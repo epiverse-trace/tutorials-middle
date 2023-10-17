@@ -4,6 +4,13 @@ teaching: 10
 exercises: 2
 ---
 
+```{r setup, echo= FALSE, warning = FALSE, message=FALSE}
+require(EpiNow2);require(ggplot2); require(incidence2)
+require(webshot)
+webshot::install_phantomjs(force = TRUE)
+```
+
+
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How do I account for incomplete reporting in `EpiNow2`?
@@ -34,6 +41,64 @@ This tutorial has the following concept dependencies:
 :::::::::::::::::::::::::::::::::
 
 
+## Incomplete observations 
+
+In the previous lesson we accounted for delays in reporting. We also can account for incomplete observations. In reality, 100% of cases are not reported, to account for this we apply an observation process to our model.
+
+Say we observe 40% of cases (with standard deviation 1%), then we specify the `scale` input to `obs_opts` as follows:
+
+```{r, echo = FALSE}
+
+cases <- covidregionaldataUK[, c("date", "cases_new")]
+cases <- aggregate(x = cases$cases_new,
+                     FUN = sum,
+                     by = list(cases$date),
+                     na.rm = TRUE)
+colnames(cases) <- c("date", "confirm")
+
+
+rt_log_mean <- convert_to_logmean(2, 1)
+rt_log_sd <- convert_to_logsd(2, 1) 
+
+latent_period_fixed <- dist_spec(
+  mean = 4, sd = 2, 
+  max = 20, distribution = "gamma"
+)
+
+log_mean <- convert_to_logmean(2, 1)
+log_sd <- convert_to_logsd(2, 1) 
+reporting_delay_fixed <- dist_spec(
+  mean = log_mean, sd = log_sd,
+  max = 10, distribution = "lognormal"
+)
+
+generation_time_fixed <- dist_spec(
+  mean = 3.6, sd = 3.1,
+  max = 20, distribution = "lognormal"
+)
+
+```
+
+
+
+```{r, message = FALSE}
+obs_scale <- list(mean = 0.4, sd = 0.01)
+estimates <- epinow(
+  reported_cases = cases[1:90,],
+  generation_time = generation_time_opts(generation_time_fixed),
+  delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
+  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd)),
+  obs = obs_opts(scale = obs_scale)
+)
+summary(estimates)
+```
+
+
+The estimates of transmissibility measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see previous lesson). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that on 40% of cases are in the data set.
+
+
+We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more detail.
+ 
 
 
 
