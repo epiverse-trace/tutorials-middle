@@ -306,7 +306,7 @@ summary(estimates)
 
 ## Summary
 
-`EpiNow2` can be used to estimate infections and create forecasts using case data. The quality of the estimates relies on the quality often data and appropriate delay distributions. In the next lesson we will learn how to make regional estimates and investigate some of the additional inference options available in `EpiNow2`. 
+`EpiNow2` can be used to estimate infections and create forecasts using case data. The quality of the estimates relies on the quality of the data and appropriate choice of delay distributions. In the next lesson we will learn how to make regional estimates and investigate some of the additional inference options available in `EpiNow2`. 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
