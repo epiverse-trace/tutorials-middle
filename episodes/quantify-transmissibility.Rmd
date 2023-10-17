@@ -206,13 +206,13 @@ reporting_delay <- estimate_delay(
 
 ####  Generation time
 
-We also must specify a distribution for the generation time. Here we will use a Lognormal distribution with mean 3.6 and standard deviation 3.1.
+We also must specify a distribution for the generation time. Here we will use a Lognormal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020] (https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
 
 
 ```{r}
 generation_time_variable <- dist_spec(
   mean = 3.6, sd = 3.1,
-  mean_sd = 0.71, sd_sd = 0.77,
+  mean_sd = 0.5, sd_sd = 0.5,
   max = 20, distribution = "lognormal"
 )
 ```
@@ -222,11 +222,11 @@ generation_time_variable <- dist_spec(
 
 The function `epinow()` is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. As well as the case data and delay distributions, there are numerous other inputs for see `EpiNow2::?epinow()` for more detail.
 
-One optional input is to specify a lognormal prior for the effective reproduction number $R_t$ at the start of the outbreak. 
+One optional input is to specify a lognormal prior for the effective reproduction number $R_t$ at the start of the outbreak.
 
 ```{r, eval = FALSE}
-rt_log_mean <- convert_to_logmean(2, 1)
-rt_log_sd <- convert_to_logsd(2, 1) 
+rt_log_mean <- convert_to_logmean(1, 0.5)
+rt_log_sd <- convert_to_logsd(1, 0.5) 
 rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd ))
 ```
 
@@ -285,11 +285,11 @@ where $s=S(t)/N$, the proportion of the population susceptible to infection.
 
 We can visualise the estimates of the effective reproduction number. The estimates are split into three categories:
 
-+ estimates : utilises all data,
++ **Estimate** : utilises all data,
 
-+ estimates based on partial data : estimates that are based less data are are therfore more uncertain,
++ **Estimate based on partial data** : estimates that are based less data are are therfore more uncertain,
 
-+ forecast : forecasts into the future. 
++ **Forecast** : forecasts into the future. 
 
 
 ```{r}
@@ -302,9 +302,6 @@ We can also extract a summary of the key transmissibility features at the latest
 
 ```{r}
 summary(estimates)
-
-head(summary(estimates, type = "parameters", params = "R"))
-
 ```
 
 ## Summary
