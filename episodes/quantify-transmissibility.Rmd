@@ -225,8 +225,8 @@ The function `epinow()` is a wrapper for the function `estimate_infections()` us
 One optional input is to specify a lognormal prior for the effective reproduction number $R_t$ at the start of the outbreak.
 
 ```{r, eval = FALSE}
-rt_log_mean <- convert_to_logmean(1, 0.5)
-rt_log_sd <- convert_to_logsd(1, 0.5) 
+rt_log_mean <- convert_to_logmean(2, 1)
+rt_log_sd <- convert_to_logsd(2, 1) 
 rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd ))
 ```
 
