@@ -1,0 +1,48 @@
+---
+title: 'Quantifying transmissibility continued'
+teaching: 10
+exercises: 2
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How do I account for incomplete reporting in `EpiNow2`?
+- How can I make regional estimates of the effective reproduction number?
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Learn how to include an observation process in `epinow()`
+- Learn how to format data to make regional estimates in `epinow()`
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
+
++ Complete tutorial 'Quantifying transmissibility'
+
+This tutorial has the following concept dependencies: 
+
+**Statistics** : probability distributions, principle of Bayesian analysis. 
+
+**Epidemic theory** : Effective reproduction number.
+
+:::::::::::::::::::::::::::::::::
+
+
+
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+
+- Incomplete case reporting can be accounted for in estimates
+- Regional case data can be used in `epinow()`  
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
