@@ -13,7 +13,7 @@ webshot::install_phantomjs(force = TRUE)
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How can I estimate the effective reproduction number from case data?
-- How do I perform short-term forecasts of infections from case data
+- How do I perform short-term forecasts of infections from case data?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -112,7 +112,7 @@ We must specify a delay distribution from time of infection until time reported.
 <p class="text-center" style="background-color: aliceblue">**time from infection to symptom onset** (the latent period) + **time from symptom onset to case notification** (the reporting time)
 .</p>
 
-The delay distribution for each of these processes can either estimated from data or obtained from the literature. The distributions can also either be **fixed** (i.e. have no uncertainty) or *variable** (i.e. have associated uncertainty).
+The delay distribution for each of these processes can either estimated from data or obtained from the literature. The distributions can also either be **fixed** (i.e. have no uncertainty) or **variable** (i.e. have associated uncertainty).
 
 #### Latent period distribution 
 
@@ -135,7 +135,7 @@ The argument `max` is the maximum value the distribution can take, in this examp
 
 The latent period has to be positive in value. Therefore we must specific a distribution in `dist_spec` which is for positive values only. 
 
-`dist_spec()` supports lognormal and gamma distribution, both of which are distributions for positive values only. 
+`dist_spec()` supports Lognormal and Gamma distributions, which are distributions for positive values only. 
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -144,9 +144,7 @@ The latent period has to be positive in value. Therefore we must specific a dist
 
 ####  Including distribution uncertainty
 
-To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma^2$ of our gamma distribution. This is done as follows, if our latent period distribution has a mean $\mu$ and standard deviation $\sigma^2$. 
-
-Then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}^2$:
+To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma^2$ of our gamma distribution. If our latent period distribution has a mean $\mu$ and standard deviation $\sigma^2$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}^2$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
@@ -171,7 +169,7 @@ latent_period_variable
 
 After the latent period, there will be an additional delay of time from symptom onset to case notification : the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
 
-When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the lognormal distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a lognormal distribution. 
+When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case a Lognormal distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a Lognormal distribution. 
 
 ```{r}
 log_mean <- convert_to_logmean(2, 1)
@@ -193,7 +191,7 @@ reporting_delay_variable <- dist_spec(
 ```
 
 
-If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a lognormal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
+If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a Lognormal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
 
 ```{r, eval = FALSE }
 delay_data <- rlnorm(500, log(5), 1) # synthetic delay data 
@@ -206,7 +204,7 @@ reporting_delay <- estimate_delay(
 
 ####  Generation time
 
-We also must specify a distribution for the generation time. Here we will use a Lognormal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020] (https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
+We also must specify a distribution for the generation time. Here we will use a Lognormal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
 
 
 ```{r}
@@ -220,9 +218,10 @@ generation_time_variable <- dist_spec(
 
 ## Finding estimates
 
-The function `epinow()` is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. The generation time distribution and delay distributions must be passed using the functions ` generation_time_opts()` and `delay_opts()` respectively. As well as the case data and delay distributions, there are numerous other inputs for see `EpiNow2::?epinow()` for more detail.
+The function `epinow()` is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. The generation time distribution and delay distributions must be passed using the functions ` generation_time_opts()` and `delay_opts()` respectively. 
 
-One optional input is to specify a lognormal prior for the effective reproduction number $R_t$ at the start of the outbreak.
+There are numerous other inputs that can be passed to `epinow()`, see `EpiNow2::?epinow()` for more detail.
+One optional input is to specify a Lognormal prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean and standard deviation as arguments of `prior` within `rt_opts()`:
 
 ```{r, eval = FALSE}
 rt_log_mean <- convert_to_logmean(2, 1)
@@ -257,7 +256,7 @@ generation_time_fixed <- dist_spec(
 
 *Note : in the code below fixed distributions are used instead of variable. This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.*
 
-```{r, message = FALSE, eval = TRUE}
+```{r, message = FALSE, eval = FALSE}
 estimates <- epinow(
   reported_cases = cases[1:90,],
   generation_time = generation_time_opts(generation_time_fixed),
@@ -283,7 +282,7 @@ where $s=S(t)/N$, the proportion of the population susceptible to infection.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-We can visualise the estimates of the effective reproduction number. The estimates are split into three categories:
+We can visualise the estimates of the effective reproduction number and the estimated number of cases using `plot()`. The estimates are split into three categories:
 
 + **Estimate** : utilises all data,
 
