@@ -22,7 +22,7 @@ webshot::install_phantomjs(force = TRUE)
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Learn how to include an observation process in `epinow()`
-- Learn how to format data to make regional estimates in `epinow()`
+- Learn how to format data to make regional estimates using `regional_epinow()`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -43,9 +43,17 @@ This tutorial has the following concept dependencies:
 
 ## Incomplete observations 
 
-In the previous lesson we accounted for delays in reporting. We also can account for incomplete observations. In reality, 100% of cases are not reported, to account for this we apply an observation process to our model.
+In the previous lesson we accounted for delays in reporting. In `EpiNow2` we also can account for incomplete observations. In reality, 100% of cases are not reported, to account for this we can apply an observation process to our inference framework.
 
-Say we observe 40% of cases (with standard deviation 1%), then we specify the `scale` input to `obs_opts` as follows:
+We will pass another input into `epinow()` called `obs` to define the observation model. The format of `obs` must be the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
+
+We believe the COVID-19 outbreak data from the previous lesson does not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
+
+```{r}
+obs_scale <- list(mean = 0.4, sd = 0.01)
+```
+
+To run the inference framework with this observation process, we add `obs = obs_opts(scale = obs_scale)` to the input arguments of `epinow()` as follows:
 
 ```{r, echo = FALSE}
 
@@ -118,9 +126,9 @@ regional_cases <- regional_cases[which(regional_cases$date %in% dates),]
 head(regional_cases)
 ```
 
-To find regional estimates, we use the function `regional_epinow()`:
+To find regional estimates, we use the same inputs as `epinow()` to the function `regional_epinow()`:
 
-```{r}
+```{r, message = FALSE}
 estimates_regional <- regional_epinow(
   reported_cases = regional_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -135,7 +143,6 @@ estimates_regional$summary$plots$R
 ## Summary
 
 There are range of different model options in `EpiNow2` that aren't covered in these lessons, see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html) for more details.
-
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
