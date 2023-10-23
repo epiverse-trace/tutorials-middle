@@ -127,7 +127,7 @@ To write a new episode, follow these guidelines
 - Add a visible callout for prerequisites at the beginning following the [ETK modules notation](https://github.com/epiverse-trace/tutorials/issues/19) 
 - Add an [introduction section](https://github.com/epiverse-trace/tutorials/issues/17) with the expected summative assessment 
 - Add diagrams using Diagrammer with greek letters for parameters to [visually represent mathematical models](https://github.com/epiverse-trace/tutorials/issues/21).  
-  - Use [callouts](https://carpentries.github.io/sandpaper-docs/instructor/component-guide.html) for complementary concepts and function arguments details.  
+- Use [callouts](https://carpentries.github.io/sandpaper-docs/instructor/component-guide.html) for complementary concepts and function arguments details.  
   - Review how callouts need to be [coded in plain text](https://github.com/carpentries/sandpaper-docs/blob/main/learners/component-guide.md?plain=1). 
   - Review when to use the [spoiler snipped](https://carpentries.github.io/sandpaper-docs/aio.html#use-spoilers-instead-of-floating-solution-blocks). 
 - Request a review via PR.
