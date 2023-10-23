@@ -39,5 +39,5 @@ Read the [License](LICENSE.md) of this tutorial.
 
 ## Authors
 
-- [@avallecam](https://github.com/avallecam/)
 - [@amanda-minter](https://github.com/amanda-minter/)
+- [@avallecam](https://github.com/avallecam/)
