@@ -278,21 +278,29 @@ summary(estimates)
 
 #### `New confirmed cases by infection date` 
 
-The cases are `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`
+The estimated new confirmed cases are `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`
 
 
 #### `Expected change in daily cases` 
 
-`r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]`
+A factor describing whether the daily cases are either:
+
++ Increasing,
++ Likely increasing,
++ Stable,
++ Likely decreasing,
++ Decreasing.
+
+Here the daily cases are `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]`.
 
 
 #### `Effective reproduction no.`
-`r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`
+
+The effective reproduction number $R_t$ estimate is `r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`.
 
 ```{r}
 estimates$plots$R
 ```
-
 
 
 ::::::::::::::::::::::::::::::::::::: callout
@@ -313,7 +321,7 @@ where $s=S(t)/N$, the proportion of the population susceptible to infection.
 
 #### `Rate of growth`
 
-`r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`
+The exponential growth rate of case numbers is `r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`.
 
 ```{r}
 estimates$plots$growth_rate
@@ -322,7 +330,7 @@ estimates$plots$growth_rate
 
 #### `Doubling/halving time (days)` 
 
-`r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`
+The doubling time (the time taken for case numbers to double) is `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
 
 
 ## Quantify transmission heterogeneity
