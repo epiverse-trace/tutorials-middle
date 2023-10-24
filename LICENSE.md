@@ -4,7 +4,7 @@ title: "Licenses"
 
 ## Instructional Material
 
-This work is a derivative from Copyright (c) The Carpentries, and developed by Epiverse-TRACE.
+The tutorials in this repository are developed by Epiverse-TRACE, based on the [lesson template from the Carpentries](https://github.com/carpentries/workbench-template-rmd) (template under CC BY license).
 
 All Epiverse-TRACE
 instructional material is made available under the [Creative Commons
