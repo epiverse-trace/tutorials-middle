@@ -1,5 +1,5 @@
 ---
-title: 'Quantifying transmissibility continued'
+title: 'Create a short-term forecast'
 teaching: 10
 exercises: 2
 ---

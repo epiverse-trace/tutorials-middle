@@ -60,7 +60,7 @@ contact: 'andree.valle-campos@lshtm.ac.uk' #FIXME
 # Order of episodes in your lesson
 episodes:
 - quantify-transmissibility.Rmd
-- quantifying-transmissibility-continued.Rmd
+- create-forecast.Rmd
 - simulating-transmission.Rmd
 - model-choices.Rmd
 - modelling-interventions.Rmd
