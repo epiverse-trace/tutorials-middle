@@ -12,14 +12,15 @@ webshot::install_phantomjs(force = TRUE)
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How can I estimate the effective reproduction number from case data?
-- How do I perform short-term forecasts of infections from case data?
+- How can I estimate key transmissibility metrics from case data?
+- How can I quantify transmissibility heterogeneity in these metrics? 
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Learn how to estimate transmissibility features from case data using the R package `EpiNow2`
+- Learn how to estimate transmissibility metrics from case data using the R package `EpiNow2`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -38,7 +39,7 @@ This tutorial has the following concept dependencies:
 
 ## Introduction
 
-In an outbreak situation, data are often available on reported infections but not the exact date of infection. To create short term forecasts of future infections and to estimate the effective reproduction number (time-varying reproduction number) we must use estimation methods which account for delays between time of infection and time of case report. 
+To estimate key metrics of transmissibility using case data we must account for delays between the date of infections and date of reported cases. In an outbreak situation, data are often available on reported dates only, therefore we must use estimation methods which account for these delays. 
 
 In the next lessons we will focus on how to implement the functions in `{EpiNow2}` to estimate transmissibility features of case data from an outbreak. We will not cover the theoretical background of the models or inference framework, for details on these concepts see the  [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
@@ -256,14 +257,42 @@ generation_time_fixed <- dist_spec(
 
 *Note : in the code below fixed distributions are used instead of variable. This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.*
 
-```{r, message = FALSE, eval = FALSE}
+```{r, message = FALSE, eval = TRUE}
+#reported_cases <- cases[1:90,]
+reported_cases <- cases[1:10,]
 estimates <- epinow(
-  reported_cases = cases[1:90,],
+  reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
   delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 )
+
 ```
+
+
+We can extract a summary of the key transmissibility features at the latest date in the data:
+
+```{r}
+summary(estimates)
+```
+
+#### `New confirmed cases by infection date` 
+
+The cases are `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`
+
+
+#### `Expected change in daily cases` 
+
+`r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]`
+
+
+#### `Effective reproduction no.`
+`r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`
+
+```{r}
+estimates$plots$R
+```
+
 
 
 ::::::::::::::::::::::::::::::::::::: callout
@@ -282,33 +311,63 @@ where $s=S(t)/N$, the proportion of the population susceptible to infection.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-We can visualise the estimates of the effective reproduction number and the estimated number of cases using `plot()`. The estimates are split into three categories:
+#### `Rate of growth`
 
-+ **Estimate** : utilises all data,
-
-+ **Estimate based on partial data** : estimates that are based less data are are therfore more uncertain,
-
-+ **Forecast** : forecasts into the future. 
-
+`r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`
 
 ```{r}
-plot(estimates)
-
+estimates$plots$growth_rate
 ```
 
 
-We can also extract a summary of the key transmissibility features at the latest date in the data:
+#### `Doubling/halving time (days)` 
+
+`r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`
+
+
+## Quantify transmission heterogeneity
+
+The outbreak data of the start of the COVID-19 pandemic from the United Kingdom from the R package `{incidence2}` includes the region in which the cases were recorded. To find regional estimates of the effective reproduction number and cases, we must format the data to have three columns:
+
++ `date` : the date,
++ `region` : the region, 
++ `confirm` : number of confirmed cases for a region on a given date.
 
 ```{r}
-summary(estimates)
+regional_cases <- covidregionaldataUK[, c("date", "cases_new", "region")]
+colnames(regional_cases) <- c("date", "confirm", "region")
+
+# extract the first 90 dates for all regions
+dates <- sort(unique(regional_cases$date))[1:90]
+regional_cases <- regional_cases[which(regional_cases$date %in% dates),]
+
+head(regional_cases)
 ```
+
+To find regional estimates, we use the same inputs as `epinow()` to the function `regional_epinow()`:
+
+```{r, message = FALSE, eval = FALSE}
+#reported_regional_cases <- regional_cases
+reported_regional_cases <- regional_cases[1:10,]
+
+estimates_regional <- regional_epinow(
+  reported_cases = regional_cases,
+  generation_time = generation_time_opts(generation_time_fixed),
+  delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
+  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+)
+
+region_rt$summary$summarised_results$table
+```
+
 
 ## Summary
 
-`EpiNow2` can be used to estimate infections and create forecasts using case data. The quality of the estimates relies on the quality of the data and appropriate choice of delay distributions. In the next lesson we will learn how to make regional estimates and investigate some of the additional inference options available in `EpiNow2`. 
+The quality of the estimates relies on the quality of the data and appropriate choice of delay distributions. `EpiNow2` can also be used to estimate infections and create forecasts using case data. In the next lesson we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`. 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
+- Transmissibility metrics can be estimated from case data after accounting for delays
 - Uncertainty can be accounted for in delay distributions
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

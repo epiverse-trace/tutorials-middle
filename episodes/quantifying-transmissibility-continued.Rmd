@@ -13,16 +13,16 @@ webshot::install_phantomjs(force = TRUE)
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do I account for incomplete reporting in `EpiNow2`?
-- How can I make regional estimates of the effective reproduction number?
+- How do I create short-term forecasts of infections from case data?
+- How do I account for incomplete reporting in forecasts?
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Learn how to include an observation process in `epinow()`
-- Learn how to format data to make regional estimates using `regional_epinow()`
+- Learn how to make forecasts of cases using R package `EpiNow2`
+- Learn how to include an observation process in estimation
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -40,8 +40,71 @@ This tutorial has the following concept dependencies:
 
 :::::::::::::::::::::::::::::::::
 
+## Introduction
 
-## Incomplete observations 
+Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. In this lesson we will create short term forecasts of future using the inference framework in `{EpiNow2}`.
+
+## Create a nowcast and short-term forecast
+
+The function `epinow()` decribed in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the now cast and short term-forecast using ...
+
+```{r, echo = FALSE}
+cases <- covidregionaldataUK[, c("date", "cases_new")]
+cases <- aggregate(x = cases$cases_new,
+                     FUN = sum,
+                     by = list(cases$date),
+                     na.rm = TRUE)
+colnames(cases) <- c("date", "confirm")
+rt_log_mean <- convert_to_logmean(2, 1)
+rt_log_sd <- convert_to_logsd(2, 1) 
+
+latent_period_fixed <- dist_spec(
+  mean = 4, sd = 2, 
+  max = 20, distribution = "gamma"
+)
+
+log_mean <- convert_to_logmean(2, 1)
+log_sd <- convert_to_logsd(2, 1) 
+reporting_delay_fixed <- dist_spec(
+  mean = log_mean, sd = log_sd,
+  max = 10, distribution = "lognormal"
+)
+
+generation_time_fixed <- dist_spec(
+  mean = 3.6, sd = 3.1,
+  max = 20, distribution = "lognormal"
+)
+```
+
+
+```{r, message = FALSE, eval = TRUE}
+#reported_cases <- cases[1:90,]
+reported_cases <- cases[1:10,]
+estimates <- epinow(
+  reported_cases = reported_cases,
+  generation_time = generation_time_opts(generation_time_fixed),
+  delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
+  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+)
+```
+
+
+We can visualise the estimates of the effective reproduction number and the estimated number of cases using `plot()`. The estimates are split into three categories:
+
++ **Estimate** : utilises all data,
+
++ **Estimate based on partial data** : estimates that are based less data are are therefore more uncertain,
+
++ **Forecast** : forecasts into the future. 
+
+
+```{r}
+plot(estimates)
+```
+
+
+
+### Incomplete observations 
 
 In the previous lesson we accounted for delays in reporting. In `EpiNow2` we also can account for incomplete observations ad in reality, 100% of cases are not reported.
 
@@ -89,10 +152,12 @@ generation_time_fixed <- dist_spec(
 
 
 
-```{r, message = FALSE, eval = FALSE}
+```{r, message = FALSE, eval = TRUE}
 obs_scale <- list(mean = 0.4, sd = 0.01)
+#reported_cases <- cases[1:90,]
+reported_cases <- cases[1:10,]
 estimates <- epinow(
-  reported_cases = cases[1:90,],
+  reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
   delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd)),
@@ -104,52 +169,23 @@ summary(estimates)
 
 The estimates of transmissibility measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see previous lesson). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
 
-
 We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more detail.
  
-## Regional estimates
 
-The outbreak data of the start of the COVID-19 pandemic from the United Kingdom from the R package `{incidence2}` includes the region in which the cases were recorded. To find regional estimates of the effective reproduction number and cases, we must format the data to have three columns:
+## Estimate hospitalisations and deaths
 
-+ `date` : the date,
-+ `region` : the region, 
-+ `confirm` : number of confirmed cases for a region on a given date.
-
-```{r}
-regional_cases <- covidregionaldataUK[, c("date", "cases_new", "region")]
-colnames(regional_cases) <- c("date", "confirm", "region")
-
-# extract the first 90 dates for all regions
-dates <- sort(unique(regional_cases$date))[1:90]
-regional_cases <- regional_cases[which(regional_cases$date %in% dates),]
-
-head(regional_cases)
-```
-
-To find regional estimates, we use the same inputs as `epinow()` to the function `regional_epinow()`:
-
-```{r, message = FALSE, eval = FALSE}
-estimates_regional <- regional_epinow(
-  reported_cases = regional_cases,
-  generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
-  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
-)
-
-estimates_regional$summary$plots$R
-```
+*Coming soon*
 
 
 ## Summary
 
-Adding an observational process to account for incomplete reporting or extending estimates to regions may be features required for your analysis. There are range of different model options in `EpiNow2` that aren't covered in these lessons, see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html) for more details.
+Adding an observational process to account for incomplete reporting. There are range of different model options in `EpiNow2` that aren't covered in these lessons, see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html) for more details.
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 
 - Incomplete case reporting can be accounted for in estimates
-- Regional case data can be used in `regional_epinow()`  
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
