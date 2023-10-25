@@ -17,7 +17,7 @@ R.
 ## Usage
 
 > NOTE: The expected date for the deployment of the first set of
-> tutorials is mid-November 2023
+> tutorials is mid-November 2023.
 
 Visualize this content as a webpage at
 <https://epiverse-trace.github.io/tutorials/>
