@@ -49,7 +49,7 @@ Given case data, we can create estimates of the current and future number of cas
 The function `epinow()` decribed in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the now cast and short term-forecast using ...
 
 ```{r, echo = FALSE}
-cases <- covidregionaldataUK[, c("date", "cases_new")]
+cases <- incidence2::covidregionaldataUK[, c("date", "cases_new")]
 cases <- aggregate(x = cases$cases_new,
                      FUN = sum,
                      by = list(cases$date),
@@ -78,8 +78,7 @@ generation_time_fixed <- dist_spec(
 
 
 ```{r, message = FALSE, eval = TRUE}
-#reported_cases <- cases[1:90,]
-reported_cases <- cases[1:10,]
+reported_cases <- cases[1:90,]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -118,44 +117,9 @@ obs_scale <- list(mean = 0.4, sd = 0.01)
 
 To run the inference framework with this observation process, we add `obs = obs_opts(scale = obs_scale)` to the input arguments of `epinow()`:
 
-```{r, echo = FALSE}
-
-cases <- covidregionaldataUK[, c("date", "cases_new")]
-cases <- aggregate(x = cases$cases_new,
-                     FUN = sum,
-                     by = list(cases$date),
-                     na.rm = TRUE)
-colnames(cases) <- c("date", "confirm")
-
-
-rt_log_mean <- convert_to_logmean(2, 1)
-rt_log_sd <- convert_to_logsd(2, 1) 
-
-latent_period_fixed <- dist_spec(
-  mean = 4, sd = 2, 
-  max = 20, distribution = "gamma"
-)
-
-log_mean <- convert_to_logmean(2, 1)
-log_sd <- convert_to_logsd(2, 1) 
-reporting_delay_fixed <- dist_spec(
-  mean = log_mean, sd = log_sd,
-  max = 10, distribution = "lognormal"
-)
-
-generation_time_fixed <- dist_spec(
-  mean = 3.6, sd = 3.1,
-  max = 20, distribution = "lognormal"
-)
-
-```
-
-
-
 ```{r, message = FALSE, eval = TRUE}
 obs_scale <- list(mean = 0.4, sd = 0.01)
-#reported_cases <- cases[1:90,]
-reported_cases <- cases[1:10,]
+reported_cases <- cases[1:90,]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
