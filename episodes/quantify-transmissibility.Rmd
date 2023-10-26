@@ -153,7 +153,7 @@ The argument `max` is the maximum value the distribution can take, in this examp
 
 The latent period has to be positive in value. Therefore we must specific a distribution in `dist_spec` which is for positive values only. 
 
-`dist_spec()` supports lognormal and gamma distributions, which are distributions for positive values only. 
+`dist_spec()` supports log normal and gamma distributions, which are distributions for positive values only. 
 
 For all types of delay, we will need to use distributions for positive values only - we don't want to include delays of negative days in our analysis!
 
@@ -188,9 +188,9 @@ latent_period_variable
 
 After the latent period, there will be an additional delay of time from symptom onset to case notification : the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
 
-When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a lognormal distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a lognormal distribution. 
+When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a log normal distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a log normal distribution. 
 
-If we want to assume that the mean reporting delay is 2 days (with a standard deviation of 1 day), the lognormal distribution will look like: 
+If we want to assume that the mean reporting delay is 2 days (with a standard deviation of 1 day), the log normal distribution will look like: 
 
 ```{r}
 log_mean <- convert_to_logmean(2, 1)
@@ -201,7 +201,7 @@ ggplot(df) +
   geom_line(aes(x, density))
 ```
 
-Using the mean and standard deviation for the lognormal distribution, we can specify a fixed or variable distribution using `dist_spec()` as before: 
+Using the mean and standard deviation for the log normal distribution, we can specify a fixed or variable distribution using `dist_spec()` as before: 
 
 ```{r}
 reporting_delay_variable <- dist_spec(
@@ -211,7 +211,7 @@ reporting_delay_variable <- dist_spec(
   )
 ```
 
-If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a lognormal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
+If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a log normal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
 
 ```{r, eval = FALSE }
 delay_data <- rlnorm(500, log(5), 1) # synthetic delay data 
@@ -224,7 +224,7 @@ reporting_delay <- estimate_delay(
 
 ####  Generation time
 
-We also must specify a distribution for the generation time. Here we will use a lognormal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
+We also must specify a distribution for the generation time. Here we will use a log normal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
 
 
 ```{r}
@@ -241,7 +241,7 @@ generation_time_variable <- dist_spec(
 The function `epinow()` is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. The generation time distribution and delay distributions must be passed using the functions ` generation_time_opts()` and `delay_opts()` respectively. 
 
 There are numerous other inputs that can be passed to `epinow()`, see `EpiNow2::?epinow()` for more detail.
-One optional input is to specify a lognormal prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean and standard deviation as arguments of `prior` within `rt_opts()`:
+One optional input is to specify a log normal prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean and standard deviation as arguments of `prior` within `rt_opts()`:
 
 ```{r, eval = FALSE}
 rt_log_mean <- convert_to_logmean(2, 1)

@@ -46,7 +46,7 @@ Given case data, we can create estimates of the current and future number of cas
 
 ## Create a nowcast and short-term forecast
 
-The function `epinow()` decribed in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the now cast and short term-forecast using ...
+The function `epinow()` described in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the now cast and short term-forecast using ...
 
 ```{r, echo = FALSE}
 cases <- incidence2::covidregionaldataUK[, c("date", "cases_new")]
