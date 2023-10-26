@@ -37,11 +37,29 @@ This tutorial has the following concept dependencies:
 :::::::::::::::::::::::::::::::::
 
 
+
+::::::::::::::::::::::::::::::::::::: callout
+### Reminder: the Effective Reproduction Number, $R_t$ 
+
+The basic reproduction number, $R_0$, is the average number of cases caused by one infectious individual in a entirely susceptible population. 
+
+But in an ongoing outbreak, the population is not entirely susceptible. Therefore we are more interested in the value of the **effective reproduction number**, $R_t$, the average number of cases caused by one infectious individual in the population at time $t$.
+
+The effective reproduction number is related to $R_0$ as follows, 
+
+$$R_t = s R_0.$$
+
+where $s=S(t)/N$, the proportion of the population susceptible to infection.
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 ## Introduction
 
-To estimate key metrics of transmissibility using case data we must account for delays between the date of infections and date of reported cases. In an outbreak situation, data are often available on reported dates only, therefore we must use estimation methods which account for these delays. 
+To estimate key metrics of transmissibility using case data we must account for delays between the date of infections and date of reported cases. In an outbreak situation, data are often available on reported dates only, therefore we must use estimation methods to account for these delays. 
 
-In the next lessons we will focus on how to implement the functions in `{EpiNow2}` to estimate transmissibility features of case data from an outbreak. We will not cover the theoretical background of the models or inference framework, for details on these concepts see the  [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
+In the next lessons we will focus on how to implement the functions in `{EpiNow2}` to estimate transmissibility features of case data. We will not cover the theoretical background of the models or inference framework, for details on these concepts see the  [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
 
 ::::::::::::::::::::::::::::::::::::: callout
@@ -79,8 +97,7 @@ This lesson illustrates the usage of `epinow()` to estimate the time-varying rep
 To illustrate the functions of `EpiNow2` we will use outbreak data of the start of the COVID-19 pandemic from the United Kingdom. The data are available in the R package `{incidence2}`. 
 
 ```{r}
-library(incidence2)
-head(covidregionaldataUK)
+head(incidence2::covidregionaldataUK)
 ```
 
 To use the data, we must format the data to have two columns:
@@ -89,7 +106,7 @@ To use the data, we must format the data to have two columns:
 + `confirm` : number of confirmed cases on that date.
 
 ```{r}
-cases <- covidregionaldataUK[, c("date", "cases_new")]
+cases <- incidence2::covidregionaldataUK[, c("date", "cases_new")]
 cases <- aggregate(x = cases$cases_new,
                      FUN = sum,
                      by = list(cases$date),
@@ -136,8 +153,9 @@ The argument `max` is the maximum value the distribution can take, in this examp
 
 The latent period has to be positive in value. Therefore we must specific a distribution in `dist_spec` which is for positive values only. 
 
-`dist_spec()` supports Lognormal and Gamma distributions, which are distributions for positive values only. 
+`dist_spec()` supports lognormal and gamma distributions, which are distributions for positive values only. 
 
+For all types of delay, we will need to use distributions for positive values only - we don't want to include delays of negative days in our analysis!
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -170,7 +188,9 @@ latent_period_variable
 
 After the latent period, there will be an additional delay of time from symptom onset to case notification : the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
 
-When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case a Lognormal distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a Lognormal distribution. 
+When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a lognormal distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a lognormal distribution. 
+
+If we want to assume that the mean reporting delay is 2 days (with a standard deviation of 1 day), the lognormal distribution will look like: 
 
 ```{r}
 log_mean <- convert_to_logmean(2, 1)
@@ -181,7 +201,7 @@ ggplot(df) +
   geom_line(aes(x, density))
 ```
 
-Then we can specify a fixed or variable distribution using `dist_spec()`: 
+Using the mean and standard deviation for the lognormal distribution, we can specify a fixed or variable distribution using `dist_spec()` as before: 
 
 ```{r}
 reporting_delay_variable <- dist_spec(
@@ -191,8 +211,7 @@ reporting_delay_variable <- dist_spec(
   )
 ```
 
-
-If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a Lognormal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
+If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a lognormal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
 
 ```{r, eval = FALSE }
 delay_data <- rlnorm(500, log(5), 1) # synthetic delay data 
@@ -205,7 +224,7 @@ reporting_delay <- estimate_delay(
 
 ####  Generation time
 
-We also must specify a distribution for the generation time. Here we will use a Lognormal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
+We also must specify a distribution for the generation time. Here we will use a lognormal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
 
 
 ```{r}
@@ -222,7 +241,7 @@ generation_time_variable <- dist_spec(
 The function `epinow()` is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. The generation time distribution and delay distributions must be passed using the functions ` generation_time_opts()` and `delay_opts()` respectively. 
 
 There are numerous other inputs that can be passed to `epinow()`, see `EpiNow2::?epinow()` for more detail.
-One optional input is to specify a Lognormal prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean and standard deviation as arguments of `prior` within `rt_opts()`:
+One optional input is to specify a lognormal prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean and standard deviation as arguments of `prior` within `rt_opts()`:
 
 ```{r, eval = FALSE}
 rt_log_mean <- convert_to_logmean(2, 1)
@@ -258,8 +277,7 @@ generation_time_fixed <- dist_spec(
 *Note : in the code below fixed distributions are used instead of variable. This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.*
 
 ```{r, message = FALSE, eval = TRUE}
-#reported_cases <- cases[1:90,]
-reported_cases <- cases[1:10,]
+reported_cases <- cases[1:90,]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -270,18 +288,26 @@ estimates <- epinow(
 ```
 
 
+### Results
+
 We can extract a summary of the key transmissibility features at the latest date in the data:
 
 ```{r}
 summary(estimates)
 ```
 
-#### `New confirmed cases by infection date` 
 
-The estimated new confirmed cases are `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`
++ From the summary of our analysis we see that the expected change in daily cases is `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]` with the estimated new confirmed cases `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`.
+
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`. 
+
++ The exponential growth rate of case numbers is `r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`.
+
++ The doubling time (the time taken for case numbers to double) is `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
 
 
-#### `Expected change in daily cases` 
+::::::::::::::::::::::::::::::::::::: callout
+### `Expected change in daily cases` 
 
 A factor describing whether the daily cases are either:
 
@@ -291,46 +317,16 @@ A factor describing whether the daily cases are either:
 + Likely decreasing,
 + Decreasing.
 
-Here the daily cases are `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]`.
-
-
-#### `Effective reproduction no.`
-
-The effective reproduction number $R_t$ estimate is `r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`.
-
-```{r}
-estimates$plots$R
-```
-
-
-::::::::::::::::::::::::::::::::::::: callout
-### The Effective Reproduction Number, $R_t$ 
-
-The basic reproduction number, $R_0$, is the average number of cases caused by one infectious individual in a entirely susceptible population. 
-
-But in an ongoing outbreak, the population is not entirely susceptible. Therefore we are more interested in the value of the **effective reproduction number**, $R_t$, the average number of cases caused by one infectious individual in the population at time $t$.
-
-The effective reproduction number is related to $R_0$ as follows, 
-
-$$R_t = s R_0.$$
-
-where $s=S(t)/N$, the proportion of the population susceptible to infection.
-
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-#### `Rate of growth`
-
-The exponential growth rate of case numbers is `r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`.
+We can also extract and visualise estimates of the effective reproduction number and growth rate through time:
 
 ```{r}
+estimates$plots$R
 estimates$plots$growth_rate
 ```
 
-
-#### `Doubling/halving time (days)` 
-
-The doubling time (the time taken for case numbers to double) is `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
 
 
 ## Quantify transmission heterogeneity
@@ -342,7 +338,7 @@ The outbreak data of the start of the COVID-19 pandemic from the United Kingdom 
 + `confirm` : number of confirmed cases for a region on a given date.
 
 ```{r}
-regional_cases <- covidregionaldataUK[, c("date", "cases_new", "region")]
+regional_cases <- incidence2::covidregionaldataUK[, c("date", "cases_new", "region")]
 colnames(regional_cases) <- c("date", "confirm", "region")
 
 # extract the first 90 dates for all regions
@@ -354,10 +350,7 @@ head(regional_cases)
 
 To find regional estimates, we use the same inputs as `epinow()` to the function `regional_epinow()`:
 
-```{r, message = FALSE, eval = FALSE}
-#reported_regional_cases <- regional_cases
-reported_regional_cases <- regional_cases[1:10,]
-
+```{r, message = FALSE, eval = TRUE}
 estimates_regional <- regional_epinow(
   reported_cases = regional_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -371,7 +364,7 @@ region_rt$summary$summarised_results$table
 
 ## Summary
 
-The quality of the estimates relies on the quality of the data and appropriate choice of delay distributions. `EpiNow2` can also be used to estimate infections and create forecasts using case data. In the next lesson we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`. 
+The reliability of the estimates depends on the quality of the data and appropriate choice of delay distributions. `EpiNow2` can also be used to estimate infections and create forecasts using case data. In the next lesson we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`. 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
