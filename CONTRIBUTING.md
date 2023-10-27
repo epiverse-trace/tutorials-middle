@@ -117,7 +117,7 @@ Consider that:
 - The number `##` is equal to the PR number. 
 - `.md` files contain [generated lesson content](https://carpentries.github.io/sandpaper-docs/deployment.html) for review with knitted text, code, and figures. 
 - These `.md` files generate the `.html` of the website and look similar to how it's going to look like online.
-- Locally, after switching to the review branch in Rstudio, you can use the [Visual editor](https://posit.co/blog/exploring-rstudio-visual-markdown-editor/).
+- Locally, after switching to the review branch in Rstudio, you can use the [Visual editor](https://posit.co/blog/exploring-rstudio-visual-markdown-editor/), or Preview it as an HTML file (which later you will need to delete).
 - Make any edit suggestions in the [PR online on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request).
 
 #### Maintainer:
