@@ -99,13 +99,25 @@ If you need to work with a specific stable version of a package:
 
 #### Reviewer:
 
-You can follow this steps:
+You can follow these steps:
 
-- Clone the repo or Pull the branch on Rstudio.
-- Checkout to the branch to review.
+- [Clone](https://happygitwithr.com/new-github-first.html#new-rstudio-project-via-git) the repository or [Pull](https://www.epirhandbook.com/en/version-control-and-collaboration-with-git-and-github.html?q=github#in-rstudio-1) to update the branch to review on Rstudio.
+- [Checkout](https://happygitwithr.com/git-branches#switching-branches) or [Switch](https://rstudio.github.io/cheatsheets/html/rstudio-ide.html#version-control) to the branch to review.
 - Use [`sandpaper::manage_deps()`](https://carpentries.github.io/sandpaper/reference/dependency_management.html) to align the packages in your cache with the ones in the `renv.lock` file (defined by the Developer).
-- Render lesson with [`sandpaper::build_lesson()`](https://carpentries.github.io/sandpaper/reference/build_lesson.html). This will open an html tab in your browser to review.
-- Make any edit suggestion in the `.Rmd` files inside the `episodes/` folder.
+- Render lesson with [`sandpaper::build_lesson()`](https://carpentries.github.io/sandpaper/reference/build_lesson.html). This will open an HTML tab in your browser to review. This HTML format is how the website is going to look like online.
+- Make any edit suggestion to the `.Rmd` files inside the `episodes/` folder of the branch under review. For big changes, [create an issue][issues] first.
+
+If you have issues at the Render step, follow these:
+
+- Verify or wait until the branch is under Pull Request (PR) with all checks passed.
+- Access to the [`md-outputs-PR-##` branch](https://github.com/epiverse-trace/tutorials/branches) on GitHub or locally to read the `.md` files for each episode. 
+
+Consider that:
+
+- The number `##` is equal to the PR number. 
+- `.md` files contain [generated lesson content](https://carpentries.github.io/sandpaper-docs/deployment.html) for review with knitted text, code, and figures. 
+- These `.md` files generate the `.html` of the website and look similar to how it's going to look like online.
+- Make any edit suggestions in the [PR online on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request).
 
 #### Maintainer:
 
