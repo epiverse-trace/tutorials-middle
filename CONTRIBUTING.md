@@ -107,16 +107,17 @@ You can follow these steps:
 - Render lesson with [`sandpaper::build_lesson()`](https://carpentries.github.io/sandpaper/reference/build_lesson.html). This will open an HTML tab in your browser to review. This HTML format is how the website is going to look like online.
 - Make any edit suggestion to the `.Rmd` files inside the `episodes/` folder of the branch under review. For big changes, [create an issue][issues] first.
 
-If you have issues at the Render step, follow these:
+If you have issues at the Render step, follow these two steps:
 
 - Verify or wait until the branch is under Pull Request (PR) with all checks passed.
-- Access to the [`md-outputs-PR-##` branch](https://github.com/epiverse-trace/tutorials/branches) on GitHub or locally to read the `.md` files for each episode. 
+- Access to the [`md-outputs-PR-##` branch](https://github.com/epiverse-trace/tutorials/branches) on GitHub to read the `.md` files for each episode. 
 
 Consider that:
 
 - The number `##` is equal to the PR number. 
 - `.md` files contain [generated lesson content](https://carpentries.github.io/sandpaper-docs/deployment.html) for review with knitted text, code, and figures. 
 - These `.md` files generate the `.html` of the website and look similar to how it's going to look like online.
+- Locally, after switching to the review branch in Rstudio, you can use the [Visual editor](https://posit.co/blog/exploring-rstudio-visual-markdown-editor/).
 - Make any edit suggestions in the [PR online on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/reviewing-proposed-changes-in-a-pull-request).
 
 #### Maintainer:
