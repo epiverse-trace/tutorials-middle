@@ -358,7 +358,7 @@ estimates_regional <- regional_epinow(
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 )
 
-region_rt$summary$summarised_results$table
+estimates_regional$summary$summarised_results$table
 ```
 
 
