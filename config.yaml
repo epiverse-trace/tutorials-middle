@@ -59,6 +59,10 @@ contact: 'andree.valle-campos@lshtm.ac.uk' #FIXME
 
 # Order of episodes in your lesson
 episodes:
+- simulating-transmission.Rmd
+- model-choices.Rmd
+- modelling-interventions.Rmd
+- compare-interventions.Rmd
 
 # Information for Learners
 learners:
@@ -74,4 +78,5 @@ profiles:
 # This space below is where custom yaml items (e.g. pinning
 # sandpaper and varnish versions) should live
 
+sandpaper: 'carpentries/sandpaper#533'
 

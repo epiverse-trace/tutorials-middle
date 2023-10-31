@@ -1,0 +1,221 @@
+---
+title: 'Choosing an appropriate model'
+teaching: 10 # teaching time in minutes
+exercises: 20 # exercise time in minutes
+
+---
+
+```{r setup, echo= FALSE, message = FALSE, warning = FALSE}
+require(ggplot2)
+require(pak)
+pak::pak("epiverse-trace/epidemics")
+library(epidemics)
+```
+
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How do I choose a model for my task?
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Learn how to access the model library in `epidemics`
+- Understand the model requirements for a question 
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
++ Complete tutorial 'Simulating transmission'
+:::::::::::::::::::::::::::::::::
+
+
+## Introduction
+
+Using mathematical models in outbreak analysis does not necessarily require developing a new model. There are existing models for different infections, interventions and transmission patterns which can be used to answer new questions. In this tutorial, we will learn how to choose an existing model to generate predictions for a given scenario.
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+
+The focus of this tutorial is understanding existing models to decide if they are appropriate for a defined question. 
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+### Choosing a model 
+
+When deciding whether an existing model can be used, we must consider :
+
++ What is the infection/disease of interest? 
+
+A model may already exist for your study disease, or there may be a model for an infection that has the same transmission pathways and epidemiological features that can be used. 
+
++ Do we need a deterministic or stochastic model? 
+
+Model structures differ for whether the disease has pandemic potential or not. When predicted numbers of infection are small, stochastic variation in output can have an effect on whether an outbreak takes off or not. Outbreaks are usually smaller in magnitude than epidemics, so its often appropriate to use a stochastic model to characterise the uncertainty in the early stages of the outbreak. Epidemics are larger in magnitude than outbreaks and so a deterministic model is suitable as we have less interest in the stochastic variation in output. 
+
++ What is the outcome of interest?
+
+The outcome of interest can be a feature of a mathematical model. It may be that you are interested in the predicted numbers of infection through time, or in a specific outcome such as hospitalisations or cases of severe disease.
+
++ Will any interventions be modelled? 
+
+Finally, interventions such as vaccination may be of interest. A model may or may not have the capability to include the impact of different interventions on different time scales (continuous time or at discrete time points). We will discuss interventions in detail in the next tutorial.
+
+### Available  models
+ 
+The R package `epidemics` contains functions to run existing models.
+For details on the models that are available, see the package [vignettes](https://epiverse-trace.github.io/epidemics/articles). To learn how to run the models in R, read the documentation using `?epidemics::epidemic_ebola`. Remember to use the 'Check model equation' questions to help your understanding of an  existing model. 
+
+::::::::::::::::::::::::::::::::::::: checklist
+### Check model equations
+
+- How is transmission modelled? e.g. direct or indirect, airborne or vector-borne
+- What interventions are modelled? 
+- What state variables are there and how do they relate to assumptions about infection?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+## Challenge
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+## What model?
+
+You have been asked to explore the variation in numbers of infected individuals in the early stages of an Ebola outbreak. 
+
+Which of the following models would be an appropriate choice for this task:
+
++  `epidemic_default`
+
++ `epidemic_ebola`
+
+::::::::::::::::: hint
+
+### HINT
+
+Consider the following questions:
+
+::::::::::::::::::::::::::::::::::::: checklist
+
++ What is the infection/disease of interest? 
++ Do we need a deterministic or stochastic model? 
++ What is the outcome of interest?
++ Will any interventions be modelled? 
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::
+
+
+::::::::::::::::: solution
+
+### SOLUTION
+
+
++ What is the infection/disease of interest? **Ebola**
++ Do we need a deterministic or stochastic model?  **A stochastic model would allow us to explore variation in the early stages of the outbreak**
++ What is the outcome of interest? **Number of infections**
++ Will any interventions be modelled? **No**
+
+#### `epidemic_default`
+
+A deterministic SEIR model with age specific direct transmission. 
+
+```{r diagram, echo = FALSE, message = FALSE}
+DiagrammeR::grViz("digraph {
+  # graph statement
+  #################
+  graph [layout = dot,
+         rankdir = LR,
+         overlap = true,
+         fontsize = 10]
+  # nodes
+  #######
+  node [shape = square,
+       fixedsize = true,
+       width = 1.3]
+       S
+       E
+       I
+       R
+
+  # edges
+  #######
+  S -> E [label = ' infection']
+  E -> I [label = ' onset of \ninfectiousness']
+  I -> R [label = ' recovery']
+}")
+```
+
+
+The model is capable of predicting an Ebola type outbreak, but as the model is deterministic, we are not able to explore stochastic variation in the early stages of the outbreak.
+
+
+#### `epidemic_ebola`
+
+A stochastic SEIHFR (Susceptible, Exposed, Infectious, Hospitalised, Funeral, Removed) model that was developed specifically for infection with Ebola.
+
+```{r, echo = FALSE, message = FALSE}
+DiagrammeR::grViz("digraph {
+
+  # graph statement
+  #################
+  graph [layout = dot,
+  rankdir = LR,
+  overlap = true,
+  fontsize = 10]
+
+  # nodes
+  #######
+  node [shape = square,
+       fixedsize = true
+       width = 1.3]
+
+       S
+       E
+       I
+       H
+       F
+       R
+
+  # edges
+  #######
+  S -> E [label = ' infection ']
+  E -> I [label = ' onset of \ninfectiousness']
+  I -> F [label = ' death \n(funeral) ']
+  F -> R [label = ' safe burial']
+  I -> H [label = ' hospitalisation']
+  H -> R [label = ' recovery or \nsafe burial']
+
+  subgraph {
+    rank = same; I; F;
+  }
+  subgraph {
+    rank = same; H; R;
+  }
+}")
+```
+
+
+
+As this model is stochastic, it is the most appropriate choice to explore how variation in numbers of infected individuals in the early stages of an Ebola outbreak. 
+
+
+:::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Existing models can be used for new questions
+- Check that a model has appropriate assumptions about transmission, outbreak potential, outcomes and interventions 
+::::::::::::::::::::::::::::::::::::::::::::::::
