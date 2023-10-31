@@ -5,7 +5,9 @@ exercises: 0
 ---
 
 ```{r setup, echo= FALSE, warning = FALSE, message=FALSE}
-require(EpiNow2);require(ggplot2); require(incidence2)
+require(EpiNow2)
+require(ggplot2)
+require(incidence2)
 require(webshot)
 webshot::install_phantomjs(force = TRUE)
 ```
@@ -107,10 +109,12 @@ To use the data, we must format the data to have two columns:
 
 ```{r}
 cases <- incidence2::covidregionaldataUK[, c("date", "cases_new")]
-cases <- aggregate(x = cases$cases_new,
-                     FUN = sum,
-                     by = list(cases$date),
-                     na.rm = TRUE)
+cases <- aggregate(
+  x = cases$cases_new,
+  FUN = sum,
+  by = list(cases$date),
+  na.rm = TRUE
+)
 colnames(cases) <- c("date", "confirm")
 ```
 
@@ -118,7 +122,7 @@ colnames(cases) <- c("date", "confirm")
 There are case data available for `r dim(cases)[1]` days, but in an outbreak situation it is likely we would only have access to the beginning of this data set. Therefore we assume we only have the first 90 days of this data. 
 
 ```{r echo = FALSE}
-ggplot(cases[1:90,], aes(x = date, y = confirm)) +
+ggplot(cases[1:90, ], aes(x = date, y = confirm)) +
   geom_col()
 ```
 
@@ -140,10 +144,10 @@ We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviati
 
 ```{r}
 latent_period_fixed <- dist_spec(
-  mean = 4, sd = 2, 
+  mean = 4, sd = 2,
   max = 20, distribution = "gamma"
 )
-latent_period_fixed 
+latent_period_fixed
 ```
 
 The argument `max` is the maximum value the distribution can take, in this example 20 days. 
@@ -178,8 +182,8 @@ latent_period_variable <- dist_spec(
   mean = 4, sd = 2,
   mean_sd = 0.5, sd_sd = 0.5,
   max = 20, distribution = "gamma"
-  )
-latent_period_variable 
+)
+latent_period_variable
 ```
 
 
@@ -194,8 +198,8 @@ If we want to assume that the mean reporting delay is 2 days (with a standard de
 
 ```{r}
 log_mean <- convert_to_logmean(2, 1)
-log_sd <- convert_to_logsd(2, 1) 
-x <- seq(from = 0,to = 10 ,length = 1000)
+log_sd <- convert_to_logsd(2, 1)
+x <- seq(from = 0, to = 10, length = 1000)
 df <- data.frame(x = x, density = dlnorm(x, meanlog = log_mean, sdlog = log_sd))
 ggplot(df) +
   geom_line(aes(x, density))
@@ -208,17 +212,18 @@ reporting_delay_variable <- dist_spec(
   mean = log_mean, sd = log_sd,
   mean_sd = 0.5, sd_sd = 0.5,
   max = 10, distribution = "lognormal"
-  )
+)
 ```
 
 If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a log normal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
 
 ```{r, eval = FALSE }
-delay_data <- rlnorm(500, log(5), 1) # synthetic delay data 
+delay_data <- rlnorm(500, log(5), 1) # synthetic delay data
 reporting_delay <- estimate_delay(
-  delay_data, samples = 1000, 
+  delay_data,
+  samples = 1000,
   bootstraps = 10
-  )
+)
 ```
 
 
@@ -245,8 +250,8 @@ One optional input is to specify a log normal prior for the effective reproducti
 
 ```{r, eval = FALSE}
 rt_log_mean <- convert_to_logmean(2, 1)
-rt_log_sd <- convert_to_logsd(2, 1) 
-rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd ))
+rt_log_sd <- convert_to_logsd(2, 1)
+rt <- rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 ```
 
 ::::::::::::::::::::::::::::::::::::: callout
@@ -264,17 +269,16 @@ To find the maximum number of available of cores on your machine, use `parallel:
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ```{r, echo = FALSE}
-
 rt_log_mean <- convert_to_logmean(2, 1)
-rt_log_sd <- convert_to_logsd(2, 1) 
+rt_log_sd <- convert_to_logsd(2, 1)
 
 latent_period_fixed <- dist_spec(
-  mean = 4, sd = 2, 
+  mean = 4, sd = 2,
   max = 20, distribution = "gamma"
 )
 
 log_mean <- convert_to_logmean(2, 1)
-log_sd <- convert_to_logsd(2, 1) 
+log_sd <- convert_to_logsd(2, 1)
 reporting_delay_fixed <- dist_spec(
   mean = log_mean, sd = log_sd,
   max = 10, distribution = "lognormal"
@@ -289,14 +293,13 @@ generation_time_fixed <- dist_spec(
 *Note : in the code below fixed distributions are used instead of variable. This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.*
 
 ```{r, message = FALSE, eval = TRUE}
-reported_cases <- cases[1:90,]
+reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
   delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 )
-
 ```
 
 
@@ -358,7 +361,7 @@ colnames(regional_cases) <- c("date", "confirm", "region")
 
 # extract the first 90 dates for all regions
 dates <- sort(unique(regional_cases$date))[1:90]
-regional_cases <- regional_cases[which(regional_cases$date %in% dates),]
+regional_cases <- regional_cases[which(regional_cases$date %in% dates), ]
 
 head(regional_cases)
 ```
@@ -376,7 +379,6 @@ estimates_regional <- regional_epinow(
 estimates_regional$summary$summarised_results$table
 
 estimates_regional$summary$plots$R
-
 ```
 
 

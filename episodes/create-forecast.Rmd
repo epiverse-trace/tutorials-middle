@@ -5,7 +5,9 @@ exercises: 2
 ---
 
 ```{r setup, echo= FALSE, warning = FALSE, message=FALSE}
-require(EpiNow2);require(ggplot2); require(incidence2)
+require(EpiNow2)
+require(ggplot2)
+require(incidence2)
 require(webshot)
 webshot::install_phantomjs(force = TRUE)
 options(mc.cores = 4)
@@ -51,21 +53,23 @@ The function `epinow()` described in the previous lesson is a wrapper for the fu
 
 ```{r, echo = FALSE}
 cases <- incidence2::covidregionaldataUK[, c("date", "cases_new")]
-cases <- aggregate(x = cases$cases_new,
-                     FUN = sum,
-                     by = list(cases$date),
-                     na.rm = TRUE)
+cases <- aggregate(
+  x = cases$cases_new,
+  FUN = sum,
+  by = list(cases$date),
+  na.rm = TRUE
+)
 colnames(cases) <- c("date", "confirm")
 rt_log_mean <- convert_to_logmean(2, 1)
-rt_log_sd <- convert_to_logsd(2, 1) 
+rt_log_sd <- convert_to_logsd(2, 1)
 
 latent_period_fixed <- dist_spec(
-  mean = 4, sd = 2, 
+  mean = 4, sd = 2,
   max = 20, distribution = "gamma"
 )
 
 log_mean <- convert_to_logmean(2, 1)
-log_sd <- convert_to_logsd(2, 1) 
+log_sd <- convert_to_logsd(2, 1)
 reporting_delay_fixed <- dist_spec(
   mean = log_mean, sd = log_sd,
   max = 10, distribution = "lognormal"
@@ -79,7 +83,7 @@ generation_time_fixed <- dist_spec(
 
 
 ```{r, message = FALSE, eval = TRUE}
-reported_cases <- cases[1:90,]
+reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -120,7 +124,7 @@ To run the inference framework with this observation process, we add `obs = obs_
 
 ```{r, message = FALSE, eval = TRUE}
 obs_scale <- list(mean = 0.4, sd = 0.01)
-reported_cases <- cases[1:90,]
+reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -154,4 +158,3 @@ Adding an observational process to account for incomplete reporting. There are r
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
