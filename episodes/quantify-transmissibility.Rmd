@@ -249,7 +249,19 @@ rt_log_sd <- convert_to_logsd(2, 1)
 rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd ))
 ```
 
+::::::::::::::::::::::::::::::::::::: callout
+### Bayesin inference using Stan 
 
+The Bayesian inference is performed using MCMC methods with the program [Stan](https://mc-stan.org/). There are a number of default inputs to the Stan functions including the number of chains and number of samples per chain (see `?EpiNow2::stan_opts()`).
+
+To reduce computation time, we can run chains in parallel. To do this, we must set the number of cores to be used. By default, 4 MCMC chains are run (see `stan_opts()$chains`), so we can set an equal number of cores to be used in parallel as follows:
+```{r}
+options(mc.cores = 4)
+```
+
+To find the maximum number of available of cores on your machine, use `parallel::detectCores()`.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ```{r, echo = FALSE}
 
@@ -286,6 +298,9 @@ estimates <- epinow(
 )
 
 ```
+
+
+
 
 
 ### Results
@@ -359,6 +374,9 @@ estimates_regional <- regional_epinow(
 )
 
 estimates_regional$summary$summarised_results$table
+
+estimates_regional$summary$plots$R
+
 ```
 
 
