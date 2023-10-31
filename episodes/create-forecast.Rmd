@@ -8,6 +8,7 @@ exercises: 2
 require(EpiNow2);require(ggplot2); require(incidence2)
 require(webshot)
 webshot::install_phantomjs(force = TRUE)
+options(mc.cores = 4)
 ```
 
 
