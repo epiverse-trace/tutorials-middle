@@ -163,7 +163,7 @@ There is a library of models to choose from in `epidemics`. Models are prefixed 
 ### Check model equations
 When using existing model structures always check the model assumptions. Ask questions such as:
 
-- How is transmission modelled? e.g. direct or indirect, airborne or vector-borne
+- How is transmission modelled? e.g. [direct](../learners/reference.md#direct) or [indirect](../learners/reference.md#indirect), [airborne](../learners/reference.md#airborne) or [vector-borne](../learners/reference.md#vectorborne)?
 - What interventions are modelled? 
 - What state variables are there and how do they relate to assumptions about infection?
 
@@ -466,7 +466,7 @@ The choice of increment will depend on the time scale of the parameters, and the
 
 ### Accounting for uncertainty 
 
-As the epidemic model is deterministic, we have one trajectory for our given parameter values. In practice, we have uncertainty in the value of our parameters. To account for this, we must run our model for different parameter combinations. 
+As the epidemic model is [deterministic](../learners/reference.md#deterministic), we have one trajectory for our given parameter values. In practice, we have uncertainty in the value of our parameters. To account for this, we must run our model for different parameter combinations. 
 
 We ran our model with $R_0= 1.5$. However, we believe that $R_0$ follows a normal distribution with mean 1.5 and standard deviation 0.05. To account for uncertainty we will run the model for different values of $R_0$. The steps we will follow to do this are:
 

@@ -52,7 +52,7 @@ When deciding whether an existing model can be used, we must consider :
 
 A model may already exist for your study disease, or there may be a model for an infection that has the same transmission pathways and epidemiological features that can be used. 
 
-+ Do we need a deterministic or stochastic model? 
++ Do we need a [deterministic](../learners/reference.md#deterministic) or [stochastic](../learners/reference.md#stochastic) model? 
 
 Model structures differ for whether the disease has pandemic potential or not. When predicted numbers of infection are small, stochastic variation in output can have an effect on whether an outbreak takes off or not. Outbreaks are usually smaller in magnitude than epidemics, so its often appropriate to use a stochastic model to characterise the uncertainty in the early stages of the outbreak. Epidemics are larger in magnitude than outbreaks and so a deterministic model is suitable as we have less interest in the stochastic variation in output. 
 
