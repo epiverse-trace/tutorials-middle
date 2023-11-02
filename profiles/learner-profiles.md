@@ -11,5 +11,5 @@ We thought about Lucia, Patricia, and Anya as learner personas in designing the 
 
 - [Patricia](https://epiverse-trace.github.io/personas/patricia-discoverer.html), A PhD student learning to use R and analyse Outbreak data for her research project.
 
-- [Anya](https://epiverse-trace.github.io/personas/anya-academica.html), a Professor who needs ready-to-use teaching material for her research and to pass on to students.
+- [Vania](https://epiverse-trace.github.io/personas/vania-academica.html), a Professor who needs ready-to-use teaching material for her research and to pass on to students.
 
