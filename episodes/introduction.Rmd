@@ -12,7 +12,8 @@ The Epiverse-TRACE tutorials are training materials for outbreak analysis aimed 
 
 The tutorials are built around the workflow of outbreak analysis split into three stages : early tasks, middle tasks and late tasks.
 
-![An overview of the tutorial topics](fig/flow.svg)
+![An overview of the tutorial topics](https://epiverse-trace.github.io/task_pipeline-minimal.svg)
+
 
 Task topics consist of one or more episodes. You can navigate to different episodes using the menu on the left hand side. Alternatively, check out the [key points](../key-points.md) of each episode.
 
