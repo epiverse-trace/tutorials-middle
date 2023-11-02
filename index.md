@@ -10,10 +10,9 @@ The tutorials are built around the workflow of outbreak analysis split into thre
 
 ![An overview of the tutorial topics](https://epiverse-trace.github.io/task_pipeline-minimal.svg)
 
+Task topics consist of one or more episodes. You can navigate to different episodes using the menu on the left hand side. Alternatively, you may find the topic you are interested in the [key points](../key-points.md) of each episode.
 
-Task topics consist of one or more episodes. You can navigate to different episodes using the menu on the left hand side. Alternatively, check out the [key points](../key-points.md) of each episode.
-
-Within each episode there are:
+Each episode contains:
 
 + **Overview** : describes what questions will be answered and what are the objectives of the episode.
 + **Prerequisites**: describes what episodes/packages need to be covered before the current episode.
