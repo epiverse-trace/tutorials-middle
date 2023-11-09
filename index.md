@@ -4,7 +4,7 @@ site: sandpaper::sandpaper_site
 
 ## Epiverse-TRACE tutorials
 
-The Epiverse-TRACE tutorials are training materials for outbreak analysis aimed at [learners](../profiles.md) without extensive backgrounds and experience in modelling. 
+The Epiverse-TRACE tutorials are training materials for Outbreak Analysis tasks aimed at [learners](../profiles.md) who are willing to achieve basic competence in modelling and analytics.
 
 The tutorials are built around the workflow of outbreak analysis split into three stages : early tasks, middle tasks and late tasks.
 
