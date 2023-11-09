@@ -30,7 +30,7 @@ library(epidemics)
 ::::::::::::::::::::::::::::::::::::: prereq
 
 ## Prerequisites
-+ Complete tutorial 'Simulating transmission'
++ Complete tutorial [Simulating transmission](../episodes/simulating-transmission.md)
 :::::::::::::::::::::::::::::::::
 
 

@@ -28,7 +28,7 @@ library(epidemics)
 ::::::::::::::::::::::::::::::::::::: prereq
 
 ## Prerequisites
-+ Complete tutorials 'Simulating transmission' and 'Modelling interventions'
++ Complete tutorials [Simulating transmission](../episodes/simulating-transmission.md) and [Modelling interventions](../episodes/modelling-interventions.md)
 
 This tutorial has the following concept dependencies:
 
