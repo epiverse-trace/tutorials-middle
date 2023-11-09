@@ -67,7 +67,7 @@ Finally, interventions such as vaccination may be of interest. A model may or ma
 ### Available  models
  
 The R package `epidemics` contains functions to run existing models.
-For details on the models that are available, see the package [vignettes](https://epiverse-trace.github.io/epidemics/articles). To learn how to run the models in R, read the documentation using `?epidemics::epidemic_ebola`. Remember to use the 'Check model equation' questions to help your understanding of an  existing model. 
+For details on the models that are available, see the package [vignettes](https://epiverse-trace.github.io/epidemics/articles). To learn how to run the models in R, read the documentation using `?epidemics::model_ebola_r`. Remember to use the questions in the '[Check model equation](#check-model-equations)' checklist to help your understanding of an  existing model. 
 
 ::::::::::::::::::::::::::::::::::::: checklist
 ### Check model equations
@@ -90,9 +90,9 @@ You have been asked to explore the variation in numbers of infected individuals 
 
 Which of the following models would be an appropriate choice for this task:
 
-+  `epidemic_default`
++  `model_default_cpp()`
 
-+ `epidemic_ebola`
++ `model_ebola_r()`
 
 ::::::::::::::::: hint
 
@@ -123,7 +123,7 @@ Consider the following questions:
 + What is the outcome of interest? **Number of infections**
 + Will any interventions be modelled? **No**
 
-#### `epidemic_default`
+#### `model_default_cpp()`
 
 A deterministic SEIR model with age specific direct transmission. 
 
@@ -157,7 +157,7 @@ DiagrammeR::grViz("digraph {
 The model is capable of predicting an Ebola type outbreak, but as the model is deterministic, we are not able to explore stochastic variation in the early stages of the outbreak.
 
 
-#### `epidemic_ebola`
+#### `model_ebola_r()`
 
 A stochastic SEIHFR (Susceptible, Exposed, Infectious, Hospitalised, Funeral, Removed) model that was developed specifically for infection with Ebola.
 

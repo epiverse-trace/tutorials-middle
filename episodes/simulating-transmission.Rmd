@@ -106,7 +106,7 @@ influenza <- infection(
 )
 
 # run an epidemic model using `epidemic()`
-output <- epidemic_default_cpp(
+output <- model_default_cpp(
   population = uk_population,
   infection = influenza,
   time_end = 600, increment = 1.0
@@ -156,7 +156,7 @@ pak::pak("epiverse-trace/epidemics")
 ## Model structures
 To generate predictions of infectious disease trajectories, we must first select a mathematical model to use.
 
-There is a library of models to choose from in `epidemics`. Models are prefixed with epidemic and suffixed by the infection name. In this tutorial, we will use the default epidemic model, `epidemic_default()` which is described in the next section.
+There is a library of models to choose from in `epidemics`. Models are prefixed with `model` and suffixed by the name of infection (e.g. ebola) or a different identifier (e.g. default), and whether the model has a R or C++ code base. In this tutorial, we will use the default epidemic model, `model_default_cpp()` which is described in the next section.
 
 
 ::::::::::::::::::::::::::::::::::::: callout
@@ -418,7 +418,7 @@ uk_population <- population(
 No we are ready to run our model. We will specify `time_end=600` to run the model for 600 days.
 
 ```{r run_model}
-output <- epidemic_default_cpp(
+output <- model_default_cpp(
   population = uk_population,
   infection = influenza,
   time_end = 600
@@ -492,7 +492,7 @@ output_samples <- Map(
     )
 
     # run an epidemic model using `epidemic()`
-    output <- epidemic_default_cpp(
+    output <- model_default_cpp(
       population = uk_population,
       infection = influenza,
       time_end = 600, increment = 1.0

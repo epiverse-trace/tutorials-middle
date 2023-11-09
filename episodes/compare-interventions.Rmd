@@ -121,7 +121,7 @@ DiagrammeR::grViz("digraph{
 }")
 ```
 
-See `?epidemics::epidemic_vacamole` for detail on how to run the model. 
+See `?epidemics::model_vacamole_cpp` for detail on how to run the model. 
 
 ## Comparing scenarios
 
