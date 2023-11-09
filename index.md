@@ -24,7 +24,7 @@ Also check out the [glossary](../reference.md) for any terms you may be unfamili
 
 ## Related projects
 
-+ R package vignettes : for R package `{package}` find the vignette located at `https://epiverse-trace.github.io/{package}/`
++ R package vignettes : for R package `{package}` find the vignette located at `https://epiverse-trace.github.io/{package}/`. [Look at all Epiverse-TRACE packages in our developer space](https://epiverse-trace.github.io/).
 + [howto](https://epiverse-trace.github.io/howto/) : reproducible how-to guides of outbreak data analysis tasks using R packages.
 + *COMING SOON* case studies : reproducible case-studies of outbreak data analysis tasks using R packages.
 
