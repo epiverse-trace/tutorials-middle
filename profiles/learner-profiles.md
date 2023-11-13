@@ -5,7 +5,7 @@ title:  Who are these tutorials for?
 
 ## Who are these tutorials for? 
 
-We thought about Lucia, Patricia, and Anya as learner personas in designing the contents of this training:
+We thought about Lucia, Patricia, and Vania as learner personas in designing the contents of this training:
 
 - [Lucia](https://epiverse-trace.github.io/personas/lucia-outbreaks.html), a Field Epidemiologist in a National Health Agency that uses R for data cleaning, plotting and automated reports.
 
