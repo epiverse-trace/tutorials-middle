@@ -4,12 +4,10 @@ teaching: 30
 exercises: 0
 ---
 
-```{r setup, echo= FALSE, warning = FALSE, message=FALSE}
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 require(EpiNow2)
 require(ggplot2)
-require(incidence2)
-require(webshot)
-webshot::install_phantomjs(force = TRUE)
+options(mc.cores = 4)
 ```
 
 :::::::::::::::::::::::::::::::::::::: questions 
@@ -82,6 +80,12 @@ The first step is to install the package :
 ```{r, eval = FALSE}
 install.packages("EpiNow2")
 library("EpiNow2")
+```
+
+*Note : this tutorial is based on EpiNow2 version 1.4.0. This version of the package can be installed using `{devtools}`:*
+```{r, eval = FALSE}
+require("devtools")
+install_version("EpiNow2", version = "1.4.0", repos = "http://cran.us.r-project.org")
 ```
 
 

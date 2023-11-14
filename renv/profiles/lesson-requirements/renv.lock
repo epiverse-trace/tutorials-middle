@@ -131,7 +131,7 @@
     },
     "QuickJSR": {
       "Package": "QuickJSR",
-      "Version": "1.0.6",
+      "Version": "1.0.7",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -139,7 +139,7 @@
         "Rcpp",
         "jsonlite"
       ],
-      "Hash": "6ded66fbe724abcec064fb15f626a0e4"
+      "Hash": "1160fb7afae2eebb5f24939590956cdf"
     },
     "R.methodsS3": {
       "Package": "R.methodsS3",
@@ -2482,19 +2482,6 @@
         "R"
       ],
       "Hash": "c826c7c4241b6fc89ff55aaea3fa7491"
-    },
-    "webshot": {
-      "Package": "webshot",
-      "Version": "0.5.5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "callr",
-        "jsonlite",
-        "magrittr"
-      ],
-      "Hash": "16858ee1aba97f902d24049d4a44ef16"
     },
     "withr": {
       "Package": "withr",

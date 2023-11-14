@@ -4,12 +4,9 @@ teaching: 10
 exercises: 2
 ---
 
-```{r setup, echo= FALSE, warning = FALSE, message=FALSE}
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 require(EpiNow2)
 require(ggplot2)
-require(incidence2)
-require(webshot)
-webshot::install_phantomjs(force = TRUE)
 options(mc.cores = 4)
 ```
 
