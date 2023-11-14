@@ -60,7 +60,7 @@ colnames(cases) <- c("date", "confirm")
 rt_log_mean <- convert_to_logmean(2, 1)
 rt_log_sd <- convert_to_logsd(2, 1)
 
-latent_period_fixed <- dist_spec(
+incubation_period_fixed <- dist_spec(
   mean = 4, sd = 2,
   max = 20, distribution = "gamma"
 )
@@ -84,7 +84,7 @@ reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
+  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 )
 ```
@@ -125,7 +125,7 @@ reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
+  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd)),
   obs = obs_opts(scale = obs_scale)
 )

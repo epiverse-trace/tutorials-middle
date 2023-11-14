@@ -133,18 +133,18 @@ We must specify a delay distribution from time of infection until time reported.
 
 The delay distribution for each of these processes can either estimated from data or obtained from the literature. The distributions can also either be **fixed** (i.e. have no uncertainty) or **variable** (i.e. have associated uncertainty).
 
-#### Latent period distribution 
+#### Incubation period distribution 
 
-The distribution of latent period can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
+The distribution of incubation period can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
 
 We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma^2= 2$ (shape = $4$, scale = $1$) using the function `dist_spec()` as follows:
 
 ```{r}
-latent_period_fixed <- dist_spec(
+incubation_period_fixed <- dist_spec(
   mean = 4, sd = 2,
   max = 20, distribution = "gamma"
 )
-latent_period_fixed
+incubation_period_fixed
 ```
 
 The argument `max` is the maximum value the distribution can take, in this example 20 days. 
@@ -152,7 +152,7 @@ The argument `max` is the maximum value the distribution can take, in this examp
 ::::::::::::::::::::::::::::::::::::: callout
 ### Why a gamma distrubution? 
 
-The latent period has to be positive in value. Therefore we must specific a distribution in `dist_spec` which is for positive values only. 
+The incubation period has to be positive in value. Therefore we must specific a distribution in `dist_spec` which is for positive values only. 
 
 `dist_spec()` supports log normal and gamma distributions, which are distributions for positive values only. 
 
@@ -164,7 +164,7 @@ For all types of delay, we will need to use distributions for positive values on
 
 ####  Including distribution uncertainty
 
-To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma^2$ of our gamma distribution. If our latent period distribution has a mean $\mu$ and standard deviation $\sigma^2$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}^2$:
+To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma^2$ of our gamma distribution. If our incubation period distribution has a mean $\mu$ and standard deviation $\sigma^2$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}^2$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
@@ -175,19 +175,19 @@ $$\mbox{Normal}(\sigma^2,\sigma_{\sigma^2}^2).$$
 We specify this using `dist_spec` with the additional arguments `mean_sd` ($\sigma_{\mu}^2$) and `sd_sd` ($\sigma_{\sigma^2}^2$).
 
 ```{r}
-latent_period_variable <- dist_spec(
+incubation_period_variable <- dist_spec(
   mean = 4, sd = 2,
   mean_sd = 0.5, sd_sd = 0.5,
   max = 20, distribution = "gamma"
 )
-latent_period_variable
+incubation_period_variable
 ```
 
 
 
 ####  Reporting delays
 
-After the latent period, there will be an additional delay of time from symptom onset to case notification: the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
+After the incubation period, there will be an additional delay of time from symptom onset to case notification: the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
 
 When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a log normal distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a log normal distribution. 
 
@@ -269,7 +269,7 @@ To find the maximum number of available of cores on your machine, use `parallel:
 rt_log_mean <- convert_to_logmean(2, 1)
 rt_log_sd <- convert_to_logsd(2, 1)
 
-latent_period_fixed <- dist_spec(
+incubation_period_fixed <- dist_spec(
   mean = 4, sd = 2,
   max = 20, distribution = "gamma"
 )
@@ -294,7 +294,7 @@ reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
+  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 )
 ```
@@ -369,7 +369,7 @@ To find regional estimates, we use the same inputs as `epinow()` to the function
 estimates_regional <- regional_epinow(
   reported_cases = regional_cases,
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(latent_period_fixed + reporting_delay_fixed),
+  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 )
 
