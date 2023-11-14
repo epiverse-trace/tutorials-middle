@@ -22,7 +22,7 @@ webshot::install_phantomjs(force = TRUE)
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Learn how to estimate transmissibility metrics from case data using the R package `EpiNow2`
+- Learn how to estimate transmissibility metrics from a time series of case data using the R package `EpiNow2`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
