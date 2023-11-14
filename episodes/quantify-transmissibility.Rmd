@@ -13,7 +13,7 @@ options(mc.cores = 4)
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How can I estimate key transmissibility metrics from a time series of case data?
-- How can I quantify transmissibility heterogeneity in these metrics? 
+- How can I quantify geographical heterogeneity in these metrics? 
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -344,7 +344,7 @@ estimates$plots$growth_rate
 
 
 
-## Quantify transmission heterogeneity
+## Quantify geographical heterogeneity
 
 The outbreak data of the start of the COVID-19 pandemic from the United Kingdom from the R package `{incidence2}` includes the region in which the cases were recorded. To find regional estimates of the effective reproduction number and cases, we must format the data to have three columns:
 
