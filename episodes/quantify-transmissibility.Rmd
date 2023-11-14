@@ -131,7 +131,7 @@ ggplot(cases[1:90, ], aes(x = date, y = confirm)) +
 ### Delay distributions 
 We must specify a delay distribution from time of infection until time reported. This delay distribution can consist of multiple types of delays/processes. A typical delay distribution from time of infection to case notification may consist of :
 
-<p class="text-center" style="background-color: aliceblue">**time from infection to symptom onset** (the latent period) + **time from symptom onset to case notification** (the reporting time)
+<p class="text-center" style="background-color: aliceblue">**time from infection to symptom onset** (the incubation period) + **time from symptom onset to case notification** (the reporting time)
 .</p>
 
 The delay distribution for each of these processes can either estimated from data or obtained from the literature. The distributions can also either be **fixed** (i.e. have no uncertainty) or **variable** (i.e. have associated uncertainty).
