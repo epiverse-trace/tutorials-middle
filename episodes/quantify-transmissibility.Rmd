@@ -14,7 +14,7 @@ webshot::install_phantomjs(force = TRUE)
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How can I estimate key transmissibility metrics from case data?
+- How can I estimate key transmissibility metrics from a time series of case data?
 - How can I quantify transmissibility heterogeneity in these metrics? 
 
 
