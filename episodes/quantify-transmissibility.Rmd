@@ -45,13 +45,6 @@ The basic reproduction number, $R_0$, is the average number of cases caused by o
 
 But in an ongoing outbreak, the population does not remain entirely susceptible as those that recover from infection are typically immune. Moreover, there can be changes in behaviour or other factors that affect transmission. When we are interested in monitoring changes in transmissibility we are therefore more interested in the value of the **effective reproduction number**, $R_t$, the average number of cases caused by one infectious individual in the population at time $t$.
 
-The effective reproduction number is related to $R_0$ as follows, 
-
-$$R_t = s R_0.$$
-
-where $s=S(t)/N$, the proportion of the population susceptible to infection.
-
-
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
