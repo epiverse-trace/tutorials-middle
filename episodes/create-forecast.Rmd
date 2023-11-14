@@ -49,7 +49,7 @@ Given case data, we can create estimates of the current and future number of cas
 
 ## Create a nowcast and short-term forecast
 
-The function `epinow()` described in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the now cast and short term-forecast using ...
+The function `epinow()` described in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the short term-forecast using ...
 
 ```{r, echo = FALSE}
 cases <- incidence2::covidregionaldataUK[, c("date", "cases_new")]
@@ -110,7 +110,7 @@ plot(estimates)
 
 ### Incomplete observations 
 
-In the previous lesson we accounted for delays in reporting. In `EpiNow2` we also can account for incomplete observations ad in reality, 100% of cases are not reported.
+In the previous lesson we accounted for delays in reporting. In `EpiNow2` we also can account for incomplete observations as in reality, 100% of cases are not reported.
 
 We will pass another input into `epinow()` called `obs` to define an observation model. The format of `obs` must be the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
 

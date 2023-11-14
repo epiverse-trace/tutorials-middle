@@ -81,7 +81,7 @@ The first step is to install the package :
 
 ```{r, eval = FALSE}
 install.packages("EpiNow2")
-library(EpiNow2)
+library("EpiNow2")
 ```
 
 
@@ -190,7 +190,7 @@ latent_period_variable
 
 ####  Reporting delays
 
-After the latent period, there will be an additional delay of time from symptom onset to case notification : the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
+After the latent period, there will be an additional delay of time from symptom onset to case notification: the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
 
 When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a log normal distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a log normal distribution. 
 
