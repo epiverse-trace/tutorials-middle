@@ -44,7 +44,7 @@ This tutorial has the following concept dependencies:
 
 Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. In this lesson we will create short term forecasts of future using the inference framework in `{EpiNow2}`.
 
-## Create a nowcast and short-term forecast
+## Create a short-term forecast
 
 The function `epinow()` described in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the short term-forecast using ...
 
