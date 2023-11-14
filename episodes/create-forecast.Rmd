@@ -80,7 +80,7 @@ generation_time_fixed <- dist_spec(
 
 
 ```{r, message = FALSE, eval = TRUE}
-reported_cases <- cases[1:90, ]
+reported_cases <- cases[1:9, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -121,7 +121,7 @@ To run the inference framework with this observation process, we add `obs = obs_
 
 ```{r, message = FALSE, eval = TRUE}
 obs_scale <- list(mean = 0.4, sd = 0.01)
-reported_cases <- cases[1:90, ]
+reported_cases <- cases[1:9, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),

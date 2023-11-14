@@ -41,7 +41,7 @@ This tutorial has the following concept dependencies:
 ::::::::::::::::::::::::::::::::::::: callout
 ### Reminder: the Effective Reproduction Number, $R_t$ 
 
-The basic reproduction number, $R_0$, is the average number of cases caused by one infectious individual in a entirely susceptible population. 
+The [basic reproduction number](../learners/reference.md#basic), $R_0$, is the average number of cases caused by one infectious individual in a entirely susceptible population. 
 
 But in an ongoing outbreak, the population does not remain entirely susceptible as those that recover from infection are typically immune. Moreover, there can be changes in behaviour or other factors that affect transmission. When we are interested in monitoring changes in transmissibility we are therefore more interested in the value of the **effective reproduction number**, $R_t$, the average number of cases caused by one infectious individual in the population at time $t$.
 
@@ -58,7 +58,7 @@ In the next lessons we will focus on how to implement the functions in `{EpiNow2
 ::::::::::::::::::::::::::::::::::::: callout
 ### Bayesian inference
 
-The R package `EpiNow2` uses a Bayesian inference framework to estimate reproduction numbers and infection times based on reporting dates.
+The R package `EpiNow2` uses a [Bayesian inference](../learners/reference.md#bayesian) framework to estimate reproduction numbers and infection times based on reporting dates.
 
 In Bayesian inference, we use prior knowledge (prior distributions) with data (in a likelihood function) to find the posterior probability.
 
@@ -128,7 +128,7 @@ ggplot(cases[1:90, ], aes(x = date, y = confirm)) +
 ### Delay distributions 
 We must specify a delay distribution from time of infection until time reported. This delay distribution can consist of multiple types of delays/processes. A typical delay distribution from time of infection to case notification may consist of :
 
-<p class="text-center" style="background-color: aliceblue">**time from infection to symptom onset** (the incubation period) + **time from symptom onset to case notification** (the reporting time)
+<p class="text-center" style="background-color: aliceblue">**time from infection to symptom onset** (the [incubation period](../learners/reference.md#incubation)) + **time from symptom onset to case notification** (the reporting time)
 .</p>
 
 The delay distribution for each of these processes can either estimated from data or obtained from the literature. The distributions can also either be **fixed** (i.e. have no uncertainty) or **variable** (i.e. have associated uncertainty).
@@ -290,7 +290,7 @@ generation_time_fixed <- dist_spec(
 *Note : in the code below fixed distributions are used instead of variable. This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.*
 
 ```{r, message = FALSE, eval = TRUE}
-reported_cases <- cases[1:90, ]
+reported_cases <- cases[1:9, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -357,7 +357,7 @@ regional_cases <- incidence2::covidregionaldataUK[, c("date", "cases_new", "regi
 colnames(regional_cases) <- c("date", "confirm", "region")
 
 # extract the first 90 dates for all regions
-dates <- sort(unique(regional_cases$date))[1:90]
+dates <- sort(unique(regional_cases$date))[1:9]
 regional_cases <- regional_cases[which(regional_cases$date %in% dates), ]
 
 head(regional_cases)
