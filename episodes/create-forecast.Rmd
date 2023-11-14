@@ -150,7 +150,7 @@ Adding an observational process to account for incomplete reporting. There are r
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-
+- We can create short-term forecasts by making assumptions about the future behaviour of the reproduction number
 - Incomplete case reporting can be accounted for in estimates
 
 
