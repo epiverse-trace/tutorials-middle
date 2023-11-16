@@ -343,14 +343,17 @@ summary(estimates)
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in daily cases` 
 
-A factor describing whether the daily cases are either:
+A factor describing expected change in daily cases based on the posterior probability that $R_t < 1$.
 
-+ Increasing,
-+ Likely increasing,
-+ Stable,
-+ Likely decreasing,
-+ Decreasing.
-
+<center>
+| Probability ($p$)      | Expected change |
+| ------------- |-------------|
+|$p < 0.05$    |Increasing |
+|$0.05 \leq p< 0.4$    |Likely increasing |
+|$0.4 \leq p< 0.6$    |Stable |
+|$0.6 \leq p < 0.95$    |Likely decreasing |
+|$0.95 \leq p \leq 1$    |Decreasing |
+</center>
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
