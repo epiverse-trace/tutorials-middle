@@ -133,6 +133,25 @@ We assume there are delays from the time of infection until the time a case is r
 
 The delay distribution for each of these processes can either estimated from data or obtained from the literature. We can express uncertainty about what the correct parameters of the distributions by assuming the distributions have **fixed** parameters or whether they have **variable** parameters. To understand the difference between **fixed** and **variable** distributions, let's consider the incubation period. 
 
+::::::::::::::::::::::::::::::::::::: callout
+### Delays and data
+The number of delays and type of delay is a flexible input that depends on the data. The examples below highlight how the delays can be specified for different data sources:
+
+<center>
+
+| Data source        | Delay(s) |
+| ------------- |-------------|
+|Time of case report      |Incubation period + time from symptom onset to case notification |
+|Time of hospitalisation   |Incubation period + time from symptom onset to hospitalisation     |
+|Time of symptom onset      |Incubation period |
+
+</center>
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
 #### Incubation period distribution 
 
 The distribution of incubation period can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
