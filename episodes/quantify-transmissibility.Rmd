@@ -126,12 +126,12 @@ ggplot(cases[1:90, ], aes(x = date, y = confirm)) +
 
 
 ### Delay distributions 
-We must specify a delay distribution from time of infection until time reported. This delay distribution can consist of multiple types of delays/processes. A typical delay distribution from time of infection to case notification may consist of :
+We assume there are delays from the time of infection until the time a case is reported. We specify these delays as distributions to account for the uncertainty in individual level differences. The delay can consist of multiple types of delays/processes. A typical delay from time of infection to case reporting may consist of :
 
 <p class="text-center" style="background-color: aliceblue">**time from infection to symptom onset** (the [incubation period](../learners/reference.md#incubation)) + **time from symptom onset to case notification** (the reporting time)
 .</p>
 
-The delay distribution for each of these processes can either estimated from data or obtained from the literature. The distributions can also either be **fixed** (i.e. have no uncertainty) or **variable** (i.e. have associated uncertainty).
+The delay distribution for each of these processes can either estimated from data or obtained from the literature. We can express uncertainty about what the correct parameters of the distributions by assuming the distributions have **fixed** parameters or whether they have **variable** parameters. To understand the difference between **fixed** and **variable** distributions, let's consider the incubation period. 
 
 #### Incubation period distribution 
 
