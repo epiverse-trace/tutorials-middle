@@ -309,7 +309,7 @@ generation_time_fixed <- dist_spec(
 *Note : in the code below fixed distributions are used instead of variable. This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.*
 
 ```{r, message = FALSE, eval = TRUE}
-reported_cases <- cases[1:9, ]
+reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -382,7 +382,7 @@ regional_cases <- incidence2::covidregionaldataUK[, c("date", "cases_new", "regi
 colnames(regional_cases) <- c("date", "confirm", "region")
 
 # extract the first 90 dates for all regions
-dates <- sort(unique(regional_cases$date))[1:9]
+dates <- sort(unique(regional_cases$date))[1:90]
 regional_cases <- regional_cases[which(regional_cases$date %in% dates), ]
 
 head(regional_cases)
