@@ -271,7 +271,7 @@ rt <- rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 ```
 
 ::::::::::::::::::::::::::::::::::::: callout
-### Bayesin inference using Stan 
+### Bayesian inference using Stan 
 
 The Bayesian inference is performed using MCMC methods with the program [Stan](https://mc-stan.org/). There are a number of default inputs to the Stan functions including the number of chains and number of samples per chain (see `?EpiNow2::stan_opts()`).
 
@@ -318,18 +318,28 @@ estimates <- epinow(
 )
 ```
 
-
-
-
-
 ### Results
 
-We can extract a summary of the key transmissibility features at the latest date in the data:
+We can extract and visualise estimates of the effective reproduction number through time:
+
+```{r}
+estimates$plots$R
+```
+
+The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. This difference in uncertainty is categorised into **Estimate** (green) utilises all data and **Estimate based on partial data** (orange) estimates that are based on less data and therefore have wider intervals. Finally, the **Forecast** (purple) is a projection ahead of time. 
+
+We can also visualise the growth rate estimate through time: 
+```{r}
+estimates$plots$growth_rate
+```
+
+To extract a summary of the key transmissibility features at the *latest date* in the data:
 
 ```{r}
 summary(estimates)
 ```
 
+As these estimates are based on partial data, they have a wide uncertainty interval.
 
 + From the summary of our analysis we see that the expected change in daily cases is `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]` with the estimated new confirmed cases `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`.
 
@@ -338,6 +348,7 @@ summary(estimates)
 + The exponential growth rate of case numbers is `r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`.
 
 + The doubling time (the time taken for case numbers to double) is `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
+
 
 
 ::::::::::::::::::::::::::::::::::::: callout
@@ -357,12 +368,6 @@ A factor describing expected change in daily cases based on the posterior probab
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-We can also extract and visualise estimates of the effective reproduction number and growth rate through time:
-
-```{r}
-estimates$plots$R
-estimates$plots$growth_rate
-```
 
 
 

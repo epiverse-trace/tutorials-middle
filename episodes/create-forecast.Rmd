@@ -92,11 +92,11 @@ estimates <- epinow(
 
 We can visualise the estimates of the effective reproduction number and the estimated number of cases using `plot()`. The estimates are split into three categories:
 
-+ **Estimate** : utilises all data,
++ **Estimate** (green): utilises all data,
 
-+ **Estimate based on partial data** : estimates that are based less data are are therefore more uncertain,
++ **Estimate based on partial data** (orange): estimates that are based less data are are therefore more uncertain,
 
-+ **Forecast** : forecasts into the future. 
++ **Forecast** (purple): forecasts into the future. 
 
 
 ```{r}
