@@ -30,7 +30,7 @@ options(mc.cores = 4)
 
 ## Prerequisites
 
-+ Complete tutorial 'Quantifying transmissibility'
++ Complete tutorial [Quantifying transmission](../episodes/quantify-transmissibility.md)
 
 This tutorial has the following concept dependencies: 
 
@@ -42,11 +42,11 @@ This tutorial has the following concept dependencies:
 
 ## Introduction
 
-Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. In this lesson we will create short term forecasts of future using the inference framework in `{EpiNow2}`.
+Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future, we need to make an assumption of how observations up to today are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed.  In this lesson we will create short-term forecasts by assuming the reproduction number will remain the same as it was estimated to be on the final date for which data was available.
 
 ## Create a short-term forecast
 
-The function `epinow()` described in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the short term-forecast using ...
+The function `epinow()` described in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the short-term forecast using ...
 
 ```{r, echo = FALSE}
 cases <- incidence2::covidregionaldataUK[, c("date", "cases_new")]
@@ -80,7 +80,7 @@ generation_time_fixed <- dist_spec(
 
 
 ```{r, message = FALSE, eval = TRUE}
-reported_cases <- cases[1:9, ]
+reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -104,6 +104,21 @@ plot(estimates)
 ```
 
 
+::::::::::::::::::::::::::::::::::::: callout
+### Forecasting with estimates of $R_t$
+
+By default, the short-term forecasts are created using the latest estimate of the reproduction number $R_t$. As this estimate is based on partial data, it has considerable uncertainty.  
+
+The reproduction number can be changed to an estimate based on more data using `rt_ops()`:
+
+```{r, eval = FALSE}
+rt_opts(future = "estimate")
+```
+
+The result will be less uncertain forecasts (as they are based on $R_t$ with a narrower uncertainty interval) but the forecasts will be based on less recent estimates of $R_t$.  
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 ### Incomplete observations 
 
@@ -121,7 +136,7 @@ To run the inference framework with this observation process, we add `obs = obs_
 
 ```{r, message = FALSE, eval = TRUE}
 obs_scale <- list(mean = 0.4, sd = 0.01)
-reported_cases <- cases[1:9, ]
+reported_cases <- cases[1:90, ]
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -133,7 +148,7 @@ summary(estimates)
 ```
 
 
-The estimates of transmissibility measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see previous lesson). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
+The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see previous lesson). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
 
 We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more detail.
  
