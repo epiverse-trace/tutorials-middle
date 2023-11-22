@@ -44,6 +44,8 @@ _write about the Reproduction number (in a motivational way)_
 
 Packages are handy tools to reuse code, maintenance, less error prone data analysis steps.
 
+## Quantify transmission
+
 The `{EpiNow2}` provide us with a a three-steps solution for this task!
 
 ```{r,warning=FALSE}
@@ -51,7 +53,7 @@ library(EpiNow2)
 ```
 
 
-## First, get your data
+### First, get your data
 
 A data frame of observation
 
@@ -59,7 +61,7 @@ A data frame of observation
 example_confirmed
 ```
 
-## Then, set the parameters
+### Then, set the parameters
 
 ```{r}
 incubation_period <- dist_spec(
@@ -79,7 +81,7 @@ generation_time <- dist_spec(
 )
 ```
 
-## Let's calculate R!
+### Let's calculate R!
 
 ```{r,message=FALSE,warning=FALSE,cache=TRUE}
 epinow_estimates <- epinow(
