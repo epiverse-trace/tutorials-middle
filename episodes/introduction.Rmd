@@ -1,0 +1,140 @@
+---
+title: 'Introduction'
+teaching: 10
+exercises: 2
+editor_options: 
+  chunk_output_type: console
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- Why to use R packages for Outbreak analytics?
+- What can we do to analyse our outbreak data?
+- How can I start doing Outbreak analytics with R?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Explain our vision on the need to outbreak analytics R packages. 
+- Share our strategy to incorporate R packages into an outbreak analytics pipeline.
+- Define our plan to incorporate practical solutions and theoretical concepts on outbreak analytics.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
+
+List (and hyperlink) the lessons/packages which need to be covered before this lesson
+
+```r
+install_version(
+  package = "EpiNow2", version = "1.4.0", 
+  repos = "http://cran.us.r-project.org"
+)
+```
+
+:::::::::::::::::::::::::::::::::
+
+
+## Introduction
+
+_write about the Reproduction number (in a motivational way)_
+
+Packages are handy tools to reuse code, maintenance, less error prone data analysis steps.
+
+The `{EpiNow2}` provide us with a a three-steps solution for this task!
+
+```{r,warning=FALSE}
+library(EpiNow2)
+```
+
+
+## First, get your data
+
+A data frame of observation
+
+```{r}
+example_confirmed
+```
+
+## Then, set the parameters
+
+```{r}
+incubation_period_fixed <- dist_spec(
+  mean = 4, sd = 2,
+  max = 20, distribution = "gamma"
+)
+
+reporting_delay_fixed <- dist_spec(
+  mean = convert_to_logmean(2, 1), 
+  sd = convert_to_logsd(2, 1),
+  max = 10, distribution = "lognormal"
+)
+
+generation_time_fixed <- dist_spec(
+  mean = 3.6, sd = 3.1,
+  max = 20, distribution = "lognormal"
+)
+```
+
+## Let's calculate R!
+
+```{r,echo=FALSE}
+setup_default_logging(logs = NULL)
+```
+
+```{r,message=FALSE,warning=FALSE}
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = example_confirmed[1:60],
+  # delays
+  generation_time = generation_time_opts(generation_time_fixed),
+  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
+  # computation options
+  stan = stan_opts(cores = 4, samples = 10, chains = 2,
+                   control = list(adapt_delta = 0.99)),
+  verbose = interactive()
+)
+```
+
+```{r}
+base::plot(epinow_estimates)
+```
+
+
+## The problem!
+
+However, doing this in real life is not as easy as this example!
+
+Data analysis involves dealing with inputs problems. 
+
+- Read your linelist
+- Clean your linelist
+- Validate your linelist
+- Read parameters from literature
+
+Also you can usethis R outputs as inputs for other tasks.
+
+- Forecast cases
+- Estimate severity
+- Simulate transmission scenarios
+- Compare interventions
+
+At Epiverse-TRACE we are creating packages that complement the current landscape filling gaps of epi-specific challenges in response to outbreaks.
+
+## How to?
+
+In first set of episodes we are going to deal with each of these task previous to the _Quantify transmission_ task. These preliminary task are the __Early tasks__. Then we are going to get deeper into the _Quantify transmission_ task, which is within the __Middle tasks__, and later ones in the pipeline called and __Late tasks__.
+
+![An overview of the tutorial task to cover.](https://epiverse-trace.github.io/task_pipeline-minimal.svg)
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Our vision is to have pipelines of R packages for outbreak analytics.
+- Our strategy is to create interconnected tasks to get public health relevant outputs.
+- Our plan is to introduce about package solutions and theory bits for each of the tasks in the outbreak analytics pipeline.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
