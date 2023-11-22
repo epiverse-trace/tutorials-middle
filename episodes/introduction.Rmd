@@ -16,9 +16,9 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain our vision on the need to outbreak analytics R packages. 
-- Share our strategy to incorporate R packages into an outbreak analytics pipeline.
-- Define our plan to incorporate practical solutions and theoretical concepts on outbreak analytics.
+- Explain our vision on the need of outbreak analytics R packages. 
+- Share our strategy to create R packages into an outbreak analytics pipeline.
+- Define our plan to start your learning path in outbreak analytics with R.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
