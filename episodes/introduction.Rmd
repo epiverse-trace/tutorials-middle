@@ -81,10 +81,6 @@ generation_time_fixed <- dist_spec(
 
 ## Let's calculate R!
 
-```{r,echo=FALSE}
-setup_default_logging(logs = NULL)
-```
-
 ```{r,message=FALSE,warning=FALSE}
 epinow_estimates <- epinow(
   # cases
