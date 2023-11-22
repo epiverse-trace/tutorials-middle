@@ -122,13 +122,16 @@ Also you can usethis R outputs as inputs for other tasks.
 - Simulate transmission scenarios
 - Compare interventions
 
+## What can we do?
+
 At Epiverse-TRACE we are creating packages that complement the current landscape filling gaps of epi-specific challenges in response to outbreaks.
 
-## How to?
+![An overview of the tutorial task to cover.](https://epiverse-trace.github.io/task_pipeline-minimal.svg)
+
+
+## How can we start?
 
 In first set of episodes we are going to deal with each of these task previous to the _Quantify transmission_ task. These preliminary task are the __Early tasks__. Then we are going to get deeper into the _Quantify transmission_ task, which is within the __Middle tasks__, and later ones in the pipeline called and __Late tasks__.
-
-![An overview of the tutorial task to cover.](https://epiverse-trace.github.io/task_pipeline-minimal.svg)
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
