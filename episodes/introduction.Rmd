@@ -62,18 +62,18 @@ example_confirmed
 ## Then, set the parameters
 
 ```{r}
-incubation_period_fixed <- dist_spec(
+incubation_period <- dist_spec(
   mean = 4, sd = 2,
   max = 20, distribution = "gamma"
 )
 
-reporting_delay_fixed <- dist_spec(
+reporting_delay <- dist_spec(
   mean = convert_to_logmean(2, 1), 
   sd = convert_to_logsd(2, 1),
   max = 10, distribution = "lognormal"
 )
 
-generation_time_fixed <- dist_spec(
+generation_time <- dist_spec(
   mean = 3.6, sd = 3.1,
   max = 20, distribution = "lognormal"
 )
@@ -81,17 +81,20 @@ generation_time_fixed <- dist_spec(
 
 ## Let's calculate R!
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,cache=TRUE}
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
   # delays
-  generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  # computation options
-  stan = stan_opts(cores = 4, samples = 10, chains = 2,
-                   control = list(adapt_delta = 0.99)),
-  verbose = interactive()
+  generation_time = generation_time_opts(generation_time),
+  delays = delay_opts(
+    incubation_period + reporting_delay
+  ),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 2,
+    control = list(adapt_delta = 0.99)
+  )
 )
 ```
 
