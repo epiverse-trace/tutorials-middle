@@ -115,7 +115,7 @@ The reproduction number can be changed to an estimate based on more data using `
 rt_opts(future = "estimate")
 ```
 
-The result will be less uncertain forecasts (as they are based on $R_t$ with a narrower uncertainty interval) but the forecasts will be based on less recent estimates of $R_t$.  
+The result will be less uncertain forecasts (as they are based on $R_t$ with a narrower uncertainty interval) but the forecasts will be based on less recent estimates of $R_t$ and assume no change since then.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
