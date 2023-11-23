@@ -58,8 +58,10 @@ contact: 'andree.valle-campos@lshtm.ac.uk' #FIXME
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes:
+episodes: 
 - introduction.Rmd
+- read-data.Rmd
+- describe-data.Rmd
 - quantify-transmissibility.Rmd
 - create-forecast.Rmd
 - simulating-transmission.Rmd
@@ -68,18 +70,20 @@ episodes:
 - compare-interventions.Rmd
 
 # Information for Learners
-learners:
+learners: 
 
 # Information for Instructors
-instructors:
+instructors: 
 
 # Learner Profiles
-profiles:
+profiles: 
 
 # Customisation ---------------------------------------------
 #
 # This space below is where custom yaml items (e.g. pinning
 # sandpaper and varnish versions) should live
+
+
 varnish: epiverse-trace/varnish@epiversetheme
 # this is carpentries/sandpaper#533 in our fork so we can keep it up to date with main
 sandpaper: epiverse-trace/sandpaper@patch-renv-github-bug 
