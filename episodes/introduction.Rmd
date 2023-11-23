@@ -115,6 +115,7 @@ Data analysis involves dealing with inputs problems.
 - Clean your linelist
 - Validate your linelist
 - Read parameters from literature
+- Describe the outbreak in person, place, and time
 
 Also you can usethis R outputs as inputs for other tasks.
 
@@ -122,6 +123,39 @@ Also you can usethis R outputs as inputs for other tasks.
 - Estimate severity
 - Simulate transmission scenarios
 - Compare interventions
+
+::::::::::::::::::::::::::::::::: challenge
+
+### Your last outbreak response
+
+Remember your last experience with outbreak data and reflect in these questions:
+
+- What data sources your needed to understand the outbreak?
+- How did you get accessed to that data?
+- Is that analysis pipeline you follow reusable for your next response?
+
+::::::::::::::::: hint
+
+### HINT (`hint`)
+
+HINT accordions are created with the `hint` tag and nested within 
+`challenge` callouts. These offer more context for the challenge that can help
+the learner find the solution.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+### SOLUTION (`solution`)
+
+SOLUTION accordions are created with the `solution` tag and nested within 
+`challenge` callouts. These provide the learners with the solution to the
+challenge so they can confirm their answers.
+
+::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::
 
 ## What can we do?
 
