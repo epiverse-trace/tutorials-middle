@@ -28,7 +28,7 @@ options(mc.cores = 4)
 
 ## Prerequisites
 
-This tutorial has the following concept dependencies: 
+Learners should familiarise themselves with following concept dependencies before working through this tutorial: 
 
 **Statistics** : probability distributions, principle of Bayesian analysis. 
 
