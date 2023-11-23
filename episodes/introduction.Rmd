@@ -61,9 +61,11 @@ A data frame of observation
 example_confirmed
 ```
 
-### Then, set the delay distributions
+### Then, set the parameters
 
 The natural history of a disease influence the transmission
+
+delay distributions
 
 ```{r}
 incubation_period <- dist_spec(
@@ -90,13 +92,11 @@ epinow_estimates <- epinow(
   
   # cases
   reported_cases = example_confirmed[1:60],
-  
   # delays
   generation_time = generation_time_opts(generation_time),
   delays = delay_opts(
     incubation_period + reporting_delay
   ),
-  
   # computation
   stan = stan_opts(
     cores = 4, samples = 1000, chains = 2,
@@ -113,20 +113,23 @@ base::plot(epinow_estimates)
 
 However, doing this in real life is not as easy as this example!
 
-Data analysis involves dealing with inputs problems. 
+Usually, we receive outbreak data in non-standard formats that require specific steps for make them useful data inputs. Some of them are:
 
 - Read parameters from literature
-- Read your linelist
-- Clean your linelist
+- Read and clean case data
 - Validate your linelist
-- Describe the outbreak in person, place, and time
+- Describe case data
 
-Also you can usethis R outputs as inputs for other tasks.
+After this, we can use the reproductive number and other outputs as inputs for other outbreak analytics tasks. For example:
 
 - Forecast cases
 - Estimate severity
 - Simulate transmission scenarios
 - Compare interventions
+
+So, all these tasks can be interconnected in a pipeline:
+
+![The outbreak analytics pipeline.](https://epiverse-trace.github.io/task_pipeline-minimal.svg)
 
 ::::::::::::::::::::::::::::::::: discussion
 
@@ -144,22 +147,22 @@ Pair up and share your experiences.
 
 ## What can we do?
 
-One strategy is to incorporate into your traditional analysis pipeline new R packages that fill gaps of this epi- specific challenges in response to outbreaks. 
+One strategy is to incorporate specialized R packages into your traditional analysis pipeline. These packages should fill the gaps of these epidemiology specific challenges in response to outbreaks. 
 
 Epiverse-TRACE aim is to provide a software ecosystem for outbreak analytics. This includes to support the development of software pieces, make the existing ones interoperable for the user experience, and stimulate a community of practice.
 
-![An overview of the tutorial task to cover.](https://epiverse-trace.github.io/task_pipeline-minimal.svg)
-
+![](fig/pkgs-hexlogos.png)
 
 ## How can I start?
 
 Our plan for these tutorials is to introduce key solutions from packages in the outbreak analytics pipeline, plus the required theory concepts to interpret modelling outputs and make rigorous conclusions.
 
-- In the first set of episodes, we are going to learn to apply handy package solutions to deal with each of the task previous to _Quantify transmission_ of an outbreak. These preliminary task are the __Early tasks__. 
+- In the first set of episodes, we are going to learn how to read case data and epidemiological parameters to the _Quantify transmission_ pipeline. These preliminary task are the __Early tasks__. Packages here are `{readepi}`, `{cleanepi}`, `{linelist}`, `{epiparameter}`, and `{episoap}`.
 
-- Then, we are going to get deeper into the packages and required theory concepts to _Quantify transmission_ and other ones immediately related with it, all of them named as __Middle tasks__. 
+- Then, we are going to get deeper into the packages and required theory to _Quantify transmission_ and perform more real-time analysis task next to it. These are the __Middle tasks__. Packages here are `{EpiNow2}`, `{cfr}`, `{epichains}`, and `{superspreading}`.
 
-- Lastly, we will use _Quantify transmission_ data outputs to feed complementary tasks in the pipeline called and __Late tasks__.
+- Lastly, we will use _Quantify transmission_ data outputs to compare it to other indicators and simulate epidemic scenarios as part of the __Late tasks__. Packages here are `{finalsize}`, `{epidemics}`, `{scenarios}`, and `{vaccineff}`.
+
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
