@@ -32,7 +32,11 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 [Direct transmission]{#direct}
 : Individuals become infected via direct contact with other infected humans. Airborne transmitted infections are often modelled as directly transmitted infections as they require close contact with infected individuals for successful transmission. 
 
-<!-- ## E -->
+## E
+
+[Effective reproduction number]{#effectiverepro}
+: The effective reproduction number ($Rt$) is similar to the [Basic reproductive number](#basic) ($R0$), but $Rt$ measures the number of persons infected by infectious person when some portion of the population has already been infected. Read more about the [etymology of Reproduction number by Sharma et al, 2023](https://wwwnc.cdc.gov/eid/article/29/8/22-1445_article).
+
 
 <!-- ## F -->
 

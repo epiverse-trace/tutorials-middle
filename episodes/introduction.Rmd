@@ -131,7 +131,7 @@ epinow_estimates <- epinow(
 )
 ```
 
-Getting the following plot that includes cases by date of report, by date of infection, and with the time-varying [effective](https://wwwnc.cdc.gov/eid/article/29/8/22-1445_article) reproduction number:
+Getting the following plot that includes cases by date of report, by date of infection, and with the time-varying (or [effective](../learners/reference.md#effectiverepro)) reproduction number:
 
 ```{r}
 base::plot(epinow_estimates)
