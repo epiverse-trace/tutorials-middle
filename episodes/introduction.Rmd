@@ -156,7 +156,7 @@ Epiverse-TRACE aim is to provide a software ecosystem for outbreak analytics. Th
 
 Our plan for these tutorials is to introduce key solutions from packages in the outbreak analytics pipeline, plus the required theory concepts to interpret modelling outputs and make rigorous conclusions.
 
-- In the first set of episodes, you will learn how to read epidemiological parameters from systematic reviews directly and standardize your reading and cleaning process to input them into the _Quantify transmission_ pipeline. These preliminary tasks are the __Early tasks__. Packages here are `{readepi}`, `{cleanepi}`, `{linelist}`, `{epiparameter}`, and `{episoap}`.
+- In the first set of episodes, you will learn how to optimize the reading and cleaning of epidemiological parameters and case data to input them into the _Quantify transmission_ pipeline. These preliminary tasks are the __Early tasks__. Packages here are `{readepi}`, `{cleanepi}`, `{linelist}`, `{epiparameter}`, and `{episoap}`.
 
 - Then, we are going to get deeper into the packages and required theory to _Quantify transmission_ and perform more real-time analysis task next to it. These are the __Middle tasks__. Packages here are `{EpiNow2}`, `{cfr}`, `{epichains}`, and `{superspreading}`.
 
