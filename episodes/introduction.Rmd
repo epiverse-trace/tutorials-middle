@@ -26,7 +26,13 @@ editor_options:
 
 ## Prerequisites
 
-List (and hyperlink) the lessons/packages which need to be covered before this lesson
+This episode requires you to be familiar with:
+
+**Data science** : Basic programming with R.
+
+**Epidemic theory** : Effective reproduction number.
+
+This also requires the following package:
 
 ```r
 install_version(
