@@ -43,6 +43,20 @@ install_version(
 
 :::::::::::::::::::::::::::::::::
 
+## Why to use R packages for Outbreak analytics?
+
+Outbreaks appear with different diseases and in different contexts but what all of them have in common are the key public health questions ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371#d1e605)).
+
+Is the epidemic going to take off? Is it under control? How much effort will be needed to control it? We can answer to them by _quantifying the transmissibility_ of the disease. The most used parameter for this is the reproduction number ($R$), the average number of secondary infections caused by a typical primary case in the population
+of interest ([Prism, 2016](http://prism.edu.au/publications/prism-modeling-guideline/)). We can intuitively interpret it as: 
+
+- if $R>1$, the epidemic is likely to growth,
+- if $R<1$, the epidemic is likely to decline.
+
+To estimate the reproduction number we need to collect __data inputs__ like the incidence of reported cases and the [serial interval](../learners/reference.md#serialinterval) distribution. Then, to get it, we need to apply the appropriate mathematical models written in code with the required computational methods. That is not enough! Following _good practices_, that code should be peer-reviewed and contain internal tests to double-check that we are getting the estimates we expect. Imagine rewriting all of it during a health emergency!
+
+In R, the fundamental unit of shareable code is the _package_. A package bundles together code, data, documentation, and tests, and is easy to share with others ([Wickham and Bryan, 2023](https://r-pkgs.org/introduction.html)). We, as epidemiologists, can contribute to their collaborative maintenance as a community, to perform less error-prone data analysis pipelines.
+
 ::::::::::::::::::::::::::::::::: discussion
 
 ### Questions to think about
@@ -57,20 +71,6 @@ Pair up and share your experiences.
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-
-## Why to use R packages for Outbreak analytics?
-
-Outbreaks appear with different diseases and in different contexts but what all of them have in common are the key public health questions ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371#d1e605)).
-
-Is the epidemic going to take off? Is it under control? How much effort will be needed to control it? We can answer to them by _quantifying the transmissibility_ of the disease. The most used parameter for this is the reproduction number ($R$), the average number of secondary infections caused by a typical primary case in the population
-of interest ([Prism, 2016](http://prism.edu.au/publications/prism-modeling-guideline/)). We can intuitively interpret it as: 
-
-- if $R>1$, the epidemic is likely to growth,
-- if $R<1$, the epidemic is likely to decline.
-
-To estimate the reproduction number we need to collect __data inputs__ like the incidence of reported cases and the [serial interval](../learners/reference.md#serialinterval) distribution. Then, to get it, we need to apply the appropriate mathematical models written in code with the required computational methods. That is not enough! Following _good practices_, that code should be peer-reviewed and contain internal tests to double-check that we are getting the estimates we expect. Imagine rewriting all of it during a health emergency!
-
-In R, the fundamental unit of shareable code is the _package_. A package bundles together code, data, documentation, and tests, and is easy to share with others ([Wickham and Bryan, 2023](https://r-pkgs.org/introduction.html)). We, as epidemiologists, can contribute to their collaborative maintenance as a community, to perform less error-prone data analysis pipelines.
 
 ## Example: Quantify transmission
 
