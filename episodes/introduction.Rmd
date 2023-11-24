@@ -30,7 +30,7 @@ This episode requires you to be familiar with:
 
 **Data science** : Basic programming with R.
 
-**Epidemic theory** : Effective reproduction number.
+**Epidemic theory** : Reproduction number.
 
 This also requires the following package:
 
