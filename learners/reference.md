@@ -37,6 +37,9 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 <!-- ## F -->
 
 ## G
+[Generation time]{#generationtime}
+:  Distribution of time between infection of an index case and infection of its secondary cases. Most commonly, the generation time distribution is estimated from data on the [serial interval](#serialinterval) distribution of an infection ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+
 [Growth rate]{#growth}
 : The exponential growth rate tells us how much cases are increasing or decreasing at the start of an epidemic. It gives us a measure of speed of transmission, see [Dushoff & Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
 
@@ -80,12 +83,18 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 
 <!-- ## Q -->
 
-<!-- ## R -->
+## R
+
+[Reporting delay]{#reportingdelay}
+: Delay between the time an event occurs and the time it is reported ([Lawless, 1994](https://www.jstor.org/stable/3315820)). We can quantify it by comparing the linelist with successive versions of it or up-to-date reported aggregated case counts ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
 ## S
 
 [State variables]{#state}
 : The state variables in a model represented by [ordinary differential equations](#ordinary) are the disease states that individuals can be in e.g. if individuals can be susceptible, infectious or recovered the state variables are $S$, $I$ and $R$. There is an ordinary differential equation for each state variable. 
+
+[Serial interval]{#serialinterval}
+: The time delay between the onset of symptoms between a primary case and a secondary case. The serial interval is related to the [incubation period](#incubation), as described in Figure 2 at [Nishiura et al. (2020)](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext).
 
 [Stochastic model]{#stochastic}
 : A model that includes some stochastic process resulting in variation in model simulations for the same initial conditions and parameter values. Examples include stochastic differential equations and branching process models. For more detail see [Allen (2017)](https://doi.org/10.1016/j.idm.2017.03.001).
