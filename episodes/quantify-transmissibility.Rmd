@@ -102,7 +102,7 @@ head(incidence2::covidregionaldataUK)
 
 To use the data, we must format the data to have two columns:
 
-+ `date` : the date,
++ `date` : the date (as a date object see `?is.Date()`),
 + `confirm` : number of confirmed cases on that date.
 
 ```{r}

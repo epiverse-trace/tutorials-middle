@@ -8,6 +8,7 @@ exercises: 2
 require(EpiNow2)
 require(ggplot2)
 options(mc.cores = 4)
+ebola_cases <- read.csv("~/GitHub/tutorials/learners/data/ebola_cases.csv")
 ```
 
 
@@ -157,6 +158,88 @@ We can also change the default distribution from Negative Binomial to Poisson, r
 
 *Coming soon*
 
+## Challenge : Ebola outbreak analysis 
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+Download the file [ebola_cases.csv](../data/ebola_cases.csv) and read it into R. The simulated data consists of the date of symptom onset and number of confirmed cases of the early stages of the Ebola outbreak in Sierra Leone in 2014.
+
+Using the first 3 months (120 days) of data:
+
+1. Estimate of cases increasing or decreasing on day 120 of the outbreak (Hint: Find the effective reproduction number and growth rate on day 120)
+2. Create a two week forecast of number of cases
+
+You can use the following parameter values for the delay distribution(s) and generation time distribution.
+
++ Latent period : Lognormal$(2.487,0.330)$ ([Eichner et al. 2011](https://doi.org/10.1016/j.phrp.2011.04.001) via `{epiparameter}`)
++ Generation time : Gamma$(15.3, 10.1)$ ([WHO Ebola Response Team 2014](https://www.nejm.org/doi/full/10.1056/NEJMoa1411100))
+
+You may include some uncertainty around the mean and standard deviation of these distributions. 
+
+::::::::::::::::: hint
+
+### HINT : data format
+
+Ensure the data is in the correct format :
+
++ `date` : the date (as a date object see `?is.Date()`),
++ `confirm` : number of confirmed cases on that date.
+
+
+::::::::::::::::::::::
+
+
+::::::::::::::::: solution
+
+### SOLUTION
+
+To estimate the effective reproduction number and growth rate, we will use the function `epinow()`.
+
+As the data consists of date of symptom onset, we only need to specify a delay distribution for the incubation period and the generation time. 
+
+We specify the distributions with some uncertainty around the mean and standard deviation of the log normal distribution for the incubation period and the Gamma distribution for the generation time.
+
+```{r}
+ebola_incubation_period <- dist_spec(
+  mean =  2.487, sd = 0.330,
+  mean_sd = 0.5, sd_sd = 0.5,
+  max = 20, distribution = "lognormal"
+)
+
+ebola_generation_time <- dist_spec(
+  mean = 15.3, sd = 10.1,
+  mean_sd = 0.5, sd_sd = 0.5,
+  max = 30, distribution = "gamma"
+)
+```
+
+As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 
+
+```{r, message = FALSE}
+# format date column
+ebola_cases$date <- as.Date(ebola_cases$date)
+
+ebola_estimates <- epinow(
+  reported_cases = ebola_cases[1:120,], # first 3 months of data only
+  generation_time = generation_time_opts(ebola_generation_time),
+  delays = delay_opts(ebola_incubation_period),
+  horizon = 14 # horizon needs to be 14 days to create two week forecast (default is 7 days)
+)
+
+summary(ebola_estimates)
+```
+
+The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(ebola_estimates)$estimate[summary(ebola_estimates)$measure=="Effective reproduction no."]`. The exponential growth rate of case numbers is `r summary(ebola_estimates)$estimate[summary(ebola_estimates)$measure=="Rate of growth"]`.
+
+
+```{r}
+plot(ebola_estimates)
+```
+
+:::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Summary
 
