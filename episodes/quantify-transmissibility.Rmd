@@ -121,7 +121,10 @@ There are case data available for `r dim(cases)[1]` days, but in an outbreak sit
 
 ```{r echo = FALSE}
 ggplot(cases[1:90, ], aes(x = date, y = confirm)) +
-  geom_col()
+  geom_col()+
+  theme_grey(
+    base_size = 15
+  )
 ```
 
 
@@ -219,7 +222,12 @@ log_sd <- convert_to_logsd(2, 1)
 x <- seq(from = 0, to = 10, length = 1000)
 df <- data.frame(x = x, density = dlnorm(x, meanlog = log_mean, sdlog = log_sd))
 ggplot(df) +
-  geom_line(aes(x, density))
+  geom_line(
+    aes(x, density)
+    )+
+  theme_grey(
+    base_size = 15
+  )
 ```
 
 Using the mean and standard deviation for the log normal distribution, we can specify a fixed or variable distribution using `dist_spec()` as before: 
