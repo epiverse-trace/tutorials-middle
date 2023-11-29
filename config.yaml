@@ -58,8 +58,9 @@ contact: 'andree.valle-campos@lshtm.ac.uk' #FIXME
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
+episodes:
 - introduction.Rmd
+- read-delays.Rmd
 - read-data.Rmd
 - describe-data.Rmd
 - quantify-transmissibility.Rmd
@@ -70,13 +71,13 @@ episodes:
 - compare-interventions.Rmd
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
