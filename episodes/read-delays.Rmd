@@ -26,12 +26,16 @@ exercises: 2
 
 ## Systematic review of Parameters
 
-This is a lesson created via The Carpentries Workbench. 
+The natural history of a disease influence the transmission dynamics. 
+<!-- ref: https://www.sciencedirect.com/topics/mathematics/infectiousness -->
+<!-- ref: https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext -->
 
 ## Find a generation time
 
 What it is?
 With which other is related? -> the serial interval
+
+[serial interval](../learners/reference.md#serialinterval) distribution
 
 ```{r}
 ### 1 replace generation time from literature -----
