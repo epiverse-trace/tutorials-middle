@@ -28,7 +28,10 @@ exercises: 2
 
 This is a lesson created via The Carpentries Workbench. 
 
-# Find a generation time
+## Find a generation time
+
+What it is?
+With which other is related? -> the serial interval
 
 ```{r}
 ### 1 replace generation time from literature -----
@@ -91,7 +94,10 @@ base::plot(epinow_estimates)
 ```
 
 
-## Adding incubation time
+## Find the incubation time
+
+What it is?
+With which other is related?
 
 The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [incubation period](../learners/reference.md#incubation):
 
@@ -180,7 +186,10 @@ base::plot(epinow_estimates)
 ```
 
 
-## Adding reporting delays
+## Find the reporting delay
+
+What it is?
+With which other is related?
 
 The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [reporting delay](../learners/reference.md#reportingdelay):
 
@@ -220,6 +229,9 @@ epinow_estimates <- epinow(
 
 ```
 
+## concept map
+
+update it from last epiparameter test 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
