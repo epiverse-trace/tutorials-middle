@@ -42,7 +42,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 
 ## G
 [Generation time]{#generationtime}
-:  Distribution of time between infection of an index case and infection of its secondary cases. Most commonly, the generation time distribution is estimated from data on the [serial interval](#serialinterval) distribution of an infection ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+:  Distribution of time between infection of an index case and infection of its secondary cases. Most commonly, the generation time distribution is commonly estimated from data on the [serial interval](#serialinterval) distribution of an infection ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
 [Growth rate]{#growth}
 : The exponential growth rate tells us how much cases are increasing or decreasing at the start of an epidemic. It gives us a measure of speed of transmission, see [Dushoff & Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).

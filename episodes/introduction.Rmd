@@ -90,7 +90,7 @@ example_confirmed
 
 ### Then, set the generation time
 
-Not all primary cases have the same probability to generate a secondary case. The onset and cessation of infectiousness may occur gradually. For `{EpiNow2}`, we can specify it as a probability distribution:
+Not all primary cases have the same probability to generate a secondary case. The onset and cessation of infectiousness may occur gradually. For `{EpiNow2}`, we can specify it as a probability `distribution` with `mean`, standard deviation `sd`, and maximum value `max`:
 
 ```{r}
 generation_time <- dist_spec(
@@ -103,13 +103,13 @@ generation_time <- dist_spec(
 
 ### Let's calculate the reproduction number!
 
-In the `epinow()` function we can add the cases, delays, and your preferred computational parameters for this calculation:
+In the `epinow()` function we can add the `reported_cases` data frame, the `generation_time` distribution, and your preferred computation `stan` parameters for this calculation:
 
 ```{r,message=FALSE,warning=FALSE,cache=TRUE}
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
-  # delays
+  # distribution
   generation_time = generation_time_opts(generation_time),
   # computation
   stan = stan_opts(
