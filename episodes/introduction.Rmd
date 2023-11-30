@@ -90,20 +90,9 @@ example_confirmed
 
 ### Then, set the delay distributions
 
-The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [incubation period](../learners/reference.md#incubation), the [reporting delay](../learners/reference.md#reportingdelay), and the [generation time](../learners/reference.md#generationtime):
+The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify a relevant epidemiological distributions, the [generation time](../learners/reference.md#generationtime):
 
 ```{r}
-incubation_period <- dist_spec(
-  mean = 4, sd = 2,
-  max = 20, distribution = "gamma"
-)
-
-reporting_delay <- dist_spec(
-  mean = convert_to_logmean(2, 1), 
-  sd = convert_to_logsd(2, 1),
-  max = 10, distribution = "lognormal"
-)
-
 generation_time <- dist_spec(
   mean = 3.6, sd = 3.1,
   max = 20, distribution = "lognormal"
@@ -120,9 +109,6 @@ epinow_estimates <- epinow(
   reported_cases = example_confirmed[1:60],
   # delays
   generation_time = generation_time_opts(generation_time),
-  delays = delay_opts(
-    incubation_period + reporting_delay
-  ),
   # computation
   stan = stan_opts(
     cores = 4, samples = 1000, chains = 3,
