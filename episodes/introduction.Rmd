@@ -53,7 +53,7 @@ of interest ([Prism, 2016](http://prism.edu.au/publications/prism-modeling-guide
 - if $R>1$, the epidemic is likely to growth,
 - if $R<1$, the epidemic is likely to decline.
 
-To estimate the reproduction number we need to collect __data inputs__ like the incidence of reported cases and the [serial interval](../learners/reference.md#serialinterval) distribution. Then, to get it, we need to apply the appropriate mathematical models written in code with the required computational methods. That is not enough! Following _good practices_, that code should be peer-reviewed and contain internal tests to double-check that we are getting the estimates we expect. Imagine rewriting all of it during a health emergency!
+To estimate the reproduction number we can use two __data inputs__: the incidence of reported cases and the [generation time](../learners/reference.md#generationtime) distribution. Then, to get it, we need to apply the appropriate mathematical models written in code with the required computational methods. That is not enough! Following _good practices_, that code should be peer-reviewed and contain internal tests to double-check that we are getting the estimates we expect. Imagine rewriting all of it during a health emergency!
 
 In R, the fundamental unit of shareable code is the _package_. A package bundles together code, data, documentation, and tests, and is easy to share with others ([Wickham and Bryan, 2023](https://r-pkgs.org/introduction.html)). We, as epidemiologists, can contribute to their collaborative maintenance as a community, to perform less error-prone data analysis pipelines.
 
@@ -88,14 +88,16 @@ Case incidence data needs be stored in a data frame with the observed number of 
 example_confirmed
 ```
 
-### Then, set the delay distributions
+### Then, set the generation time
 
-The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify a relevant epidemiological distributions, the [generation time](../learners/reference.md#generationtime):
+Not all primary cases have the same probability to generate a secondary case. The onset and cessation of infectiousness may occur gradually. For `{EpiNow2}`, we can specify it as a probability distribution:
 
 ```{r}
 generation_time <- dist_spec(
-  mean = 3.6, sd = 3.1,
-  max = 20, distribution = "lognormal"
+  mean = 3.6, 
+  sd = 3.1,
+  max = 20, 
+  distribution = "lognormal"
 )
 ```
 
