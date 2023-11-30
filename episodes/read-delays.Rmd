@@ -24,13 +24,202 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introduction
+## Systematic review of Parameters
 
 This is a lesson created via The Carpentries Workbench. 
 
-# Content
+# Find a generation time
 
-Bla
+```{r}
+### 1 replace generation time from literature -----
+
+generation_time <- dist_spec(
+  mean = 3.6,
+  sd = 3.1,
+  max = 20,
+  distribution = "lognormal"
+)
+
+# replace this assuming that this is covid
+# with lognormal
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Nishiura") %>%
+  epiparameter::list_distributions()
+
+covid_lnorm <- epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Nishiura",
+  single_epidist = T) # not desired
+
+covid_lnorm
+
+covid_lnorm$summary_stats$mean
+covid_lnorm_discrete <- epiparameter::discretise(covid_lnorm)
+covid_lnorm_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.999)
+
+generation_time_epiparam <- dist_spec(
+  mean = covid_lnorm$summary_stats$mean,
+  sd = covid_lnorm$summary_stats$sd,
+  max = covid_lnorm_discrete_max,
+  distribution = "lognormal"
+)
+
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = example_confirmed[1:60],
+  # delays
+  generation_time = generation_time_opts(generation_time_epiparam),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
+)
+
+base::plot(epinow_estimates)
+```
+
+## formative
+
+```{r}
+# generation time for ebola
+# if not, find serial interval and use it as serial interval
+```
+
+
+## Adding incubation time
+
+The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [incubation period](../learners/reference.md#incubation):
+
+```{r}
+incubation_period <- dist_spec(
+  mean = 4, sd = 2,
+  max = 20, distribution = "gamma"
+)
+```
+
+```{r,message=FALSE,warning=FALSE,cache=TRUE}
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = example_confirmed[1:60],
+  # delays
+  generation_time = generation_time_opts(generation_time),
+  delays = delay_opts(incubation_period),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
+)
+```
+
+
+```{r}
+### 2 include incubation time ------
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "incubation") %>%
+  epiparameter::list_distributions()
+
+covid_incubation <- epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "incubation",
+  author = "Natalie",
+  single_epidist = T
+)
+
+covid_incubation
+
+covid_incubation$summary_stats$mean
+covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
+covid_incubation_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.999)
+
+incubation_time_epiparam <- dist_spec(
+  mean = covid_incubation$summary_stats$mean,
+  sd = covid_incubation$summary_stats$sd,
+  max = covid_incubation_discrete_max,
+  distribution = "lognormal"
+)
+
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = example_confirmed[1:60],
+  # generation time
+  generation_time = generation_time_opts(generation_time_epiparam),
+  # delays
+  delays = delay_opts(incubation_time_epiparam),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
+)
+
+base::plot(epinow_estimates)
+
+# post calculation questions
+# what have changed?
+# - cases by date of infection
+# - uncertainty
+
+```
+
+## formative
+
+```{r}
+# formative, now with ebola -----------------------------------------------
+
+# read ebola
+
+
+```
+
+
+## Adding reporting delays
+
+The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [reporting delay](../learners/reference.md#reportingdelay):
+
+```{r}
+reporting_delay <- dist_spec(
+  mean = convert_to_logmean(2, 1), 
+  sd = convert_to_logsd(2, 1),
+  max = 10, distribution = "lognormal"
+)
+```
+
+```{r,message=FALSE,warning=FALSE,cache=TRUE}
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = example_confirmed[1:60],
+  # delays
+  generation_time = generation_time_opts(generation_time),
+  delays = delay_opts(
+    incubation_period + reporting_delay
+  ),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
+)
+```
+
+## formative
+
+```{r}
+### 3 add reporting delay --------
+
+# now is your turn!
+# after the ebola assessment
+
+
+```
+
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
