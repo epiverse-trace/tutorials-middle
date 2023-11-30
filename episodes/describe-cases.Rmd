@@ -1,0 +1,28 @@
+---
+title: 'describe-cases'
+teaching: 10
+exercises: 2
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How do you visualize incidence cases?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Create incidence curves
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Introduction
+
+This is a lesson created via The Carpentries Workbench. 
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Use `{incidence2}` 
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
