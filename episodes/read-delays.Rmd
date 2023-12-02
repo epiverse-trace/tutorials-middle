@@ -233,6 +233,12 @@ epinow_estimates <- epinow(
 
 ```
 
+## From our data! (callout)
+
+estimate serial interval from case and contact data pairs 
+
+ref: https://www.reconlearn.org/post/real-time-response-2
+
 ## concept map
 
 update it from last epiparameter test 
