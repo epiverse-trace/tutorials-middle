@@ -7,12 +7,14 @@ exercises: 2
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How do you visualize incidence cases?
+- How to get serial interval from case data? <!-- possibly in a separate episode? -->
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Create incidence curves
+- Estimate serial interval distribution from contact data
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
