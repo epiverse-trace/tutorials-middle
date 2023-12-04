@@ -171,7 +171,7 @@ Using the first 3 months (120 days) of data:
 
 You can use the following parameter values for the delay distribution(s) and generation time distribution.
 
-+ Latent period : Lognormal$(2.487,0.330)$ ([Eichner et al. 2011](https://doi.org/10.1016/j.phrp.2011.04.001) via `{epiparameter}`)
++ Incubation period : Lognormal$(2.487,0.330)$ ([Eichner et al. 2011](https://doi.org/10.1016/j.phrp.2011.04.001) via `{epiparameter}`)
 + Generation time : Gamma$(15.3, 10.1)$ ([WHO Ebola Response Team 2014](https://www.nejm.org/doi/full/10.1056/NEJMoa1411100))
 
 You may include some uncertainty around the mean and standard deviation of these distributions. 
