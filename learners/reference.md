@@ -36,7 +36,9 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 
 <!-- ## F -->
 
-<!-- ## G -->
+## G
+[Growth rate]{#growth}
+: The exponential growth rate tells us how much cases are increasing or decreasing at the start of an epidemic. It gives us a measure of speed of transmission, see [Dushoff & Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
 
 <!-- ## H -->
 
