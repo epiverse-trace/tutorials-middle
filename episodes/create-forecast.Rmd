@@ -43,11 +43,11 @@ Learners should familiarise themselves with following concept dependencies befor
 
 ## Introduction
 
-Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future, we need to make an assumption of how observations up to today are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed. In this lesson we will create short-term forecasts by assuming the reproduction number will remain the same as it was estimated to be on the final date for which data was available.
+Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future, we need to make an assumption of how observations up to today are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed. In this tutorial we will create short-term forecasts by assuming the reproduction number will remain the same as it was estimated to be on the final date for which data was available.
 
 ## Create a short-term forecast
 
-The function `epinow()` described in the previous lesson is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous lesson we can extract the short-term forecast using ...
+The function `epinow()` described in the previous tutorial is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Using the same code in the previous tutorial we can extract the short-term forecast using:
 
 ```{r, echo = FALSE}
 cases <- aggregate(
@@ -123,11 +123,11 @@ Additionally, there is the option to project the value of $R_t$ into the future 
 
 ### Incomplete observations 
 
-In the previous lesson we accounted for delays in reporting. In `EpiNow2` we also can account for incomplete observations as in reality, 100% of cases are not reported.
+In the previous tutorial we accounted for delays in reporting. In `EpiNow2` we also can account for incomplete observations as in reality, 100% of cases are not reported.
 
 We will pass another input into `epinow()` called `obs` to define an observation model. The format of `obs` must be the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
 
-We believe the COVID-19 outbreak data from the previous lesson do not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
+We believe the COVID-19 outbreak data from the previous tutorial do not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
 
 ```{r}
 obs_scale <- list(mean = 0.4, sd = 0.01)
@@ -149,7 +149,7 @@ summary(estimates)
 ```
 
 
-The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see previous lesson). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
+The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see previous tutorial). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
 
 We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more detail.
  
