@@ -106,12 +106,10 @@ To use the data, we must format the data to have two columns:
 + `confirm` : number of confirmed cases on that date.
 
 ```{r}
-cases <- incidence2::covidregionaldataUK[, c("date", "cases_new")]
 cases <- aggregate(
-  x = cases$cases_new,
-  FUN = sum,
-  by = list(cases$date),
-  na.rm = TRUE
+  cases_new ~ date, 
+  data = incidence2::covidregionaldataUK[, c("date", "cases_new")],
+  FUN = sum
 )
 colnames(cases) <- c("date", "confirm")
 ```
