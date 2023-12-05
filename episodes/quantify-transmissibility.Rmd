@@ -413,7 +413,7 @@ estimates_regional$summary$plots$R
 
 ## Summary
 
-The reliability of the estimates depends on the quality of the data and appropriate choice of delay distributions. `EpiNow2` can also be used to estimate infections and create forecasts using case data. In the next lesson we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`. 
+`EpiNow2` can be used to estimate transmission metrics from case data at the start of an outbreak. The reliability of these estimates depends on the quality of the data and appropriate choice of delay distributions. In the next lesson we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`. 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 

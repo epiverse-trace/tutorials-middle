@@ -43,7 +43,7 @@ Learners should familiarise themselves with following concept dependencies befor
 
 ## Introduction
 
-Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future, we need to make an assumption of how observations up to today are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed.  In this lesson we will create short-term forecasts by assuming the reproduction number will remain the same as it was estimated to be on the final date for which data was available.
+Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future, we need to make an assumption of how observations up to today are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed. In this lesson we will create short-term forecasts by assuming the reproduction number will remain the same as it was estimated to be on the final date for which data was available.
 
 ## Create a short-term forecast
 
@@ -243,7 +243,7 @@ plot(ebola_estimates)
 
 ## Summary
 
-Adding an observational process to account for incomplete reporting. There are range of different model options in `EpiNow2` that aren't covered in these lessons, see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html) for more details.
+`EpiNow2` can be used to create short term forecasts and to estimate the relationship between different outcomes. There are a range of model options that can be implemented for different analysis, including adding an observational process to account for incomplete reporting. ee the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html) for more details on different model options in `EpiNow2` that aren't covered in these tutorials. 
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
