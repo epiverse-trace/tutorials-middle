@@ -67,14 +67,14 @@ Remember your last experience with outbreak data and reflect in these questions:
 - How did you get accessed to that data?
 - Is that analysis pipeline you followed reusable for a next response?
 
-Pair up and share your experiences.
+Reflect on your experiences.
 
 :::::::::::::::::::::::::::::::::::::::::::
 
 
 ## Example: Quantify transmission
 
-The `{EpiNow2}` package provide us with a three-steps solution to _quantify the transmissibility_.
+The `{EpiNow2}` package provide us with a three-steps solution to _quantify the transmissibility_. Let's see how to do this with a minimal example. First, load the package:
 
 ```{r,warning=FALSE}
 library(EpiNow2)
@@ -82,7 +82,7 @@ library(EpiNow2)
 
 ### First, get your case data
 
-Case incidence data needs be stored in a data frame with the observed number of cases per day:
+Case incidence data needs be stored in a data frame with the observed number of cases per day. We can read example from the package:
 
 ```{r}
 example_confirmed
@@ -103,7 +103,11 @@ generation_time <- dist_spec(
 
 ### Let's calculate the reproduction number!
 
-In the `epinow()` function we can add the `reported_cases` data frame, the `generation_time` distribution, and your preferred computation `stan` parameters for this calculation:
+In the `epinow()` function we can add:
+
+- the `reported_cases` data frame, 
+- the `generation_time` distribution, and 
+- the computation `stan` parameters for this calculation:
 
 ```{r,message=FALSE,warning=FALSE,cache=TRUE}
 epinow_estimates <- epinow(
@@ -119,7 +123,7 @@ epinow_estimates <- epinow(
 )
 ```
 
-Getting the time-varying (or [effective](../learners/reference.md#effectiverepro)) reproduction number next to the cases by date of report and cases by date of infection:
+As an output, we get the time-varying (or [effective](../learners/reference.md#effectiverepro)) reproduction number, as well as the cases by date of report and date of infection:
 
 ```{r}
 base::plot(epinow_estimates)
@@ -149,7 +153,7 @@ So, all these tasks can be interconnected in a pipeline:
 
 ## What can we do?
 
-Our strategy is to gradually incorporate specialized R packages into the traditional analysis pipeline. These packages should fill the gaps in these epidemiology-specific tasks in response to outbreaks. 
+Our strategy is to gradually incorporate specialized R packages into our traditional analysis pipeline. These packages should fill the gaps in these epidemiology-specific tasks in response to outbreaks. 
 
 Epiverse-TRACE aim is to provide a software ecosystem for outbreak analytics. We support the development of software pieces, make the existing ones interoperable for the user experience, and stimulate a community of practice.
 
@@ -159,11 +163,11 @@ Epiverse-TRACE aim is to provide a software ecosystem for outbreak analytics. We
 
 Our plan for these tutorials is to introduce key solutions from packages in all the tasks before and after the _Quantify transmission_ task, plus the required theory concepts to interpret modelling outputs and make rigorous conclusions.
 
-- In the first set of episodes, you will learn how to optimize the reading and cleaning of epidemiological parameters and case data to input them into the _Quantify transmission_ task. These preliminary tasks are the __Early tasks__. Packages here are `{readepi}`, `{cleanepi}`, `{linelist}`, `{epiparameter}`, and `{episoap}`.
+- In the first set of episodes, you will learn how to optimize the reading and cleaning of epidemiological parameters and case data to input them into the _Quantify transmission_ task. These preliminary tasks are the __Early tasks__. This includes package like `{readepi}`, `{cleanepi}`, `{linelist}`, `{epiparameter}`, and `{episoap}`.
 
-- Then, we will get deeper into the packages and required theory to _Quantify transmission_ and perform more real-time analysis tasks next to it. These are the __Middle tasks__. Packages here are `{EpiNow2}`, `{cfr}`, `{epichains}`, and `{superspreading}`.
+- Then, we will get deeper into the packages and required theory to _Quantify transmission_ and perform more real-time analysis tasks next to it. These are the __Middle tasks__. This includes `{EpiNow2}`, `{cfr}`, `{epichains}`, and `{superspreading}`.
 
-- Lastly, we will use _Quantify transmission_ data outputs to compare it to other indicators and simulate epidemic scenarios as part of the __Late tasks__. Packages here are `{finalsize}`, `{epidemics}`, `{scenarios}`, and `{vaccineff}`.
+- Lastly, we will use _Quantify transmission_ data outputs to compare it to other indicators and simulate epidemic scenarios as part of the __Late tasks__. This includes `{finalsize}`, `{epidemics}`, and `{scenarios}`.
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
