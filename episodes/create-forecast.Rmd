@@ -154,9 +154,82 @@ The estimates of transmission measures such as the effective reproduction number
 We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more detail.
  
 
-## Estimate hospitalisations and deaths
+## Forecast secondary observations
 
-*Coming soon*
+`EpiNow2` also has the ability to estimate and forecast secondary observations e.g. deaths, hospitalisations from a primary observation e.g. cases. Here we will illustrate how to forecast the number of deaths arising from observed cases of COVID-19 in the early stages of the UK outbreak. 
+
+First, we must format our data to have the following columns:
+
++ `date` : the date (as a date object see `?is.Date()`),
++ `primary` : number of primary observations on that date, in this example **cases**,
++ `secondary` : number of secondary observations date, in this example **deaths**.
+
+```{r}
+reported_cases_deaths <- aggregate(
+  cbind(cases_new, deaths_new) ~ date, 
+  data = incidence2::covidregionaldataUK[, c("date", "cases_new", "deaths_new")], 
+  FUN = sum
+) 
+colnames(reported_cases_deaths) <- c("date", "primary", "secondary")
+```
+
+
+Using the first 30 days of data on cases and deaths, we will estimate the relationship between the primary and secondary observations using `estimate_secondary()`, then forecast future deaths using `forecast_secondary()`. For detail on the model see the [model documentation](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html). 
+
+We must specify the type of observation using `type` in `secondary_opts()`, options include:
+
++ "incidence" : secondary observations arise from previous primary observations, i.e. deaths arising from recorded cases.
++ "prevalence" : secondary observations arise from a combination current primary observations and past secondary observations, i.e. hospital bed usage arising from current hospital admissions and past hospital bed usage. 
+
+In this example we specify `secondary_opts(type = "incidence")`. See `?EpiNow2::secondary_opts` for more detail).
+
+The final key input is the delay distribution between the primary and secondary observations. Here this is the delay between case report and death, we assume this follows a gamma distribution with mean of 14 days and standard deviation of 5 days. Using `dist_spec()` we specify a fixed gamma distribution.
+
+There are further function inputs to `estimate_secondary()` which can be specified, including adding an observation process, see `?EpiNow2::estimate_secondary` for detail on the options. 
+
+To find the model fit between cases and deaths : 
+```{r}
+estimate_cases_to_deaths <- estimate_secondary(reports = reported_cases_deaths[1:30, ], 
+                                      secondary = secondary_opts(type = "incidence"),
+                                      delays = delay_opts(dist_spec(
+                                        mean = 14, sd = 5, 
+                                        max = 30, distribution = "gamma"))
+                                        )
+```
+
+
+::::::::::::::::::::::::::::::::::::: callout
+### Be cautious of timescale 
+
+In the early stages of an outbreak there can be substantial changes in testing and reporting. If there are testing changes from one month to another, then there will be a bias in the model fit. Therefore, you should be cautious of the time-scale of data used in the model fit and forecast.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+We plot the model fit (shaded ribbons) with the secondary observations (bar plot) and primary observations (dotted line) as follows: 
+
+```{r}
+plot(estimate_cases_to_deaths, primary = TRUE)
+```
+
+To use this model fit to forecast deaths, we pass a data frame consisting of the primary observation (cases) for dates not used in the model fit. 
+
+*Note : in this tutorial we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
+```{r}
+cases_to_forecast <- reported_cases_deaths[31:60, c("date", "primary") ]
+colnames(cases_to_forecast) <- c("date", "value")
+```
+
+To forecast, we use the model fit `estimate_cases_to_deaths`:  
+
+```{r}
+deaths_forecast <- forecast_secondary(estimate = estimate_cases_to_deaths, 
+                                      primary = cases_to_forecast)
+plot(deaths_forecast)
+```
+
+The plot shows the forecast secondary observations (deaths) over the dates which we have recorded cases for. 
+It is also possible to forecast deaths using forecast cases, here you would specify `primary` as the `estimates` output from `estimate_infections()`.
+
 
 ## Challenge : Ebola outbreak analysis 
 
