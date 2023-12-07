@@ -90,7 +90,7 @@ example_confirmed
 
 ### Then, set the generation time
 
-Not all primary cases have the same probability to generate a secondary case. The onset and cessation of infectiousness may occur gradually. For `{EpiNow2}`, we can specify it as a probability `distribution` with `mean`, standard deviation `sd`, and maximum value `max`:
+Not all primary cases have the same probability to generate a secondary case. The onset and cessation of [infectiousness](../learners/reference.md#infectiousness) may occur gradually. For `{EpiNow2}`, we can specify it as a probability `distribution` with `mean`, standard deviation `sd`, and maximum value `max`:
 
 ```{r}
 generation_time <- dist_spec(

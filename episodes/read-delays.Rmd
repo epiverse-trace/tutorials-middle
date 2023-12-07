@@ -32,8 +32,6 @@ The natural history of a disease influence the transmission dynamics.
 
 ![Definition of key time periods. From [Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038)](fig/time-periods.jpg)
 
-![Window and kinetics of SARS-CoV-2 infectiousness in recently infected contacts. From [Hakki et al, 2022](https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext)](fig/infectiousness-covid19.jpg)
-
 ## Find a generation time
 
 What it is?
@@ -249,7 +247,7 @@ estimate serial interval from case and contact data pairs
 
 ref: https://www.reconlearn.org/post/real-time-response-2
 
-ref: to epimodelac
+ref: https://epiverse-trace.github.io/epimodelac/EnfermedadX.html
 
 ## concept map
 
