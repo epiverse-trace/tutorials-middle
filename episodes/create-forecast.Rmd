@@ -51,7 +51,7 @@ The function `epinow()` described in the previous tutorial is a wrapper for the 
 
 ```{r, echo = FALSE}
 cases <- aggregate(
-  cases_new ~ date, 
+  cases_new ~ date,
   data = incidence2::covidregionaldataUK[, c("date", "cases_new")],
   FUN = sum
 )
@@ -166,10 +166,10 @@ First, we must format our data to have the following columns:
 
 ```{r}
 reported_cases_deaths <- aggregate(
-  cbind(cases_new, deaths_new) ~ date, 
-  data = incidence2::covidregionaldataUK[, c("date", "cases_new", "deaths_new")], 
+  cbind(cases_new, deaths_new) ~ date,
+  data = incidence2::covidregionaldataUK[, c("date", "cases_new", "deaths_new")],
   FUN = sum
-) 
+)
 colnames(reported_cases_deaths) <- c("date", "primary", "secondary")
 ```
 
@@ -189,12 +189,14 @@ There are further function inputs to `estimate_secondary()` which can be specifi
 
 To find the model fit between cases and deaths : 
 ```{r}
-estimate_cases_to_deaths <- estimate_secondary(reports = reported_cases_deaths[1:30, ], 
-                                      secondary = secondary_opts(type = "incidence"),
-                                      delays = delay_opts(dist_spec(
-                                        mean = 14, sd = 5, 
-                                        max = 30, distribution = "gamma"))
-                                        )
+estimate_cases_to_deaths <- estimate_secondary(
+  reports = reported_cases_deaths[1:30, ],
+  secondary = secondary_opts(type = "incidence"),
+  delays = delay_opts(dist_spec(
+    mean = 14, sd = 5,
+    max = 30, distribution = "gamma"
+  ))
+)
 ```
 
 
@@ -215,15 +217,17 @@ To use this model fit to forecast deaths, we pass a data frame consisting of the
 
 *Note : in this tutorial we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
 ```{r}
-cases_to_forecast <- reported_cases_deaths[31:60, c("date", "primary") ]
+cases_to_forecast <- reported_cases_deaths[31:60, c("date", "primary")]
 colnames(cases_to_forecast) <- c("date", "value")
 ```
 
 To forecast, we use the model fit `estimate_cases_to_deaths`:  
 
 ```{r}
-deaths_forecast <- forecast_secondary(estimate = estimate_cases_to_deaths, 
-                                      primary = cases_to_forecast)
+deaths_forecast <- forecast_secondary(
+  estimate = estimate_cases_to_deaths,
+  primary = cases_to_forecast
+)
 plot(deaths_forecast)
 ```
 
@@ -274,7 +278,7 @@ We specify the distributions with some uncertainty around the mean and standard 
 
 ```{r}
 ebola_incubation_period <- dist_spec(
-  mean =  2.487, sd = 0.330,
+  mean = 2.487, sd = 0.330,
   mean_sd = 0.5, sd_sd = 0.5,
   max = 20, distribution = "lognormal"
 )
@@ -293,7 +297,7 @@ As we want to also create a two week forecast, we specify `horizon = 14` to fore
 ebola_cases$date <- as.Date(ebola_cases$date)
 
 ebola_estimates <- epinow(
-  reported_cases = ebola_cases[1:120,], # first 3 months of data only
+  reported_cases = ebola_cases[1:120, ], # first 3 months of data only
   generation_time = generation_time_opts(ebola_generation_time),
   delays = delay_opts(ebola_incubation_period),
   horizon = 14 # horizon needs to be 14 days to create two week forecast (default is 7 days)

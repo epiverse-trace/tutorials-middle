@@ -107,7 +107,7 @@ To use the data, we must format the data to have two columns:
 
 ```{r}
 cases <- aggregate(
-  cases_new ~ date, 
+  cases_new ~ date,
   data = incidence2::covidregionaldataUK[, c("date", "cases_new")],
   FUN = sum
 )
@@ -119,7 +119,7 @@ There are case data available for `r dim(cases)[1]` days, but in an outbreak sit
 
 ```{r echo = FALSE}
 ggplot(cases[1:90, ], aes(x = date, y = confirm)) +
-  geom_col()+
+  geom_col() +
   theme_grey(
     base_size = 15
   )
@@ -222,7 +222,7 @@ df <- data.frame(x = x, density = dlnorm(x, meanlog = log_mean, sdlog = log_sd))
 ggplot(df) +
   geom_line(
     aes(x, density)
-    )+
+  ) +
   theme_grey(
     base_size = 15
   )
