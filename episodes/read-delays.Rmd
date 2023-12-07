@@ -30,12 +30,18 @@ The natural history of a disease influence the transmission dynamics.
 <!-- ref: https://www.sciencedirect.com/topics/mathematics/infectiousness -->
 <!-- ref: https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext -->
 
+![Definition of key time periods. From [Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038)](fig/time-periods.jpg)
+
+![Window and kinetics of SARS-CoV-2 infectiousness in recently infected contacts. From [Hakki et al, 2022](https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext)](fig/infectiousness-covid19.jpg)
+
 ## Find a generation time
 
 What it is?
 With which other is related? -> the serial interval
 
 [serial interval](../learners/reference.md#serialinterval) distribution
+
+![Serial interval of novel coronavirus (COVID-19) infections. From [Nishiura et al, 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/serial-interval-covid-sars.jpg)
 
 ```{r}
 ### 1 replace generation time from literature -----
@@ -104,6 +110,8 @@ What it is?
 With which other is related?
 
 The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [incubation period](../learners/reference.md#incubation):
+
+![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
 
 ```{r}
 incubation_period <- dist_spec(
@@ -197,6 +205,8 @@ With which other is related?
 
 The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [reporting delay](../learners/reference.md#reportingdelay):
 
+![Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
+
 ```{r}
 reporting_delay <- dist_spec(
   mean = convert_to_logmean(2, 1), 
@@ -238,6 +248,8 @@ epinow_estimates <- epinow(
 estimate serial interval from case and contact data pairs 
 
 ref: https://www.reconlearn.org/post/real-time-response-2
+
+ref: to epimodelac
 
 ## concept map
 
