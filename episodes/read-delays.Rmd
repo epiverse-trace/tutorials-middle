@@ -24,22 +24,101 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
+
+This episode requires you to be familiar with:
+
+**Data science** : Basic programming with R.
+
+**Epidemic theory** : Epidemiological parameters. Time periods.
+
+This also requires the following package:
+
+```r
+if(!require("pak")) install.packages("pak")
+pak::pak("epiverse-trace/epiparameter")
+```
+
+:::::::::::::::::::::::::::::::::
+
 ## Systematic review of Parameters
 
-The natural history of a disease influence the transmission dynamics. 
-<!-- ref: https://www.sciencedirect.com/topics/mathematics/infectiousness -->
-<!-- ref: https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext -->
+The [natural history](../learners/reference.md#naturalhistory) of a infectious disease show us that its development has a regularity from stage to stage. The time periods from a infectious disease inform about the timing of transmission and interventions.
 
 ![Definition of key time periods. From [Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038)](fig/time-periods.jpg)
 
+
+::::::::::::::::: callout
+
+### Definitions
+
+Take a look at the [glossary](../learners/reference.md) for all the definitions of the time periods of the figure above!
+
+:::::::::::::::::::::::::
+
+However, early in an epidemic, modelling efforts can be delayed by the lack of a centralized resource summarizing input parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are building online catalogs that can help building models faster for coming outbreaks and epidemics from known and unknown pathogens.
+
+<!-- Early models for COVID-19 used parameters from other coronaviruses. -->
+
+Let's explore how we can access to time periods and delays using `{epiparameter}` to plug them in to `{EpiNow2}`:
+
+```{r}
+library(epiparameter)
+library(EpiNow2)
+```
+
+
 ## Find a generation time
 
-What it is?
-With which other is related? -> the serial interval
+The generation time, jointly with the R0, can inform about the speed of spread and its feasibility of control. Given a $R>1$, with a shorter generation time, cases can appear more quickly.
 
-[serial interval](../learners/reference.md#serialinterval) distribution
+![From the video by MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
 
-![Serial interval of novel coronavirus (COVID-19) infections. From [Nishiura et al, 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/serial-interval-covid-sars.jpg)
+<!-- formative -->
+<!-- how to assess on? -->
+<!-- compare two scenarios -->
+<!-- - high R0 and short generation time -->
+<!-- - low R0 and long generation time -->
+
+In calculating the effective reproductive number ($Rt$), the generation time distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution although this can produced biased estimates. ([Knight et al., 2020](https://www.sciencedirect.com/science/article/pii/S2468042720300634?via%3Dihub))
+
+::::::::::::::::::::::::::::::::: challenge
+
+### REVIEW
+
+Let's assume that COVID-19 and SARS has close Reproduction number values. Which one would be harder to control? Why do you conclude that?
+
+![Serial interval of novel coronavirus (COVID-19) infections overlaid with a published distribution of SARS. From [Nishiura et al, 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/serial-interval-covid-sars.jpg)
+
+::::::::::::::::: hint
+
+### HINT
+
+The peak of each curve can inform you about the mean each distribution. Larger mean, larger serial interval. 
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+### SOLUTION
+
+Which one would be harder to control?
+
+- COVID-19
+
+Why do you conclude that?
+
+- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of: 
+  - COVID-19 is around 4 days.
+  - SARS us around 7 days.
+
+::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::
+
 
 ```{r}
 ### 1 replace generation time from literature -----
@@ -101,7 +180,6 @@ base::plot(epinow_estimates)
 # if not, find serial interval and use it as serial interval
 ```
 
-
 ## Find the incubation time
 
 What it is?
@@ -110,6 +188,17 @@ With which other is related?
 The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [incubation period](../learners/reference.md#incubation):
 
 ![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
+
+![Parameter estimates. Plausible ranges for the key parameters R0 and θ (see main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
+<!-- fix with screenshot from larger computer monitor -->
+
+<!-- Transmission before symptoms -->
+<!-- https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext -->
+
+<!-- The highest the Reproduction number, more -->
+<!-- Required coverage ~duration~ of contact tracing -->
+<!-- https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext -->
+<!-- https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371 -->
 
 ```{r}
 incubation_period <- dist_spec(
@@ -195,11 +284,19 @@ base::plot(epinow_estimates)
 
 ```
 
+Potential biases like
+
+- censoring bias (short periods)
+- reporting bias (recent contacts)
 
 ## Find the reporting delay
 
 What it is?
 With which other is related?
+
+Adjusting for delays
+
+![Rt is a measure of transmission at time t. Observations after time t must be adjusted. ICU, intensive care unit. From  [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)](fig/rt-adjusting-delays.png)
 
 The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [reporting delay](../learners/reference.md#reportingdelay):
 
@@ -241,7 +338,15 @@ epinow_estimates <- epinow(
 
 ```
 
+## Severity parameters
+
+The three examples above represent transmission parameters.
+
+- Duration of hospitalization (bed capacity needed)
+
 ## From our data! (callout)
+
+Fit a parametric distribution to estimate the mean and sd
 
 estimate serial interval from case and contact data pairs 
 
