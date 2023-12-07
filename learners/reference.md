@@ -90,7 +90,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## R
 
 [Reporting delay]{#reportingdelay}
-: Delay between the time an event occurs and the time it is reported ([Lawless, 1994](https://www.jstor.org/stable/3315820)). We can quantify it by comparing the linelist with successive versions of it or up-to-date reported aggregated case counts ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+: Delay or lag between the time an event occurs (e.g. symptom onset) and the time it is reported ([Lawless, 1994](https://www.jstor.org/stable/3315820)). We can quantify it by comparing the linelist with successive versions of it or up-to-date reported aggregated case counts ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
 ## S
 
