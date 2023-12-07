@@ -42,7 +42,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 
 ## G
 [Generation time]{#generationtime}
-:  Distribution of time between infection of an index case and infection of its secondary cases. Most commonly, the generation time distribution is commonly estimated from data on the [serial interval](#serialinterval) distribution of an infection ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+:  Time between infection of an index case and infection of its secondary cases. Most commonly, the generation time distribution is commonly estimated from data on the [serial interval](#serialinterval) distribution of an infection ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
 [Growth rate]{#growth}
 : The exponential growth rate tells us how much cases are increasing or decreasing at the start of an epidemic. It gives us a measure of speed of transmission, see [Dushoff & Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
@@ -52,7 +52,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## I 
 
 [Incubation period]{#incubation}
-: The time between becoming infected and the onset of symptoms. [More information on the incubation period](https://en.wikipedia.org/wiki/Latent_period_(epidemiology)#Incubation_period).
+: The time between becoming infected and the onset of symptoms. [More information on the incubation period](https://en.wikipedia.org/wiki/Latent_period_(epidemiology)#Incubation_period). This can be different to the [latent period](#latent). ([Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038))
 
 [Indirect transmission]{#indirect}
 : Indirectly transmitted infections are passed on to humans via contact with vectors, animals or contaminated environment. Vector-borne infections, zoonoses and water-borne infections are modelled as indirectly transmitted. 
@@ -61,7 +61,9 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 : In [ODEs](#ordinary), the initial conditions are the values of the state variables at the start of the model simulation (at time 0). For example, if there is one infectious individual in a population of 1000 in an Susceptible-Infectious-Recovered model, the initial conditions would be $S(0) = 999$, $I(0) = 1$, $R(0) = 0$.  
 
 [Infectiousness]{#infectiousness}
-: Median duration of the time between the onset and end of infectious viral shedding.
+: Also known as Duration of infectiousness. Time period between the onset and end of infectious [viral shedding](#viralshedding). Viral load and detection of infectious virus are the two key parameters for estimating infectiousness ([Puhach et al., 2022](https://www.nature.com/articles/s41579-022-00822-w)).
+<!-- ref: https://www.sciencedirect.com/topics/mathematics/infectiousness -->
+
 ![Window and kinetics of SARS-CoV-2 infectiousness in recently infected contacts. From [Hakki et al, 2022](https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext)](fig/infectiousness-covid19.jpg)
 
 <!-- ## J -->
@@ -71,7 +73,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## L
 
 [Latent period]{#latent}
-: The time between becoming infected and the onset of infectiousness. [More information on the latent period](https://en.wikipedia.org/wiki/Latent_period_(epidemiology)).
+: The time between becoming infected and the onset of infectiousness. [More information on the latent period](https://en.wikipedia.org/wiki/Latent_period_(epidemiology)). This can be different to the [incubation period](#incubation). ([Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038))
 
 ## M
 [Model parameters (ODEs)]{#parsode}
@@ -85,6 +87,10 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## O
 [Ordinary differential equations]{#ordinary}
 : Ordinary differential equations (ODEs) can be used to represent the rate of change of one variable (e.g. number of infected individuals) with respect to another (e.g. time). Check out this introduction to [ODEs](https://mathinsight.org/ordinary_differential_equation_introduction). ODEs are widely used in infectious disease modelling to model the flow of individuals between different disease states. 
+[Natural history of disease]{#naturalhistory} 
+: Refers to the development of disease from beginning to end without any treatment or intervention. In fact, given the harmfulness of an epidemic, treatment or intervention measures are inevitable. Therefore, it is difficult for the natural history of a disease to be unaffected by the various coupling factors. ([Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038))
+
+<!-- ## O -->
 
 <!-- ## P -->
 
@@ -115,6 +121,9 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 
 [Vector-borne transmission]{#vectorborne}
 : Vector-borne transmission means an infection can be passed from a vector (e.g. mosquitoes) to humans. Examples of vector-borne diseases include malaria and dengue. The World Health Organization have a [Fact sheet about Vector-borne diseases](https://www.who.int/news-room/fact-sheets/detail/vector-borne-diseases) with key information and a list of them according to their vector.
+
+[Viral shedding]{#viralshedding}
+: The process of releasing a virus from a cell or body into the environment where it can infect other people. ([Cambridge Dictionary, 2023](https://dictionary.cambridge.org/us/dictionary/english/shedding))
 
 <!-- ## W -->
 
