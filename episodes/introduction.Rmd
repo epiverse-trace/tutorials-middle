@@ -129,6 +129,14 @@ As an output, we get the time-varying (or [effective](../learners/reference.md#e
 base::plot(epinow_estimates)
 ```
 
+::::::::::::::::: callout
+
+### Is this $Rt$ estimation biased?
+
+Review [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409) about what additional adjustments this estimation requires to avoid false precision in $Rt$. 
+
+:::::::::::::::::::::::::
+
 ## The problem!
 
 However, _quantifying the transmissibility_ during a real-life outbreak response is more challenging than this example!
