@@ -2,6 +2,8 @@
 title: 'Describe case data'
 teaching: 10
 exercises: 2
+editor_options: 
+  chunk_output_type: console
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
@@ -67,6 +69,7 @@ Let's explore how we can access to time periods and delays using `{epiparameter}
 ```{r}
 library(epiparameter)
 library(EpiNow2)
+library(tidyverse)
 ```
 
 
@@ -88,7 +91,12 @@ In calculating the effective reproductive number ($Rt$), the generation time dis
 
 ### REVIEW
 
-Let's assume that COVID-19 and SARS has close Reproduction number values. Which one would be harder to control? Why do you conclude that?
+Let's assume that COVID-19 and SARS has similar Reproduction number values. 
+
+Given the Serial Interval of both infections in the figure below: 
+
+- Which one would be harder to control? 
+- Why do you conclude that?
 
 ![Serial interval of novel coronavirus (COVID-19) infections overlaid with a published distribution of SARS. From [Nishiura et al, 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/serial-interval-covid-sars.jpg)
 
@@ -96,7 +104,7 @@ Let's assume that COVID-19 and SARS has close Reproduction number values. Which 
 
 ### HINT
 
-The peak of each curve can inform you about the mean each distribution. Larger mean, larger serial interval. 
+The peak of each curve can inform you about the location of the mean of each distribution. The larger the mean, the larger the serial interval. 
 
 ::::::::::::::::::::::
 
@@ -110,35 +118,47 @@ Which one would be harder to control?
 
 Why do you conclude that?
 
-- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of: 
-  - COVID-19 is around 4 days.
-  - SARS us around 7 days.
+- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of COVID-19 is around 4 days, and SARS is around 7 days. Thus, COVID-19 is likely to have newer generations in less time than SARS. 
+  
 
 ::::::::::::::::::::::::::
 
 
 :::::::::::::::::::::::::::::::::::::::::::
 
+Now, instead of using `EpiNow2::dist_spec()` to plug-in numeric values to specify the distribution:
 
 ```{r}
-### 1 replace generation time from literature -----
-
 generation_time <- dist_spec(
   mean = 3.6,
   sd = 3.1,
   max = 20,
   distribution = "lognormal"
 )
+```
 
-# replace this assuming that this is covid
-# with lognormal
+Assuming that the disease we are dealing with is COVID, We can replace this code chunk and extract the Serial Interval for COVID-19 using the `epiparameter::epidist_db()` function.
 
+```{r}
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Nishiura")
+```
+
+We have more than one epidemiological delay. To summarize this view and get the column names from the underlying parameter dataset we connect the previous code chunk with `epiparameter::list_distributions()`:
+
+```{r}
 epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "serial",
   author = "Nishiura") %>%
   epiparameter::list_distributions()
+```
 
+If we want to filter only one
+
+```{r}
 covid_lnorm <- epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "serial",
