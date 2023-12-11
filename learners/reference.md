@@ -14,7 +14,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## D
 
 [Deterministic model]{#deterministic}
-: Models that will always have the same trajectory for given initial conditions and parameters. Examples include ordinary differential equations and difference equations. 
+: Models that will always have the same trajectory for given initial conditions and parameter values. Examples include ordinary differential equations and difference equations. 
 
 [Direct transmission]{#direct}
 : Individuals become infected via direct contact with other infected humans. Airborne transmitted infections are often modelled as directly transmitted infections as they require close contact with infected individuals for successful transmission. 
@@ -60,7 +60,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## S
 
 [Stochastic model]{#stochastic}
-: A model that includes some stochastic process resulting in variation in model simulations for the same initial conditions and parameters. Examples include stochastic differential equations, branching process models. For more detail see [Allen (2017)](https://doi.org/10.1016/j.idm.2017.03.001).
+: A model that includes some stochastic process resulting in variation in model simulations for the same initial conditions and parameter values. Examples include stochastic differential equations and branching process models. For more detail see [Allen (2017)](https://doi.org/10.1016/j.idm.2017.03.001).
 
 
 <!-- ## T -->
@@ -70,7 +70,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## V
 
 [Vector-borne transmission]{#vectorborne}
-: Vector-borne transmission means an infection can be passed from a vector (e.g. mosquitoes) to humans. Examples of vector-borne diseases include malaria and dengue. [More information on vector-borne transmission](https://www.who.int/news-room/fact-sheets/detail/vector-borne-diseases).  
+: Vector-borne transmission means an infection can be passed from a vector (e.g. mosquitoes) to humans. Examples of vector-borne diseases include malaria and dengue. Click [here](https://www.who.int/news-room/fact-sheets/detail/vector-borne-diseases) for more information on vector-borne transmission.
 
 
 <!-- ## W -->
