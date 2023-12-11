@@ -132,7 +132,23 @@ Why do you conclude that?
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-Now, instead of using `EpiNow2::dist_spec()` to plug-in numeric values to specify the distribution as in the chunk below:
+Our goal now is to replace the `generation_time` input that we used for `EpiNow2::epinow()`.
+
+```r
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = example_confirmed[1:60],
+  # distribution
+  generation_time = generation_time_opts(generation_time),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
+)
+```
+
+To do this replacement, instead of plug-in numeric values to `EpiNow2::dist_spec()` to specify the distribution parameters, we are going to collect them from the library of epidemiological parameters provided by `{epiparameter}`:
 
 ```r
 generation_time <- dist_spec(
@@ -143,6 +159,32 @@ generation_time <- dist_spec(
 )
 ```
 
+First, let's assume that the data set `example_confirmed` have COVID-19 observed cases. So, we need to find a reported generation time for COVID-19 or any other useful parameter for this aim.
+
+From the `{epiparameter}` package, we can use the `epidist_db()` function to ask for any epidemiological distribution (`epi_dist`) with the generation time using the string `generation`:
+
+```{r}
+epiparameter::epidist_db(
+  epi_dist = "generation"
+)
+```
+
+Currently, in the library of epidemiological parameters we do not have  `generation` time entry for COVID-19. We can try to look at the serial intervals for COVID-19.
+
+```{r}
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial"
+)
+```
+
+
+The `epiparameter::epidist_db()` function works as a filtering or subset function. 
+
+We can use other arguments like `author`, `subset` and `single_epidist` to filter even
+
+
+
 Let's replace it with the Serial Interval output for COVID-19 using the `epiparameter::epidist_db()` function. (Assuming that the disease we are dealing with is COVID-19)
 
 ```{r}
@@ -152,7 +194,7 @@ epiparameter::epidist_db(
   author = "Nishiura")
 ```
 
-We have more than one epidemiological delay. To summarize this view and get the column names from the underlying parameter dataset we can connect the previous code chunk using the pipe `%>%` and the `epiparameter::list_distributions()` function:
+We get more than one epidemiological delay. To summarize this view and get the column names from the underlying parameter dataset we can add the previous code the `epiparameter::list_distributions()` function using the pipe `%>%`:
 
 ```{r}
 epiparameter::epidist_db(
@@ -161,6 +203,8 @@ epiparameter::epidist_db(
   author = "Nishiura") %>%
   epiparameter::list_distributions()
 ```
+
+We have
 
 If we want to filter only one
 
@@ -200,6 +244,15 @@ base::plot(epinow_estimates)
 ```
 
 ## formative
+
+```{r}
+# what parameters are are available for influenza?
+epidist_db(disease = "influenza") %>% 
+  list_distributions() %>% 
+  as_tibble() %>% 
+  count(epi_distribution)
+```
+
 
 ```{r}
 # generation time for ebola
