@@ -21,8 +21,8 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain how to use markdown with the new lesson template
-- Demonstrate how to include pieces of code, figures, and nested challenge blocks
+- Get epidemological parameters from systematic reviews.
+- Convert statistical summary to distribution parameters.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
