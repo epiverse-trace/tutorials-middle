@@ -47,7 +47,7 @@ pak::pak("epiverse-trace/epiparameter")
 
 ## Systematic review of Parameters
 
-The [natural history](../learners/reference.md#naturalhistory) of a infectious disease show us that its development has a regularity from stage to stage. The time periods from a infectious disease inform about the timing of transmission and interventions.
+The [natural history](../learners/reference.md#naturalhistory) of a infectious disease shows that its development has a regularity from stage to stage. The time periods from a infectious disease inform about the timing of transmission and interventions.
 
 ![Definition of key time periods. From [Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038)](fig/time-periods.jpg)
 
@@ -56,11 +56,11 @@ The [natural history](../learners/reference.md#naturalhistory) of a infectious d
 
 ### Definitions
 
-Take a look at the [glossary](../learners/reference.md) for all the definitions of the time periods of the figure above!
+Take a look at the [glossary](../learners/reference.md) for the definitions of all the time periods of the figure above!
 
 :::::::::::::::::::::::::
 
-However, early in an epidemic, modelling efforts can be delayed by the lack of a centralized resource summarizing input parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are building online catalogs that can help building models faster for coming outbreaks and epidemics from known and unknown pathogens.
+However, early in an epidemic, modelling efforts can be delayed by the lack of a centralized resource that summarized input parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are building online catalogs that can help building models faster for coming outbreaks and epidemics from known and unknown pathogens related to known families of viruses.
 
 <!-- Early models for COVID-19 used parameters from other coronaviruses. -->
 
@@ -75,9 +75,18 @@ library(tidyverse)
 
 ## Find a generation time
 
-The generation time, jointly with the R0, can inform about the speed of spread and its feasibility of control. Given a $R>1$, with a shorter generation time, cases can appear more quickly.
+The generation time, jointly with the $R$, can inform about the speed of spread and its feasibility of control. Given a $R>1$, with a shorter generation time, cases can appear more quickly.
 
 ![From the video by MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
+
+In calculating the effective reproductive number ($Rt$), the generation time distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
+This is because the date of onset of symptoms is more easily observed than the date of onset of infectiousness.
+
+<!-- This can produced biased estimates. ([Knight et al., 2020](https://www.sciencedirect.com/science/article/pii/S2468042720300634?via%3Dihub)) -->
+
+However, this is valid for diseases in which infectiousness starts after symptom onset [(Chung Lau et al. 2021)](https://academic.oup.com/jid/article/224/10/1664/6356465). In cases where infectiousness starts before symptom onset serial intervals can be negative! This is the case of a pre-symptomatic transmission.
+
+Even if the generation time and serial interval have the same mean, their variance usually differ propagating bias to the Rt estimation. Rt estimates are sensitive not only to the mean generation time but also to the variance and form of the generation interval distribution [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409).
 
 <!-- formative -->
 <!-- how to assess on? -->
@@ -85,15 +94,13 @@ The generation time, jointly with the R0, can inform about the speed of spread a
 <!-- - high R0 and short generation time -->
 <!-- - low R0 and long generation time -->
 
-In calculating the effective reproductive number ($Rt$), the generation time distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution although this can produced biased estimates. ([Knight et al., 2020](https://www.sciencedirect.com/science/article/pii/S2468042720300634?via%3Dihub))
-
 ::::::::::::::::::::::::::::::::: challenge
 
 ### REVIEW
 
-Let's assume that COVID-19 and SARS has similar Reproduction number values. 
+Let's assume that COVID-19 and SARS has similar Reproduction number values, and the Serial interval a good proxy of the generation interval. 
 
-Given the Serial Interval of both infections in the figure below: 
+Given the Serial interval of both infections in the figure below: 
 
 - Which one would be harder to control? 
 - Why do you conclude that?
@@ -118,17 +125,16 @@ Which one would be harder to control?
 
 Why do you conclude that?
 
-- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of COVID-19 is around 4 days, and SARS is around 7 days. Thus, COVID-19 is likely to have newer generations in less time than SARS. 
-  
+- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of COVID-19 is around 4 days, and SARS is around 7 days. Thus, COVID-19 is likely to have newer generations in less time than SARS, assuming similar reproduction number in both.
 
 ::::::::::::::::::::::::::
 
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-Now, instead of using `EpiNow2::dist_spec()` to plug-in numeric values to specify the distribution:
+Now, instead of using `EpiNow2::dist_spec()` to plug-in numeric values to specify the distribution as in the chunk below:
 
-```{r}
+```r
 generation_time <- dist_spec(
   mean = 3.6,
   sd = 3.1,
@@ -137,7 +143,7 @@ generation_time <- dist_spec(
 )
 ```
 
-Assuming that the disease we are dealing with is COVID, We can replace this code chunk and extract the Serial Interval for COVID-19 using the `epiparameter::epidist_db()` function.
+Let's replace it with the Serial Interval output for COVID-19 using the `epiparameter::epidist_db()` function. (Assuming that the disease we are dealing with is COVID-19)
 
 ```{r}
 epiparameter::epidist_db(
@@ -146,7 +152,7 @@ epiparameter::epidist_db(
   author = "Nishiura")
 ```
 
-We have more than one epidemiological delay. To summarize this view and get the column names from the underlying parameter dataset we connect the previous code chunk with `epiparameter::list_distributions()`:
+We have more than one epidemiological delay. To summarize this view and get the column names from the underlying parameter dataset we can connect the previous code chunk using the pipe `%>%` and the `epiparameter::list_distributions()` function:
 
 ```{r}
 epiparameter::epidist_db(
@@ -373,6 +379,12 @@ estimate serial interval from case and contact data pairs
 ref: https://www.reconlearn.org/post/real-time-response-2
 
 ref: https://epiverse-trace.github.io/epimodelac/EnfermedadX.html
+
+Recall that "Methods for accurate estimation of the generation interval from contact tracing data involve adjusting for right truncation and accounting for population susceptibility at the times transmission pairs are observed" [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)
+
+## Convert from statistical summaries to distribution parameters
+
+...
 
 ## concept map
 
