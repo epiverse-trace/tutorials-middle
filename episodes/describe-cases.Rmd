@@ -14,13 +14,17 @@ exercises: 2
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Create incidence curves
-- Estimate serial interval distribution from contact data
+- Estimate the growth rate from incidence curves
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
 This is a lesson created via The Carpentries Workbench. 
+
+## Exponential growth
+
+Within the renewal equation, the generation interval mechanistically links the reproductive number R to observables such as the epidemic growth rate r or the number of new infections per day [(Wallinga et al. 2006)](https://royalsocietypublishing.org/doi/10.1098/rspb.2006.3754)
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
