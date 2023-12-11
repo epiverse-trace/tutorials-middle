@@ -132,6 +132,8 @@ Why do you conclude that?
 
 :::::::::::::::::::::::::::::::::::::::::::
 
+## Extract epidemiological parameters
+
 Our goal now is to replace the `generation_time` input that we used for `EpiNow2::epinow()`.
 
 ```r
@@ -148,7 +150,7 @@ epinow_estimates <- epinow(
 )
 ```
 
-To do this replacement, instead of plug-in numeric values to `EpiNow2::dist_spec()` to specify the distribution parameters, we are going to collect them from the library of epidemiological parameters provided by `{epiparameter}`:
+To do this replacement, instead of plug-in numeric values to `EpiNow2::dist_spec()` to manually specify the distribution parameters, we are going to collect them from the library of epidemiological parameters provided by `{epiparameter}`:
 
 ```r
 generation_time <- dist_spec(
@@ -169,7 +171,7 @@ epiparameter::epidist_db(
 )
 ```
 
-Currently, in the library of epidemiological parameters we do not have  `generation` time entry for COVID-19. We can try to look at the serial intervals for COVID-19.
+Currently, in the library of epidemiological parameters we do not have  `generation` time entry for COVID-19. We can try to look at the `serial` intervals for COVID-19.
 
 ```{r}
 epiparameter::epidist_db(
@@ -178,35 +180,54 @@ epiparameter::epidist_db(
 )
 ```
 
+::::::::::::::::: callout
 
-The `epiparameter::epidist_db()` function works as a filtering or subset function. 
+`epidist_db` is not case-sensitive. This means that you can use strings with upper and lower case indistinctly.
 
-We can use other arguments like `author`, `subset` and `single_epidist` to filter even
-
-
-
-Let's replace it with the Serial Interval output for COVID-19 using the `epiparameter::epidist_db()` function. (Assuming that the disease we are dealing with is COVID-19)
-
-```{r}
-epiparameter::epidist_db(
-  disease = "covid",
-  epi_dist = "serial",
-  author = "Nishiura")
-```
+:::::::::::::::::::::::::
 
 We get more than one epidemiological delay. To summarize this view and get the column names from the underlying parameter dataset we can add the previous code the `epiparameter::list_distributions()` function using the pipe `%>%`:
 
 ```{r}
 epiparameter::epidist_db(
   disease = "covid",
-  epi_dist = "serial",
-  author = "Nishiura") %>%
+  epi_dist = "serial") %>%
   epiparameter::list_distributions()
 ```
 
-We have
+The `epiparameter::epidist_db()` function works as a filtering or subset function. Let's use the `author` argument to filter `Hiroshi Nishiura` parameters:
 
-If we want to filter only one
+```{r}
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Hiroshi") %>%
+  epiparameter::list_distributions()
+```
+
+We still get more than one epidemiological parameter. We can set the `single_epidist` argument to `TRUE` to only one:
+
+```{r}
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Hiroshi",
+  single_epidist = T)
+```
+
+::::::::::::::::: callout
+
+### How does `single_epidist` works?
+
+Take a look into help documentation for `?epiparameter::epidist_db()`.
+
+> Note: If multiple entries match the arguments supplied and single_epidist = TRUE then the `⁠<epidist`>⁠ that is parameterised and has the largest sample size will be returned (see `?is_parameterised()`). If multiple entries are equal after this sorting the first entry will be returned.
+
+:::::::::::::::::::::::::
+
+Now we have our epidemiological parameter of interest! We can use it to replace the number we plug-in to `EpiNow2::dist_spec()`
+
+Let's do this by assigning this `epidist` class object to the `covid_lnorm` object.
 
 ```{r}
 covid_lnorm <- epiparameter::epidist_db(
@@ -216,8 +237,54 @@ covid_lnorm <- epiparameter::epidist_db(
   single_epidist = T) # not desired
 
 covid_lnorm
+```
 
+## Extract the summary statistics
+
+We can get the `mean` and standard deviation (`sd`) from this `epidist` we can dive into the `summary_stats` object:
+
+```{r}
+# to get the mean 
 covid_lnorm$summary_stats$mean
+
+# to get the standard deviation?
+covid_lnorm$summary_stats
+```
+
+:::::::::: discussion
+
+Take a minute and explore the nested content with in the `covid_lnorm` using the `$` operator plus the `TAB` button to see them as a list:
+
+```r
+covid_lnorm$
+```
+
+Share what else you discover from this!
+
+::::::::::::::::::::
+
+::::::::: instructor
+
+An interesting example is the `method_assess` nested entry, which refers to the methods used to assess for the bias while estimating the serial interval distribution.
+
+```{r}
+covid_lnorm$method_assess
+```
+
+Will explore this at the end!
+
+::::::::::::::::::
+
+`EpiNow2::dist_spec()` still needs
+
+The epidemiological parameter in `covid_lnorm` is a continuous distribution:
+
+```{r}
+plot(covid_lnorm)
+```
+
+
+```{r}
 covid_lnorm_discrete <- epiparameter::discretise(covid_lnorm)
 covid_lnorm_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.999)
 
@@ -424,6 +491,13 @@ The three examples above represent transmission parameters.
 - Duration of hospitalization (bed capacity needed)
 
 ## From our data! (callout)
+
+An interesting example is the `method_assess` nested entry, which refers to the methods used to assess for the bias while estimating the serial interval distribution.
+
+```{r}
+covid_lnorm$method_assess
+```
+
 
 Fit a parametric distribution to estimate the mean and sd
 
