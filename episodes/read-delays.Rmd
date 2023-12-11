@@ -289,19 +289,49 @@ We will explore this at the end!
 
 ::::::::::::::::::::::::::::::::
 
-`EpiNow2::dist_spec()` still needs
+## Discretize a continuous distribution
 
-The epidemiological parameter in `covid_lnorm` is a continuous distribution:
+We are almost halfway! `EpiNow2::dist_spec()` still needs a maximum value (`max`). 
+
+One way to do this is getting the quantile value for the the 99.9% or `0.999` cumulative probability of the distribution. For this we need to access to the set of distribution functions for our `epidist` object.
+
+To achieve this we can **discretize** the continuous distribution stored in our `epidist` object.
+
+The epidemiological parameter stored in `covid_lnorm` is a **continuous** distribution. Here we plot its *Probability Density Function (PDF)*:
 
 ```{r}
 plot(covid_lnorm)
 ```
 
+When we `epiparameter::discretise()` the continuous distribution we get a **discrete** distribution:
 
 ```{r}
 covid_lnorm_discrete <- epiparameter::discretise(covid_lnorm)
-covid_lnorm_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.999)
 
+covid_lnorm_discrete
+```
+
+We identify this change in the `Distribution:` output line of the `epidist` object. Take a double check to this line:
+
+```
+Distribution: discrete lnorm
+```
+
+For a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
+
+```{r}
+plot(covid_lnorm_discrete)
+```
+
+To finally get a `max` value let's access to the quantile value of the 99% or `0.999` probability of the distribution with the `prob_dist$q` notation, similarly to how we access to the `summary_stats` values.
+
+```{r}
+covid_lnorm_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.999)
+```
+
+Now we are ready to plug-in all to the `EpiNow2::dist_spec()` function!
+
+```{r}
 generation_time_epiparam <- dist_spec(
   mean = covid_lnorm$summary_stats$mean,
   sd = covid_lnorm$summary_stats$sd,
