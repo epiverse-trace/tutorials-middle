@@ -241,39 +241,53 @@ covid_lnorm
 
 ## Extract the summary statistics
 
-We can get the `mean` and standard deviation (`sd`) from this `epidist` we can dive into the `summary_stats` object:
+We can get the `mean` and standard deviation (`sd`) from this `epidist` diving into the `summary_stats` object:
 
 ```{r}
-# to get the mean 
+# get the mean 
 covid_lnorm$summary_stats$mean
-
-# to get the standard deviation?
-covid_lnorm$summary_stats
 ```
 
-:::::::::: discussion
+:::::::::::::::::::::::::::::: challenge
 
-Take a minute and explore the nested content with in the `covid_lnorm` using the `$` operator plus the `TAB` button to see them as a list:
+## How to get the `sd` and other nested elements?
+
+Take 1 minute to:
+
+- Get the `sd` from the `epidist` object.
+
+- Explore all the other nested elements within the `epidist` object.
+
+Share what is the most interesting element for you!
+
+::::::::: hint
+
+Using the `$` operator plus the `TAB` keyboard button to explore them as an expandable list:
 
 ```r
 covid_lnorm$
 ```
 
-Share what else you discover from this!
+::::::::::::::::::
 
-::::::::::::::::::::
+:::::::::: solution
 
-::::::::: instructor
+```{r}
+# get the sd 
+covid_lnorm$summary_stats$sd
+```
 
-An interesting example is the `method_assess` nested entry, which refers to the methods used to assess for the bias while estimating the serial interval distribution.
+An interesting element is the `method_assess` nested entry, which refers to the methods used by the study authora to assess for the bias while estimating the serial interval distribution.
 
 ```{r}
 covid_lnorm$method_assess
 ```
 
-Will explore this at the end!
+We will explore this at the end!
 
-::::::::::::::::::
+::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::
 
 `EpiNow2::dist_spec()` still needs
 
