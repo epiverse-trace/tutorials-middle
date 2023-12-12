@@ -96,7 +96,7 @@ Even if the generation time and serial interval have the same mean, their varian
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### REVIEW
+### Serial interval
 
 Let's assume that COVID-19 and SARS has similar Reproduction number values, and the Serial interval a good proxy of the generation interval. 
 
@@ -109,15 +109,11 @@ Given the Serial interval of both infections in the figure below:
 
 ::::::::::::::::: hint
 
-### HINT
-
 The peak of each curve can inform you about the location of the mean of each distribution. The larger the mean, the larger the serial interval. 
 
 ::::::::::::::::::::::
 
 ::::::::::::::::: solution
-
-### SOLUTION
 
 Which one would be harder to control?
 
@@ -161,9 +157,19 @@ generation_time <- dist_spec(
 )
 ```
 
-First, let's assume that the data set `example_confirmed` have COVID-19 observed cases. So, we need to find a reported generation time for COVID-19 or any other useful parameter for this aim.
+First, let's assume that the data set `example_confirmed` have COVID-19 observed cases. So, we need to find a reported generation time for COVID-19 or any other useful parameter for this aim. 
 
-From the `{epiparameter}` package, we can use the `epidist_db()` function to ask for any epidemiological distribution (`epi_dist`) with the generation time using the string `generation`:
+Let's start by looking at how many parameters do we have in the epidemiological distributions database (`epidist_db`) for the `disease` named `covid`-19:
+
+```{r}
+epiparameter::epidist_db(
+  disease = "covid"
+)
+```
+
+From the `{epiparameter}` package, we can use the `epidist_db()` function to ask for any `disease` and also for an specific epidemiological distribution (`epi_dist`). 
+
+Let's ask now how many parameters do we have in the epidemiological distributions database (`epidist_db`) with the generation time using the string `generation`:
 
 ```{r}
 epiparameter::epidist_db(
@@ -171,18 +177,18 @@ epiparameter::epidist_db(
 )
 ```
 
-Currently, in the library of epidemiological parameters we do not have  `generation` time entry for COVID-19. We can try to look at the `serial` intervals for COVID-19.
+Currently, in the library of epidemiological parameters we have one `generation` time entry but for Influenza. We can try to look at the `serial` intervals for `COVID`-19.
 
 ```{r}
 epiparameter::epidist_db(
-  disease = "covid",
+  disease = "COVID",
   epi_dist = "serial"
 )
 ```
 
 ::::::::::::::::: callout
 
-`epidist_db` is not case-sensitive. This means that you can use strings with upper and lower case indistinctly.
+`epidist_db` is [case-insensitive](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). This means that you can use strings with letters in upper or lower case indistinctly.
 
 :::::::::::::::::::::::::
 
@@ -191,7 +197,8 @@ We get more than one epidemiological delay. To summarize this view and get the c
 ```{r}
 epiparameter::epidist_db(
   disease = "covid",
-  epi_dist = "serial") %>%
+  epi_dist = "serial"
+) %>%
   epiparameter::list_distributions()
 ```
 
@@ -201,7 +208,8 @@ The `epiparameter::epidist_db()` function works as a filtering or subset functio
 epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "serial",
-  author = "Hiroshi") %>%
+  author = "Hiroshi"
+) %>%
   epiparameter::list_distributions()
 ```
 
@@ -212,7 +220,8 @@ epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "serial",
   author = "Hiroshi",
-  single_epidist = T)
+  single_epidist = T
+)
 ```
 
 ::::::::::::::::: callout
@@ -221,23 +230,76 @@ epiparameter::epidist_db(
 
 Take a look into help documentation for `?epiparameter::epidist_db()`.
 
-> Note: If multiple entries match the arguments supplied and single_epidist = TRUE then the `⁠<epidist`>⁠ that is parameterised and has the largest sample size will be returned (see `?is_parameterised()`). If multiple entries are equal after this sorting the first entry will be returned.
+> Note: If multiple entries match the arguments supplied and `single_epidist = TRUE` then the `⁠<epidist`>⁠ that is parameterised and has the largest sample size will be returned (see `?is_parameterised()`). If multiple entries are equal after this sorting the first entry will be returned.
 
 :::::::::::::::::::::::::
 
-Now we have our epidemiological parameter of interest! We can use it to replace the number we plug-in to `EpiNow2::dist_spec()`
+Now we have an epidemiological parameter we can reuse! We can use it to replace the numbers we plug-in to `EpiNow2::dist_spec()`.
 
-Let's do this by assigning this `epidist` class object to the `covid_lnorm` object.
+Let's do this by assigning this `epidist` class object to the `covid_lnorm` object, where `lnorm` means that this epiparameter follows a log-normal distribution.
 
 ```{r}
 covid_lnorm <- epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "serial",
   author = "Nishiura",
-  single_epidist = T) # not desired
+  single_epidist = T
+)
 
 covid_lnorm
 ```
+
+::::::::::::::::::::::::::::::::: challenge
+
+### Ebola's incubation period
+
+
+
+- How many delay distributions are for the Ebola disease?
+
+- How many delay distributions are for the incubation period of Ebola?
+
+- What type of distribution has the incubation period of Ebola with highest sample size?
+
+::::::::::::::::: hint
+
+The `{epiparameter}` combo of `epidist_db()` plus `list_distributions()` list all the entries by:
+- disease, 
+- epidemiological distribution, 
+- the type of the probability distribution, 
+- author of the study, and 
+- year of study.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r}
+# 16 delays distributions
+epiparameter::epidist_db(
+  disease = "ebola"
+)
+
+# 5 delay distributions are for the incubation period
+epiparameter::epidist_db(
+  disease = "ebola",
+  epi_dist = "incubation"
+)
+
+# the distribution with the highest sample size has a gamma distribution
+epiparameter::epidist_db(
+  disease = "ebola",
+  epi_dist = "incubation",
+  single_epidist = T
+)
+```
+
+Now, from the output of `epiparameter::epidist_db()`, What is an [offspring distribution](../learners/reference.md#offspringdist)?
+
+::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::
 
 ## Extract the summary statistics
 
@@ -250,23 +312,27 @@ covid_lnorm$summary_stats$mean
 
 :::::::::::::::::::::::::::::: challenge
 
-## How to get the `sd` and other nested elements?
+### How to get the `sd` and other nested elements?
 
 Take 1 minute to:
 
-- Get the `sd` from the `epidist` object.
+1. Get the `sd` of the epidemiological distribution.
 
-- Explore all the other nested elements within the `epidist` object.
+2. Find the `sample_size` used in the study.
+
+3. Explore all the other nested elements within the `epidist` object.
 
 Share what is the most interesting element for you!
 
 ::::::::: hint
 
-Using the `$` operator plus the `TAB` keyboard button to explore them as an expandable list:
+Use the `$` operator plus the <kbd>tab</kbd> keyboard button to explore them as an expandable list:
 
 ```r
 covid_lnorm$
 ```
+
+Use the `str()` to display the structure of the `epidist` R object.
 
 ::::::::::::::::::
 
@@ -275,15 +341,18 @@ covid_lnorm$
 ```{r}
 # get the sd 
 covid_lnorm$summary_stats$sd
+
+# get the sample_size
+covid_lnorm$metadata$sample_size
 ```
 
-An interesting element is the `method_assess` nested entry, which refers to the methods used by the study authora to assess for the bias while estimating the serial interval distribution.
+An interesting element is the `method_assess` nested entry, which refers to the methods used by the study authors to assess for the bias while estimating the serial interval distribution.
 
 ```{r}
 covid_lnorm$method_assess
 ```
 
-We will explore this at the end!
+We will explore these concepts at the end!
 
 ::::::::::::::::::::
 
@@ -311,16 +380,61 @@ We also recommend your this shinyapp called **The Distribution Zoo**!
 
 <https://ben18785.shinyapps.io/distribution-zoo/>
 
+You can go to the left panel and the second option named `Distribution type`. Select `Log-Normal` and the name of the [sliders](https://shiny.posit.co/r/articles/build/sliders/) will change according to the distribution of your interest.
+
 :::::::::::::::::::::::::
+
+## Distribution functions
+
+TODO
+
+...
+
+::::::::::::::::::::::::::::::::: challenge
+
+### 99% of serial interval?
+
+When considering secondary cases, after how many days following the symptom onset of primary cases can we expect 99% of symptom onset to occur?
+
+::::::::::::::::: hint
+
+```{r}
+# the probability density function and 
+# the cumulative distribution function of the distribution
+plot(covid_lnorm,day_range = 0:20)
+# the density value at quantile value of 10
+stats::density(covid_lnorm,at = 10)
+# the cumulative probability at quantile value of 10
+epiparameter::cdf(covid_lnorm,q = 10)
+# the quantile value at a cumulative probability of 50%
+stats::quantile(covid_lnorm,p = 0.5)
+# generate 10 random values given the distribution family and its parameters
+epiparameter::generate(covid_lnorm,times = 10)
+```
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r}
+stats::quantile(covid_lnorm,p = 0.99)
+```
+
+The 99% percent of the symptom onset of secondary cases will happen after 14.99 days after the symptom onset of primary cases.
+
+::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::
 
 
 ## Discretize a continuous distribution
 
 We are almost halfway! `EpiNow2::dist_spec()` still needs a maximum value (`max`). 
 
-One way to do this is getting the quantile value for the the 99.9% or `0.999` cumulative probability of the distribution. For this we need to access to the set of distribution functions for our `epidist` object.
+One way to do this is getting the quantile value for the the 99th percentile or `0.99` cumulative probability of the distribution. For this we need to access to the set of distribution functions for our `epidist` object.
 
-To achieve this we can **discretize** the continuous distribution stored in our `epidist` object.
+We can use the set of [distribution functions](https://epiverse-trace.github.io/epiparameter/articles/epiparameter.html#distribution-functions) for a continuous distribution. However, this values will be _continuous_ numbers. To get discrete values from a continuous distribution we can **discretize** the continuous distribution stored in our `epidist` object.
 
 The epidemiological parameter stored in `covid_lnorm` is a **continuous** distribution. Here we plot its *Probability Density Function (PDF)*:
 
@@ -348,35 +462,60 @@ For a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
 plot(covid_lnorm_discrete)
 ```
 
-To finally get a `max` value let's access to the quantile value of the 99% or `0.999` probability of the distribution with the `prob_dist$q` notation, similarly to how we access to the `summary_stats` values.
+To finally get a `max` value let's access to the quantile value of the 99th percentile or `0.99` probability of the distribution with the `prob_dist$q` notation, similarly to how we access to the `summary_stats` values.
 
 ```{r}
-covid_lnorm_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.999)
+covid_lnorm_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.99)
 ```
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### DISTRIBUTION FUNCTIONS
+### 99% of incubation period
 
-TODO epxlore epiparameter internal dsitrubtion functions for discrete distrib
+Within what time frame do 99% of individuals who develop symptoms exhibit them after infection?
 
 ::::::::::::::::: hint
 
-### HINT
+```{r}
+plot(covid_lnorm_discrete,day_range = 0:20)
+# generate random values
+covid_lnorm_discrete$prob_dist$r(1000)
+# in what quantile we have the 99.9% cumulative probability?
+covid_lnorm_discrete$prob_dist$q(0.99)
+# covid_lnorm_discrete$prob_dist$qf(0.99) # as in continuous distribution?
+x_limit <- covid_lnorm_discrete$prob_dist$q(0.99)
+# generate quantile values as a sequence for each natural number
+si_discrete_x <- seq(1L, to = x_limit, by = 1L)
+# calculate the values for each quantiles in the density function
+si_discrete_y <- covid_lnorm_discrete$prob_dist$d(si_discrete_x)
 
-HINT accordions are created with the `hint` tag and nested within 
-`challenge` callouts. These offer more context for the challenge that can help
-the learner find the solution.
+tibble(
+  quantile_values = si_discrete_x,
+  density_values = si_discrete_y
+) %>%
+  ggplot(aes(quantile_values,density_values)) +
+  geom_col()
+```
+
 
 ::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
-### SOLUTION
+```{r}
+covid_incubation <- 
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "incubation",
+    single_epidist = T
+  )
 
-SOLUTION accordions are created with the `solution` tag and nested within 
-`challenge` callouts. These provide the learners with the solution to the
-challenge so they can confirm their answers.
+covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
+
+covid_incubation_discrete$prob_dist$q(0.99)
+```
+
+99% of those who develop symptoms will do so within 16 days of infection.
 
 ::::::::::::::::::::::::::
 
@@ -431,7 +570,7 @@ epidist_db(disease = "influenza") %>%
 # if not, find serial interval and use it as serial interval
 ```
 
-## Find the incubation time
+## Find the incubation period
 
 What it is?
 With which other is related?
@@ -441,6 +580,49 @@ The natural history of a disease influence the transmission dynamics. For `{EpiN
 ![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
 
 ![Parameter estimates. Plausible ranges for the key parameters R0 and θ (see main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
+
+
+::::::::::::::::::::::::::::::::: challenge
+
+### WHAT TYPE OF TRANSMISSION?
+
+...
+
+::::::::::::::::: hint
+
+...
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r}
+# pre-symptomatic transmission
+epidist_db(disease = "influenza",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "influenza",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+
+# symptomatic transmission
+epidist_db(disease = "mers",epi_dist = "incubation",single_epidist = T)$summary_stats$median
+epidist_db(disease = "mers",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+```
+
+```{r}
+# pre-symptomatic transmission
+epidist_db(disease = "covid",epi_dist = "incubation",author = "Stephen",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "covid",epi_dist = "serial",author = "Nishiura",single_epidist = T)$summary_stats$mean
+
+# symptomatic transmission
+epidist_db(disease = "ebola",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+```
+
+
+::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+
 <!-- fix with screenshot from larger computer monitor -->
 
 <!-- Transmission before symptoms -->
@@ -553,6 +735,17 @@ The natural history of a disease influence the transmission dynamics. For `{EpiN
 
 ![Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
 
+
+## any epiparameter?
+
+```{r}
+epidist_db(disease = "all") %>% list_distributions() %>% 
+  as_tibble() %>% 
+  distinct(epi_distribution)
+```
+
+## replace in epinow2
+
 ```{r}
 reporting_delay <- dist_spec(
   mean = convert_to_logmean(2, 1), 
@@ -616,7 +809,7 @@ Recall that "Methods for accurate estimation of the generation interval from con
 
 ## Convert from statistical summaries to distribution parameters
 
-...
+https://github.com/epiverse-trace/epiparameter/issues/114
 
 ## concept map
 
