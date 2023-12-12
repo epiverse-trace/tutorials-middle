@@ -95,7 +95,10 @@ This can be different to the [incubation period](#incubation) as shown in Figure
 [Natural history of disease]{#naturalhistory} 
 : Refers to the development of disease from beginning to end without any treatment or intervention. In fact, given the harmfulness of an epidemic, treatment or intervention measures are inevitable. Therefore, it is difficult for the natural history of a disease to be unaffected by the various coupling factors. ([Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038))
 
-<!-- ## O -->
+## O
+
+[Offspring distribution]{#offspringdist}
+: Distribution of the number of secondary cases caused by a particular infected individual. ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153), [Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-67/v3))
 
 <!-- ## P -->
 
