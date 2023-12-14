@@ -70,7 +70,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## V
 
 [Vector-borne transmission]{#vectorborne}
-: Vector-borne transmission means an infection can be passed from a vector (e.g. mosquitoes) to humans. Examples of vector-borne diseases include malaria and dengue. Click [here](https://www.who.int/news-room/fact-sheets/detail/vector-borne-diseases) for more information on vector-borne transmission.
+: Vector-borne transmission means an infection can be passed from a vector (e.g. mosquitoes) to humans. Examples of vector-borne diseases include malaria and dengue. The World Health Organization have a [Fact sheet about Vector-borne diseases](https://www.who.int/news-room/fact-sheets/detail/vector-borne-diseases) with key information and a list of them according to their vector.
 
 
 <!-- ## W -->
