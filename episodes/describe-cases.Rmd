@@ -8,6 +8,7 @@ exercises: 2
 
 - How do you visualize incidence cases?
 - How to get serial interval from case data? <!-- possibly in a separate episode? -->
+- what is the demographic distribution of cases?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
