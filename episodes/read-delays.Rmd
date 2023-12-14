@@ -637,7 +637,7 @@ _Dive into the structure of this new `<epidist>` R object for discrete distribut
 Now we are ready to plug-in all to the `EpiNow2::dist_spec()` function!
 
 ```{r}
-generation_time_epiparam <- 
+serial_interval_covid <- 
   dist_spec(
     mean = covid_serialint$summary_stats$mean,
     sd = covid_serialint$summary_stats$sd,
@@ -645,7 +645,7 @@ generation_time_epiparam <-
     distribution = "lognormal"
   )
 
-generation_time_epiparam
+serial_interval_covid
 ```
 
 :::::::::: callout
@@ -658,12 +658,12 @@ Using the serial interval instead of the generation time is an alternative that 
 
 Now, let's replace the `generation_time` input that we used for `EpiNow2::epinow()`.
 
-```{r}
+```{r,eval=FALSE}
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
   # delays
-  generation_time = generation_time_opts(generation_time_epiparam),
+  generation_time = generation_time_opts(serial_interval_covid),
   # computation
   stan = stan_opts(
     cores = 4, samples = 1000, chains = 3,
@@ -674,21 +674,75 @@ epinow_estimates <- epinow(
 base::plot(epinow_estimates)
 ```
 
-### formative
+::::::::::::::::::::::::::::::::: challenge
+
+### EBOLA
+
+Download the [Ebola dataset](data/ebola_cases.csv):
+
+- Reuse one epidemiological parameter to estimate the effective reproductive number for the Ebola dataset.
 
 ```{r}
-# what parameters are are available for influenza?
-epidist_db(disease = "influenza") %>% 
-  list_distributions() %>% 
-  as_tibble() %>% 
-  count(epi_distribution)
+ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
 ```
 
+::::::::::::::::: hint
 
-```{r}
-# generation time for ebola
-# if not, find serial interval and use it as serial interval
+Key functions we applied until now:
+
+- `epidist_db`
+- `list_distributions`
+- `discretise`
+- probability functions 
+
+Review the type of distribution of the parameter you choose.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r,message=FALSE,warning=FALSE,eval=FALSE}
+# read data
+ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
+
+# list distributions
+epidist_db(disease = "ebola") %>% 
+  list_distributions()
+
+# subset one distribution 
+ebola_serial <- epidist_db(disease = "ebola", epi_dist = "serial", single_epidist = T)
+
+ebola_serial_discrete <- discretise(ebola_serial)
+
+serial_interval_ebola <- 
+  dist_spec(
+    mean = ebola_serial$summary_stats$mean,
+    sd = ebola_serial$summary_stats$sd,
+    max = ebola_serial_discrete$prob_dist$q(p = 0.999),
+    distribution = "gamma"
+  )
+
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = ebola_confirmed,
+  # distribution
+  generation_time = generation_time_opts(serial_interval_ebola),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
+)
+
+plot(epinow_estimates)
+
 ```
+
+::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::  
+
 
 ## Add the Incubation period
 
@@ -700,7 +754,6 @@ The natural history of a disease influence the transmission dynamics. For `{EpiN
 ![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
 
 ![Parameter estimates. Plausible ranges for the key parameters R0 and θ (read main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
-
 
 ::::::::::::::::::::::::::::::::: challenge
 
@@ -753,6 +806,8 @@ epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = T)$summary_sta
 <!-- https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext -->
 <!-- https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371 -->
 
+### example
+
 ```{r}
 incubation_period <- dist_spec(
   mean = 4, sd = 2,
@@ -760,7 +815,7 @@ incubation_period <- dist_spec(
 )
 ```
 
-```{r,message=FALSE,warning=FALSE,cache=TRUE}
+```{r,message=FALSE,warning=FALSE,cache=TRUE,eval=FALSE}
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
@@ -776,7 +831,7 @@ epinow_estimates <- epinow(
 ```
 
 
-```{r}
+```{r,eval=FALSE}
 ### 2 include incubation time ------
 
 epiparameter::epidist_db(
@@ -808,7 +863,7 @@ epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
   # generation time
-  generation_time = generation_time_opts(generation_time_epiparam),
+  generation_time = generation_time_opts(serial_interval_covid),
   # delays
   delays = delay_opts(incubation_time_epiparam),
   # computation
@@ -827,7 +882,67 @@ base::plot(epinow_estimates)
 
 ```
 
+## Extract parameters
+
+https://github.com/epiverse-trace/epiparameter/issues/114
+
+
 ### formative
+
+```{r,eval=FALSE}
+# what parameters are are available for influenza?
+epidist_db(disease = "influenza") %>% 
+  list_distributions() %>% 
+  as_tibble() %>% 
+  count(epi_distribution)
+
+influenza_generation <- epidist_db(disease = "influenza",epi_dist = "generation")
+
+influenza_generation_discrete <- discretise(influenza_generation)
+
+influenza_generation$summary_stats$median
+influenza_generation$summary_stats$quantiles
+
+# question: is dispersion valid for quantiles?
+# convert_summary_stats_to_params(
+#   distribution = "lnorm", 
+#   median = influenza_generation$summary_stats$median,
+#   quantiles = influenza_generation$summary_stats$quantiles)
+
+influenza_extracted <- extract_param(
+  type = "percentiles",
+  values = c(influenza_generation$summary_stats$quantiles[1],
+             influenza_generation$summary_stats$quantiles[2]),
+  distribution = "lnorm",
+  percentiles = c(0.05,0.95)
+)
+
+generation_time_influenza <- 
+  dist_spec(
+    mean = influenza_extracted[1],
+    sd = influenza_extracted[2],
+    max = influenza_generation_discrete$prob_dist$q(p = 0.999),
+    distribution = "lognormal"
+  )
+
+influenza_cleaned <- outbreaks::influenza_england_1978_school %>% 
+  select(date,confirm = in_bed)
+
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = influenza_cleaned,
+  # distribution
+  generation_time = generation_time_opts(generation_time_influenza),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
+)
+
+plot(epinow_estimates)
+```
+
 
 ```{r}
 # formative, now with ebola -----------------------------------------------
@@ -837,7 +952,7 @@ base::plot(epinow_estimates)
 
 ```
 
-Potential biases like
+However, this still propagates potential biases like
 
 - censoring bias (short periods)
 - reporting bias (recent contacts)
@@ -854,11 +969,6 @@ Adjusting for delays
 The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [reporting delay](../learners/reference.md#reportingdelay):
 
 ![Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
-
-### Convert from statistical summaries to distribution parameters
-
-https://github.com/epiverse-trace/epiparameter/issues/114
-
 
 ### any epiparameter?
 
@@ -878,7 +988,9 @@ reporting_delay <- dist_spec(
 )
 ```
 
-```{r,message=FALSE,warning=FALSE,cache=TRUE}
+### epinow2
+
+```{r,message=FALSE,warning=FALSE,cache=TRUE,eval=FALSE}
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
@@ -915,7 +1027,7 @@ The three examples above represent transmission parameters.
 ### explore
 
 ```{r}
-
+# from data set
 ```
 
 ## From our data! (callout)
@@ -936,9 +1048,11 @@ ref: https://epiverse-trace.github.io/epimodelac/EnfermedadX.html
 
 Recall that "Methods for accurate estimation of the generation interval from contact tracing data involve adjusting for right truncation and accounting for population susceptibility at the times transmission pairs are observed" [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)
 
+<!--
 ## Concept map
 
 update it from last epiparameter test 
+-->
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
