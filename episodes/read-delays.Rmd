@@ -188,6 +188,8 @@ epiparameter::epidist_db(
 
 ::::::::::::::::: callout
 
+### CASE-INSENSITIVE
+
 `epidist_db` is [case-insensitive](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). This means that you can use strings with letters in upper or lower case indistinctly.
 
 :::::::::::::::::::::::::
@@ -201,6 +203,8 @@ epiparameter::epidist_db(
 ) %>%
   epiparameter::list_distributions()
 ```
+
+## Select a single distribution
 
 The `epiparameter::epidist_db()` function works as a filtering or subset function. Let's use the `author` argument to filter `Hiroshi Nishiura` parameters:
 
@@ -230,30 +234,31 @@ epiparameter::epidist_db(
 
 Take a look into help documentation for `?epiparameter::epidist_db()`.
 
-> Note: If multiple entries match the arguments supplied and `single_epidist = TRUE` then the `⁠<epidist`>⁠ that is parameterised and has the largest sample size will be returned (see `?is_parameterised()`). If multiple entries are equal after this sorting the first entry will be returned.
+> Note: If multiple entries match the arguments supplied and `single_epidist = TRUE` then the `⁠<epidist`>⁠ that is parameterised and has the largest sample size will be returned (read `?is_parameterised()`). If multiple entries are equal after this sorting the first entry will be returned.
 
 :::::::::::::::::::::::::
 
 Now we have an epidemiological parameter we can reuse! We can use it to replace the numbers we plug-in to `EpiNow2::dist_spec()`.
 
-Let's do this by assigning this `epidist` class object to the `covid_lnorm` object, where `lnorm` means that this epiparameter follows a log-normal distribution.
+Let's do this by assigning this `<epidist>` class object to the `covid_serialint` object.
 
 ```{r}
-covid_lnorm <- epiparameter::epidist_db(
-  disease = "covid",
-  epi_dist = "serial",
-  author = "Nishiura",
-  single_epidist = T
-)
+covid_serialint <- 
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "serial",
+    author = "Nishiura",
+    single_epidist = T
+  )
 
-covid_lnorm
+covid_serialint
 ```
 
 ::::::::::::::::::::::::::::::::: challenge
 
 ### Ebola's incubation period
 
-
+Take 5 minutes:
 
 - How many delay distributions are for the Ebola disease?
 
@@ -303,11 +308,11 @@ Now, from the output of `epiparameter::epidist_db()`, What is an [offspring dist
 
 ## Extract the summary statistics
 
-We can get the `mean` and standard deviation (`sd`) from this `epidist` diving into the `summary_stats` object:
+We can get the `mean` and standard deviation (`sd`) from this `<epidist>` diving into the `summary_stats` object:
 
 ```{r}
 # get the mean 
-covid_lnorm$summary_stats$mean
+covid_serialint$summary_stats$mean
 ```
 
 :::::::::::::::::::::::::::::: challenge
@@ -320,7 +325,7 @@ Take 1 minute to:
 
 2. Find the `sample_size` used in the study.
 
-3. Explore all the other nested elements within the `epidist` object.
+3. Explore all the other nested elements within the `<epidist>` object.
 
 Share what is the most interesting element for you!
 
@@ -329,10 +334,10 @@ Share what is the most interesting element for you!
 Use the `$` operator plus the <kbd>tab</kbd> keyboard button to explore them as an expandable list:
 
 ```r
-covid_lnorm$
+covid_serialint$
 ```
 
-Use the `str()` to display the structure of the `epidist` R object.
+Use the `str()` to display the structure of the `<epidist>` R object.
 
 ::::::::::::::::::
 
@@ -340,16 +345,16 @@ Use the `str()` to display the structure of the `epidist` R object.
 
 ```{r}
 # get the sd 
-covid_lnorm$summary_stats$sd
+covid_serialint$summary_stats$sd
 
 # get the sample_size
-covid_lnorm$metadata$sample_size
+covid_serialint$metadata$sample_size
 ```
 
 An interesting element is the `method_assess` nested entry, which refers to the methods used by the study authors to assess for the bias while estimating the serial interval distribution.
 
 ```{r}
-covid_lnorm$method_assess
+covid_serialint$method_assess
 ```
 
 We will explore these concepts at the end!
@@ -358,69 +363,155 @@ We will explore these concepts at the end!
 
 ::::::::::::::::::::::::::::::::
 
-::::::::::::::::: spoiler
+## Continuous distributions
+
+The following output has four entries with different content in the probability distribution (`prob_distribution`) column:
+
+```{r}
+distribution <- 
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "serial"
+  )
+
+distribution %>% 
+  list_distributions()
+```
+
+Entries with a missing value (`<NA>`) in the `prob_distribution` column only posses summary statistics associated with it. Run these commands to find the difference:
+
+```{r,eval=FALSE}
+distribution[[1]]$summary_stats
+distribution[[1]]$prob_dist
+```
+
+As detailed in `?is_parameterised`, a parameterised distribution is the entry that has a probability distribution associated to it provided by an `inference_method` as shown in `metadata`. Run these commands to find the difference:
+
+```{r,eval=FALSE}
+distribution[[1]]$metadata$inference_method
+distribution[[2]]$metadata$inference_method
+distribution[[3]]$metadata$inference_method
+distribution[[4]]$metadata$inference_method
+```
+
+In the `epiparameter::list_distributions()` output, we can also find different types of probability distributions (e.g., log-normal, weibull, normal).
+
+```{r}
+distribution %>% 
+  list_distributions()
+```
+
+In `{epiparameter}` you will mostly find **continuous** distributions like these. You can visualize any of them with the `plot()` function and access to: 
+
+- the *Probability Density Function (PDF)* and 
+- the *Cumulative Distribution Function (CDF)*.
+
+```{r}
+plot(distribution[[2]], day_range = 0:20)
+```
+
+With the `day_range` argument you can change the length or number of days in the `x` axis.
+
+::::::::::::::::: discussion
 
 ### The distribution Zoo
 
-How to read this notation?
+Explore this shinyapp called **The Distribution Zoo**!
 
-```{r}
-covid_lnorm$prob_dist
-```
+Follow these steps to reproduce the `covid_serialint` distribution:
 
-This object is class `distribution`. 
+- Access to <https://ben18785.shinyapps.io/distribution-zoo/> shinyapp website!
+- Go to the left panel,
+- Keep the *Category of distribution*: `Continuous Univariate`,
+- Select a new *Distribution type*: `Log-Normal`,
+- Move the **sliders**, i.e. the graphical control element that allows you to adjust a value by moving a handle along a track or bar, to the `covid_serialint` parameters. 
 
-```{r}
-covid_lnorm$prob_dist %>% class()
-```
+<!--
+A slider, in the context of user interfaces and graphical user interfaces (GUIs), is a graphical control element that allows users to adjust a value by moving a handle along a track or bar. Conceptually, it provides a way to select a numeric value within a specified range by visually sliding or dragging a pointer (the handle) along a continuous axis.
+-->
 
-You can look further into it `?distributional::dist_lognormal()` or the corresponding distribution that you need.
+Replicate these with the `distribution` object and all its list elements: `2`, `3`, and `4`. Explore:
 
-We also recommend your this shinyapp called **The Distribution Zoo**!
+- How does the shape of a distribution change when its parameters change?
 
-<https://ben18785.shinyapps.io/distribution-zoo/>
-
-You can go to the left panel and the second option named `Distribution type`. Select `Log-Normal` and the name of the [sliders](https://shiny.posit.co/r/articles/build/sliders/) will change according to the distribution of your interest.
+Share what other useful features you find in the website.
 
 :::::::::::::::::::::::::
 
 ## Distribution functions
 
-TODO
+In R, all the statistical distributions has functions to access to:
 
-...
+- density,
+- cumulative distribution function,
+- quantile function, and
+- random variate generation.
+
+:::::::::::: spoiler
+
+### Functions for the Normal distribution
+
+If you needed it, read in detail about the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), each of its definitions and identify in which part of a distribution they are located!
+
+![The four probability functions for the normal distribution ([Jack Weiss, 2012](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc))](fig/fig5a-normaldistribution.png)
+
+::::::::::::::::::::
+
+If you look at `?stats::Distributions`, each type of distribution has a unique set functions. However, `{epiparameter}` allows gives you one same set of four functions to access to each of the values above for any `<epidist>` object you want! 
+
+```{r,eval=FALSE}
+# plot this to have a visual reference
+plot(covid_serialint, day_range = 0:20)
+```
+
+```{r}
+# the density value at quantile value of 10 (days)
+density(covid_serialint, at = 10)
+
+# the cumulative probability at quantile value of 10 (days)
+cdf(covid_serialint, q = 10)
+
+# the quantile value (day) at a cumulative probability of 60%
+quantile(covid_serialint, p = 0.6)
+
+# generate 10 random values (days) given the distribution family and its parameters
+generate(covid_serialint, times = 10)
+```
+
+::::::::: instructor
+
+Access to the reference documentation (Help files) for these functions is accessible with the three double-colon notation: `epiparameter:::`
+
+```{r}
+?epiparameter:::density.epidist()
+?epiparameter:::cdf.epidist()
+?epiparameter:::quantile.epidist()
+?epiparameter:::generate.epidist()
+```
+
+::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### 99% of serial interval?
+### 99th percentile of the serial interval?
 
 When considering secondary cases, after how many days following the symptom onset of primary cases can we expect 99% of symptom onset to occur?
 
 ::::::::::::::::: hint
 
-```{r}
-# the probability density function and 
-# the cumulative distribution function of the distribution
-plot(covid_lnorm,day_range = 0:20)
-# the density value at quantile value of 10
-stats::density(covid_lnorm,at = 10)
-# the cumulative probability at quantile value of 10
-epiparameter::cdf(covid_lnorm,q = 10)
-# the quantile value at a cumulative probability of 50%
-stats::quantile(covid_lnorm,p = 0.5)
-# generate 10 random values given the distribution family and its parameters
-epiparameter::generate(covid_lnorm,times = 10)
-```
+In Figure 5 from the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), the shadowed section represents a cumulative probability of `0.997` for the quantile value at `x = 2`.
 
 ::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
 ```{r}
-stats::quantile(covid_lnorm,p = 0.99)
+quantile(covid_serialint, p = 0.99)
 ```
 
 The 99% percent of the symptom onset of secondary cases will happen after 14.99 days after the symptom onset of primary cases.
+
+_Does this result make sense or is expected?_
 
 ::::::::::::::::::::::::::
 
@@ -432,25 +523,25 @@ The 99% percent of the symptom onset of secondary cases will happen after 14.99 
 
 We are almost halfway! `EpiNow2::dist_spec()` still needs a maximum value (`max`). 
 
-One way to do this is getting the quantile value for the the 99th percentile or `0.99` cumulative probability of the distribution. For this we need to access to the set of distribution functions for our `epidist` object.
+One way to do this is getting the quantile value for the the 99th percentile or `0.99` cumulative probability of the distribution. For this we need to access to the set of distribution functions for our `<epidist>` object.
 
-We can use the set of [distribution functions](https://epiverse-trace.github.io/epiparameter/articles/epiparameter.html#distribution-functions) for a continuous distribution. However, this values will be _continuous_ numbers. To get discrete values from a continuous distribution we can **discretize** the continuous distribution stored in our `epidist` object.
+We can use the set of [distribution functions](https://epiverse-trace.github.io/epiparameter/articles/epiparameter.html#distribution-functions) for a continuous distribution. However, this values will be _continuous_ numbers. To get discrete values from a continuous distribution we can **discretize** the continuous distribution stored in our `<epidist>` object.
 
-The epidemiological parameter stored in `covid_lnorm` is a **continuous** distribution. Here we plot its *Probability Density Function (PDF)*:
+The epidemiological parameter stored in `covid_serialint` is a **continuous** distribution. Here we plot its *Probability Density Function (PDF)*:
 
 ```{r}
-plot(covid_lnorm)
+plot(covid_serialint)
 ```
 
 When we `epiparameter::discretise()` the continuous distribution we get a **discrete** distribution:
 
 ```{r}
-covid_lnorm_discrete <- epiparameter::discretise(covid_lnorm)
+covid_serialint_discrete <- epiparameter::discretise(covid_serialint)
 
-covid_lnorm_discrete
+covid_serialint_discrete
 ```
 
-We identify this change in the `Distribution:` output line of the `epidist` object. Take a double check to this line:
+We identify this change in the `Distribution:` output line of the `<epidist>` object. Take a double check to this line:
 
 ```
 Distribution: discrete lnorm
@@ -459,35 +550,35 @@ Distribution: discrete lnorm
 For a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
 
 ```{r}
-plot(covid_lnorm_discrete)
+plot(covid_serialint_discrete)
 ```
 
 To finally get a `max` value let's access to the quantile value of the 99th percentile or `0.99` probability of the distribution with the `prob_dist$q` notation, similarly to how we access to the `summary_stats` values.
 
 ```{r}
-covid_lnorm_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.99)
+covid_serialint_discrete_max <- covid_serialint_discrete$prob_dist$q(p = 0.99)
 ```
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### 99% of incubation period
+### 99th percentile of the incubation period
 
 Within what time frame do 99% of individuals who develop symptoms exhibit them after infection?
 
 ::::::::::::::::: hint
 
 ```{r}
-plot(covid_lnorm_discrete,day_range = 0:20)
+plot(covid_serialint_discrete,day_range = 0:20)
 # generate random values
-covid_lnorm_discrete$prob_dist$r(1000)
+covid_serialint_discrete$prob_dist$r(1000)
 # in what quantile we have the 99.9% cumulative probability?
-covid_lnorm_discrete$prob_dist$q(0.99)
-# covid_lnorm_discrete$prob_dist$qf(0.99) # as in continuous distribution?
-x_limit <- covid_lnorm_discrete$prob_dist$q(0.99)
+covid_serialint_discrete$prob_dist$q(0.99)
+# covid_serialint_discrete$prob_dist$qf(0.99) # as in continuous distribution?
+x_limit <- covid_serialint_discrete$prob_dist$q(0.99)
 # generate quantile values as a sequence for each natural number
 si_discrete_x <- seq(1L, to = x_limit, by = 1L)
 # calculate the values for each quantiles in the density function
-si_discrete_y <- covid_lnorm_discrete$prob_dist$d(si_discrete_x)
+si_discrete_y <- covid_serialint_discrete$prob_dist$d(si_discrete_x)
 
 tibble(
   quantile_values = si_discrete_x,
@@ -527,9 +618,9 @@ Now we are ready to plug-in all to the `EpiNow2::dist_spec()` function!
 ```{r}
 generation_time_epiparam <- 
   dist_spec(
-    mean = covid_lnorm$summary_stats$mean,
-    sd = covid_lnorm$summary_stats$sd,
-    max = covid_lnorm_discrete_max,
+    mean = covid_serialint$summary_stats$mean,
+    sd = covid_serialint$summary_stats$sd,
+    max = covid_serialint_discrete_max,
     distribution = "lognormal"
   )
 
@@ -579,7 +670,7 @@ The natural history of a disease influence the transmission dynamics. For `{EpiN
 
 ![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
 
-![Parameter estimates. Plausible ranges for the key parameters R0 and θ (see main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
+![Parameter estimates. Plausible ranges for the key parameters R0 and θ (read main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
 
 
 ::::::::::::::::::::::::::::::::: challenge
@@ -675,7 +766,7 @@ covid_incubation
 
 covid_incubation$summary_stats$mean
 covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
-covid_incubation_discrete_max <- covid_lnorm_discrete$prob_dist$q(p = 0.999)
+covid_incubation_discrete_max <- covid_serialint_discrete$prob_dist$q(p = 0.999)
 
 incubation_time_epiparam <- dist_spec(
   mean = covid_incubation$summary_stats$mean,
@@ -793,7 +884,7 @@ The three examples above represent transmission parameters.
 An interesting example is the `method_assess` nested entry, which refers to the methods used to assess for the bias while estimating the serial interval distribution.
 
 ```{r}
-covid_lnorm$method_assess
+covid_serialint$method_assess
 ```
 
 
