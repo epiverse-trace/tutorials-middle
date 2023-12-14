@@ -523,17 +523,11 @@ _Does this result make sense or is expected?_
 
 We are almost halfway! `EpiNow2::dist_spec()` still needs a maximum value (`max`). 
 
-One way to do this is getting the quantile value for the the 99th percentile or `0.99` cumulative probability of the distribution. For this we need to access to the set of distribution functions for our `<epidist>` object.
+One way to do this is getting the quantile value for the the 99.9th percentile or `0.999` cumulative probability of the distribution. For this we need to access to the set of distribution functions for our `<epidist>` object.
 
-We can use the set of [distribution functions](https://epiverse-trace.github.io/epiparameter/articles/epiparameter.html#distribution-functions) for a continuous distribution. However, this values will be _continuous_ numbers. To get discrete values from a continuous distribution we can **discretize** the continuous distribution stored in our `<epidist>` object.
+We can use the set of distribution functions for a _continuous_ distribution (as above). However, this values will be _continuous_ numbers. To get discrete values from a continuous distribution we can **discretize** the continuous distribution stored in our `<epidist>` object.
 
-The epidemiological parameter stored in `covid_serialint` is a **continuous** distribution. Here we plot its *Probability Density Function (PDF)*:
-
-```{r}
-plot(covid_serialint)
-```
-
-When we `epiparameter::discretise()` the continuous distribution we get a **discrete** distribution:
+When we `epiparameter::discretise()` the continuous distribution we get a **discrete**(-ized) distribution:
 
 ```{r}
 covid_serialint_discrete <- epiparameter::discretise(covid_serialint)
@@ -547,47 +541,70 @@ We identify this change in the `Distribution:` output line of the `<epidist>` ob
 Distribution: discrete lnorm
 ```
 
+For a **continuous** distribution, we plot the *Probability Density Function (PDF)*:
+
+```{r,eval=FALSE}
+plot(covid_serialint)
+```
+
 For a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
 
 ```{r}
 plot(covid_serialint_discrete)
 ```
 
-To finally get a `max` value let's access to the quantile value of the 99th percentile or `0.99` probability of the distribution with the `prob_dist$q` notation, similarly to how we access to the `summary_stats` values.
+To finally get a `max` value let's access to the quantile value of the 99.9th percentile or `0.999` probability of the distribution with the `prob_dist$q` notation, similarly to how we access to the `summary_stats` values.
 
 ```{r}
-covid_serialint_discrete_max <- covid_serialint_discrete$prob_dist$q(p = 0.99)
+covid_serialint_discrete_max <- covid_serialint_discrete$prob_dist$q(p = 0.999)
 ```
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### 99th percentile of the incubation period
+### 99th percentile of the incubation period of COVID-19
 
-Within what time frame do 99% of individuals who develop symptoms exhibit them after infection?
+Within what time frame do 99% of individuals who develop COVID-19 symptoms exhibit them after infection?
 
 ::::::::::::::::: hint
 
-```{r}
-plot(covid_serialint_discrete,day_range = 0:20)
+First, we are asking about a different distribution delay: incubation period 
+
+Probability function for `<epidist>` **discrete** distributions differ from the *continuous* ones!
+
+```{r,eval=FALSE}
+# plot to have a visual reference
+plot(covid_serialint_discrete, day_range = 0:20)
+
+# density value at quantile value 10 (day)
+covid_serialint_discrete$prob_dist$d(10)
+
+# cumulative probability at quantile value 10 (day)
+covid_serialint_discrete$prob_dist$cdf(10)
+
+# in what quantile value (days) we have the 60% cumulative probability?
+covid_serialint_discrete$prob_dist$q(0.6)
+# covid_serialint_discrete$prob_dist$qf(0.6) # as in continuous distribution
+
 # generate random values
-covid_serialint_discrete$prob_dist$r(1000)
-# in what quantile we have the 99.9% cumulative probability?
-covid_serialint_discrete$prob_dist$q(0.99)
-# covid_serialint_discrete$prob_dist$qf(0.99) # as in continuous distribution?
-x_limit <- covid_serialint_discrete$prob_dist$q(0.99)
-# generate quantile values as a sequence for each natural number
-si_discrete_x <- seq(1L, to = x_limit, by = 1L)
-# calculate the values for each quantiles in the density function
-si_discrete_y <- covid_serialint_discrete$prob_dist$d(si_discrete_x)
+covid_serialint_discrete$prob_dist$r(10)
+
+# create a discrete distribution visualization
+x_limit <- covid_serialint_discrete$prob_dist$q(0.999)
 
 tibble(
-  quantile_values = si_discrete_x,
-  density_values = si_discrete_y
-) %>%
-  ggplot(aes(quantile_values,density_values)) +
+  # generate quantile values as a sequence for each natural number
+  quantile_values = seq(1L, to = x_limit, by = 1L)
+) %>% 
+  mutate(
+    # calculate the values for each quantiles in the density function
+    density_values = covid_serialint_discrete$prob_dist$d(quantile_values)
+  ) %>%
+  ggplot(aes(
+    x = quantile_values,
+    y = density_values)
+  ) +
   geom_col()
 ```
-
 
 ::::::::::::::::::::::
 
@@ -606,12 +623,16 @@ covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
 covid_incubation_discrete$prob_dist$q(0.99)
 ```
 
-99% of those who develop symptoms will do so within 16 days of infection.
+99% of those who develop COVID-19 symptoms will do so within 16 days of infection.
+
+_Dive into the structure of this new `<epidist>` R object for discrete distributions!_
 
 ::::::::::::::::::::::::::
 
 
 :::::::::::::::::::::::::::::::::::::::::::
+
+## Plug-in `{epiparameter}` to `{EpiNow2}`
 
 Now we are ready to plug-in all to the `EpiNow2::dist_spec()` function!
 
