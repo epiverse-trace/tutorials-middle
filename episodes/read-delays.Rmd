@@ -10,12 +10,7 @@ editor_options:
 
 - how to obtain delay distributions from a literature systematic review?
 - what is the natural history of the disease?
-- how long should contacts be followed?
-- what is the required duration of contact tracing?
-- how long should cases be isolated to reduce transmission?
-
 - what are the epidemiological characteristics of the infection?
-- what is the demographic distribution of cases?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -1038,6 +1033,10 @@ epidist_db(disease = "all") %>% list_distributions() %>%
 ```
 
 ## From our data! (callout)
+
+- how long should contacts be followed?
+- what is the required duration of contact tracing?
+- how long should cases be isolated to reduce transmission?
 
 An interesting example is the `method_assess` nested entry, which refers to the methods used to assess for the bias while estimating the serial interval distribution.
 
