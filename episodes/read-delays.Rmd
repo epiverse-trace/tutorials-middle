@@ -746,12 +746,13 @@ plot(epinow_estimates)
 
 ## Add the Incubation period
 
-What it is?
-With which other is related?
+For `{EpiNow2}`, we can specify relevant delay distributions like the [incubation period](../learners/reference.md#incubation).
 
-The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [incubation period](../learners/reference.md#incubation):
+The lengths of the Serial interval and Incubation period determine the type of transmission of a disease.
 
 ![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
+
+The proportion of pre-symptomatic transmission contributes to the effective reproductive number and expected new cases to have.
 
 ![Parameter estimates. Plausible ranges for the key parameters R0 and θ (read main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
 
@@ -759,11 +760,18 @@ The natural history of a disease influence the transmission dynamics. For `{EpiN
 
 ### WHAT TYPE OF TRANSMISSION?
 
-...
+Compare the serial interval and incubation period of Influenza and MERS:
+
+- What type of transmission have Influenza?
+- What type of transmission have MERS?
+- Does these results correlates with the available evidence?
 
 ::::::::::::::::: hint
 
-...
+Key functions:
+
+- `epidist_db()`
+- `epidist$summary_stats$`
 
 ::::::::::::::::::::::
 
@@ -779,7 +787,7 @@ epidist_db(disease = "mers",epi_dist = "incubation",single_epidist = T)$summary_
 epidist_db(disease = "mers",epi_dist = "serial",single_epidist = T)$summary_stats$mean
 ```
 
-```{r}
+```{r,eval=FALSE}
 # pre-symptomatic transmission
 epidist_db(disease = "covid",epi_dist = "incubation",author = "Stephen",single_epidist = T)$summary_stats$mean
 epidist_db(disease = "covid",epi_dist = "serial",author = "Nishiura",single_epidist = T)$summary_stats$mean
@@ -806,22 +814,25 @@ epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = T)$summary_sta
 <!-- https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext -->
 <!-- https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371 -->
 
-### example
+::::::::::::::::::::::::::::::::: challenge
 
-```{r}
-incubation_period <- dist_spec(
-  mean = 4, sd = 2,
-  max = 20, distribution = "gamma"
-)
-```
+### Reuse an Incubation period for COVID-19
 
-```{r,message=FALSE,warning=FALSE,cache=TRUE,eval=FALSE}
+Use `{epiparameter}` to:
+
+- Find and incubation period for COVID-19
+- Add to our last `epinow()` code chunk the `incubation_time_covid` in the `delays` argument.
+
+::::::::::::::::: hint
+
+```r
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
+  # generation time
+  generation_time = generation_time_opts(serial_interval_covid),
   # delays
-  generation_time = generation_time_opts(generation_time),
-  delays = delay_opts(incubation_period),
+  delays = delay_opts(incubation_time_covid),
   # computation
   stan = stan_opts(
     cores = 4, samples = 1000, chains = 3,
@@ -830,15 +841,11 @@ epinow_estimates <- epinow(
 )
 ```
 
+::::::::::::::::::::::
+
+::::::::::::::::: solution
 
 ```{r,eval=FALSE}
-### 2 include incubation time ------
-
-epiparameter::epidist_db(
-  disease = "covid",
-  epi_dist = "incubation") %>%
-  epiparameter::list_distributions()
-
 covid_incubation <- epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "incubation",
@@ -848,14 +855,12 @@ covid_incubation <- epiparameter::epidist_db(
 
 covid_incubation
 
-covid_incubation$summary_stats$mean
 covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
-covid_incubation_discrete_max <- covid_serialint_discrete$prob_dist$q(p = 0.999)
 
-incubation_time_epiparam <- dist_spec(
+incubation_time_covid <- dist_spec(
   mean = covid_incubation$summary_stats$mean,
   sd = covid_incubation$summary_stats$sd,
-  max = covid_incubation_discrete_max,
+  max = covid_serialint_discrete$prob_dist$q(p = 0.999),
   distribution = "lognormal"
 )
 
@@ -865,7 +870,7 @@ epinow_estimates <- epinow(
   # generation time
   generation_time = generation_time_opts(serial_interval_covid),
   # delays
-  delays = delay_opts(incubation_time_epiparam),
+  delays = delay_opts(incubation_time_covid),
   # computation
   stan = stan_opts(
     cores = 4, samples = 1000, chains = 3,
@@ -874,17 +879,28 @@ epinow_estimates <- epinow(
 )
 
 base::plot(epinow_estimates)
-
-# post calculation questions
-# what have changed?
-# - cases by date of infection
-# - uncertainty
-
 ```
+
+::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+
+:::::::::::::: discussion
+
+### How much it changed?
+
+After adding the incubation period, discuss:
+
+- Does the retrospective trend of forecast changed?
+- Does the uncertainty changed?
+
+::::::::::::::::::::::::::::
 
 ## Extract parameters
 
-https://github.com/epiverse-trace/epiparameter/issues/114
+<!-- https://github.com/epiverse-trace/epiparameter/issues/114 -->
 
 
 ### formative
@@ -943,6 +959,7 @@ epinow_estimates <- epinow(
 plot(epinow_estimates)
 ```
 
+### formative
 
 ```{r}
 # formative, now with ebola -----------------------------------------------
@@ -959,14 +976,11 @@ However, this still propagates potential biases like
 
 ## Add the Reporting delays
 
-What it is?
-With which other is related?
-
-Adjusting for delays
+Estimating Rt requires data on the daily number of new infections (i.e., transmission events). Due to lags in the development of detectable viral loads, symptom onset, seeking care, and reporting, these numbers are not readily available. All observations reflect transmission events from some time in the past. In other words, if d is the delay from infection to observation, then observations at time t inform Rt−d, not Rt. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)
 
 ![Rt is a measure of transmission at time t. Observations after time t must be adjusted. ICU, intensive care unit. From  [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)](fig/rt-adjusting-delays.png)
 
-The natural history of a disease influence the transmission dynamics. For `{EpiNow2}`, we can specify relevant delay distributions like the [reporting delay](../learners/reference.md#reportingdelay):
+We can opt to adjust `{EpiNow2}` outputs by the [reporting delay](../learners/reference.md#reportingdelay) that condition the report of confirmed cases.
 
 ![Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
 
@@ -981,16 +995,18 @@ epidist_db(disease = "all") %>% list_distributions() %>%
 ### replace in epinow2
 
 ```{r}
-reporting_delay <- dist_spec(
-  mean = convert_to_logmean(2, 1), 
-  sd = convert_to_logsd(2, 1),
-  max = 10, distribution = "lognormal"
-)
+
 ```
 
 ### epinow2
 
 ```{r,message=FALSE,warning=FALSE,cache=TRUE,eval=FALSE}
+reporting_delay <- dist_spec(
+  mean = convert_to_logmean(2, 1), 
+  sd = convert_to_logsd(2, 1),
+  max = 10, distribution = "lognormal"
+)
+
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
@@ -1007,27 +1023,18 @@ epinow_estimates <- epinow(
 )
 ```
 
-### formative
-
-```{r}
-### 3 add reporting delay --------
-
-# now is your turn!
-# after the ebola assessment
-
-
-```
-
 ## Severity parameters
 
 The three examples above represent transmission parameters.
 
-- Duration of hospitalization (bed capacity needed)
+One example of severity parameter is the duration of hospitalization (bed capacity needed)
 
 ### explore
 
 ```{r}
-# from data set
+epidist_db(disease = "all") %>% list_distributions() %>% 
+  as_tibble() %>% 
+  distinct(epi_distribution)
 ```
 
 ## From our data! (callout)
@@ -1042,7 +1049,7 @@ Fit a parametric distribution to estimate the mean and sd
 
 estimate serial interval from case and contact data pairs 
 
-ref: https://www.reconlearn.org/post/real-time-response-2
+<!-- ref: https://www.reconlearn.org/post/real-time-response-2 -->
 
 ref: https://epiverse-trace.github.io/epimodelac/EnfermedadX.html
 
