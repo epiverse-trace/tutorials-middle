@@ -73,7 +73,7 @@ library(tidyverse)
 ```
 
 
-## Find a generation time
+## Find a Generation time
 
 The generation time, jointly with the $R$, can inform about the speed of spread and its feasibility of control. Given a $R>1$, with a shorter generation time, cases can appear more quickly.
 
@@ -648,6 +648,14 @@ generation_time_epiparam <-
 generation_time_epiparam
 ```
 
+:::::::::: callout
+
+### Warning
+
+Using the serial interval instead of the generation time is an alternative that can propagate bias in your estimates. Even more in diseases with reported pre-symptomatic transmission!
+
+::::::::::::::::::
+
 Now, let's replace the `generation_time` input that we used for `EpiNow2::epinow()`.
 
 ```{r}
@@ -682,7 +690,7 @@ epidist_db(disease = "influenza") %>%
 # if not, find serial interval and use it as serial interval
 ```
 
-## Find the incubation period
+## Add the Incubation period
 
 What it is?
 With which other is related?
@@ -819,7 +827,7 @@ base::plot(epinow_estimates)
 
 ```
 
-## formative
+### formative
 
 ```{r}
 # formative, now with ebola -----------------------------------------------
@@ -834,7 +842,7 @@ Potential biases like
 - censoring bias (short periods)
 - reporting bias (recent contacts)
 
-## Find the reporting delay
+## Add the Reporting delays
 
 What it is?
 With which other is related?
@@ -847,8 +855,12 @@ The natural history of a disease influence the transmission dynamics. For `{EpiN
 
 ![Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
 
+### Convert from statistical summaries to distribution parameters
 
-## any epiparameter?
+https://github.com/epiverse-trace/epiparameter/issues/114
+
+
+### any epiparameter?
 
 ```{r}
 epidist_db(disease = "all") %>% list_distributions() %>% 
@@ -856,7 +868,7 @@ epidist_db(disease = "all") %>% list_distributions() %>%
   distinct(epi_distribution)
 ```
 
-## replace in epinow2
+### replace in epinow2
 
 ```{r}
 reporting_delay <- dist_spec(
@@ -883,7 +895,7 @@ epinow_estimates <- epinow(
 )
 ```
 
-## formative
+### formative
 
 ```{r}
 ### 3 add reporting delay --------
@@ -900,6 +912,12 @@ The three examples above represent transmission parameters.
 
 - Duration of hospitalization (bed capacity needed)
 
+### explore
+
+```{r}
+
+```
+
 ## From our data! (callout)
 
 An interesting example is the `method_assess` nested entry, which refers to the methods used to assess for the bias while estimating the serial interval distribution.
@@ -907,7 +925,6 @@ An interesting example is the `method_assess` nested entry, which refers to the 
 ```{r}
 covid_serialint$method_assess
 ```
-
 
 Fit a parametric distribution to estimate the mean and sd
 
@@ -919,11 +936,7 @@ ref: https://epiverse-trace.github.io/epimodelac/EnfermedadX.html
 
 Recall that "Methods for accurate estimation of the generation interval from contact tracing data involve adjusting for right truncation and accounting for population susceptibility at the times transmission pairs are observed" [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)
 
-## Convert from statistical summaries to distribution parameters
-
-https://github.com/epiverse-trace/epiparameter/issues/114
-
-## concept map
+## Concept map
 
 update it from last epiparameter test 
 
