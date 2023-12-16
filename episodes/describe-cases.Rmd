@@ -7,8 +7,8 @@ exercises: 2
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How do you visualize incidence cases?
-- How to get serial interval from case data? <!-- possibly in a separate episode? -->
-- what is the demographic distribution of cases?
+- what is the growth rate of the epidemic?
+- what is the person, place, time distribution of cases?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -16,6 +16,7 @@ exercises: 2
 
 - Create incidence curves
 - Estimate the growth rate from incidence curves
+- Create quick descriptive and comparison tables
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -23,13 +24,23 @@ exercises: 2
 
 This is a lesson created via The Carpentries Workbench. 
 
+## time
+
 ## Exponential growth
 
 Within the renewal equation, the generation interval mechanistically links the reproductive number R to observables such as the epidemic growth rate r or the number of new infections per day [(Wallinga et al. 2006)](https://royalsocietypublishing.org/doi/10.1098/rspb.2006.3754)
 
+## person
+
+## place
+
+<!-- https://gitlab.renkulab.io/the-graph-courses/further-data-analysis-with-r-staging/-/tree/master/ch06_basic_geospatial_viz/lessons -->
+
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Use `{incidence2}` 
+- Use `{i2extras}`
+- Use `{compareGroups}`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
