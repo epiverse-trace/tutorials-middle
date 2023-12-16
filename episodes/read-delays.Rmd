@@ -1034,6 +1034,7 @@ epidist_db(disease = "all") %>% list_distributions() %>%
 
 ## From our data! (callout)
 
+- How to get serial interval from case data? <!-- possibly in a separate episode? -->
 - how long should contacts be followed?
 - what is the required duration of contact tracing?
 - how long should cases be isolated to reduce transmission?
