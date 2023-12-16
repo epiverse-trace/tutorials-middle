@@ -5,7 +5,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 ## A
 
 [Airborne transmission]{#airborne}
-: Individuals become infected via contact with infectious particles in the air. Examples include influenza, and COVID-19. Click[here](https://www.ncbi.nlm.nih.gov/books/NBK531468/) for more information on airborne transmission.
+: Individuals become infected via contact with infectious particles in the air. Examples include influenza and COVID-19. Atler et al. (2023) discuss about [factors and management procedures](https://www.ncbi.nlm.nih.gov/books/NBK531468/) of airborne transmission.
 
 <!--  ## B -->
 
