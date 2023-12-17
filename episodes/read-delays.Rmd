@@ -8,9 +8,8 @@ editor_options:
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- how to obtain delay distributions from a literature systematic review?
+- how to get delay distributions from a systematic review?
 - what is the natural history of the disease?
-- what are the epidemiological characteristics of the infection?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
