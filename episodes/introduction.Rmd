@@ -167,6 +167,30 @@ Epiverse-TRACE aim is to provide a software ecosystem for outbreak analytics. We
 
 ![](fig/pkgs-hexlogos.png)
 
+```{r, results='asis', echo = FALSE, eval=FALSE}
+# eval = TRUE
+# turn on if maintainers manage to 
+# adapt css from main page to varnish
+pkg_list <- c("readepi","cleanepi","linelist","epiparameter","episoap")
+
+# from https://github.com/epiverse-trace/epiverse-trace.github.io/blob/main/index.qmd
+
+pkg_path <- "https://raw.githubusercontent.com/epiverse-trace/epiverse-trace.github.io/main/_data/epiverse_pkgs.csv"
+hexwall_path<- "https://raw.githubusercontent.com/epiverse-trace/epiverse-trace.github.io/main/_templates/hexwall_element.Rmd"
+
+file.path(pkg_path) |>
+  read.csv() |>
+  # dplyr::filter(
+  #   magrittr::is_in(pkgname,pkg_list)) |>
+  as.list() |>
+  purrr::transpose() |>
+  purrr::map_chr(~ knitr::knit_expand(
+    file = hexwall_path,
+    pkgname = .x$pkgname,
+    description = .x$description)) |>
+  cat(sep = "\n")
+```
+
 ## How can I start?
 
 Our plan for these tutorials is to introduce key solutions from packages in all the tasks before and after the _Quantify transmission_ task, plus the required theory concepts to interpret modelling outputs and make rigorous conclusions.
