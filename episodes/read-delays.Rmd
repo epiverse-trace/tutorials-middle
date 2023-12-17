@@ -676,8 +676,8 @@ Download the [Ebola dataset](data/ebola_cases.csv):
 
 - Reuse one epidemiological parameter to estimate the effective reproductive number for the Ebola dataset.
 
-```{r}
-ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
+```{r,eval=FALSE}
+ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
 ```
 
 ::::::::::::::::: hint
@@ -695,9 +695,14 @@ Review the type of distribution of the parameter you choose.
 
 ::::::::::::::::: solution
 
+```{r,eval=FALSE}
+# read data from tutorial repository R project
+ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
+```
+
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 # read data
-ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
+ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
 
 # list distributions
 epidist_db(disease = "ebola") %>% 
