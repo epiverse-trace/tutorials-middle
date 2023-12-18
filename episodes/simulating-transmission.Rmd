@@ -10,8 +10,6 @@ require(testthat)
 require(tidyverse)
 require(DiagrammeR)
 require(webshot)
-require(pak)
-pak::pak("epiverse-trace/epidemics")
 library(epidemics)
 webshot::install_phantomjs(force = TRUE)
 ```
