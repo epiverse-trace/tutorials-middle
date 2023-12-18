@@ -80,7 +80,7 @@ contact_data
 ## Output
  
 ```{r polymod_uk, echo = FALSE}
- polymod <- socialmixr::polymod
+polymod <- socialmixr::polymod
 contact_data <- socialmixr::contact_matrix(
   polymod,
   countries = "United Kingdom",

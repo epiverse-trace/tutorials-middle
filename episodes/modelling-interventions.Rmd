@@ -77,7 +77,7 @@ initial_conditions <- c(
 # build for all age groups
 initial_conditions <- matrix(
   rep(initial_conditions, dim(contact_matrix)[1]),
-  ncol = 5, byrow = T,
+  ncol = 5, byrow = TRUE
 )
 rownames(initial_conditions) <- rownames(contact_matrix)
 
