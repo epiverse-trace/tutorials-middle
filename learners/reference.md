@@ -55,8 +55,8 @@ The generation time distribution is commonly estimated from data on the [serial 
 [Incubation period]{#incubation}
 : The time between becoming infected and the onset of symptoms. 
 [More information on the incubation period](https://en.wikipedia.org/wiki/Latent_period_(epidemiology)#Incubation_period). 
-This can be different to the [latent period](#latent) as shown in Figure 4 from ([Xiang et al. (2021)](https://www.sciencedirect.com/science/article/pii/S2468042721000038)).
-The relationship between the incubation period and  the [serial interval](#serialinterval) helps to define the type of infection transmission (symptomatic or pre-symptomatic). This is shown in Figure 2 at [Nishiura et al. (2020)](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext).
+This can be different to the [latent period](#latent) as shown in Figure 4 from ([Xiang et al. (2021)](https://www.sciencedirect.com/science/article/pii/S2468042721000038#fig4)).
+The relationship between the incubation period and  the [serial interval](#serialinterval) helps to define the type of infection transmission (symptomatic or pre-symptomatic). This is shown in Figure 2 at [Nishiura et al. (2020)](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2).
 
 [Indirect transmission]{#indirect}
 : Indirectly transmitted infections are passed on to humans via contact with vectors, animals or contaminated environment. Vector-borne infections, zoonoses and water-borne infections are modelled as indirectly transmitted. 
@@ -79,8 +79,8 @@ The relationship between the incubation period and  the [serial interval](#seria
 ## L
 
 [Latent period]{#latent}
-: The time between becoming infected and the onset of infectiousness. [More information on the latent period](https://en.wikipedia.org/wiki/Latent_period_(epidemiology)).
-This can be different to the [incubation period](#incubation) as shown in Figure 4 from ([Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038))
+: The time between becoming infected and the onset of infectiousness. 
+This can be different to the [incubation period](#incubation) as shown in Figure 4 from ([Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038#fig4))
 
 ## M
 [Model parameters (ODEs)]{#parsode}
@@ -120,7 +120,7 @@ This can be different to the [incubation period](#incubation) as shown in Figure
 : The time delay between the onset of symptoms between a primary case and a secondary case.
 This can be negative when pre-symptomatic infection occurs.
 Most commonly, the serial interval distribution of an infection is used to estimate the [generation time](#generationtime) distribution ([(Cori et al., 2017)](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
-The relationship between the serial interval and the [incubation period](#incubation) helps to define the type of infection transmission (symptomatic or pre-symptomatic). This is shown in Figure 2 at [Nishiura et al. (2020)](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext).
+The relationship between the serial interval and the [incubation period](#incubation) helps to define the type of infection transmission (symptomatic or pre-symptomatic). This is shown in Figure 2 at [Nishiura et al. (2020)](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2).
 
 [Stochastic model]{#stochastic}
 : A model that includes some stochastic process resulting in variation in model simulations for the same initial conditions and parameter values. Examples include stochastic differential equations and branching process models. For more detail see [Allen (2017)](https://doi.org/10.1016/j.idm.2017.03.001).
