@@ -127,7 +127,7 @@ To merge your new episodes:
       - Pull the `main` branch: `git pull`
       - Switch to your `feature` branch: `git checkout feature`
       - [Rebase](https://docs.gitlab.com/ee/topics/git/git_rebase.html) your `feature` branch onto `main` branch: `git rebase main`
-      - Push your rebased `featured` branch using the `--force` (this must be a forced update): `git push --force` 
+      - Push your rebased `featured` branch using the `--force` option (this must be a forced update): `git push --force` 
     - In the remote repository, i.e. on GitHub, only if you are in a PR:
       - Update your PR branch with [Update with Rebase](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch).
     <!-- - Go to Git tab in the environments pane. Click on `Pull options` > `Pull with rebase`.-->
