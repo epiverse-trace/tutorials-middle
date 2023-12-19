@@ -94,6 +94,7 @@ install.packages(c("sandpaper", "varnish", "pegboard", "tinkr"),
 To contribute with a new episode:
 
 - [Create](https://happygitwithr.com/git-branches#create-a-new-branch) a new feature branch. Write in there your contribution.
+- Create an Issue to report the start of your WIP feature branch. Add the [WIP label](https://github.com/epiverse-trace/tutorials/labels/WIP) to it. This aims to keep one contributor per feature branch. 
 - [Create](https://carpentries.github.io/sandpaper-docs/aio.html#episodes) a new episode with `sandpaper::create_episode_md("Episode Name")`
 
 If you need to work with the most recent versions of packages:
@@ -121,9 +122,15 @@ To merge your new episodes:
 - Make a Pull request (PR). You can follow the stesp on [using GitHub](#using-github).
 - Keep branches up to date with `main`. 
     - This encourage to keep the history as linear as possible, prioritizing actions like ["rebase and merge"](https://epiverse-trace.github.io/blueprints/git-branching-merging.html#merging-pull-requests-merge-commits-vs-squash-and-merge-vs-rebase-and-merge) to accept the PR.
-    - Do this in your local repository only. In your feature branch:
-      - Go to the terminal. [Run `git pull origin main`](https://docs.gitlab.com/ee/topics/git/git_rebase.html) to rebase the feature branch.
-    - Go to Git tab in the environments pane. Click on `Pull options` > `Pull with rebase`.
+    - In the local repository:
+      - Switch to the `main` branch: `git checkout main`
+      - Pull the `main` branch: `git pull`
+      - Switch to your `feature` branch: `git checkout feature`
+      - [Rebase](https://docs.gitlab.com/ee/topics/git/git_rebase.html) your `feature` branch: `git rebase main`
+      - Push your rebased `featured` branch using the `--force` (this must be a forced update): `git push --force` 
+    - In the remote repository, i.e. on GitHub, only if you are in a PR:
+      - Update your PR branch with [Update with Rebase](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch).
+    <!-- - Go to Git tab in the environments pane. Click on `Pull options` > `Pull with rebase`.-->
 
 
 #### Reviewer:
