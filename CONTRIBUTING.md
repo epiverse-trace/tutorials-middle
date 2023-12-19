@@ -130,6 +130,7 @@ To merge your new episodes:
       5. Push your rebased `featured` branch using the `--force` option (this must be a forced update): `git push --force` 
     - In the remote repository, i.e. on GitHub, only if you are in a PR:
       - Update your PR branch with [Update with Rebase](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch).
+      - To pull changes from an updated PR branch with rebase run: `git pull --rebase`
     <!-- - Go to Git tab in the environments pane. Click on `Pull options` > `Pull with rebase`.-->
 
 
