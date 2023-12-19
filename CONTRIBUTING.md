@@ -120,9 +120,9 @@ If you need the version of a package that is not programmatically loaded, i.e., 
 To merge your new episodes:
 
 - Make a Pull request (PR). You can follow the stesp on [using GitHub](#using-github).
-- Keep branches up to date with `main`. 
+- Keep your feature branch up to date with `main`. 
     - This encourage to keep the history as linear as possible, prioritizing actions like ["rebase and merge"](https://epiverse-trace.github.io/blueprints/git-branching-merging.html#merging-pull-requests-merge-commits-vs-squash-and-merge-vs-rebase-and-merge) to accept the PR.
-    - In the local repository, follow all these five steps:
+    - In the local repository. First, make sure that you are the only contributor in the `feature` branch. Then, follow all these five steps:
       1. Switch to the `main` branch: `git checkout main`
       2. Pull the `main` branch: `git pull`
       3. Switch to your `feature` branch: `git checkout feature`
