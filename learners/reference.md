@@ -68,6 +68,8 @@ The relationship between the incubation period and  the [serial interval](#seria
 : Also known as Duration of infectiousness. Time period between the onset and end of infectious [viral shedding](#viralshedding). Viral load and detection of infectious virus are the two key parameters for estimating infectiousness ([Puhach et al., 2022](https://www.nature.com/articles/s41579-022-00822-w)).
 <!-- ref: https://www.sciencedirect.com/topics/mathematics/infectiousness -->
 
+![Kinetics of RNA viral loads and infectious virus for ancestral SARS-CoV-2 in patients with mild-to-moderate disease. From [Puhach et al., 2022](https://www.nature.com/articles/s41579-022-00822-w/figures/2)](fig/virus-load-rna-copies.png)
+
 ![Window and kinetics of SARS-CoV-2 infectiousness in recently infected contacts. From [Hakki et al, 2022](https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext)](fig/infectiousness-covid19.jpg)
 
 <!-- ## J -->
