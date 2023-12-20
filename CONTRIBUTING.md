@@ -120,17 +120,16 @@ If you need the version of a package that is not programmatically loaded, i.e., 
 To merge your new episodes:
 
 - Make a Pull request (PR). You can follow the stesp on [using GitHub](#using-github).
-- Keep your feature branch up to date with `main`. 
-    - This encourage to keep the history as linear as possible, prioritizing actions like ["rebase and merge"](https://epiverse-trace.github.io/blueprints/git-branching-merging.html#merging-pull-requests-merge-commits-vs-squash-and-merge-vs-rebase-and-merge) to accept the PR.
-    - In the local repository. First, make sure that you are the only contributor in the `feature` branch. Then, follow all these five steps:
+- If you need to get the latest commits in the `main` branch to use them in your development, we recommend rebasing your feature branch. Rebase will keep the [commit history linear](https://epiverse-trace.github.io/blueprints/git-branching-merging.html#merging-pull-requests-merge-commits-vs-squash-and-merge-vs-rebase-and-merge). First, make sure that you are the only contributor in the `feature` branch, then:
+    - In the local repository, follow all these five steps:
       1. Switch to the `main` branch: `git checkout main`
       2. Pull the `main` branch: `git pull`
       3. Switch to your `feature` branch: `git checkout feature`
       4. [Rebase](https://docs.gitlab.com/ee/topics/git/git_rebase.html) your `feature` branch onto `main` branch: `git rebase main`
       5. Push your rebased `featured` branch using the `--force` option (this must be a forced update): `git push --force` 
-    - In the remote repository, i.e. on GitHub, only if you are in a PR:
+    - In the remote repository, only if you are in a PR:
       - Update your PR branch with [Update with Rebase](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/keeping-your-pull-request-in-sync-with-the-base-branch#updating-your-pull-request-branch).
-      - To pull changes from an updated PR branch with rebase run: `git pull --rebase`
+      - To pull changes to your local repository from an updated PR branch with rebase in the remote, run: `git pull --rebase`
     <!-- - Go to Git tab in the environments pane. Click on `Pull options` > `Pull with rebase`.-->
 
 
