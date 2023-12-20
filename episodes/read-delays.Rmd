@@ -41,7 +41,7 @@ pak::pak("epiverse-trace/epiparameter")
 
 ## Systematic review of Parameters
 
-The [natural history](../learners/reference.md#naturalhistory) of a infectious disease shows that its development has a regularity from stage to stage. The time periods from a infectious disease inform about the timing of transmission and interventions.
+The [natural history](../learners/reference.md#naturalhistory) of an infectious disease shows that its development has a regularity from stage to stage. The time periods from a infectious disease inform about the timing of transmission and interventions.
 
 ![Definition of key time periods. From [Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038)](fig/time-periods.jpg)
 
@@ -58,9 +58,9 @@ However, early in an epidemic, modelling efforts can be delayed by the lack of a
 
 <!-- Early models for COVID-19 used parameters from other coronaviruses. -->
 
-Let's explore how we can access to time periods and delays using `{epiparameter}` to plug them in to `{EpiNow2}`:
+Let's explore how we can access to time periods and delays using `{epiparameter}` to plug them in to `{EpiNow2}`. We'll also use the pipe `%>%` to connect some of their functions, so let's also call to the `{tidyverse}` package:
 
-```{r}
+```{r,warning=FALSE,message=FALSE}
 library(epiparameter)
 library(EpiNow2)
 library(tidyverse)
@@ -73,14 +73,31 @@ The generation time, jointly with the $R$, can inform about the speed of spread 
 
 ![From the video by MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
 
-In calculating the effective reproductive number ($Rt$), the generation time distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
+In calculating the effective reproductive number ($Rt$), the *generation time* distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
 This is because the date of onset of symptoms is more easily observed than the date of onset of infectiousness.
 
 <!-- This can produced biased estimates. ([Knight et al., 2020](https://www.sciencedirect.com/science/article/pii/S2468042720300634?via%3Dihub)) -->
 
 However, this is valid for diseases in which infectiousness starts after symptom onset [(Chung Lau et al. 2021)](https://academic.oup.com/jid/article/224/10/1664/6356465). In cases where infectiousness starts before symptom onset serial intervals can be negative! This is the case of a pre-symptomatic transmission.
 
-Even if the generation time and serial interval have the same mean, their variance usually differ propagating bias to the Rt estimation. Rt estimates are sensitive not only to the mean generation time but also to the variance and form of the generation interval distribution [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409).
+::::::::::::::::: callout
+
+### From time to probability distributions.
+
+When calculating the *generation time*, we see that not all primary cases have the same probability to generate a secondary case. The onset and cessation of infectiousness may occur gradually.
+
+Equally, not all cases have the same probability to have a time period of equal duration. 
+
+
+<!-- add a lolipop chart! use sgb figures! -->
+
+<!-- use gist https://gist.github.com/avallecam/65f19b5dce87335889f2bb1845cec93b -->
+
+For that reason, we refer to all time periods them in terms of their distribution parameters of location (like mean and percentiles)  and spread
+
+:::::::::::::::::::::::::
+
+Also, even if the *generation time* and *serial interval* have the same mean, their variance usually differ propagating bias to the Rt estimation. Rt estimates are sensitive not only to the mean generation time but also to the variance and form of the generation interval distribution [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409).
 
 <!-- formative -->
 <!-- how to assess on? -->
