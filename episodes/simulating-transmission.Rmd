@@ -145,9 +145,11 @@ By the end of this tutorial, learners should be able to replicate the above imag
 
 The first step is to install the R packages `epidemics`.
 
+*Note : this tutorial is based on a development version of {epidemics}. This version of the package can be installed using `{pak}`:*
+
 ```{r installation, eval = FALSE}
 if (!require("pak")) install.packages("pak")
-pak::pak("epiverse-trace/epidemics")
+pak::pak("epiverse-trace/epidemics@96a7b1457")
 ```
 
 
