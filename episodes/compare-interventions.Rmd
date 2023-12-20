@@ -5,11 +5,6 @@ exercises: 30 # exercise time in minutes
 
 ---
 
-```{r setup, echo= FALSE, message = FALSE, warning = FALSE}
-require(ggplot2)
-library(epidemics)
-```
-
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How can I quantify the effect of an intervention?

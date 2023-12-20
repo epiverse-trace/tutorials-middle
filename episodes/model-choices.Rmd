@@ -5,12 +5,6 @@ exercises: 20 # exercise time in minutes
 
 ---
 
-```{r setup, echo= FALSE, message = FALSE, warning = FALSE}
-require(ggplot2)
-library(epidemics)
-```
-
-
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How do I choose a mathematical model that's appropriate to complete my analytical task?

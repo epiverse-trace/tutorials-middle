@@ -5,12 +5,11 @@ exercises: 30 # exercise time in minutes
 ---
 
 ```{r setup, echo= FALSE, message = FALSE, warning = FALSE}
-require(ggplot2)
-require(dplyr)
-require(testthat)
-require(tidyverse)
-require(DiagrammeR)
-require(webshot)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(DiagrammeR)
+library(webshot)
 library(epidemics)
 webshot::install_phantomjs(force = TRUE)
 ```
@@ -403,9 +402,11 @@ In `epidemics`, the [ODE solver](https://www.boost.org/doc/libs/1_82_0/libs/nume
 
 Now we are ready to run our model. To install the `epidemics` package : 
 
-```{r installation, eval = FALSE}
+```{r installation, eval = FALSE, echo = 2:3}
+# nolint start
 if (!require("pak")) install.packages("pak")
 pak::pak("epiverse-trace/epidemics")
+# no lint end
 ```
 
 Then we specify `time_end=600` to run the model for 600 days.
