@@ -117,6 +117,7 @@ If you need the version of a package that is not programmatically loaded, i.e., 
 - [Create](https://carpentries.github.io/sandpaper/articles/building-with-renv.html#adding-new-packages-to-the-cache) an `episodes/install.R` file that lists the installation scripts for the packages in your lesson.
 - Run the `episodes/install.R` file to install the list of packages.
 - Run `sandpaper::update_cache()`. Before you accept the update, verify that the expected version number is listed as an update. After this, review the `renv.lock` file if this modified the file as expected. 
+
 To merge your new episodes:
 
 - Make a Pull request (PR). You can follow the stesp on [using GitHub](#using-github).
