@@ -67,13 +67,9 @@ The relationship between the incubation period and the [serial interval](#serial
 [Initial conditions]{#initial}
 : In [ODEs](#ordinary), the initial conditions are the values of the state variables at the start of the model simulation (at time 0). For example, if there is one infectious individual in a population of 1000 in an Susceptible-Infectious-Recovered model, the initial conditions would be $S(0) = 999$, $I(0) = 1$, $R(0) = 0$.  
 
-[Infectiousness]{#infectiousness}
-: Also known as Duration of infectiousness. Time period between the onset and end of infectious [viral shedding](#viralshedding). Viral load and detection of infectious virus are the two key parameters for estimating infectiousness ([Puhach et al., 2022](https://www.nature.com/articles/s41579-022-00822-w)).
-<!-- ref: https://www.sciencedirect.com/topics/mathematics/infectiousness -->
-
-![Kinetics of RNA viral loads and infectious virus for ancestral SARS-CoV-2 in patients with mild-to-moderate disease. From [Puhach et al., 2022](https://www.nature.com/articles/s41579-022-00822-w/figures/2)](fig/virus-load-rna-copies.png)
-
-![Window and kinetics of SARS-CoV-2 infectiousness in recently infected contacts. From [Hakki et al, 2022](https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext)](fig/infectiousness-covid19.jpg)
+[Infectious period]{#infectiousness}
+: Also known as Duration of infectiousness. Time period between the onset and end of infectious [viral shedding](#viralshedding). 
+Viral load and detection of infectious virus are the two key parameters for estimating infectiousness ([Puhach et al., 2022](https://www.nature.com/articles/s41579-022-00822-w) and [Hakki et al, 2022](https://www.thelancet.com/journals/lanres/article/PIIS2213-2600(22)00226-0/fulltext)](fig/infectiousness-covid19.jpg)).
 
 <!-- ## J -->
 
