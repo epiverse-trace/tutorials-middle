@@ -567,24 +567,23 @@
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
-      "RemoteRepo": "epidemics",
       "RemoteUsername": "epiverse-trace",
-      "RemotePkgRef": "epiverse-trace/epidemics",
-      "RemoteRef": "HEAD",
-      "RemoteSha": "6004c3a7e50be7b127070c4e96a011630307df17",
+      "RemoteRepo": "epidemics",
+      "RemoteRef": "main",
+      "RemoteSha": "5f6825d7ee9fbd162b26db95bc2f3e0d3054f452",
       "Requirements": [
         "BH",
         "Rcpp",
         "RcppEigen",
         "checkmate",
+        "cli",
         "data.table",
         "deSolve",
         "glue",
-        "jsonlite",
         "stats",
         "utils"
       ],
-      "Hash": "96a7b1457b8a5d89f146d0abf3de7eff"
+      "Hash": "5abca47c2b33eb1a73a412a045823a8f"
     },
     "evaluate": {
       "Package": "evaluate",
@@ -1179,18 +1178,6 @@
       ],
       "Hash": "2a0dc8c6adfb6f032e4d4af82d258ab5"
     },
-    "pak": {
-      "Package": "pak",
-      "Version": "0.7.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "tools",
-        "utils"
-      ],
-      "Hash": "17c4c32b4bdc087508f35e8b7dcf4191"
-    },
     "pillar": {
       "Package": "pillar",
       "Version": "1.9.0",
@@ -1628,7 +1615,7 @@
       "Package": "systemfonts",
       "Version": "1.0.5",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://carpentries.r-universe.dev",
       "Requirements": [
         "R",
         "cpp11"
@@ -1668,7 +1655,7 @@
       "Package": "textshaping",
       "Version": "0.3.7",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "https://carpentries.r-universe.dev",
       "Requirements": [
         "R",
         "cpp11",

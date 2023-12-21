@@ -19,7 +19,7 @@ library(epidemics)
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Understand how to compare intervention scenarios
+- Compare intervention scenarios
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -28,7 +28,7 @@ library(epidemics)
 ## Prerequisites
 + Complete tutorials [Simulating transmission](../episodes/simulating-transmission.md) and [Modelling interventions](../episodes/modelling-interventions.md)
 
-This tutorial has the following concept dependencies:
+Learners should familiarise themselves with following concept dependencies before working through this tutorial: 
 
 **Outbreak response** : [Intervention types](https://www.cdc.gov/nonpharmaceutical-interventions/).
 :::::::::::::::::::::::::::::::::
@@ -53,7 +53,7 @@ In this tutorial we introduce the concept of the counter factual and how to comp
 
 ## Vacamole model
 
-The Vacamole model is a deterministic model based on a system of ODEs in [Ainslie et al. 2022]( https://doi.org/10.2807/1560-7917.ES.2022.27.44.2101090). The model consists of 11 compartments, individuals are classed as one of the following:
+The Vacamole model is a deterministic model based on a system of ODEs in [Ainslie et al. 2022]( https://doi.org/10.2807/1560-7917.ES.2022.27.44.2101090) to describe the effect of vaccination on COVID-19 dynamics. The model consists of 11 compartments, individuals are classed as one of the following:
 
 + susceptible, $S$,
 + partial vaccination ($V_1$), fully vaccination ($V_2$),
@@ -119,42 +119,157 @@ DiagrammeR::grViz("digraph{
 }")
 ```
 
-See `?epidemics::model_vacamole_cpp` for detail on how to run the model. 
+
+::::::::::::::::::::::::::::::::::::: challenge
+
+## Running a counterfactual scenario using the Vacamole model 
+
+1. Run the model with the default parameter values for the UK population assuming that :
+
++ 1 in a million individual are infectious (and not vaccinated) at the start of the simulation
++ The contact matrix for the United Kingdom has age bins:
+  + age between 0 and 20 years,
+  + age between 20 and 40,
+  + 40 years and over.
++ There is no vaccination scheme in place
+
+2. Using the output, plot the number of deaths through time
+
+
+::::::::::::::::: hint
+
+### Vaccination code 
+
+To run the model with no vaccination in place we can *either* create two vaccination objects (one for each dose) using `vaccination()` with the time start, time end and vaccination rate all set to 0, or we can use the `no_vaccination()` function to create a vaccination object for two doses with all values set to 0.
+
+```{r, eval = FALSE}
+no_vaccination <- no_vaccination(population = uk_population, doses = 2)
+```
+::::::::::::::::::::::
+
+::::::::::::::::: hint
+
+### HINT : Running the model with default parameter values
+
+We can run the Vacamole model with [default parameter values](https://epiverse-trace.github.io/epidemics/articles/vacamole.html#model-epidemic-using-vacamole) by just specifying the population object and number of time steps to run the model for: 
+
+
+```{r, eval = FALSE}
+output <- model_vacamole_cpp(
+  population = uk_population,
+  vaccination = no_vaccination,
+  time_end = 300
+)
+```
+
+::::::::::::::::::::::
+
+
+
+::::::::::::::::: solution
+
+### SOLUTION
+
+1.  Run the model
+
+```{r}
+polymod <- socialmixr::polymod
+contact_data <- socialmixr::contact_matrix(
+  survey = polymod,
+  countries = "United Kingdom",
+  age.limits = c(0, 20, 40),
+  symmetric = TRUE
+)
+# prepare contact matrix
+contact_matrix <- t(contact_data$matrix)
+
+# extract demography vector
+demography_vector <- contact_data$demography$population
+names(demography_vector) <- rownames(contact_matrix)
+
+# prepare initial conditions
+initial_i <- 1e-6
+
+initial_conditions <- c(
+  S = 1 - initial_i,
+  V1 = 0, V2 = 0,
+  E = 0, EV = 0,
+  I = initial_i, IV = 0,
+  H = 0, HV = 0, D = 0, R = 0
+)
+
+initial_conditions <- rbind(
+  initial_conditions,
+  initial_conditions,
+  initial_conditions
+)
+rownames(initial_conditions) <- rownames(contact_matrix)
+
+# prepare population object
+uk_population <- population(
+  name = "UK",
+  contact_matrix = contact_matrix,
+  demography_vector = demography_vector,
+  initial_conditions = initial_conditions
+)
+
+no_vaccination <- no_vaccination(population = uk_population, doses = 2)
+
+# run model
+output <- model_vacamole_cpp(
+  population = uk_population,
+  vaccination = no_vaccination,
+  time_end = 300
+)
+```
+
+2. Plot the number of deaths through time
+
+```{r}
+ggplot(output[output$compartment == "dead", ]) +
+  geom_line(
+    aes(time, value, colour = demography_group),
+    linewidth = 1
+  ) +
+  scale_colour_brewer(
+    palette = "Dark2",
+    labels = rownames(contact_matrix),
+    name = "Age group"
+  ) +
+  scale_y_continuous(
+    labels = scales::comma
+  ) +
+  labs(
+    x = "Simulation time (days)",
+    y = "Individuals"
+  ) +
+  theme(
+    legend.position = "top"
+  ) +
+  theme_bw(
+    base_size = 15
+  )
+```
+
+
+
+:::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
 
 ## Comparing scenarios
 
 *Coming soon*
 
-## Challenge
+
+
+## Challenge : Ebola outbreak analysis 
 
 *Coming soon*
 
-<!-- ::::::::::::::::::::::::::::::::::::: challenge -->
-
-<!-- ## The effect of vaccination on COVID-19 hospitalisations   -->
-
-
-
-<!-- ::::::::::::::::: hint -->
-
-<!-- ### HINT -->
-
-
-<!-- :::::::::::::::::::::: -->
-
-
-<!-- ::::::::::::::::: solution -->
-
-<!-- ### SOLUTION -->
-
-
-
-
-
-<!-- ::::::::::::::::::::::::::: -->
-
-
-<!-- :::::::::::::::::::::::::::::::::::::::::::::::: -->
 
 
 
