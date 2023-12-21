@@ -406,7 +406,7 @@ Now we are ready to run our model. To install the `epidemics` package :
 # nolint start
 if (!require("pak")) install.packages("pak")
 pak::pak("epiverse-trace/epidemics")
-# no lint end
+# nolint end
 ```
 
 Then we specify `time_end=600` to run the model for 600 days.
