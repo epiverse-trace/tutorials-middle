@@ -78,4 +78,5 @@ profiles:
 # This space below is where custom yaml items (e.g. pinning
 # sandpaper and varnish versions) should live
 varnish: epiverse-trace/varnish@epiversetheme
-sandpaper: 'carpentries/sandpaper#533'
+# this is carpentries/sandpaper#533 in our fork so we can keep it up to date with main
+sandpaper: epiverse-trace/sandpaper@patch-renv-github-bug 
