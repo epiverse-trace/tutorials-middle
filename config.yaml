@@ -14,7 +14,7 @@ carpentry: 'incubator'
 title: 'Outbreak analytics with R'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: 
+created:
 
 # Comma-separated list of keywords for the lesson
 keywords: 'forecasts, epidemic models, interventions'
@@ -58,13 +58,9 @@ contact: 'andree.valle-campos@lshtm.ac.uk'
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
+episodes:
 - introduction.Rmd
 - read-delays.Rmd
-- describe-cases.Rmd
-- read-cases.Rmd
-- describe-data.Rmd
-- create-report.Rmd
 - quantify-transmissibility.Rmd
 - create-forecast.Rmd
 - simulating-transmission.Rmd
@@ -73,13 +69,13 @@ episodes:
 - compare-interventions.Rmd
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
