@@ -73,27 +73,30 @@ The generation time, jointly with the $R$, can inform about the speed of spread 
 
 ![From the video by MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
 
-In calculating the effective reproductive number ($Rt$), the *generation time* distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
+In calculating the effective reproductive number ($R_{t}$), the *generation time* distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
 This is because the date of onset of symptoms is more easily observed than the date of onset of infectiousness.
 
-<!-- This can produced biased estimates. ([Knight et al., 2020](https://www.sciencedirect.com/science/article/pii/S2468042720300634?via%3Dihub)) -->
+![A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time ([Chung Lau et al. 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
 
-However, this is valid for diseases in which infectiousness starts after symptom onset [(Chung Lau et al. 2021)](https://academic.oup.com/jid/article/224/10/1664/6356465). In cases where infectiousness starts before symptom onset serial intervals can be negative! This is the case of a pre-symptomatic transmission.
+However, this is mostly valid for diseases in which infectiousness starts after symptom onset ([Chung Lau et al. 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). In cases where infectiousness starts before symptom onset, the serial intervals can be negative, which is the case of a pre-symptomatic transmission ([Nishiura et al. (2020)](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2)).
+
+Additionally, even if the *generation time* and *serial interval* have the same mean, their variance usually differ propagating bias to the $R_{t}$ estimation. $R_{t}$ estimates are sensitive not only to the mean generation time but also to the variance and form of the generation interval distribution [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409).
 
 ::::::::::::::::: callout
 
-### From time to probability distributions.
+### From time periods to probability distributions.
 
-When calculating the *generation time*, we see that not all primary cases have the same probability to generate a secondary case. The onset and cessation of infectiousness may occur gradually.
+When we calculate the *serial interval*, we see that not all case pairs have the same time length. We also observe this variability for individual time periods like the [incubation period](../learners/reference.md#incubation) and [infectious period](../learners/reference.md#infectiousness).
 
-Equally, not all cases have the same probability to have a time period of equal duration. 
+![Serial intervals of possible case pairs in (a) COVID-19 and (b) MERSCoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/serial-interval-pairs.jpg)
 
-[Serial intervals of possible case pairs in (a) COVID-19 and (b) MERSCoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset.](fig/serial-interval-pairs.jpg)
+To summarize these data from individual and pair time periods, we can find the **statistical distributions** that best fits to the data ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
 
+<!-- add reference about good practices to estimate distributions -->
 
-[Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distribution, lognormal, gamma, and Weibull distributions, respectively.](fig/seria-interval-fitted-distributions.jpg)
+![Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distribution, lognormal, gamma, and Weibull distributions, respectively ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/seria-interval-fitted-distributions.jpg)
 
-For that reason, we refer to all time periods them in terms of their distribution parameters of location (like mean and percentiles)  and spread
+Statistical distributions are summarized in terms of their **summary statistics** like the *location* (mean and percentiles) and *spread* (variance or standard deviation) of the distribution, or with their **distribution parameters** that inform about the *form* (shape and rate/scale) of the distribution. Each of these values can be reported with the *uncertainty* (95% confidence intervals) of each estimate.
 
 | Gamma | mean | shape | rate/scale |
 |:--------------|:--------------|:--------------|:--------------|
@@ -105,22 +108,16 @@ For that reason, we refer to all time periods them in terms of their distributio
 | MERS-CoV | 14.2(13.3–15.2) | 3.07(2.64–3.63) | 16.1(15.0–17.1) |
 | COVID-19 | 5.2(4.6–5.9) | 1.74(1.46–2.11) | 5.83(5.08–6.67) |
 
-Table: Serial interval estimates using gamma, Weibull and log normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for log normal) parameters are shown in brackets.
-
 | Log normal | mean | mean-log | sd-log |
 |:--------------|:--------------|:--------------|:--------------|
 | MERS-CoV | 14.08(13.1–15.2) | 2.58(2.50–2.68) | 0.44(0.39–0.5) |
 | COVID-19 | 5.2(4.2–6.5) | 1.45(1.31–1.61) | 0.63(0.54–0.74) |
 
+Table: Serial interval estimates using gamma, Weibull and log normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for log normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).
+
+<!-- should we keep only one table, the best fit? -->
+
 :::::::::::::::::::::::::
-
-Also, even if the *generation time* and *serial interval* have the same mean, their variance usually differ propagating bias to the Rt estimation. Rt estimates are sensitive not only to the mean generation time but also to the variance and form of the generation interval distribution [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409).
-
-<!-- formative -->
-<!-- how to assess on? -->
-<!-- compare two scenarios -->
-<!-- - high R0 and short generation time -->
-<!-- - low R0 and long generation time -->
 
 ::::::::::::::::::::::::::::::::: challenge
 
@@ -153,8 +150,13 @@ Why do you conclude that?
 
 ::::::::::::::::::::::::::
 
-
 :::::::::::::::::::::::::::::::::::::::::::
+
+<!-- formative -->
+<!-- how to assess on? -->
+<!-- compare two scenarios -->
+<!-- - high R0 and short generation time -->
+<!-- - low R0 and long generation time -->
 
 ## Extract epidemiological parameters
 
