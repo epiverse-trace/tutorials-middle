@@ -88,12 +88,29 @@ When calculating the *generation time*, we see that not all primary cases have t
 
 Equally, not all cases have the same probability to have a time period of equal duration. 
 
+[Serial intervals of possible case pairs in (a) COVID-19 and (b) MERSCoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset.](fig/serial-interval-pairs.jpg)
 
-<!-- add a lolipop chart! use sgb figures! -->
 
-<!-- use gist https://gist.github.com/avallecam/65f19b5dce87335889f2bb1845cec93b -->
+[Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distribution, lognormal, gamma, and Weibull distributions, respectively.](fig/seria-interval-fitted-distributions.jpg)
 
 For that reason, we refer to all time periods them in terms of their distribution parameters of location (like mean and percentiles)  and spread
+
+| Gamma | mean | shape | rate/scale |
+|:--------------|:--------------|:--------------|:--------------|
+| MERS-CoV | 14.13(13.9–14.7) | 6.31(4.88–8.52) | 0.43(0.33–0.60) |
+| COVID-19 | 5.1(5.0–5.5) | 2.77(2.09–3.88) | 0.53(0.38–0.76) |
+
+| Weibull | mean | shape | rate/scale |
+|:--------------|:--------------|:--------------|:--------------|
+| MERS-CoV | 14.2(13.3–15.2) | 3.07(2.64–3.63) | 16.1(15.0–17.1) |
+| COVID-19 | 5.2(4.6–5.9) | 1.74(1.46–2.11) | 5.83(5.08–6.67) |
+
+Table: Serial interval estimates using gamma, Weibull and log normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for log normal) parameters are shown in brackets.
+
+| Log normal | mean | mean-log | sd-log |
+|:--------------|:--------------|:--------------|:--------------|
+| MERS-CoV | 14.08(13.1–15.2) | 2.58(2.50–2.68) | 0.44(0.39–0.5) |
+| COVID-19 | 5.2(4.2–6.5) | 1.45(1.31–1.61) | 0.63(0.54–0.74) |
 
 :::::::::::::::::::::::::
 
