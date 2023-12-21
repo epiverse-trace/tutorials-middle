@@ -374,7 +374,10 @@ output_samples <- Map(
 
 output_samples <- bind_rows(output_samples) # requires the tidyverse package
 
-ggplot(output_samples[output_samples$compartment == "infectious", ], aes(time, value)) +
+ggplot(
+  output_samples[output_samples$compartment == "infectious", ],
+  aes(time, value)
+) +
   stat_summary(geom = "line", fun = mean) +
   stat_summary(
     geom = "ribbon",
