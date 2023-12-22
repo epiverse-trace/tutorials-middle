@@ -115,26 +115,24 @@ Statistical distributions are summarized in terms of their **summary statistics*
 
 Table: Serial interval estimates using Gamma, Weibull and Log normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for log normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
 
-<!-- should we keep only one table, the best fit? -->
-
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::: challenge
 
 ### Serial interval
 
-Let's assume that COVID-19 and SARS has similar Reproduction number values, and the Serial interval a good proxy of the generation interval. 
+Assume that COVID-19 and SARS have similar reproduction number values and that the serial interval is a fair approximation of the generation time. 
 
 Given the Serial interval of both infections in the figure below: 
 
 - Which one would be harder to control? 
 - Why do you conclude that?
 
-![Serial interval of novel coronavirus (COVID-19) infections overlaid with a published distribution of SARS. From [Nishiura et al, 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/serial-interval-covid-sars.jpg)
+![Serial interval of novel coronavirus (COVID-19) infections overlaid with a published distribution of SARS. ([Nishiura et al, 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext))](fig/serial-interval-covid-sars.jpg)
 
 ::::::::::::::::: hint
 
-The peak of each curve can inform you about the location of the mean of each distribution. The larger the mean, the larger the serial interval. 
+The peak of each curve can inform you about the location of the mean of each distribution. The larger the mean, the larger the serial interval.
 
 ::::::::::::::::::::::
 
@@ -146,17 +144,17 @@ Which one would be harder to control?
 
 Why do you conclude that?
 
-- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of COVID-19 is around 4 days, and SARS is around 7 days. Thus, COVID-19 is likely to have newer generations in less time than SARS, assuming similar reproduction number in both.
+- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of COVID-19 is around four days, and SARS is about seven days. Thus, COVID-19 will likely have newer generations in less time than SARS, assuming similar reproduction numbers in both.
 
 ::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-<!-- formative -->
-<!-- how to assess on? -->
-<!-- compare two scenarios -->
-<!-- - high R0 and short generation time -->
-<!-- - low R0 and long generation time -->
+:::::::::::::::::::::: instructor
+
+The objective of the assessment above is to assess on the interpretation of a larger or shorter generation time.
+
+::::::::::::::::::::::
 
 ## Extract epidemiological parameters
 
