@@ -90,7 +90,7 @@ During the course we will need a number of R packages. Packages contain useful R
 
 To try to install these packages, open RStudio and copy and paste the following code chunk into the [console window](https://docs.posit.co/ide/user/ide/guide/code/console.html) (look for a blinking cursor on the bottom left), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command.
 
-```{r}
+```r
 if(!require("pak")) install.packages("pak")
 
 new_packages <- c(
@@ -110,7 +110,7 @@ R tries to download and install the packages on your machine.
 
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
 
-```{r}
+```r
 library(EpiNow2)
 library(epiparameter)
 library(socialmixr)
