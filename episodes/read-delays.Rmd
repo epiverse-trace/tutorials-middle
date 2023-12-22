@@ -94,9 +94,9 @@ To summarize these data from individual and pair time periods, we can find the *
 
 <!-- add reference about good practices to estimate distributions -->
 
-![Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distribution, lognormal, gamma, and Weibull distributions, respectively ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/seria-interval-fitted-distributions.jpg)
+![Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distribution, lognormal, gamma, and Weibull distributions, respectively ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)).](fig/seria-interval-fitted-distributions.jpg)
 
-Statistical distributions are summarized in terms of their **summary statistics** like the *location* (mean and percentiles) and *spread* (variance or standard deviation) of the distribution, or with their **distribution parameters** that inform about the *form* (shape and rate/scale) of the distribution. Each of these values can be reported with the *uncertainty* (95% confidence intervals) of each estimate.
+Statistical distributions are summarized in terms of their **summary statistics** like the *location* (mean and percentiles) and *spread* (variance or standard deviation) of the distribution, or with their **distribution parameters** that inform about the *form* (shape and rate/scale) of the distribution. Each of these estimated values can be reported with their **uncertainty** (95% confidence intervals).
 
 | Gamma | mean | shape | rate/scale |
 |:--------------|:--------------|:--------------|:--------------|
@@ -113,7 +113,7 @@ Statistical distributions are summarized in terms of their **summary statistics*
 | MERS-CoV | 14.08(13.1–15.2) | 2.58(2.50–2.68) | 0.44(0.39–0.5) |
 | COVID-19 | 5.2(4.2–6.5) | 1.45(1.31–1.61) | 0.63(0.54–0.74) |
 
-Table: Serial interval estimates using gamma, Weibull and log normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for log normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).
+Table: Serial interval estimates using Gamma, Weibull and Log normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for log normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
 
 <!-- should we keep only one table, the best fit? -->
 
