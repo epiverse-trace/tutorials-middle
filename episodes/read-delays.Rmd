@@ -791,6 +791,8 @@ The proportion of pre-symptomatic transmission contributes to the effective repr
 
 ![Parameter estimates. Plausible ranges for the key parameters R0 and θ (read main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
 
+The proportion of presymptomatic transmission in SARS-CoV-2 has been heterogeneous with point estimates of 40% or grater ([Buitrago-Garcia et al., 2022](https://journals.plos.org/plosmedicine/article/figure?id=10.1371/journal.pmed.1003987.g003))
+
 ::::::::::::::::::::::::::::::::: challenge
 
 ### WHAT TYPE OF TRANSMISSION?
