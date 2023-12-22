@@ -41,7 +41,7 @@ pak::pak("epiverse-trace/epiparameter")
 
 ## Systematic review of Parameters
 
-The [natural history](../learners/reference.md#naturalhistory) of an infectious disease shows that its development has a regularity from stage to stage. The time periods from a infectious disease inform about the timing of transmission and interventions.
+The [natural history](../learners/reference.md#naturalhistory) of an infectious disease shows that its development has a regularity from stage to stage. The time periods from an infectious disease inform about the timing of transmission and interventions.
 
 ![Definition of key time periods. From [Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038)](fig/time-periods.jpg)
 
@@ -50,15 +50,15 @@ The [natural history](../learners/reference.md#naturalhistory) of an infectious 
 
 ### Definitions
 
-Take a look at the [glossary](../learners/reference.md) for the definitions of all the time periods of the figure above!
+Look at the [glossary](../learners/reference.md) for the definitions of all the time periods of the figure above!
 
 :::::::::::::::::::::::::
 
-However, early in an epidemic, modelling efforts can be delayed by the lack of a centralized resource that summarized input parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are building online catalogs that can help building models faster for coming outbreaks and epidemics from known and unknown pathogens related to known families of viruses.
+However, early in an epidemic, modelling efforts can be delayed by the lack of a centralized resource that summarises input parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are building online catalogues that can help build models faster for coming outbreaks and epidemics from known and unknown pathogens related to known families of viruses.
 
 <!-- Early models for COVID-19 used parameters from other coronaviruses. -->
 
-Let's explore how we can access to time periods and delays using `{epiparameter}` to plug them in to `{EpiNow2}`. We'll also use the pipe `%>%` to connect some of their functions, so let's also call to the `{tidyverse}` package:
+Let's explore how we can access time periods and delays using `{epiparameter}` to plug them into `{EpiNow2}`. We'll also use the pipe `%>%` to connect some of their functions, so let's also call to the `{tidyverse}` package:
 
 ```{r,warning=FALSE,message=FALSE}
 library(epiparameter)
@@ -71,16 +71,16 @@ library(tidyverse)
 
 The generation time, jointly with the $R$, can inform about the speed of spread and its feasibility of control. Given a $R>1$, with a shorter generation time, cases can appear more quickly.
 
-![From the video by MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
+![Video from the MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
 
 In calculating the effective reproductive number ($R_{t}$), the *generation time* distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
-This is because the date of onset of symptoms is more easily observed than the date of onset of infectiousness.
+This is because it is easier to observe and measure the onset of symptoms than the onset of infectiousness.
 
 ![A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time ([Chung Lau et al. 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
 
-However, this is mostly valid for diseases in which infectiousness starts after symptom onset ([Chung Lau et al. 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). In cases where infectiousness starts before symptom onset, the serial intervals can be negative, which is the case of a pre-symptomatic transmission ([Nishiura et al. (2020)](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2)).
+However, using the *serial interval* as an approximation of the *generation time* is primarily valid for diseases in which infectiousness starts after symptom onset ([Chung Lau et al. 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). In cases where infectiousness starts before symptom onset, the serial intervals can have negative values, which is the case of a pre-symptomatic transmission ([Nishiura et al. (2020)](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2)).
 
-Additionally, even if the *generation time* and *serial interval* have the same mean, their variance usually differ propagating bias to the $R_{t}$ estimation. $R_{t}$ estimates are sensitive not only to the mean generation time but also to the variance and form of the generation interval distribution [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409).
+Additionally, even if the *generation time* and *serial interval* have the same mean, their variance usually differs, propagating bias to the $R_{t}$ estimation. $R_{t}$ estimates are sensitive not only to the mean generation time but also to the variance and form of the generation interval distribution [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409).
 
 ::::::::::::::::: callout
 
