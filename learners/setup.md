@@ -137,3 +137,7 @@ We will download the data directly from R during the lessons. However, if you ar
 The data files for the lesson can be downloaded manually here: 
 
 - <https://epiverse-trace.github.io/tutorials/data/ebola_cases.csv>
+
+## Your Questions
+
+If you need any assistance installing the software or have any other questions about the workshop, please send an email to <andree.valle-campos@lshtm.ac.uk>
