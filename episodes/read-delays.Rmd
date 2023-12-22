@@ -30,13 +30,6 @@ This episode requires you to be familiar with:
 
 **Epidemic theory** : Epidemiological parameters. Time periods.
 
-This also requires the following package:
-
-```r
-if(!require("pak")) install.packages("pak")
-pak::pak("epiverse-trace/epiparameter")
-```
-
 :::::::::::::::::::::::::::::::::
 
 ## Systematic review of Parameters

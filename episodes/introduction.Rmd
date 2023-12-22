@@ -32,15 +32,6 @@ This episode requires you to be familiar with:
 
 **Epidemic theory** : Reproduction number.
 
-This also requires the following package:
-
-```r
-install_version(
-  package = "EpiNow2", version = "1.4.0", 
-  repos = "http://cran.us.r-project.org"
-)
-```
-
 :::::::::::::::::::::::::::::::::
 
 ## Why to use R packages for Outbreak analytics?
