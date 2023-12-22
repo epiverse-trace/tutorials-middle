@@ -44,7 +44,7 @@ of interest ([Prism, 2016](http://prism.edu.au/publications/prism-modeling-guide
 - if $R>1$, the epidemic is likely to growth,
 - if $R<1$, the epidemic is likely to decline.
 
-To estimate the reproduction number we can use two __data inputs__: the incidence of reported cases and the [generation time](../learners/reference.md#generationtime) distribution. Then, to get it, we need to apply the appropriate mathematical models written in code with the required computational methods. That is not enough! Following _good practices_, that code should be peer-reviewed and contain internal tests to double-check that we are getting the estimates we expect. Imagine rewriting all of it during a health emergency!
+To estimate the reproduction number we can use two __data inputs__: the incidence of reported cases and the [generation time](../learners/reference.md#generationtime) distribution. But to calculate it, we need to apply the appropriate mathematical models written in code with the required computational methods. That is not enough! Following _good practices_, the code we write should be peer-reviewed and contain internal tests to double-check that we are getting the estimates we expect. Imagine rewriting all of it during a health emergency!
 
 In R, the fundamental unit of shareable code is the _package_. A package bundles together code, data, documentation, and tests, and is easy to share with others ([Wickham and Bryan, 2023](https://r-pkgs.org/introduction.html)). We, as epidemiologists, can contribute to their collaborative maintenance as a community, to perform less error-prone data analysis pipelines.
 
