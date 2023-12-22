@@ -97,14 +97,14 @@ generation_time <- dist_spec(
 In the `epinow()` function we can add:
 
 - the `reported_cases` data frame, 
-- the `generation_time` distribution, and 
+- the `generation_time` delay distribution, and 
 - the computation `stan` parameters for this calculation:
 
 ```{r,message=FALSE,warning=FALSE,cache=TRUE}
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
-  # distribution
+  # delays
   generation_time = generation_time_opts(generation_time),
   # computation
   stan = stan_opts(
