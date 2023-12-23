@@ -136,7 +136,7 @@
     },
     "QuickJSR": {
       "Package": "QuickJSR",
-      "Version": "1.0.7",
+      "Version": "1.0.9",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -144,7 +144,7 @@
         "Rcpp",
         "jsonlite"
       ],
-      "Hash": "1160fb7afae2eebb5f24939590956cdf"
+      "Hash": "1965c66cbe09d7878d3a8fa6ecbd8e71"
     },
     "R.methodsS3": {
       "Package": "R.methodsS3",
@@ -172,7 +172,7 @@
     },
     "R.utils": {
       "Package": "R.utils",
-      "Version": "2.12.2",
+      "Version": "2.12.3",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -183,7 +183,7 @@
         "tools",
         "utils"
       ],
-      "Hash": "325f01db13da12c04d8f6e7be36ff514"
+      "Hash": "3dc2829b790254bfba21e60965787651"
     },
     "R6": {
       "Package": "R6",
@@ -1273,6 +1273,16 @@
       ],
       "Hash": "eef74fe28b747e52288ea9e1d3600034"
     },
+    "inline": {
+      "Package": "inline",
+      "Version": "0.3.19",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "methods"
+      ],
+      "Hash": "1deaf1de3eac7e1d3377954b3a283652"
+    },
     "isoband": {
       "Package": "isoband",
       "Version": "0.2.7",
@@ -1382,6 +1392,17 @@
       ],
       "Hash": "b64ec208ac5bc1852b285f665d6368b3"
     },
+    "lambda.r": {
+      "Package": "lambda.r",
+      "Version": "1.2.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "formatR"
+      ],
+      "Hash": "b1e925c4b9ffeb901bacf812cbe9a6ad"
+    },
     "lattice": {
       "Package": "lattice",
       "Version": "0.22-5",
@@ -1446,6 +1467,30 @@
         "rlang"
       ],
       "Hash": "b8552d117e1b808b09a832f589b79035"
+    },
+    "listenv": {
+      "Package": "listenv",
+      "Version": "0.9.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "4fbd3679ec8ee169ba28d4b1ea7d0e8f"
+    },
+    "loo": {
+      "Package": "loo",
+      "Version": "2.6.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "checkmate",
+        "matrixStats",
+        "parallel",
+        "stats"
+      ],
+      "Hash": "e5c8f41731502a0e98f353da23f7ca30"
     },
     "lubridate": {
       "Package": "lubridate",
@@ -1521,13 +1566,13 @@
     },
     "matrixStats": {
       "Package": "matrixStats",
-      "Version": "1.1.0",
+      "Version": "1.2.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "68d317093459a3f0852b1dd52d9e1ea6"
+      "Hash": "33a3ca9e732b57244d14f5d732ffc9eb"
     },
     "memoise": {
       "Package": "memoise",
@@ -1952,13 +1997,13 @@
     },
     "rprojroot": {
       "Package": "rprojroot",
-      "Version": "2.0.3",
+      "Version": "2.0.4",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R"
       ],
-      "Hash": "1de7ab598047a87bba48434ba35d497d"
+      "Hash": "4c8415e0ec1e29f3f4f6fc108bef0144"
     },
     "rstan": {
       "Package": "rstan",
@@ -2387,6 +2432,16 @@
         "xfun"
       ],
       "Hash": "5ac22900ae0f386e54f1c307eca7d843"
+    },
+    "truncnorm": {
+      "Package": "truncnorm",
+      "Version": "1.0-9",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "ef5b32c5194351ff409dfb37ca9468f1"
     },
     "tzdb": {
       "Package": "tzdb",
