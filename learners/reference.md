@@ -23,6 +23,10 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 
 [C++]{#cplusplus}
 : C++ is a high-level programming language that can be used within R to speed up sections of code. To learn more about C++ check out these [tutorials](https://cplusplus.com/doc/tutorial/) and learn more about the integration of C++ and R [here](https://www.rcpp.org/).
+[Censoring]{#censoring}
+: 
+Means that we know an event happened, but we do not know exactly when it happened. Most epidemiological data are “doubly censored” because there is uncertainty surrounding both primary and secondary event times. Not accounting for censoring can lead to biased estimates of the delay’s standard deviation ([Park et al., in progress](https://github.com/parksw3/epidist-paper)).
+Different sampling approaches can generate biases given left and right censoring in the estimation of the serial interval that can propagate bias to the estimation of the [incubation period](#incubation) and generation time ([Chen et al., 2022](https://www.nature.com/articles/s41467-022-35496-8/figures/2))
 
 ## D
 
@@ -37,14 +41,12 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 [Effective reproduction number]{#effectiverepro}
 : The time-varying or effective reproduction number ($Rt$) is similar to the [Basic reproductive number](#basic) ($R0$), but $Rt$ measures the number of persons infected by infectious person when some portion of the population has already been infected. Read more about the [etymology of Reproduction number by Sharma et al, 2023](https://wwwnc.cdc.gov/eid/article/29/8/22-1445_article).
 
-
 <!-- ## F -->
 
 ## G
 [Generation time]{#generationtime}
 :  Time between the onset of infectiousness of an index case and its secondary case. This always needs to be positive.
 The generation time distribution is commonly estimated from data on the [serial interval](#serialinterval) distribution of an infection ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
-Different sampling approaches can generate biases given left and right censoring in the estimation of the serial interval that can propagate bias to the estimation of the [incubation period](#incubation) and generation time ([Chen et al., 2022](https://www.nature.com/articles/s41467-022-35496-8/figures/2)).
 
 <!-- This can produced biased estimates. ([Knight et al., 2020](https://www.sciencedirect.com/science/article/pii/S2468042720300634)) -->
 
@@ -101,7 +103,11 @@ This can be different to the [incubation period](#incubation) as shown in Figure
 [Offspring distribution]{#offspringdist}
 : Distribution of the number of secondary cases caused by a particular infected individual. ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153), [Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-67/v3))
 
-<!-- ## P -->
+## P
+
+[(Dynamical or Epidemic) Phase bias]{#phasebias}
+: Accounts for population susceptibility at the times transmission pairs are observed.
+It is a type of sampling bias. It affects backward-looking data and is related to the phase of the epidemic: during the exponential growth phase, cases that developed symptoms recently are over-represented in the observed data, while during the declining phase, these cases are underrepresented, leading to the estimation of shorter and longer delay intervals, respectively. ([Park et al., in progress](https://github.com/parksw3/epidist-paper))
 
 <!-- ## Q -->
 
@@ -125,7 +131,10 @@ The relationship between the serial interval and the [incubation period](#incuba
 : A model that includes some stochastic process resulting in variation in model simulations for the same initial conditions and parameter values. Examples include stochastic differential equations and branching process models. For more detail see [Allen (2017)](https://doi.org/10.1016/j.idm.2017.03.001).
 
 
-<!-- ## T -->
+## T
+
+[(Right) Truncation]{#truncation}
+: Type of sampling bias related to the data collection process. It arises because only cases that have been reported can be observed. Not accounting for right truncation during the growth phase of an epidemic can lead to underestimation of the mean delay ([Park et al., in progress](https://github.com/parksw3/epidist-paper)).
 
 <!-- ## U -->
 
