@@ -10,7 +10,7 @@ editor_options:
 
 - How to get delay distributions from a systematic review?
 - How to connect reused delays with my existing analysis pipeline?
-- When to reuse delays from a systematic review?
+- When should delays be reused from a systematic review?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -81,7 +81,7 @@ generation_time <- dist_spec(
 )
 ```
 
-Let's explore how we can access to this and other time delays using `{epiparameter}`. We'll use the pipe `%>%` to connect some of their functions, so let's also call to the `{tidyverse}` package:
+Let's explore how we can access this and other time delays using `{epiparameter}`. We'll use the pipe `%>%` to connect some of their functions, so let's also call to the `{tidyverse}` package:
 
 ```{r,warning=FALSE,message=FALSE}
 library(epiparameter)
@@ -96,7 +96,7 @@ The generation time, jointly with the $R$, can inform about the speed of spread 
 ![Video from the MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
 
 In calculating the effective reproduction number ($R_{t}$), the *generation time* distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
-This is because it is easier to observe and measure the onset of symptoms than the onset of infectiousness.
+This frequent approximation is because it is easier to observe and measure the onset of symptoms than the onset of infectiousness.
 
 ![A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time ([Chung Lau et al. 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
 
@@ -110,15 +110,15 @@ Additionally, even if the *generation time* and *serial interval* have the same 
 
 When we calculate the *serial interval*, we see that not all case pairs have the same time length. We will observe this variability for any case pair and individual time period, including the [incubation period](../learners/reference.md#incubation) and [infectious period](../learners/reference.md#infectiousness).
 
-![Serial intervals of possible case pairs in (a) COVID-19 and (b) MERSCoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/serial-interval-pairs.jpg)
+![Serial intervals of possible case pairs in (a) COVID-19 and (b) MERS-CoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/serial-interval-pairs.jpg)
 
-To summarize these data from individual and pair time periods, we can find the **statistical distributions** that best fits to the data ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
+To summarize these data from individual and pair time periods, we can find the **statistical distributions** that best fit the data ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
 
-<!-- add reference about good practices to estimate distributions -->
+<!-- add a reference about good practices to estimate distributions -->
 
-![Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distribution, lognormal, gamma, and Weibull distributions, respectively ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)).](fig/seria-interval-fitted-distributions.jpg)
+![Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distributions, Lognormal, Gamma, and Weibull distributions, respectively ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)).](fig/seria-interval-fitted-distributions.jpg)
 
-Statistical distributions are summarized in terms of their **summary statistics** like the *location* (mean and percentiles) and *spread* (variance or standard deviation) of the distribution, or with their **distribution parameters** that inform about the *form* (shape and rate/scale) of the distribution. Each of these estimated values can be reported with their **uncertainty** (95% confidence intervals).
+Statistical distributions are summarized in terms of their **summary statistics** like the *location* (mean and percentiles) and *spread* (variance or standard deviation) of the distribution, or with their **distribution parameters** that inform about the *form* (shape and rate/scale) of the distribution. These estimated values can be reported with their **uncertainty** (95% confidence intervals).
 
 | Gamma | mean | shape | rate/scale |
 |:--------------|:--------------|:--------------|:--------------|
@@ -135,7 +135,7 @@ Statistical distributions are summarized in terms of their **summary statistics*
 | MERS-CoV | 14.08(13.1–15.2) | 2.58(2.50–2.68) | 0.44(0.39–0.5) |
 | COVID-19 | 5.2(4.2–6.5) | 1.45(1.31–1.61) | 0.63(0.54–0.74) |
 
-Table: Serial interval estimates using Gamma, Weibull and Log normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for log normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
+Table: Serial interval estimates using Gamma, Weibull, and Log normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for Log normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
 
 :::::::::::::::::::::::::
 
@@ -143,7 +143,7 @@ Table: Serial interval estimates using Gamma, Weibull and Log normal distributio
 
 ### Serial interval
 
-Assume that COVID-19 and SARS have similar reproduction number values and that the serial interval is a fair approximation of the generation time. 
+Assume that COVID-19 and SARS have similar reproduction number values and that the serial interval approximates the generation time. 
 
 Given the Serial interval of both infections in the figure below: 
 
@@ -166,7 +166,7 @@ Which one would be harder to control?
 
 Why do you conclude that?
 
-- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of COVID-19 is around four days, and SARS is about seven days. Thus, COVID-19 will likely have newer generations in less time than SARS, assuming similar reproduction numbers in both.
+- COVID-19 has the lowest mean serial interval. The approximate mean value for the serial interval of COVID-19 is around four days, and SARS is about seven days. Thus, COVID-19 will likely have newer generations in less time than SARS, assuming similar reproduction numbers.
 
 ::::::::::::::::::::::::::
 
@@ -174,15 +174,15 @@ Why do you conclude that?
 
 :::::::::::::::::::::: instructor
 
-The objective of the assessment above is to assess on the interpretation of a larger or shorter generation time.
+The objective of the assessment above is to assess the interpretation of a larger or shorter generation time.
 
 ::::::::::::::::::::::
 
 ## Extract epidemiological parameters
 
-First, let's assume that the data set `example_confirmed` have COVID-19 observed cases. So, we need to find a reported generation time for COVID-19 or any other useful parameter for this aim. 
+First, let's assume that the data set `example_confirmed` has COVID-19 observed cases. So, we need to find a reported generation time for COVID-19 or any other useful parameter for this aim. 
 
-Let's start by looking at how many parameters do we have in the epidemiological distributions database (`epidist_db`) for the `disease` named `covid`-19:
+Let's start by looking at how many parameters we have in the epidemiological distributions database (`epidist_db`) for the `disease` named `covid`-19:
 
 ```{r}
 epiparameter::epidist_db(
@@ -190,9 +190,9 @@ epiparameter::epidist_db(
 )
 ```
 
-From the `{epiparameter}` package, we can use the `epidist_db()` function to ask for any `disease` and also for an specific epidemiological distribution (`epi_dist`). 
+From the `{epiparameter}` package, we can use the `epidist_db()` function to ask for any `disease` and also for a specific epidemiological distribution (`epi_dist`). 
 
-Let's ask now how many parameters do we have in the epidemiological distributions database (`epidist_db`) with the generation time using the string `generation`:
+Let's ask now how many parameters we have in the epidemiological distributions database (`epidist_db`) with the generation time using the string `generation`:
 
 ```{r}
 epiparameter::epidist_db(
@@ -200,7 +200,7 @@ epiparameter::epidist_db(
 )
 ```
 
-Currently, in the library of epidemiological parameters we have one `generation` time entry but for Influenza. Taking the considerations explained above, we can try to look at the `serial` intervals for `COVID`-19.
+Currently, in the library of epidemiological parameters, we have one `generation` time entry for Influenza. Considering the abovementioned considerations, we can look at the `serial` intervals for `COVID`-19.
 
 ```{r}
 epiparameter::epidist_db(
@@ -217,7 +217,7 @@ epiparameter::epidist_db(
 
 :::::::::::::::::::::::::
 
-We get more than one epidemiological delay. To summarize this view and get the column names from the underlying parameter dataset we can add the previous code the `epiparameter::list_distributions()` function using the pipe `%>%`:
+We get more than one epidemiological delay. To summarize this view and get the column names from the underlying parameter dataset, we can add the `epiparameter::list_distributions()` function to the previous code using the pipe `%>%`:
 
 ```{r}
 epiparameter::epidist_db(
@@ -258,16 +258,16 @@ epiparameter::epidist_db(
 Looking at the help documentation for `?epiparameter::epidist_db()`:
 
 - If multiple entries match the arguments supplied and `single_epidist = TRUE`,
-- Then the `⁠<epidist>`⁠ that is parameterised and has the largest sample size will be returned.
-- If multiple entries are equal after this sorting the first entry will be returned.
+- Then, the parameterised `⁠<epidist>`⁠ with the largest sample size will be returned.
+- If multiple entries are equal after this sorting, the first entry will be returned.
 
 What does a parametrised `<epidist>` is? Look at `?is_parameterised`.
 
 :::::::::::::::::::::::::
 
-Now we have an epidemiological parameter we can reuse! We can use it to replace the numbers we plug-in to `EpiNow2::dist_spec()`.
+Now, we have an epidemiological parameter we can reuse! We can replace the numbers we plug into `EpiNow2::dist_spec()`.
 
-Let's do this by assigning this `<epidist>` class object to the `covid_serialint` object.
+Let's assign this `<epidist>` class object to the `covid_serialint` object.
 
 ```{r}
 covid_serialint <- 
@@ -291,7 +291,7 @@ Take 5 minutes:
 
 - How many delay distributions are for the incubation period of Ebola?
 
-- What type of distribution has the incubation period of Ebola with highest sample size?
+- What type of distribution has the incubation period of Ebola with the highest sample size?
 
 ::::::::::::::::: hint
 
@@ -355,7 +355,7 @@ Take 1 minute to:
 
 Share about: 
 
-- What elements you find useful for your analysis?
+- What elements do you find useful for your analysis?
 - What other elements would you like to see in this object? How?
 
 ::::::::: hint
@@ -380,7 +380,7 @@ covid_serialint$summary_stats$sd
 covid_serialint$metadata$sample_size
 ```
 
-An interesting element is the `method_assess` nested entry, which refers to the methods used by the study authors to assess for the bias while estimating the serial interval distribution.
+An interesting element is the `method_assess` nested entry, which refers to the methods used by the study authors to assess for bias while estimating the serial interval distribution.
 
 ```{r}
 covid_serialint$method_assess
@@ -418,7 +418,7 @@ distribution[[1]]$prob_dist
 
 ### Parameterised entries have an Inference method
 
-As detailed in `?is_parameterised`, a parameterised distribution is the entry that has a probability distribution associated to it provided by an `inference_method` as shown in `metadata`:
+As detailed in `?is_parameterised`, a parameterised distribution is the entry that has a probability distribution associated with it provided by an `inference_method` as shown in `metadata`:
 
 ```{r,eval=FALSE}
 distribution[[1]]$metadata$inference_method
@@ -428,14 +428,14 @@ distribution[[4]]$metadata$inference_method
 
 :::::::::::::::::::::::::
 
-In the `epiparameter::list_distributions()` output, we can also find different types of probability distributions (e.g., log-normal, weibull, normal).
+In the `epiparameter::list_distributions()` output, we can also find different types of probability distributions (e.g., log-normal, Weibull, normal).
 
 ```{r}
 distribution %>% 
   list_distributions()
 ```
 
-In `{epiparameter}` you will mostly find **continuous** distributions like these. You can visualize any of them with the `plot()` function and access to: 
+In `{epiparameter}`, you will mostly find **continuous** distributions like these. You can visualize any of them with the `plot()` function and access to: 
 
 - the *Probability Density Function (PDF)* and 
 - the *Cumulative Distribution Function (CDF)*.
@@ -444,7 +444,7 @@ In `{epiparameter}` you will mostly find **continuous** distributions like these
 plot(distribution[[2]])
 ```
 
-With the `day_range` argument you can change the length or number of days in the `x` axis. Explore how does it looks like:
+With the `day_range` argument, you can change the length or number of days in the `x` axis. Explore what it look like:
 
 ```{r,eval=FALSE}
 plot(distribution[[2]], day_range = 0:20)
@@ -462,13 +462,13 @@ Follow these steps to reproduce the form of the `covid_serialint` distribution:
 - Go to the left panel,
 - Keep the *Category of distribution*: `Continuous Univariate`,
 - Select a new *Type of distribution*: `Log-Normal`,
-- Move the **sliders**, i.e. the graphical control element that allows you to adjust a value by moving a handle along a horizontal track or bar, to the `covid_serialint` parameters. 
+- Move the **sliders**, i.e. the graphical control element that allows you to adjust a value by moving a handle along a horizontal track or bar to the `covid_serialint` parameters. 
 
-Replicate these with the `distribution` object and all its list elements: `2`, `3`, and `4`. Explore How does the shape of a distribution change when its parameters change.
+Replicate these with the `distribution` object and all its list elements: `2`, `3`, and `4`. Explore how the shape of a distribution changes when its parameters change.
 
 Share about:
 
-- What other features in the website you find useful?
+- What other features of the website do you find helpful?
 
 :::::::::::::::::::::::::
 
@@ -476,24 +476,24 @@ Share about:
 
 ## Distribution functions
 
-In R, all the statistical distributions has functions to access to the:
+In R, all the statistical distributions have functions to access the:
 
 - Probability **Density** function (PDF),
 - Cumulative Distribution function (**CDF**),
 - **Quantile** function, and
-- **Random** drawn values from the given distribution.
+- **Random** values from the given distribution.
 
 :::::::::::: spoiler
 
 ### Functions for the Normal distribution
 
-If you needed it, read in detail about the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), each of its definitions and identify in which part of a distribution they are located!
+If you need it, read in detail about the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), each of its definitions and identify in which part of a distribution they are located!
 
 ![The four probability functions for the normal distribution ([Jack Weiss, 2012](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc))](fig/fig5a-normaldistribution.png)
 
 ::::::::::::::::::::
 
-If you look at `?stats::Distributions`, each type of distribution has a unique set functions. However, `{epiparameter}` allows gives you one same set of four functions to access to each of the values above for any `<epidist>` object you want! 
+If you look at `?stats::Distributions`, each type of distribution has a unique set of functions. However, `{epiparameter}` gives you the same four functions to access each of the values above for any `<epidist>` object you want! 
 
 ```{r,eval=FALSE}
 # plot this to have a visual reference
@@ -553,9 +553,9 @@ cdf(covid_serialint,q = 6)
 
 Given the COVID-19 serial interval:
 
-- A contact tracing method that consider contacts up to 2 days pre-onset will already capture around 11.1% of backwards cases.
+- A contact tracing method considering contacts up to 2 days pre-onset will capture around 11.1% of backward cases.
 
-- If this period was extended to 6 days pre-onset then this could include 76.2% of backward contacts.
+- If this period is extended to 6 days pre-onset, this could include 76.2% of backward contacts.
 
 ::::::::::::::::::::::::::
 
@@ -565,7 +565,7 @@ Given the COVID-19 serial interval:
 
 If we exchange the question between days and cumulative probability to: 
 
-- When considering secondary cases, after how many days following the symptom onset of primary cases can we expect 55% of symptom onset to occur?
+- When considering secondary cases, how many days following the symptom onset of primary cases can we expect 55% of symptom onset to occur?
 
 ```{r}
 quantile(covid_serialint, p = 0.55)
@@ -585,9 +585,9 @@ An interpretation could be:
 
 We are almost halfway! `EpiNow2::dist_spec()` still needs a maximum value (`max`). 
 
-One way to do this is getting the quantile value for the the 99.9th percentile or `0.999` cumulative probability of the distribution. For this we need to access to the set of distribution functions for our `<epidist>` object.
+One way to do this is to get the quantile value for the distribution's 99.9th percentile or `0.999` cumulative probability. For this, we need access to the set of distribution functions for our `<epidist>` object.
 
-We can use the set of distribution functions for a _continuous_ distribution (as above). However, this values will be _continuous_ numbers. To get discrete values from a continuous distribution we can **discretize** the continuous distribution stored in our `<epidist>` object.
+We can use the set of distribution functions for a _continuous_ distribution (as above). However, these values will be _continuous_ numbers. We can **discretize** the continuous distribution stored in our `<epidist>` object to get discrete values from a continuous distribution.
 
 When we `epiparameter::discretise()` the continuous distribution we get a **discrete**(-ized) distribution:
 
@@ -614,7 +614,7 @@ plot(covid_serialint)
 plot(covid_serialint_discrete)
 ```
 
-To finally get a `max` value let's access to the quantile value of the 99.9th percentile or `0.999` probability of the distribution with the `prob_dist$q` notation, similarly to how we access to the `summary_stats` values.
+To finally get a `max` value, let's access the quantile value of the 99.9th percentile or `0.999` probability of the distribution with the `prob_dist$q` notation, similarly to how we access the `summary_stats` values.
 
 ```{r}
 covid_serialint_discrete_max <- 
@@ -625,7 +625,7 @@ covid_serialint_discrete_max <-
 
 ### Lenght of quarantine and Incubation period
 
-The **incubation period** distribution is a useful delay to assess for the length of active monitoring or quarantine ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)). Similarly, delays from symptom onset to recovery (or death) will determine the required duration of health-care and case isolation ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+The **incubation period** distribution is a useful delay to assess the length of active monitoring or quarantine ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)). Similarly, delays from symptom onset to recovery (or death) will determine the required duration of health-care and case isolation ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
 Calculate:
 
@@ -633,9 +633,9 @@ Calculate:
 
 ::::::::::::::::: hint
 
-What is the delay distribution that measures the time between infection and symptoms onset?
+What delay distribution measures the time between infection and the onset of symptoms?
 
-Probability function for `<epidist>` **discrete** distributions differ from the *continuous* ones!
+The probability function for `<epidist>` **discrete** distributions differ from the *continuous* ones!
 
 ```{r,eval=FALSE}
 # plot to have a visual reference
@@ -647,7 +647,7 @@ covid_serialint_discrete$prob_dist$d(10)
 # cumulative probability at quantile value 10 (day)
 covid_serialint_discrete$prob_dist$cdf(10)
 
-# in what quantile value (days) we have the 60% cumulative probability?
+# In what quantile value (days) do we have the 60% cumulative probability?
 covid_serialint_discrete$prob_dist$q(0.6)
 # covid_serialint_discrete$prob_dist$qf(0.6) # as in continuous distribution
 
@@ -662,7 +662,7 @@ tibble(
   quantile_values = seq(1L, to = x_limit, by = 1L)
 ) %>% 
   mutate(
-    # calculate the values for each quantiles in the density function
+    # calculate the values for each quantile in the density function
     density_values = covid_serialint_discrete$prob_dist$d(quantile_values)
   ) %>%
   ggplot(aes(
@@ -702,7 +702,7 @@ _Is this result expected in epidemiological terms?_
 
 ### Ebola's severity parameter
 
-A severity parameter like the duration of hospitalization could add into the information needed about the bed capacity in response to an outbreak ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+A severity parameter like the duration of hospitalization could add to the information needed about the bed capacity in response to an outbreak ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
 For Ebola: 
 
@@ -743,7 +743,7 @@ ebola_severity$summary_stats$mean_ci_limits
 
 ## Plug-in `{epiparameter}` to `{EpiNow2}`
 
-Now we are ready to plug-in all to the `EpiNow2::dist_spec()` function!
+Now we can plug everything into the `EpiNow2::dist_spec()` function!
 
 ```{r}
 serial_interval_covid <- 
@@ -761,11 +761,11 @@ serial_interval_covid
 
 ### Warning
 
-Using the serial interval instead of the generation time is an alternative that can propagate bias in your estimates. Even more in diseases with reported pre-symptomatic transmission.
+Using the serial interval instead of the generation time is an alternative that can propagate bias in your estimates, even more so in diseases with reported pre-symptomatic transmission.
 
 ::::::::::::::::::
 
-Now, let's replace the `generation_time` input that we used for `EpiNow2::epinow()`.
+Let's replace the `generation_time` input we used for `EpiNow2::epinow()`.
 
 ```{r,eval=FALSE}
 epinow_estimates <- epinow(
@@ -790,7 +790,7 @@ base::plot(epinow_estimates)
 Download the [Ebola dataset](data/ebola_cases.csv):
 
 - Reuse one epidemiological parameter to estimate the effective reproduction number for the Ebola dataset.
-- Why you choose that parameter?
+- Why did you choose that parameter?
 
 ```{r,eval=FALSE}
 ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
@@ -798,12 +798,12 @@ ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
 
 ::::::::::::::::: hint
 
-To calculate the Rt we need:
+To calculate the $R_t$, we need:
 
-- data set with confirmed cases per day, and
+- data set with confirmed cases per day and
 - one key delay distribution
 
-Key functions we applied in this episodes are:
+Key functions we applied in this episode are:
 
 - `epidist_db()`
 - `list_distributions()`
@@ -815,7 +815,7 @@ Key functions we applied in this episodes are:
 ::::::::::::::::: solution
 
 ```{r,eval=FALSE}
-# read data from tutorial repository R project
+# read data from the tutorial repository R project
 ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
 ```
 
@@ -844,7 +844,7 @@ serial_interval_ebola <-
     distribution = "gamma"
   )
 
-# name of type of distribution
+# name of the type of distribution
 # only for the discretised distribution
 ebola_serial_discrete$prob_dist$name
 
@@ -887,8 +887,8 @@ For `{EpiNow2}`, we can specify these complementary delay distributions in the `
 
 Use `{epiparameter}` to:
 
-- Find and incubation period for COVID-19.
-- Add it our last `epinow()` code chunk using the `delays` argument and the `delay_opts()` helper function.
+- Find an incubation period for COVID-19.
+- Add our last `epinow()` code chunk using the `delays` argument and the `delay_opts()` helper function.
 
 ::::::::::::::::: hint
 
@@ -953,12 +953,12 @@ base::plot(epinow_estimates)
 
 :::::::::::::: solution
 
-### How much it changed?
+### How much has it changed?
 
 After adding the incubation period, discuss:
 
-- Does the retrospective trend of forecast changed?
-- Does the uncertainty changed?
+- Does the retrospective trend of forecast change?
+- Has the uncertainty changed?
 - How would you explain or interpret any of these changes?
 
 ::::::::::::::::::::::::::::
@@ -968,13 +968,13 @@ After adding the incubation period, discuss:
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Ebola's effective reproduction number adjusted by reporting delays 
+### Ebola's effective reproduction number was adjusted by reporting delays 
 
 Using the same [Ebola dataset](data/ebola_cases.csv):
 
 - Reuse one additional epidemiological parameter for the `delays` argument in `EpiNow2::epinow()`.
 - Estimate the effective reproduction number using `EpiNow2::epinow()`.
-- Why you choose that parameter?
+- Why did you choose that parameter?
 
 ```{r,eval=FALSE}
 ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
@@ -982,14 +982,14 @@ ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
 
 ::::::::::::::::: hint
 
-There are two complementary delay distributions that we can use to estimate the $R_t$ at time $t$.
+We can use two complementary delay distributions to estimate the $R_t$ at time $t$.
 
 ::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
 ```{r,eval=FALSE}
-# read data from tutorial repository R project
+# read data from the tutorial repository R project
 ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
 ```
 
@@ -1018,7 +1018,7 @@ serial_interval_ebola <-
     distribution = "gamma"
   )
 
-# subset one distribution for delay of incubation period 
+# subset one distribution for delay of the incubation period 
 ebola_incubation <- epidist_db(
   disease = "ebola", 
   epi_dist = "incubation", 
@@ -1076,7 +1076,7 @@ How to get the mean and standard deviation from a generation time with median an
 <!-- https://github.com/epiverse-trace/epiparameter/issues/114 -->
 
 ```{r,eval=FALSE}
-# what parameters are are available for influenza?
+# What parameters are available for Influenza?
 epidist_db(disease = "influenza") %>% 
   list_distributions() %>% 
   as_tibble() %>% 
@@ -1087,7 +1087,7 @@ influenza_generation <- epidist_db(disease = "influenza",epi_dist = "generation"
 influenza_generation_discrete <- discretise(influenza_generation)
 
 # problem
-# the summary statistics fo not have mean and sd
+# the summary statistics do not have mean and sd
 influenza_generation$summary_stats
 influenza_generation$summary_stats$median
 influenza_generation$summary_stats$quantiles
@@ -1144,16 +1144,15 @@ plot(epinow_estimates)
 
 ## When to reuse? When to estimate?
 
-In the early stage of an outbreak we can rely on reusing parameters, for known and unknown pathogens, even for the [Disease X](https://en.wikipedia.org/wiki/Disease_X), a pathogen currently unknown to cause human disease and potentially cause a  serious international epidemic ([WHO, 2018](https://www.who.int/activities/prioritizing-diseases-for-research-and-development-in-emergency-contexts)). 
+In the early stage of an outbreak, we can rely on reusing parameters for known and unknown pathogens, even for the [Disease X](https://en.wikipedia.org/wiki/Disease_X), a pathogen currently unknown to cause human disease and potentially cause a  serious international epidemic ([WHO, 2018](https://www.who.int/activities/prioritizing-diseases-for-research-and-development-in-emergency-contexts)). 
 
-But when data from **lines list paired with contact tracing** is available, we are in the possibility to estimate the key delays distributions that best fit our data. This will help us to inform, compare and update any previous estimate about questions like:
+But when data from **lines list paired with contact tracing** is available, we can estimate the key delay distributions that best fit our data. These will help us to inform, compare and update any previous estimate about questions like:
 
-- How to get serial interval from case data? <!-- possibly in a separate episode? -->
-- how long should contacts be followed?
-- what is the required duration of contact tracing?
-- how long should cases be isolated to reduce transmission?
+- How long should contacts be followed?
+- What is the required duration of contact tracing?
+- How long should cases be isolated to reduce transmission?
 
-However, the methods to accurately estimate delays like the generation interval from contact tracing data involve adjusting for biases like like **[censoring](../learners/reference.md#censoring)**, **[right truncation](../learners/reference.md#truncation)** and **[epidemic phase bias](../learners/reference.md#phasebias)**. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)
+However, the methods to accurately estimate delays like the generation interval from contact tracing data involve adjusting for biases like **[censoring](../learners/reference.md#censoring)**, **[right truncation](../learners/reference.md#truncation)** and **[epidemic phase bias](../learners/reference.md#phasebias)**. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)
 
 We can identify what entries in the `{epiparameter}` library assessed for these biases in their methodology with the `method_assess` nested entry:
 
@@ -1163,11 +1162,11 @@ covid_serialint$method_assess
 
 ::::::::::::::::: testimonial
 
-### How to estimating delay distributions for Disease X?
+### How to estimate delay distributions for Disease X?
 
-Refer to this excellent tutorial on how to estimate the serial interval and incubation period of Disease X accounting for *censoring* using Bayesian inference with packages like `{rstan}` and `{coarseDataTools}`.
+Refer to this excellent tutorial on estimating the serial interval and incubation period of Disease X accounting for *censoring* using Bayesian inference with packages like `{rstan}` and `{coarseDataTools}`.
 
-- Tutuorial in English: <https://rpubs.com/tracelac/diseaseX> <!-- to request -->
+- Tutorial in English: <https://rpubs.com/tracelac/diseaseX> <!-- to request -->
 - Tutorial en Español: <https://epiverse-trace.github.io/epimodelac/EnfermedadX.html>
 
 :::::::::::::::::::::::::::::
@@ -1176,17 +1175,17 @@ Refer to this excellent tutorial on how to estimate the serial interval and incu
 
 ### How to assess for pre-symptomatic infection?
 
-The lengths of the Serial interval and Incubation period determine the type of transmission of a disease. 
+The lengths of the Serial interval and Incubation period determine the type of disease transmission. 
 
 ![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
 
-Estimating the proportion of presymptomatic infections, or the extent to which infectiousness precedes symptom onset will determine the effectiveness of contact tracing and the feasibility of controlling an outbreak ([Fraser et al., 2004](https://www.pnas.org/doi/full/10.1073/pnas.0307506101) and [Hellewell et al., 2020](https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext)).
+Estimating the proportion of pre-symptomatic infections, or the extent to which infectiousness precedes symptom onset will determine the effectiveness of contact tracing and the feasibility of controlling an outbreak ([Fraser et al., 2004](https://www.pnas.org/doi/full/10.1073/pnas.0307506101) and [Hellewell et al., 2020](https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext)).
 
-<!-- The proportion of pre-symptomatic transmission contributes to the effective reproduction number and expected new cases to have. -->
+<!-- The proportion of pre-symptomatic transmission contributes to the effective reproduction number and expected new cases. -->
 
-![Parameter estimates. Plausible ranges for the key parameters R0 and θ (read main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
+![Parameter estimates. Plausible ranges for the key parameters R0 and θ (read the main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
 
-Meta-analysis on the proportion of presymptomatic and asymptomatic transmission in SARS-CoV-2 found limitations of the evidence given high heterogeneity and high risk of selection and information bias between studies ([Buitrago-Garcia et al., 2022](https://journals.plos.org/plosmedicine/article/figure?id=10.1371/journal.pmed.1003987.g003)). This is a call to action to improve the Outbreak Analytic pipelines to use and reuse in the early phase of an outbreak.
+Meta-analysis on the proportion of pre-symptomatic and asymptomatic transmission in SARS-CoV-2 found limitations of the evidence given high heterogeneity and high risk of selection and information bias between studies ([Buitrago-Garcia et al., 2022](https://journals.plos.org/plosmedicine/article/figure?id=10.1371/journal.pmed.1003987.g003)). This is a call to action to improve the Outbreak Analytic pipelines to use and reuse in the early phase of an outbreak.
 
 :::::::::::::::::::::::::::::::::::
 
@@ -1196,9 +1195,9 @@ Meta-analysis on the proportion of presymptomatic and asymptomatic transmission 
 
 Compare the serial interval and incubation period of Influenza and MERS:
 
-- What type of transmission have Influenza?
-- What type of transmission have MERS?
-- Does these results correlates with the available evidence?
+- What type of transmission has Influenza?
+- What type of transmission has MERS?
+- Do these results correlate with the available evidence?
 
 ::::::::::::::::: hint
 
@@ -1244,9 +1243,9 @@ update it from last epiparameter test
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use `{epiparameter}` to access to systematic review catalog of epidemiological delay distributions.
+- Use `{epiparameter}` to access the systematic review catalogue of epidemiological delay distributions.
 - Use `epidist_db()` to select single delay distributions.
-- Use `list_distributions()` for a overview of multiple delay distributions.
+- Use `list_distributions()` for an overview of multiple delay distributions.
 - Use `discretise()` to convert continuous to discrete delay distributions.
 - Use `{epiparameter}` probability functions for any delay distributions. 
 
