@@ -8,8 +8,9 @@ editor_options:
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- how to get delay distributions from a systematic review?
-- what is the natural history of the disease?
+- How to get delay distributions from a systematic review?
+- How to connect reused delays with my existing analysis pipeline?
+- When to reuse delays from a systematic review?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -19,7 +20,6 @@ editor_options:
 - Get statistical summaries and distribution parameters of delay distributions.
 - Use distribution functions from delay distributions.
 - Convert a continuous to a discrete delay distribution.
-- Convert delay statistical summaries to distribution parameters.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -95,7 +95,7 @@ The generation time, jointly with the $R$, can inform about the speed of spread 
 
 ![Video from the MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
 
-In calculating the effective reproductive number ($R_{t}$), the *generation time* distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
+In calculating the effective reproduction number ($R_{t}$), the *generation time* distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.
 This is because it is easier to observe and measure the onset of symptoms than the onset of infectiousness.
 
 ![A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time ([Chung Lau et al. 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
@@ -330,7 +330,6 @@ Now, from the output of `epiparameter::epidist_db()`, What is an [offspring dist
 
 ::::::::::::::::::::::::::
 
-
 :::::::::::::::::::::::::::::::::::::::::::
 
 ## Extract the summary statistics
@@ -530,13 +529,13 @@ Access to the reference documentation (Help files) for these functions is access
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Lenght of contact tracing and the Serial interval
+### Window for contact tracing and the Serial interval
 
-The **serial interval** is important in the optimization of contact tracing since it provides a time window for the containment of a disease spread ([Fine, 2003](https://academic.oup.com/aje/article/158/11/1039/162725)).
+The **serial interval** is important in the optimization of contact tracing since it provides a time window for the containment of a disease spread ([Fine, 2003](https://academic.oup.com/aje/article/158/11/1039/162725)). Depending on the serial interval, we can evaluate the need to expand the number of days pre-onset to consider in the contact tracing to include more backwards contacts ([Davis et al., 2020](https://assets.publishing.service.gov.uk/media/61e9ab3f8fa8f50597fb3078/S0523_Oxford_-_Backwards_contact_tracing.pdf)).
 
-Calculate:
+With the COVID-19 serial interval (`covid_serialint`) calculate:
 
-- When considering secondary cases, after how many days following the symptom onset of primary cases can we expect 99% of symptom onset to occur?
+- How much more of the backward cases could be captured if the contact tracing method considered contacts up to 6 days pre-onset compared to 2 days pre-onset?
 
 ::::::::::::::::: hint
 
@@ -547,12 +546,34 @@ In Figure 5 from the [R probability functions for the normal distribution](https
 ::::::::::::::::: solution
 
 ```{r}
-quantile(covid_serialint, p = 0.99)
+plot(covid_serialint)
+cdf(covid_serialint,q = 2)
+cdf(covid_serialint,q = 6)
 ```
 
-The 99% percent of the symptom onset of secondary cases will happen after 14.99 days after the symptom onset of primary cases.
+Given the COVID-19 serial interval:
 
-_Is this result expected in epidemiological terms?_
+- A contact tracing method that consider contacts up to 2 days pre-onset will already capture around 11.1% of backwards cases.
+
+- If this period was extended to 6 days pre-onset then this could include 76.2% of backward contacts.
+
+::::::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+### What if
+
+If we exchange the question between days and cumulative probability to: 
+
+- When considering secondary cases, after how many days following the symptom onset of primary cases can we expect 55% of symptom onset to occur?
+
+```{r}
+quantile(covid_serialint, p = 0.55)
+```
+
+An interpretation could be:
+
+- The 55% percent of the symptom onset of secondary cases will happen after 4.2 days after the symptom onset of primary cases.
 
 ::::::::::::::::::::::::::
 
@@ -602,17 +623,17 @@ covid_serialint_discrete_max <-
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Lenght of quarentine and Incubation period
+### Lenght of quarantine and Incubation period
 
-The **incubation period** distribution is a useful delay to assess for the length of active monitoring or quarantine ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)).
+The **incubation period** distribution is a useful delay to assess for the length of active monitoring or quarantine ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)). Similarly, delays from symptom onset to recovery (or death) will determine the required duration of health-care and case isolation ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
 Calculate:
 
-- Within what time frame do 99% of individuals who develop COVID-19 symptoms exhibit them after infection?
+- Within what exact time frame do 99% of individuals who develop COVID-19 symptoms exhibit them after infection?
 
 ::::::::::::::::: hint
 
-First, we are asking about a different distribution delay: incubation period 
+What is the delay distribution that measures the time between infection and symptoms onset?
 
 Probability function for `<epidist>` **discrete** distributions differ from the *continuous* ones!
 
@@ -670,12 +691,55 @@ covid_incubation_discrete$prob_dist$q(0.99)
 
 99% of those who develop COVID-19 symptoms will do so within 16 days of infection.
 
-_Dive into the structure of this new `<epidist>` R object for discrete distributions!_
+_Is this result expected in epidemiological terms?_
 
 ::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::: challenge
+
+### Ebola's severity parameter
+
+A severity parameter like the duration of hospitalization could add into the information needed about the bed capacity in response to an outbreak ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+
+For Ebola: 
+
+- what is a reported point estimate and uncertainty of the mean duration of health-care and case isolation?
+
+::::::::::::::::: hint
+
+An informative delay measures the time from symptom onset to recovery or death.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r}
+# one way to get the list of all the available parameters
+epidist_db(disease = "all") %>% 
+  list_distributions() %>% 
+  as_tibble() %>% 
+  distinct(epi_distribution)
+
+ebola_severity <- epidist_db(
+  disease = "ebola",
+  epi_dist = "onset to discharge"
+)
+
+# point estimate
+ebola_severity$summary_stats$mean
+# 95% confidence intervals
+ebola_severity$summary_stats$mean_ci
+# limits of the confidence intervals
+ebola_severity$summary_stats$mean_ci_limits
+```
+
+::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::
+
 
 ## Plug-in `{epiparameter}` to `{EpiNow2}`
 
@@ -697,7 +761,7 @@ serial_interval_covid
 
 ### Warning
 
-Using the serial interval instead of the generation time is an alternative that can propagate bias in your estimates. Even more in diseases with reported pre-symptomatic transmission!
+Using the serial interval instead of the generation time is an alternative that can propagate bias in your estimates. Even more in diseases with reported pre-symptomatic transmission.
 
 ::::::::::::::::::
 
@@ -721,11 +785,11 @@ base::plot(epinow_estimates)
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Ebola's effective reproductive number
+### Ebola's effective reproduction number
 
 Download the [Ebola dataset](data/ebola_cases.csv):
 
-- Reuse one epidemiological parameter to estimate the effective reproductive number for the Ebola dataset.
+- Reuse one epidemiological parameter to estimate the effective reproduction number for the Ebola dataset.
 - Why you choose that parameter?
 
 ```{r,eval=FALSE}
@@ -805,78 +869,17 @@ plot(epinow_estimates)
 
 :::::::::::::::::::::::::::::::::::::::::::  
 
+## Adjusting for reporting delays
 
-## Add the Incubation period
+Estimating $R_t$ requires data on the daily number of new infections. Due to lags in the development of detectable viral loads, symptom onset, seeking care, and reporting, these numbers are not readily available. All observations reflect transmission events from some time in the past. In other words, if $d$ is the delay from infection to observation, then observations at time $t$ inform $R_{t−d}$, not $R_t$. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)
 
-For `{EpiNow2}`, we can specify relevant delay distributions like the [incubation period](../learners/reference.md#incubation).
+![Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
 
-The lengths of the Serial interval and Incubation period determine the type of transmission of a disease.
+The delay distribution could be inferred jointly with the underlying times of infection or estimated as the sum of the [incubation period](../learners/reference.md#incubation) distribution and the distribution of delays from symptom onset to observation from line list data ([reporting delay](../learners/reference.md#reportingdelay)).
 
-![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
+For `{EpiNow2}`, we can specify these complementary delay distributions in the `delays` argument.
 
-The proportion of pre-symptomatic transmission contributes to the effective reproductive number and expected new cases to have.
-
-![Parameter estimates. Plausible ranges for the key parameters R0 and θ (read main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
-
-The proportion of presymptomatic transmission in SARS-CoV-2 has been heterogeneous with point estimates of 40% or grater ([Buitrago-Garcia et al., 2022](https://journals.plos.org/plosmedicine/article/figure?id=10.1371/journal.pmed.1003987.g003))
-
-::::::::::::::::::::::::::::::::: challenge
-
-### WHAT TYPE OF TRANSMISSION?
-
-Compare the serial interval and incubation period of Influenza and MERS:
-
-- What type of transmission have Influenza?
-- What type of transmission have MERS?
-- Does these results correlates with the available evidence?
-
-::::::::::::::::: hint
-
-Key functions:
-
-- `epidist_db()`
-- `epidist$summary_stats$`
-
-::::::::::::::::::::::
-
-::::::::::::::::: solution
-
-```{r}
-# pre-symptomatic transmission
-epidist_db(disease = "influenza",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
-epidist_db(disease = "influenza",epi_dist = "serial",single_epidist = T)$summary_stats$mean
-
-# symptomatic transmission
-epidist_db(disease = "mers",epi_dist = "incubation",single_epidist = T)$summary_stats$median
-epidist_db(disease = "mers",epi_dist = "serial",single_epidist = T)$summary_stats$mean
-```
-
-```{r,eval=FALSE}
-# pre-symptomatic transmission
-epidist_db(disease = "covid",epi_dist = "incubation",author = "Stephen",single_epidist = T)$summary_stats$mean
-epidist_db(disease = "covid",epi_dist = "serial",author = "Nishiura",single_epidist = T)$summary_stats$mean
-
-# symptomatic transmission
-epidist_db(disease = "ebola",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
-epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = T)$summary_stats$mean
-```
-
-
-::::::::::::::::::::::::::
-
-
-:::::::::::::::::::::::::::::::::::::::::::
-
-
-<!-- fix with screenshot from larger computer monitor -->
-
-<!-- Transmission before symptoms -->
-<!-- https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext -->
-
-<!-- The highest the Reproduction number, more -->
-<!-- Required coverage ~duration~ of contact tracing -->
-<!-- https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext -->
-<!-- https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371 -->
+![Rt is a measure of transmission at time t. Observations after time t must be adjusted. ICU, intensive care unit. From  [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)](fig/rt-adjusting-delays.png)
 
 ::::::::::::::::::::::::::::::::: challenge
 
@@ -884,10 +887,12 @@ epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = T)$summary_sta
 
 Use `{epiparameter}` to:
 
-- Find and incubation period for COVID-19
-- Add to our last `epinow()` code chunk the `incubation_time_covid` in the `delays` argument.
+- Find and incubation period for COVID-19.
+- Add it our last `epinow()` code chunk using the `delays` argument and the `delay_opts()` helper function.
 
 ::::::::::::::::: hint
+
+The `delays` argument and the `delay_opts()` helper function are analogous to the `generation_time` argument and the `generation_time_opts()` helper function.
 
 ```r
 epinow_estimates <- epinow(
@@ -946,11 +951,7 @@ base::plot(epinow_estimates)
 
 ::::::::::::::::::::::::::
 
-
-:::::::::::::::::::::::::::::::::::::::::::
-
-
-:::::::::::::: discussion
+:::::::::::::: solution
 
 ### How much it changed?
 
@@ -958,15 +959,121 @@ After adding the incubation period, discuss:
 
 - Does the retrospective trend of forecast changed?
 - Does the uncertainty changed?
+- How would you explain or interpret any of these changes?
 
 ::::::::::::::::::::::::::::
 
-## Extract parameters
+:::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::: challenge
+
+### Ebola's effective reproduction number adjusted by reporting delays 
+
+Using the same [Ebola dataset](data/ebola_cases.csv):
+
+- Reuse one additional epidemiological parameter for the `delays` argument in `EpiNow2::epinow()`.
+- Estimate the effective reproduction number using `EpiNow2::epinow()`.
+- Why you choose that parameter?
+
+```{r,eval=FALSE}
+ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
+```
+
+::::::::::::::::: hint
+
+There are two complementary delay distributions that we can use to estimate the $R_t$ at time $t$.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r,eval=FALSE}
+# read data from tutorial repository R project
+ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
+```
+
+```{r,message=FALSE,warning=FALSE,eval=FALSE}
+# read data
+ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
+
+# list distributions
+epidist_db(disease = "ebola") %>% 
+  list_distributions()
+
+# subset one distribution for the generation time 
+ebola_serial <- epidist_db(
+  disease = "ebola", 
+  epi_dist = "serial", 
+  single_epidist = T
+)
+
+ebola_serial_discrete <- discretise(ebola_serial)
+
+serial_interval_ebola <- 
+  dist_spec(
+    mean = ebola_serial$summary_stats$mean,
+    sd = ebola_serial$summary_stats$sd,
+    max = ebola_serial_discrete$prob_dist$q(p = 0.999),
+    distribution = "gamma"
+  )
+
+# subset one distribution for delay of incubation period 
+ebola_incubation <- epidist_db(
+  disease = "ebola", 
+  epi_dist = "incubation", 
+  single_epidist = T
+)
+
+ebola_incubation_discrete <- discretise(ebola_incubation)
+
+incubation_period_ebola <- 
+  dist_spec(
+    mean = ebola_incubation$summary_stats$mean,
+    sd = ebola_incubation$summary_stats$sd,
+    max = ebola_incubation_discrete$prob_dist$q(p = 0.999),
+    distribution = "gamma"
+  )
+
+epinow_estimates <- epinow(
+  # cases
+  reported_cases = ebola_confirmed,
+  # delays
+  generation_time = generation_time_opts(serial_interval_ebola),
+  delays = delay_opts(incubation_period_ebola),
+  # computation
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
+)
+
+plot(epinow_estimates)
+
+```
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::: challenge
+
+### Extract parameters
+
+Use the `influenza_england_1978_school` from the `{outbreaks}` package to calculate the effective reproduction number.
+
+::::::::::::::::: hint
+
+How to get the mean and standard deviation from a generation time with median and quantiles as summary statistics?
+
+- Look at how to extract parameters from `{epiparameter}` vignette on [parameter extraction and conversion](https://epiverse-trace.github.io/epiparameter/articles/extract_convert.html)
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
 
 <!-- https://github.com/epiverse-trace/epiparameter/issues/114 -->
-
-
-### formative
 
 ```{r,eval=FALSE}
 # what parameters are are available for influenza?
@@ -979,15 +1086,14 @@ influenza_generation <- epidist_db(disease = "influenza",epi_dist = "generation"
 
 influenza_generation_discrete <- discretise(influenza_generation)
 
+# problem
+# the summary statistics fo not have mean and sd
+influenza_generation$summary_stats
 influenza_generation$summary_stats$median
 influenza_generation$summary_stats$quantiles
 
-# question: is dispersion valid for quantiles?
-# convert_summary_stats_to_params(
-#   distribution = "lnorm", 
-#   median = influenza_generation$summary_stats$median,
-#   quantiles = influenza_generation$summary_stats$quantiles)
-
+# solution
+# extract parameters from percentiles
 influenza_extracted <- extract_param(
   type = "percentiles",
   values = c(influenza_generation$summary_stats$quantiles[1],
@@ -995,6 +1101,8 @@ influenza_extracted <- extract_param(
   distribution = "lnorm",
   percentiles = c(0.05,0.95)
 )
+
+influenza_extracted
 
 generation_time_influenza <- 
   dist_spec(
@@ -1022,106 +1130,111 @@ epinow_estimates <- epinow(
 plot(epinow_estimates)
 ```
 
-### formative
-
-```{r}
-# formative, now with ebola -----------------------------------------------
-
-# read ebola
-
-
+```{r,eval=FALSE,echo=FALSE}
+# question: is dispersion valid for quantiles?
+# convert_summary_stats_to_params(
+#   distribution = "lnorm", 
+#   median = influenza_generation$summary_stats$median,
+#   quantiles = influenza_generation$summary_stats$quantiles)
 ```
 
-However, this still propagates potential biases like
+::::::::::::::::::::::::::
 
-- censoring bias (short periods)
-- reporting bias (recent contacts)
+:::::::::::::::::::::::::::::::::::::::::::
 
-## Add the Reporting delays
+## When to reuse? When to estimate?
 
-Estimating Rt requires data on the daily number of new infections (i.e., transmission events). Due to lags in the development of detectable viral loads, symptom onset, seeking care, and reporting, these numbers are not readily available. All observations reflect transmission events from some time in the past. In other words, if d is the delay from infection to observation, then observations at time t inform Rt−d, not Rt. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)
+In the early stage of an outbreak we can rely on reusing parameters, for known and unknown pathogens, even for the [Disease X](https://en.wikipedia.org/wiki/Disease_X), a pathogen currently unknown to cause human disease and potentially cause a  serious international epidemic ([WHO, 2018](https://www.who.int/activities/prioritizing-diseases-for-research-and-development-in-emergency-contexts)). 
 
-![Rt is a measure of transmission at time t. Observations after time t must be adjusted. ICU, intensive care unit. From  [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)](fig/rt-adjusting-delays.png)
-
-We can opt to adjust `{EpiNow2}` outputs by the [reporting delay](../learners/reference.md#reportingdelay) that condition the report of confirmed cases.
-
-![Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
-
-### any epiparameter?
-
-```{r}
-epidist_db(disease = "all") %>% list_distributions() %>% 
-  as_tibble() %>% 
-  distinct(epi_distribution)
-```
-
-### replace in epinow2
-
-```{r}
-
-```
-
-### epinow2
-
-```{r,message=FALSE,warning=FALSE,cache=TRUE,eval=FALSE}
-reporting_delay <- dist_spec(
-  mean = convert_to_logmean(2, 1), 
-  sd = convert_to_logsd(2, 1),
-  max = 10, distribution = "lognormal"
-)
-
-epinow_estimates <- epinow(
-  # cases
-  reported_cases = example_confirmed[1:60],
-  # delays
-  generation_time = generation_time_opts(generation_time),
-  delays = delay_opts(
-    incubation_period + reporting_delay
-  ),
-  # computation
-  stan = stan_opts(
-    cores = 4, samples = 1000, chains = 3,
-    control = list(adapt_delta = 0.99)
-  )
-)
-```
-
-## Severity parameters
-
-The three examples above represent transmission parameters.
-
-One example of severity parameter is the duration of hospitalization (bed capacity needed)
-
-### explore
-
-```{r}
-epidist_db(disease = "all") %>% list_distributions() %>% 
-  as_tibble() %>% 
-  distinct(epi_distribution)
-```
-
-## From our data! (callout)
+But when data from **lines list paired with contact tracing** is available, we are in the possibility to estimate the key delays distributions that best fit our data. This will help us to inform, compare and update any previous estimate about questions like:
 
 - How to get serial interval from case data? <!-- possibly in a separate episode? -->
 - how long should contacts be followed?
 - what is the required duration of contact tracing?
 - how long should cases be isolated to reduce transmission?
 
-An interesting example is the `method_assess` nested entry, which refers to the methods used to assess for the bias while estimating the serial interval distribution.
+However, the methods to accurately estimate delays like the generation interval from contact tracing data involve adjusting for biases like like **[censoring](../learners/reference.md#censoring)**, **[right truncation](../learners/reference.md#truncation)** and **[epidemic phase bias](../learners/reference.md#phasebias)**. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)
+
+We can identify what entries in the `{epiparameter}` library assessed for these biases in their methodology with the `method_assess` nested entry:
 
 ```{r}
 covid_serialint$method_assess
 ```
 
-Fit a parametric distribution to estimate the mean and sd
+::::::::::::::::: testimonial
 
-estimate serial interval from case and contact data pairs 
+### How to estimating delay distributions for Disease X?
 
-<!-- ref: https://www.reconlearn.org/post/real-time-response-2 -->
+Refer to this excellent tutorial on how to estimate the serial interval and incubation period of Disease X accounting for *censoring* using Bayesian inference with packages like `{rstan}` and `{coarseDataTools}`.
 
-ref: https://epiverse-trace.github.io/epimodelac/EnfermedadX.html
+- Tutuorial in English: <https://rpubs.com/tracelac/diseaseX> <!-- to request -->
+- Tutorial en Español: <https://epiverse-trace.github.io/epimodelac/EnfermedadX.html>
 
-Recall that "Methods for accurate estimation of the generation interval from contact tracing data involve adjusting for right truncation and accounting for population susceptibility at the times transmission pairs are observed" [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)
+:::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: spoiler
+
+### How to assess for pre-symptomatic infection?
+
+The lengths of the Serial interval and Incubation period determine the type of transmission of a disease. 
+
+![The relationship between the incubation period and serial interval. From [Nishiura 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)](fig/incubation-period-serial-interval.jpg)
+
+Estimating the proportion of presymptomatic infections, or the extent to which infectiousness precedes symptom onset will determine the effectiveness of contact tracing and the feasibility of controlling an outbreak ([Fraser et al., 2004](https://www.pnas.org/doi/full/10.1073/pnas.0307506101) and [Hellewell et al., 2020](https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext)).
+
+<!-- The proportion of pre-symptomatic transmission contributes to the effective reproduction number and expected new cases to have. -->
+
+![Parameter estimates. Plausible ranges for the key parameters R0 and θ (read main text for sources) for four viral infections of public concern are shown as shaded regions. The size of the shaded area reflects the uncertainties in the parameter estimates. [Fraser et al., 2004](https://www.pnas.org/doi/10.1073/pnas.0307506101)](fig/reproduction-number-pre-symptomatic.png)
+
+Meta-analysis on the proportion of presymptomatic and asymptomatic transmission in SARS-CoV-2 found limitations of the evidence given high heterogeneity and high risk of selection and information bias between studies ([Buitrago-Garcia et al., 2022](https://journals.plos.org/plosmedicine/article/figure?id=10.1371/journal.pmed.1003987.g003)). This is a call to action to improve the Outbreak Analytic pipelines to use and reuse in the early phase of an outbreak.
+
+:::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::: challenge
+
+### WHAT TYPE OF TRANSMISSION?
+
+Compare the serial interval and incubation period of Influenza and MERS:
+
+- What type of transmission have Influenza?
+- What type of transmission have MERS?
+- Does these results correlates with the available evidence?
+
+::::::::::::::::: hint
+
+Key functions:
+
+- `epidist_db()`
+- `epidist$summary_stats$`
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r}
+# pre-symptomatic transmission
+epidist_db(disease = "influenza",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "influenza",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+
+# symptomatic transmission
+epidist_db(disease = "mers",epi_dist = "incubation",single_epidist = T)$summary_stats$median
+epidist_db(disease = "mers",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+```
+
+```{r,eval=FALSE}
+# pre-symptomatic transmission
+epidist_db(disease = "covid",epi_dist = "incubation",author = "Stephen",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "covid",epi_dist = "serial",author = "Nishiura",single_epidist = T)$summary_stats$mean
+
+# symptomatic transmission
+epidist_db(disease = "ebola",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+```
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::
+
 
 <!--
 ## Concept map
