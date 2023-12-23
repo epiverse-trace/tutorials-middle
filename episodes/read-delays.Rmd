@@ -108,7 +108,7 @@ Additionally, even if the *generation time* and *serial interval* have the same 
 
 ### From time periods to probability distributions.
 
-When we calculate the *serial interval*, we see that not all case pairs have the same time length. We also observe this variability for individual time periods like the [incubation period](../learners/reference.md#incubation) and [infectious period](../learners/reference.md#infectiousness).
+When we calculate the *serial interval*, we see that not all case pairs have the same time length. We will observe this variability for any case pair and individual time period, including the [incubation period](../learners/reference.md#incubation) and [infectious period](../learners/reference.md#infectiousness).
 
 ![Serial intervals of possible case pairs in (a) COVID-19 and (b) MERSCoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/serial-interval-pairs.jpg)
 
@@ -200,7 +200,7 @@ epiparameter::epidist_db(
 )
 ```
 
-Currently, in the library of epidemiological parameters we have one `generation` time entry but for Influenza. We can try to look at the `serial` intervals for `COVID`-19.
+Currently, in the library of epidemiological parameters we have one `generation` time entry but for Influenza. Taking the considerations explained above, we can try to look at the `serial` intervals for `COVID`-19.
 
 ```{r}
 epiparameter::epidist_db(
@@ -255,9 +255,13 @@ epiparameter::epidist_db(
 
 ### How does `single_epidist` works?
 
-Take a look into help documentation for `?epiparameter::epidist_db()`.
+Looking at the help documentation for `?epiparameter::epidist_db()`:
 
-> Note: If multiple entries match the arguments supplied and `single_epidist = TRUE` then the `⁠<epidist`>⁠ that is parameterised and has the largest sample size will be returned (read `?is_parameterised()`). If multiple entries are equal after this sorting the first entry will be returned.
+- If multiple entries match the arguments supplied and `single_epidist = TRUE`,
+- Then the `⁠<epidist>`⁠ that is parameterised and has the largest sample size will be returned.
+- If multiple entries are equal after this sorting the first entry will be returned.
+
+What does a parametrised `<epidist>` is? Look at `?is_parameterised`.
 
 :::::::::::::::::::::::::
 
@@ -350,7 +354,10 @@ Take 1 minute to:
 
 3. Explore all the other nested elements within the `<epidist>` object.
 
-Share what is the most interesting element for you!
+Share about: 
+
+- What elements you find useful for your analysis?
+- What other elements would you like to see in this object? How?
 
 ::::::::: hint
 
@@ -388,7 +395,7 @@ We will explore these concepts at the end!
 
 ## Continuous distributions
 
-The following output has four entries with different content in the probability distribution (`prob_distribution`) column:
+The following output has four entries with different content in the **probability distribution** (`prob_distribution`) column:
 
 ```{r}
 distribution <- 
@@ -401,21 +408,26 @@ distribution %>%
   list_distributions()
 ```
 
-Entries with a missing value (`<NA>`) in the `prob_distribution` column only posses summary statistics associated with it. Run these commands to find the difference:
+Entries with a missing value (`<NA>`) in the `prob_distribution` column are *non-parameterised* entries. They have summary statistics but no probability distribution. Compare these two outputs:
 
 ```{r,eval=FALSE}
 distribution[[1]]$summary_stats
 distribution[[1]]$prob_dist
 ```
 
-As detailed in `?is_parameterised`, a parameterised distribution is the entry that has a probability distribution associated to it provided by an `inference_method` as shown in `metadata`. Run these commands to find the difference:
+::::::::::::::::: spoiler
+
+### Parameterised entries have an Inference method
+
+As detailed in `?is_parameterised`, a parameterised distribution is the entry that has a probability distribution associated to it provided by an `inference_method` as shown in `metadata`:
 
 ```{r,eval=FALSE}
 distribution[[1]]$metadata$inference_method
 distribution[[2]]$metadata$inference_method
-distribution[[3]]$metadata$inference_method
 distribution[[4]]$metadata$inference_method
 ```
+
+:::::::::::::::::::::::::
 
 In the `epiparameter::list_distributions()` output, we can also find different types of probability distributions (e.g., log-normal, weibull, normal).
 
@@ -430,10 +442,14 @@ In `{epiparameter}` you will mostly find **continuous** distributions like these
 - the *Cumulative Distribution Function (CDF)*.
 
 ```{r}
-plot(distribution[[2]], day_range = 0:20)
+plot(distribution[[2]])
 ```
 
-With the `day_range` argument you can change the length or number of days in the `x` axis.
+With the `day_range` argument you can change the length or number of days in the `x` axis. Explore how does it looks like:
+
+```{r,eval=FALSE}
+plot(distribution[[2]], day_range = 0:20)
+```
 
 ::::::::::::::::: discussion
 
@@ -441,34 +457,32 @@ With the `day_range` argument you can change the length or number of days in the
 
 Explore this shinyapp called **The Distribution Zoo**!
 
-Follow these steps to reproduce the `covid_serialint` distribution:
+Follow these steps to reproduce the form of the `covid_serialint` distribution:
 
-- Access to <https://ben18785.shinyapps.io/distribution-zoo/> shinyapp website!
+- Access to <https://ben18785.shinyapps.io/distribution-zoo/> shinyapp website,
 - Go to the left panel,
 - Keep the *Category of distribution*: `Continuous Univariate`,
-- Select a new *Distribution type*: `Log-Normal`,
-- Move the **sliders**, i.e. the graphical control element that allows you to adjust a value by moving a handle along a track or bar, to the `covid_serialint` parameters. 
+- Select a new *Type of distribution*: `Log-Normal`,
+- Move the **sliders**, i.e. the graphical control element that allows you to adjust a value by moving a handle along a horizontal track or bar, to the `covid_serialint` parameters. 
 
-<!--
-A slider, in the context of user interfaces and graphical user interfaces (GUIs), is a graphical control element that allows users to adjust a value by moving a handle along a track or bar. Conceptually, it provides a way to select a numeric value within a specified range by visually sliding or dragging a pointer (the handle) along a continuous axis.
--->
+Replicate these with the `distribution` object and all its list elements: `2`, `3`, and `4`. Explore How does the shape of a distribution change when its parameters change.
 
-Replicate these with the `distribution` object and all its list elements: `2`, `3`, and `4`. Explore:
+Share about:
 
-- How does the shape of a distribution change when its parameters change?
-
-Share what other useful features you find in the website.
+- What other features in the website you find useful?
 
 :::::::::::::::::::::::::
 
+<!-- A slider, in the context of user interfaces and graphical user interfaces (GUIs), is a graphical control element that allows users to adjust a value by moving a handle along a track or bar. Conceptually, it provides a way to select a numeric value within a specified range by visually sliding or dragging a pointer (the handle) along a continuous axis. -->
+
 ## Distribution functions
 
-In R, all the statistical distributions has functions to access to:
+In R, all the statistical distributions has functions to access to the:
 
-- density,
-- cumulative distribution function,
-- quantile function, and
-- random variate generation.
+- Probability **Density** function (PDF),
+- Cumulative Distribution function (**CDF**),
+- **Quantile** function, and
+- **Random** drawn values from the given distribution.
 
 :::::::::::: spoiler
 
@@ -516,9 +530,13 @@ Access to the reference documentation (Help files) for these functions is access
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### 99th percentile of the serial interval?
+### Lenght of contact tracing and the Serial interval
 
-When considering secondary cases, after how many days following the symptom onset of primary cases can we expect 99% of symptom onset to occur?
+The **serial interval** is important in the optimization of contact tracing since it provides a time window for the containment of a disease spread ([Fine, 2003](https://academic.oup.com/aje/article/158/11/1039/162725)).
+
+Calculate:
+
+- When considering secondary cases, after how many days following the symptom onset of primary cases can we expect 99% of symptom onset to occur?
 
 ::::::::::::::::: hint
 
@@ -534,7 +552,7 @@ quantile(covid_serialint, p = 0.99)
 
 The 99% percent of the symptom onset of secondary cases will happen after 14.99 days after the symptom onset of primary cases.
 
-_Does this result make sense or is expected?_
+_Is this result expected in epidemiological terms?_
 
 ::::::::::::::::::::::::::
 
@@ -553,7 +571,8 @@ We can use the set of distribution functions for a _continuous_ distribution (as
 When we `epiparameter::discretise()` the continuous distribution we get a **discrete**(-ized) distribution:
 
 ```{r}
-covid_serialint_discrete <- epiparameter::discretise(covid_serialint)
+covid_serialint_discrete <- 
+  epiparameter::discretise(covid_serialint)
 
 covid_serialint_discrete
 ```
@@ -564,29 +583,32 @@ We identify this change in the `Distribution:` output line of the `<epidist>` ob
 Distribution: discrete lnorm
 ```
 
-For a **continuous** distribution, we plot the *Probability Density Function (PDF)*:
+While for a **continuous** distribution, we plot the *Probability Density Function (PDF)*, for a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
 
 ```{r,eval=FALSE}
+# continuous
 plot(covid_serialint)
-```
 
-For a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
-
-```{r}
+# discrete
 plot(covid_serialint_discrete)
 ```
 
 To finally get a `max` value let's access to the quantile value of the 99.9th percentile or `0.999` probability of the distribution with the `prob_dist$q` notation, similarly to how we access to the `summary_stats` values.
 
 ```{r}
-covid_serialint_discrete_max <- covid_serialint_discrete$prob_dist$q(p = 0.999)
+covid_serialint_discrete_max <- 
+  covid_serialint_discrete$prob_dist$q(p = 0.999)
 ```
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### 99th percentile of the incubation period of COVID-19
+### Lenght of quarentine and Incubation period
 
-Within what time frame do 99% of individuals who develop COVID-19 symptoms exhibit them after infection?
+The **incubation period** distribution is a useful delay to assess for the length of active monitoring or quarantine ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)).
+
+Calculate:
+
+- Within what time frame do 99% of individuals who develop COVID-19 symptoms exhibit them after infection?
 
 ::::::::::::::::: hint
 
@@ -699,11 +721,12 @@ base::plot(epinow_estimates)
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### EBOLA
+### Ebola's effective reproductive number
 
 Download the [Ebola dataset](data/ebola_cases.csv):
 
 - Reuse one epidemiological parameter to estimate the effective reproductive number for the Ebola dataset.
+- Why you choose that parameter?
 
 ```{r,eval=FALSE}
 ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
@@ -711,14 +734,17 @@ ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
 
 ::::::::::::::::: hint
 
-Key functions we applied until now:
+To calculate the Rt we need:
 
-- `epidist_db`
-- `list_distributions`
-- `discretise`
-- probability functions 
+- data set with confirmed cases per day, and
+- one key delay distribution
 
-Review the type of distribution of the parameter you choose.
+Key functions we applied in this episodes are:
+
+- `epidist_db()`
+- `list_distributions()`
+- `discretise()`
+- probability functions for continuous and discrete distributions 
 
 ::::::::::::::::::::::
 
@@ -738,7 +764,11 @@ epidist_db(disease = "ebola") %>%
   list_distributions()
 
 # subset one distribution 
-ebola_serial <- epidist_db(disease = "ebola", epi_dist = "serial", single_epidist = T)
+ebola_serial <- epidist_db(
+  disease = "ebola", 
+  epi_dist = "serial", 
+  single_epidist = T
+)
 
 ebola_serial_discrete <- discretise(ebola_serial)
 
