@@ -237,7 +237,7 @@ Take 5 minutes:
 
 - How many delay distributions are for the incubation period of Ebola?
 
-- Explore the library and find the disease of interest!
+- Explore the library and find the disease with the delay distribution of your interest! Do you recognize the paper?
 
 ::::::::::::::::: hint
 
@@ -348,7 +348,7 @@ The `{epiparameter}` combo of `epidist_db()` plus `list_distributions()` list al
 
 This is a `<multi_epidist>` class object:
 
-```{r}
+```{r,eval=FALSE}
 epiparameter::epidist_db(
   disease = "ebola",
   epi_dist = "incubation"
@@ -369,7 +369,7 @@ epiparameter::epidist_db(
 )
 ```
 
-Now, from the output of `epiparameter::epidist_db()`, What is an [offspring distribution](../learners/reference.md#offspringdist)?
+To access the `sample_size`, review an [issue reported in the GitHub repository](https://github.com/epiverse-trace/epiparameter/issues/227) of the `{epiparameter}` package. 
 
 ::::::::::::::::::::::::::
 
