@@ -751,10 +751,14 @@ serial_interval_ebola <-
     distribution = "gamma"
   )
 
+# name of type of distribution
+# only for the discretised distribution
+ebola_serial_discrete$prob_dist$name
+
 epinow_estimates <- epinow(
   # cases
   reported_cases = ebola_confirmed,
-  # distribution
+  # delays
   generation_time = generation_time_opts(serial_interval_ebola),
   # computation
   stan = stan_opts(
@@ -860,9 +864,8 @@ Use `{epiparameter}` to:
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
-  # generation time
-  generation_time = generation_time_opts(serial_interval_covid),
   # delays
+  generation_time = generation_time_opts(serial_interval_covid),
   delays = delay_opts(incubation_time_covid),
   # computation
   stan = stan_opts(
@@ -898,7 +901,7 @@ incubation_time_covid <- dist_spec(
 epinow_estimates <- epinow(
   # cases
   reported_cases = example_confirmed[1:60],
-  # generation time
+  # delays
   generation_time = generation_time_opts(serial_interval_covid),
   # delays
   delays = delay_opts(incubation_time_covid),
@@ -978,7 +981,7 @@ influenza_cleaned <- outbreaks::influenza_england_1978_school %>%
 epinow_estimates <- epinow(
   # cases
   reported_cases = influenza_cleaned,
-  # distribution
+  # delays
   generation_time = generation_time_opts(generation_time_influenza),
   # computation
   stan = stan_opts(
