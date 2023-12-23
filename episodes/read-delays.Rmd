@@ -227,6 +227,52 @@ epiparameter::epidist_db(
   epiparameter::list_distributions()
 ```
 
+::::::::::::::::::::::::::::::::: challenge
+
+### Ebola's incubation periods
+
+Take 5 minutes:
+
+- How many delay distributions are for the Ebola disease?
+
+- How many delay distributions are for the incubation period of Ebola?
+
+- Explore the library and find the disease of interest!
+
+::::::::::::::::: hint
+
+The `{epiparameter}` combo of `epidist_db()` plus `list_distributions()` list all the entries by:
+
+- disease, 
+- epidemiological distribution, 
+- the type of the probability distribution, 
+- author of the study, and 
+- year of study.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r,eval=FALSE}
+# 16 delays distributions
+epiparameter::epidist_db(
+  disease = "ebola"
+)
+
+# 5 delay distributions are for the incubation period
+epiparameter::epidist_db(
+  disease = "ebola",
+  epi_dist = "incubation"
+)
+```
+
+Now, from the output of `epiparameter::epidist_db()`, What is an [offspring distribution](../learners/reference.md#offspringdist)?
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+
 ## Select a single distribution
 
 The `epiparameter::epidist_db()` function works as a filtering or subset function. Let's use the `author` argument to filter `Hiroshi Nishiura` parameters:
@@ -285,13 +331,10 @@ covid_serialint
 
 ### Ebola's incubation period
 
-Take 5 minutes:
-
-- How many delay distributions are for the Ebola disease?
-
-- How many delay distributions are for the incubation period of Ebola?
+Take 2 minutes:
 
 - What type of distribution has the incubation period of Ebola with the highest sample size?
+- How would you access to the sample size of the other studies in the `<multi_epidist>` class object?
 
 ::::::::::::::::: hint
 
@@ -303,22 +346,21 @@ The `{epiparameter}` combo of `epidist_db()` plus `list_distributions()` list al
 - author of the study, and 
 - year of study.
 
+This is a `<multi_epidist>` class object:
+
+```{r}
+epiparameter::epidist_db(
+  disease = "ebola",
+  epi_dist = "incubation"
+)
+```
+
+
 ::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
 ```{r,eval=FALSE}
-# 16 delays distributions
-epiparameter::epidist_db(
-  disease = "ebola"
-)
-
-# 5 delay distributions are for the incubation period
-epiparameter::epidist_db(
-  disease = "ebola",
-  epi_dist = "incubation"
-)
-
 # the distribution with the highest sample size has a gamma distribution
 epiparameter::epidist_db(
   disease = "ebola",
@@ -1209,6 +1251,8 @@ Compare the serial interval and incubation period of Influenza and MERS:
 - Do these results correlate with the available evidence?
 
 ::::::::::::::::: hint
+
+For types of transmission, we refer to infections with symptomatic or pre-symptomatic transmission.
 
 Key functions:
 
