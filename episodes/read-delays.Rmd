@@ -296,6 +296,7 @@ Take 5 minutes:
 ::::::::::::::::: hint
 
 The `{epiparameter}` combo of `epidist_db()` plus `list_distributions()` list all the entries by:
+
 - disease, 
 - epidemiological distribution, 
 - the type of the probability distribution, 
@@ -306,7 +307,7 @@ The `{epiparameter}` combo of `epidist_db()` plus `list_distributions()` list al
 
 ::::::::::::::::: solution
 
-```{r}
+```{r,eval=FALSE}
 # 16 delays distributions
 epiparameter::epidist_db(
   disease = "ebola"
@@ -372,13 +373,19 @@ Use the `str()` to display the structure of the `<epidist>` R object.
 
 :::::::::: solution
 
-```{r}
+```{r,eval=FALSE}
 # get the sd 
 covid_serialint$summary_stats$sd
 
 # get the sample_size
 covid_serialint$metadata$sample_size
 ```
+
+::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::: intructor
 
 An interesting element is the `method_assess` nested entry, which refers to the methods used by the study authors to assess for bias while estimating the serial interval distribution.
 
@@ -388,9 +395,51 @@ covid_serialint$method_assess
 
 We will explore these concepts at the end!
 
-::::::::::::::::::::
+::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::: challenge
+
+### Ebola's severity parameter
+
+A severity parameter like the duration of hospitalization could add to the information needed about the bed capacity in response to an outbreak ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+
+For Ebola: 
+
+- what is a reported point estimate and uncertainty of the mean duration of health-care and case isolation?
+
+::::::::::::::::: hint
+
+An informative delay measures the time from symptom onset to recovery or death.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r,eval=FALSE}
+# one way to get the list of all the available parameters
+epidist_db(disease = "all") %>% 
+  list_distributions() %>% 
+  as_tibble() %>% 
+  distinct(epi_distribution)
+
+ebola_severity <- epidist_db(
+  disease = "ebola",
+  epi_dist = "onset to discharge"
+)
+
+# point estimate
+ebola_severity$summary_stats$mean
+# 95% confidence intervals
+ebola_severity$summary_stats$mean_ci
+# limits of the confidence intervals
+ebola_severity$summary_stats$mean_ci_limits
+```
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::
+
 
 ## Continuous distributions
 
@@ -428,7 +477,7 @@ distribution[[4]]$metadata$inference_method
 
 :::::::::::::::::::::::::
 
-In the `epiparameter::list_distributions()` output, we can also find different types of probability distributions (e.g., log-normal, Weibull, normal).
+In the `epiparameter::list_distributions()` output, we can also find different types of probability distributions (e.g., Log-normal, Weibull, Normal).
 
 ```{r}
 distribution %>% 
@@ -458,11 +507,11 @@ Explore this shinyapp called **The Distribution Zoo**!
 
 Follow these steps to reproduce the form of the `covid_serialint` distribution:
 
-- Access to <https://ben18785.shinyapps.io/distribution-zoo/> shinyapp website,
-- Go to the left panel,
-- Keep the *Category of distribution*: `Continuous Univariate`,
-- Select a new *Type of distribution*: `Log-Normal`,
-- Move the **sliders**, i.e. the graphical control element that allows you to adjust a value by moving a handle along a horizontal track or bar to the `covid_serialint` parameters. 
+1. Access to <https://ben18785.shinyapps.io/distribution-zoo/> shinyapp website,
+2. Go to the left panel,
+3. Keep the *Category of distribution*: `Continuous Univariate`,
+4. Select a new *Type of distribution*: `Log-Normal`,
+5. Move the **sliders**, i.e. the graphical control element that allows you to adjust a value by moving a handle along a horizontal track or bar to the `covid_serialint` parameters. 
 
 Replicate these with the `distribution` object and all its list elements: `2`, `3`, and `4`. Explore how the shape of a distribution changes when its parameters change.
 
@@ -545,8 +594,11 @@ In Figure 5 from the [R probability functions for the normal distribution](https
 
 ::::::::::::::::: solution
 
-```{r}
+```{r,eval=FALSE}
 plot(covid_serialint)
+```
+
+```{r,eval=FALSE}
 cdf(covid_serialint,q = 2)
 cdf(covid_serialint,q = 6)
 ```
@@ -567,7 +619,7 @@ If we exchange the question between days and cumulative probability to:
 
 - When considering secondary cases, how many days following the symptom onset of primary cases can we expect 55% of symptom onset to occur?
 
-```{r}
+```{r,eval=FALSE}
 quantile(covid_serialint, p = 0.55)
 ```
 
@@ -583,7 +635,7 @@ An interpretation could be:
 
 ## Discretize a continuous distribution
 
-We are almost halfway! `EpiNow2::dist_spec()` still needs a maximum value (`max`). 
+We are getting closer to the end! `EpiNow2::dist_spec()` still needs a maximum value (`max`). 
 
 One way to do this is to get the quantile value for the distribution's 99.9th percentile or `0.999` cumulative probability. For this, we need access to the set of distribution functions for our `<epidist>` object.
 
@@ -676,7 +728,7 @@ tibble(
 
 ::::::::::::::::: solution
 
-```{r}
+```{r,eval=FALSE}
 covid_incubation <- 
   epiparameter::epidist_db(
     disease = "covid",
@@ -692,49 +744,6 @@ covid_incubation_discrete$prob_dist$q(0.99)
 99% of those who develop COVID-19 symptoms will do so within 16 days of infection.
 
 _Is this result expected in epidemiological terms?_
-
-::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::::::
-
-
-::::::::::::::::::::::::::::::::: challenge
-
-### Ebola's severity parameter
-
-A severity parameter like the duration of hospitalization could add to the information needed about the bed capacity in response to an outbreak ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
-
-For Ebola: 
-
-- what is a reported point estimate and uncertainty of the mean duration of health-care and case isolation?
-
-::::::::::::::::: hint
-
-An informative delay measures the time from symptom onset to recovery or death.
-
-::::::::::::::::::::::
-
-::::::::::::::::: solution
-
-```{r}
-# one way to get the list of all the available parameters
-epidist_db(disease = "all") %>% 
-  list_distributions() %>% 
-  as_tibble() %>% 
-  distinct(epi_distribution)
-
-ebola_severity <- epidist_db(
-  disease = "ebola",
-  epi_dist = "onset to discharge"
-)
-
-# point estimate
-ebola_severity$summary_stats$mean
-# 95% confidence intervals
-ebola_severity$summary_stats$mean_ci
-# limits of the confidence intervals
-ebola_severity$summary_stats$mean_ci_limits
-```
 
 ::::::::::::::::::::::::::
 
@@ -814,7 +823,7 @@ Key functions we applied in this episode are:
 
 ::::::::::::::::: solution
 
-```{r,eval=FALSE}
+```{r,eval=FALSE,echo=FALSE}
 # read data from the tutorial repository R project
 ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
 ```
@@ -875,9 +884,9 @@ Estimating $R_t$ requires data on the daily number of new infections. Due to lag
 
 ![Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
 
-The delay distribution could be inferred jointly with the underlying times of infection or estimated as the sum of the [incubation period](../learners/reference.md#incubation) distribution and the distribution of delays from symptom onset to observation from line list data ([reporting delay](../learners/reference.md#reportingdelay)).
+The **delay distribution** could be inferred jointly with the underlying times of infection or estimated as the sum of the **[incubation period](../learners/reference.md#incubation)** distribution and the distribution of delays from symptom onset to observation from line list data **([reporting delay](../learners/reference.md#reportingdelay))**.
 
-For `{EpiNow2}`, we can specify these complementary delay distributions in the `delays` argument.
+For `{EpiNow2}`, we can specify these two complementary delay distributions in the `delays` argument.
 
 ![Rt is a measure of transmission at time t. Observations after time t must be adjusted. ICU, intensive care unit. From  [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)](fig/rt-adjusting-delays.png)
 
@@ -988,7 +997,7 @@ We can use two complementary delay distributions to estimate the $R_t$ at time $
 
 ::::::::::::::::: solution
 
-```{r,eval=FALSE}
+```{r,eval=FALSE,echo=FALSE}
 # read data from the tutorial repository R project
 ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
 ```
@@ -1144,7 +1153,7 @@ plot(epinow_estimates)
 
 ## When to reuse? When to estimate?
 
-In the early stage of an outbreak, we can rely on reusing parameters for known and unknown pathogens, even for the [Disease X](https://en.wikipedia.org/wiki/Disease_X), a pathogen currently unknown to cause human disease and potentially cause a  serious international epidemic ([WHO, 2018](https://www.who.int/activities/prioritizing-diseases-for-research-and-development-in-emergency-contexts)). 
+In the early stage of an outbreak, we can rely on reusing parameters for known pathogens to unknown ones, like for the [Disease X](https://en.wikipedia.org/wiki/Disease_X), a pathogen currently unknown to cause human disease and potentially cause a  serious international epidemic ([WHO, 2018](https://www.who.int/activities/prioritizing-diseases-for-research-and-development-in-emergency-contexts)). 
 
 But when data from **lines list paired with contact tracing** is available, we can estimate the key delay distributions that best fit our data. These will help us to inform, compare and update any previous estimate about questions like:
 
@@ -1210,7 +1219,7 @@ Key functions:
 
 ::::::::::::::::: solution
 
-```{r}
+```{r,eval=FALSE}
 # pre-symptomatic transmission
 epidist_db(disease = "influenza",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
 epidist_db(disease = "influenza",epi_dist = "serial",single_epidist = T)$summary_stats$mean
