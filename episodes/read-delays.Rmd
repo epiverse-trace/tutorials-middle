@@ -1192,7 +1192,7 @@ Meta-analysis on the proportion of presymptomatic and asymptomatic transmission 
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### WHAT TYPE OF TRANSMISSION?
+### What type of transmission?
 
 Compare the serial interval and incubation period of Influenza and MERS:
 
