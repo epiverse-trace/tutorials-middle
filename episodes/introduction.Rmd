@@ -136,7 +136,7 @@ Usually, we receive outbreak data in non-standard formats, requiring specific st
 
 - Read delay distributions from the literature
 - Read and clean case data
-- Validate your linelist
+- Validate your line list
 - Describe case data
 
 And this is not the end. After _quantifying transmissibility_ we need to answer more key public health questions like: What is the attack rate we expect? What would be the impact of a given intervention? We can use the reproduction number and other outputs as new inputs for complementary tasks. For example:
@@ -162,7 +162,7 @@ Epiverse-TRACE's aim is to provide a software ecosystem for outbreak analytics. 
 # eval = TRUE
 # turn on if maintainers manage to 
 # adapt css from main page to varnish
-pkg_list <- c("readepi","cleanepi","linelist","epiparameter","episoap")
+# pkg_list <- c("readepi","cleanepi","linelist","epiparameter","episoap")
 
 # from https://github.com/epiverse-trace/epiverse-trace.github.io/blob/main/index.qmd
 
