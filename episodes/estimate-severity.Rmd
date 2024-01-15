@@ -1,0 +1,131 @@
+---
+title: 'estimate-severity'
+teaching: 10
+exercises: 2
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How to estimate severity from linelist data?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Explain ...
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Introduction
+
+This is a lesson 
+
+```{r}
+# draft summative
+
+library(simulist)
+library(epiparameter)
+library(incidence2)
+library(cfr)
+library(tidyverse)
+
+# comments ----------------------------------------------------------------
+
+#' ideas
+#' - add "create epidist from scratch" as an assessment in read delays chapter
+#' - add "use get_parameters()" as assessment in read delays
+
+# estimate severity -------------------------------------------------------
+
+# james reprex ------------------------------------------------------------
+
+## reuse epi distributions -------------------------------------------------
+
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial") %>% 
+  epiparameter::list_distributions()
+
+# create a distribution from scratch
+
+serial_interval <- epiparameter::epidist(
+  disease = "covid",
+  epi_dist = "serial",
+  prob_distribution = "gamma",
+  prob_distribution_params = c(shape = 1, scale = 1)
+)
+
+serial_interval
+
+# reuse from systematic review
+
+onset_to_hosp <- epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "onset to hospitalisation",
+  single_epidist = TRUE
+)
+
+onset_to_hosp
+
+onset_to_death <- epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "onset to death",
+  single_epidist = TRUE
+)
+
+
+## simulate a linelist -----------------------------------------------------
+
+linelist <- sim_linelist(
+  R = 1.1,
+  serial_interval = serial_interval,
+  onset_to_hosp = onset_to_hosp,
+  onset_to_death = onset_to_death,
+  hosp_risk = 0.5,
+  add_ct = FALSE,
+  add_names = FALSE
+)
+
+linelist %>% 
+  glimpse()
+
+
+## convert to incidence2 class object --------------------------------------
+
+incidence_data <- incidence2::incidence(
+  x = linelist,
+  date_index = c("date_onset","date_death"),
+  date_names_to = "date"
+)
+
+incidence_data
+
+
+## prepare incidence2 for cfr estimation -----------------------------------
+
+cfr_data <- cfr::prepare_data(
+  data = incidence_data,
+  cases_variable = "date_onset",
+  deaths_variable = "date_death",
+  fill_NA = TRUE
+)
+
+#' Error in (function (df, colname)  : 
+#' `NA`s present in the 'cases' count. Set `fill_NA = TRUE` to use 0s
+
+cfr_data
+
+## estimate cfr ------------------------------------------------------------
+
+cfr::estimate_static(data = cfr_data)
+
+
+```
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Use `{cfr}` to estimate severity
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
