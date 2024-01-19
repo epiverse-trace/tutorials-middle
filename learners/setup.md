@@ -104,10 +104,6 @@ new_packages <- c(
 pak::pak(new_packages)
 ```
 
-Alternatively, you can install the packages using RStudio's graphical user interface by going to `Tools > Install Packages` and typing the names of the packages separated by a comma.
-
-R tries to download and install the packages on your machine. 
-
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
 
 ```r
@@ -118,7 +114,7 @@ library(epidemics)
 library(tidyverse)
 ```
 
-If you do NOT see an error like `there is no package called ‘...’` you are good to go! 
+If you do NOT see an error like `there is no package called ‘...’` you are good to go! If you do, [contact us](#your-questions)!
 
 ### Updating R packages
 
