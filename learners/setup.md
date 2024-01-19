@@ -92,4 +92,4 @@ The data files for the lesson can be downloaded manually here:
 
 ## Your Questions
 
-If you need any assistance installing the software or have any other questions about the workshop, please send an email to <andree.valle-campos@lshtm.ac.uk>
+If you need any assistance installing the software or have any other questions about this tutorial, please send an email to <andree.valle-campos@lshtm.ac.uk>
