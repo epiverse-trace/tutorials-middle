@@ -21,6 +21,27 @@ exercises: 2
 This is a lesson 
 
 ```{r}
+# collect case-studies!
+
+# https://github.com/CarmenTamayo/Applications-Epiverse-pipelines
+
+# https://github.com/epiverse-trace/episoap/blob/severity-pipeline/inst/rmarkdown/templates/severity/skeleton/skeleton.Rmd
+```
+
+```{r}
+# collect relevant issues
+
+# https://github.com/epiverse-trace/cfr/issues/79
+```
+
+```{r}
+# collect from epicatador and feedback form
+
+# https://github.com/avallecam/epicatador/blob/main/18-cfr.R
+```
+
+
+```{r}
 # draft summative
 
 library(simulist)
