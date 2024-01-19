@@ -66,6 +66,8 @@ new_packages <- c(
 pak::pak(new_packages)
 ```
 
+You should update **all of the packages** required for the lesson, even if you installed them relatively recently. New versions bring improvements and important bugfixes.
+
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
 
 ```r
@@ -77,14 +79,6 @@ library(tidyverse)
 ```
 
 If you do NOT see an error like `there is no package called ‘...’` you are good to go! If you do, [contact us](#your-questions)!
-
-### Updating R packages
-
-Generally, it is recommended to keep your R version and all packages up to date, because new versions bring improvements and important bugfixes. To update the packages that you have installed, click `Update` in the `Packages` tab in the bottom right panel of RStudio, or go to `Tools > Check for Package Updates...` 
-
-You should update **all of the packages** required for the lesson, even if you installed them relatively recently.
-
-Sometimes, package updates introduce changes that break your old code, which can be very frustrating. To avoid this problem, you can use a package called `renv`. It locks the package versions you have used for a given [Rstudio project](https://docs.posit.co/ide/user/ide/guide/code/projects.html) and makes it straightforward to reinstall those exact package version in a new environment, for example after updating your R version or on another computer. However, the details are outside of the scope of this lesson.
 
 ## Data sets
 
