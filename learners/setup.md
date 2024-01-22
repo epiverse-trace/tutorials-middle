@@ -15,7 +15,7 @@ Setup instructions live in this document. Please specify the tools and the data 
 R and RStudio are two separate pieces of software: 
 
 * **R** is a programming language and software used to run code written in R.
-* **RStudio** is an integrated development environment (IDE) that makes using R easier. In this course we use RStudio to interact with R. 
+* **RStudio** is an integrated development environment (IDE) that makes using R easier. In this tutorial, we use RStudio to interact with R. 
 
 If you don't already have `R` and `RStudio` installed, follow the instructions for your operating system at <https://posit.co/download/rstudio-desktop/>.
 
@@ -48,7 +48,7 @@ While this may sound scary, it is **far more common** to run into issues due to 
 
 ### Install required R packages
 
-During the course we will need a number of R packages. Packages contain useful R code written by other people. We will use packages from the [Epiverse-TRACE](https://epiverse-trace.github.io/). 
+During the tutorial, we will need a number of R packages. Packages contain useful R code written by other people. We will use packages from the [Epiverse-TRACE](https://epiverse-trace.github.io/). 
 
 To try to install these packages, open RStudio and copy and paste the following code chunk into the [console window](https://docs.posit.co/ide/user/ide/guide/code/console.html), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command.
 
