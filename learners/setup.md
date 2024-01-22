@@ -31,7 +31,7 @@ If you already have R and RStudio installed, first check if your R version is up
 
 * When you open RStudio your R version will be printed in the console on the [console window](https://docs.posit.co/ide/user/ide/guide/code/console.html). Alternatively, you can type `sessionInfo()` into the console. 
 
-* If your R version is 4.0.0 or later, you don't need to update R for this lesson. If your version of R is older than that, download and install the latest version of R from the [R project website](https://cran.rstudio.com/) for your operating system. 
+* If your R version is 4.0.0 or later, you don't need to update R for this tutorial. If your version of R is older than that, download and install the latest version of R from the [R project website](https://cran.rstudio.com/) for your operating system. 
 
 * After installing a new version of R, you will have to reinstall all your packages with the new version. For Windows, there is a package called `installr` that can help you with upgrading your R version and migrate your package library. 
 
@@ -66,7 +66,7 @@ new_packages <- c(
 pak::pak(new_packages)
 ```
 
-You should update **all of the packages** required for the lesson, even if you installed them relatively recently. New versions bring improvements and important bugfixes.
+You should update **all of the packages** required for the tutorial, even if you installed them relatively recently. New versions bring improvements and important bugfixes.
 
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
 
@@ -84,9 +84,9 @@ If you do NOT see an error like `there is no package called ‘...’` you are g
 
 ### Download the data
 
-We will download the data directly from R during the lessons. However, if you are expecting problems with the network, it may be better to download the data beforehand and store it on your machine.
+We will download the data directly from R during the tutorial. However, if you are expecting problems with the network, it may be better to download the data beforehand and store it on your machine.
 
-The data files for the lesson can be downloaded manually here: 
+The data files for the tutorial can be downloaded manually here: 
 
 - <https://epiverse-trace.github.io/tutorials/data/ebola_cases.csv>
 
