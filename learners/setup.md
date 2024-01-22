@@ -19,12 +19,6 @@ R and RStudio are two separate pieces of software:
 
 If you don't already have `R` and `RStudio` installed, follow the instructions for your operating system at <https://posit.co/download/rstudio-desktop/>.
 
-:::::::::::::::::::::::::::::: instructor
-
-* For Mac: It is also a good idea to install [XQuartz](https://www.xquartz.org/) (needed by some packages)
-
-:::::::::::::::::::::::::::::::::::::::::
-
 ### Update R and RStudio
 
 If you already have R and RStudio installed, first check if your R version is up to date:
