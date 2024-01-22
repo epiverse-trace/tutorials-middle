@@ -29,11 +29,11 @@ If you already have R and RStudio installed, first check if your R version is up
 
 * If your version of R is older than the one required, download and install the latest version of R from the [R project website](https://cran.rstudio.com/) for your operating system. 
 
-* After installing a new version of R, you will have to reinstall all your packages with the new version. For Windows, there is a package called `installr` that can help you with upgrading your R version and migrate your package library. 
+* After installing a new version of R, you will have to reinstall all your packages with the new version. For Windows, there is a package called `installr` that can help you with upgrading your R version and migrating your package library. 
 
 * To update RStudio to the latest version, open RStudio and click on 
 `Help > Check for Updates`. If a new version is available follow the 
-instruction on screen. By default, RStudio will also automatically notify you 
+instructions on the screen. By default, RStudio will also automatically notify you 
 of new versions every once in a while.
 
 ::::::::::::::::::::::::::::: callout
@@ -62,7 +62,7 @@ new_packages <- c(
 pak::pak(new_packages)
 ```
 
-You should update **all of the packages** required for the tutorial, even if you installed them relatively recently. New versions bring improvements and important bugfixes.
+You should update **all of the packages** required for the tutorial, even if you installed them relatively recently. New versions bring improvements and important bug fixes.
 
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
 
