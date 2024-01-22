@@ -21,11 +21,13 @@ If you don't already have `R` and `RStudio` installed, follow the instructions f
 
 ### Update R and RStudio
 
+This tutorial requires R version 4.0.0 or later. 
+
 If you already have R and RStudio installed, first check if your R version is up to date:
 
 * When you open RStudio your R version will be printed in the console on the [console window](https://docs.posit.co/ide/user/ide/guide/code/console.html). Alternatively, you can type `sessionInfo()` into the console. 
 
-* If your R version is 4.0.0 or later, you don't need to update R for this tutorial. If your version of R is older than that, download and install the latest version of R from the [R project website](https://cran.rstudio.com/) for your operating system. 
+* If your version of R is older than that, download and install the latest version of R from the [R project website](https://cran.rstudio.com/) for your operating system. 
 
 * After installing a new version of R, you will have to reinstall all your packages with the new version. For Windows, there is a package called `installr` that can help you with upgrading your R version and migrate your package library. 
 
