@@ -988,7 +988,6 @@ epinow_estimates <- epinow(
   reported_cases = example_confirmed[1:60],
   # delays
   generation_time = generation_time_opts(serial_interval_covid),
-  # delays
   delays = delay_opts(incubation_time_covid),
   # computation
   stan = stan_opts(
