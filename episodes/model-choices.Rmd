@@ -282,7 +282,7 @@ You have been tasked to generate initial trajectories of an Ebola outbreak in Gu
 
 ::::::::::::::::: hint
 
-### Code for initial conidtions 
+### Code for initial conditions 
 
 ```{r}
 # set population size
