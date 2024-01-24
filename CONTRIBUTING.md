@@ -136,6 +136,7 @@ install.packages(c("sandpaper", "varnish", "pegboard", "tinkr"),
 - [Clone](https://happygitwithr.com/new-github-first.html#new-rstudio-project-via-git) the repository or [Pull](https://www.epirhandbook.com/en/version-control-and-collaboration-with-git-and-github.html?q=github#in-rstudio-1) to update the branch to review on Rstudio.
 - [Checkout](https://happygitwithr.com/git-branches#switching-branches) or [Switch](https://rstudio.github.io/cheatsheets/html/rstudio-ide.html#version-control) to the branch to review.
 - Use [`sandpaper::manage_deps()`](https://carpentries.github.io/sandpaper/reference/dependency_management.html) to align the packages in your cache with the ones in the `renv.lock` file (defined by the Developer).
+   - You may need to manually install certain packages used in the lesson - please check the output in case [`sandpaper::manage_deps()`](https://carpentries.github.io/sandpaper/reference/dependency_management.html) fails. This can be resolved on a trial and error basis.
 - Render lesson with [`sandpaper::build_lesson()`](https://carpentries.github.io/sandpaper/reference/build_lesson.html). This will open an HTML tab in your browser to review. This HTML format is how the website is going to look like online.
 - Make any edit suggestion to the `.Rmd` files inside the `episodes/` folder of the branch under review. For big changes, [create an issue][issues] first.
 
