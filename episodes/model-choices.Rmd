@@ -5,6 +5,12 @@ exercises: 20 # exercise time in minutes
 
 ---
 
+```{r setup, echo = FALSE, message = FALSE, warning = FALSE}
+library(epidemics)
+library(dplyr)
+library(ggplot2)
+```
+
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How do I choose a mathematical model that's appropriate to complete my analytical task?
@@ -372,7 +378,7 @@ output_samples <- Map(
   }
 )
 
-output_samples <- bind_rows(output_samples) # requires the tidyverse package
+output_samples <- bind_rows(output_samples) # requires the dplyr package
 
 ggplot(
   output_samples[output_samples$compartment == "infectious", ],
