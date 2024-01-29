@@ -2,6 +2,8 @@
 title: 'Create a short-term forecast'
 teaching: 30
 exercises: 30
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
@@ -276,7 +278,7 @@ As the data consists of date of symptom onset, we only need to specify a delay d
 
 We specify the distributions with some uncertainty around the mean and standard deviation of the log normal distribution for the incubation period and the Gamma distribution for the generation time.
 
-```{r}
+```{r,eval=FALSE}
 ebola_incubation_period <- dist_spec(
   mean = 2.487, sd = 0.330,
   mean_sd = 0.5, sd_sd = 0.5,
@@ -292,7 +294,7 @@ ebola_generation_time <- dist_spec(
 
 As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 
 
-```{r, message = FALSE}
+```{r,eval=FALSE, message = FALSE}
 # format date column
 ebola_cases$date <- as.Date(ebola_cases$date)
 
@@ -300,7 +302,13 @@ ebola_estimates <- epinow(
   reported_cases = ebola_cases[1:120, ], # first 3 months of data only
   generation_time = generation_time_opts(ebola_generation_time),
   delays = delay_opts(ebola_incubation_period),
-  horizon = 14 # horizon needs to be 14 days to create two week forecast (default is 7 days)
+  horizon = 14, # horizon needs to be 14 days to create two week forecast (default is 7 days)
+  # computation
+  # complementary parameters
+  stan = stan_opts(
+    cores = 4, samples = 1000, chains = 3,
+    control = list(adapt_delta = 0.99)
+  )
 )
 
 summary(ebola_estimates)
@@ -309,7 +317,7 @@ summary(ebola_estimates)
 The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(ebola_estimates)$estimate[summary(ebola_estimates)$measure=="Effective reproduction no."]`. The exponential growth rate of case numbers is `r summary(ebola_estimates)$estimate[summary(ebola_estimates)$measure=="Rate of growth"]`.
 
 
-```{r}
+```{r,eval=FALSE}
 plot(ebola_estimates)
 ```
 
