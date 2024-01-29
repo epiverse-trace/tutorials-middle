@@ -8,7 +8,7 @@ exercises: 30
 require(EpiNow2)
 require(ggplot2)
 options(mc.cores = 4)
-ebola_cases <- read.csv("~/GitHub/tutorials/learners/data/ebola_cases.csv")
+ebola_cases <- read.csv("episodes/data/ebola_cases.csv")
 ```
 
 
@@ -239,7 +239,7 @@ It is also possible to forecast deaths using forecast cases, here you would spec
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-Download the file [ebola_cases.csv](../data/ebola_cases.csv) and read it into R. The simulated data consists of the date of symptom onset and number of confirmed cases of the early stages of the Ebola outbreak in Sierra Leone in 2014.
+Download the file [ebola_cases.csv](data/ebola_cases.csv) and read it into R. The simulated data consists of the date of symptom onset and number of confirmed cases of the early stages of the Ebola outbreak in Sierra Leone in 2014.
 
 Using the first 3 months (120 days) of data:
 
