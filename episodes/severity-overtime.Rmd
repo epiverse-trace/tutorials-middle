@@ -1,0 +1,218 @@
+---
+title: 'severity-overtime'
+teaching: 10
+exercises: 2
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How to?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Estimate time-varying CFR
+- Differenciate rolling vs time-varying
+- with `{incidence2}`
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Introduction
+
+- CFR in time is intervention-sensitive
+
+- time-varying, depending to interventions or new strains (evaluate if in separate episode?)
+
+## Time-varying CFR
+
+```{r}
+# Load package
+library(cfr)
+library(tidyverse)
+
+# get data pre-loaded with the package
+data("covid_data")
+df_covid_uk <- covid_data[covid_data$country == "United Kingdom", ]
+
+```
+
+```{r}
+# estimate time varying severity while correcting for delays
+time_varying_cfr <- cfr_time_varying(
+  data = df_covid_uk,
+  delay_density = function(x) dlnorm(x, meanlog = 2.577, sdlog = 0.440),
+  burn_in = 7L,
+  smoothing_window = 111
+)
+```
+
+
+```{r}
+time_varying_cfr %>% 
+  mutate(method = "time_varying") %>% 
+  ggplot() +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low, ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_mean, color = method)
+  )
+```
+
+- what do you need?
+
+### burn in
+
+```{r}
+head(df_covid_uk,10)
+head(time_varying_cfr,10)
+# head(covid_rolling,10)
+```
+
+
+### soothing window window
+
+```{r}
+
+tail(df_covid_uk,10)
+tail(time_varying_cfr,10)
+# tail(covid_rolling,10)
+```
+
+## The method
+
+nishiura 2009?
+
+`.convolve_cases_pmfs()`
+
+https://github.com/epiverse-trace/cfr/blob/HEAD/R/cfr_time_varying.R#L174
+
+https://github.com/epiverse-trace/cfr/blob/main/R/estimate_outcomes.R#L16
+
+what is a convolution?
+
+### assessment: do a rolling and compare, why so different?
+
+```{r}
+covid_rolling <- cfr_rolling(
+  data = df_covid_uk,
+  delay_density = function(x) dlnorm(x, meanlog = 2.577, sdlog = 0.440)
+)
+
+time_varying_cfr %>% 
+  mutate(method = "time_varying") %>% 
+  bind_rows(
+    covid_rolling %>% 
+      mutate(method = "rolling")
+  ) %>% 
+  ggplot() +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low, ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_mean, color = method)
+  )
+```
+
+
+
+## Time-varying issues
+
+```{r}
+# Load package
+library(cfr)
+library(tidyverse)
+
+# Load the Ebola 1976 data provided with the package
+data("ebola1976")
+
+# Calculate the rolling daily CFR while correcting for delays
+rolling_cfr_corrected <- cfr_rolling(
+  data = ebola1976,
+  delay_density = function(x) dgamma(x, shape = 2.40, scale = 3.33)
+)
+
+# Calculate the time varying daily CFR while correcting for delays
+time_varying_cfr_corrected <- cfr_time_varying(
+  data = ebola1976,
+  delay_density = function(x) dgamma(x, shape = 2.40, scale = 3.33)
+)
+
+# combine the data for plotting
+rolling_cfr_corrected$method <- "rolling"
+time_varying_cfr_corrected$method <- "time_varying"
+
+data_cfr <- rbind(
+  rolling_cfr_corrected,
+  time_varying_cfr_corrected
+)
+
+# visualise both corrected and uncorrected rolling estimates
+ggplot(data_cfr) +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low, ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_mean, colour = method)
+  )
+
+```
+
+
+length of outbreak
+
+because, the algorithm
+- cuts the start for burn-in and
+- cuts the end given the window
+
+
+size of outbreak
+
+because,
+- deaths < estimated deaths, and
+- 0 < estimated deaths
+if not, then NA
+
+95% CI for low and high intervals
+
+### rolling vs time-varying
+
+- rolling is a cumulative sum, where the final value equals the static cfr
+- time-varying is a moving window, that
+  - cuts the start for burn-in and
+  - cuts some of the end given the window
+
+time-varying is size and length sensitive
+
+## When to apply it?
+
+when to apply depending on any special population at risk
+
+<https://github.com/epiverse-trace/cfr/issues/116>
+
+### Look our case studies
+
+[malgburg](https://github.com/CarmenTamayo/Applications-Epiverse-pipelines/blob/ctc-edits/Severity_pipeline_simulated_data.Rmd) using {cfr} and others
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Use 
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
