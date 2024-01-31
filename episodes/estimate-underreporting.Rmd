@@ -54,6 +54,12 @@ cfr = confirmed deaths / confirmed infections
 
 The `cfr` package also provides a function to calculate  proportion of cases that have been ascertained  via `estimate_ascertainment()` function.
 
+```{r,message=FALSE,warning=FALSE}
+# Load package ----------------------------------------------
+library(cfr)
+library(tidyverse)
+```
+
 ```{r}
 # get data pre-loaded with the package
 data("covid_data")
