@@ -10,7 +10,6 @@ editor_options:
 require(EpiNow2)
 require(ggplot2)
 options(mc.cores = 4)
-ebola_cases <- read.csv("episodes/data/ebola_cases.csv")
 ```
 
 
@@ -294,7 +293,16 @@ ebola_generation_time <- dist_spec(
 
 As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 
 
+```{r, eval=FALSE,echo=FALSE}
+# read data from the tutorial repository R project
+ebola_cases <- read.csv("episodes/data/ebola_cases.csv")
+```
+
 ```{r,eval=FALSE,echo=TRUE, message = FALSE}
+# read data
+# assuming it is located in the folder path: data/raw-data/
+ebola_cases <- read.csv("data/raw-data/ebola_cases.csv")
+
 # format date column
 ebola_cases$date <- as.Date(ebola_cases$date)
 
@@ -309,10 +317,9 @@ ebola_estimates <- epinow(
 summary(ebola_estimates)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.7 (1 -- 3). The exponential growth rate of case numbers is 0.042 (0.0019 -- 0.094).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.7 (1 - 3). The exponential growth rate of case numbers is 0.042 (0.0019 - 0.094).
 
-<!-- The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(ebola_estimates)$estimate[summary(ebola_estimates)$measure=="Effective reproduction no."]`. The exponential growth rate of case numbers is `r summary(ebola_estimates)$estimate[summary(ebola_estimates)$measure=="Rate of growth"]`. -->
-
+Visualize the estimates:
 
 ```{r,eval=FALSE,echo=TRUE}
 plot(ebola_estimates)
