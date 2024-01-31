@@ -1,148 +1,249 @@
 ---
-title: 'estimate-severity'
+title: 'Estimate severity'
 teaching: 10
 exercises: 2
+editor_options: 
+  chunk_output_type: console
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How to estimate severity from linelist data?
+- How to estimate static CFR from linelist data?
+
+- Why to adjust a CFR with a delay distribution?
+
+- How to differentiate the CFR estimation from linelist vs incidence?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain ...
+- Estimate static CFR
+- Estimate a delay adjusted static CFR
+- Use with `{epiparamater}` (for any refer to package vignette)
+- Estimate rolling CFR
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
+
+- `{incidence2}`
+
+:::::::::::::::::::::::::::::::::
+
 ## Introduction
 
-This is a lesson 
+- severity
+
+- why is it important?
+
+<https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html>
+
+## Naive CFR
+
+- time static
+
+- right-censoring bias
+
+Disease severity is measured in terms of case fatality ratio ($cfr$) --total number of deaths $D$ divided by total number of cases $C$.
+
+$$ cfr =  \frac{D}{C}. $$
 
 ```{r}
-# collect case-studies!
-
-# https://github.com/CarmenTamayo/Applications-Epiverse-pipelines
-
-# https://github.com/epiverse-trace/episoap/blob/severity-pipeline/inst/rmarkdown/templates/severity/skeleton/skeleton.Rmd
-```
-
-```{r}
-# collect relevant issues
-
-# https://github.com/epiverse-trace/cfr/issues/79
-```
-
-```{r}
-# collect from epicatador and feedback form
-
-# https://github.com/avallecam/epicatador/blob/main/18-cfr.R
-```
-
-
-```{r}
-# draft summative
-
-library(simulist)
-library(epiparameter)
-library(incidence2)
+# Load package ----------------------------------------------
 library(cfr)
 library(tidyverse)
 
-# comments ----------------------------------------------------------------
+# Load the Ebola 1976 data provided with the package --------
+data("ebola1976")
 
-#' ideas
-#' - add "create epidist from scratch" as an assessment in read delays chapter
-#' - add "use get_parameters()" as assessment in read delays
+# view top data
+ebola1976 %>% as_tibble()
+```
 
-# estimate severity -------------------------------------------------------
+The `cfr` package requires only a data frame with three columns,`date`, `cases`, and `deaths`, giving the daily number of reported cases and deaths. The below code chuck creates such data frame from the simulated Ebola dataset.
 
-# james reprex ------------------------------------------------------------
+```{r}
+# Calculate the static CFR without correcting for delays ----
+cfr_static(data = ebola1976)
+```
 
-## reuse epi distributions -------------------------------------------------
+However, this is a naive, biased estimates value for the true $cfr$; because it does not account for the delay between case being reported and knowing its outcome. 
 
-epiparameter::epidist_db(
-  disease = "covid",
-  epi_dist = "serial") %>% 
-  epiparameter::list_distributions()
+> During the outbreak of severe acute respiratory syndrome (SARS) in 2002–03, it was shown that this estimator, bt, considerably underestimates the cCFR [8]. This is easily demonstrated by relating Ct and Dt to the incidence function ct (i.e. the number of new confirmed cases on day t), and the conditional probability density function fs of the time from onset to death, given death. ([Nishiura et al. 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852#s2))
 
-# create a distribution from scratch
+```{r}
+# show nishiura example, if possible
+```
 
-serial_interval <- epiparameter::epidist(
-  disease = "covid",
-  epi_dist = "serial",
-  prob_distribution = "gamma",
-  prob_distribution_params = c(shape = 1, scale = 1)
+[Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647)
+
+```{r}
+# methods
+```
+
+
+- naive CFR vs adjusted CFR
+
+## Adjusted CFR
+
+- what do we need to estimate it?
+
+```{r, message=FALSE, warning=FALSE}
+
+# Load package ----------------------------------------------
+library(epiparameter)
+
+# Get delay distribution ------------------------------------
+onset_to_death_ebola <- epiparameter::epidist_db(
+  disease = "Ebola",
+  epi_dist = "onset_to_death",
+  single_epidist = TRUE)
+```
+
+## Calculate adjusted CFR
+
+Now, we use  `cfr_static()` to calculate overall disease severity.
+
+```{r}
+# Calculate the static CFR while correcting for delays ------
+cfr_static(
+  data = ebola1976,
+  delay_density = function(x) density(onset_to_death_ebola, x)
+)
+```
+
+This analysis indicated that the overall disease severity is, roughly, between $49\%$ and $51\%$. The function can also calculate unbiased $cfr$ if distribution of delays between cases being reported and knowing their outcome (death or recovery), which can be obtained from `epiparameter` package, is provided.
+
+This analysis indicated that the overall disease severity is between $49\%$ and $53\%$, slightly higher than the static one.
+
+### Use any distribution
+
+For a distributions refresher
+
+<https://github.com/epiverse-trace/tutorials/blob/md-outputs-PR-104/read-delays.md#functions-for-the-normal-distribution>
+
+To use any distribution, refer to vignette
+
+- distirbutional
+- distcrete
+- epiparameter
+
+<https://epiverse-trace.github.io/cfr/articles/delay_distributions.html>
+
+### Should we remove unknown outcomes from the linelist?
+
+- linelist vs incidence estimation
+
+Refer to: <https://github.com/epiverse-trace/cfr/issues/79>
+
+[Lipsitch et al., 2005](https://journals.plos.org/plosntds/article/figure?id=10.1371/journal.pntd.0003846.t001)
+
+```{r}
+# show if possible
+```
+
+
+## Rolling CFR
+
+- cumulative sum
+
+```{r}
+# last rolling equal to the static estimate
+tail(rolling_cfr_corrected)
+cfr_static(
+  data = ebola1976,
+  delay_density = function(x) dgamma(x, shape = 2.40, scale = 3.33)
+)
+```
+
+
+Also,  severity of a disease can change over time. The `cfr` package provides functions to estimate biased and unbiased (by considering the delays), static, and time-varying $cfr$s. 
+
+```{r}
+# Calculate the rolling daily CFR while correcting for delays --------------------
+rolling_cfr_corrected <- cfr_rolling(
+  data = ebola1976,
+  delay_density = function(x) density(onset_to_death_ebola, x)
 )
 
-serial_interval
+rolling_cfr_corrected
+```
 
-# reuse from systematic review
+```{r}
+rolling_cfr_corrected$method <- "corrected"
 
-onset_to_hosp <- epiparameter::epidist_db(
-  disease = "covid",
-  epi_dist = "onset to hospitalisation",
-  single_epidist = TRUE
+# visualise both corrected and uncorrected rolling estimates
+ggplot(data_cfr) +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low, ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_mean, colour = method)
+  )
+```
+
+### assessment: explain the bias
+
+```{r}
+# Calculate the CFR without correcting for delays on each day of the outbreak ----
+rolling_cfr_naive <- cfr_rolling(
+  data = ebola1976
 )
 
-onset_to_hosp
+rolling_cfr_naive
 
-onset_to_death <- epiparameter::epidist_db(
-  disease = "covid",
-  epi_dist = "onset to death",
-  single_epidist = TRUE
+rolling_cfr_naive$method <- "naive"
+
+# combine the data for plotting
+data_cfr <- bind_rows(
+  rolling_cfr_naive,
+  rolling_cfr_corrected
 )
 
-
-## simulate a linelist -----------------------------------------------------
-
-linelist <- sim_linelist(
-  R = 1.1,
-  serial_interval = serial_interval,
-  onset_to_hosp = onset_to_hosp,
-  onset_to_death = onset_to_death,
-  hosp_risk = 0.5,
-  add_ct = FALSE,
-  add_names = FALSE
-)
-
-linelist %>% 
-  glimpse()
-
-
-## convert to incidence2 class object --------------------------------------
-
-incidence_data <- incidence2::incidence(
-  x = linelist,
-  date_index = c("date_onset","date_death"),
-  date_names_to = "date"
-)
-
-incidence_data
-
-
-## prepare incidence2 for cfr estimation -----------------------------------
-
-cfr_data <- cfr::prepare_data(
-  data = incidence_data,
-  cases_variable = "date_onset",
-  deaths_variable = "date_death",
-  fill_NA = TRUE
-)
-
-#' Error in (function (df, colname)  : 
-#' `NA`s present in the 'cases' count. Set `fill_NA = TRUE` to use 0s
-
-cfr_data
-
-## estimate cfr ------------------------------------------------------------
-
-cfr::estimate_static(data = cfr_data)
-
+# visualise both corrected and uncorrected rolling estimates
+ggplot(data_cfr) +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low, ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_mean, colour = method)
+  )
 
 ```
 
+
+### estimate HFR
+
+- hospitalization fatality ratio
+
+- look for parameters from epiparameter
+
+```{r}
+library(epiparameter)
+
+epidist_db() %>% 
+  list_distributions() %>% 
+  count(epi_distribution)
+
+epidist_db(epi_dist = "onset to death") %>% 
+  list_distributions()
+```
+
+
+- if not, create a simulist to use
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
