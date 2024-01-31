@@ -113,6 +113,8 @@ what is a convolution?
 
 ### assessment: do a rolling and compare, why so different?
 
+<https://github.com/epiverse-trace/cfr/issues/123>
+
 ```{r}
 covid_rolling <- cfr_rolling(
   data = df_covid_uk,
