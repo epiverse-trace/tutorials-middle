@@ -14,9 +14,18 @@ exercises: 2
 
 - Estimate time-varying CFR
 - Differenciate rolling vs time-varying
-- with `{incidence2}`
+- Simulate `{simulist}` ~or assess for `{incidence2}`~
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
+
+- previos episode
+
+:::::::::::::::::::::::::::::::::
+
 
 ## Introduction
 
@@ -205,6 +214,26 @@ time-varying is size and length sensitive
 when to apply depending on any special population at risk
 
 <https://github.com/epiverse-trace/cfr/issues/116>
+
+
+### estimate time-varying HFR
+
+- hospitalization fatality ratio
+
+- look for parameters from epiparameter
+
+- show and use `{simulist}`
+
+```{r}
+library(epiparameter)
+
+epidist_db() %>% 
+  list_distributions() %>% 
+  count(epi_distribution)
+
+epidist_db(epi_dist = "onset to death") %>% 
+  list_distributions()
+```
 
 ### Look our case studies
 
