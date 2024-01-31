@@ -29,7 +29,7 @@ editor_options:
 
 ## Prerequisites
 
-- `{incidence2}`
+- `{epiparameter}`
 
 :::::::::::::::::::::::::::::::::
 
@@ -241,9 +241,6 @@ epidist_db() %>%
 epidist_db(epi_dist = "onset to death") %>% 
   list_distributions()
 ```
-
-
-- if not, create a simulist to use
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
