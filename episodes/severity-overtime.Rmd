@@ -35,11 +35,14 @@ exercises: 2
 
 ## Time-varying CFR
 
-```{r}
-# Load package
+```{r,message=FALSE,warning=FALSE}
+# Load package ----------------------------------------------
 library(cfr)
 library(tidyverse)
+```
 
+
+```{r}
 # get data pre-loaded with the package
 data("covid_data")
 df_covid_uk <- covid_data[covid_data$country == "United Kingdom", ]
@@ -74,7 +77,9 @@ time_varying_cfr %>%
   )
 ```
 
-- what do you need?
+## what do you need?
+
+- <https://rdrr.io/r/stats/runmed.html>
 
 ### burn in
 
