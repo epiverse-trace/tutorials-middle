@@ -1,5 +1,5 @@
 ---
-title: 'estimate-ascertainment'
+title: 'Estimate underreporting'
 teaching: 10
 exercises: 2
 ---
@@ -13,6 +13,7 @@ exercises: 2
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Estimate case ascertainment
+- Simulate `{simulist}`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -25,6 +26,8 @@ exercises: 2
 :::::::::::::::::::::::::::::::::
 
 ## Introduction
+
+- case-ascertainment or underreporting
 
 - selection bias
 
@@ -42,22 +45,58 @@ cfr = confirmed deaths / confirmed infections
 
 The `cfr` package also provides a function to calculate  proportion of cases that have been ascertained  via `estimate_ascertainment()` function.
 
-```{r, message=FALSE, warning=FALSE}
-df_reporting <- estimate_ascertainment(
-  data = cfr_df,
-  epidist = ebola_dist_onset_to_death,
-  type = "static",
-  severity_baseline = 0.30,
-  smooth_inputs = TRUE,
-  burn_in_value = 7,
-  correct_for_delays = TRUE,
-  max_date = "2014-12-04"
+```{r}
+# get data pre-loaded with the package
+data("covid_data")
+df_covid_uk <- covid_data[covid_data$country == "United Kingdom", ]
+
+df_covid_uk_subset <- subset(df_covid_uk, date <= "2020-05-31")
+
+# use a severity baseline of 1.4% (0.014) taken from Verity et al. (2020)
+# Lancet Infectious Diseases: <https://doi.org/10.1016/S1473-3099(20)30243-7>
+
+# use onset-to-death distribution from Linton et al. (2020)
+# J. Clinical Medicine: <https://doi.org/10.3390/jcm9020538>
+
+# subset data until 30th June 2020
+data <- df_covid_uk[df_covid_uk$date <= "2020-06-30", ]
+estimate_ascertainment(
+  data = data,
+  delay_density = function(x) dlnorm(x, meanlog = 2.577, sdlog = 0.440),
+  severity_baseline = 0.014
 )
-df_reporting
 ```
 
 According to the above findings, the number of reported cases represents around $57\%$ to $61\%$ of all cases. Approximately $39\%$ to $43\%$ of cases go undetected. 
 
+### assessment: ?
+
+- look for different scenarios from epiparameter available
+
+```{r}
+library(epiparameter)
+
+epidist_db() %>% 
+  list_distributions() %>% 
+  count(epi_distribution)
+
+epidist_db(epi_dist = "onset to death") %>% 
+  list_distributions()
+```
+
+
+### assessment: extra package
+
+- if simulist no needed, insert here using incidence2 or refer to it in vignette to solve an assessment
+
+<https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html>
+
+
+### Look our case studies
+
+[malgburg](https://github.com/CarmenTamayo/Applications-Epiverse-pipelines/blob/ctc-edits/Severity_ascertainment_case_studies.Rmd) using {cfr} and others
+
+[reproducible report](https://github.com/epiverse-trace/episoap/blob/severity-pipeline/inst/rmarkdown/templates/severity/skeleton/skeleton.Rmd) using {episoap} and others
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
