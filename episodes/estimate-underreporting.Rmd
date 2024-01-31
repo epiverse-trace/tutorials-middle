@@ -13,7 +13,7 @@ exercises: 2
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Estimate case ascertainment
-- Simulate `{simulist}`
+- ~Simulate `{simulist}` or~ Assess for `{incidence2}`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -24,6 +24,15 @@ exercises: 2
 - estimate severity
 
 :::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
+
+- previous two episodes
+
+:::::::::::::::::::::::::::::::::
+
 
 ## Introduction
 
@@ -101,10 +110,7 @@ epidist_db(epi_dist = "onset to death") %>%
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use `.md` files for episodes when you want static content
-- Use `.Rmd` files for episodes when you need to generate output
-- Run `sandpaper::check_lesson()` to identify any issues with your lesson
-- Run `sandpaper::build_lesson()` to preview your lesson locally
+- Use 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
