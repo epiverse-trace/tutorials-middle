@@ -428,6 +428,16 @@
       ],
       "Hash": "3f038e5ac7f41d4ac41ce658c85e3042"
     },
+    "codetools": {
+      "Package": "codetools",
+      "Version": "0.2-19",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "c089a619a7fae175d149d89164f8c7d8"
+    },
     "colorspace": {
       "Package": "colorspace",
       "Version": "2.1-0",
@@ -652,6 +662,33 @@
       ],
       "Hash": "b18a9cf3c003977b0cc49d5e76ebe48d"
     },
+    "distcrete": {
+      "Package": "distcrete",
+      "Version": "1.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "5ad4e98af2a8e4c63b9b394ec05c91e1"
+    },
+    "distributional": {
+      "Package": "distributional",
+      "Version": "0.3.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "digest",
+        "farver",
+        "generics",
+        "ggplot2",
+        "lifecycle",
+        "numDeriv",
+        "rlang",
+        "scales",
+        "stats",
+        "utils",
+        "vctrs"
+      ],
+      "Hash": "0a94c3c917918a1c90f4609171ff41b6"
+    },
     "dotCall64": {
       "Package": "dotCall64",
       "Version": "1.1-1",
@@ -749,6 +786,26 @@
         "utils"
       ],
       "Hash": "5abca47c2b33eb1a73a412a045823a8f"
+    },
+    "epiparameter": {
+      "Package": "epiparameter",
+      "Version": "0.0.0.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteUsername": "epiverse-trace",
+      "RemoteRepo": "epiparameter",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "7c5a0fb9c732fbfe45177ef055f66e75063e460a",
+      "RemoteHost": "api.github.com",
+      "Requirements": [
+        "R",
+        "checkmate",
+        "distcrete",
+        "distributional",
+        "stats",
+        "utils"
+      ],
+      "Hash": "024a8c8a100fcd73dcf92522d7ef2e35"
     },
     "evaluate": {
       "Package": "evaluate",
@@ -1364,7 +1421,7 @@
     },
     "lattice": {
       "Package": "lattice",
-      "Version": "0.22-4",
+      "Version": "0.22-5",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1375,7 +1432,7 @@
         "stats",
         "utils"
       ],
-      "Hash": "7ae8282579016aee39386e2813d7c342"
+      "Hash": "7c5e89f04e72d6611c77451f6331a091"
     },
     "lifecycle": {
       "Package": "lifecycle",
@@ -1553,6 +1610,16 @@
       ],
       "Hash": "a623a2239e642806158bc4dc3f51565d"
     },
+    "numDeriv": {
+      "Package": "numDeriv",
+      "Version": "2016.8-1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "df58958f293b166e4ab885ebcad90e02"
+    },
     "oai": {
       "Package": "oai",
       "Version": "0.4.0",
@@ -1576,6 +1643,18 @@
         "askpass"
       ],
       "Hash": "2a0dc8c6adfb6f032e4d4af82d258ab5"
+    },
+    "pak": {
+      "Package": "pak",
+      "Version": "0.7.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "tools",
+        "utils"
+      ],
+      "Hash": "17c4c32b4bdc087508f35e8b7dcf4191"
     },
     "parallelly": {
       "Package": "parallelly",
@@ -1871,7 +1950,7 @@
       ],
       "Hash": "d65e35823c817f09f4de424fcdfa812a"
     },
-        "rprojroot": {
+    "rprojroot": {
       "Package": "rprojroot",
       "Version": "2.0.3",
       "Source": "Repository",
