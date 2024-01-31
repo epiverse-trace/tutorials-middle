@@ -47,15 +47,19 @@ editor_options:
 
 - right-censoring bias
 
+figure <https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#%20>
+
 Disease severity is measured in terms of case fatality ratio ($cfr$) --total number of deaths $D$ divided by total number of cases $C$.
 
 $$ cfr =  \frac{D}{C}. $$
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 # Load package ----------------------------------------------
 library(cfr)
 library(tidyverse)
+```
 
+```{r}
 # Load the Ebola 1976 data provided with the package --------
 data("ebola1976")
 
@@ -169,14 +173,14 @@ rolling_cfr_corrected <- cfr_rolling(
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
 
-rolling_cfr_corrected
+tail(rolling_cfr_corrected)
 ```
 
 ```{r}
 rolling_cfr_corrected$method <- "corrected"
 
 # visualise both corrected and uncorrected rolling estimates
-ggplot(data_cfr) +
+ggplot(rolling_cfr_corrected) +
   geom_ribbon(
     aes(
       date,
