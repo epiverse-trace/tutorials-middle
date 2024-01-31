@@ -1,0 +1,71 @@
+---
+title: 'estimate-ascertainment'
+teaching: 10
+exercises: 2
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How do you evaluate diagnostic and testing capacity?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Estimate case ascertainment
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
+
+- estimate severity
+
+:::::::::::::::::::::::::::::::::
+
+## Introduction
+
+- selection bias
+
+- infection fatality ratio (IFR) and case fatality ratio (CFR)
+
+ifr = confirmed deaths / all infections
+
+cfr = confirmed deaths / confirmed infections
+
+- cfr varies depending on the diagnostic and testing capacity
+
+- any regional variations facilitates the estimate of case ascertainment 
+
+### Assessing under-reporting proportion of cases 
+
+The `cfr` package also provides a function to calculate  proportion of cases that have been ascertained  via `estimate_ascertainment()` function.
+
+```{r, message=FALSE, warning=FALSE}
+df_reporting <- estimate_ascertainment(
+  data = cfr_df,
+  epidist = ebola_dist_onset_to_death,
+  type = "static",
+  severity_baseline = 0.30,
+  smooth_inputs = TRUE,
+  burn_in_value = 7,
+  correct_for_delays = TRUE,
+  max_date = "2014-12-04"
+)
+df_reporting
+```
+
+According to the above findings, the number of reported cases represents around $57\%$ to $61\%$ of all cases. Approximately $39\%$ to $43\%$ of cases go undetected. 
+
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Use `.md` files for episodes when you want static content
+- Use `.Rmd` files for episodes when you need to generate output
+- Run `sandpaper::check_lesson()` to identify any issues with your lesson
+- Run `sandpaper::build_lesson()` to preview your lesson locally
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
