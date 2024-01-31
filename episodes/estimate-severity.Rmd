@@ -156,7 +156,6 @@ Refer to: <https://github.com/epiverse-trace/cfr/issues/79>
 
 ```{r}
 # last rolling equal to the static estimate
-tail(rolling_cfr_corrected)
 cfr_static(
   data = ebola1976,
   delay_density = function(x) dgamma(x, shape = 2.40, scale = 3.33)
@@ -202,7 +201,7 @@ rolling_cfr_naive <- cfr_rolling(
   data = ebola1976
 )
 
-rolling_cfr_naive
+tail(rolling_cfr_naive)
 
 rolling_cfr_naive$method <- "naive"
 
