@@ -293,7 +293,7 @@ epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "serial",
   author = "Hiroshi",
-  single_epidist = T
+  single_epidist = TRUE
 )
 ```
 
@@ -316,12 +316,12 @@ Now, we have an epidemiological parameter we can reuse! We can replace the numbe
 Let's assign this `<epidist>` class object to the `covid_serialint` object.
 
 ```{r}
-covid_serialint <- 
+covid_serialint <-
   epiparameter::epidist_db(
     disease = "covid",
     epi_dist = "serial",
     author = "Nishiura",
-    single_epidist = T
+    single_epidist = TRUE
   )
 
 covid_serialint
@@ -365,7 +365,7 @@ epiparameter::epidist_db(
 epiparameter::epidist_db(
   disease = "ebola",
   epi_dist = "incubation",
-  single_epidist = T
+  single_epidist = TRUE
 )
 ```
 
@@ -380,7 +380,7 @@ To access the `sample_size`, review an [issue reported in the GitHub repository]
 We can get the `mean` and standard deviation (`sd`) from this `<epidist>` diving into the `summary_stats` object:
 
 ```{r}
-# get the mean 
+# get the mean
 covid_serialint$summary_stats$mean
 ```
 
@@ -416,7 +416,7 @@ Use the `str()` to display the structure of the `<epidist>` R object.
 :::::::::: solution
 
 ```{r,eval=FALSE}
-# get the sd 
+# get the sd
 covid_serialint$summary_stats$sd
 
 # get the sample_size
@@ -460,9 +460,9 @@ An informative delay measures the time from symptom onset to recovery or death.
 
 ```{r,eval=FALSE}
 # one way to get the list of all the available parameters
-epidist_db(disease = "all") %>% 
-  list_distributions() %>% 
-  as_tibble() %>% 
+epidist_db(disease = "all") %>%
+  list_distributions() %>%
+  as_tibble() %>%
   distinct(epi_distribution)
 
 ebola_severity <- epidist_db(
@@ -488,13 +488,13 @@ ebola_severity$summary_stats$mean_ci_limits
 The following output has four entries with different content in the **probability distribution** (`prob_distribution`) column:
 
 ```{r}
-distribution <- 
+distribution <-
   epiparameter::epidist_db(
     disease = "covid",
     epi_dist = "serial"
   )
 
-distribution %>% 
+distribution %>%
   list_distributions()
 ```
 
@@ -522,7 +522,7 @@ distribution[[4]]$metadata$inference_method
 In the `epiparameter::list_distributions()` output, we can also find different types of probability distributions (e.g., Log-normal, Weibull, Normal).
 
 ```{r}
-distribution %>% 
+distribution %>%
   list_distributions()
 ```
 
@@ -601,7 +601,8 @@ cdf(covid_serialint, q = 10)
 # the quantile value (day) at a cumulative probability of 60%
 quantile(covid_serialint, p = 0.6)
 
-# generate 10 random values (days) given the distribution family and its parameters
+# generate 10 random values (days) given 
+# the distribution family and its parameters
 generate(covid_serialint, times = 10)
 ```
 
@@ -609,12 +610,10 @@ generate(covid_serialint, times = 10)
 
 Access to the reference documentation (Help files) for these functions is accessible with the three double-colon notation: `epiparameter:::`
 
-```{r}
-?epiparameter:::density.epidist()
-?epiparameter:::cdf.epidist()
-?epiparameter:::quantile.epidist()
-?epiparameter:::generate.epidist()
-```
+- `?epiparameter:::density.epidist()`
+- `?epiparameter:::cdf.epidist()`
+- `?epiparameter:::quantile.epidist()`
+- `?epiparameter:::generate.epidist()`
 
 ::::::::::::::::::
 
@@ -641,8 +640,8 @@ plot(covid_serialint)
 ```
 
 ```{r,eval=FALSE}
-cdf(covid_serialint,q = 2)
-cdf(covid_serialint,q = 6)
+cdf(covid_serialint, q = 2)
+cdf(covid_serialint, q = 6)
 ```
 
 Given the COVID-19 serial interval:
@@ -686,7 +685,7 @@ We can use the set of distribution functions for a _continuous_ distribution (as
 When we `epiparameter::discretise()` the continuous distribution we get a **discrete**(-ized) distribution:
 
 ```{r}
-covid_serialint_discrete <- 
+covid_serialint_discrete <-
   epiparameter::discretise(covid_serialint)
 
 covid_serialint_discrete
@@ -711,7 +710,7 @@ plot(covid_serialint_discrete)
 To finally get a `max` value, let's access the quantile value of the 99.9th percentile or `0.999` probability of the distribution with the `prob_dist$q` notation, similarly to how we access the `summary_stats` values.
 
 ```{r}
-covid_serialint_discrete_max <- 
+covid_serialint_discrete_max <-
   covid_serialint_discrete$prob_dist$q(p = 0.999)
 ```
 
@@ -743,7 +742,8 @@ covid_serialint_discrete$prob_dist$cdf(10)
 
 # In what quantile value (days) do we have the 60% cumulative probability?
 covid_serialint_discrete$prob_dist$q(0.6)
-# covid_serialint_discrete$prob_dist$qf(0.6) # as in continuous distribution
+# covid_serialint_discrete$prob_dist$qf(0.6) 
+# as in continuous distribution
 
 # generate random values
 covid_serialint_discrete$prob_dist$r(10)
@@ -775,7 +775,7 @@ covid_incubation <-
   epiparameter::epidist_db(
     disease = "covid",
     epi_dist = "incubation",
-    single_epidist = T
+    single_epidist = TRUE
   )
 
 covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
@@ -882,7 +882,7 @@ epidist_db(disease = "ebola") %>%
 ebola_serial <- epidist_db(
   disease = "ebola", 
   epi_dist = "serial", 
-  single_epidist = T
+  single_epidist = TRUE
 )
 
 ebola_serial_discrete <- discretise(ebola_serial)
@@ -969,7 +969,7 @@ covid_incubation <- epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "incubation",
   author = "Natalie",
-  single_epidist = T
+  single_epidist = TRUE
 )
 
 covid_incubation
@@ -1055,7 +1055,7 @@ epidist_db(disease = "ebola") %>%
 ebola_serial <- epidist_db(
   disease = "ebola", 
   epi_dist = "serial", 
-  single_epidist = T
+  single_epidist = TRUE
 )
 
 ebola_serial_discrete <- discretise(ebola_serial)
@@ -1072,7 +1072,7 @@ serial_interval_ebola <-
 ebola_incubation <- epidist_db(
   disease = "ebola", 
   epi_dist = "incubation", 
-  single_epidist = T
+  single_epidist = TRUE
 )
 
 ebola_incubation_discrete <- discretise(ebola_incubation)
@@ -1264,22 +1264,22 @@ Key functions:
 
 ```{r,eval=FALSE}
 # pre-symptomatic transmission
-epidist_db(disease = "influenza",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
-epidist_db(disease = "influenza",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "influenza",epi_dist = "incubation",single_epidist = TRUE)$summary_stats$mean
+epidist_db(disease = "influenza",epi_dist = "serial",single_epidist = TRUE)$summary_stats$mean
 
 # symptomatic transmission
-epidist_db(disease = "mers",epi_dist = "incubation",single_epidist = T)$summary_stats$median
-epidist_db(disease = "mers",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "mers",epi_dist = "incubation",single_epidist = TRUE)$summary_stats$median
+epidist_db(disease = "mers",epi_dist = "serial",single_epidist = TRUE)$summary_stats$mean
 ```
 
 ```{r,eval=FALSE}
 # pre-symptomatic transmission
-epidist_db(disease = "covid",epi_dist = "incubation",author = "Stephen",single_epidist = T)$summary_stats$mean
-epidist_db(disease = "covid",epi_dist = "serial",author = "Nishiura",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "covid",epi_dist = "incubation",author = "Stephen",single_epidist = TRUE)$summary_stats$mean
+epidist_db(disease = "covid",epi_dist = "serial",author = "Nishiura",single_epidist = TRUE)$summary_stats$mean
 
 # symptomatic transmission
-epidist_db(disease = "ebola",epi_dist = "incubation",single_epidist = T)$summary_stats$mean
-epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = T)$summary_stats$mean
+epidist_db(disease = "ebola",epi_dist = "incubation",single_epidist = TRUE)$summary_stats$mean
+epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = TRUE)$summary_stats$mean
 ```
 
 ::::::::::::::::::::::::::
