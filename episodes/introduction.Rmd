@@ -85,9 +85,9 @@ Not all primary cases have the same probability of generating a secondary case. 
 
 ```{r}
 generation_time <- dist_spec(
-  mean = 3.6, 
+  mean = 3.6,
   sd = 3.1,
-  max = 20, 
+  max = 20,
   distribution = "lognormal"
 )
 ```
@@ -157,30 +157,6 @@ Our strategy is gradually incorporating specialised R packages into our traditio
 Epiverse-TRACE's aim is to provide a software ecosystem for outbreak analytics. We support the development of software pieces, make the existing ones interoperable for the user experience, and stimulate a community of practice.
 
 ![](fig/pkgs-hexlogos.png)
-
-```{r, results='asis', echo = FALSE, eval=FALSE}
-# eval = TRUE
-# turn on if maintainers manage to 
-# adapt css from main page to varnish
-# pkg_list <- c("readepi","cleanepi","linelist","epiparameter","episoap")
-
-# from https://github.com/epiverse-trace/epiverse-trace.github.io/blob/main/index.qmd
-
-pkg_path <- "https://raw.githubusercontent.com/epiverse-trace/epiverse-trace.github.io/main/_data/epiverse_pkgs.csv"
-hexwall_path<- "https://raw.githubusercontent.com/epiverse-trace/epiverse-trace.github.io/main/_templates/hexwall_element.Rmd"
-
-file.path(pkg_path) |>
-  read.csv() |>
-  # dplyr::filter(
-  #   magrittr::is_in(pkgname,pkg_list)) |>
-  as.list() |>
-  purrr::transpose() |>
-  purrr::map_chr(~ knitr::knit_expand(
-    file = hexwall_path,
-    pkgname = .x$pkgname,
-    description = .x$description)) |>
-  cat(sep = "\n")
-```
 
 ## How can I start?
 
