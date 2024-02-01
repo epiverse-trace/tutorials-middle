@@ -243,9 +243,9 @@ Take 5 minutes:
 
 The `{epiparameter}` combo of `epidist_db()` plus `list_distributions()` list all the entries by:
 
-- disease, 
-- epidemiological distribution, 
-- the type of the probability distribution, 
+- disease,
+- epidemiological distribution,
+- the type of the probability distribution,
 - author of the study, and 
 - year of study.
 
@@ -340,10 +340,10 @@ Take 2 minutes:
 
 The `{epiparameter}` combo of `epidist_db()` plus `list_distributions()` list all the entries by:
 
-- disease, 
-- epidemiological distribution, 
-- the type of the probability distribution, 
-- author of the study, and 
+- disease,
+- epidemiological distribution,
+- the type of the probability distribution,
+- author of the study, and
 - year of study.
 
 This is a `<multi_epidist>` class object:
@@ -742,8 +742,6 @@ covid_serialint_discrete$prob_dist$cdf(10)
 
 # In what quantile value (days) do we have the 60% cumulative probability?
 covid_serialint_discrete$prob_dist$q(0.6)
-# covid_serialint_discrete$prob_dist$qf(0.6) 
-# as in continuous distribution
 
 # generate random values
 covid_serialint_discrete$prob_dist$r(10)
@@ -752,12 +750,16 @@ covid_serialint_discrete$prob_dist$r(10)
 x_limit <- covid_serialint_discrete$prob_dist$q(0.999)
 
 tibble(
-  # generate quantile values as a sequence for each natural number
-  quantile_values = seq(1L, to = x_limit, by = 1L)
-) %>% 
+  # generate quantile values
+  # as a sequence for each natural number
+  quantile_values = 
+    seq(1L, to = x_limit, by = 1L)
+) %>%
   mutate(
-    # calculate the values for each quantile in the density function
-    density_values = covid_serialint_discrete$prob_dist$d(quantile_values)
+    # calculate the values
+    # for each quantile in the density function
+    density_values = 
+      covid_serialint_discrete$prob_dist$d(quantile_values)
   ) %>%
   ggplot(aes(
     x = quantile_values,
@@ -771,7 +773,7 @@ tibble(
 ::::::::::::::::: solution
 
 ```{r,eval=FALSE}
-covid_incubation <- 
+covid_incubation <-
   epiparameter::epidist_db(
     disease = "covid",
     epi_dist = "incubation",
@@ -797,7 +799,7 @@ _Is this result expected in epidemiological terms?_
 Now we can plug everything into the `EpiNow2::dist_spec()` function!
 
 ```{r}
-serial_interval_covid <- 
+serial_interval_covid <-
   dist_spec(
     mean = covid_serialint$summary_stats$mean,
     sd = covid_serialint$summary_stats$sd,
@@ -838,14 +840,10 @@ base::plot(epinow_estimates)
 
 ### Ebola's effective reproduction number
 
-Download the [Ebola dataset](data/ebola_cases.csv):
+Download and read the [Ebola dataset](data/ebola_cases.csv):
 
 - Reuse one epidemiological parameter to estimate the effective reproduction number for the Ebola dataset.
 - Why did you choose that parameter?
-
-```{r,eval=FALSE}
-ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
-```
 
 ::::::::::::::::: hint
 
@@ -867,15 +865,18 @@ Key functions we applied in this episode are:
 
 ```{r,eval=FALSE,echo=FALSE}
 # read data from the tutorial repository R project
-ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
+ebola_confirmed <- 
+  read_csv(file.path("episodes","data","ebola_cases.csv"))
 ```
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 # read data
-ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+ebola_confirmed <- 
+  read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 
 # list distributions
-epidist_db(disease = "ebola") %>% 
+epidist_db(disease = "ebola") %>%
   list_distributions()
 
 # subset one distribution 
@@ -887,7 +888,7 @@ ebola_serial <- epidist_db(
 
 ebola_serial_discrete <- discretise(ebola_serial)
 
-serial_interval_ebola <- 
+serial_interval_ebola <-
   dist_spec(
     mean = ebola_serial$summary_stats$mean,
     sd = ebola_serial$summary_stats$sd,
@@ -1026,10 +1027,6 @@ Using the same [Ebola dataset](data/ebola_cases.csv):
 - Estimate the effective reproduction number using `EpiNow2::epinow()`.
 - Why did you choose that parameter?
 
-```{r,eval=FALSE}
-ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
-```
-
 ::::::::::::::::: hint
 
 We can use two complementary delay distributions to estimate the $R_t$ at time $t$.
@@ -1040,21 +1037,23 @@ We can use two complementary delay distributions to estimate the $R_t$ at time $
 
 ```{r,eval=FALSE,echo=FALSE}
 # read data from the tutorial repository R project
-ebola_confirmed <- read_csv("episodes/data/ebola_cases.csv")
+ebola_confirmed <- read_csv(file.path("episodes","data","ebola_cases.csv"))
 ```
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 # read data
-ebola_confirmed <- read_csv("data/raw-data/ebola_cases.csv")
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+ebola_confirmed <- 
+  read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 
 # list distributions
-epidist_db(disease = "ebola") %>% 
+epidist_db(disease = "ebola") %>%
   list_distributions()
 
-# subset one distribution for the generation time 
+# subset one distribution for the generation time
 ebola_serial <- epidist_db(
-  disease = "ebola", 
-  epi_dist = "serial", 
+  disease = "ebola",
+  epi_dist = "serial",
   single_epidist = TRUE
 )
 
@@ -1070,14 +1069,14 @@ serial_interval_ebola <-
 
 # subset one distribution for delay of the incubation period 
 ebola_incubation <- epidist_db(
-  disease = "ebola", 
-  epi_dist = "incubation", 
+  disease = "ebola",
+  epi_dist = "incubation",
   single_epidist = TRUE
 )
 
 ebola_incubation_discrete <- discretise(ebola_incubation)
 
-incubation_period_ebola <- 
+incubation_period_ebola <-
   dist_spec(
     mean = ebola_incubation$summary_stats$mean,
     sd = ebola_incubation$summary_stats$sd,
@@ -1127,9 +1126,9 @@ How to get the mean and standard deviation from a generation time with median an
 
 ```{r,eval=FALSE}
 # What parameters are available for Influenza?
-epidist_db(disease = "influenza") %>% 
-  list_distributions() %>% 
-  as_tibble() %>% 
+epidist_db(disease = "influenza") %>%
+  list_distributions() %>%
+  as_tibble() %>%
   count(epi_distribution)
 
 influenza_generation <- epidist_db(disease = "influenza",epi_dist = "generation")
@@ -1154,7 +1153,7 @@ influenza_extracted <- extract_param(
 
 influenza_extracted
 
-generation_time_influenza <- 
+generation_time_influenza <-
   dist_spec(
     mean = influenza_extracted[1],
     sd = influenza_extracted[2],
@@ -1162,7 +1161,7 @@ generation_time_influenza <-
     distribution = "lognormal"
   )
 
-influenza_cleaned <- outbreaks::influenza_england_1978_school %>% 
+influenza_cleaned <- outbreaks::influenza_england_1978_school %>%
   select(date,confirm = in_bed)
 
 epinow_estimates <- epinow(
@@ -1180,13 +1179,14 @@ epinow_estimates <- epinow(
 plot(epinow_estimates)
 ```
 
-```{r,eval=FALSE,echo=FALSE}
-# question: is dispersion valid for quantiles?
-# convert_summary_stats_to_params(
-#   distribution = "lnorm", 
-#   median = influenza_generation$summary_stats$median,
-#   quantiles = influenza_generation$summary_stats$quantiles)
-```
+
+
+
+
+
+
+
+
 
 ::::::::::::::::::::::::::
 
@@ -1262,24 +1262,80 @@ Key functions:
 
 ::::::::::::::::: solution
 
+In this solution we use `purrr::pluck()` to extract elements within the `summary_stats` object which is of class `list`.
+
 ```{r,eval=FALSE}
 # pre-symptomatic transmission
-epidist_db(disease = "influenza",epi_dist = "incubation",single_epidist = TRUE)$summary_stats$mean
-epidist_db(disease = "influenza",epi_dist = "serial",single_epidist = TRUE)$summary_stats$mean
+epidist_db(
+  disease = "influenza",
+  epi_dist = "incubation",
+  single_epidist = TRUE
+) %>%
+  pluck("summary_stats") %>%
+  pluck("mean")
+
+epidist_db(
+  disease = "influenza",
+  epi_dist = "serial",
+  single_epidist = TRUE
+) %>%
+  pluck("summary_stats") %>%
+  pluck("mean")
 
 # symptomatic transmission
-epidist_db(disease = "mers",epi_dist = "incubation",single_epidist = TRUE)$summary_stats$median
-epidist_db(disease = "mers",epi_dist = "serial",single_epidist = TRUE)$summary_stats$mean
+epidist_db(
+  disease = "mers",
+  epi_dist = "incubation",
+  single_epidist = TRUE
+) %>%
+  pluck("summary_stats") %>%
+  pluck("median")
+
+epidist_db(
+  disease = "mers",
+  epi_dist = "serial",
+  single_epidist = TRUE
+) %>%
+  pluck("summary_stats") %>%
+  pluck("mean")
 ```
 
 ```{r,eval=FALSE}
 # pre-symptomatic transmission
-epidist_db(disease = "covid",epi_dist = "incubation",author = "Stephen",single_epidist = TRUE)$summary_stats$mean
-epidist_db(disease = "covid",epi_dist = "serial",author = "Nishiura",single_epidist = TRUE)$summary_stats$mean
+epidist_db(
+  disease = "covid",
+  epi_dist = "incubation",
+  author = "Stephen",
+  single_epidist = TRUE
+) %>%
+  pluck("summary_stats") %>%
+  pluck("mean")
+
+epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Nishiura",
+  single_epidist = TRUE
+) %>%
+  pluck("summary_stats") %>%
+  pluck("mean")
 
 # symptomatic transmission
-epidist_db(disease = "ebola",epi_dist = "incubation",single_epidist = TRUE)$summary_stats$mean
-epidist_db(disease = "ebola",epi_dist = "serial",single_epidist = TRUE)$summary_stats$mean
+epidist_db(
+  disease = "ebola",
+  epi_dist = "incubation",
+  single_epidist = TRUE
+) %>%
+  pluck("summary_stats") %>%
+  pluck("mean")
+
+epidist_db(
+  disease = "ebola",
+  epi_dist = "serial",
+  single_epidist = TRUE
+) %>%
+  pluck("summary_stats") %>%
+  pluck("mean")
 ```
 
 ::::::::::::::::::::::::::
