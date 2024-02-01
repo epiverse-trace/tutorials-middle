@@ -13,17 +13,9 @@ exercises: 2
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Estimate case ascertainment
-- ~Simulate `{simulist}` or~ Assess for `{incidence2}`
+- Assess for `{incidence2}`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::: prereq
-
-## Prerequisites
-
-- estimate severity
-
-:::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: prereq
 
@@ -99,6 +91,9 @@ epidist_db(epi_dist = "onset to death") %>%
   list_distributions()
 ```
 
+### time-varying underreporting?
+
+<https://mrc-ide.github.io/global-lmic-reports/DZA/>
 
 ### assessment: extra package
 

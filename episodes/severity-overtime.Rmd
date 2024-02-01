@@ -14,7 +14,7 @@ exercises: 2
 
 - Estimate time-varying CFR
 - Differenciate rolling vs time-varying
-- Simulate `{simulist}` ~or assess for `{incidence2}`~
+- Simulate `{simulist}`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
