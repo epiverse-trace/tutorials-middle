@@ -127,7 +127,7 @@ In the previous tutorial we accounted for delays in reporting. In `EpiNow2` we a
 
 We will pass another input into `epinow()` called `obs` to define an observation model. The format of `obs` must be the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
 
-We believe the COVID-19 outbreak data from the previous tutorial do not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
+Let's say we believe the COVID-19 outbreak data from the previous tutorial do not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
 
 ```{r}
 obs_scale <- list(mean = 0.4, sd = 0.01)
