@@ -745,27 +745,6 @@ covid_serialint_discrete$prob_dist$q(0.6)
 
 # generate random values
 covid_serialint_discrete$prob_dist$r(10)
-
-# create a discrete distribution visualization
-x_limit <- covid_serialint_discrete$prob_dist$q(0.999)
-
-tibble(
-  # generate quantile values
-  # as a sequence for each natural number
-  quantile_values = 
-    seq(1L, to = x_limit, by = 1L)
-) %>%
-  mutate(
-    # calculate the values
-    # for each quantile in the density function
-    density_values = 
-      covid_serialint_discrete$prob_dist$d(quantile_values)
-  ) %>%
-  ggplot(aes(
-    x = quantile_values,
-    y = density_values)
-  ) +
-  geom_col()
 ```
 
 ::::::::::::::::::::::
@@ -787,7 +766,40 @@ covid_incubation_discrete$prob_dist$q(0.99)
 
 99% of those who develop COVID-19 symptoms will do so within 16 days of infection.
 
-_Is this result expected in epidemiological terms?_
+Now, _Is this result expected in epidemiological terms?_
+
+::::::::::::::::::::::::::
+
+::::::::::::::::: solution
+
+### how to create a distribution plot?
+
+From a maximum value with `$prob_dist$q()`, we can create a sequence of quantile values as a numeric vector and map density values for each:
+
+```{r}
+# create a discrete distribution visualization
+# from a maximum value from the distribution
+covid_serialint_discrete$prob_dist$q(0.999) %>%
+  # generate quantile values
+  # as a sequence for each natural number
+  seq(1L, to = ., by = 1L) %>%
+  # coerce numeric vector to data frame
+  as_tibble_col(column_name = "quantile_values") %>%
+  mutate(
+    # map density values
+    # for each quantile in the density function
+    density_values =
+      covid_serialint_discrete$prob_dist$d(quantile_values)
+  ) %>%
+  # create plot
+  ggplot(
+    aes(
+      x = quantile_values,
+      y = density_values
+    )
+  ) +
+  geom_col()
+```
 
 ::::::::::::::::::::::::::
 
