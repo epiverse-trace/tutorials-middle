@@ -8,7 +8,7 @@ editor_options:
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 library(EpiNow2)
-withr::with_options(mc.cores = 4)
+withr::local_options(list(mc.cores = 4))
 ```
 
 

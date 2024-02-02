@@ -7,7 +7,7 @@ exercises: 0
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 library(EpiNow2)
 library(ggplot2)
-withr::with_options(mc.cores = 4)
+withr::local_options(list(mc.cores = 4))
 ```
 
 :::::::::::::::::::::::::::::::::::::: questions 
