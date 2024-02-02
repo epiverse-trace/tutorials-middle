@@ -93,7 +93,7 @@ We can visualise the estimates of the effective reproduction number and the esti
 
 + **Estimate** (green): utilises all data,
 
-+ **Estimate based on partial data** (orange): estimates that are based less data are are therefore more uncertain,
++ **Estimate based on partial data** (orange): estimates that are based less data are therefore more uncertain,
 
 + **Forecast** (purple): forecasts into the future. 
 
