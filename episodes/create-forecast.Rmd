@@ -116,7 +116,7 @@ rt_opts(future = "estimate")
 
 The result will be less uncertain forecasts (as they are based on $R_t$ with a narrower uncertainty interval) but the forecasts will be based on less recent estimates of $R_t$ and assume no change since then.
 
-Additionally, there is the option to project the value of $R_t$ into the future using a model by setting `future = "project"`. As this option uses a model to forecast the value of $R_t$, the result will be forecasts that are more uncertain than `estimate`, for an example [see here](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html#projecting-the-reproduction-number-with-the-gaussian-process).
+Additionally, there is the option to project the value of $R_t$ into the future using a generic model by setting `future = "project"`. As this option uses a model to forecast the value of $R_t$, the result will be forecasts that are more uncertain than `estimate`, for an example [see here](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html#projecting-the-reproduction-number-with-the-gaussian-process).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
