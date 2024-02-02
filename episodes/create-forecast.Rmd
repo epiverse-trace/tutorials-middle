@@ -14,7 +14,7 @@ withr::with_options(mc.cores = 4)
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do I create short-term forecasts of infections from case data?
+- How do I create short-term forecasts from case data?
 - How do I account for incomplete reporting in forecasts?
 
 
