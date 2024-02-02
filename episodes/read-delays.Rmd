@@ -601,7 +601,7 @@ cdf(covid_serialint, q = 10)
 # the quantile value (day) at a cumulative probability of 60%
 quantile(covid_serialint, p = 0.6)
 
-# generate 10 random values (days) given 
+# generate 10 random values (days) given
 # the distribution family and its parameters
 generate(covid_serialint, times = 10)
 ```
@@ -865,24 +865,24 @@ Key functions we applied in this episode are:
 
 ```{r,eval=FALSE,echo=FALSE}
 # read data from the tutorial repository R project
-ebola_confirmed <- 
-  read_csv(file.path("episodes","data","ebola_cases.csv"))
+ebola_confirmed <-
+  read_csv(file.path("episodes", "data", "ebola_cases.csv"))
 ```
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
-ebola_confirmed <- 
+ebola_confirmed <-
   read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 
 # list distributions
 epidist_db(disease = "ebola") %>%
   list_distributions()
 
-# subset one distribution 
+# subset one distribution
 ebola_serial <- epidist_db(
-  disease = "ebola", 
-  epi_dist = "serial", 
+  disease = "ebola",
+  epi_dist = "serial",
   single_epidist = TRUE
 )
 
@@ -1037,13 +1037,14 @@ We can use two complementary delay distributions to estimate the $R_t$ at time $
 
 ```{r,eval=FALSE,echo=FALSE}
 # read data from the tutorial repository R project
-ebola_confirmed <- read_csv(file.path("episodes","data","ebola_cases.csv"))
+ebola_confirmed <-
+  read_csv(file.path("episodes", "data", "ebola_cases.csv"))
 ```
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
-ebola_confirmed <- 
+ebola_confirmed <-
   read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 
 # list distributions
@@ -1059,7 +1060,7 @@ ebola_serial <- epidist_db(
 
 ebola_serial_discrete <- discretise(ebola_serial)
 
-serial_interval_ebola <- 
+serial_interval_ebola <-
   dist_spec(
     mean = ebola_serial$summary_stats$mean,
     sd = ebola_serial$summary_stats$sd,
@@ -1067,7 +1068,7 @@ serial_interval_ebola <-
     distribution = "gamma"
   )
 
-# subset one distribution for delay of the incubation period 
+# subset one distribution for delay of the incubation period
 ebola_incubation <- epidist_db(
   disease = "ebola",
   epi_dist = "incubation",
@@ -1131,9 +1132,14 @@ epidist_db(disease = "influenza") %>%
   as_tibble() %>%
   count(epi_distribution)
 
-influenza_generation <- epidist_db(disease = "influenza",epi_dist = "generation")
+influenza_generation <-
+  epidist_db(
+    disease = "influenza",
+    epi_dist = "generation"
+  )
 
-influenza_generation_discrete <- discretise(influenza_generation)
+influenza_generation_discrete <-
+  discretise(influenza_generation)
 
 # problem
 # the summary statistics do not have mean and sd
@@ -1148,7 +1154,7 @@ influenza_extracted <- extract_param(
   values = c(influenza_generation$summary_stats$quantiles[1],
              influenza_generation$summary_stats$quantiles[2]),
   distribution = "lnorm",
-  percentiles = c(0.05,0.95)
+  percentiles = c(0.05, 0.95)
 )
 
 influenza_extracted
@@ -1161,8 +1167,9 @@ generation_time_influenza <-
     distribution = "lognormal"
   )
 
-influenza_cleaned <- outbreaks::influenza_england_1978_school %>%
-  select(date,confirm = in_bed)
+influenza_cleaned <-
+  outbreaks::influenza_england_1978_school %>%
+  select(date, confirm = in_bed)
 
 epinow_estimates <- epinow(
   # cases
