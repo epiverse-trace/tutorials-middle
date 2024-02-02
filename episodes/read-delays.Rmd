@@ -776,7 +776,7 @@ Now, _Is this result expected in epidemiological terms?_
 
 From a maximum value with `$prob_dist$q()`, we can create a sequence of quantile values as a numeric vector and map density values for each:
 
-```{r}
+```{r,eval=FALSE}
 # create a discrete distribution visualization
 # from a maximum value from the distribution
 covid_serialint_discrete$prob_dist$q(0.999) %>%
