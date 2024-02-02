@@ -3,7 +3,7 @@ title: 'Create a short-term forecast'
 teaching: 30
 exercises: 30
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
@@ -296,7 +296,7 @@ As we want to also create a two week forecast, we specify `horizon = 14` to fore
 ```{r, eval=TRUE,echo=FALSE}
 # read data from the tutorial repository R project
 ebola_cases <-
-  read.csv(file.path("episodes", "data", "ebola_cases.csv"))
+  read.csv(file.path("data", "ebola_cases.csv"))
 ```
 
 ```{r,eval=FALSE,echo=TRUE}
