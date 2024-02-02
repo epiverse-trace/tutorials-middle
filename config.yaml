@@ -61,6 +61,9 @@ contact: 'andree.valle-campos@lshtm.ac.uk'
 episodes:
 - quantify-transmissibility.Rmd
 - create-forecast.Rmd
+- severity-static.Rmd
+- severity-timevarying.Rmd
+- severity-underreporting.Rmd
 
 # Information for Learners
 learners:
