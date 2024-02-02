@@ -6,6 +6,7 @@ linters: all_linters(
     extraction_operator_linter = NULL,
     missing_package_linter = NULL,
     library_call_linter = NULL,
+    namespace_linter = NULL,
     undesirable_function_linter(
       modify_defaults(
         default_undesirable_functions,
