@@ -5,9 +5,9 @@ exercises: 0
 ---
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
-require(EpiNow2)
-require(ggplot2)
-options(mc.cores = 4)
+library(EpiNow2)
+library(ggplot2)
+withr::with_options(mc.cores = 4)
 ```
 
 :::::::::::::::::::::::::::::::::::::: questions 
@@ -69,20 +69,11 @@ In Bayesian inference, we use prior knowledge (prior distributions) with data (i
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-The first step is to install the package :
+The first step is to load the `{EpiNow2}` package :
 
 ```{r, eval = FALSE}
-install.packages("EpiNow2")
-library("EpiNow2")
+library(EpiNow2)
 ```
-
-*Note : this tutorial is based on EpiNow2 version 1.4.0. This version of the package can be installed using `{devtools}`:*
-```{r, eval = FALSE}
-require("devtools")
-install_version("EpiNow2", version = "1.4.0", repos = "http://cran.us.r-project.org")
-```
-
-
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
@@ -283,8 +274,9 @@ rt <- rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 The Bayesian inference is performed using MCMC methods with the program [Stan](https://mc-stan.org/). There are a number of default inputs to the Stan functions including the number of chains and number of samples per chain (see `?EpiNow2::stan_opts()`).
 
 To reduce computation time, we can run chains in parallel. To do this, we must set the number of cores to be used. By default, 4 MCMC chains are run (see `stan_opts()$chains`), so we can set an equal number of cores to be used in parallel as follows:
+
 ```{r}
-options(mc.cores = 4)
+withr::with_options(mc.cores = 4)
 ```
 
 To find the maximum number of available of cores on your machine, use `parallel::detectCores()`.
@@ -385,7 +377,8 @@ The outbreak data of the start of the COVID-19 pandemic from the United Kingdom 
 + `confirm` : number of confirmed cases for a region on a given date.
 
 ```{r}
-regional_cases <- incidence2::covidregionaldataUK[, c("date", "cases_new", "region")]
+regional_cases <-
+  incidence2::covidregionaldataUK[, c("date", "cases_new", "region")]
 colnames(regional_cases) <- c("date", "confirm", "region")
 
 # extract the first 90 dates for all regions
