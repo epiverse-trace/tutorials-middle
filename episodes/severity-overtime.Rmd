@@ -111,6 +111,8 @@ https://github.com/epiverse-trace/cfr/blob/main/R/estimate_outcomes.R#L16
 
 what is a convolution?
 
+<https://github.com/epiverse-trace/cfr/issues/42>
+
 ### assessment: do a rolling and compare, why so different?
 
 <https://github.com/epiverse-trace/cfr/issues/123>
