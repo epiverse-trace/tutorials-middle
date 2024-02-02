@@ -321,7 +321,7 @@ ebola_estimates <- epinow(
 summary(ebola_estimates)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(ebola_estimates)$estimate[summary(ebola_estimates)$measure=="Effective reproduction no."]`. The exponential growth rate of case numbers is `r summary(ebola_estimates)$estimate[summary(ebola_estimates)$measure=="Rate of growth"]`.
+The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(ebola_estimates)[measure=="Effective reproduction no."]$estimate`. The exponential growth rate of case numbers is `r summary(ebola_estimates)[measure=="Rate of growth"]$estimate`.
 
 Visualize the estimates:
 
