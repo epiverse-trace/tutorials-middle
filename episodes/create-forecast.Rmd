@@ -108,7 +108,7 @@ plot(estimates)
 
 By default, the short-term forecasts are created using the latest estimate of the reproduction number $R_t$. As this estimate is based on partial data, it has considerable uncertainty.  
 
-The reproduction number can be changed to an estimate based on more data using `rt_ops()`:
+The reproduction number that is projected into the future can be changed to a less recent estimate based on more data using `rt_ops()`:
 
 ```{r, eval = FALSE}
 rt_opts(future = "estimate")
