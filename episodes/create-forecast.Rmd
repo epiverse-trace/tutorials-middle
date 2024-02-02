@@ -7,9 +7,8 @@ editor_options:
 ---
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
-require(EpiNow2)
-require(ggplot2)
-options(mc.cores = 4)
+library(EpiNow2)
+withr::with_options(mc.cores = 4)
 ```
 
 
@@ -168,7 +167,8 @@ First, we must format our data to have the following columns:
 ```{r}
 reported_cases_deaths <- aggregate(
   cbind(cases_new, deaths_new) ~ date,
-  data = incidence2::covidregionaldataUK[, c("date", "cases_new", "deaths_new")],
+  data =
+    incidence2::covidregionaldataUK[, c("date", "cases_new", "deaths_new")],
   FUN = sum
 )
 colnames(reported_cases_deaths) <- c("date", "primary", "secondary")
@@ -295,13 +295,15 @@ As we want to also create a two week forecast, we specify `horizon = 14` to fore
 
 ```{r, eval=FALSE,echo=FALSE}
 # read data from the tutorial repository R project
-ebola_cases <- read.csv("episodes/data/ebola_cases.csv")
+ebola_confirmed <-
+  read_csv(file.path("episodes", "data", "ebola_cases.csv"))
 ```
 
 ```{r,eval=FALSE,echo=TRUE, message = FALSE}
 # read data
-# assuming it is located in the folder path: data/raw-data/
-ebola_cases <- read.csv("data/raw-data/ebola_cases.csv")
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+ebola_confirmed <-
+  read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 
 # format date column
 ebola_cases$date <- as.Date(ebola_cases$date)
@@ -310,8 +312,8 @@ ebola_estimates <- epinow(
   reported_cases = ebola_cases[1:120, ], # first 3 months of data only
   generation_time = generation_time_opts(ebola_generation_time),
   delays = delay_opts(ebola_incubation_period),
-  horizon = 14 # horizon needs to be 14 days to create two week forecast (default is 7 days)
-  )
+  # horizon needs to be 14 days to create two week forecast (default is 7 days)
+  horizon = 14
 )
 
 summary(ebola_estimates)
