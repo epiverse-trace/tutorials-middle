@@ -95,6 +95,11 @@ epidist_db(epi_dist = "onset to death") %>%
 
 <https://mrc-ide.github.io/global-lmic-reports/DZA/>
 
+### uncertainty in `severity_baseline`
+
+is it possible? to run this as in finalsize uncertainty R0, running over `severity_baseline` samples?
+<https://epiverse-trace.github.io/finalsize/articles/uncertainty_params.html>
+
 ### assessment: extra package
 
 - if simulist no needed, insert here using incidence2 or refer to it in vignette to solve an assessment
