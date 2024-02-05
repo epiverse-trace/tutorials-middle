@@ -276,10 +276,10 @@ The Bayesian inference is performed using MCMC methods with the program [Stan](h
 To reduce computation time, we can run chains in parallel. To do this, we must set the number of cores to be used. By default, 4 MCMC chains are run (see `stan_opts()$chains`), so we can set an equal number of cores to be used in parallel as follows:
 
 ```{r}
-withr::with_options(mc.cores = 4)
+withr::local_options(list(mc.cores = 4))
 ```
 
-To find the maximum number of available of cores on your machine, use `parallel::detectCores()`.
+To find the maximum number of available cores on your machine, use `parallel::detectCores()`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
