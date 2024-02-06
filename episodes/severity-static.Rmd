@@ -116,16 +116,8 @@ However, this is a naive, biased estimates value for the true $cfr$; because it 
 # show nishiura example, if possible
 ```
 
-[Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647)
 
-```{r}
-# methods
-```
-
-
-- naive CFR vs adjusted CFR
-
-## Adjusted CFR
+## Method: Adjusted CFR
 
 - what do we need to estimate it?
 
@@ -140,6 +132,44 @@ onset_to_death_ebola <- epiparameter::epidist_db(
   epi_dist = "onset_to_death",
   single_epidist = TRUE)
 ```
+
+## Method: Censoring or Delays?
+
+The delay adjustment can be adjusted by censoring
+
+```{r}
+epiparameter::epidist_db(
+  epi_dist = "onset_to_death",
+  # disease = "COVID-19"
+  ) %>% 
+  list_distributions()
+
+onset_to_death <- 
+  epiparameter::epidist_db(
+  disease = "Marburg",
+  epi_dist = "onset_to_death",
+  single_epidist = TRUE)
+
+onset_to_death$method_assess
+```
+
+
+for early stage of epidemic, by delays instead of censoring
+
+Ghani
+
+[Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647)
+
+
+```{r}
+# methods
+```
+
+- naive CFR vs adjusted CFR
+
+### limitation
+
+> Our unbiased estimation of the cCFR does not address all sources of error in data (e.g. underdiagnosis of infected individuals) and we summarize the relevant issues in the discussion. 
 
 ## Calculate adjusted CFR
 
@@ -183,6 +213,23 @@ Refer to: <https://github.com/epiverse-trace/cfr/issues/79>
 # show if possible
 ```
 
+### why to use discrete distributions over continuous distributions
+
+From <https://epiverse-trace.github.io/cfr/articles/delay_distributions.html>
+> Note that discretised distributions are the more appropriate choice to be passed to cfr_*(), as we are usually working with daily case and death data. We do use continuous distributions in many examples as we do not expect this difference to bias the estimates excessively.
+
+## Severity heterogeneity
+
+From <https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371>
+
+> The CFR may differ across populations (e.g. age, space, treatment); quantifying these heterogeneities can help target resources appropriately and compare different care regimens. 
+
+
+### Assessment: estimate CFR by age group
+
+```{r}
+#find data
+```
 
 ## Rolling CFR
 
@@ -266,6 +313,9 @@ ggplot(data_cfr) +
 
 - hospitalization fatality ratio
 
+HFR in figure
+<https://www.nature.com/articles/s41467-020-19238-2>
+
 - look for parameters from epiparameter
 
 ```{r}
@@ -276,6 +326,10 @@ epidist_db() %>%
   count(epi_distribution)
 
 epidist_db(epi_dist = "onset to death") %>% 
+  list_distributions()
+
+epidist_db(
+  epi_dist = "hospitalisation to death") %>% 
   list_distributions()
 ```
 
