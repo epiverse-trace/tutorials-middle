@@ -58,17 +58,57 @@ figure <https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243
 
 ![At the top of the pyramid, those meeting the WHO case criteria for severe or critical cases are likely to be identified in the hospital setting, presenting with atypical viral pneumonia. These cases will have been identified in mainland China and among those categorised internationally as local transmission. Many more cases are likely to be symptomatic (ie, with fever, cough, or myalgia), but might not require hospitalisation. These cases will have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might also be identified through population surveillance of, for example, influenza-like illness. The bottom part of the pyramid represents mild (and possibly asymptomatic) cases. These cases might be identified through contact tracing and subsequently via serological testing ([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext)).](fig/spectrum-cases-covid19.jpg)
 
+![](fig/spectrum-cases-covid19.jpg)
+
+Disease severity is measured in terms of case fatality ratio ($cfr$) --total number of deaths $D$ divided by total number of cases $C$.
+
+$$ nCFR =  \frac{D}{C}. $$
+
+
+```{r}
+# Load the Ebola 1976 data provided with the package --------
+data("ebola1976")
+
+# view top data
+ebola1976 %>% as_tibble()
+```
+
+
 cfr
 
 naive cfr = nCFR
 
 nCFR = deaths / cases
 
+The `cfr` package requires only a data frame with three columns,`date`, `cases`, and `deaths`, giving the daily number of reported cases and deaths. The below code chuck creates such data frame from the simulated Ebola dataset.
+
+```{r}
+# Calculate the static CFR without correcting for delays ----
+cfr_static(data = ebola1976)
+```
+
+However, this is a naive, biased estimates value for the true $cfr$; because it does not account for the delay between case being reported and knowing its outcome. 
+
 cases = recovered + death + unknown status
 
 right-censoring refers to the unknown status
 
 [1] one way to solve this was removing the unknown status (suggesting in Ghani)
+
+
+- time static
+
+- right-censoring bias
+
+
+> During the outbreak of severe acute respiratory syndrome (SARS) in 2002–03, it was shown that this estimator, bt, considerably underestimates the cCFR [8]. This is easily demonstrated by relating Ct and Dt to the incidence function ct (i.e. the number of new confirmed cases on day t), and the conditional probability density function fs of the time from onset to death, given death. ([Nishiura et al. 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852#s2))
+
+```{r}
+# show nishiura example, if possible
+```
+
+
+## Method: Adjusted CFR
 
 [2] other method scale the number of cases in the denominator
 
@@ -80,46 +120,6 @@ ut is used to *scale* the value of the cumulative number of cases in the denomin
 
 cfr = deaths / (cases * ut)
 
-hfr
-daily incidence * proportion of cases with delay between hospitalization and death
-
-- time static
-
-- right-censoring bias
-
-
-
-Disease severity is measured in terms of case fatality ratio ($cfr$) --total number of deaths $D$ divided by total number of cases $C$.
-
-$$ cfr =  \frac{D}{C}. $$
-
-
-```{r}
-# Load the Ebola 1976 data provided with the package --------
-data("ebola1976")
-
-# view top data
-ebola1976 %>% as_tibble()
-```
-
-The `cfr` package requires only a data frame with three columns,`date`, `cases`, and `deaths`, giving the daily number of reported cases and deaths. The below code chuck creates such data frame from the simulated Ebola dataset.
-
-```{r}
-# Calculate the static CFR without correcting for delays ----
-cfr_static(data = ebola1976)
-```
-
-However, this is a naive, biased estimates value for the true $cfr$; because it does not account for the delay between case being reported and knowing its outcome. 
-
-> During the outbreak of severe acute respiratory syndrome (SARS) in 2002–03, it was shown that this estimator, bt, considerably underestimates the cCFR [8]. This is easily demonstrated by relating Ct and Dt to the incidence function ct (i.e. the number of new confirmed cases on day t), and the conditional probability density function fs of the time from onset to death, given death. ([Nishiura et al. 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852#s2))
-
-```{r}
-# show nishiura example, if possible
-```
-
-
-## Method: Adjusted CFR
-
 - what do we need to estimate it?
 
 ```{r, message=FALSE, warning=FALSE}
@@ -128,7 +128,19 @@ onset_to_death_ebola <- epiparameter::epidist_db(
   disease = "Ebola",
   epi_dist = "onset_to_death",
   single_epidist = TRUE)
+
+onset_to_death_ebola
 ```
+
+
+```{r}
+cfr::estimate_outcomes(
+  data = ebola1976, 
+  delay_density = function(x) density(onset_to_death_ebola, x)
+)
+```
+
+As you 
 
 ## Method: Censoring or Delays?
 
@@ -307,6 +319,9 @@ ggplot(data_cfr) +
 
 
 ### estimate HFR
+
+hfr
+daily incidence * proportion of cases with delay between hospitalization and death
 
 - hospitalization fatality ratio
 
