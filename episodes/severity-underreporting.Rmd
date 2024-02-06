@@ -2,6 +2,8 @@
 title: 'Estimate underreporting'
 teaching: 10
 exercises: 2
+editor_options: 
+  chunk_output_type: inline
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
@@ -12,8 +14,9 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Estimate case ascertainment
-- Assess for `{incidence2}`
+- Estimate case ascertainment or underreporting.
+- Integrate `{incidence2}` and `{cfr}`.
+- Create an input linelist with `{simulist}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
