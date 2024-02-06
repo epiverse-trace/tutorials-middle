@@ -44,16 +44,13 @@ The clinical severity is one of the key measurements to estimate the pandemic po
 
 The case fatality ratio or CFR, defined as the ratio of deaths from an infectious disease to the number of cases, is a measure of severity. However, calculating this directly from the cumulative number of deaths to cases during the course of an epidemic tends to result in a biased CFR ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
 
-In this tutorial we are going to learn how to use `{cfr}` to correct a CFR estimation using the appropriate delay distributions.
+In this tutorial we are going to learn how to use `{cfr}` to correct a CFR estimation using an appropriate [delay distribution](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere. Also, this will show how it works in the inside next to the theory behind it, and how we can reuse its functions for other severity measurements. We’ll use the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
 
 ```{r,message=FALSE,warning=FALSE}
-# Load package ----------------------------------------------
 library(cfr)
+library(epiparameter)
 library(tidyverse)
 ```
-
-[Delay distribution]{#delaydist}
-: Probability distribution of a key time period. 
 
 ## Naive CFR
 
@@ -126,10 +123,6 @@ However, this is a naive, biased estimates value for the true $cfr$; because it 
 - what do we need to estimate it?
 
 ```{r, message=FALSE, warning=FALSE}
-
-# Load package ----------------------------------------------
-library(epiparameter)
-
 # Get delay distribution ------------------------------------
 onset_to_death_ebola <- epiparameter::epidist_db(
   disease = "Ebola",
