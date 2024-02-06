@@ -2,6 +2,8 @@
 title: 'severity-overtime'
 teaching: 10
 exercises: 2
+editor_options: 
+  chunk_output_type: inline
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
@@ -12,9 +14,8 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Estimate time-varying CFR
-- Differenciate rolling vs time-varying
-- Simulate `{simulist}`
+- Estimate time-varying CFR.
+- Differenciate rolling vs time-varying.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

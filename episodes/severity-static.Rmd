@@ -3,7 +3,7 @@ title: 'Estimate severity'
 teaching: 10
 exercises: 2
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
@@ -21,6 +21,7 @@ editor_options:
 - Estimate static CFR
 - Estimate a delay adjusted static CFR
 - Use with `{epiparamater}` (for any refer to package vignette)
+- Estimate severity heterogeneity
 - Estimate rolling CFR
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
