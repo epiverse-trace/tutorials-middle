@@ -45,6 +45,15 @@ cfr = confirmed deaths / confirmed infections
 
 - any regional variations facilitates the estimate of case ascertainment 
 
+ifr covid influenza?
+<https://github.com/mbevand/covid19-age-stratified-ifr?tab=readme-ov-file#comparing-covid-19-to-seasonal-influenza>
+
+infection assertainment ratio
+<https://onlinelibrary.wiley.com/doi/full/10.1111/irv.13181>
+
+infection fatality by age
+<https://www.nature.com/articles/s41586-020-2918-0/figures/2>
+
 ### Assessing under-reporting proportion of cases 
 
 The `cfr` package also provides a function to calculate  proportion of cases that have been ascertained  via `estimate_ascertainment()` function.
