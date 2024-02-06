@@ -40,7 +40,7 @@ What is the likely public health impact of the outbreak? Is this being or going 
 
 The clinical severity is one of the key measurements to estimate the pandemic potential ([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062)) useful for planning scenarios ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html))
 
-![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterize influenza pandemic scenarios. The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases. HHS: United States Department of Health and Human Services.](fig/hhs-scenarios-psaf.png)
+![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterize influenza pandemic scenarios. The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases. HHS: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/hhs-scenarios-psaf.png)
 
 The case fatality ratio or CFR, defined as the ratio of deaths from an infectious disease to the number of cases, is a measure of severity. However, calculating this directly from the cumulative number of deaths to cases during the course of an epidemic tends to result in a biased CFR ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
 
@@ -56,6 +56,10 @@ library(tidyverse)
 : Probability distribution of a key time period. 
 
 ## Naive CFR
+
+figure <https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext>
+
+![At the top of the pyramid, those meeting the WHO case criteria for severe or critical cases are likely to be identified in the hospital setting, presenting with atypical viral pneumonia. These cases will have been identified in mainland China and among those categorised internationally as local transmission. Many more cases are likely to be symptomatic (ie, with fever, cough, or myalgia), but might not require hospitalisation. These cases will have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might also be identified through population surveillance of, for example, influenza-like illness. The bottom part of the pyramid represents mild (and possibly asymptomatic) cases. These cases might be identified through contact tracing and subsequently via serological testing ([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext)).](fig/spectrum-cases-covid19.jpg)
 
 cfr
 
@@ -86,7 +90,7 @@ daily incidence * proportion of cases with delay between hospitalization and dea
 
 - right-censoring bias
 
-figure <https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#%20>
+
 
 Disease severity is measured in terms of case fatality ratio ($cfr$) --total number of deaths $D$ divided by total number of cases $C$.
 
