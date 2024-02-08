@@ -11,7 +11,7 @@
 carpentry: 'incubator'
 
 # Overall title for pages.
-title: 'Outbreak analytics with R'
+title: 'Real-time analysis and forecasting for outbreak analytics with R'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
 created:
@@ -59,14 +59,8 @@ contact: 'andree.valle-campos@lshtm.ac.uk'
 
 # Order of episodes in your lesson
 episodes:
-- introduction.Rmd
-- read-delays.Rmd
 - quantify-transmissibility.Rmd
 - create-forecast.Rmd
-- simulating-transmission.Rmd
-- model-choices.Rmd
-- modelling-interventions.Rmd
-- compare-interventions.Rmd
 
 # Information for Learners
 learners:
@@ -84,4 +78,4 @@ profiles:
 
 varnish: epiverse-trace/varnish@epiversetheme
 # this is carpentries/sandpaper#533 in our fork so we can keep it up to date with main
-sandpaper: epiverse-trace/sandpaper@patch-renv-github-bug 
+sandpaper: epiverse-trace/sandpaper@patch-renv-github-bug
