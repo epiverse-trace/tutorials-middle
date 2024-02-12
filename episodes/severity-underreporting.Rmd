@@ -15,8 +15,8 @@ editor_options:
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Estimate case ascertainment or underreporting.
-- Integrate `{incidence2}` and `{cfr}`.
-- Create an input linelist with `{simulist}`.
+<!-- - Integrate `{incidence2}` and `{cfr}`. -->
+<!-- - Create an input linelist with `{simulist}`. -->
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
