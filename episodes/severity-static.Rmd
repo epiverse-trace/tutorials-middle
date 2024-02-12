@@ -221,7 +221,7 @@ what approach would you prefer to do?
 
 ::::::::::::::::::::
 
-## retake here! 
+<!-- retake here!  -->
 
 However, this is a naive, biased estimates value for the true $cfr$; because it does not account for the delay between case being reported and knowing its outcome. 
 
@@ -493,10 +493,12 @@ After looking to the vignette.
 
 - Load the `fluH7N9_china_2013` from `{outbreaks}` and estimate the naive and corrected CFR using the appropriate distribution delay
 
-```{r}
+```{r,eval=FALSE}
 # to-do
 # find any other source similar to covid_uk data
+# aggregated case data 
 # ideally stratified by regions or any other category
+# if not, rearrange those inputs
 
 library(outbreaks)
 
