@@ -59,8 +59,6 @@ contact: 'andree.valle-campos@lshtm.ac.uk'
 
 # Order of episodes in your lesson
 episodes:
-- introduction.Rmd
-- read-delays.Rmd
 - quantify-transmissibility.Rmd
 - create-forecast.Rmd
 
