@@ -35,6 +35,89 @@ editor_options:
 
 - time-varying, depending to interventions or new strains (evaluate if in separate episode?)
 
+## Rolling CFR
+
+- cumulative sum
+
+```{r}
+# last rolling equal to the static estimate
+cfr_static(
+  data = ebola1976,
+  delay_density = function(x) dgamma(x, shape = 2.40, scale = 3.33)
+)
+```
+
+
+Also,  severity of a disease can change over time. The `cfr` package provides functions to estimate biased and unbiased (by considering the delays), static, and time-varying $cfr$s. 
+
+```{r}
+# Calculate the rolling daily CFR while correcting for delays --------------------
+rolling_cfr_corrected <- cfr::cfr_rolling(
+  data = ebola1976,
+  delay_density = function(x) density(onset_to_death_ebola, x)
+)
+
+tail(rolling_cfr_corrected)
+```
+
+```{r}
+rolling_cfr_corrected$method <- "corrected"
+
+# visualise both corrected and uncorrected rolling estimates
+ggplot(rolling_cfr_corrected) +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low, ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_mean, colour = method)
+  )
+```
+
+
+
+
+### assessment: explain the bias
+
+```{r}
+# Calculate the CFR without correcting for delays on each day of the outbreak ----
+rolling_cfr_naive <- cfr_rolling(
+  data = ebola1976
+)
+
+tail(rolling_cfr_naive)
+
+rolling_cfr_naive$method <- "naive"
+
+# combine the data for plotting
+data_cfr <- bind_rows(
+  rolling_cfr_naive,
+  rolling_cfr_corrected
+)
+
+# visualise both corrected and uncorrected rolling estimates
+ggplot(data_cfr) +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low, ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_mean, colour = method)
+  )
+
+```
+
+![a) Estimates of the case fatality ratio and 95 percent confidence intervals over the course of the epidemic of severe acute respiratory syndrome in Hong Kong in 2003. Black square, case fatality ratio eventually observed for patients admitted to the hospital by the time denoted on the x-axis; black diamond, first simple estimate (deaths/cases); black triangle, second simple estimate (deaths/(deaths + recovered)); white square, adapted Kaplan-Meier (KM) method; black dotted line, range obtained from the adapted KM method; white circle, gamma mixture model. ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743))](fig/cfr-m_amjepidkwi230f03_lw-top_a.jpeg)
+
+
 ## Time-varying CFR
 
 ```{r,message=FALSE,warning=FALSE}
