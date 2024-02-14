@@ -36,7 +36,10 @@ editor_options:
 
 ## Introduction
 
-What is the likely public health impact of the outbreak? Is this being or going to be a public health problem? These are common questions at the early stage of an epidemic.
+These two are also common questions at the early stage of an epidemic:
+
+- What is the likely public health impact of the outbreak? 
+- Is this being or going to be a public health problem? 
 
 The clinical severity is one of the key measurements to estimate the pandemic potential ([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062)) useful for planning scenarios ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html))
 
@@ -44,7 +47,7 @@ The clinical severity is one of the key measurements to estimate the pandemic po
 
 One measure of severity is the case fatality ratio or CFR. This is defined as the ratio of deaths from an infectious disease to the number of cases. However, calculating this directly from the cumulative number of deaths to cases during the course of an epidemic tends to result in a biased CFR ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
 
-In this tutorial we are going to learn how to use `{cfr}` to correct a CFR estimation using an appropriate [delay distribution](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere. Also, this will show how it works in the inside next to the theory behind it, and how we can reuse its functions for other severity measurements. 
+In this tutorial we are going to learn how to use the `{cfr}` package to calculate and adjust a CFR estimation using an appropriate [delay distribution](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere. Also, this will show how it works in the inside next to the theory behind it, and how we can reuse its functions for other severity measurements. 
 
 We’ll use the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
 
@@ -75,7 +78,7 @@ ebola1976 %>% as_tibble()
 The `cfr_static()`
 
 ```{r}
-# Calculate the static CFR without correcting for delays ----
+# Calculate the static CFR without adjusting for delays ----
 cfr_static(data = ebola1976)
 ```
 
@@ -178,7 +181,7 @@ onset_to_death_ebola
 Now, we use  `cfr_static()` to calculate overall disease severity with the `delay_density` argument. When using an `<epidist>` class object we can use this expression as a template `function(x) density(<EPIDIST_OBJECT>, x)`:
 
 ```{r}
-# Calculate the static CFR while correcting for delays
+# Calculate the static CFR while adjusting for delays
 cfr_static(
   data = ebola1976,
   delay_density = function(x) density(onset_to_death_ebola, x)
@@ -191,7 +194,7 @@ This analysis indicated that the overall disease severity is between $49\%$ and 
 
 :::::::::::::::::::: challenge
 
-Load the `ebola_kikwit_1995` from `{outbreaks}` and estimate the corrected CFR using the appropriate distribution delay
+Load the `ebola_kikwit_1995` from `{outbreaks}` and estimate the adjusted CFR using the appropriate distribution delay
 
 - find the approapriate epiparameter!
 
@@ -387,7 +390,15 @@ daily incidence * proportion of cases with delay between hospitalization and dea
 HFR in figure
 <https://www.nature.com/articles/s41467-020-19238-2>
 
+::::::::::::::::::::: hint
+
+For the Hospitalisation Fatality Risk (HFR) we require: 
+  - hospitalisation and death incidence data, and a
+  - hospitalization-to-death delay distribution.
+
 - look for parameters from epiparameter
+
+:::::::::::::::::::::
 
 ```{r}
 library(epiparameter)
@@ -403,6 +414,8 @@ epidist_db(
   epi_dist = "hospitalisation to death") %>% 
   list_distributions()
 ```
+
+:::::::::::::::::::::::::
 
 ::::::::::::::::: callout
 
@@ -420,7 +433,7 @@ After looking to the vignette.
 
 - What is the function?
 
-- Load the `fluH7N9_china_2013` from `{outbreaks}` and estimate the naive and corrected CFR using the appropriate distribution delay
+- Load the `fluH7N9_china_2013` from `{outbreaks}` and estimate the naive and adjusted CFR using the appropriate distribution delay
 
 ```{r,eval=FALSE}
 # to-do
@@ -446,6 +459,22 @@ cfr::prepare_data(
   deaths_variable = "death"
 )
 ```
+
+:::::::::::::::::
+
+::::::::::::::::: challenge
+
+### Estimate severity heterogeneity
+
+The CFR may differ across populations (e.g. age, space, treatment); quantifying these heterogeneities can help target resources appropriately and compare different care regimens.
+
+How would you estimate severity heterogeneity?
+
+::::::::::::::::: hint
+
+use `{incidence2}` to group aggregated case data by the `region` variable.
+
+:::::::::::::::::
 
 :::::::::::::::::
 
