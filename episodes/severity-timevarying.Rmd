@@ -14,6 +14,7 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
+- Estimate rolling CFR
 - Estimate time-varying CFR.
 - Differenciate rolling vs time-varying.
 

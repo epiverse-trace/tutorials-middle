@@ -8,21 +8,21 @@ editor_options:
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How to estimate static CFR from linelist data?
+- How to estimate the Case Fatality Ratio (CFR)?
 
 - Why to adjust a CFR with a delay distribution?
 
-- How to differentiate the CFR estimation from linelist vs incidence?
+- How does the CFR adjusting method works?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Estimate static CFR
-- Estimate a delay adjusted static CFR
-- Use with `{epiparamater}` (for any refer to package vignette)
-- Estimate severity heterogeneity
-- Estimate rolling CFR
+- Estimate the CFR from aggregated case data using `{cfr}`.
+
+- Estimate a delay-adjusted CFR using `{epiparamater}` and `{cfr}`.
+
+- Estimate severity measurements like IFR or HFR using `{cfr}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
