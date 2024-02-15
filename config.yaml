@@ -62,8 +62,6 @@ episodes:
 - quantify-transmissibility.Rmd
 - create-forecast.Rmd
 - severity-static.Rmd
-- severity-timevarying.Rmd
-- severity-underreporting.Rmd
 
 # Information for Learners
 learners:
