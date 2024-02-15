@@ -315,7 +315,7 @@ outbreaks::ebola_kikwit_1995 %>%
 ::::::::::::::::::::::::::::::::::::::::
 
 
-## Early determination of an unbiased CFR
+## Early-stage unbiased CFR
 
 We just found that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?!
 
@@ -509,13 +509,13 @@ Then, the Infection fatality risk (IFR) requires:
   - infection and death incidence data, with an 
   - exposure-to-death delay distribution (or close approximation).
 
-And for the Hospitalisation Fatality Risk (HFR) we require: 
-  - hospitalisation and death incidence data, and a
-  - hospitalization-to-death delay distribution.
-
 :::::::::::::::::::::::::::: callout
 
 ### Data sources for more severity measures
+
+Similarly, for the Hospitalisation Fatality Risk (HFR) we require: 
+  - hospitalisation and death incidence data, and a
+  - hospitalization-to-death delay distribution.
 
 [Yang et al., 2020](https://www.nature.com/articles/s41467-020-19238-2) summarises different definitions and data sources:
 
