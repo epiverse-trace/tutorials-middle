@@ -63,9 +63,11 @@ library(tidyverse)
 
 ## Naive CFR
 
-Disease severity is measured in terms of case fatality ratio ($cfr$) --total number of deaths $D$ divided by total number of confirmed cases $C$. We can refer to the crude or _naive CFR_ as $nCFR$:
+Disease severity is measured in terms of case fatality ratio (CFR) --which is given by the ratio of the cumulative number of deaths $D_{t}$ to the cumulative number of confirmed cases $C_{t}$. We can refer to the _naive CFR_ (also crude or biased $b_{t}$):
 
-$$ nCFR =  \frac{D}{C}. $$
+$$ b_{t} =  \frac{D_{t}}{C_{t}} $$
+
+<!-- total number of deaths $D$ divided by total number of confirmed cases $C$ -->
 
 :::::::::::::: callout
 
@@ -103,7 +105,7 @@ Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19
 
 ::::::::::::::
 
-To calculate the $nCFR$, the `cfr` package requires a data frame with three columns named:
+To calculate the naive CFR, the `cfr` package requires a data frame with three columns named:
 
 - `date`
 - `cases`
@@ -134,7 +136,7 @@ data("ebola1976")
 ebola1976 %>% as_tibble()
 ```
 
-When we use `cfr_static()` to `data` only, we calculate the naive CFR ($nCFR$):
+When we use `cfr_static()` to `data` only, we calculate the naive CFR:
 
 ```{r}
 # Calculate the static CFR without adjusting for delays
@@ -432,46 +434,55 @@ This means that the CFR estimate is higher than the proportion of deaths among i
 
 ## The underlying method
 
-However, this is a naive, biased estimates value for the true $cfr$; because it does not account for the delay between case being reported and knowing its outcome. 
+To adjust the CFR, Nishiura et al., 2009 use the case and death incidence data to estimate the number of cases with known outcomes:
 
+$$
+  u_t = \dfrac{\sum_{i = 0}^t
+        \sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
+$$
 
+where $c_{t}$ is the daily case incidence at time, $t$, $f_{t}$ is the value of the probability mass function of the delay distribution between onset and death. $u_{t}$ represents the underestimation of the known outcomes and is used to **scale** the value of the cumulative number of cases in the denominator in the calculation of the CFR. 
 
-> During the outbreak of severe acute respiratory syndrome (SARS) in 2002–03, it was shown that this estimator, bt, considerably underestimates the cCFR [8]. This is easily demonstrated by relating Ct and Dt to the incidence function ct (i.e. the number of new confirmed cases on day t), and the conditional probability density function fs of the time from onset to death, given death. ([Nishiura et al. 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852#s2))
-
-```{r}
-# show nishiura example, if possible
-```
-
-For calculation of the factor of underestimation $u_{t}$, two pieces of information are needed: the incidence function $c_{t}$ and the distribution of time from onset to death $f_{s}$. For ct, we use the published dates of onset among confirmed cases, while fs is assumed known.
-
-[2] other method scale the number of cases in the denominator
-
-ct = daily incidence *
-ft = proportion of cases with delay between onset and death
-ut = underestimation of known outcomes
-
-ut is used to *scale* the value of the cumulative number of cases in the denominator, when calculating cfr
-
-cfr = deaths / (cases * ut)
-
-- what do we need to estimate it?
-
-```{r, message=FALSE, warning=FALSE}
-# Get delay distribution 
-onset_to_death_ebola <- epiparameter::epidist_db(
-  disease = "Ebola",
-  epi_dist = "onset_to_death",
-  single_epidist = TRUE)
-
-onset_to_death_ebola
-```
-
+The numerator for $u_{t}$ is represented in `estimated_outcomes`, while $u_{t}$ in `u_t`:
 
 ```{r}
-cfr::estimate_outcomes(
+ut_outcomes <- 
+  cfr::estimate_outcomes(
+    data = ebola1976, 
+    delay_density = function(x) density(onset_to_death_ebola, x)
+  ) %>% 
+  slice_tail()
+
+ut_outcomes
+```
+
+The estimator for CFR can be written as: 
+
+$$p_{t} = b_{t} / u_{t}$$
+
+where $p_{t}$ is the realized proportion of confirmed cases to die from the infection, and $b_{t}$, as a naive, crude and biased estimate of CFR.
+
+```{r}
+ebola1976 %>% 
+  summarise(
+    date_max = max(date),
+    cases_cumsum = cumsum(cases),
+    deaths_cumsum = cumsum(deaths)
+    ) %>% 
+  slice_tail() %>% 
+  mutate(b_t = deaths_cumsum/cases_cumsum) %>% 
+  mutate(p_t = b_t/(ut_outcomes %>% pull(u_t)))
+```
+
+
+In `cfr_static()` and `cfr_rolling()`, $u_{t}$ is used in a likelihood function to estimate the severity:
+
+```{r}
+cfr::cfr_rolling(
   data = ebola1976, 
   delay_density = function(x) density(onset_to_death_ebola, x)
-)
+) %>% 
+  slice_tail()
 ```
 
 :::::::::::::::::::::::::: checklist
@@ -630,6 +641,12 @@ covid_data_prepared %>%
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Use `{cfr}` to estimate severity
+
+- Use `cfr_static()` to estimate the overall CFR with the latest data available.
+
+- Use `cfr_rolling()` to show what the estimated CFR would be on each day of the outbreak.
+
+- Use the `delay_density` argument to adjust the CFR by the corresponding delay distribution.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
