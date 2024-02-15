@@ -20,7 +20,7 @@ editor_options:
 
 - Estimate the CFR from aggregated case data using `{cfr}`.
 
-- Estimate a delay-adjusted CFR using `{epiparamater}` and `{cfr}`.
+- Estimate a delay-adjusted CFR using `{epiparameter}` and `{cfr}`.
 
 - Estimate severity measurements like IFR or HFR using `{cfr}`.
 
@@ -195,6 +195,18 @@ During an _ongoing_ epidemic, there is a delay between the time someone dies and
 
 The key determinants of the magnitude of the bias are the epidemic _growth rate_ and the _distribution of delays_ from case-reporting to death-reporting; the longer the delays and the faster the growth rate, the greater the bias.
 
+:::::::::::::::::::: testimonial
+
+Improving an _early_ epidemiological assessment of an unbiased cCFR is crucial for the initial determination of virulence, shaping the level and choices of public health intervention, and providing advice to the general public. 
+
+In 2009, during the swine-flu virus, Influenza A (H1N1), Mexico had an early biased estimation of the CFR. Initial reports from the government of Mexico suggested a virulent infection, whereas in other countries the same virus was perceived as mild ([TIME, 2009](https://content.time.com/time/health/article/0,8599,1894534,00.html)). 
+
+In the USA and Canada there were no deaths attributed to the virus in the first 10 days following a declaration of a public health emergency by the World Health Organization. Even under similar circumstances at the early stage of the global pandemic, public health officials, policy makers and the general public want to know the virulence of an emerging infectious agent. 
+
+[Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062) reinterpreted the data assessing the biases and getting a clinical severity lower than the 1918 influenza pandemic but comparable with that seen in the 1957 pandemic.
+
+::::::::::::::::::::
+
 :::::::::::::::::::: discussion
 
 Based on your experience:
@@ -208,18 +220,6 @@ Answer to these questions:
 - What complementary analysis would you do to solve the bias?
 
 :::::::::::::::::::: 
-
-:::::::::::::::::::: testimonial
-
-Improving an _early_ epidemiological assessment of an unbiased cCFR is crucial for the initial determination of virulence, shaping the level and choices of public health intervention, and providing advice to the general public. 
-
-In 2009, during the swine-flu virus, Influenza A (H1N1), Mexico had an early biased estimation of the CFR. Initial reports from the government of Mexico suggested a virulent infection, whereas in other countries the same virus was perceived as mild ([TIME, 2009](https://content.time.com/time/health/article/0,8599,1894534,00.html)). 
-
-In the USA and Canada there were no deaths attributed to the virus in the first 10 days following a declaration of a public health emergency by the World Health Organization. Even under similar circumstances at the early stage of the global pandemic, public health officials, policy makers and the general public want to know the virulence of an emerging infectious agent. 
-
-[Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062) reinterpreted the data assessing the biases and getting a clinical severity lower than the 1918 influenza pandemic but comparable with that seen in the 1957 pandemic.
-
-::::::::::::::::::::
 
 ## Delay-adjusted CFR
 
@@ -281,7 +281,7 @@ out_low <- out_delay_adjusted %>% pull(severity_low)
 out_high <- out_delay_adjusted %>% pull(severity_high)
 ```
 
-The delay-adjusted CFR indicated that the overall disease severity _at end of the outbreak_ or with the _latest data available at the moment_ is `r out_mean` with a 95% confidence interval between `r `out_low` and `r out_high`, slightly higher than the naive one.
+The delay-adjusted CFR indicated that the overall disease severity _at end of the outbreak_ or with the _latest data available at the moment_ is `r out_mean` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
 
 :::::::::::::::::::::::::::::::::::::::: challenge
 
@@ -323,9 +323,13 @@ With [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.137
 
 The main benefit of using the method from  is to reduce the time to get an _unbiased CFR_
 
-In the figure bellow, Figures A and B show the cumulative numbers of cases and deaths of SARS, and Figure C the observed (biased) CFR estimates as a function of time, i.e. the ratio of the cumulative number of cases to deaths at time $t$. Due to the delay from onset of symptoms to death, the biased estimate of CFR at time $t$ underestimates the realized CFR at the end of an outbreak (i.e. 302/1755 = 17.2 %). Nevertheless, even by only using the observed data for the period 19 March to 2 April, the method in `{cfr}` can yield an appropriate prediction (Figure D), e.g. the unbiased CFR at 27 Mar is 18.1 % (95% CI: 10.5, 28.1). An overestimation is seen in the very early stages of the epidemic, but the 95% confidence limits in the later stages include the realized CFR (i.e. 17.2 %).
+In the figure bellow, Figures A and B show the cumulative numbers of cases and deaths of SARS, and Figure C the observed (biased) CFR estimates as a function of time, i.e. the ratio of the cumulative number of cases to deaths at time $t$. Due to the delay from onset of symptoms to death, the biased estimate of CFR at time $t$ underestimates the realized CFR at the end of an outbreak (i.e. 302/1755 = 17.2 %). 
 
-![Early determination of the unbiased confirmed case fatality ratio of severe acute respiratory syndrome (SARS) in Hong Kong, 2003.](fig/cfr-pone.0006852.g003.png)
+![Observed (biased) confirmed case fatality ratio of severe acute respiratory syndrome (SARS) in Hong Kong, 2003.](fig/cfr-pone.0006852.g003-fig_abc.png)
+
+Nevertheless, even by only using the observed data for the period 19 March to 2 April, the method in `{cfr}` can yield an appropriate prediction (Figure D), e.g. the unbiased CFR at 27 Mar is 18.1 % (95% CI: 10.5, 28.1). An overestimation is seen in the very early stages of the epidemic, but the 95% confidence limits in the later stages include the realized CFR (i.e. 17.2 %).
+
+![Early determination of the unbiased confirmed case fatality ratio of severe acute respiratory syndrome (SARS) in Hong Kong, 2003.](fig/cfr-pone.0006852.g003-fig_d.png)
 
 We can explore this behavior by using the `cfr_rolling()` function. With `tail()` we show that the latest CFR estimates are equal to the `cfr_static()` outputs: 
 
@@ -460,11 +464,11 @@ The estimator for CFR can be written as:
 
 $$p_{t} = b_{t} / u_{t}$$
 
-where $p_{t}$ is the realized proportion of confirmed cases to die from the infection, and $b_{t}$, as a naive, crude and biased estimate of CFR.
+where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
 
 ```{r}
 ebola1976 %>% 
-  summarise(
+  reframe(
     date_max = max(date),
     cases_cumsum = cumsum(cases),
     deaths_cumsum = cumsum(deaths)
@@ -493,21 +497,41 @@ cfr::cfr_rolling(
 
 ::::::::::::::::::::::::::
 
-## From CFR to other severity measures
+## More severity measures
 
 For less severe emerging pathogens, the case definition typically only encompasses a small fraction of all infected individuals, and hence the infection fatality rate (i.e. the proportion of infected individuals who die, rather than the proportion of cases who die—as per the case definition, which may not be equivalent to infection) may be a more useful measure of severity [Nicoll et al., 2012](https://www.eurosurveillance.org/content/10.2807/ese.17.18.20162-en?crawler=true).
-
-Then, the Infection fatality risk (IFR) requires: 
-  - infection and death incidence data, with an 
-  - exposure-to-death delay distribution (or close approximation).
 
 If for a Case fatality risk (CFR) we require: 
   - case and death incidence data, with a 
   - case-to-death delay distribution (or close approximation, such as symptom onset-to-death).
 
-For the Hospitalisation Fatality Risk (HFR) we require: 
+Then, the Infection fatality risk (IFR) requires: 
+  - infection and death incidence data, with an 
+  - exposure-to-death delay distribution (or close approximation).
+
+And for the Hospitalisation Fatality Risk (HFR) we require: 
   - hospitalisation and death incidence data, and a
   - hospitalization-to-death delay distribution.
+
+:::::::::::::::::::::::::::: callout
+
+### Data sources for more severity measures
+
+[Yang et al., 2020](https://www.nature.com/articles/s41467-020-19238-2) summarises different definitions and data sources:
+
+![Severity levels of infections with SARS-CoV-2 and parameters of interest. Each level is assumed to be a subset of the level below.](fig/cfr-s41467-020-19238-2-fig_a.png)
+
+- sCFR symptomatic case-fatality risk, 
+- sCHR symptomatic case-hospitalization risk, 
+- mCFR medically attended case-fatality risk, 
+- mCHR medically attended case-hospitalization risk, 
+- HFR hospitalization-fatality risk. 
+
+![Schematic diagram of the baseline analyses.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 84, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–194, D3)daily number of laboratory-confirmed cases on March 9–April 243, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission3, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities3, and D7) 16,781 laboratory-confirmed cases identified through universal screening10,11. Pse: RT-PCR sensitivity12. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections13.'}
+
+Red, blue, and green arrows separately denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.
+
+::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::: challenge
 
@@ -521,9 +545,7 @@ After looking to the vignette.
 
 ::::::::::::::::: hint
 
-HFR in figure
-<https://www.nature.com/articles/s41467-020-19238-2>
-
+Use `{epiparameter}` to find the required delay distribution.
 
 ```{r,eval=FALSE}
 epiparameter::epidist_db(
@@ -531,7 +553,6 @@ epiparameter::epidist_db(
 ) %>% 
   list_distributions()
 ```
-
 
 :::::::::::::::::
 
@@ -622,7 +643,7 @@ covid_data_prepared <-
     fill_NA = TRUE
   )
 
-covid_data_prepared
+covid_data_prepared %>% glimpse()
 
 covid_data_prepared %>% 
   group_by(region) %>% 
