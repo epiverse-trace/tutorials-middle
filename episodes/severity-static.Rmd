@@ -164,14 +164,14 @@ We can use `dplyr::rename()` to adapt the external data to fit the data input fo
 ```{r}
 library(outbreaks)
 
-outbreaks::ebola_kikwit_1995 %>% 
+outbreaks::ebola_kikwit_1995 %>%
   glimpse()
 
-outbreaks::ebola_kikwit_1995 %>% 
+outbreaks::ebola_kikwit_1995 %>%
   dplyr::rename(
-    "cases" = onset,
-    "deaths" = death
-  ) %>% 
+    cases = onset,
+    deaths = death
+  ) %>%
   cfr::cfr_static()
 ```
 
@@ -232,8 +232,8 @@ Real-time outbreaks may have a number of deaths insufficient to determine the di
 Let's use `{epiparameter}`:
 
 ```{r, message=FALSE, warning=FALSE}
-# Get delay distribution 
-onset_to_death_ebola <- 
+# Get delay distribution
+onset_to_death_ebola <-
   epiparameter::epidist_db(
     disease = "Ebola",
     epi_dist = "onset_to_death",
@@ -270,7 +270,7 @@ BTW, What approach would you prefer to apply?
 ::::::::::::::::::
 
 ```{r,echo=FALSE}
-out_delay_adjusted <- 
+out_delay_adjusted <-
   cfr_static(
     data = ebola1976,
     delay_density = function(x) density(onset_to_death_ebola, x)
@@ -302,9 +302,11 @@ library(outbreaks)
 
 outbreaks::ebola_kikwit_1995 %>% glimpse()
 
-outbreaks::ebola_kikwit_1995 %>% 
-  rename("cases" = onset,
-         "deaths" = death) %>% 
+outbreaks::ebola_kikwit_1995 %>%
+  rename(
+    cases = onset,
+    deaths = death
+  ) %>%
   cfr::cfr_static(
     delay_density = function(x) density(onset_to_death_ebola, x)
   )
@@ -355,23 +357,23 @@ Now let's visualize how the naive and delay-adjusted CFR estimates perform in re
 ```{r}
 
 # get the latest delay-adjusted CFR
-rolling_cfr_adjusted_end <- 
-  rolling_cfr_adjusted %>% 
+rolling_cfr_adjusted_end <-
+  rolling_cfr_adjusted %>%
   dplyr::slice_tail()
 
 # bind by rows both output data frames
 bind_rows(
   rolling_cfr_naive %>%
     mutate(method = "naive"),
-  rolling_cfr_adjusted %>% 
+  rolling_cfr_adjusted %>%
     mutate(method = "adjusted")
-) %>% 
+) %>%
   # visualise both adjusted and unadjusted rolling estimates
   ggplot() +
   geom_ribbon(
     aes(
       date,
-      ymin = severity_low, 
+      ymin = severity_low,
       ymax = severity_high,
       fill = method
     ),
@@ -383,9 +385,9 @@ bind_rows(
   geom_hline(data = rolling_cfr_adjusted_end,
              aes(yintercept = severity_mean)) +
   geom_hline(data = rolling_cfr_adjusted_end,
-             aes(yintercept = severity_low),lty = 2) +
+             aes(yintercept = severity_low), lty = 2) +
   geom_hline(data = rolling_cfr_adjusted_end,
-             aes(yintercept = severity_high),lty = 2)
+             aes(yintercept = severity_high), lty = 2)
 ```
 
 Horizontal line represents the delay-adjusted CFR estimated at the end of the outbreak. The dotted-line represents the 95% confidence intervals (95% CI) of that estimate.
@@ -450,11 +452,11 @@ where $c_{t}$ is the daily case incidence at time, $t$, $f_{t}$ is the value of 
 The numerator for $u_{t}$ is represented in `estimated_outcomes`, while $u_{t}$ in `u_t`:
 
 ```{r}
-ut_outcomes <- 
+ut_outcomes <-
   cfr::estimate_outcomes(
-    data = ebola1976, 
+    data = ebola1976,
     delay_density = function(x) density(onset_to_death_ebola, x)
-  ) %>% 
+  ) %>%
   slice_tail()
 
 ut_outcomes
@@ -467,15 +469,15 @@ $$p_{t} = b_{t} / u_{t}$$
 where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
 
 ```{r}
-ebola1976 %>% 
+ebola1976 %>%
   reframe(
     date_max = max(date),
     cases_cumsum = cumsum(cases),
     deaths_cumsum = cumsum(deaths)
-    ) %>% 
-  slice_tail() %>% 
-  mutate(b_t = deaths_cumsum/cases_cumsum) %>% 
-  mutate(p_t = b_t/(ut_outcomes %>% pull(u_t)))
+  ) %>%
+  slice_tail() %>%
+  mutate(b_t = deaths_cumsum / cases_cumsum) %>%
+  mutate(p_t = b_t / (ut_outcomes %>% pull(u_t)))
 ```
 
 
@@ -483,9 +485,9 @@ In `cfr_static()` and `cfr_rolling()`, $u_{t}$ is used in a likelihood function 
 
 ```{r}
 cfr::cfr_rolling(
-  data = ebola1976, 
+  data = ebola1976,
   delay_density = function(x) density(onset_to_death_ebola, x)
-) %>% 
+) %>%
   slice_tail()
 ```
 
@@ -550,7 +552,7 @@ Use `{epiparameter}` to find the required delay distribution.
 ```{r,eval=FALSE}
 epiparameter::epidist_db(
   epi_dist = "hospitalisation to death"
-) %>% 
+) %>%
   list_distributions()
 ```
 
@@ -561,7 +563,7 @@ epiparameter::epidist_db(
 ```{r,eval=FALSE}
 # to-do
 # find any other source similar to covid_uk data
-# aggregated case data 
+# aggregated case data
 # ideally stratified by regions or any other category
 # if not, rearrange those inputs
 
@@ -569,11 +571,11 @@ library(outbreaks)
 
 outbreaks::influenza_england_1978_school %>% glimpse()
 
-outbreaks::influenza_england_1978_school %>% 
+outbreaks::influenza_england_1978_school %>%
   dplyr::rename(
-    "cases" = in_bed,
-    "deaths" = convalescent
-  ) %>% 
+    cases = in_bed,
+    deaths = convalescent
+  ) %>%
   cfr::cfr_static()
 ```
 
@@ -616,7 +618,7 @@ incidence2::covidregionaldataUK %>% glimpse()
 ```{r,eval=FALSE}
 epiparameter::epidist_db(
   epi_dist = "onset to death"
-) %>% 
+) %>%
   list_distributions()
 ```
 
@@ -625,17 +627,17 @@ epiparameter::epidist_db(
 ::::::::::::::::::::::::: solution
 
 ```{r}
-covid_data_incidence <- 
-  incidence2::covidregionaldataUK %>% 
+covid_data_incidence <-
+  incidence2::covidregionaldataUK %>%
   incidence2::incidence(
     date_index = "date",
-    counts = c("cases_total","deaths_total"),
+    counts = c("cases_total", "deaths_total"),
     groups = "region"
   )
 
 covid_data_incidence
 
-covid_data_prepared <- 
+covid_data_prepared <-
   cfr::prepare_data(
     data = covid_data_incidence,
     cases_variable = "cases_total",
@@ -645,9 +647,9 @@ covid_data_prepared <-
 
 covid_data_prepared %>% glimpse()
 
-covid_data_prepared %>% 
-  group_by(region) %>% 
-  nest() %>% 
+covid_data_prepared %>%
+  group_by(region) %>%
+  nest() %>%
   # map(.f = cfr_static) %>% # fix this
   identity()
 ```
