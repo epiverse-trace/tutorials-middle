@@ -12,7 +12,7 @@ editor_options:
 
 - Why to adjust a CFR with a delay distribution?
 
-- How does the CFR adjusting method works?
+- When to estimate the CFR in an ongoing outbreak?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
