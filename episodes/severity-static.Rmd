@@ -352,9 +352,9 @@ rolling_cfr_adjusted <- cfr::cfr_rolling(
 tail(rolling_cfr_adjusted)
 ```
 
-Now let's visualize how the naive and delay-adjusted CFR estimates perform in real-time:
+Now let's visualize both results in a time series. How the naive and delay-adjusted CFR estimates would perform in real-time?
 
-```{r}
+```{r,echo=FALSE}
 
 # get the latest delay-adjusted CFR
 rolling_cfr_adjusted_end <-
@@ -422,6 +422,29 @@ evaluate to share sth from this discussion in solution
 
 
 ::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+::::::::::::::::: callout
+
+### rolling or time-varying?
+
+`{cfr}` have a function called `cfr_time_varying()` that have a different functionallity that make them not comparable.
+
+#### `cfr_rolling()`
+
+`cfr_rolling()` shows what the estimated CFR would be on each day of the outbreak, given that future data on cases and deaths is not available at the time. The final value of `cfr_rolling()` estimates is expected to be identical to the value of `cfr_static()` on the same data.
+
+Remember, as shown above, `cfr_rolling()` is useful to get early-stage CFR estimates and checks whether an outbreak's CFR estimate has stabilized. Thus, `cfr_rolling()` is not sensible to the length or size of the epidemic.
+
+#### `cfr_time_varying()`
+
+On the other hand, `cfr_time_varying()` calculates the CFR over a moving window, and helps to understand changes in CFR due to changes in the epidemic, e.g. due to a new variant or due to increased immunity from vaccination.
+
+However, `cfr_time_varying()` is sensible to sampling uncertainty, thus, it is sensible to the size of the outbreak. The higher the amount of cases with expected outcomes on a given day, the more reasonable estimates of the time varying CFR we will get. But if we have a small number of cases over the course of the whole epidemic, we probably need to rely on `cfr_rolling()` that uses the cumulative data.
+
+:::::::::::::::::
+
 
 :::::::::::::::::::::: checklist
 
