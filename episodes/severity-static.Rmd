@@ -52,7 +52,7 @@ We can assess the pandemic potential of an epidemic with two critical measuremen
 
 One epidemiological approach to estimating the clinical severity is quantifying the Case Fatality Ratio or CFR. CFR is the ratio of deaths from an infectious disease to the number of confirmed diagnosed cases. However, calculating this directly from the cumulative number of deaths to cases during an epidemic tends to result in a biased CFR given the time delay from onset to death, varying substantially as the epidemic progresses and stabilising at the later stages of the outbreak ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
 
-![Observed biased confirmed case fatality ratio (CFR) estimates as a function of time (thick line) calculated as the ratio of the cumulative number of confirmed cases to deaths at time t. The estimate at the end of an outbreak (i.e. 302/1755 = 17.2 %) is the realised cCFR by the end of the epidemic. The horizontal continuous line and dotted lines show the expected value and the 95% confidence intervals (95% CI) of the predicted delay-adjusted cCFR estimate (based on Nishiura et al., 2009) only by using the observed data until 27 Mar 2003 (estimated at 18.1 % (95% CI: 10.5, 28.1).](fig/cfr-pone.0006852.g003-fig_c.png)
+![Observed biased confirmed case fatality ratio (CFR) estimates as a function of time (thick line) calculated as the ratio of the cumulative number of confirmed cases to deaths at time t. The estimate at the end of an outbreak (i.e. 302/1755 = 17.2 %) is the realised CFR by the end of the epidemic. The horizontal continuous line and dotted lines show the expected value and the 95% confidence intervals (95% CI) of the predicted delay-adjusted CFR estimate (based on Nishiura et al., 2009) only by using the observed data until 27 Mar 2003 (estimated at 18.1 % (95% CI: 10.5, 28.1).](fig/cfr-pone.0006852.g003-fig_c.png)
 
 In this tutorial we are going to learn how to use the `{cfr}` package to calculate and adjust a CFR estimation using [delay distributions](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere, based on the methods developed by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852), also, how we can reuse `{cfr}` functions for more severity measurements.
 
@@ -219,8 +219,6 @@ onset_to_death_ebola <-
     epi_dist = "onset_to_death",
     single_epidist = TRUE
   )
-
-onset_to_death_ebola
 ```
 
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
@@ -332,7 +330,7 @@ tail(rolling_cfr_adjusted)
 
 Now, let's visualise both results in a time series. How would the naive and delay-adjusted CFR estimates perform in real time?
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 
 # get the latest delay-adjusted CFR
 rolling_cfr_adjusted_end <-
@@ -399,11 +397,11 @@ Is this pattern similar to other outbreaks? We can use the data sets in this epi
 
 
 
-::::::::::::::::: callout
+::::::::::::::::: spoiler
 
 ### rolling or time-varying?
 
-`{cfr}` have a function called `cfr_time_varying()` that has a different functionality that makes them not comparable.
+The `{cfr}` package has a function called `cfr_time_varying()` with different functionality that makes them not comparable.
 
 #### `cfr_rolling()`
 
@@ -417,6 +415,8 @@ On the other hand, `cfr_time_varying()` calculates the CFR over a moving window 
 
 However, `cfr_time_varying()` is sensible to sampling uncertainty. Thus, it is sensible to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. But if we have a small number of cases throughout the epidemic, we probably need to rely on `cfr_rolling()` that uses the cumulative data.
 
+We invite you to read the [reference guide of the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/reference/cfr_time_varying.html).
+
 :::::::::::::::::
 
 
@@ -428,88 +428,31 @@ By only using **confirmed** cases, it is clear that all cases that do not seek m
 
 ::::::::::::::::::::::
 
-
-::::::::::::::::: callout
-
-### How to rearrange my input data?
-
-Rearranging the input data for data analysis can take most of the time.
-
-For _aggregated case data_, we encourage you to use `{incidence2}`! Refer to the `{cfr}` vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html).
-
-<!-- cite howto entry one lineslist + incidence2 + cfr connection -->
-
-:::::::::::::::::
-
-
 :::::::::::::::::::::::::::::::::::::::::::::::::: challenge
 
 ### Severity heterogeneity
 
 The CFR may differ across populations (e.g. age, space, treatment); quantifying these heterogeneities can help target resources appropriately and compare different care regimens ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
 
-Use the `incidence2::covidregionaldataUK` data frame to estimate a delay-adjusted CFR stratified by region.
-
-```{r,eval=FALSE}
-incidence2::covidregionaldataUK %>% glimpse()
-```
+Use the `cfr::covid_data` data frame to estimate a delay-adjusted CFR stratified by country.
 
 ::::::::::::::::::::::::: hint
 
-- You can read the `{cfr}` vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html)
-
-- Look for delay distributions from `{epiparameter}`
-
-```{r,eval=FALSE}
-library(epiparameter)
-
-epidist_db(
-  epi_dist = "onset to death"
-) %>%
-  list_distributions()
-```
-
-- One way to do a _stratified analysis_ is to apply a model to nested data. This [`{tidyr}` vignette](https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models) shows you how to apply the `group_by()` + `nest()` to nest data, and then `mutate()` + `map()` to apply the model.
+One way to do a _stratified analysis_ is to apply a model to nested data. This [`{tidyr}` vignette](https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models) shows you how to apply the `group_by()` + `nest()` to nest data, and then `mutate()` + `map()` to apply the model.
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::: solution
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 library(cfr)
-library(incidence2)
 library(epiparameter)
 library(tidyverse)
 
-covid_data_incidence <-
-  incidence2::covidregionaldataUK %>%
-  incidence2::incidence(
-    date_index = "date",
-    counts = c("cases_total", "deaths_total"),
-    groups = "region"
-  )
+covid_data
 
-covid_data_incidence
-
-covid_data_prepared <-
-  cfr::prepare_data(
-    data = covid_data_incidence,
-    cases_variable = "cases_total",
-    deaths_variable = "deaths_total",
-    fill_NA = TRUE
-  )
-
-covid_data_prepared %>% glimpse()
-
-delay_onset_death <-
-  epiparameter::epidist_db(
-    disease = "covid",
-    epi_dist = "onset to death",
-    single_epidist = TRUE
-  )
-
-covid_data_prepared %>%
-  group_by(region) %>%
+covid_data %>%
+  group_by(country) %>%
   nest() %>%
   mutate(
     temp =
@@ -522,7 +465,9 @@ covid_data_prepared %>%
   unnest(cols = temp)
 ```
 
-Great! But, how can we interpret that there is a regional variability of severity from the same diagnosed pathogen?
+Great! Now you can use similar code for any other stratified analysis like age, regions or more!
+
+But, how can we interpret that there is a country variability of severity from the same diagnosed pathogen?
 
 Local factors like testing capacity, the case definition, and sampling regime can affect the report of cases and deaths, thus affecting case ascertainment. Take a look to the `{cfr}` vignette on [Estimating the proportion of cases that are ascertained during an outbreak](https://epiverse-trace.github.io/cfr/articles/estimate_ascertainment.html)!
 
