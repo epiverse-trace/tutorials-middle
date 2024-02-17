@@ -451,8 +451,8 @@ library(tidyverse)
 
 covid_data %>% glimpse()
 
-delay_onset_death <- 
-  epiparameter::epidist_db(
+delay_onset_death <-
+  epidist_db(
     disease = "covid",
     epi_dist = "onset to death",
     single_epidist = TRUE
@@ -553,7 +553,7 @@ From the `{covidregionaldata}` package, load COVID cases from the region England
 Use `covidregionaldata::get_regional_data()` to get COVID data from the region England from the country UK.
 
 ```{r,eval=FALSE}
-covid_england <- 
+covid_england <-
   covidregionaldata::get_regional_data(
     country = "uk",
     regions = "England",
@@ -569,7 +569,7 @@ covid_england <-
 library(cfr)
 library(covidregionaldata)
 
-covid_england <- 
+covid_england <-
   covidregionaldata::get_regional_data(
     country = "uk",
     regions = "England",
@@ -607,7 +607,7 @@ delay_hosp_death <-
 covid_data_prepared %>%
   cfr::cfr_static(
     delay_density = function(x) density(delay_hosp_death, x)
-    )
+  )
 ```
 
 
