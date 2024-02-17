@@ -248,7 +248,7 @@ onset_to_death_ebola <-
 onset_to_death_ebola
 ```
 
-To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments. 
+To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
 ```{r}
 # Calculate the static CFR while adjusting for delays
@@ -537,7 +537,7 @@ covid_data_prepared <-
 
 covid_data_prepared %>% glimpse()
 
-delay_onset_death <- 
+delay_onset_death <-
   epiparameter::epidist_db(
     disease = "covid",
     epi_dist = "onset to death",
@@ -548,13 +548,13 @@ covid_data_prepared %>%
   group_by(region) %>%
   nest() %>%
   mutate(
-    temp = 
+    temp =
       map(
         .x = data,
         .f = cfr::cfr_static,
         delay_density = function(x) density(delay_onset_death, x)
       )
-  ) %>% 
+  ) %>%
   unnest(cols = temp)
 ```
 
