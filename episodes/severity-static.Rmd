@@ -415,7 +415,7 @@ On the other hand, `cfr_time_varying()` calculates the CFR over a moving window 
 
 However, `cfr_time_varying()` is sensible to sampling uncertainty. Thus, it is sensible to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. But if we have a small number of cases throughout the epidemic, we probably need to rely on `cfr_rolling()` that uses the cumulative data.
 
-We invite you to read the [reference guide of the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/reference/cfr_time_varying.html).
+We invite you to read this [vignette about the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
 
 :::::::::::::::::
 
