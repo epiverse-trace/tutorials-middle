@@ -507,6 +507,11 @@ epidist_db(
 ::::::::::::::::::::::::: solution
 
 ```{r}
+library(cfr)
+library(incidence2)
+library(epiparameter)
+library(tidyverse)
+
 covid_data_incidence <-
   incidence2::covidregionaldataUK %>%
   incidence2::incidence(
@@ -535,17 +540,17 @@ delay_onset_death <-
   )
 
 covid_data_prepared %>%
-  dplyr::group_by(region) %>%
-  tidyr::nest() %>%
-  dplyr::mutate(
+  group_by(region) %>%
+  nest() %>%
+  mutate(
     temp = 
-      purrr::map(
+      map(
         .x = data,
         .f = cfr::cfr_static,
         delay_density = function(x) density(delay_onset_death, x)
       )
   ) %>% 
-  tidyr::unnest(cols = temp)
+  unnest(cols = temp)
 ```
 
 Great! But, how can we interpret that there is a regional variability of severity from the same diagnosed pathogen?
