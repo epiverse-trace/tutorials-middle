@@ -578,44 +578,84 @@ Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires:
 
 ::::::::::::::::::::::::::::
 
+::::::::::::::::: callout
+
+### How to rearrange my input data?
+
+Rearranging the input data for data analysis can take most of the time.
+
+For _aggregated case data_, we encourage you to use `{incidence2}`! Refer to the `{cfr}` vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html).
+
+<!-- cite howto entry one lineslist + incidence2 + cfr connection -->
+
+:::::::::::::::::
+
 :::::::::::::::::::::::::::::::::: challenge
 
 ### Hospitalisation Fatality Risk (HFR)
 
-Load the `fluH7N9_china_2013` from `{outbreaks}` and estimate the naive and adjusted CFR using the appropriate distribution delay.
+From the `{covidregionaldata}` package, load COVID cases from the region England from country UK to estimate the delay-adjusted HFR using the corresponding distribution delay.
 
 ::::::::::::::::: hint
 
-Use `{epiparameter}` to find the required delay distribution.
+Use `covidregionaldata::get_regional_data()` to get COVID data from the region England from the country UK.
 
 ```{r,eval=FALSE}
-epiparameter::epidist_db(
-  epi_dist = "hospitalisation to death"
-) %>%
-  list_distributions()
+covid_england <- 
+  covidregionaldata::get_regional_data(
+    country = "uk",
+    regions = "England",
+    verbose = FALSE
+  )
 ```
 
 :::::::::::::::::
 
 ::::::::::::::::: solution
 
-```{r,eval=FALSE}
-# to-do
-# find any other source similar to covid_uk data
-# aggregated case data
-# ideally stratified by regions or any other category
-# if not, rearrange those inputs
+```{r,message=FALSE,warning=FALSE}
+library(cfr)
+library(covidregionaldata)
 
-library(outbreaks)
+covid_england <- 
+  covidregionaldata::get_regional_data(
+    country = "uk",
+    regions = "England",
+    verbose = FALSE
+  )
 
-outbreaks::influenza_england_1978_school %>% glimpse()
+covid_england %>% glimpse()
 
-outbreaks::influenza_england_1978_school %>%
-  dplyr::rename(
-    cases = in_bed,
-    deaths = convalescent
-  ) %>%
-  cfr::cfr_static()
+covid_data_incidence <-
+  covid_england %>%
+  incidence2::incidence(
+    date_index = "date",
+    counts = c("hosp_total", "deaths_total")
+  )
+
+covid_data_incidence
+
+covid_data_prepared <-
+  cfr::prepare_data(
+    data = covid_data_incidence,
+    cases_variable = "hosp_total",
+    deaths_variable = "deaths_total",
+    fill_NA = TRUE
+  )
+
+covid_data_prepared %>% glimpse()
+
+delay_hosp_death <-
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "hospitalisation to death",
+    single_epidist = TRUE
+  )
+
+covid_data_prepared %>%
+  cfr::cfr_static(
+    delay_density = function(x) density(delay_hosp_death, x)
+    )
 ```
 
 
