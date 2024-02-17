@@ -479,7 +479,7 @@ If you are using _aggregated case data_, we encourage you to use `{incidence2}`!
 
 The CFR may differ across populations (e.g. age, space, treatment); quantifying these heterogeneities can help target resources appropriately and compare different care regimens ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
 
-Use the `incidence2::covidregionaldataUK` dataframe to estimate an stratified delay-adjusted CFR
+Use the `incidence2::covidregionaldataUK` data frame to estimate a delay-adjusted CFR stratified by region.
 
 ```{r,eval=FALSE}
 incidence2::covidregionaldataUK %>% glimpse()
@@ -487,16 +487,20 @@ incidence2::covidregionaldataUK %>% glimpse()
 
 ::::::::::::::::::::::::: hint
 
-- Read the `{cfr}` vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html)
+- You can read the `{cfr}` vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html)
 
 - Look for delay distributions from `{epiparameter}`
 
 ```{r,eval=FALSE}
-epiparameter::epidist_db(
+library(epiparameter)
+
+epidist_db(
   epi_dist = "onset to death"
 ) %>%
   list_distributions()
 ```
+
+- One way to do a _stratified analysis_ is to apply a model to nested data. This [`{tidyr}` vignette](https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models) shows you how to apply the `group_by()` + `nest()` to nest data, and then `mutate()` + `map()` to apply the model.
 
 :::::::::::::::::::::::::
 
@@ -523,13 +527,30 @@ covid_data_prepared <-
 
 covid_data_prepared %>% glimpse()
 
+delay_onset_death <- 
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "onset to death",
+    single_epidist = TRUE
+  )
+
 covid_data_prepared %>%
-  group_by(region) %>%
-  nest() %>%
-  # map(.f = cfr_static) %>% # fix this
-  identity()
+  dplyr::group_by(region) %>%
+  tidyr::nest() %>%
+  dplyr::mutate(
+    temp = 
+      purrr::map(
+        .x = data,
+        .f = cfr::cfr_static,
+        delay_density = function(x) density(delay_onset_death, x)
+      )
+  ) %>% 
+  tidyr::unnest(cols = temp)
 ```
 
+Great! But, how can we interpret that there is a regional variability of severity from the same diagnosed pathogen?
+
+Local factors like testing capacity, the case definition, and sampling regime can affect the report of cases and deaths, thus affecting case ascertainment. Take a look to the `{cfr}` vignette on [Estimating the proportion of cases that are ascertained during an outbreak](https://epiverse-trace.github.io/cfr/articles/estimate_ascertainment.html)!
 
 :::::::::::::::::::::::::
 
