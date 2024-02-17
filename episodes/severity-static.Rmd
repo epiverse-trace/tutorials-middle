@@ -449,7 +449,14 @@ library(cfr)
 library(epiparameter)
 library(tidyverse)
 
-covid_data
+covid_data %>% glimpse()
+
+delay_onset_death <- 
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "onset to death",
+    single_epidist = TRUE
+  )
 
 covid_data %>%
   group_by(country) %>%
