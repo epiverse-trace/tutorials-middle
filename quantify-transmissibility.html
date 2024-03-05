@@ -294,13 +294,14 @@ Bayesian analysis.</p>
 </div>
 </div>
 </div>
-<div id="reminder-the-effective-reproduction-number-r_t" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="reminder-the-effective-reproduction-number-r_t" class="callout-inner">
-<h3 class="callout-title">Reminder: the Effective Reproduction Number,<span class="math inline">\(R_t\)</span><a class="anchor" aria-label="anchor" href="#reminder-the-effective-reproduction-number-r_t"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="reminder-the-effective-reproduction-number-r_t">Reminder: the Effective Reproduction Number,
+<span class="math inline">\(R_t\)</span>
+<a class="anchor" aria-label="anchor" href="#reminder-the-effective-reproduction-number-r_t"></a></h3>
 <div class="callout-content">
 <p>The <a href="reference.html#basic">basic reproduction number</a>,
 <span class="math inline">\(R_0\)</span>, is the average number of cases
@@ -333,13 +334,12 @@ framework, for details on these concepts see the <a href="https://epiforecasts.i
 For more details on the distinction between speed and strength of
 transmission and implications for control, see <a href="https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556" class="external-link">Dushoff
 &amp; Park, 2021</a>.</p>
-<div id="bayesian-inference" class="callout callout">
+<div id="callout2" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="bayesian-inference" class="callout-inner">
-<h3 class="callout-title">Bayesian inference<a class="anchor" aria-label="anchor" href="#bayesian-inference"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="bayesian-inference">Bayesian inference<a class="anchor" aria-label="anchor" href="#bayesian-inference"></a></h3>
 <div class="callout-content">
 <p>The R package <code>EpiNow2</code> uses a <a href="reference.html#bayesian">Bayesian inference</a> framework to
 estimate reproduction numbers and infection times based on reporting
@@ -442,13 +442,12 @@ whether they have <strong>variable</strong> parameters. To understand
 the difference between <strong>fixed</strong> and
 <strong>variable</strong> distributions, let’s consider the incubation
 period.</p>
-<div id="delays-and-data" class="callout callout">
+<div id="callout3" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="delays-and-data" class="callout-inner">
-<h3 class="callout-title">Delays and data<a class="anchor" aria-label="anchor" href="#delays-and-data"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="delays-and-data">Delays and data<a class="anchor" aria-label="anchor" href="#delays-and-data"></a></h3>
 <div class="callout-content">
 <p>The number of delays and type of delay is a flexible input that
 depends on the data. The examples below highlight how the delays can be
@@ -493,13 +492,12 @@ from the literature.</p>
 </div>
 <p>The argument <code>max</code> is the maximum value the distribution
 can take, in this example 20 days.</p>
-<div id="why-a-gamma-distrubution" class="callout callout">
+<div id="callout4" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="why-a-gamma-distrubution" class="callout-inner">
-<h3 class="callout-title">Why a gamma distrubution?<a class="anchor" aria-label="anchor" href="#why-a-gamma-distrubution"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="why-a-gamma-distrubution">Why a gamma distrubution?<a class="anchor" aria-label="anchor" href="#why-a-gamma-distrubution"></a></h3>
 <div class="callout-content">
 <p>The incubation period has to be positive in value. Therefore we must
 specific a distribution in <code>dist_spec</code> which is for positive
@@ -646,13 +644,12 @@ as arguments of <code>prior</code> within <code>rt_opts()</code>:</p>
 <span><span class="va">rt_log_sd</span> <span class="op">&lt;-</span> <span class="fu">convert_to_logsd</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">rt</span> <span class="op">&lt;-</span> <span class="fu">rt_opts</span><span class="op">(</span>prior <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>mean <span class="op">=</span> <span class="va">rt_log_mean</span>, sd <span class="op">=</span> <span class="va">rt_log_sd</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<div id="bayesian-inference-using-stan" class="callout callout">
+<div id="callout5" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="bayesian-inference-using-stan" class="callout-inner">
-<h3 class="callout-title">Bayesian inference using Stan<a class="anchor" aria-label="anchor" href="#bayesian-inference-using-stan"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="bayesian-inference-using-stan">Bayesian inference using Stan<a class="anchor" aria-label="anchor" href="#bayesian-inference-using-stan"></a></h3>
 <div class="callout-content">
 <p>The Bayesian inference is performed using MCMC methods with the
 program <a href="https://mc-stan.org/" class="external-link">Stan</a>. There are a number of
@@ -758,14 +755,12 @@ data) is 0.9 (0.58 – 1.4).</p></li>
 0.042).</p></li>
 <li><p>The doubling time (the time taken for case numbers to double) is
 -54 (17 – -11).</p></li>
-</ul><div id="expected-change-in-daily-cases" class="callout callout">
+</ul><div id="callout6" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="expected-change-in-daily-cases" class="callout-inner">
-<h3 class="callout-title">
-<code>Expected change in daily cases</code><a class="anchor" aria-label="anchor" href="#expected-change-in-daily-cases"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="expected-change-in-daily-cases"><code>Expected change in daily cases</code><a class="anchor" aria-label="anchor" href="#expected-change-in-daily-cases"></a></h3>
 <div class="callout-content">
 <p>A factor describing expected change in daily cases based on the
 posterior probability that <span class="math inline">\(R_t &lt;
@@ -1002,7 +997,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials/quantify-transmissibility.html",
   "dateCreated": "2024-02-12",
   "dateModified": "2024-02-12",
-  "datePublished": "2024-02-27"
+  "datePublished": "2024-03-05"
 }
 
   </script><script>
