@@ -70,7 +70,8 @@ We measure disease severity in terms of case fatality risk (CFR). The CFR is int
 
 $$ b_{t} =  \frac{D_{t}}{C_{t}} $$
 
-<!-- total number of deaths $D$ divided by total number of confirmed cases $C$ -->
+<!-- add here the callout on ratio, rate or risk?  -->
+<!-- https://github.com/epiverse-trace/cfr/issues/130 -->
 
 :::::::::::::: callout
 
