@@ -306,7 +306,7 @@ outbreaks::ebola_kikwit_1995 %>%
 
 We just found that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?!
 
-The main benefit of using `cfr_static()` is to reduce the time to get an _delay-adjusted CFR_ estimate closer to the overall CFR of the epidemic. 
+The main benefit of using `cfr_static()` is to reduce the time to get a _delay-adjusted CFR_ estimate closer to the overall CFR of the epidemic. 
 
 `cfr_static()` can assess the virulence of an emerging infectious disease at an epidemic's **early stage**. This is particularly useful when an _epidemic curve of confirmed cases_ is the only data available (i.e. when individual data from onset to death are unavailable, especially during the early stage of the epidemic). Nishiura et al., 2009 depict this in the figures below.
 
