@@ -8,11 +8,11 @@ editor_options:
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How to estimate the Case Fatality Risk (CFR)?
+- Why do we estimate the clinical severity of an epidemic?
 
-- Why adjust a CFR with a delay distribution?
+- How can the Case Fatality Risk (CFR) be estimated early in an ongoing epidemic?
 
-- When should we estimate the CFR in an ongoing outbreak?
+- How do we estimate other severity measurements from different data sources?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -22,7 +22,7 @@ editor_options:
 
 - Estimate a delay-adjusted CFR using `{epiparameter}` and `{cfr}`.
 
-- Estimate severity measurements like IFR or HFR using `{cfr}`.
+- Estimate severity measurements like the Hospitalization Fatality Risk (HFR) using `{cfr}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
