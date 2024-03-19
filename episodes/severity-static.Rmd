@@ -72,6 +72,17 @@ library(epiparameter)
 library(tidyverse)
 ```
 
+## Data sources for clinical severity
+
+What are data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summaries the spectrum of COVID-19 cases:
+
+![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic. ([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
+
+- At the top of the pyramid, those meeting the WHO case criteria for **severe** or critical cases will likely be identified in the hospital setting, presenting with atypical viral pneumonia. These cases will have been identified in mainland China and among those categorised internationally as local transmission. 
+- Many more cases are likely to be **symptomatic** (i.e., with fever, cough, or myalgia) but might not require hospitalisation. These cases will have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might also be identified through population surveillance of, for example, influenza-like illness. 
+- The bottom part of the pyramid represents **mild** (and possibly **asymptomatic**) cases. These cases might be identified through contact tracing and subsequently via serological testing.
+
+
 ## Naive CFR
 
 We measure disease severity in terms of case fatality risk (CFR). The CFR is interpreted as the conditional probability of death given confirmed diagnosis, calculated as the cumulative number of deaths $D_{t}$ over the cumulative number of confirmed cases $C_{t}$ at a certain time $t$. We can refer to the _naive CFR_ (also crude or biased CFR, $b_{t}$):
@@ -82,20 +93,6 @@ This calculation is _naive_ because it tends to yield a biased and mostly undere
 
 <!-- add here the callout on ratio or risk?  -->
 <!-- https://github.com/epiverse-trace/cfr/issues/130 -->
-
-:::::::::::::: callout
-
-### What are data sources to estimate CFR?
-
-[Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summaries the spectrum of COVID-19 cases:
-
-![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic.](fig/cfr-spectrum-cases-covid19.jpg)
-
-- At the top of the pyramid, those meeting the WHO case criteria for **severe** or critical cases will likely be identified in the hospital setting, presenting with atypical viral pneumonia. These cases will have been identified in mainland China and among those categorised internationally as local transmission. 
-- Many more cases are likely to be **symptomatic** (i.e., with fever, cough, or myalgia) but might not require hospitalisation. These cases will have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might also be identified through population surveillance of, for example, influenza-like illness. 
-- The bottom part of the pyramid represents **mild** (and possibly **asymptomatic**) cases. These cases might be identified through contact tracing and subsequently via serological testing.
-
-::::::::::::::
 
 To calculate the naive CFR, the `{cfr}` package requires a data frame with three columns named:
 
