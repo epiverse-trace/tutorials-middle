@@ -94,26 +94,11 @@ This calculation is _naive_ because it tends to yield a biased and mostly undere
 <!-- add here the callout on ratio or risk?  -->
 <!-- https://github.com/epiverse-trace/cfr/issues/130 -->
 
-To calculate the naive CFR, the `{cfr}` package requires a data frame with three columns named:
+To calculate the naive CFR, the `{cfr}` package requires an input data frame with three columns named:
 
 - `date`
 - `cases`
 - `deaths`
-
-:::::::::::::::::: callout
-
-### We need daily data
-
-These should give the **daily** number of reported cases and deaths. 
-
-We emphasise **daily** because this needs to show all the observations for all the days in the time frame of your analysis, even if the number of observations is zero or there are missing values.
-
-Also, this currently only works for **daily** data, not weekly data.
-
-<!-- suggest ways to deal with raw input weekly data -->
-<!-- https://github.com/epiverse-trace/cfr/issues/117 -->
-
-::::::::::::::::::
 
 Let's explore the `ebola1976` dataset, which comes from the first Ebola outbreak in Zaire in 1976, as analysed by Camacho et al. (2014).
 
@@ -124,6 +109,35 @@ data("ebola1976")
 # view top data
 ebola1976 %>% as_tibble()
 ```
+
+:::::::::::::::::: callout
+
+### We need aggregated incidence data
+
+`{cfr}` reads **aggregated** incidence data. Similar to the `{EpiNow2}` with the difference that for `{cfr}` we need one more column named `deaths`.
+
+```{r}
+EpiNow2::example_confirmed %>% as_tibble()
+```
+
+This data input should be **aggregated** by day, which means one observation *per day*, containing the *daily* number of reported cases and deaths. Observations with zero or missing values should also be included, similar to a time-series data.
+
+Also, `{cfr}` currently works for *daily* data only, not weekly data.
+
+<!-- suggest ways to deal with raw input weekly data -->
+<!-- https://github.com/epiverse-trace/cfr/issues/117 -->
+
+### Aggregated differs from Linelist
+
+Lastly, *aggregated* incidence data differs from **linelist** data, where each observation contains subject-level data.
+
+```{r}
+outbreaks::ebola_sierraleone_2014 %>% as_tibble()
+```
+
+::::::::::::::::::
+
+
 
 When we use `cfr_static()` to `data` only, we calculate the naive CFR:
 
