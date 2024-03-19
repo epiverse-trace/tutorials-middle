@@ -100,7 +100,7 @@ To calculate the naive CFR, the `{cfr}` package requires an input data frame wit
 - `cases`
 - `deaths`
 
-Let's explore the `ebola1976` dataset, which comes from the first Ebola outbreak in Zaire in 1976, as analysed by Camacho et al. (2014).
+Let's explore the `ebola1976` dataset, which comes from the first Ebola outbreak in what was then called Zaire (now the Democratic Republic of the Congo) in 1976, as analysed by Camacho et al. (2014).
 
 ```{r}
 # Load the Ebola 1976 data provided with the package
