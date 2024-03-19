@@ -34,7 +34,7 @@ This episode requires you to be familiar with:
 
 **Data science** : Basic programming with R.
 
-**Epidemic theory** : Epidemiological parameters and Delay distributions.
+**Epidemic theory** : [Delay distributions](../learners/reference.md#delaydist).
 
 :::::::::::::::::::::::::::::::::
 
