@@ -54,6 +54,8 @@ One epidemiological approach to estimating the clinical severity is quantifying 
 
 ![Observed biased confirmed case fatality risk (CFR) estimates as a function of time (thick line) calculated as the cumulative number of deaths over confirmed cases at time t. The estimate at the end of an outbreak (i.e. 302/1755 = 17.2 %) is the realised CFR by the end of the epidemic. The horizontal continuous line and dotted lines show the expected value and the 95% confidence intervals (95% CI) of the predicted delay-adjusted CFR estimate (based on Nishiura et al., 2009) only by using the observed data until 27 Mar 2003 (estimated at 18.1 % (95% CI: 10.5, 28.1).](fig/cfr-pone.0006852.g003-fig_c.png)
 
+More generally, estimating severity can be helpful even outside of a pandemic planning scenario and in the context of routine public health. Knowing whether an outbreak has or had a different severity from the historical record can motivate causal investigations, which could be intrinsic to the infectious agent (e.g. a new, more severe strain) or due to underlying factors in the population (e.g. reduced immunity or morbidity factors) ([Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846)).
+
 In this tutorial we are going to learn how to use the `{cfr}` package to calculate and adjust a CFR estimation using [delay distributions](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere, based on the methods developed by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852), also, how we can reuse `{cfr}` functions for more severity measurements.
 
 We’ll use the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
