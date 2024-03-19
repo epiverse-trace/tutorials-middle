@@ -208,6 +208,8 @@ We can showcase this last bias using the [concept described in this `{cfr}` vign
 
 :::::::::::::::::::: testimonial
 
+### Biases during the Influenza A (H1N1) outbreak in Mexico, 2009
+
 Improving an _early_ epidemiological assessment of a delay-adjusted CFR is crucial for determining virulence, shaping the level and choices of public health intervention, and providing advice to the general public. 
 
 In 2009, during the swine-flu virus, Influenza A (H1N1), Mexico had an early biased estimation of the CFR. Initial reports from the government of Mexico suggested a virulent infection, whereas, in other countries, the same virus was perceived as mild ([TIME, 2009](https://content.time.com/time/health/article/0,8599,1894534,00.html)).
