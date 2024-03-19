@@ -85,7 +85,7 @@ $$ b_{t} =  \frac{D_{t}}{C_{t}} $$
 
 ### What are data sources to estimate CFR?
 
-[Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summaries the spectrum of COVID-19 cases.
+[Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summaries the spectrum of COVID-19 cases:
 
 ![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic.](fig/cfr-spectrum-cases-covid19.jpg)
 
@@ -320,11 +320,11 @@ The main benefit of using `cfr_static()` is to reduce the time to get a _delay-a
 
 Figures A and B show the cumulative numbers of cases and deaths of SARS, and Figure C shows the observed (biased) CFR estimates as a function of time, i.e. the cumulative number of deaths over cases at time $t$. Due to the delay from the onset of symptoms to death, the biased estimate of CFR at time $t$ underestimates the realised CFR at the end of an outbreak (i.e. 302/1755 = 17.2 %). 
 
-![Observed (biased) confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003.](fig/cfr-pone.0006852.g003-fig_abc.png)
+![Observed (biased) confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_abc.png)
 
 Nevertheless, even by only using the observed data for the period March 19 to April 2, `cfr_static()` can yield an appropriate prediction (Figure D), e.g. the delay-adjusted CFR at March 27 is 18.1 % (95% CI: 10.5, 28.1). An overestimation is seen in the very early stages of the epidemic, but the 95% confidence limits in the later stages include the realised CFR (i.e. 17.2 %).
 
-![Early determination of the delay-adjusted confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003.](fig/cfr-pone.0006852.g003-fig_d.png)
+![Early determination of the delay-adjusted confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_d.png)
 
 We can explore this behaviour using the `cfr_rolling()` function. With `tail()`, we show that the latest CFR estimates are equal to the `cfr_static()` outputs:  
 
