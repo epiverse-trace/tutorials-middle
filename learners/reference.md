@@ -31,7 +31,7 @@ Different sampling approaches can generate biases given left and right censoring
 ## D
 
 [Delay distribution]{#delaydist}
-: Probability distribution ([Althobaity et al., 2022, Figure 5](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)) of a key epidemiological time period ([Althobait et al., 2022, Figure 6](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)). For a full summary of key epidemiological periods refer to [Xiang et al., 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038/#fig4).
+: Probability distribution ([Althobaity et al., 2022, Figure 5](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)) of a key epidemiological time period ([Althobait et al., 2022, Figure 6](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)). For a full summary of key epidemiological periods refer to [Xiang et al., 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038/#fig4). [Early task tutorials](https://epiverse-trace.github.io/tutorials-early/) contain episodes on this topic.
 
 [Deterministic model]{#deterministic}
 : Models that will always have the same trajectory for given initial conditions and parameter values. Examples include ordinary differential equations and difference equations. 
