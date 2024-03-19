@@ -42,9 +42,9 @@ This episode requires you to be familiar with:
 
 Common questions at the early stage of an epidemic include:
 
-- What is the likely public health impact of the outbreak? 
-- Is this being or going to be a public health problem?
-- Does the virus have the potential to cause a devastating pandemic?
+- What is the likely public health impact of the outbreak in terms of clinical severity? 
+- What are the most severely affected groups?
+- Does the outbreak have the potential to cause a very severe pandemic?
 
 We can assess the pandemic potential of an epidemic with two critical measurements: the transmissibility and the clinical severity. ([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062), [CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html))
 
