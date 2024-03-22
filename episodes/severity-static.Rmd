@@ -267,7 +267,9 @@ cfr_static(
 
 ### Use the `<epidist>` class
 
-When using an `<epidist>` class object we can use this expression as a template `function(x) density(<EPIDIST_OBJECT>, x)`
+When using an `<epidist>` class object we can use this expression as a template:
+
+`function(x) density(<EPIDIST_OBJECT>, x)`
 
 For distribution functions with parameters not available in `{epiparameter}`, we suggest you two alternatives: 
 
