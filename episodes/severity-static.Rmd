@@ -293,6 +293,20 @@ cfr_static(
 )
 ```
 
+```{r,echo=FALSE}
+out_delay_adjusted <-
+  cfr_static(
+    data = ebola1976,
+    delay_density = function(x) density(onset_to_death_ebola, x)
+  )
+
+out_mean <- out_delay_adjusted %>% pull(severity_mean)
+out_low <- out_delay_adjusted %>% pull(severity_low)
+out_high <- out_delay_adjusted %>% pull(severity_high)
+```
+
+The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_mean` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
+
 :::::::::::::::::: callout
 
 ### Use the `<epidist>` class
@@ -308,20 +322,6 @@ For distribution functions with parameters not available in `{epiparameter}`, we
 - Read `{cfr}` vignette for [a primer on working with delay distributions](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html).
 
 ::::::::::::::::::
-
-```{r,echo=FALSE}
-out_delay_adjusted <-
-  cfr_static(
-    data = ebola1976,
-    delay_density = function(x) density(onset_to_death_ebola, x)
-  )
-
-out_mean <- out_delay_adjusted %>% pull(severity_mean)
-out_low <- out_delay_adjusted %>% pull(severity_low)
-out_high <- out_delay_adjusted %>% pull(severity_high)
-```
-
-The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_mean` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
 
 :::::::::::::::::::::::::::::::::::::::: challenge
 
