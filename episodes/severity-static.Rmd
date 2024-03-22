@@ -267,12 +267,13 @@ $$
         \sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
 $$
 
-where 
-- $c_{t}$ is the daily case incidence at time, $t$, 
-- $f_{t}$ is the value of the probability mass function of the **delay distribution** between onset and death. 
-- $u_{t}$ represents the underestimation of the known outcomes and is used to **scale** the value of the cumulative number of cases in the denominator in the calculation of the CFR.
+where:
 
-The [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) function is used internally to calculate $u_{t}$.
+- $c_{t}$ is the daily case incidence at time $t$, 
+- $f_{t}$ is the value of the Probability Mass Function (PMF) of the **delay distribution** between onset and death, and
+- $u_{t}$ represents the underestimation of the known outcomes.
+
+$u_{t}$ is used to **scale** the value of the cumulative number of cases in the denominator in the calculation of the CFR. This is calculated internally with the [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) function.
 
 The estimator for CFR can be written as: 
 
