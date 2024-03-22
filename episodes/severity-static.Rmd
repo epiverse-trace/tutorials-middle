@@ -239,7 +239,7 @@ Answer to these questions:
 
 [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) developed a method that considers the **time delay** from the onset of symptoms to death.
 
-Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones available in systematic reviews from repositories like `{epiparameter}` or `{epireview}`.
+Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collects them from literature searches and systematic reviews.
 
 Let's use `{epiparameter}`:
 
