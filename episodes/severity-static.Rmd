@@ -256,6 +256,30 @@ onset_to_death_ebola <-
 plot(onset_to_death_ebola, day_range = 0:40)
 ```
 
+To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
+
+```{r}
+# Calculate the static CFR while adjusting for delays
+cfr_static(
+  data = ebola1976,
+  delay_density = function(x) density(onset_to_death_ebola, x)
+)
+```
+
+```{r,echo=FALSE}
+out_delay_adjusted <-
+  cfr_static(
+    data = ebola1976,
+    delay_density = function(x) density(onset_to_death_ebola, x)
+  )
+
+out_mean <- out_delay_adjusted %>% pull(severity_mean)
+out_low <- out_delay_adjusted %>% pull(severity_low)
+out_high <- out_delay_adjusted %>% pull(severity_high)
+```
+
+The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_mean` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
+
 ::::::::::::::::::::::::::: spoiler
 
 ### How does {cfr} works?
@@ -282,30 +306,6 @@ $$p_{t} = b_{t} / u_{t}$$
 where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
 
 :::::::::::::::::::::::::::
-
-To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
-
-```{r}
-# Calculate the static CFR while adjusting for delays
-cfr_static(
-  data = ebola1976,
-  delay_density = function(x) density(onset_to_death_ebola, x)
-)
-```
-
-```{r,echo=FALSE}
-out_delay_adjusted <-
-  cfr_static(
-    data = ebola1976,
-    delay_density = function(x) density(onset_to_death_ebola, x)
-  )
-
-out_mean <- out_delay_adjusted %>% pull(severity_mean)
-out_low <- out_delay_adjusted %>% pull(severity_low)
-out_high <- out_delay_adjusted %>% pull(severity_high)
-```
-
-The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_mean` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
 
 :::::::::::::::::: callout
 
@@ -359,7 +359,7 @@ outbreaks::ebola_kikwit_1995 %>%
 
 ## An early-stage CFR estimate
 
-We just found that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?!
+We just found that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?
 
 The main benefit of using `cfr_static()` is to reduce the time to get a _delay-adjusted CFR_ estimate closer to the overall CFR of the epidemic. 
 
