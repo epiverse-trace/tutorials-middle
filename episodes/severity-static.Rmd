@@ -365,6 +365,31 @@ outbreaks::ebola_kikwit_1995 %>%
 
 We just found that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?
 
+`{cfr}` method obtains an unbiased estimator "well before" observing the entire course of the outbreak. For this `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the sampling process defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
+
+:::::::::::::::::::::::::: spoiler
+
+### What is the sampling process?
+
+![The population and sampling process for estimating the unbiased CFR during the course of an outbreak. ([Nishiura et al., 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
+
+From our *aggregated incidence data*, at time $t$ we know the cumulative number of confirmed cases and deaths, $C_{t}$ and $D_{t}$, and wish to estimate the unbiased CFR $\pi$, by way of the factor of underestimation $u_{t}$. 
+
+If we knew the factor of underestimation $u_{t}$ we could specify the size of the population no longer at risk ($u_{t}C_{t}$, **shaded**), although we do not know which surviving individuals belong to this group. A proportion $\pi$ of those in the group of cases still at risk (size $(1- u_{t})C_{t}$, **unshaded**) is expected to die.
+
+Because each case no longer at risk had an independent probability of dying, $\pi$, the number of deaths, $D_{t}$, is a sample from a binomial distribution with sample size $u_{t}C_{t}$, and probability $p_{t}$ = $\pi$.
+
+This is represented by the following likelihood function to obtain the maximum likelihood estimate of the unbiased CFR $p_{t}$ = $\pi$:
+
+$$
+  {\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} + D_{t} \log{\pi} +
+  (u_{t}C_{t} - D_{t})\log{(1 - \pi)},
+$$
+
+This estimation is performed by the internal function `?cfr:::estimate_severity()`.
+
+::::::::::::::::::::::::::
+
 The main benefit of using `cfr_static()` is to reduce the time to get a _delay-adjusted CFR_ estimate closer to the overall CFR of the epidemic. 
 
 `cfr_static()` can assess the virulence of an emerging infectious disease at an epidemic's **early stage**. This is particularly useful when an _epidemic curve of confirmed cases_ is the only data available (i.e. when individual data from onset to death are unavailable, especially during the early stage of the epidemic). [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) depict this in the figures below.
