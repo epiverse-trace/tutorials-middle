@@ -184,13 +184,13 @@ outbreaks::ebola_kikwit_1995 %>%
 
 ## Biases that affect CFR estimation
 
-::::::::::::::::::::::::::::::::::: discusion
+::::::::::::::::::::::::::::: discussion
 
 ### Two biases that affect CFR estimation
 
 [Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describe two potential biases that can affect the estimation of CFR (and its possible solutions):
 
-:::::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::::::
 
 ::::::::::::: solution
 
