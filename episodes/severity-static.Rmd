@@ -210,6 +210,8 @@ During an _ongoing_ epidemic, there is a delay between the time someone dies and
 
 The key determinants of the magnitude of the bias are the epidemic _growth rate_ and the _distribution of delays_ from case-reporting to death-reporting; the longer the delays and the faster the growth rate, the greater the bias.
 
+In this tutorial episode, we are going to focus on solutions to deal with this specific bias using `{cfr}`!
+
 ::::::::::::
 
 
