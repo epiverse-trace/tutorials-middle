@@ -546,7 +546,9 @@ Remember, as shown above, `cfr_rolling()` is helpful to get early-stage CFR esti
 
 On the other hand, `cfr_time_varying()` calculates the CFR over a moving window and helps to understand changes in CFR due to changes in the epidemic, e.g. due to a new variant or increased immunity from vaccination.
 
-However, `cfr_time_varying()` is sensitive to sampling uncertainty. Thus, it is sensitive to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. But if we have a small number of cases throughout the epidemic, we probably need to rely on `cfr_rolling()` that uses the cumulative data.
+However, `cfr_time_varying()` is sensitive to sampling uncertainty. Thus, it is sensitive to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. 
+
+For example, with 100 cases, the fatality risk estimate will, roughly speaking, have a 95% confidence interval ±10% of the mean estimate (binomial CI). So if we have >100 cases with expected outcomes *on a given day*, we can get reasonable estimates of the time varying CFR. But if we only have >100 cases *over the course of the whole epidemic*, we probably need to rely on `cfr_static()` that uses the cumulative data.
 
 We invite you to read this [vignette about the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
 
