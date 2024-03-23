@@ -325,7 +325,7 @@ where $p_{t}$ is the realized proportion of confirmed cases to die from the infe
 
 From this last equation, we observe that the unbiased CFR $p_{t}$ is larger than biased CFR $b_{t}$ because in $u_{t}$ the numerator is smaller than the denominator (note that $f_{t}$ is the probability distribution of the *delay distribution* between onset and death). Therefore, we refer to $b_{t}$ as the biased estimator of CFR.
 
-When we observe the entire course of an epidemic (from $t \rightarrow \infty$), $b_{t}$ tends to $p_{t}$ and becomes an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
+When we observe the entire course of an epidemic (from $t \rightarrow \infty$), $u_{t}$ tends to 1, making $b_{t}$ tends to $p_{t}$ and become an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
 
 :::::::::::::::::::::::::::
 
