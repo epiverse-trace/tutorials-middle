@@ -425,7 +425,7 @@ tail(rolling_cfr_adjusted)
 
 Now, let's visualise both results in a time series. How would the naive and delay-adjusted CFR estimates perform in real time?
 
-```{r,echo=FALSE,warning=FALSE,message=FALSE}
+```{r,echo=TRUE,warning=FALSE,message=FALSE}
 
 # get the latest delay-adjusted CFR
 rolling_cfr_adjusted_end <-
@@ -453,12 +453,20 @@ bind_rows(
   geom_line(
     aes(date, severity_mean, colour = method)
   ) +
-  geom_hline(data = rolling_cfr_adjusted_end,
-             aes(yintercept = severity_mean)) +
-  geom_hline(data = rolling_cfr_adjusted_end,
-             aes(yintercept = severity_low), lty = 2) +
-  geom_hline(data = rolling_cfr_adjusted_end,
-             aes(yintercept = severity_high), lty = 2)
+  geom_hline(
+    data = rolling_cfr_adjusted_end,
+    aes(yintercept = severity_mean)
+  ) +
+  geom_hline(
+    data = rolling_cfr_adjusted_end,
+    aes(yintercept = severity_low), 
+    lty = 2
+  ) +
+  geom_hline(
+    data = rolling_cfr_adjusted_end,
+    aes(yintercept = severity_high), 
+    lty = 2
+  )
 ```
 
 The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
