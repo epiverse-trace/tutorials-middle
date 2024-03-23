@@ -402,7 +402,7 @@ Nevertheless, even by only using the observed data for the period March 19 to Ap
 
 ![Early determination of the delay-adjusted confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_d.png)
 
-We can explore this behaviour using the `cfr_rolling()` function. With `tail()`, we show that the latest CFR estimates are equal to the `cfr_static()` outputs:  
+We can explore this behaviour using the `cfr_rolling()` function. `cfr_rolling()` is utility function that automatically calculates CFR for each day of the outbreak with the data available up to that day, saving the user time.
 
 ```{r}
 # Calculate the rolling daily naive CFR
@@ -410,6 +410,8 @@ rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
 
 tail(rolling_cfr_naive)
 ```
+
+With `tail()`, we show that the latest CFR estimates are equal to the `cfr_static()` outputs
 
 ```{r}
 # Calculate the rolling daily delay-adjusted CFR
