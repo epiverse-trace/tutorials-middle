@@ -295,7 +295,7 @@ where:
 
 - $c_{t}$ is the daily case incidence at time $t$, 
 - $f_{t}$ is the value of the Probability Mass Function (PMF) of the **delay distribution** between onset and death, and
-- $u_{t}$ represents the underestimation of the known outcomes.
+- $u_{t}$ represents the underestimation factor of the known outcomes.
 
 $u_{t}$ is used to **scale** the value of the cumulative number of cases in the denominator in the calculation of the CFR. This is calculated internally with the [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) function.
 
@@ -304,6 +304,10 @@ The estimator for CFR can be written as:
 $$p_{t} = b_{t} / u_{t}$$
 
 where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
+
+From this last equation, we observe that the unbiased CFR $p_{t}$ is larger than biased CFR $b_{t}$ because in $u_{t}$ the numerator is smaller than the denominator (note that $f_{t}$ is the probability distribution of the *delay distribution* between onset and death). Therefore, we refer to $b_{t}$ as the biased estimator of CFR.
+
+When we observe the entire course of an epidemic (from $t \rightarrow \infty $), $b_{t}$ tends to $p_{t}$ and becomes an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
 
 :::::::::::::::::::::::::::
 
