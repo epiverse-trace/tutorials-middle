@@ -190,6 +190,8 @@ outbreaks::ebola_kikwit_1995 %>%
 
 [Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describe two potential biases that can affect the estimation of CFR (and its possible solutions):
 
+:::::::::::::::::::::::::::::::::::
+
 ::::::::::::: solution
 
 ### Preferential ascertainment of severe cases
@@ -209,8 +211,6 @@ During an _ongoing_ epidemic, there is a delay between the time someone dies and
 The key determinants of the magnitude of the bias are the epidemic _growth rate_ and the _distribution of delays_ from case-reporting to death-reporting; the longer the delays and the faster the growth rate, the greater the bias.
 
 ::::::::::::
-
-:::::::::::::::::::::::::::::::::::
 
 
 
