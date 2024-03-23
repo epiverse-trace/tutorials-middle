@@ -395,7 +395,7 @@ From *aggregated incidence data*, at time $t$ we know the cumulative number of c
 
 If we knew the factor of underestimation $u_{t}$ we could specify the size of the population of confirmed cases no longer at risk ($u_{t}C_{t}$, **shaded**), although we do not know which surviving individuals belong to this group. A proportion $\pi$ of those in the group of cases still at risk (size $(1- u_{t})C_{t}$, **unshaded**) is expected to die.
 
-Because each case no longer at risk had an independent probability of dying, $\pi$, the number of deaths, $D_{t}$, is a sample from a binomial distribution with sample size $u_{t}C_{t}$, and probability $p_{t}$ = $\pi$.
+Because each case no longer at risk had an independent probability of dying, $\pi$, the number of deaths, $D_{t}$, is a sample from a binomial distribution with sample size $u_{t}C_{t}$, and probability of dying $p_{t}$ = $\pi$.
 
 This is represented by the following likelihood function to obtain the maximum likelihood estimate of the unbiased CFR $p_{t}$ = $\pi$:
 
@@ -410,7 +410,7 @@ This estimation is performed by the internal function `?cfr:::estimate_severity(
 
 The `cfr_static()` estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has clearly ended, or has progressed such that deaths are reported more, the estimated CFR is then _closest to_ the 'true' unbiased CFR.
 
-A _delay-adjusted CFR_ estimated with `cfr_static()` can assess the severity of an emerging infectious disease **earlier** than the biased or naive CFR, during an epidemic.
+Additionally, a _delay-adjusted CFR_ estimated with `cfr_static()` can assess the severity of an emerging infectious disease **earlier** than the biased or naive CFR, during an epidemic.
 
 This is particularly useful when an _epidemic curve of confirmed cases_ is the only data available (i.e. when individual data from onset to death are unavailable, especially during the early stage of the epidemic). When there are few deaths or none at all, an assumption has to be made for the *delay distribution* from onset to death, e.g. from literature based on previous outbreaks. [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) depict this in the figures with data from the SARS outbreak in Hong Kong, 2003.
 
@@ -432,7 +432,7 @@ We can explore the **early** determination of the _delay-adjusted CFR_ using the
 
 :::::::::::::::::::::: callout
 
-`cfr_rolling()` is utility function that automatically calculates CFR for each day of the outbreak with the data available up to that day, saving the user time.
+`cfr_rolling()` is a utility function that automatically calculates CFR for each day of the outbreak with the data available up to that day, saving the user time.
 
 ::::::::::::::::::::::
 
@@ -538,19 +538,19 @@ Is this pattern similar to other outbreaks? We can use the data sets in this epi
 
 The `{cfr}` package has a function called `cfr_time_varying()` with different functionality that makes them not comparable.
 
-#### `cfr_rolling()`
+#### When to use `cfr_rolling()`?
 
 `cfr_rolling()` shows the estimated CFR on each outbreak day, given that future data on cases and deaths is unavailable at the time. The final value of `cfr_rolling()` estimates is identical to `cfr_static()` on the same data.
 
 Remember, as shown above, `cfr_rolling()` is helpful to get early-stage CFR estimates and check whether an outbreak's CFR estimate has stabilised. Thus, `cfr_rolling()` is not sensitive to the length or size of the epidemic.
 
-#### `cfr_time_varying()`
+#### When to use `cfr_time_varying()`?
 
 On the other hand, `cfr_time_varying()` calculates the CFR over a moving window and helps to understand changes in CFR due to changes in the epidemic, e.g. due to a new variant or increased immunity from vaccination.
 
 However, `cfr_time_varying()` is sensitive to sampling uncertainty. Thus, it is sensitive to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. 
 
-For example, with 100 cases, the fatality risk estimate will, roughly speaking, have a 95% confidence interval ±10% of the mean estimate (binomial CI). So if we have >100 cases with expected outcomes *on a given day*, we can get reasonable estimates of the time varying CFR. But if we only have >100 cases *over the course of the whole epidemic*, we probably need to rely on `cfr_static()` that uses the cumulative data.
+For example, with 100 cases, the fatality risk estimate will, roughly speaking, have a 95% confidence interval ±10% of the mean estimate (binomial CI). So if we have >100 cases with expected outcomes *on a given day*, we can get reasonable estimates of the time varying CFR. But if we only have >100 cases *over the course of the whole epidemic*, we probably need to rely on `cfr_rolling()` that uses the cumulative data.
 
 We invite you to read this [vignette about the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
 
@@ -697,6 +697,8 @@ covid_england <-
     verbose = FALSE
   )
 ```
+
+Also, check out the vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html)
 
 :::::::::::::::::
 
