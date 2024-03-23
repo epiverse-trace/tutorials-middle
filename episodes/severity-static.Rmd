@@ -301,13 +301,13 @@ $u_{t}$ is used to **scale** the value of the cumulative number of cases in the 
 
 The estimator for CFR can be written as: 
 
-$$p_{t} = b_{t} / u_{t}$$
+$$p_{t} = \frac{b_{t}}{u_{t}}$$
 
 where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
 
 From this last equation, we observe that the unbiased CFR $p_{t}$ is larger than biased CFR $b_{t}$ because in $u_{t}$ the numerator is smaller than the denominator (note that $f_{t}$ is the probability distribution of the *delay distribution* between onset and death). Therefore, we refer to $b_{t}$ as the biased estimator of CFR.
 
-When we observe the entire course of an epidemic (from $t \rightarrow \infty $), $b_{t}$ tends to $p_{t}$ and becomes an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
+When we observe the entire course of an epidemic (from $t \rightarrow \infty$), $b_{t}$ tends to $p_{t}$ and becomes an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
 
 :::::::::::::::::::::::::::
 
@@ -365,17 +365,17 @@ outbreaks::ebola_kikwit_1995 %>%
 
 We just found that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?
 
-`{cfr}` method obtains an unbiased estimator "well before" observing the entire course of the outbreak. For this `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the sampling process defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
+`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the sampling process defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
 
 :::::::::::::::::::::::::: spoiler
 
 ### What is the sampling process?
 
-![The population and sampling process for estimating the unbiased CFR during the course of an outbreak. ([Nishiura et al., 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
+![The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. ([Nishiura et al., 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
 
-From our *aggregated incidence data*, at time $t$ we know the cumulative number of confirmed cases and deaths, $C_{t}$ and $D_{t}$, and wish to estimate the unbiased CFR $\pi$, by way of the factor of underestimation $u_{t}$. 
+From *aggregated incidence data*, at time $t$ we know the cumulative number of confirmed cases and deaths, $C_{t}$ and $D_{t}$, and wish to estimate the unbiased CFR $\pi$, by way of the factor of underestimation $u_{t}$. 
 
-If we knew the factor of underestimation $u_{t}$ we could specify the size of the population no longer at risk ($u_{t}C_{t}$, **shaded**), although we do not know which surviving individuals belong to this group. A proportion $\pi$ of those in the group of cases still at risk (size $(1- u_{t})C_{t}$, **unshaded**) is expected to die.
+If we knew the factor of underestimation $u_{t}$ we could specify the size of the population of confirmed cases no longer at risk ($u_{t}C_{t}$, **shaded**), although we do not know which surviving individuals belong to this group. A proportion $\pi$ of those in the group of cases still at risk (size $(1- u_{t})C_{t}$, **unshaded**) is expected to die.
 
 Because each case no longer at risk had an independent probability of dying, $\pi$, the number of deaths, $D_{t}$, is a sample from a binomial distribution with sample size $u_{t}C_{t}$, and probability $p_{t}$ = $\pi$.
 
