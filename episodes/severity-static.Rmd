@@ -184,7 +184,13 @@ outbreaks::ebola_kikwit_1995 %>%
 
 ## Biases that affect CFR estimation
 
+::::::::::::::::::::::::::::::::::: discusion
+
+### Two biases that affect CFR estimation
+
 [Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describe two potential biases that can affect the estimation of CFR (and its possible solutions):
+
+::::::::::::: solution
 
 ### Preferential ascertainment of severe cases
 
@@ -192,11 +198,21 @@ For diseases with a _spectrum_ of clinical presentation, those cases that come t
 
 Therefore, the CFR will typically be higher among _detected cases_ than among the entire population of cases, given that the latter may include individuals with mild, subclinical, and (under some definitions of “case”) asymptomatic presentations.
 
+:::::::::::::
+
+:::::::::::: solution
+
 ### Bias due to delayed reporting of death
 
 During an _ongoing_ epidemic, there is a delay between the time someone dies and the time their death is reported. Therefore, at any moment in time, the list of cases includes people who will die and whose death has not yet occurred or has occurred but not yet been reported. Thus, dividing the cumulative number of reported deaths by the cumulative number of reported cases at any moment will underestimate the true CFR.
 
 The key determinants of the magnitude of the bias are the epidemic _growth rate_ and the _distribution of delays_ from case-reporting to death-reporting; the longer the delays and the faster the growth rate, the greater the bias.
+
+::::::::::::
+
+:::::::::::::::::::::::::::::::::::
+
+
 
 :::::::::::::::::::: instructor
 
