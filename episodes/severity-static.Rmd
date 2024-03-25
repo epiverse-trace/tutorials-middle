@@ -491,12 +491,12 @@ bind_rows(
   ) +
   geom_hline(
     data = rolling_cfr_adjusted_end,
-    aes(yintercept = severity_low), 
+    aes(yintercept = severity_low),
     lty = 2
   ) +
   geom_hline(
     data = rolling_cfr_adjusted_end,
-    aes(yintercept = severity_high), 
+    aes(yintercept = severity_high),
     lty = 2
   )
 ```
