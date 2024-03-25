@@ -517,13 +517,19 @@ bind_rows(
 
 The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
 
-:::::::::::::::::::::::::::::::::::::::::::: challenge
+:::::::::::::::::::::::::::::::::::::::::::: discussion
 
 ### Interpret the early-stage CFR estimate
 
 Based on the figure above:
 
 - How much difference in days is between the date in which the 95% CI of the estimated _delay-adjusted CFR_ vs _naive CFR_ cross with the CFR estimated at the end of the outbreak?
+
+Discuss:
+
+- What are the Public health policy implications of having a _delay-adjusted CFR_ estimate?
+
+:::::::::::::::::::::::::::::::::::::::::::: 
 
 :::::::::::::::::::::: hint
 
@@ -540,9 +546,6 @@ Note that the estimate has considerable uncertainty at the beginning of the time
 Is this pattern similar to other outbreaks? We can use the data sets in this episode's challenges. We invite you to find it out!
 
 ::::::::::::::::::::::
-
-
-::::::::::::::::::::::::::::::::::::::::::::
 
 
 
