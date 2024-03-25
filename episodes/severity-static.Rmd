@@ -345,6 +345,20 @@ For distribution functions with parameters not available in `{epiparameter}`, we
 
 ::::::::::::::::::
 
+:::::::::::::::::: spoiler
+
+## When to use discrete distributions?
+
+For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropriate choice to pass are **discrete** distributions. This is because we will work with daily case and death data.
+
+We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
+
+However, this assumption may not be appropriate for distributions with greater picks. For example, when onset-to-death is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads.
+
+In a scenario like the last one, you can opt to discretise the continuous distribution using `epiparameter::discretise()` to an `<epidist>` object.
+
+::::::::::::::::::
+
 :::::::::::::::::::::::::::::::::::::::: challenge
 
 Load the `ebola_kikwit_1995` from `{outbreaks}` and estimate the delay-adjusted CFR using the appropriate distribution delay. Then:
