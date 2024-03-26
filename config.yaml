@@ -61,6 +61,7 @@ contact: 'andree.valle-campos@lshtm.ac.uk'
 episodes:
 - quantify-transmissibility.Rmd
 - create-forecast.Rmd
+- severity-static.Rmd
 
 # Information for Learners
 learners:
