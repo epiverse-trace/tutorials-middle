@@ -8,8 +8,8 @@ exercises: 0
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How can I estimate key transmission metrics from a time series of case data?
-- How can I quantify geographical heterogeneity in these metrics? 
+- How can I estimate the time-varying reproduction number ($Rt$) and growth rate from a time series of case data?
+- How can I quantify geographical heterogeneity in these transmission metrics? 
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -61,6 +61,14 @@ In Bayesian inference, we use prior knowledge (prior distributions) with data (i
 
 <p class="text-center" style="background-color: white">Posterior probability $\propto$ likelihood $\times$ prior probability
 </p>
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::: instructor
+
+We refer to the Prior probability distribution and the [Posterior probability](https://en.wikipedia.org/wiki/Posterior_probability) distribution.
+
+Lines below, in the "`Expected change in daily cases`" callout, by "the posterior probability that $R_t < 1$", we refer specifically to the [area under the posterior probability distribution curve](https://www.nature.com/articles/nmeth.3368/figures/1). 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -166,7 +174,7 @@ The number of delays and type of delay is a flexible input that depends on the d
 
 The distribution of incubation period can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
 
-We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma^2= 2$ (shape = $4$, scale = $1$) using the function `dist_spec()` as follows:
+We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma= 2$ (shape = $4$, scale = $1$) using the function `dist_spec()` as follows:
 
 
 ```r
@@ -199,15 +207,15 @@ For all types of delay, we will need to use distributions for positive values on
 
 ####  Including distribution uncertainty
 
-To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma^2$ of our gamma distribution. If our incubation period distribution has a mean $\mu$ and standard deviation $\sigma^2$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}^2$:
+To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma$ of our gamma distribution. If our incubation period distribution has a mean $\mu$ and standard deviation $\sigma$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
-and a standard deviation ($\sigma^2$) follows a Normal distribution with standard deviation $\sigma_{\sigma^2}^2$:
+and a standard deviation ($\sigma$) follows a Normal distribution with standard deviation $\sigma_{\sigma}$:
 
-$$\mbox{Normal}(\sigma^2,\sigma_{\sigma^2}^2).$$
+$$\mbox{Normal}(\sigma,\sigma_{\sigma}^2).$$
 
-We specify this using `dist_spec` with the additional arguments `mean_sd` ($\sigma_{\mu}^2$) and `sd_sd` ($\sigma_{\sigma^2}^2$).
+We specify this using `dist_spec` with the additional arguments `mean_sd` ($\sigma_{\mu}$) and `sd_sd` ($\sigma_{\sigma}$).
 
 
 ```r
@@ -336,10 +344,10 @@ estimates <- epinow(
 ```
 
 ```{.output}
-WARN [2024-03-25 19:10:03] epinow: There were 1 divergent transitions after warmup. See
+WARN [2024-03-28 21:34:59] epinow: There were 8 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-03-25 19:10:03] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-03-28 21:34:59] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -374,22 +382,22 @@ summary(estimates)
 ```{.output}
                                  measure                 estimate
                                   <char>                   <char>
-1: New confirmed cases by infection date     7126 (4149 -- 12509)
+1: New confirmed cases by infection date     7232 (4047 -- 13301)
 2:        Expected change in daily cases        Likely decreasing
-3:            Effective reproduction no.       0.89 (0.58 -- 1.3)
-4:                        Rate of growth -0.015 (-0.063 -- 0.037)
-5:          Doubling/halving time (days)          -45 (19 -- -11)
+3:            Effective reproduction no.       0.89 (0.58 -- 1.4)
+4:                        Rate of growth -0.015 (-0.063 -- 0.043)
+5:          Doubling/halving time (days)          -47 (16 -- -11)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in daily cases is Likely decreasing with the estimated new confirmed cases 7126 (4149 -- 12509).
++ From the summary of our analysis we see that the expected change in daily cases is Likely decreasing with the estimated new confirmed cases 7232 (4047 -- 13301).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.89 (0.58 -- 1.3). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.89 (0.58 -- 1.4). 
 
-+ The exponential growth rate of case numbers is -0.015 (-0.063 -- 0.037).
++ The exponential growth rate of case numbers is -0.015 (-0.063 -- 0.043).
 
-+ The doubling time (the time taken for case numbers to double) is -45 (19 -- -11).
++ The doubling time (the time taken for case numbers to double) is -47 (16 -- -11).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in daily cases` 
@@ -455,17 +463,17 @@ estimates_regional <- regional_epinow(
 ```
 
 ```{.output}
-INFO [2024-03-25 19:10:09] Producing following optional outputs: regions, summary, samples, plots, latest
-INFO [2024-03-25 19:10:09] Reporting estimates using data up to: 2020-04-28
-INFO [2024-03-25 19:10:09] No target directory specified so returning output
-INFO [2024-03-25 19:10:09] Producing estimates for: East Midlands, East of England, England, London, North East, North West, Northern Ireland, Scotland, South East, South West, Wales, West Midlands, Yorkshire and The Humber
-INFO [2024-03-25 19:10:09] Regions excluded: none
-INFO [2024-03-25 19:54:28] Completed regional estimates
-INFO [2024-03-25 19:54:28] Regions with estimates: 13
-INFO [2024-03-25 19:54:28] Regions with runtime errors: 0
-INFO [2024-03-25 19:54:29] Producing summary
-INFO [2024-03-25 19:54:29] No summary directory specified so returning summary output
-INFO [2024-03-25 19:54:29] No target directory specified so returning timings
+INFO [2024-03-28 21:35:04] Producing following optional outputs: regions, summary, samples, plots, latest
+INFO [2024-03-28 21:35:04] Reporting estimates using data up to: 2020-04-28
+INFO [2024-03-28 21:35:04] No target directory specified so returning output
+INFO [2024-03-28 21:35:04] Producing estimates for: East Midlands, East of England, England, London, North East, North West, Northern Ireland, Scotland, South East, South West, Wales, West Midlands, Yorkshire and The Humber
+INFO [2024-03-28 21:35:04] Regions excluded: none
+INFO [2024-03-28 22:21:26] Completed regional estimates
+INFO [2024-03-28 22:21:26] Regions with estimates: 13
+INFO [2024-03-28 22:21:26] Regions with runtime errors: 0
+INFO [2024-03-28 22:21:26] Producing summary
+INFO [2024-03-28 22:21:26] No summary directory specified so returning summary output
+INFO [2024-03-28 22:21:26] No target directory specified so returning timings
 ```
 
 ```r
@@ -475,49 +483,49 @@ estimates_regional$summary$summarised_results$table
 ```{.output}
                       Region New confirmed cases by infection date
                       <char>                                <char>
- 1:            East Midlands                      339 (213 -- 548)
- 2:          East of England                      539 (337 -- 846)
- 3:                  England                   3558 (2161 -- 5686)
- 4:                   London                      298 (187 -- 460)
- 5:               North East                      256 (145 -- 425)
- 6:               North West                      563 (325 -- 866)
- 7:         Northern Ireland                         42 (22 -- 82)
- 8:                 Scotland                      289 (152 -- 551)
- 9:               South East                      590 (353 -- 978)
-10:               South West                      419 (288 -- 604)
-11:                    Wales                        95 (63 -- 139)
-12:            West Midlands                      271 (141 -- 494)
-13: Yorkshire and The Humber                      483 (287 -- 792)
+ 1:            East Midlands                      347 (216 -- 568)
+ 2:          East of England                      540 (331 -- 840)
+ 3:                  England                   3621 (2184 -- 5730)
+ 4:                   London                      293 (191 -- 456)
+ 5:               North East                      251 (144 -- 412)
+ 6:               North West                      561 (326 -- 869)
+ 7:         Northern Ireland                         44 (24 -- 85)
+ 8:                 Scotland                      288 (160 -- 538)
+ 9:               South East                      588 (343 -- 975)
+10:               South West                      415 (290 -- 598)
+11:                    Wales                        94 (63 -- 134)
+12:            West Midlands                      272 (145 -- 495)
+13: Yorkshire and The Humber                      476 (280 -- 787)
     Expected change in daily cases Effective reproduction no.
                             <fctr>                     <char>
- 1:              Likely increasing          1.2 (0.85 -- 1.6)
- 2:              Likely increasing          1.2 (0.84 -- 1.6)
- 3:              Likely decreasing         0.92 (0.62 -- 1.3)
- 4:              Likely decreasing         0.79 (0.55 -- 1.1)
- 5:              Likely decreasing          0.92 (0.6 -- 1.3)
- 6:              Likely decreasing         0.87 (0.57 -- 1.2)
- 7:              Likely decreasing           0.63 (0.38 -- 1)
- 8:              Likely decreasing         0.92 (0.57 -- 1.4)
- 9:                         Stable         0.99 (0.67 -- 1.4)
+ 1:              Likely increasing          1.2 (0.87 -- 1.6)
+ 2:              Likely increasing          1.2 (0.83 -- 1.6)
+ 3:              Likely decreasing         0.92 (0.63 -- 1.3)
+ 4:              Likely decreasing         0.78 (0.56 -- 1.1)
+ 5:              Likely decreasing         0.91 (0.59 -- 1.3)
+ 6:              Likely decreasing         0.87 (0.58 -- 1.2)
+ 7:              Likely decreasing          0.66 (0.4 -- 1.1)
+ 8:              Likely decreasing         0.91 (0.58 -- 1.4)
+ 9:                         Stable         0.99 (0.66 -- 1.4)
 10:                     Increasing           1.4 (1.1 -- 1.8)
-11:                     Decreasing        0.57 (0.41 -- 0.77)
+11:                     Decreasing        0.56 (0.41 -- 0.74)
 12:              Likely decreasing         0.71 (0.42 -- 1.1)
-13:                         Stable             1 (0.7 -- 1.4)
+13:                         Stable            1 (0.69 -- 1.4)
                Rate of growth Doubling/halving time (days)
                        <char>                       <char>
- 1:    0.023 (-0.02 -- 0.067)               30 (10 -- -34)
- 2:   0.022 (-0.022 -- 0.065)               31 (11 -- -32)
- 3:  -0.011 (-0.055 -- 0.032)              -62 (22 -- -13)
- 4:   -0.029 (-0.068 -- 0.01)              -24 (69 -- -10)
- 5:  -0.011 (-0.059 -- 0.038)              -63 (18 -- -12)
- 6:  -0.017 (-0.064 -- 0.022)              -40 (31 -- -11)
- 7:   -0.053 (-0.1 -- 0.0038)            -13 (180 -- -6.9)
- 8:   -0.01 (-0.065 -- 0.047)              -67 (15 -- -11)
- 9: -0.0013 (-0.048 -- 0.049)             -540 (14 -- -14)
-10:    0.047 (0.011 -- 0.086)               15 (8.1 -- 60)
-11: -0.064 (-0.095 -- -0.032)            -11 (-22 -- -7.3)
-12:  -0.041 (-0.092 -- 0.012)             -17 (56 -- -7.5)
-13:  0.0032 (-0.042 -- 0.051)              220 (14 -- -17)
+ 1:   0.024 (-0.018 -- 0.069)               29 (10 -- -39)
+ 2:   0.022 (-0.023 -- 0.066)               31 (11 -- -30)
+ 3:   -0.01 (-0.054 -- 0.033)              -68 (21 -- -13)
+ 4:    -0.03 (-0.066 -- 0.01)              -23 (67 -- -11)
+ 5:   -0.012 (-0.06 -- 0.034)              -57 (20 -- -12)
+ 6:  -0.017 (-0.063 -- 0.022)              -40 (32 -- -11)
+ 7:  -0.05 (-0.097 -- 0.0067)            -14 (100 -- -7.1)
+ 8:  -0.012 (-0.062 -- 0.049)              -58 (14 -- -11)
+ 9: -0.0017 (-0.049 -- 0.049)             -410 (14 -- -14)
+10:    0.046 (0.013 -- 0.085)               15 (8.2 -- 55)
+11: -0.065 (-0.095 -- -0.036)            -11 (-19 -- -7.3)
+12:  -0.041 (-0.092 -- 0.014)             -17 (50 -- -7.5)
+13:  0.0025 (-0.045 -- 0.051)              270 (14 -- -15)
 ```
 
 ```r
