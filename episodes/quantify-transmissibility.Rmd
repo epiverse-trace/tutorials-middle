@@ -12,8 +12,8 @@ withr::local_options(list(mc.cores = 4))
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How can I estimate key transmission metrics from a time series of case data?
-- How can I quantify geographical heterogeneity in these metrics? 
+- How can I estimate the time-varying reproduction number ($Rt$) and growth rate from a time series of case data?
+- How can I quantify geographical heterogeneity in these transmission metrics? 
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
