@@ -68,6 +68,14 @@ In Bayesian inference, we use prior knowledge (prior distributions) with data (i
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::::::::::::::::::::: instructor
+
+We refer to the Prior probability distribution and the [Posterior probability](https://en.wikipedia.org/wiki/Posterior_probability) distribution.
+
+Lines below, in the "`Expected change in daily cases`" callout, by "the posterior probability that $R_t < 1$", we refer specifically to the [area under the posterior probability distribution curve](https://www.nature.com/articles/nmeth.3368/figures/1). 
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 The first step is to load the `{EpiNow2}` package :
 
