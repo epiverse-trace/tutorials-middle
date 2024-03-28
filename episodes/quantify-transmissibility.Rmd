@@ -157,7 +157,7 @@ The number of delays and type of delay is a flexible input that depends on the d
 
 The distribution of incubation period can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
 
-We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma^2= 2$ (shape = $4$, scale = $1$) using the function `dist_spec()` as follows:
+We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma= 2$ (shape = $4$, scale = $1$) using the function `dist_spec()` as follows:
 
 ```{r}
 incubation_period_fixed <- dist_spec(
@@ -184,15 +184,15 @@ For all types of delay, we will need to use distributions for positive values on
 
 ####  Including distribution uncertainty
 
-To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma^2$ of our gamma distribution. If our incubation period distribution has a mean $\mu$ and standard deviation $\sigma^2$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}^2$:
+To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma$ of our gamma distribution. If our incubation period distribution has a mean $\mu$ and standard deviation $\sigma$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
-and a standard deviation ($\sigma^2$) follows a Normal distribution with standard deviation $\sigma_{\sigma^2}^2$:
+and a standard deviation ($\sigma$) follows a Normal distribution with standard deviation $\sigma_{\sigma}$:
 
-$$\mbox{Normal}(\sigma^2,\sigma_{\sigma^2}^2).$$
+$$\mbox{Normal}(\sigma,\sigma_{\sigma}^2).$$
 
-We specify this using `dist_spec` with the additional arguments `mean_sd` ($\sigma_{\mu}^2$) and `sd_sd` ($\sigma_{\sigma^2}^2$).
+We specify this using `dist_spec` with the additional arguments `mean_sd` ($\sigma_{\mu}$) and `sd_sd` ($\sigma_{\sigma}$).
 
 ```{r}
 incubation_period_variable <- dist_spec(
