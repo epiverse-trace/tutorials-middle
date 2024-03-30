@@ -63,6 +63,7 @@ episodes:
 - create-forecast.Rmd
 - severity-static.Rmd
 - superspreading-estimate.Rmd
+- superspreading-simulate.Rmd
 
 # Information for Learners
 learners: 
