@@ -94,31 +94,26 @@ To illustrate the functions of `EpiNow2` we will use outbreak data of the start 
 
 
 ```r
-head(incidence2::covidregionaldataUK)
+dplyr::as_tibble(incidence2::covidregionaldataUK)
 ```
 
 ```{.output}
-        date          region region_code cases_new cases_total deaths_new
-1 2020-01-30   East Midlands   E12000004        NA          NA         NA
-2 2020-01-30 East of England   E12000006        NA          NA         NA
-3 2020-01-30         England   E92000001         2           2         NA
-4 2020-01-30          London   E12000007        NA          NA         NA
-5 2020-01-30      North East   E12000001        NA          NA         NA
-6 2020-01-30      North West   E12000002        NA          NA         NA
-  deaths_total recovered_new recovered_total hosp_new hosp_total tested_new
-1           NA            NA              NA       NA         NA         NA
-2           NA            NA              NA       NA         NA         NA
-3           NA            NA              NA       NA         NA         NA
-4           NA            NA              NA       NA         NA         NA
-5           NA            NA              NA       NA         NA         NA
-6           NA            NA              NA       NA         NA         NA
-  tested_total
-1           NA
-2           NA
-3           NA
-4           NA
-5           NA
-6           NA
+# A tibble: 6,370 × 13
+   date       region   region_code cases_new cases_total deaths_new deaths_total
+   <date>     <chr>    <chr>           <dbl>       <dbl>      <dbl>        <dbl>
+ 1 2020-01-30 East Mi… E12000004          NA          NA         NA           NA
+ 2 2020-01-30 East of… E12000006          NA          NA         NA           NA
+ 3 2020-01-30 England  E92000001           2           2         NA           NA
+ 4 2020-01-30 London   E12000007          NA          NA         NA           NA
+ 5 2020-01-30 North E… E12000001          NA          NA         NA           NA
+ 6 2020-01-30 North W… E12000002          NA          NA         NA           NA
+ 7 2020-01-30 Norther… N92000002          NA          NA         NA           NA
+ 8 2020-01-30 Scotland S92000003          NA          NA         NA           NA
+ 9 2020-01-30 South E… E12000008          NA          NA         NA           NA
+10 2020-01-30 South W… E12000009          NA          NA         NA           NA
+# ℹ 6,360 more rows
+# ℹ 6 more variables: recovered_new <dbl>, recovered_total <dbl>,
+#   hosp_new <dbl>, hosp_total <dbl>, tested_new <dbl>, tested_total <dbl>
 ```
 
 To use the data, we must format the data to have two columns:
@@ -126,18 +121,21 @@ To use the data, we must format the data to have two columns:
 + `date` : the date (as a date object see `?is.Date()`),
 + `confirm` : number of confirmed cases on that date.
 
+Let's use `{dplyr}` for this:
+
 
 ```r
-cases <- aggregate(
-  cases_new ~ date,
-  data = incidence2::covidregionaldataUK[, c("date", "cases_new")],
-  FUN = sum
-)
-colnames(cases) <- c("date", "confirm")
+library(dplyr)
+
+cases <- incidence2::covidregionaldataUK %>%
+  select(date, cases_new) %>%
+  group_by(date) %>%
+  summarise(confirm = sum(cases_new, na.rm = TRUE)) %>%
+  ungroup()
 ```
 
 
-There are case data available for 489 days, but in an outbreak situation it is likely we would only have access to the beginning of this data set. Therefore we assume we only have the first 90 days of this data. 
+There are case data available for 490 days, but in an outbreak situation it is likely we would only have access to the beginning of this data set. Therefore we assume we only have the first 90 days of this data. 
 
 <img src="fig/quantify-transmissibility-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
@@ -159,9 +157,9 @@ The number of delays and type of delay is a flexible input that depends on the d
 
 | Data source        | Delay(s) |
 | ------------- |-------------|
+|Time of symptom onset      |Incubation period |
 |Time of case report      |Incubation period + time from symptom onset to case notification |
 |Time of hospitalisation   |Incubation period + time from symptom onset to hospitalisation     |
-|Time of symptom onset      |Incubation period |
 
 </center>
 
@@ -335,21 +333,55 @@ To find the maximum number of available cores on your machine, use `parallel::de
 
 ```r
 reported_cases <- cases[1:90, ]
+
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+  delays = delay_opts(
+    incubation_period_fixed + reporting_delay_fixed
+  ),
+  rt = rt_opts(
+    prior = list(mean = rt_log_mean, sd = rt_log_sd)
+  )
 )
 ```
 
 ```{.output}
-WARN [2024-03-28 21:34:59] epinow: There were 8 divergent transitions after warmup. See
+WARN [2024-03-30 17:17:33] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-03-28 21:34:59] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-03-30 17:17:33] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
+
+::::::::::::::::::::::::::::::::: spoiler
+
+### Reduce computation time
+
+Using an appropriate number of samples and chains is crucial for ensuring convergence and obtaining reliable estimates in Bayesian computations using Stan. Inadequate sampling or insufficient chains may lead to issues such as divergent transitions, impacting the accuracy and stability of the inference process.
+
+For the purpose of this tutorial, we can add more configuration details to get an useful output in less time. You can specify a fixed number of `samples` and `chains` to the `stan` argument using the `stan_opts()` function:
+
+The code in the previous chunk can take around 10 minutes. We expect this chunk below to take approximately 3 minutes:
+
+
+```r
+estimates <- epinow(
+  # same code as previous chunk
+  reported_cases = reported_cases,
+  generation_time = generation_time_opts(generation_time_fixed),
+  delays = delay_opts(
+    incubation_period_fixed + reporting_delay_fixed
+  ),
+  rt = rt_opts(
+    prior = list(mean = rt_log_mean, sd = rt_log_sd)
+  ),
+  # [new] set a fixed number of samples and chains
+  stan = stan_opts(samples = 1000, chains = 3)
+)
+```
+
+:::::::::::::::::::::::::::::::::
 
 ### Results
 
@@ -360,7 +392,7 @@ We can extract and visualise estimates of the effective reproduction number thro
 estimates$plots$R
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
 The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. This difference in uncertainty is categorised into **Estimate** (green) utilises all data and **Estimate based on partial data** (orange) estimates that are based on less data (because infections that happened at the time are more likely to not have been observed yet) and therefore have increasingly wider intervals towards the date of the last data point. Finally, the **Forecast** (purple) is a projection ahead of time. 
 
@@ -370,7 +402,7 @@ We can also visualise the growth rate estimate through time:
 estimates$plots$growth_rate
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
 
 To extract a summary of the key transmission metrics at the *latest date* in the data:
 
@@ -382,22 +414,22 @@ summary(estimates)
 ```{.output}
                                  measure                 estimate
                                   <char>                   <char>
-1: New confirmed cases by infection date     7232 (4047 -- 13301)
+1: New confirmed cases by infection date     7097 (3893 -- 12496)
 2:        Expected change in daily cases        Likely decreasing
-3:            Effective reproduction no.       0.89 (0.58 -- 1.4)
-4:                        Rate of growth -0.015 (-0.063 -- 0.043)
-5:          Doubling/halving time (days)          -47 (16 -- -11)
+3:            Effective reproduction no.       0.88 (0.55 -- 1.3)
+4:                        Rate of growth -0.016 (-0.068 -- 0.037)
+5:          Doubling/halving time (days)          -42 (19 -- -10)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in daily cases is Likely decreasing with the estimated new confirmed cases 7232 (4047 -- 13301).
++ From the summary of our analysis we see that the expected change in daily cases is Likely decreasing with the estimated new confirmed cases 7097 (3893 -- 12496).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.89 (0.58 -- 1.4). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.88 (0.55 -- 1.3). 
 
-+ The exponential growth rate of case numbers is -0.015 (-0.063 -- 0.043).
++ The exponential growth rate of case numbers is -0.016 (-0.068 -- 0.037).
 
-+ The doubling time (the time taken for case numbers to double) is -47 (16 -- -11).
++ The doubling time (the time taken for case numbers to double) is -42 (19 -- -10).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in daily cases` 
@@ -457,23 +489,27 @@ To find regional estimates, we use the same inputs as `epinow()` to the function
 estimates_regional <- regional_epinow(
   reported_cases = regional_cases,
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+  delays = delay_opts(
+    incubation_period_fixed + reporting_delay_fixed
+  ),
+  rt = rt_opts(
+    prior = list(mean = rt_log_mean, sd = rt_log_sd)
+  )
 )
 ```
 
 ```{.output}
-INFO [2024-03-28 21:35:04] Producing following optional outputs: regions, summary, samples, plots, latest
-INFO [2024-03-28 21:35:04] Reporting estimates using data up to: 2020-04-28
-INFO [2024-03-28 21:35:04] No target directory specified so returning output
-INFO [2024-03-28 21:35:04] Producing estimates for: East Midlands, East of England, England, London, North East, North West, Northern Ireland, Scotland, South East, South West, Wales, West Midlands, Yorkshire and The Humber
-INFO [2024-03-28 21:35:04] Regions excluded: none
-INFO [2024-03-28 22:21:26] Completed regional estimates
-INFO [2024-03-28 22:21:26] Regions with estimates: 13
-INFO [2024-03-28 22:21:26] Regions with runtime errors: 0
-INFO [2024-03-28 22:21:26] Producing summary
-INFO [2024-03-28 22:21:26] No summary directory specified so returning summary output
-INFO [2024-03-28 22:21:26] No target directory specified so returning timings
+INFO [2024-03-30 17:17:38] Producing following optional outputs: regions, summary, samples, plots, latest
+INFO [2024-03-30 17:17:38] Reporting estimates using data up to: 2020-04-28
+INFO [2024-03-30 17:17:38] No target directory specified so returning output
+INFO [2024-03-30 17:17:38] Producing estimates for: East Midlands, East of England, England, London, North East, North West, Northern Ireland, Scotland, South East, South West, Wales, West Midlands, Yorkshire and The Humber
+INFO [2024-03-30 17:17:38] Regions excluded: none
+INFO [2024-03-30 18:03:05] Completed regional estimates
+INFO [2024-03-30 18:03:05] Regions with estimates: 13
+INFO [2024-03-30 18:03:05] Regions with runtime errors: 0
+INFO [2024-03-30 18:03:05] Producing summary
+INFO [2024-03-30 18:03:05] No summary directory specified so returning summary output
+INFO [2024-03-30 18:03:06] No target directory specified so returning timings
 ```
 
 ```r
@@ -483,56 +519,56 @@ estimates_regional$summary$summarised_results$table
 ```{.output}
                       Region New confirmed cases by infection date
                       <char>                                <char>
- 1:            East Midlands                      347 (216 -- 568)
- 2:          East of England                      540 (331 -- 840)
- 3:                  England                   3621 (2184 -- 5730)
- 4:                   London                      293 (191 -- 456)
- 5:               North East                      251 (144 -- 412)
- 6:               North West                      561 (326 -- 869)
- 7:         Northern Ireland                         44 (24 -- 85)
- 8:                 Scotland                      288 (160 -- 538)
- 9:               South East                      588 (343 -- 975)
-10:               South West                      415 (290 -- 598)
-11:                    Wales                        94 (63 -- 134)
-12:            West Midlands                      272 (145 -- 495)
-13: Yorkshire and The Humber                      476 (280 -- 787)
+ 1:            East Midlands                      347 (218 -- 566)
+ 2:          East of England                      550 (336 -- 853)
+ 3:                  England                   3522 (2184 -- 5621)
+ 4:                   London                      300 (187 -- 468)
+ 5:               North East                      253 (145 -- 416)
+ 6:               North West                      550 (337 -- 874)
+ 7:         Northern Ireland                         44 (23 -- 89)
+ 8:                 Scotland                      283 (160 -- 531)
+ 9:               South East                      592 (354 -- 986)
+10:               South West                      420 (290 -- 613)
+11:                    Wales                        95 (67 -- 138)
+12:            West Midlands                      272 (144 -- 493)
+13: Yorkshire and The Humber                      481 (291 -- 770)
     Expected change in daily cases Effective reproduction no.
                             <fctr>                     <char>
  1:              Likely increasing          1.2 (0.87 -- 1.6)
- 2:              Likely increasing          1.2 (0.83 -- 1.6)
- 3:              Likely decreasing         0.92 (0.63 -- 1.3)
- 4:              Likely decreasing         0.78 (0.56 -- 1.1)
- 5:              Likely decreasing         0.91 (0.59 -- 1.3)
- 6:              Likely decreasing         0.87 (0.58 -- 1.2)
- 7:              Likely decreasing          0.66 (0.4 -- 1.1)
- 8:              Likely decreasing         0.91 (0.58 -- 1.4)
- 9:                         Stable         0.99 (0.66 -- 1.4)
+ 2:              Likely increasing          1.2 (0.85 -- 1.6)
+ 3:              Likely decreasing         0.91 (0.63 -- 1.3)
+ 4:              Likely decreasing          0.8 (0.55 -- 1.1)
+ 5:              Likely decreasing          0.91 (0.6 -- 1.3)
+ 6:              Likely decreasing          0.85 (0.6 -- 1.2)
+ 7:              Likely decreasing         0.64 (0.38 -- 1.1)
+ 8:              Likely decreasing           0.9 (0.6 -- 1.4)
+ 9:                         Stable         0.99 (0.68 -- 1.4)
 10:                     Increasing           1.4 (1.1 -- 1.8)
-11:                     Decreasing        0.56 (0.41 -- 0.74)
-12:              Likely decreasing         0.71 (0.42 -- 1.1)
-13:                         Stable            1 (0.69 -- 1.4)
+11:                     Decreasing        0.57 (0.42 -- 0.76)
+12:              Likely decreasing         0.71 (0.43 -- 1.1)
+13:                         Stable            1 (0.71 -- 1.4)
                Rate of growth Doubling/halving time (days)
                        <char>                       <char>
- 1:   0.024 (-0.018 -- 0.069)               29 (10 -- -39)
- 2:   0.022 (-0.023 -- 0.066)               31 (11 -- -30)
- 3:   -0.01 (-0.054 -- 0.033)              -68 (21 -- -13)
- 4:    -0.03 (-0.066 -- 0.01)              -23 (67 -- -11)
- 5:   -0.012 (-0.06 -- 0.034)              -57 (20 -- -12)
- 6:  -0.017 (-0.063 -- 0.022)              -40 (32 -- -11)
- 7:  -0.05 (-0.097 -- 0.0067)            -14 (100 -- -7.1)
- 8:  -0.012 (-0.062 -- 0.049)              -58 (14 -- -11)
- 9: -0.0017 (-0.049 -- 0.049)             -410 (14 -- -14)
-10:    0.046 (0.013 -- 0.085)               15 (8.2 -- 55)
-11: -0.065 (-0.095 -- -0.036)            -11 (-19 -- -7.3)
-12:  -0.041 (-0.092 -- 0.014)             -17 (50 -- -7.5)
-13:  0.0025 (-0.045 -- 0.051)              270 (14 -- -15)
+ 1:    0.024 (-0.018 -- 0.07)              29 (9.9 -- -40)
+ 2:   0.024 (-0.021 -- 0.065)               28 (11 -- -34)
+ 3:  -0.012 (-0.054 -- 0.031)              -58 (22 -- -13)
+ 4:  -0.028 (-0.068 -- 0.013)              -25 (55 -- -10)
+ 5:  -0.012 (-0.059 -- 0.035)              -57 (20 -- -12)
+ 6:    -0.02 (-0.06 -- 0.023)              -35 (30 -- -12)
+ 7:    -0.052 (-0.1 -- 0.012)             -13 (58 -- -6.8)
+ 8:  -0.013 (-0.059 -- 0.045)              -52 (15 -- -12)
+ 9: -0.0012 (-0.046 -- 0.048)             -560 (15 -- -15)
+10:    0.047 (0.013 -- 0.086)               15 (8.1 -- 54)
+11: -0.065 (-0.092 -- -0.033)            -11 (-21 -- -7.6)
+12:  -0.042 (-0.091 -- 0.015)             -17 (47 -- -7.6)
+13:  0.0029 (-0.041 -- 0.049)              240 (14 -- -17)
 ```
 
 ```r
 estimates_regional$summary$plots$R
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 
 ## Summary
