@@ -341,7 +341,7 @@ Using an appropriate number of samples and chains is crucial for ensuring conver
 
 For the purpose of this tutorial, we can add more configuration details to get an useful output in less time. You can specify a fixed number of `samples` and `chains` to the `stan` argument using the `stan_opts()` function:
 
-The code in the previous chunk can take around 20 minutes. We expect this chunk below to take approximately 3 minutes:
+The code in the previous chunk can take around 10 minutes. We expect this chunk below to take approximately 3 minutes:
 
 ```{r,eval=FALSE}
 estimates <- epinow(
