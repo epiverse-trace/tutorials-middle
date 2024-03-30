@@ -145,9 +145,9 @@ The number of delays and type of delay is a flexible input that depends on the d
 
 | Data source        | Delay(s) |
 | ------------- |-------------|
+|Time of symptom onset      |Incubation period |
 |Time of case report      |Incubation period + time from symptom onset to case notification |
 |Time of hospitalisation   |Incubation period + time from symptom onset to hospitalisation     |
-|Time of symptom onset      |Incubation period |
 
 </center>
 
