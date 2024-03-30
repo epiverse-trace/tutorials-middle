@@ -320,11 +320,16 @@ generation_time_fixed <- dist_spec(
 
 ```{r, message = FALSE, eval = TRUE}
 reported_cases <- cases[1:90, ]
+
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+  delays = delay_opts(
+    incubation_period_fixed + reporting_delay_fixed
+  ),
+  rt = rt_opts(
+    prior = list(mean = rt_log_mean, sd = rt_log_sd)
+  )
 )
 ```
 
@@ -405,8 +410,12 @@ To find regional estimates, we use the same inputs as `epinow()` to the function
 estimates_regional <- regional_epinow(
   reported_cases = regional_cases,
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+  delays = delay_opts(
+    incubation_period_fixed + reporting_delay_fixed
+  ),
+  rt = rt_opts(
+    prior = list(mean = rt_log_mean, sd = rt_log_sd)
+  )
 )
 
 estimates_regional$summary$summarised_results$table
