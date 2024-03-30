@@ -355,9 +355,7 @@ estimates <- epinow(
     prior = list(mean = rt_log_mean, sd = rt_log_sd)
   ),
   # [new] set a fixed number of samples and chains
-  stan = stan_opts(
-    samples = 1000, chains = 3
-  )
+  stan = stan_opts(samples = 1000, chains = 3)
 )
 ```
 
