@@ -96,7 +96,7 @@ This tutorial illustrates the usage of `epinow()` to estimate the time-varying r
 To illustrate the functions of `EpiNow2` we will use outbreak data of the start of the COVID-19 pandemic from the United Kingdom. The data are available in the R package `{incidence2}`. 
 
 ```{r}
-head(incidence2::covidregionaldataUK)
+dplyr::as_tibble(incidence2::covidregionaldataUK)
 ```
 
 To use the data, we must format the data to have two columns:
@@ -106,7 +106,7 @@ To use the data, we must format the data to have two columns:
 
 Let's use `{dplyr}` for this:
 
-```{r}
+```{r, warning = FALSE, message = FALSE}
 library(dplyr)
 
 cases <- incidence2::covidregionaldataUK %>%
