@@ -53,7 +53,11 @@ if(!require("pak")) install.packages("pak")
 
 new_packages <- c(
   "EpiNow2",
+  "cfr",
   "epiverse-trace/epiparameter",
+  "incidence2",
+  "covidregionaldata",
+  "outbreaks",
   "tidyverse"
 )
 
@@ -66,7 +70,11 @@ When the installation has finished, you can try to load the packages by pasting 
 
 ```r
 library(EpiNow2)
+library(cfr)
 library(epiparameter)
+library(incidence2)
+library(covidregionaldata)
+library(outbreaks)
 library(tidyverse)
 ```
 
