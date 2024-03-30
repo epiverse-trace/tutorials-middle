@@ -333,6 +333,36 @@ estimates <- epinow(
 )
 ```
 
+::::::::::::::::::::::::::::::::: spoiler
+
+### Reduce computation time
+
+Using an appropriate number of samples and chains is crucial for ensuring convergence and obtaining reliable estimates in Bayesian computations using Stan. Inadequate sampling or insufficient chains may lead to issues such as divergent transitions, impacting the accuracy and stability of the inference process.
+
+For the purpose of this tutorial, we can add more configuration details to get an useful output in less time. You can specify a fixed number of `samples` and `chains` to the `stan` argument using the `stan_opts()` function:
+
+The code in the previous chunk can take around 20 minutes. We expect this chunk below to take approximately 3 minutes:
+
+```{r,eval=FALSE}
+estimates <- epinow(
+  # same code as previous chunk
+  reported_cases = reported_cases,
+  generation_time = generation_time_opts(generation_time_fixed),
+  delays = delay_opts(
+    incubation_period_fixed + reporting_delay_fixed
+  ),
+  rt = rt_opts(
+    prior = list(mean = rt_log_mean, sd = rt_log_sd)
+  ),
+  # [new] set a fixed number of samples and chains
+  stan = stan_opts(
+    samples = 1000, chains = 3
+  )
+)
+```
+
+:::::::::::::::::::::::::::::::::
+
 ### Results
 
 We can extract and visualise estimates of the effective reproduction number through time:
