@@ -109,10 +109,10 @@ Let's use `{dplyr}` for this:
 ```{r}
 library(dplyr)
 
-cases <- incidence2::covidregionaldataUK %>% 
-  select(date, cases_new) %>% 
-  group_by(date) %>% 
-  summarise(confirm = sum(cases_new, na.rm = TRUE)) %>% 
+cases <- incidence2::covidregionaldataUK %>%
+  select(date, cases_new) %>%
+  group_by(date) %>%
+  summarise(confirm = sum(cases_new, na.rm = TRUE)) %>%
   ungroup()
 ```
 
