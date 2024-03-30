@@ -104,13 +104,16 @@ To use the data, we must format the data to have two columns:
 + `date` : the date (as a date object see `?is.Date()`),
 + `confirm` : number of confirmed cases on that date.
 
+Let's use `{dplyr}` for this:
+
 ```{r}
-cases <- aggregate(
-  cases_new ~ date,
-  data = incidence2::covidregionaldataUK[, c("date", "cases_new")],
-  FUN = sum
-)
-colnames(cases) <- c("date", "confirm")
+library(dplyr)
+
+cases <- incidence2::covidregionaldataUK %>% 
+  select(date, cases_new) %>% 
+  group_by(date) %>% 
+  summarise(confirm = sum(cases_new, na.rm = TRUE)) %>% 
+  ungroup()
 ```
 
 
