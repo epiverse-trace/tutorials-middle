@@ -1,27 +1,23 @@
 ---
-title: 'Estimate superspreading'
+title: 'Account for superspreading'
 teaching: 10
 exercises: 2
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- What is the estimated amount of superespreading events?
 - What is the level of individual variation of transmission?
-- can you reconstruct transmission chains?
+- How to estimate de amount of superspreading events?
+- How to account for superspreading in decision-making for contact tracing?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Quantify transmission heterogeneity
-- Estimate overdispersion from early outbreak data
-- Estimate R0
-- Estimate k
-- Estimate the proportion of superspreading events
-
-- Create a Short term forecast using branching process
-- Create simulation of interventions
+- Evaluate for transmission heterogeneity.
+- Create the offspring distribution from outbreak data using `{epicontacts}`.
+- Estimate the dispersion parameter from the offspring distribution using `{fitdistrplus}`.
+- Estimate the proportion of transmission accounting for superspreading events using `{superspreading}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -29,11 +25,391 @@ exercises: 2
 
 ## Prerequisites
 
-List (and hyperlink) the lessons/packages which need to be covered before this lesson
+Learners should familiarise themselves with following concept dependencies before working through this tutorial: 
+
+**Statistics**: probability distributions. 
+
+**Epidemic theory**: Reproduction number.
 
 :::::::::::::::::::::::::::::::::
 
 ## Introduction
+
+<!-- we know -->
+
+<!-- we dont know -->
+
+<!-- we want -->
+
+## questions
+
+- What is the offspring distribution?
+- How to assess for heterogeneity in transmission?
+- How to estimate the mean reproduction number and dispersion parameter from an offspring distribution?
+- The definition of a 99th-percentile SSE (not directly cover by the package)
+
+
+## The offspring distribution
+
+```{r}
+library(outbreaks)
+library(epicontacts)
+library(tidyverse)
+
+## make epicontact object
+epi <- make_epicontacts(
+  linelist = mers_korea_2015$linelist, 
+  contacts = mers_korea_2015$contacts
+)
+
+# visualise contact tree
+epicontacts::vis_epicontacts(epi)
+
+# no infector-infectee pairs are replicated
+epi %>% 
+  pluck("contacts") %>% 
+  group_by(from,to) %>% 
+  filter(n()>1)
+
+# count secondary cases per infectee
+infector_secondary <- epi %>% 
+  pluck("contacts") %>% 
+  count(from, name = "secondary_cases")
+
+epi_secondary <- 
+  epi %>% 
+  # extract ids in contact *and* linelist using "which" argument
+  get_id(which = "all") %>% 
+  enframe(name = NULL, value = "from") %>% 
+  # join count secondary cases per infectee
+  left_join(infector_secondary) %>% 
+  # infectee with missing secondary cases are replaced with zero
+  replace_na(
+    replace = list(secondary_cases = 0)
+  )
+
+# count of secondary cases per individual
+epi_secondary
+
+# arrange in descendant order of secondary cases
+epi_secondary %>% 
+  arrange(desc(secondary_cases))
+
+## plot the distribution
+epi_secondary %>% 
+  ggplot(aes(secondary_cases)) +
+  geom_histogram(binwidth = 1) +
+  labs(
+    xlab = "Individual reproduction number",
+    ylab = "Number of individuals"
+  )
+```
+
+## Estimate the dispersion parameter
+
+fit distribution to data
+provide maximum likelihood estimates
+
+the estimated value of k
+suggest that
+SSE are an expected feature of the
+individual level variation in infectiousness
+
+```{r}
+library(fitdistrplus)
+
+conflicted::conflict_scout()
+conflicted::conflict_prefer(
+  name = "filter",
+  winner = "dplyr"
+)
+conflicted::conflict_prefer(
+  name = "lag",
+  winner = "dplyr"
+)
+conflicted::conflict_prefer(
+  name = "select",
+  winner = "dplyr"
+)
+conflicted::conflict_scout()
+
+## fit distribution
+offspring_fit <- epi_secondary %>% 
+  pull(secondary_cases) %>% 
+  fitdist(distr = "nbinom")
+
+offspring_fit
+
+## extract the "size" parameter
+mid <- offspring_fit$estimate[["size"]]
+
+## calculate the 95% confidence intervals using the standard error estimate and
+## the 0.025 and 0.975 quantiles of the normal distribution.
+lower <- mid + offspring_fit$sd[["size"]]*qnorm(0.025)
+upper <- mid + offspring_fit$sd[["size"]]*qnorm(0.975)
+
+round(mid, 4)
+round(lower, 4)
+round(upper, 4)
+```
+
+We can see that the
+dispersion parameter is estimated as
+0.020 (95% CI 0.006 - 0.035).
+
+As this value is significantly lower
+than one, we can conclude that
+the degree of super-spreading is high.
+
+This is in line with visual inspection
+of the histogram made above.
+
+```{r}
+# calculate density fit
+fit_density <- 
+  tibble(quantile = 0:40) %>% 
+  mutate(
+    density = dnbinom(
+      x = quantile,
+      mu=offspring_fit$estimate[["mu"]],
+      size=mid
+    )
+  )
+
+# plot offspring distribution with density fit
+ggplot() +
+  geom_histogram(
+    data = epi_secondary,
+    mapping = aes(
+      x = secondary_cases,
+      y = after_stat(density)
+    ),
+    binwidth = 1) +
+  geom_point(
+    data = fit_density,
+    mapping = aes(x = quantile, y = density),
+    alpha = 0.3, color = "red"
+    ) +
+  labs(
+    xlab = "Individual reproduction number",
+    ylab = "Number of individuals"
+  )
+```
+
+## Interpret the dispersion parameter
+
+<!-- from draft -->
+
+<!-- paste from 37-nbinom-dispersion.R -->
+
+In a Negative Binomial distribution, the relationship between mean (Ro), dispersion (k), variance and heterogeneity is given by:
+
+$$ \uparrow heterogeneity = \uparrow variance = R_{o}(1+\frac{R_{o}}{\downarrow k})$$
+
+The Poisson distribution is an special case of the Negative Binomial. When k approximates infinity $k \rightarrow \infty$ the variance equals the mean because $\frac{R_{o}}{\infty}=0$
+
+
+:::::::::::::::::::::::: callout
+
+### Use epiparameter
+
+```{r}
+library(epiparameter)
+
+epidist_db(
+  epi_dist = "offspring distribution"
+) %>% 
+  list_distributions() %>% 
+  select(disease,prob_distribution)
+
+# Load parameters
+sars <- epidist_db(
+  disease = "SARS",
+  epi_dist = "offspring_distribution",
+  single_epidist=T
+)
+sars_params <- get_parameters(sars)
+sars_params
+```
+
+::::::::::::::::::::::::
+
+:::::::::::::::::::::::: callout
+
+### Select the best model
+
+Using Information criteria for the best fit. Read further in vignette using helper functions
+
+<https://epiverse-trace.github.io/superspreading/articles/estimate_individual_level_transmission.html>
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: spoiler
+
+### Define SSE
+
+code this up lloyds definition
+
+::::::::::::::::::::::::
+
+
+## Proportion of transmission
+
+#### Proportion of cases resposible of 80% of infection
+
+show from figure (not available in vignette)
+
+```{r}
+# estimate prop cases cause transmission ----------------------------------
+
+## text ---------------------------------
+
+# proportion of cases that 
+# generate 80% of transmission
+proportion_transmission(
+  R = sars_params[["mean"]],
+  k = sars_params[["dispersion"]],
+  percent_transmission=0.8,
+)
+
+## assessment ---------------------------------
+
+# proportion of cases that 
+# generate 80% of transmission
+proportion_transmission(
+  R = offspring_fit$estimate["mu"],
+  k = offspring_fit$estimate["size"],
+  percent_transmission=0.8,
+)
+
+## assessment --------------------------------------------------------------
+
+#' estimate for ebola
+
+```
+
+
+## Backward and forward contact tracing
+
+### Proportion of events in a given cluster size
+
+the proportion of new cases that originated within a transmission event of a given size. What proportion of all transmission events were part of secondary case clusters from a set of initial cases
+
+useful to inform backwards contact tracing efforts
+
+Given the observed number of new cases, cluster of cases, what proportion of them came from same index case
+
+cluster is the transmission from primary to secondary case
+
+Given a set of cases, what proportion of them (transmission events) where part of secondary case clusters (from the same primary case)
+
+prevent superspreading events
+
+```{r}
+# estimate prop cluster size ----------------------------------------------
+
+## text --------------------------
+
+#' Given a set of cases, 
+#' what proportion of them 
+#' (transmission events) 
+#' where part of 
+#' secondary case clusters 
+#' (from the same primary case)
+#' 
+#' useful for 
+#' backward contact traicing
+
+proportion_cluster_size(
+  R = offspring_fit$estimate["mu"],
+  k = offspring_fit$estimate["size"],
+  cluster_size = 10
+)
+
+```
+
+## Superspreading in decision making
+
+- How to estimate the probability of large outbreak?
+- How to estimate the proportion of cases responsible of the 80% of transmission?
+
+Early understanding of disease epidemic potential from R0 and dispersion
+
+ease of control with either mass or targeted interventions
+
+**Probability of a large epidemic**
+
+The more heterogeneity, less probability to stablish.
+
+But the higher the number of introductions, the higher the likelihood
+
+:::::::::::::::::::: challenge
+
+```{r}
+## assessment -------------------------------------
+
+# Estimate probability of large outbreak
+# with 5 independent imported cases
+probability_epidemic(
+  R = offspring_fit$estimate["mu"],
+  k = offspring_fit$estimate["size"],
+  num_init_infect = 5
+)
+
+
+## assessment --------------------------------------------------------------
+
+#' get ebola params
+```
+
+:::::::::::::::::::
+
+**Probability of extintion**
+
+more heterogeneity, more difficult to go extinct.
+
+
+
+**Probability to contain**
+
+not exceed 100 cases
+
+```{r}
+# estimate prob to contain ------------------------------------------------
+
+
+## text ----------------------------------
+
+probability_contain(
+  R = offspring_fit$estimate["mu"],
+  k = offspring_fit$estimate["size"],
+  num_init_infect = 1,
+  case_threshold = 100
+)
+```
+
+
+### Go to vignette
+
+Given initial conditions or a range of plausible scenarios or R and k, you can use
+
+Look at them in the {superspreading} vignette
+
+<https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html>
+
+## Challenges
+
+::::::::::::::::::::::::::: challenge
+
+use mers to estimate ...
+
+:::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: challenge
+
+inform backward contact tracing strategy
+
+:::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::: testimonial
 
