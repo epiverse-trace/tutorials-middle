@@ -1,24 +1,328 @@
 ---
-title: 'superspreading-simulate'
+title: 'Simulate transmission chains'
 teaching: 10
 exercises: 2
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How do ?
+- How to simulate transmission chains?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain 
+- Create a short term projection using branching process with `{epichains}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Prerequisites
+
+Learners should familiarise themselves with following concept dependencies before working through this tutorial: 
+
+**Statistics**: probability distributions. 
+
+**Epidemic theory**: Reproduction number.
+
+:::::::::::::::::::::::::::::::::
+
+## questions
+
 ## Introduction
 
-This is a 
+<!-- what we know -->
+
+<!-- what we dont know -->
+
+<!-- what we are going to do -->
+
+```{r}
+library(epichains)
+```
+
+
+## Get the offspring distribution
+
+from MERS estimates in estimate episode
+
+```{r}
+mers_offspring <- 
+  c(
+    mean = 0.60, 
+    dispersion = 0.02
+  )
+
+mers_offspring
+```
+
+instead of the offspring distribution
+we can also define a poisson process
+using the lambda distribution parameter
+lambda = rate = mean
+
+
+## Get generation time
+
+```{r}
+library(epiparameter)
+
+serial_inverval <- epidist_db(
+  disease = "mers",
+  epi_dist = "serial",
+  single_epidist = T
+)
+
+serial_inverval
+```
+
+Similar to the `{cfr}` interface for `{epiparameter}`
+
+```r
+function(x) generate(x = serial_inverval,times = x)
+```
+
+## Simulate a single chain
+
+```{r}
+simulate_chains(
+  # simulation controls
+  index_cases = 5,
+  statistic = "size",
+  # offspring
+  offspring_dist = rnbinom,
+  mu = mers_offspring["mean"],
+  size = mers_offspring["dispersion"],
+  # generation
+  generation_time = function(x) generate(x = serial_inverval,times = x)
+) %>% 
+  as_tibble()
+```
+
+the output dataframe collects
+infectees as observation unit
+each infectee has a sim_id
+the infector sim_id of each infectee is in infector_id
+infectee got infected in generation and time
+as part of the simulation_n chain
+
+## Simulate multiple chains
+
+```{r}
+# Set seed for random number generator
+set.seed(33)
+# Number of simulation runs
+number_chains <- 1e3
+# Number of initial cases
+initial_cases <- 1
+
+```
+
+
+```{r}
+simulated_chains_list <- 
+  map(
+    .x = seq_len(number_chains), 
+    .f = function(sim) {
+      simulate_chains(
+        # simulation controls
+        index_cases = initial_cases,
+        statistic = "size",
+        # offspring
+        offspring_dist = rnbinom,
+        mu = mers_offspring["mean"],
+        size = mers_offspring["dispersion"],
+        # generation
+        generation_time = function(x) generate(x = serial_inverval,times = x)
+      ) %>% 
+        mutate(simulation_n = sim)
+    }
+  )
+
+sim_chains_bind <- bind_rows(simulated_chains_list)
+
+sim_chains_bind
+```
+
+```{r,echo=FALSE}
+#### get simulated chain with more infections --------------------------------
+
+chain_to_observe <- sim_chains_bind %>% 
+  as_tibble() %>% 
+  count(simulation_n,sort = TRUE) %>% 
+  filter(n == max(n)) %>% 
+  pull(simulation_n)
+```
+
+get simulated chain `r chain_to_observe` with more infections
+
+get epichain summary
+
+```{r}
+#### get epichain summary ----------------------------------------------------
+
+simulated_chains_list %>% 
+  pluck(chain_to_observe)
+```
+
+the `NA` includes the infector of the index case, for that reason (known) cases
+
+infectee-infector data frame
+
+```{r}
+#### infector-infectee data frame --------------------------------------------
+
+simulated_chains_list %>% 
+  pluck(chain_to_observe) %>% 
+  as.data.frame()
+```
+
+
+## Visualize multiple chains
+
+```{r}
+# daily aggregate of cases
+simulated_chains_day <- 
+  sim_chains_bind %>% 
+  as_tibble() %>% 
+  mutate(simulation_n = as_factor(simulation_n)) %>% 
+  # Daily number of cases for each simulation
+  mutate(day = ceiling(time)) %>%
+  count(simulation_n, day, name = "cases") %>% 
+  # Cumulative number of cases for each simulation
+  group_by(simulation_n) %>% 
+  mutate(cases_cumsum = cumsum(cases)) %>% 
+  ungroup()
+
+# Summarise the chain length and size 
+sim_chains_max <- 
+  simulated_chains_day %>%
+  group_by(simulation_n) %>% 
+  summarise(
+    # length
+    day_max = max(day),
+    # size
+    cases_total = max(cases_cumsum)
+  ) %>% 
+  ungroup()
+
+# Visualize transmission chains by cumulative cases
+ggplot() +
+  geom_line(
+    data = simulated_chains_day,
+    mapping = aes(
+      x = day, 
+      y = cases_cumsum, 
+      group = simulation_n,
+      color = simulation_n
+    ),
+    show.legend = FALSE
+  ) +
+  geom_point(
+    data = sim_chains_max,
+    mapping = aes(
+      x = day_max,
+      y = cases_total,
+      group = simulation_n,
+      color = simulation_n
+    ),
+    show.legend = FALSE
+  ) +
+  # xlim(0,150) +
+  # ylim(0,300) +
+  NULL
+
+# Visualize transmission chains by daily cases
+ggplot() +
+  geom_line(
+    data = simulated_chains_day,
+    mapping = aes(
+      x = day, 
+      y = cases, 
+      group = simulation_n,
+      color = simulation_n
+    ),
+    show.legend = FALSE
+  )
+```
+
+
+## Challenges
+
+:::::::::::::::::::::::::: challenge
+
+Evaluate for ebola with know data from previous outbreaks
+
+```{r}
+epidist_db(
+  disease = "ebola",
+  epi_dist = "offspring",
+  single_epidist = T
+)
+
+epidist_db(
+  disease = "ebola",
+  epi_dist = "serial interval",
+  single_epidist = T
+)
+```
+
+
+:::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: challenge
+
+from paper
+Christian Althaus
+<https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext>
+
+data from Fayre et al on ebola
+
+```{r}
+# Number of individuals in the trees
+n <- 152
+# Number of secondary cases for all individuals
+c1 <- c(1,2,2,5,14,1,4,4,1,3,3,8,2,1,1,4,9,9,1,1,17,
+        2,1,1,1,4,3,3,4,2,5,1,2,2,1,9,1,3,1,2,1,1,2)
+c0 <- c(c1,rep(0,n-length(c1)))
+
+c0 %>% 
+  enframe() %>% 
+  ggplot(aes(value)) +
+  geom_histogram()
+```
+
+
+::::::::::: hint
+
+...
+
+:::::::::::
+
+::::::::::: solution
+
+remarkable even with R0 less than 1
+with potentially explosive outbreaks
+
+the observed variation in individual infectiousness in Ebola
+means that although the probability of extinction is high,
+new index cases also have the potential for explosive
+regrowth of the epidemic.
+
+:::::::::::
+
+:::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::: testimonial
+
+you can use early linelist data as seed cases to make short term projection of cases
+
+take a look to vignette
+
+<https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html>
+
+:::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
