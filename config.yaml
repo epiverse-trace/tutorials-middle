@@ -59,7 +59,7 @@ contact: 'andree.valle-campos@lshtm.ac.uk'
 
 # Order of episodes in your lesson
 episodes:
-- quantify-transmissibility.Rmd
+#- quantify-transmissibility.Rmd
 - create-forecast.Rmd
 - severity-static.Rmd
 
