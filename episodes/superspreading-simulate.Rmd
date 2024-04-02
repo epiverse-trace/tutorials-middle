@@ -38,8 +38,11 @@ Learners should familiarise themselves with following concept dependencies befor
 
 <!-- what we are going to do -->
 
-```{r}
+We are going to use `{purrr}`
+
+```{r,message=FALSE,warning=FALSE}
 library(epichains)
+library(tidyverse)
 ```
 
 ## Simulation of uncontrolled outbreaks
