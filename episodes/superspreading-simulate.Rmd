@@ -42,6 +42,22 @@ Learners should familiarise themselves with following concept dependencies befor
 library(epichains)
 ```
 
+## Simulation of uncontrolled outbreaks
+
+simulation of uncontrolled outbreaks
+
+- branching process
+    + To assess the effect of individual variation on disease outbreaks, we analyse a branching process model with negative binomial offspring distribution
+
+- estimate tree parameters using branching process
+    + estimate size
+    + estimate length
+
+with estimated parameter we then can reconstruct tranmission chains to forecast and simulate interventions
+
+### branching process
+
+- probability generating function (pgf) of the offspring distribution 
 
 ## Get the offspring distribution
 
