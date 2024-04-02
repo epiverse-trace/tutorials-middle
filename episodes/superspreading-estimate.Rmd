@@ -4,17 +4,21 @@ teaching: 10
 exercises: 2
 ---
 
+```{r setup, echo= FALSE, message = FALSE, warning = FALSE}
+library(webshot)
+webshot::install_phantomjs(force = TRUE)
+```
+
+
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- What is the level of individual variation of transmission?
-- How to estimate de amount of superspreading events?
-- How to account for superspreading in decision-making for contact tracing?
+- How to evaluate for transmission heterogeneity from contact tracing data?
+- How to account for transmission heterogeneity in decision-making?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Evaluate for transmission heterogeneity.
 - Create the offspring distribution from outbreak data using `{epicontacts}`.
 - Estimate the dispersion parameter from the offspring distribution using `{fitdistrplus}`.
 - Estimate the proportion of transmission accounting for superspreading events using `{superspreading}`.
@@ -40,6 +44,15 @@ Learners should familiarise themselves with following concept dependencies befor
 <!-- we dont know -->
 
 <!-- we want -->
+
+```{r,message=FALSE,warning=FALSE}
+library(outbreaks)
+library(epicontacts)
+library(fitdistrplus)
+library(superspreading)
+library(tidyverse)
+```
+
 
 ## questions {to remove}
 
@@ -110,19 +123,38 @@ get vector of secondary cases per id
         + individual reproductive number
 
 ```{r}
-library(outbreaks)
-library(epicontacts)
-library(tidyverse)
-
 ## make epicontact object
 epi <- make_epicontacts(
   linelist = mers_korea_2015$linelist, 
   contacts = mers_korea_2015$contacts
 )
+```
 
+```{r,eval=FALSE}
 # visualise contact tree
 epicontacts::vis_epicontacts(epi)
+```
 
+```{r,echo=FALSE}
+# visualise contact tree
+network <- 
+  epicontacts::vis_epicontacts(epi) %>%
+  visNetwork::visPhysics(solver = "barnesHut")
+
+fname <- "network.html"
+
+visNetwork::visSave(network,fname)
+
+webshot::webshot(
+  fname,
+  delay = 5,
+  zoom = 10#,
+  # vwidth=900,vheight=900
+  )
+```
+
+
+```{r}
 # no infector-infectee pairs are replicated
 epi %>% 
   pluck("contacts") %>% 
