@@ -132,7 +132,7 @@ as part of the simulation_n chain
 # Set seed for random number generator
 set.seed(33)
 # Number of simulation runs
-number_chains <- 1e2
+number_chains <- 1000
 # Number of initial cases
 initial_cases <- 1
 
@@ -251,7 +251,9 @@ ggplot() +
   # xlim(0,150) +
   # ylim(0,300) +
   NULL
+```
 
+```{r,eval=FALSE}
 # Visualize transmission chains by daily cases
 ggplot() +
   geom_line(
@@ -266,6 +268,15 @@ ggplot() +
   )
 ```
 
+:::::::::::::::::::::: testimonial
+
+### Early spread projections
+
+In the initial phase of the epidemic you can use `{epichains}` to apply a branching process model to project the number of future cases. Validation analysis showed that this is a rapid and low detail model with forecast prediction intervals that are too certain ([Pearson et al., 2020](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.18.2000543#validationofthemodel-1)).
+
+We invite you to read the vignette on [Projecting infectious disease incidence: a COVID-19 example](https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html)!
+
+::::::::::::::::::::::
 
 ## Challenges
 
