@@ -511,19 +511,11 @@ When there is evidence of individual-level variation (i.e. overdispersion), ofte
 By looking at the tail of the probability offspring distribution, we can identify the size of the cluster of secondary infections. The probability that a cluster of secondary infections caused by a primary case identified by backward tracing has a size of $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
 
 ```{r}
-# estimate prop cluster size ----------------------------------------------
-
-## text --------------------------
-
-#' Given a set of cases,
-#' what proportion of them
-#' (transmission events)
-#' where part of
-#' secondary case clusters
-#' (from the same primary case)
-#' useful for
-#' backward contact traicing
-
+# estimate the probability of
+# having a cluster size of 5, 10, or 25
+# secondary cases from a primary case,
+# given known reproduction number and
+# dispersion parameter.
 proportion_cluster_size(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
