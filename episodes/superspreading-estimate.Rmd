@@ -495,23 +495,20 @@ proportion_transmission(
 
 ## Backward and forward contact tracing
 
-Reconstruction of transmission trees (whom infected whom) can provide an understanding of who contributes more to transmission. This can be done qith detailed case investigations and/or genetic data. [EXAMPLE: case data paired with contact data to visualize and find the patterns]
+Reconstruction of transmission trees (whom infected whom) can provide an understanding of who contributes more to transmission. This can be done with detailed case investigations and/or genetic data ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371))
 
-<https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371>
+Contact tracing can be deployed in multiple strategies. Forward tracing targets downstream individuals who may be infected by index individual. Backward tracing targets the upstream primary case who infected the index case (or a setting or event at which the index case was infected) by retracing history of contact to the likely point of exposure up to the upper bound of the incubation period.
+
+In the presence of heterogeneous transmission, i.e., with an overdispersed offspring distribution, if this primary case is identified, a larger fraction of the transmission chain can be detected by forward tracing each of the contacts of this primary case  [Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3).
+
+![Schematic representation of contact tracing strategies. Black arrows indicate the directions of transmission, blue and Orange arrows, a successful or failed contact tracing, respectivelly. When there is evidence of individual-level transmission heterogeneity, often resulting in superspreading, backward contact tracing from the index case (blue circle) increase the probability to find the primary case (green circle) or clusters with a larger fraction of cases, potentially increasing the number of quarentined cases (yellow circles). [Claire Blackmore, 2021](https://www.paho.org/sites/default/files/backward_contact_tracing_v3_0.pdf)](fig/contact-tracing-strategies.png)
+
+When there is evidence of individual-level variation (i.e. overdispersion), often resulting in so-called superspreading events, a large proportion of infections may be linked to a small proportion of original clusters. As a result, finding and targeting originating clusters in combination with reducing onwards infection may substantially enhance the effectiveness of tracing methods [Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3).
+
 
 ### Proportion of events in a given cluster size
 
-the proportion of new cases that originated within a transmission event of a given size. What proportion of all transmission events were part of secondary case clusters from a set of initial cases
-
-useful to inform backwards contact tracing efforts
-
-Given the observed number of new cases, cluster of cases, what proportion of them came from same index case
-
-cluster is the transmission from primary to secondary case
-
-Given a set of cases, what proportion of them (transmission events) where part of secondary case clusters (from the same primary case)
-
-prevent superspreading events
+By looking at the tail of the probability offspring distribution, we can identify the size of the cluster of secondary infections. The probability that a cluster of secondary infections caused by a primary case identified by backward tracing has a size of $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
 
 ```{r}
 # estimate prop cluster size ----------------------------------------------
@@ -530,10 +527,16 @@ prevent superspreading events
 proportion_cluster_size(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
-  cluster_size = 10
+  cluster_size = c(5, 10, 25)
 )
 
 ```
+
+Even though we have an $R<1$, given a highly overdispersed offspring distribution ($k=0.02$) we have a 46.9% probability to find a cluster of 25 people or larger.
+
+The probability of a cluster size can also inform backwards contact tracing efforts. Among other factors, high cluster sizes could imply that a contac tracing approach may no longer likely result in successful containment due to increased proportion of contacts not identified by the process or achieving low case ascertainment ([Public Health England, 2020](https://www.gov.uk/government/publications/phe-when-to-stop-contact-tracing-developing-triggers-from-phe-systems-20-february-2020)).
+
+We can also use this number to prevent gathering of certain sized to reduce the epidemic by preventing potential superspreading events. Interventions can target to reduce the reproduction number in order to reduce the probability of having clusters of secondary cases.
 
 ## Superspreading in decision making
 
