@@ -164,6 +164,13 @@ sim_chains_bind <- bind_rows(simulated_chains_list)
 sim_chains_bind
 ```
 
+```{r}
+# view infectee number per simulation
+sim_chains_bind %>%
+  as_tibble() %>%
+  count(simulation_n, sort = TRUE)
+```
+
 ```{r,echo=FALSE}
 #### get simulated chain with more infections --------------------------------
 
@@ -248,6 +255,7 @@ ggplot() +
     ),
     show.legend = FALSE
   ) +
+  geom_hline(aes(yintercept = 100), lty = 2) +
   # xlim(0,150) +
   # ylim(0,300) +
   NULL

@@ -56,6 +56,7 @@ library(outbreaks)
 library(epicontacts)
 library(fitdistrplus)
 library(superspreading)
+library(epiparameter)
 library(tidyverse)
 ```
 
