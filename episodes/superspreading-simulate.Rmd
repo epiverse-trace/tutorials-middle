@@ -174,12 +174,25 @@ sim_chains_bind %>%
 ```{r,echo=FALSE}
 #### get simulated chain with more infections --------------------------------
 
+chains_subgroup <- sim_chains_bind %>%
+  as_tibble() %>%
+  group_by(simulation_n) %>%
+  distinct(infector_id) %>%
+  count(simulation_n) %>%
+  filter(n < 5, n >= 3) %>%
+  pull(simulation_n)
+
 chain_to_observe <- sim_chains_bind %>%
   as_tibble() %>%
   count(simulation_n, sort = TRUE) %>%
+  filter(
+    magrittr::is_in(
+      simulation_n, chains_subgroup
+    )
+  ) %>%
   filter(n < 10) %>%
   filter(n == max(n)) %>%
-  slice_min(simulation_n) %>% 
+  slice_min(simulation_n) %>%
   pull(simulation_n)
 ```
 
