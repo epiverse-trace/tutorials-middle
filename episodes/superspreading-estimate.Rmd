@@ -125,7 +125,7 @@ get vector of secondary cases per id
 ```{r}
 ## make epicontact object
 epi <- make_epicontacts(
-  linelist = mers_korea_2015$linelist, 
+  linelist = mers_korea_2015$linelist,
   contacts = mers_korea_2015$contacts
 )
 ```
@@ -137,42 +137,41 @@ epicontacts::vis_epicontacts(epi)
 
 ```{r,echo=FALSE}
 # visualise contact tree
-network <- 
+network <-
   epicontacts::vis_epicontacts(epi) %>%
   visNetwork::visPhysics(solver = "barnesHut")
 
 fname <- "network.html"
 
-visNetwork::visSave(network,fname)
+visNetwork::visSave(network, fname)
 
 webshot::webshot(
   fname,
   delay = 5,
-  zoom = 10#,
-  # vwidth=900,vheight=900
-  )
+  zoom = 10
+)
 ```
 
 
 ```{r}
 # no infector-infectee pairs are replicated
-epi %>% 
-  pluck("contacts") %>% 
-  group_by(from,to) %>% 
-  filter(n()>1)
+epi %>%
+  pluck("contacts") %>%
+  group_by(from, to) %>%
+  filter(n() > 1)
 
 # count secondary cases per infectee
-infector_secondary <- epi %>% 
-  pluck("contacts") %>% 
+infector_secondary <- epi %>%
+  pluck("contacts") %>%
   count(from, name = "secondary_cases")
 
-epi_secondary <- 
-  epi %>% 
+epi_secondary <-
+  epi %>%
   # extract ids in contact *and* linelist using "which" argument
-  get_id(which = "all") %>% 
-  enframe(name = NULL, value = "from") %>% 
+  get_id(which = "all") %>%
+  enframe(name = NULL, value = "from") %>%
   # join count secondary cases per infectee
-  left_join(infector_secondary) %>% 
+  left_join(infector_secondary) %>%
   # infectee with missing secondary cases are replaced with zero
   replace_na(
     replace = list(secondary_cases = 0)
@@ -182,11 +181,11 @@ epi_secondary <-
 epi_secondary
 
 # arrange in descendant order of secondary cases
-epi_secondary %>% 
+epi_secondary %>%
   arrange(desc(secondary_cases))
 
 ## plot the distribution
-epi_secondary %>% 
+epi_secondary %>%
   ggplot(aes(secondary_cases)) +
   geom_histogram(binwidth = 1) +
   labs(
@@ -226,8 +225,8 @@ conflicted::conflict_prefer(
 conflicted::conflict_scout()
 
 ## fit distribution
-offspring_fit <- epi_secondary %>% 
-  pull(secondary_cases) %>% 
+offspring_fit <- epi_secondary %>%
+  pull(secondary_cases) %>%
   fitdist(distr = "nbinom")
 
 offspring_fit
@@ -237,8 +236,8 @@ mid <- offspring_fit$estimate[["size"]]
 
 ## calculate the 95% confidence intervals using the standard error estimate and
 ## the 0.025 and 0.975 quantiles of the normal distribution.
-lower <- mid + offspring_fit$sd[["size"]]*qnorm(0.025)
-upper <- mid + offspring_fit$sd[["size"]]*qnorm(0.975)
+lower <- mid + offspring_fit$sd[["size"]] * qnorm(0.025)
+upper <- mid + offspring_fit$sd[["size"]] * qnorm(0.975)
 
 round(mid, 4)
 round(lower, 4)
@@ -258,13 +257,13 @@ of the histogram made above.
 
 ```{r}
 # calculate density fit
-fit_density <- 
-  tibble(quantile = 0:40) %>% 
+fit_density <-
+  tibble(quantile = 0:40) %>%
   mutate(
     density = dnbinom(
       x = quantile,
-      mu=offspring_fit$estimate[["mu"]],
-      size=mid
+      mu = offspring_fit$estimate[["mu"]],
+      size = mid
     )
   )
 
@@ -272,16 +271,18 @@ fit_density <-
 ggplot() +
   geom_histogram(
     data = epi_secondary,
-    mapping = aes(
-      x = secondary_cases,
-      y = after_stat(density)
-    ),
-    binwidth = 1) +
+    mapping =
+      aes(
+        x = secondary_cases,
+        y = after_stat(density)
+      ),
+    binwidth = 1
+  ) +
   geom_point(
     data = fit_density,
     mapping = aes(x = quantile, y = density),
     alpha = 0.3, color = "red"
-    ) +
+  ) +
   labs(
     xlab = "Individual reproduction number",
     ylab = "Number of individuals"
@@ -380,15 +381,15 @@ library(epiparameter)
 
 epidist_db(
   epi_dist = "offspring distribution"
-) %>% 
-  list_distributions() %>% 
-  select(disease,prob_distribution)
+) %>%
+  list_distributions() %>%
+  select(disease, prob_distribution)
 
 # Load parameters
 sars <- epidist_db(
   disease = "SARS",
   epi_dist = "offspring_distribution",
-  single_epidist=T
+  single_epidist = TRUE
 )
 sars_params <- get_parameters(sars)
 sars_params
@@ -467,22 +468,22 @@ show from figure (not available in vignette)
 
 ## text ---------------------------------
 
-# proportion of cases that 
+# proportion of cases that
 # generate 80% of transmission
 proportion_transmission(
   R = sars_params[["mean"]],
   k = sars_params[["dispersion"]],
-  percent_transmission=0.8,
+  percent_transmission = 0.8
 )
 
 ## assessment ---------------------------------
 
-# proportion of cases that 
+# proportion of cases that
 # generate 80% of transmission
 proportion_transmission(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
-  percent_transmission=0.8,
+  percent_transmission = 0.8
 )
 
 ## assessment --------------------------------------------------------------
@@ -517,14 +518,13 @@ prevent superspreading events
 
 ## text --------------------------
 
-#' Given a set of cases, 
-#' what proportion of them 
-#' (transmission events) 
-#' where part of 
-#' secondary case clusters 
+#' Given a set of cases,
+#' what proportion of them
+#' (transmission events)
+#' where part of
+#' secondary case clusters
 #' (from the same primary case)
-#' 
-#' useful for 
+#' useful for
 #' backward contact traicing
 
 proportion_cluster_size(
