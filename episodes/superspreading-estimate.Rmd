@@ -245,9 +245,9 @@ ggplot() +
   ) +
   annotate(
     "text", label = "mean Ro",
-    x = mpox_params["mean"] + 5, 
-    y = 0.5, 
-    size = 8, 
+    x = mpox_params["mean"] + 5,
+    y = 0.5,
+    size = 8,
     colour = "red"
   ) +
   labs(
@@ -543,7 +543,10 @@ Lloyds propose a general protocol for defining a superspreading event:
 - A 99th-percentile SSE is then any case causing more infections than would occur in 99% of infectious histories in a homogeneous population
 
 ```{r}
-qpois(p = 0.99,lambda = offspring_fit$estimate["mu"])
+qpois(
+  p = 0.99,
+  lambda = offspring_fit$estimate["mu"]
+)
 ```
 
 ![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of Z∼Poisson(R), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
@@ -635,7 +638,7 @@ Calculate probabilities for Ebola using data from epiparameter
 :::::::::::::::::: hint
 
 ```{r}
-# estimate probability to contain 
+# estimate probability to contain
 probability_contain(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
