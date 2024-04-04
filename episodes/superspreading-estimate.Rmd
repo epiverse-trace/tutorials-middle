@@ -41,22 +41,29 @@ Learners should familiarise themselves with following concept dependencies befor
 
 <!-- we know -->
 
-Comparing results for eight directly transmitted infections reveals the differing degree of individual variation among diseases and outbreak settings
+From epidemics like Smallpox or the severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2), we know that some people spread disease more than others. Since disease transmission is caused by many physiological and social factors, we usually use population averages to assess the disease potential to spread. However, individual differences in infectiousness increase the tendency towards superspreading events (SSEs) which can ignite explosive epidemics and affect the ease of control.
 
-Like SARS, measles in highly vaccinated populations shows high variation in two surveillance data sets, with narrow confidence intervals excluding the conventional models (note that heterogeneous vaccination coverage is an important environmental factor contributing to this pattern). Monkeypox and smallpox viruses show intermediate variation, consistent across multiple data sets, and pneumonic plague transmission is slightly less variable
-
-![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all ν = R0), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in ν.](fig/SEE-individual-reproductive-number-fig-b.png)
+![**Chains of SARS-CoV-2 transmission in Hong Kong initiated by local or imported cases.** (**a**), Transmission network of a cluster of cases traced back to a collection of four bars across Hong Kong (n = 106). (**b**), Transmission network associated with a wedding without clear infector–infectee pairs but linked back to a preceding social gathering and local source (n = 22). (**c**), Transmission network associated with a temple cluster of undetermined source (n = 19). (**d**), All other clusters of SARS-CoV-2 infections where the source and transmission chain could be determined ([Adam et al., 2020](https://www.nature.com/articles/s41591-020-1092-0)).](fig/see-intro-superspreading.png)
 
 <!-- we dont know -->
 
+The [basic reproduction number](../learners/reference.md#basic), $R_0$, is the average number of cases caused by one infectious individual in a entirely susceptible population. Population estimates of $R_0$ can obscure considerable individual variation in infectiousness, as highlighted during the global emergence of SARS-CoV-2 by numerous ‘superspreading events’ in which certain individuals infected unusually large numbers of secondary cases ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).
+
+![**Observed offspring distribution of SARS-CoV-2 transmission in Hong Kong.** N = 91 SARS-CoV-2 infectors, N = 153 terminal infectees and N = 46 sporadic local cases. Histogram bars indicate the proportion of onward transmission per amount of secondary cases. Line corresponds to a fitted negative binomial distribution ([Adam et al., 2020](https://www.nature.com/articles/s41591-020-1092-0)).](fig/see-intro-secondary-cases-fig-b.png){alt='R = 0.58 and k = 0.43.'}
+
 <!-- we want -->
+
+In this tutorial, we are going to estimate the individual variation in transmission and assess its heterogeneity, which often results in superspreading events. Also, we are going to use these estimates to account for superspreading in contact tracing interventions.
+
+We are going to use data from the `{outbreaks}` package, manage linelist and contacts data using `{epicontacts}`, and estimate distribution parameters with `{fitdistrplus}`. Lastly, we are going to use `{superspreading}` to account for it in decision-making.
+
+We’ll use the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
 
 ```{r,message=FALSE,warning=FALSE}
 library(outbreaks)
 library(epicontacts)
 library(fitdistrplus)
 library(superspreading)
-library(epiparameter)
 library(tidyverse)
 ```
 
@@ -167,12 +174,14 @@ infector_secondary <- epi %>%
 
 epi_secondary <-
   epi %>%
-  # extract ids in contact *and* linelist using "which" argument
+  # extract ids in contact *and* linelist
+  # using "which" argument
   get_id(which = "all") %>%
   enframe(name = NULL, value = "from") %>%
   # join count secondary cases per infectee
   left_join(infector_secondary) %>%
-  # infectee with missing secondary cases are replaced with zero
+  # infectee with missing secondary cases
+  # are replaced with zero
   replace_na(
     replace = list(secondary_cases = 0)
   )
@@ -210,12 +219,12 @@ SSE are important realizations from the right-hand tail of a distribution of ν
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 # Load parameters
-mpox <- epidist_db(
+mpox <- epiparameter::epidist_db(
   disease = "SARS",
   epi_dist = "offspring_distribution",
   single_epidist = TRUE
 )
-mpox_params <- get_parameters(mpox)
+mpox_params <- epiparameter::get_parameters(mpox)
 # mpox_params
 
 # calculate density fit
@@ -487,6 +496,9 @@ Comparing our findings to the 20/80 rule proposed for sexually transmitted and v
 
 ![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png)
 
+The comparison of directly transmitted infections reveals the differing degree of individual variation among diseases and outbreak settings. Like SARS, measles in highly vaccinated populations shows high variation, with heterogeneous vaccination coverage as an important environmental factor contributing to this pattern. Monkeypox and smallpox viruses show intermediate variation, consistent across multiple data sets, and pneumonic plague transmission is slightly less variable.
+
+![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all ν = R0), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in ν.](fig/SEE-individual-reproductive-number-fig-b.png)
 
 ::::::::::::::::::::::::::::: challenge
 
