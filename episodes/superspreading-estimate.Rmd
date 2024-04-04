@@ -75,7 +75,7 @@ Let's use the `mers_korea_2015` linelist and contact data from `{outbreaks}` wit
 
 ```{r}
 ## make epicontact object
-epi_contacts <- 
+epi_contacts <-
   epicontacts::make_epicontacts(
     linelist = mers_korea_2015$linelist,
     contacts = mers_korea_2015$contacts
@@ -90,7 +90,7 @@ epicontacts::vis_epicontacts(epi_contacts)
 ```{r,echo=FALSE}
 # visualise contact tree
 network <-
-  epicontacts::vis_epicontacts(epi_contacts) %>%
+  vis_epicontacts(epi_contacts) %>%
   visNetwork::visPhysics(solver = "barnesHut")
 
 fname <- "network.html"
@@ -424,8 +424,9 @@ epidist_db(
   epi_dist = "offspring distribution"
 ) %>%
   list_distributions() %>%
-  dplyr::select(disease) %>% 
-  distinct() %>% pull()
+  dplyr::select(disease) %>%
+  distinct() %>%
+  pull()
 ```
 
 ```{r}
