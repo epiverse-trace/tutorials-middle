@@ -563,9 +563,7 @@ proportion_cluster_size(
 
 ```
 
-Even though we have an $R<1$, given a highly overdispersed offspring distribution ($k=0.02$) we have a 46.9% probability to find a cluster of 25 people or larger.
-
-The probability of a cluster size can also inform backwards contact tracing efforts. Among other factors, high cluster sizes could imply that a contac tracing approach may no longer likely result in successful containment due to increased proportion of contacts not identified by the process or achieving low case ascertainment ([Public Health England, 2020](https://www.gov.uk/government/publications/phe-when-to-stop-contact-tracing-developing-triggers-from-phe-systems-20-february-2020)).
+Even though we have an $R<1$, given a highly overdispersed offspring distribution ($k=0.02$) we have a 46.9% probability to find a cluster of 25 people or larger. Then, by following a backwards strategy, contact tracing efforts will increase their probability to find the primary case and successfully contain and quarentine an increased proportion of contacts.
 
 We can also use this number to prevent gathering of certain sized to reduce the epidemic by preventing potential superspreading events. Interventions can target to reduce the reproduction number in order to reduce the probability of having clusters of secondary cases.
 
