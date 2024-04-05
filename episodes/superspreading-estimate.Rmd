@@ -653,9 +653,11 @@ inform backward contact tracing strategy
 
 ::::::::::::::::::::::::::::: testimonial
 
-### Going viral
+### Read these blog posts
 
-<https://kucharski.substack.com/p/going-viral>
+The [Tracing monkeypox](https://plus.maths.org/content/monkeypox) article from the [JUNIPER](https://maths.org/juniper/) consortium showcases the usefulness of network models on contact tracing.
+
+The [Going viral](https://kucharski.substack.com/p/going-viral) post from Adam Kucharski shares insides from marketing campaigns on the conditions that spark contagion online.
 
 :::::::::::::::::::::::::::::
 
