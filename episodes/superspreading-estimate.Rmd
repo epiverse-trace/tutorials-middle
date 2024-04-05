@@ -424,8 +424,8 @@ epidist_string <- epidist_db(
   list_distributions() %>%
   dplyr::select(disease) %>%
   distinct() %>%
-  pull() %>% 
-  paste(collapse = ', ')
+  pull() %>%
+  paste(collapse = ", ")
 ```
 
 Currently, `{epiparameter}` have offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS:
