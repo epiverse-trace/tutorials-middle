@@ -415,25 +415,26 @@ The Poisson distribution is an special case of the Negative Binomial. When k app
 
 ### Use {epiparameter}
 
-Currently, `{epiparameter}` have offspring distributions for:
-
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 library(epiparameter)
 
-epidist_db(
+epidist_string <- epidist_db(
   epi_dist = "offspring distribution"
 ) %>%
   list_distributions() %>%
   dplyr::select(disease) %>%
   distinct() %>%
-  pull()
+  pull() %>% 
+  paste(collapse = ', ')
 ```
 
-```{r}
+Currently, `{epiparameter}` have offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS:
+
+```{r,message=FALSE,warning=FALSE}
 # Load parameters
 sars <- epidist_db(
   disease = "SARS",
-  epi_dist = "offspring_distribution",
+  epi_dist = "offspring distribution",
   single_epidist = TRUE
 )
 sars_params <- get_parameters(sars)
