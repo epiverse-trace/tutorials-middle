@@ -542,7 +542,9 @@ In the presence of heterogeneous transmission, i.e., with an overdispersed offsp
 
 ![Schematic representation of contact tracing strategies. Black arrows indicate the directions of transmission, blue and Orange arrows, a successful or failed contact tracing, respectivelly. When there is evidence of individual-level transmission heterogeneity, often resulting in superspreading, backward contact tracing from the index case (blue circle) increase the probability to find the primary case (green circle) or clusters with a larger fraction of cases, potentially increasing the number of quarentined cases (yellow circles). [Claire Blackmore, 2021](https://www.paho.org/sites/default/files/backward_contact_tracing_v3_0.pdf)](fig/contact-tracing-strategies.png)
 
-When there is evidence of individual-level variation (i.e. overdispersion), often resulting in so-called superspreading events, a large proportion of infections may be linked to a small proportion of original clusters. As a result, finding and targeting originating clusters in combination with reducing onwards infection may substantially enhance the effectiveness of tracing methods [Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3).
+When there is evidence of individual-level variation (i.e. overdispersion), often resulting in so-called superspreading events, a large proportion of infections may be linked to a small proportion of original clusters. As a result, finding and targeting originating clusters in combination with reducing onwards infection may substantially enhance the effectiveness of tracing methods [Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3). 
+
+Empirical evidence focused on evaluating the efficiency of backward tracing lead to 42% more cases identified than forward tracing supporting its implementation when rigorous suppression of transmission is justified ([Raymenants et al., 2022](https://www.nature.com/articles/s41467-022-32531-6))
 
 
 ## Proportion of events in a given cluster size
