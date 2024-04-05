@@ -124,7 +124,7 @@ infectees as observation unit
 each infectee has a sim_id
 the infector sim_id of each infectee is in infector_id
 infectee got infected in generation and time
-as part of the simulation_n chain
+as part of the `chain_id` chain
 
 ## Simulate multiple chains
 
@@ -172,7 +172,8 @@ simulated_chains_list <-
         # generation
         generation_time = function(x) generate(x = serial_inverval, times = x)
       ) %>%
-        mutate(simulation_n = sim)
+        # creates a column with the chain ID number
+        mutate(chain_id = sim)
     }
   )
 
@@ -185,7 +186,7 @@ sim_chains_bind
 # view infectee number per simulation
 sim_chains_bind %>%
   as_tibble() %>%
-  count(simulation_n, sort = TRUE)
+  count(chain_id, sort = TRUE)
 ```
 
 ```{r,echo=FALSE}
@@ -193,24 +194,24 @@ sim_chains_bind %>%
 
 chains_subgroup <- sim_chains_bind %>%
   as_tibble() %>%
-  group_by(simulation_n) %>%
+  group_by(chain_id) %>%
   distinct(infector_id) %>%
-  count(simulation_n) %>%
+  count(chain_id) %>%
   filter(n < 5, n >= 3) %>%
-  pull(simulation_n)
+  pull(chain_id)
 
 chain_to_observe <- sim_chains_bind %>%
   as_tibble() %>%
-  count(simulation_n, sort = TRUE) %>%
+  count(chain_id, sort = TRUE) %>%
   filter(
     magrittr::is_in(
-      simulation_n, chains_subgroup
+      chain_id, chains_subgroup
     )
   ) %>%
   filter(n < 10) %>%
   filter(n == max(n)) %>%
-  slice_min(simulation_n) %>%
-  pull(simulation_n)
+  slice_min(chain_id) %>%
+  pull(chain_id)
 ```
 
 get simulated chain `r chain_to_observe` with more infections
@@ -244,19 +245,19 @@ simulated_chains_list %>%
 simulated_chains_day <-
   sim_chains_bind %>%
   as_tibble() %>%
-  mutate(simulation_n = as_factor(simulation_n)) %>%
+  mutate(chain_id = as_factor(chain_id)) %>%
   # Daily number of cases for each simulation
   mutate(day = ceiling(time)) %>%
-  count(simulation_n, day, name = "cases") %>%
+  count(chain_id, day, name = "cases") %>%
   # Cumulative number of cases for each simulation
-  group_by(simulation_n) %>%
+  group_by(chain_id) %>%
   mutate(cases_cumsum = cumsum(cases)) %>%
   ungroup()
 
 # Summarise the chain length and size
 sim_chains_max <-
   simulated_chains_day %>%
-  group_by(simulation_n) %>%
+  group_by(chain_id) %>%
   summarise(
     # length
     day_max = max(day),
@@ -272,8 +273,8 @@ ggplot() +
     mapping = aes(
       x = day,
       y = cases_cumsum,
-      group = simulation_n,
-      color = simulation_n
+      group = chain_id,
+      color = chain_id
     ),
     show.legend = FALSE
   ) +
@@ -282,8 +283,8 @@ ggplot() +
     mapping = aes(
       x = day_max,
       y = cases_total,
-      group = simulation_n,
-      color = simulation_n
+      group = chain_id,
+      color = chain_id
     ),
     show.legend = FALSE
   ) +
@@ -301,8 +302,8 @@ ggplot() +
     mapping = aes(
       x = day,
       y = cases,
-      group = simulation_n,
-      color = simulation_n
+      group = chain_id,
+      color = chain_id
     ),
     show.legend = FALSE
   )
