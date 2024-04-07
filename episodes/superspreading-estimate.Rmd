@@ -333,6 +333,14 @@ ggplot() +
     ),
     alpha = 0.5
   ) +
+  geom_line(
+    data = fit_density,
+    mapping = aes(
+      x = quantile,
+      y = density
+    ),
+    alpha = 0.5, color = "red"
+  ) +
   labs(
     x = "Number of secondary cases",
     y = "Density",
@@ -340,14 +348,6 @@ ggplot() +
   ) +
   theme_bw()
 ```
-
-:::::::::::::::::::::::: callout
-
-### Select the best model
-
-We can use the maximum likelihood estimates from `{fitdistrplus}` to compare different models and assess fit performance using estimators like the AIC and BIC. Read further in the vignette on [Estimate individual-level transmission](https://epiverse-trace.github.io/superspreading/articles/estimate_individual_level_transmission.html) and use the `{superspreading}` helper function `ic_tbl()` for this!
-
-:::::::::::::::::::::::::
 
 :::::::::::::::::::: callout
 
@@ -361,21 +361,18 @@ $$\uparrow variance = R_{0}(1+\frac{R_{0}}{\downarrow k})$$
 
 The negative binomial model includes two models as special cases: 
 
-- the conventional Poisson model when $k$ approaches infinity ($k \rightarrow \infty$) the variance equals the mean ($\frac{R_{0}}{\infty}=0$), and 
-- the Geometric model when $k$ equals 1 ($k = 1$).
+- the conventional Poisson model, when $k$ approaches infinity ($k \rightarrow \infty$) and the variance equals the mean (because $\frac{R_{0}}{\infty}=0$), 
+- the Geometric model, when $k$ equals 1 ($k = 1$).
 
 ::::::::::::::::::::
 
-:::::::::::::::::::::::::::::::: callout
+:::::::::::::::::::::::: callout
 
-### Depending on the author
+### Select the best model
 
-The dispersion parameter $k$ can be expressed differently across the literature. 
+We can use the maximum likelihood estimates from `{fitdistrplus}` to compare different models and assess fit performance using estimators like the AIC and BIC. Read further in the vignette on [Estimate individual-level transmission](https://epiverse-trace.github.io/superspreading/articles/estimate_individual_level_transmission.html) and use the `{superspreading}` helper function `ic_tbl()` for this!
 
-- In the Wikipedia page for the negative binomial, this parameter is defined in its reciprocal form (refer to the [variance equation](https://en.wikipedia.org/wiki/Negative_binomial_distribution)). 
-- In [the distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app, the dispersion parameter $k$ is named "Inverse-dispersion" but it is equal to parameter estimated in this episode. We invite you to explore this!
-
-::::::::::::::::::::::::::::::::
+:::::::::::::::::::::::::
 
 ::::::::::::::::::::::: challenge
 
@@ -416,7 +413,16 @@ sars_params
 
 ::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::::: callout
 
+### Depending on the author
+
+The dispersion parameter $k$ can be expressed differently across the literature. 
+
+- In the Wikipedia page for the negative binomial, this parameter is defined in its reciprocal form (refer to the [variance equation](https://en.wikipedia.org/wiki/Negative_binomial_distribution)). 
+- In [the distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app, the dispersion parameter $k$ is named "Inverse-dispersion" but it is equal to parameter estimated in this episode. We invite you to explore this!
+
+::::::::::::::::::::::::::::::::
 
 ## Evidence for variation in individual reproductive number
 
