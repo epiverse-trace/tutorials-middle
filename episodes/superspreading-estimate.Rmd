@@ -423,7 +423,7 @@ The negative binomial model has $variance = R_{0}(1+\frac{R_{0}}{k})$, so smalle
 
 $$\uparrow variance = R_{0}(1+\frac{R_{0}}{\downarrow k})$$
 
-When $k$ approaches infinity ($k \rightarrow \infty$) and the variance equals the mean (because $\frac{R_{0}}{\infty}=0$), the negative binomial model approaches the conventional Poisson model.
+When $k$ approaches infinity ($k \rightarrow \infty$) the variance equals the mean (because $\frac{R_{0}}{\infty}=0$). This makes the conventional Poisson model an special case of the negative binomial model.
 
 ::::::::::::::::::::
 
