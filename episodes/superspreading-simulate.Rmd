@@ -115,6 +115,13 @@ serial_inverval <- epidist_db(
   epi_dist = "serial",
   single_epidist = TRUE
 )
+
+plot(serial_inverval,day_range = 0:25)
+
+serial_inverval$summary_stats %>% 
+  as_tibble() %>% 
+  select(mean,sd) %>% 
+  distinct(.keep_all = TRUE)
 ```
 
 Similar to the `{cfr}` interface for `{epiparameter}`
@@ -125,7 +132,7 @@ function(x) generate(x = serial_inverval, times = x)
 
 ## Simulate a single chain
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 simulate_chains(
   # simulation controls
   index_cases = 5,
@@ -314,6 +321,24 @@ ggplot() +
   NULL
 ```
 
+```{r}
+# chains that reached the 100-case threshold
+sim_chains_max %>% 
+  arrange(desc(day_max)) %>% 
+  filter(cases_total>100)
+```
+
+```{r}
+# proportion that reached the 100-case threshold
+sim_chains_max %>% 
+  arrange(desc(day_max)) %>% 
+  filter(cases_total>100) %>% 
+  count(name = "chains_theshold") %>% 
+  mutate(chains_number = number_chains) %>% 
+  mutate(chains_percentage = chains_theshold / chains_number*100)
+```
+
+
 ```{r,eval=FALSE,echo=FALSE}
 # Visualize transmission chains by daily cases
 ggplot() +
@@ -411,6 +436,10 @@ regrowth of the epidemic.
 Calculate probabilities for Ebola using data from epiparameter using `{superspreading}`
 
 :::::::::::::::::: hint
+
+```{r,message=FALSE,warning=FALSE}
+library(superspreading)
+```
 
 ```{r}
 # estimate probability to contain
