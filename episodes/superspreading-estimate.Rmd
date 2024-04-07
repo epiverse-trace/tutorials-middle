@@ -498,16 +498,7 @@ The comparison of directly transmitted infections reveals the differing degree o
 
 ![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all ν = R0), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in ν.](fig/SEE-individual-reproductive-number-fig-b.png)
 
-:::::::::::::::::::::::::::::::: callout
-
-### Depending on the author
-
-The dispersion parameter $k$ can be expressed differently across the literature. 
-
-- In the Wikipedia page for the negative binomial, this parameter is defined in its reciprocal form (refer to the [variance equation](https://en.wikipedia.org/wiki/Negative_binomial_distribution)). 
-- In [the distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app, the dispersion parameter $k$ is named "Inverse-dispersion" but it is equal to parameter estimated in this episode. We invite you to explore this!
-
-::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::
 
 ## Backward and forward contact tracing
 
@@ -674,6 +665,17 @@ Using the corresponding distribution function in R, estimate the SSE threshold t
 You can review the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), and then read the `?dpois` reference manual.
 
 In a Poisson distribution, the lambda or rate parameter are equal to the estimated mean from a negative binomial distribution. You can explore this in [The distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app.
+
+:::::::::::::::::
+
+::::::::::::::::: hint
+
+### inverse-dispersion?
+
+The dispersion parameter $k$ can be expressed differently across the literature. 
+
+- In the Wikipedia page for the negative binomial, this parameter is defined in its reciprocal form (refer to the [variance equation](https://en.wikipedia.org/wiki/Negative_binomial_distribution)). 
+- In [the distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app, the dispersion parameter $k$ is named "Inverse-dispersion" but it is equal to parameter estimated in this episode. We invite you to explore this!
 
 :::::::::::::::::
 
