@@ -143,7 +143,7 @@ To get this, first, we can use `epicontacts::get_id()` to get the full list of u
 all_secondary <- epi_contacts %>%
   # extract ids in contact *and* linelist using "which" argument
   epicontacts::get_id(which = "all") %>%
-  # transform to dataframe to use left_join()
+  # transform vector to dataframe to use left_join()
   enframe(name = NULL, value = "from") %>%
   # join count secondary cases per infectee
   left_join(infector_secondary) %>%
@@ -155,7 +155,7 @@ all_secondary <- epi_contacts %>%
 
 From a histogram of the `all_secondary` object, we can identify the **heterogeneity** in the number of secondary cases. Three cases were related to more than 20 secondary cases, while the complementary cases with less than five or zero secondary cases.
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,eval=FALSE}
 # arrange in descendant order of secondary cases
 all_secondary %>%
   arrange(desc(secondary_cases))
@@ -174,7 +174,7 @@ all_secondary %>%
   )
 ```
 
-The number of secondary infections caused by each case can be used to _empirically_ estimate the **offspring distribution**. One candidate statistical distribution used to model the offspring distribution is the **negative binomial** distribution with two parameters:
+The number of secondary cases can be used to _empirically_ estimate the **offspring distribution**, which is the number of secondary _infections_ caused by each case. One candidate statistical distribution used to model the offspring distribution is the **negative binomial** distribution with two parameters:
 
 - **Mean**, which represents the $R_{0}$, the average number of (secondary) cases produced by a single individual in an entirely susceptible population, and
 
@@ -228,7 +228,7 @@ ggplot() +
   )
 ```
 
-From the histogram and density plot, we can identify that the distribution is highly skewed or **overdispersed**. The superspreading events (SSEs) are realizations from the right-hand tail of the offspring distribution ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).
+From the histogram and density plot, we can identify that the offspring distribution is highly skewed or **overdispersed**. In this framework, the superspreading events (SSEs) are realizations from the right-hand tail of the offspring distribution ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).
 
 ::::::::::::::::::::::::::: callout
 
@@ -256,6 +256,70 @@ In a Poisson distribution, mean is equal to variance. But when variance is highe
 In epidemiology, [negative binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution) have being used to model disease transmission for infectious diseases where the likely number of onward infections may vary considerably from individual to individual and from setting to setting.
 
 :::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::: challenge
+
+Calculate the distribution of secondary cases for Ebola using the `ebola_sim_clean` object from `{outbreaks}` package.
+
+Does the offspring distribution is skewed or overdispersed?
+
+:::::::::::::::::: hint
+
+**Note:** This dataset has `r nrow(ebola_sim_clean$linelist)` cases. Running `epicontacts::vis_epicontacts()` may overload your session!
+
+::::::::::::::::::
+
+:::::::::::::::::: solution
+
+```{r}
+## first, make an epicontacts object
+ebola_contacts <-
+  epicontacts::make_epicontacts(
+    linelist = ebola_sim_clean$linelist,
+    contacts = ebola_sim_clean$contacts
+  )
+
+# visualise contact tree
+# (this network can overload your session!)
+#epicontacts::vis_epicontacts(ebola_contacts)
+
+# count secondary cases
+
+ebola_infector_secondary <- ebola_contacts %>%
+  pluck("contacts") %>%
+  count(from, name = "secondary_cases")
+
+ebola_secondary <- ebola_contacts %>%
+  # extract ids in contact *and* linelist using "which" argument
+  epicontacts::get_id(which = "all") %>%
+  # transform vector to dataframe to use left_join()
+  enframe(name = NULL, value = "from") %>%
+  # join count secondary cases per infectee
+  left_join(ebola_infector_secondary) %>%
+  # infectee with missing secondary cases are replaced with zero
+  replace_na(
+    replace = list(secondary_cases = 0)
+  )
+
+# arrange in descendant order of secondary cases
+# ebola_secondary %>% 
+#   arrange(desc(secondary_cases))
+
+## plot the distribution
+ebola_secondary %>%
+  ggplot(aes(secondary_cases)) +
+  geom_histogram(binwidth = 1) +
+  labs(
+    x = "Number of secondary cases",
+    y = "Frequency"
+  )
+```
+
+From a visual inspection, the distribution of secondary cases for the Ebola data set in `ebola_sim_clean` shows an skewed distribution with secondary cases equal or lower than 6. We need to complement this observation with a statistical analysis to evaluate for overdispersion.
+
+::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::
 
 ## Estimate the dispersion parameter
 
@@ -363,21 +427,50 @@ When $k$ approaches infinity ($k \rightarrow \infty$) and the variance equals th
 
 ::::::::::::::::::::
 
-
-
 ::::::::::::::::::::::: challenge
 
-read ebola contact data and estimate R and dispersion?
+Use the distribution of secondary cases from the `ebola_sim_clean` object from `{outbreaks}` package.
+
+Fit a negative binomial distribution to estimate the mean and dispersion parameter of the offspring distribution.
+
+Does the estimated dispersion parameter provide evidence of transmission heterogeneity?
 
 :::::::::::::: hint
 
-...
+Review how to fit a negative binomial distribution using the `fitdistrplus::fitdist()` function.
 
 ::::::::::::::
 
 :::::::::::::: solution
 
-...
+```{r}
+ebola_offspring <- ebola_secondary %>%
+  pull(secondary_cases) %>%
+  fitdist(distr = "nbinom")
+
+ebola_offspring
+```
+
+```{r}
+## extract the "size" parameter
+ebola_mid <- ebola_offspring$estimate[["size"]]
+
+## calculate the 95% confidence intervals using the standard error estimate and
+## the 0.025 and 0.975 quantiles of the normal distribution.
+
+ebola_lower <- ebola_mid + ebola_offspring$sd[["size"]] * qnorm(0.025)
+
+ebola_upper <- ebola_mid + ebola_offspring$sd[["size"]] * qnorm(0.975)
+
+# ebola_mid
+# ebola_lower
+# ebola_upper
+```
+
+From the number secondary cases distribution we estimated a dispersion parameter $k$ of
+`r round(ebola_mid, 3)`, with a 95% Confidence Interval from `r round(ebola_lower, 3)` to `r round(ebola_upper, 3)`.
+
+For dispersion parameter estimates higher than one we get low distribution variance, hence, low heterogeneity.
 
 ::::::::::::::
 
@@ -391,9 +484,9 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 :::::::::::::::::::::::
 
-## Evidence for variation in individual reproductive number
+## Evidence for variation in individual reproductive number EDIT!
 
-Comparing our findings to the 20/80 rule proposed for sexually transmitted and vector-borne diseases, the core principle of heterogeneous transmission is certainly supported.
+[Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) use a 20/80 rule to show how the core principle of heterogeneous transmission is supported.
 
 - focus on the cumulative probability distribution of the most infectious cases
     + if there is a 0.2 proportion of (the most infectious) cases contributing to the 0.8 proportion of transmission, this is a highly heterogeneous distribution. (e.g. SARS)
@@ -404,83 +497,6 @@ Comparing our findings to the 20/80 rule proposed for sexually transmitted and v
 The comparison of directly transmitted infections reveals the differing degree of individual variation among diseases and outbreak settings. Like SARS, measles in highly vaccinated populations shows high variation, with heterogeneous vaccination coverage as an important environmental factor contributing to this pattern. Monkeypox and smallpox viruses show intermediate variation, consistent across multiple data sets, and pneumonic plague transmission is slightly less variable.
 
 ![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all ν = R0), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in ν.](fig/SEE-individual-reproductive-number-fig-b.png)
-
-:::::::::::::::::::::::: callout
-
-### Use epiparameter R package
-
-```{r,message=FALSE,warning=FALSE,echo=FALSE}
-library(epiparameter)
-
-epidist_string <- epidist_db(
-  epi_dist = "offspring distribution"
-) %>%
-  list_distributions() %>%
-  dplyr::select(disease) %>%
-  distinct() %>%
-  pull() %>%
-  paste(collapse = ", ")
-```
-
-Currently, `{epiparameter}` have offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS:
-
-```{r,message=FALSE,warning=FALSE}
-# Load parameters
-sars <- epiparameter::epidist_db(
-  disease = "SARS",
-  epi_dist = "offspring distribution",
-  single_epidist = TRUE
-)
-sars_params <- epiparameter::get_parameters(sars)
-sars_params
-```
-
-::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::: challenge
-
-What is the proportion of cases that are responsible of the 80% of transmission?
-
-Compare between SARS, MERS, Ebola
-
-::::::::::::::::::::: hint
-
-Use `proportion_transmission()`
-
-:::::::::::::::::::::
-
-::::::::::::::::::::: solution
-
-```{r}
-# estimate
-# proportion of cases that
-# generate 80% of transmission
-proportion_transmission(
-  R = sars_params[["mean"]],
-  k = sars_params[["dispersion"]],
-  percent_transmission = 0.8
-)
-
-## assessment ---------------------------------
-
-# estimate
-# proportion of cases that
-# generate 80% of transmission
-proportion_transmission(
-  R = offspring_fit$estimate["mu"],
-  k = offspring_fit$estimate["size"],
-  percent_transmission = 0.8
-)
-
-## assessment --------------------------------------------------------------
-
-#' estimate for ebola
-
-```
-
-:::::::::::::::::::::
-
-:::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::: callout
 
@@ -539,9 +555,108 @@ reuse ebola parameters? interpret
 
 ::::::::::::::::::::::::::: challenge
 
-use mers to estimate ...
+use mers to estimate ... [pending]
 
 :::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: challenge
+
+inform backward contact tracing strategy for ebola [pending]
+
+:::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::: challenge
+
+What is the proportion of cases that are responsible of the 80% of transmission?
+
+Compare the estimates for **MERS** using the offspring distributions parameters from this tutorial episode, with **SARS** and **Ebola** offspring distributions parameter accessible via the `{epiparameter}` R package.
+
+::::::::::::::::::::: hint
+
+Use `superspreading::proportion_transmission()` and `{epiparameter}`.
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
+library(epiparameter)
+
+epidist_string <- epidist_db(
+  epi_dist = "offspring distribution"
+) %>%
+  list_distributions() %>%
+  dplyr::select(disease) %>%
+  distinct() %>%
+  pull() %>%
+  paste(collapse = ", ")
+```
+
+Currently, `{epiparameter}` have offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS:
+
+```{r,message=FALSE,warning=FALSE}
+# Load parameters
+sars <- epiparameter::epidist_db(
+  disease = "SARS",
+  epi_dist = "offspring distribution",
+  single_epidist = TRUE
+)
+sars_params <- epiparameter::get_parameters(sars)
+sars_params
+```
+
+:::::::::::::::::::::
+
+::::::::::::::::::::: solution
+
+```{r}
+#' estimate for ebola --------------
+
+ebola_epiparameter <- epiparameter::epidist_db(
+  disease = "Ebola",
+  epi_dist = "offspring distribution",
+  single_epidist = TRUE
+)
+ebola_params <- epiparameter::get_parameters(ebola_epiparameter)
+ebola_params
+
+# estimate
+# proportion of cases that
+# generate 80% of transmission
+proportion_transmission(
+  R = ebola_params[["mean"]],
+  k = ebola_params[["dispersion"]],
+  percent_transmission = 0.8
+)
+
+#' estimate for sars --------------
+
+# estimate
+# proportion of cases that
+# generate 80% of transmission
+proportion_transmission(
+  R = sars_params[["mean"]],
+  k = sars_params[["dispersion"]],
+  percent_transmission = 0.8
+)
+
+
+#' estimate for mers --------------
+
+# estimate
+# proportion of cases that
+# generate 80% of transmission
+proportion_transmission(
+  R = offspring_fit$estimate["mu"],
+  k = offspring_fit$estimate["size"],
+  percent_transmission = 0.8
+)
+```
+
+Among Ebola, SARS, and MERS, MERS has the lowest percent of cases (2.1%) responsible of the 80% of the transmission, representative of highly overdispersed offspring distributions.
+
+Among them, Ebola has the highest percent of cases (43%) responsible of the 80% of the transmission. This is representative of offspring distributions with high dispersion parameters.
+
+:::::::::::::::::::::
+
+:::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::: challenge
 
@@ -577,48 +692,6 @@ qpois(
 
 ::::::::::::::::::::::::
 
-:::::::::::::::::::: challenge
-
-Calculate probabilities for Ebola using data from epiparameter
-
-:::::::::::::::::: hint
-
-```{r}
-# estimate probability to contain
-probability_contain(
-  R = offspring_fit$estimate["mu"],
-  k = offspring_fit$estimate["size"],
-  num_init_infect = 1,
-  case_threshold = 100
-)
-
-# Estimate probability of large outbreak
-# with 5 independent imported cases
-probability_epidemic(
-  R = offspring_fit$estimate["mu"],
-  k = offspring_fit$estimate["size"],
-  num_init_infect = 5
-)
-```
-
-::::::::::::::::::
-
-:::::::::::::::::: solution
-
-```{r}
-#' get ebola params
-```
-
-::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::
-
-
-:::::::::::::::::::::::::: challenge
-
-inform backward contact tracing strategy
-
-:::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::: testimonial
 
@@ -629,6 +702,7 @@ The [Tracing monkeypox](https://plus.maths.org/content/monkeypox) article from t
 The [Going viral](https://kucharski.substack.com/p/going-viral) post from Adam Kucharski shares insides from YouTube virality, disease outbreaks, and marketing campaigns on the conditions that spark contagion online.
 
 :::::::::::::::::::::::::::::
+
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
