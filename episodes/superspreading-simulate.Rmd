@@ -45,6 +45,32 @@ library(epichains)
 library(tidyverse)
 ```
 
+## Superspreading in decision making
+
+Transmission heterogeneity affects epidemic establishment and the ease of control ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
+
++ Greater heterogeneity reduces the chance of an outbreak emerging from single case. Individuals with more extreme amount of secondary cases are rare.
+
++ However, if the outbreak gets established, this heterogeneity can make an outbreak hard to control using *mass interventions* (which assumes transmission homogeneity), as a single uncontrolled case can generate a large number of secondary cases.
+
++ Conversely, heterogeneity in transmission may provide opportunities for *targeted interventions* if the individuals who contribute more to transmission (due to biological, environmental or behavioral factors) share socio-demographic or geographical characteristics that can be defined.
+
+We can have an early understanding of a disease epidemic potential from the mean reproduction number $R_{0}$ and dispersion $k$ of an offspring distribution to answer questions like:
+
+- What is the probability of an pathogen to cause large outbreak?
+- What is the probability of an outbreak to get extinct?
+- What is the probability to contain the ongoing outbreak?
+
+::::::::::::::::::::::::::: testimonial
+
+### Epidemic Risk assessment accounting for superspreading
+
+These estimates vary non-linearly with respect to the mean reproduction number $R_{0}$ and dispersion $k$ of a given disease.
+
+We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html)!
+
+:::::::::::::::::::::::::::
+
 ## Simulation of uncontrolled outbreaks
 
 simulation of uncontrolled outbreaks
@@ -385,6 +411,42 @@ regrowth of the epidemic.
 :::::::::::
 
 :::::::::::::::::::::::::::::
+
+:::::::::::::::::::: challenge
+
+Calculate probabilities for Ebola using data from epiparameter using `{superspreading}`
+
+:::::::::::::::::: hint
+
+```{r}
+# estimate probability to contain
+probability_contain(
+  R = offspring_fit$estimate["mu"],
+  k = offspring_fit$estimate["size"],
+  num_init_infect = 1,
+  case_threshold = 100
+)
+
+# Estimate probability of large outbreak
+# with 5 independent imported cases
+probability_epidemic(
+  R = offspring_fit$estimate["mu"],
+  k = offspring_fit$estimate["size"],
+  num_init_infect = 5
+)
+```
+
+::::::::::::::::::
+
+:::::::::::::::::: solution
+
+```{r}
+#' get ebola params
+```
+
+::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::: testimonial
 
