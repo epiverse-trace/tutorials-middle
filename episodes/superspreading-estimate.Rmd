@@ -12,7 +12,7 @@ webshot::install_phantomjs(force = TRUE)
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How to evaluate for transmission heterogeneity from contact tracing data?
+- How can we estimate individual-level variation in transmission (i.e. superspreading potential) from contact tracing data?
 - How to account for transmission heterogeneity in decision-making?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
