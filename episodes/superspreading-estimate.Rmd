@@ -271,7 +271,7 @@ Does the offspring distribution is skewed or overdispersed?
 
 :::::::::::::::::: solution
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 ## first, make an epicontacts object
 ebola_contacts <-
   epicontacts::make_epicontacts(
@@ -472,7 +472,7 @@ From the number secondary cases distribution we estimated a dispersion parameter
 
 For dispersion parameter estimates higher than one we get low distribution variance, hence, low heterogeneity.
 
-But does this mean that the secondary case distribution does not have superspreading events (SSEs)? You will later find one challenge: How do you define an SSE threshold for Ebola?
+But does this mean that the secondary case distribution does not have superspreading events (SSEs)? You will later find one additional challenge: How do you define an SSE threshold for Ebola?
 
 ::::::::::::::
 
@@ -492,9 +492,9 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) use a 20/80 rule to show how the core principle of heterogeneous transmission is supported.
 
-- When the 20% most infectious cases contribute to the ~80% of transmission, this is a highly heterogeneous offspring distribution, e.g., SARS and Measles with a partially vaccinated population.
+- When the 20% most infectious cases contribute to the ~80% of transmission, this is a highly heterogeneous offspring distribution ($k<0.02$), e.g., SARS and Measles with a partially vaccinated population.
 
-- When the 20% most infectious cases contribute to the ~50% of transmission, this is a less heterogeneous offspring distribution, e.g. Pneumonic plague.
+- When the 20% most infectious cases contribute to the ~50% of transmission, this is a less heterogeneous offspring distribution ($k>0.1$), e.g. Pneumonic plague.
 
 ![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png)
 
@@ -512,14 +512,14 @@ In the presence of heterogeneous transmission, i.e., with an overdispersed offsp
 
 ![Schematic representation of contact tracing strategies. Black arrows indicate the directions of transmission, blue and Orange arrows, a successful or failed contact tracing, respectivelly. When there is evidence of individual-level transmission heterogeneity, often resulting in superspreading, backward contact tracing from the index case (blue circle) increase the probability to find the primary case (green circle) or clusters with a larger fraction of cases, potentially increasing the number of quarentined cases (yellow circles). [Claire Blackmore, 2021](https://www.paho.org/sites/default/files/backward_contact_tracing_v3_0.pdf)](fig/contact-tracing-strategies.png)
 
-When there is evidence of individual-level variation (i.e. overdispersion), often resulting in so-called superspreading events, a large proportion of infections may be linked to a small proportion of original clusters. As a result, finding and targeting originating clusters in combination with reducing onwards infection may substantially enhance the effectiveness of tracing methods [Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3). 
+When there is evidence of individual-level variation (i.e. overdispersion), often resulting in so-called superspreading events, a large proportion of infections may be linked to a small proportion of original clusters. As a result, finding and targeting originating clusters in combination with reducing onwards infection may substantially enhance the effectiveness of tracing methods ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)). 
 
 Empirical evidence focused on evaluating the efficiency of backward tracing lead to 42% more cases identified than forward tracing supporting its implementation when rigorous suppression of transmission is justified ([Raymenants et al., 2022](https://www.nature.com/articles/s41467-022-32531-6))
 
 
 ## Proportion of events in a given cluster size
 
-By looking at the tail of the probability offspring distribution, we can identify the size of the cluster of secondary infections. The probability that a cluster of secondary infections caused by a primary case identified by backward tracing has a size of $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
+Using `{superspreading}`, we can calculate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
 
 ```{r}
 # estimate the probability of
@@ -583,16 +583,16 @@ The probability of having clusters of five people is 1.8%. At this stage, given 
 
 ### Does Ebola have any superspreading event?
 
-[Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) propose a general protocol for defining a superspreading event (SSE). If the number of secondary infections caused by each case, $Z$, follows a negative binomial distribution ($R_{o}, k$):
+[Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) propose a general protocol for defining a superspreading event (SSE). If the number of secondary infections caused by each case, $Z$, follows a negative binomial distribution ($R, k$):
 
-- We define an SSE as any infected individual who infects more than Z(n) others, where Z(n) is the nth percentile of the Poisson(R) distribution. 
+- We define an SSE as any infected individual who infects more than $Z(n)$ others, where $Z(n)$ is the nth percentile of the $Poisson(R)$ distribution. 
 - A 99th-percentile SSE is then any case causing more infections than would occur in 99% of infectious histories in a homogeneous population
 
 Using the corresponding distribution function, estimate the SSE threshold to define a SSE for the Ebola offspring distribution estimates for the `ebola_sim_clean` object from `{outbreaks}` package.
 
 ::::::::::::::::: hint
 
-In a Poisson distribution, the lambda or rate parameter are equal to the estimated mean from a negative binomial distribution. You can explore this in [The distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app.
+In a Poisson distribution, the **lambda** or **rate** parameter are equal to the estimated **mean** from a negative binomial distribution. You can explore this in [The distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app.
 
 :::::::::::::::::
 
@@ -606,22 +606,24 @@ ebola_mu_mid <- ebola_offspring$estimate["mu"]
 # get upper 95% CI
 ebola_mu_upper <- ebola_mu_mid + offspring_fit$sd[["mu"]] * qnorm(0.975)
 
-# get 99th-percentile from poisson distribution with mean = mu
+# get 99th-percentile from poisson distribution 
+# with mean equal to mu
 qpois(
   p = 0.99,
   lambda = ebola_mu_mid
 )
 
-# get 99th-percentile from poisson distribution with mean = mu upper 95% CI
+# get 99th-percentile from poisson distribution 
+# with mean = mu upper 95% CI
 qpois(
   p = 0.99,
   lambda = ebola_mu_upper
 )
 ```
 
-These values are closer to the ones reported by [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153). See figure below:
+These values are close to the ones reported by [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153). See figure below:
 
-![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of Z∼Poisson(R), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
+![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of the number of secondary cases following a Poisson distribution with lambda equal to $R$ ($Z∼Poisson(R)$), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
 
 :::::::::::::::::
 
@@ -669,7 +671,7 @@ sars_params
 
 ::::::::::::::::::::: solution
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 #' estimate for ebola --------------
 
 ebola_epiparameter <- epiparameter::epidist_db(
@@ -713,9 +715,9 @@ proportion_transmission(
 )
 ```
 
-Among Ebola, SARS, and MERS, MERS has the lowest percent of cases (2.1%) responsible of the 80% of the transmission, representative of highly overdispersed offspring distributions.
+MERS has the lowest percent of cases (2.1%) responsible of the 80% of the transmission, representative of highly overdispersed offspring distributions.
 
-Among them, Ebola has the highest percent of cases (43%) responsible of the 80% of the transmission. This is representative of offspring distributions with high dispersion parameters.
+Ebola has the highest percent of cases (43%) responsible of the 80% of the transmission. This is representative of offspring distributions with high dispersion parameters.
 
 :::::::::::::::::::::
 
