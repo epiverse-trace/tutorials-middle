@@ -484,7 +484,9 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 :::::::::::::::::::::::
 
-## Evidence for variation in individual reproductive number EDIT!
+:::::::::::::::::::::::::::::::::: checklist
+
+### Evidence for variation in individual reproductive number EDIT!
 
 [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) use a 20/80 rule to show how the core principle of heterogeneous transmission is supported.
 
@@ -559,13 +561,15 @@ inform backward contact tracing strategy for ebola [pending]
 
 ::::::::::::::::::::::::::::: challenge
 
+### Expected proportion of transmission
+
 What is the proportion of cases that are responsible of the 80% of transmission?
 
-Compare the estimates for **MERS** using the offspring distributions parameters from this tutorial episode, with **SARS** and **Ebola** offspring distributions parameter accessible via the `{epiparameter}` R package.
+Use `{superspreading}` and compare the estimates for **MERS** using the offspring distributions parameters from this tutorial episode, with **SARS** and **Ebola** offspring distributions parameter accessible via the `{epiparameter}` R package.
 
 ::::::::::::::::::::: hint
 
-Use `superspreading::proportion_transmission()` and `{epiparameter}`.
+To use `superspreading::proportion_transmission()` we recommend to read the [Estimate what proportion of cases cause a certain proportion of transmission](https://epiverse-trace.github.io/superspreading/reference/proportion_transmission.html) reference manual.
 
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 library(epiparameter)
