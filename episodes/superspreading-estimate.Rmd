@@ -437,7 +437,7 @@ Does the estimated dispersion parameter provide evidence of transmission heterog
 
 :::::::::::::: hint
 
-Review how to fit a negative binomial distribution using the `fitdistrplus::fitdist()` function.
+Review how we fitted a negative binomial distribution using the `fitdistrplus::fitdist()` function.
 
 ::::::::::::::
 
@@ -471,6 +471,8 @@ From the number secondary cases distribution we estimated a dispersion parameter
 `r round(ebola_mid, 3)`, with a 95% Confidence Interval from `r round(ebola_lower, 3)` to `r round(ebola_upper, 3)`.
 
 For dispersion parameter estimates higher than one we get low distribution variance, hence, low heterogeneity.
+
+But does this mean that the secondary case distribution does not have superspreading events (SSEs)? You will later find one challenge: How do you define an SSE threshold for Ebola?
 
 ::::::::::::::
 
@@ -538,26 +540,92 @@ Even though we have an $R<1$, given a highly overdispersed offspring distributio
 We can also use this number to prevent gathering of certain sized to reduce the epidemic by preventing potential superspreading events. Interventions can target to reduce the reproduction number in order to reduce the probability of having clusters of secondary cases.
 
 
-::::::::::::::::::::::: challenge
+::::::::::::::::::::::::::::::::: challenge
 
-reuse ebola parameters? interpret
+### Backward contact tracing for Ebola
 
-:::::::::::::::::::::::
+Use the Ebola estimated parameters for `ebola_sim_clean` object from `{outbreaks}` package.
+
+Evaluate if the contact tracing efforts would be benefit by a backward strategy to increase their probability of contain and quarantine an increased proportion of contacts.
+
+Calculate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size 5, 10, 15 or larger.
+
+:::::::::::::::: hint
+
+Review how we estimated the probability of having clusters of a fixed size, given an offspring distribution mean and dispersion parameters, using the `superspreading::proportion_cluster_size()` function.
+
+::::::::::::::::
+
+:::::::::::::::: solution
+
+```{r}
+# estimate the probability of
+# having a cluster size of 5, 10, or 25
+# secondary cases from a primary case,
+# given known reproduction number and
+# dispersion parameter.
+proportion_cluster_size(
+  R = ebola_offspring$estimate["mu"],
+  k = ebola_offspring$estimate["size"],
+  cluster_size = c(5, 10, 25)
+)
+```
+
+The probability of having clusters of five people is 1.8%. At this stage, given this offspring distribution parameters, a backward strategy may not increase the probability of contain and quarantine more onward cases.
+
+::::::::::::::::
+
+:::::::::::::::::::::::::::::::::
 
 ## Challenges
 
-::::::::::::::::::::::::::: challenge
+::::::::::::::::::::::::: challenge
 
-use mers to estimate ... [pending]
+### Does Ebola have any superspreading event?
 
-:::::::::::::::::::::::::::
+[Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) propose a general protocol for defining a superspreading event (SSE). If the number of secondary infections caused by each case, $Z$, follows a negative binomial distribution ($R_{o}, k$):
 
-:::::::::::::::::::::::::: challenge
+- We define an SSE as any infected individual who infects more than Z(n) others, where Z(n) is the nth percentile of the Poisson(R) distribution. 
+- A 99th-percentile SSE is then any case causing more infections than would occur in 99% of infectious histories in a homogeneous population
 
-inform backward contact tracing strategy for ebola [pending]
+Using the corresponding distribution function, estimate the SSE threshold to define a SSE for the Ebola offspring distribution estimates for the `ebola_sim_clean` object from `{outbreaks}` package.
 
-:::::::::::::::::::::::::
+::::::::::::::::: hint
 
+In a Poisson distribution, the lambda or rate parameter are equal to the estimated mean from a negative binomial distribution. You can explore this in [The distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app.
+
+:::::::::::::::::
+
+::::::::::::::::: solution
+
+To get the quantile value for the 99th-percentile we need to use the [density function](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc) for the Poisson distribution `dpois()`.
+
+```{r}
+# get mean
+ebola_mu_mid <- ebola_offspring$estimate["mu"]
+# get upper 95% CI
+ebola_mu_upper <- ebola_mu_mid + offspring_fit$sd[["mu"]] * qnorm(0.975)
+
+# get 99th-percentile from poisson distribution with mean = mu
+qpois(
+  p = 0.99,
+  lambda = ebola_mu_mid
+)
+
+# get 99th-percentile from poisson distribution with mean = mu upper 95% CI
+qpois(
+  p = 0.99,
+  lambda = ebola_mu_upper
+)
+```
+
+These values are closer to the ones reported by [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153). See figure below:
+
+![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of Z∼Poisson(R), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
+
+:::::::::::::::::
+
+::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::: challenge
 
@@ -653,26 +721,7 @@ Among them, Ebola has the highest percent of cases (43%) responsible of the 80% 
 
 :::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::: challenge
-
-### Define Superspreading events
-
-[Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) propose a general protocol for defining a superspreading event (SSE). If the number of secondary infections caused by each case, $Z$, follows a negative binomial distribution ($R_{o}, k$):
-
-- We define an SSE as any infected individual who infects more than Z(n) others, where Z(n) is the nth percentile of the Poisson(R) distribution. 
-- A 99th-percentile SSE is then any case causing more infections than would occur in 99% of infectious histories in a homogeneous population
-
-Using the corresponding distribution function in R, estimate the SSE threshold to define a SSE.
-
-::::::::::::::::: hint
-
-You can review the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), and then read the `?dpois` reference manual.
-
-In a Poisson distribution, the lambda or rate parameter are equal to the estimated mean from a negative binomial distribution. You can explore this in [The distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app.
-
-:::::::::::::::::
-
-::::::::::::::::: hint
+::::::::::::::::: callout
 
 ### inverse-dispersion?
 
@@ -682,22 +731,6 @@ The dispersion parameter $k$ can be expressed differently across the literature.
 - In [the distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app, the dispersion parameter $k$ is named "Inverse-dispersion" but it is equal to parameter estimated in this episode. We invite you to explore this!
 
 :::::::::::::::::
-
-::::::::::::::::: solution
-
-```{r}
-qpois(
-  p = 0.99,
-  lambda = offspring_fit$estimate["mu"]
-)
-```
-
-![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of Z∼Poisson(R), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
-
-:::::::::::::::::
-
-::::::::::::::::::::::::
-
 
 ::::::::::::::::::::::::::::: testimonial
 
