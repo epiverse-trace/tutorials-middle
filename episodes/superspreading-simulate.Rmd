@@ -183,7 +183,7 @@ Let's use `map()`:
 
 ```{r}
 simulated_chains_map <-
-  map_df(
+  map(
     # vector of numbers (chain IDs)
     .x = seq_len(number_chains),
     # function to iterate to each chain ID number
@@ -202,7 +202,8 @@ simulated_chains_map <-
         # creates a column with the chain ID number
         mutate(chain_id = sim)
     }
-  )
+  ) %>% 
+  list_rbind()
 ```
 
 ```{r}
