@@ -488,19 +488,19 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 :::::::::::::::::::::::::::::::::: checklist
 
-### Evidence for variation in individual reproductive number EDIT!
+### The dispersion parameter across diseases
 
 [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) use a 20/80 rule to show how the core principle of heterogeneous transmission is supported.
 
-- focus on the cumulative probability distribution of the most infectious cases
-    + if there is a 0.2 proportion of (the most infectious) cases contributing to the 0.8 proportion of transmission, this is a highly heterogeneous distribution. (e.g. SARS)
-    + if there is a 0.6 proportion of (the most infectious) cases contributing to the 0.8 of transmission, this is a less heterogeneous distribution (compared to the above one, e.g. pneumonic plague)
+- When the 20% most infectious cases contribute to the ~80% of transmission, this is a highly heterogeneous offspring distribution, e.g., SARS and Measles with a partially vaccinated population.
+
+- When the 20% most infectious cases contribute to the ~50% of transmission, this is a less heterogeneous offspring distribution, e.g. Pneumonic plague.
 
 ![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png)
 
-The comparison of directly transmitted infections reveals the differing degree of individual variation among diseases and outbreak settings. Like SARS, measles in highly vaccinated populations shows high variation, with heterogeneous vaccination coverage as an important environmental factor contributing to this pattern. Monkeypox and smallpox viruses show intermediate variation, consistent across multiple data sets, and pneumonic plague transmission is slightly less variable.
+The comparison of directly transmitted infections reveals the differing degree of individual variation among diseases and outbreak settings. Like SARS, Measles in highly vaccinated populations shows high variation with heterogeneous vaccination coverage as an important environmental factor contributing to this pattern. Monkeypox and Smallpox viruses show intermediate variation, consistent across multiple data sets, and Pneumonic plague transmission is slightly less variable.
 
-![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all ν = R0), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in ν.](fig/SEE-individual-reproductive-number-fig-b.png)
+![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all individual reproductive number equal to $R_{0}$), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in the individual reproductive number.](fig/SEE-individual-reproductive-number-fig-b.png)
 
 ::::::::::::::::::::::::::::::::::
 
