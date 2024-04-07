@@ -747,9 +747,9 @@ The [Going viral](https://kucharski.substack.com/p/going-viral) post from Adam K
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use `{epicontacts}`
-- Use `{fitdistrplus}`
-- Use `{superspreading}` to 
+- Use `{epicontacts}` to calculate the number of secondary cases cause by a particular individual from linelist and contact data.
+- Use `{fitdistrplus}` to empirically estimate the offspring distribution from the number of secondary cases distribution.
+- Use `{superspreading}` to estimate the probability of having clusters of a given size from primary cases and inform contact tracing efforts.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
