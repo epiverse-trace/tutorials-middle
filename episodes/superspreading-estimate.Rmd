@@ -709,7 +709,7 @@ The [Going viral](https://kucharski.substack.com/p/going-viral) post from Adam K
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Use `{epicontacts}`
-- Use `{fitdistplus}`
+- Use `{fitdistrplus}`
 - Use `{superspreading}` to 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
