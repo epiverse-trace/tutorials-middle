@@ -382,7 +382,7 @@ read ebola contact data and estimate R and dispersion?
 
 :::::::::::::::::::::::: callout
 
-### Use {epiparameter}
+### Use epiparameter R package
 
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 library(epiparameter)
@@ -401,12 +401,12 @@ Currently, `{epiparameter}` have offspring distributions for `r epidist_string`.
 
 ```{r,message=FALSE,warning=FALSE}
 # Load parameters
-sars <- epidist_db(
+sars <- epiparameter::epidist_db(
   disease = "SARS",
   epi_dist = "offspring distribution",
   single_epidist = TRUE
 )
-sars_params <- get_parameters(sars)
+sars_params <- epiparameter::get_parameters(sars)
 sars_params
 ```
 
