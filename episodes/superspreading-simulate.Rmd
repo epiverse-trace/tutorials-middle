@@ -28,8 +28,6 @@ Learners should familiarise themselves with following concept dependencies befor
 
 :::::::::::::::::::::::::::::::::
 
-## questions
-
 ## Introduction
 
 <!-- what we know -->
@@ -42,6 +40,7 @@ We are going to use `{purrr}`
 
 ```{r,message=FALSE,warning=FALSE}
 library(epichains)
+library(epiparameter)
 library(tidyverse)
 ```
 
@@ -110,22 +109,18 @@ lambda = rate = mean
 
 ## Get generation time
 
-```{r}
-library(epiparameter)
-
+```{r,message=FALSE,warning=FALSE}
 serial_inverval <- epidist_db(
   disease = "mers",
   epi_dist = "serial",
   single_epidist = TRUE
 )
-
-serial_inverval
 ```
 
 Similar to the `{cfr}` interface for `{epiparameter}`
 
 ```r
-function(x) generate(x = serial_inverval,times = x)
+function(x) generate(x = serial_inverval, times = x)
 ```
 
 ## Simulate a single chain
@@ -141,8 +136,7 @@ simulate_chains(
   size = mers_offspring["dispersion"],
   # generation
   generation_time = function(x) generate(x = serial_inverval, times = x)
-) %>%
-  as_tibble()
+)
 ```
 
 the output dataframe collects
@@ -164,9 +158,9 @@ initial_cases <- 1
 
 ```
 
-:::::::::::::::::::::::::::::: checkpoint
+:::::::::::::::::::::::::::::: checklist
 
-### Iteration using {purrr}
+### Iteration using purrr
 
 [Iteration](https://r4ds.hadley.nz/iteration.html) aims to repeatedly perform the same action on different objects.
 
@@ -181,8 +175,8 @@ To get multiple chains, we need to apply the `simulate_chains()` function to eac
 Let's use `map()`:
 
 ```{r}
-simulated_chains_list <-
-  map(
+simulated_chains_map <-
+  map_df(
     # vector of numbers (chain IDs)
     .x = seq_len(number_chains),
     # function to iterate to each chain ID number
@@ -202,15 +196,11 @@ simulated_chains_list <-
         mutate(chain_id = sim)
     }
   )
-
-sim_chains_bind <- bind_rows(simulated_chains_list)
-
-sim_chains_bind
 ```
 
 ```{r}
 # view infectee number per simulation
-sim_chains_bind %>%
+simulated_chains_map %>%
   as_tibble() %>%
   count(chain_id, sort = TRUE)
 ```
@@ -218,7 +208,7 @@ sim_chains_bind %>%
 ```{r,echo=FALSE}
 #### get simulated chain with more infections --------------------------------
 
-chains_subgroup <- sim_chains_bind %>%
+chains_subgroup <- simulated_chains_map %>%
   as_tibble() %>%
   group_by(chain_id) %>%
   distinct(infector_id) %>%
@@ -226,7 +216,7 @@ chains_subgroup <- sim_chains_bind %>%
   filter(n < 5, n >= 3) %>%
   pull(chain_id)
 
-chain_to_observe <- sim_chains_bind %>%
+chain_to_observe <- simulated_chains_map %>%
   as_tibble() %>%
   count(chain_id, sort = TRUE) %>%
   filter(
@@ -240,15 +230,15 @@ chain_to_observe <- sim_chains_bind %>%
   pull(chain_id)
 ```
 
-get simulated chain `r chain_to_observe` with more infections
+Let's observe closely the simulated `chain_id` number `r chain_to_observe` with three generations.
 
 get epichain summary
 
 ```{r}
 #### get epichain summary ----------------------------------------------------
 
-simulated_chains_list %>%
-  pluck(chain_to_observe)
+simulated_chains_map %>%
+  filter(chain_id == chain_to_observe)
 ```
 
 the `NA` includes the infector of the index case, for that reason (known) cases
@@ -258,9 +248,9 @@ infectee-infector data frame
 ```{r}
 #### infector-infectee data frame --------------------------------------------
 
-simulated_chains_list %>%
-  pluck(chain_to_observe) %>%
-  as.data.frame()
+simulated_chains_map %>%
+  filter(chain_id == chain_to_observe) %>% 
+  as_tibble()
 ```
 
 
@@ -269,7 +259,7 @@ simulated_chains_list %>%
 ```{r}
 # daily aggregate of cases
 simulated_chains_day <-
-  sim_chains_bind %>%
+  simulated_chains_map %>%
   as_tibble() %>%
   mutate(chain_id = as_factor(chain_id)) %>%
   # Daily number of cases for each simulation
@@ -279,7 +269,9 @@ simulated_chains_day <-
   group_by(chain_id) %>%
   mutate(cases_cumsum = cumsum(cases)) %>%
   ungroup()
+```
 
+```{r}
 # Summarise the chain length and size
 sim_chains_max <-
   simulated_chains_day %>%
@@ -291,7 +283,9 @@ sim_chains_max <-
     cases_total = max(cases_cumsum)
   ) %>%
   ungroup()
+```
 
+```{r}
 # Visualize transmission chains by cumulative cases
 ggplot() +
   geom_line(
@@ -320,7 +314,7 @@ ggplot() +
   NULL
 ```
 
-```{r,eval=FALSE}
+```{r,eval=FALSE,echo=FALSE}
 # Visualize transmission chains by daily cases
 ggplot() +
   geom_line(
@@ -351,7 +345,7 @@ We invite you to read the vignette on [Projecting infectious disease incidence: 
 
 Evaluate for ebola with know data from previous outbreaks
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 epidist_db(
   disease = "ebola",
   epi_dist = "offspring",
@@ -376,7 +370,7 @@ Christian Althaus
 
 data from Fayre et al on ebola
 
-```{r}
+```{r,message=FALSE,warning=FALSE}
 # Number of individuals in the trees
 n <- 152
 # Number of secondary cases for all individuals
