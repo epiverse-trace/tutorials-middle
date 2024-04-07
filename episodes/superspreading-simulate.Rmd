@@ -202,7 +202,7 @@ simulated_chains_map <-
         # creates a column with the chain ID number
         mutate(chain_id = sim)
     }
-  ) %>% 
+  ) %>%
   list_rbind()
 ```
 
