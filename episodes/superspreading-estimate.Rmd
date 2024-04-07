@@ -492,13 +492,13 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) use a 20/80 rule to show how the core principle of heterogeneous transmission is supported.
 
-- When the 20% most infectious cases contribute to the ~80% of transmission, this is a highly heterogeneous offspring distribution ($k<0.03$), e.g., SARS.
+- When the 20% most infectious cases contribute to the ~90% of transmission, this is a highly heterogeneous offspring distribution ($k<0.3$), e.g., SARS.
 
-- When the 20% most infectious cases contribute to the ~50% of transmission, this is a less heterogeneous offspring distribution ($k \sim 1$), e.g. Pneumonic plague.
+- When the 20% most infectious cases contribute to the ~50% of transmission, this is a less heterogeneous offspring distribution ($k > 3$), e.g. Ebola.
 
 <!-- ![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png) -->
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE,echo=FALSE}
 library(epiparameter)
 library(tidyverse)
 
@@ -580,11 +580,11 @@ across_offspring %>%
   scale_y_continuous(breaks = scales::breaks_pretty(n = 5)) +
   colorspace::scale_color_continuous_diverging(trans = "log10") +
   labs(
-    x = "Proportion of infectious cases",
+    x = "Proportion of infectious cases (ranked)",
     y = "Expected proportion of transmission",
     color = "Dispersion\nparameter (k)"
   ) +
-  geom_hline(aes(yintercept = 0.8),lty = 3) +
+  # geom_hline(aes(yintercept = 0.8),lty = 3) +
   geom_vline(aes(xintercept = 0.2),lty = 2) +
   coord_fixed(ratio = 1)
 ```
