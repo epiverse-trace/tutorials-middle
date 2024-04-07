@@ -359,26 +359,51 @@ The negative binomial model has $variance = R_{0}(1+\frac{R_{0}}{k})$, so smalle
 
 $$\uparrow variance = R_{0}(1+\frac{R_{0}}{\downarrow k})$$
 
-The negative binomial model includes two models as special cases: 
-
-- the conventional Poisson model, when $k$ approaches infinity ($k \rightarrow \infty$) and the variance equals the mean (because $\frac{R_{0}}{\infty}=0$), 
-- the Geometric model, when $k$ equals 1 ($k = 1$).
+When $k$ approaches infinity ($k \rightarrow \infty$) and the variance equals the mean (because $\frac{R_{0}}{\infty}=0$), the negative binomial model approaches the conventional Poisson model.
 
 ::::::::::::::::::::
 
-:::::::::::::::::::::::: callout
 
-### Select the best model
-
-We can use the maximum likelihood estimates from `{fitdistrplus}` to compare different models and assess fit performance using estimators like the AIC and BIC. Read further in the vignette on [Estimate individual-level transmission](https://epiverse-trace.github.io/superspreading/articles/estimate_individual_level_transmission.html) and use the `{superspreading}` helper function `ic_tbl()` for this!
-
-:::::::::::::::::::::::::
 
 ::::::::::::::::::::::: challenge
 
 read ebola contact data and estimate R and dispersion?
 
+:::::::::::::: hint
+
+...
+
+::::::::::::::
+
+:::::::::::::: solution
+
+...
+
+::::::::::::::
+
+:::::::::::::: solution
+
+### Select the best model
+
+We can use the maximum likelihood estimates from `{fitdistrplus}` to compare different models and assess fit performance using estimators like the AIC and BIC. Read further in the vignette on [Estimate individual-level transmission](https://epiverse-trace.github.io/superspreading/articles/estimate_individual_level_transmission.html) and use the `{superspreading}` helper function `ic_tbl()` for this!
+
+::::::::::::::
+
 :::::::::::::::::::::::
+
+## Evidence for variation in individual reproductive number
+
+Comparing our findings to the 20/80 rule proposed for sexually transmitted and vector-borne diseases, the core principle of heterogeneous transmission is certainly supported.
+
+- focus on the cumulative probability distribution of the most infectious cases
+    + if there is a 0.2 proportion of (the most infectious) cases contributing to the 0.8 proportion of transmission, this is a highly heterogeneous distribution. (e.g. SARS)
+    + if there is a 0.6 proportion of (the most infectious) cases contributing to the 0.8 of transmission, this is a less heterogeneous distribution (compared to the above one, e.g. pneumonic plague)
+
+![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png)
+
+The comparison of directly transmitted infections reveals the differing degree of individual variation among diseases and outbreak settings. Like SARS, measles in highly vaccinated populations shows high variation, with heterogeneous vaccination coverage as an important environmental factor contributing to this pattern. Monkeypox and smallpox viruses show intermediate variation, consistent across multiple data sets, and pneumonic plague transmission is slightly less variable.
+
+![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all ν = R0), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in ν.](fig/SEE-individual-reproductive-number-fig-b.png)
 
 :::::::::::::::::::::::: callout
 
@@ -410,33 +435,7 @@ sars_params <- epiparameter::get_parameters(sars)
 sars_params
 ```
 
-
 ::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::: callout
-
-### Depending on the author
-
-The dispersion parameter $k$ can be expressed differently across the literature. 
-
-- In the Wikipedia page for the negative binomial, this parameter is defined in its reciprocal form (refer to the [variance equation](https://en.wikipedia.org/wiki/Negative_binomial_distribution)). 
-- In [the distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app, the dispersion parameter $k$ is named "Inverse-dispersion" but it is equal to parameter estimated in this episode. We invite you to explore this!
-
-::::::::::::::::::::::::::::::::
-
-## Evidence for variation in individual reproductive number
-
-Comparing our findings to the 20/80 rule proposed for sexually transmitted and vector-borne diseases, no general rule emerges but the core principle of heterogeneous transmission is certainly supported (Fig. 1c).
-
-- focus on the cumulative probability distribution of the most infectious cases
-    + if there is a 0.2 proportion of (the most infectious) cases contributing to the 0.8 proportion of transmission, this is a highly heterogeneous distribution. (e.g. SARS)
-    + if there is a 0.6 proportion of (the most infectious) cases contributing to the 0.8 of transmission, this is a less heterogeneous distribution (compared to the above one, e.g. pneumonic plague)
-
-![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png)
-
-The comparison of directly transmitted infections reveals the differing degree of individual variation among diseases and outbreak settings. Like SARS, measles in highly vaccinated populations shows high variation, with heterogeneous vaccination coverage as an important environmental factor contributing to this pattern. Monkeypox and smallpox viruses show intermediate variation, consistent across multiple data sets, and pneumonic plague transmission is slightly less variable.
-
-![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all ν = R0), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in ν.](fig/SEE-individual-reproductive-number-fig-b.png)
 
 ::::::::::::::::::::::::::::: challenge
 
@@ -483,6 +482,17 @@ proportion_transmission(
 
 :::::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::::: callout
+
+### Depending on the author
+
+The dispersion parameter $k$ can be expressed differently across the literature. 
+
+- In the Wikipedia page for the negative binomial, this parameter is defined in its reciprocal form (refer to the [variance equation](https://en.wikipedia.org/wiki/Negative_binomial_distribution)). 
+- In [the distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app, the dispersion parameter $k$ is named "Inverse-dispersion" but it is equal to parameter estimated in this episode. We invite you to explore this!
+
+::::::::::::::::::::::::::::::::
+
 ## Backward and forward contact tracing
 
 Contact tracing can be deployed in multiple strategies. Forward tracing targets downstream individuals who may be infected by index individual. Backward tracing targets the upstream primary case who infected the index case (or a setting or event at which the index case was infected) by retracing history of contact to the likely point of exposure up to the upper bound of the incubation period.
@@ -524,32 +534,6 @@ We can also use this number to prevent gathering of certain sized to reduce the 
 reuse ebola parameters? interpret
 
 :::::::::::::::::::::::
-
-## Superspreading in decision making
-
-Transmission heterogeneity affects epidemic establishment and the ease of control ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
-
-+ Greater heterogeneity reduces the chance of an outbreak emerging from single case. Individuals with more extreme amount of secondary cases are rare.
-
-+ However, if the outbreak gets established, this heterogeneity can make an outbreak hard to control using *mass interventions* (which assumes transmission homogeneity), as a single uncontrolled case can generate a large number of secondary cases.
-
-+ Conversely, heterogeneity in transmission may provide opportunities for *targeted interventions* if the individuals who contribute more to transmission (due to biological, environmental or behavioral factors) share socio-demographic or geographical characteristics that can be defined.
-
-We can have an early understanding of a disease epidemic potential from the mean reproduction number $R_{0}$ and dispersion $k$ of an offspring distribution to answer questions like:
-
-- What is the probability of an pathogen to cause large outbreak?
-- What is the probability of an outbreak to get extinct?
-- What is the probability to contain the ongoing outbreak?
-
-::::::::::::::::::::::::::: testimonial
-
-### Epidemic Risk assessment accounting for superspreading
-
-These estimates vary non-linearly with respect to the mean reproduction number $R_{0}$ and dispersion $k$ of a given disease.
-
-We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html)!
-
-:::::::::::::::::::::::::::
 
 ## Challenges
 
