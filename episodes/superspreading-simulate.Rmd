@@ -116,11 +116,11 @@ serial_inverval <- epidist_db(
   single_epidist = TRUE
 )
 
-plot(serial_inverval,day_range = 0:25)
+plot(serial_inverval, day_range = 0:25)
 
-serial_inverval$summary_stats %>% 
-  as_tibble() %>% 
-  select(mean,sd) %>% 
+serial_inverval$summary_stats %>%
+  as_tibble() %>%
+  select(mean, sd) %>%
   distinct(.keep_all = TRUE)
 ```
 
@@ -256,7 +256,7 @@ infectee-infector data frame
 #### infector-infectee data frame --------------------------------------------
 
 simulated_chains_map %>%
-  filter(chain_id == chain_to_observe) %>% 
+  filter(chain_id == chain_to_observe) %>%
   as_tibble()
 ```
 
@@ -323,19 +323,19 @@ ggplot() +
 
 ```{r}
 # chains that reached the 100-case threshold
-sim_chains_max %>% 
-  arrange(desc(day_max)) %>% 
-  filter(cases_total>100)
+sim_chains_max %>%
+  arrange(desc(day_max)) %>%
+  filter(cases_total > 100)
 ```
 
 ```{r}
 # proportion that reached the 100-case threshold
-sim_chains_max %>% 
-  arrange(desc(day_max)) %>% 
-  filter(cases_total>100) %>% 
-  count(name = "chains_theshold") %>% 
-  mutate(chains_number = number_chains) %>% 
-  mutate(chains_percentage = chains_theshold / chains_number*100)
+sim_chains_max %>%
+  arrange(desc(day_max)) %>%
+  filter(cases_total > 100) %>%
+  count(name = "chains_theshold") %>%
+  mutate(chains_number = number_chains) %>%
+  mutate(chains_percentage = chains_theshold / chains_number * 100)
 ```
 
 
