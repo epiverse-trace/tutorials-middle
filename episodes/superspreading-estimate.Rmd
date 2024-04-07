@@ -492,15 +492,103 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) use a 20/80 rule to show how the core principle of heterogeneous transmission is supported.
 
-- When the 20% most infectious cases contribute to the ~80% of transmission, this is a highly heterogeneous offspring distribution ($k<0.02$), e.g., SARS and Measles with a partially vaccinated population.
+- When the 20% most infectious cases contribute to the ~80% of transmission, this is a highly heterogeneous offspring distribution ($k<0.03$), e.g., SARS.
 
-- When the 20% most infectious cases contribute to the ~50% of transmission, this is a less heterogeneous offspring distribution ($k>0.1$), e.g. Pneumonic plague.
+- When the 20% most infectious cases contribute to the ~50% of transmission, this is a less heterogeneous offspring distribution ($k \sim 1$), e.g. Pneumonic plague.
 
-![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png)
+<!-- ![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png) -->
 
-The comparison of directly transmitted infections reveals the differing degree of individual variation among diseases and outbreak settings. Like SARS, Measles in highly vaccinated populations shows high variation with heterogeneous vaccination coverage as an important environmental factor contributing to this pattern. Monkeypox and Smallpox viruses show intermediate variation, consistent across multiple data sets, and Pneumonic plague transmission is slightly less variable.
+```{r,message=FALSE,warning=FALSE}
+library(epiparameter)
+library(tidyverse)
 
-![Expected proportion of all transmission due to a given proportion of infectious cases, where cases are ranked by infectiousness. For a homogeneous population (all individual reproductive number equal to $R_{0}$), this relation is linear. For five directly transmitted infections (based on specific k values), the line is concave owing to variation in the individual reproductive number.](fig/SEE-individual-reproductive-number-fig-b.png)
+epidist_string <- epidist_db(
+  epi_dist = "offspring distribution"
+) %>%
+  list_distributions() %>%
+  dplyr::select(disease) %>%
+  distinct()
+
+across_offspring <- epidist_string %>% 
+  mutate(
+    epidist_out = 
+      map(
+        .x = disease,
+        .f = epiparameter::epidist_db,
+        epi_dist = "offspring distribution",
+        single_epidist = TRUE)
+  ) %>% 
+  mutate(
+    epidist_params = 
+      map(
+        .x = epidist_out,
+        .f = epiparameter::get_parameters
+      )
+  ) %>% 
+  unnest_wider(col = epidist_params) %>% 
+  expand_grid(percent_transmission = seq(0.01,1,0.01)) %>% 
+  # mutate(percent_transmission = 0.8) %>% 
+  mutate(
+    transmission_output = 
+      pmap(
+        .l = select(., R = mean, k = dispersion, percent_transmission),
+        .f = superspreading::proportion_transmission,
+        format_prop = FALSE
+      )
+  ) %>% 
+  unnest_wider(col = transmission_output) %>%
+  rowwise() %>% 
+  mutate(percent_cases = sum(c_across(cols = starts_with("prop_")),na.rm = T)) %>% 
+  select(-starts_with("prop_"))
+
+across_offspring_tip <- across_offspring %>% 
+  group_by(disease) %>% 
+  filter(percent_transmission < 0.98, percent_transmission > 0.85) %>% 
+  slice_max(percent_transmission) %>% 
+  # filter(percent_transmission == max(percent_transmission)) %>% 
+  ungroup() %>% 
+  # filter(!str_detect(disease,"SARS|Mpox")) %>% 
+  mutate(disease = case_when(
+    str_detect(disease,"Hantavirus") ~ "Hantavirus",
+    str_detect(disease,"Ebola") ~ "Ebola",
+    TRUE ~ disease
+  ))
+
+across_offspring %>% 
+  # as_tibble()
+  ggplot() +
+  geom_line(
+    aes(
+      x = percent_cases,
+      y = percent_transmission,
+      color = dispersion,
+      group = disease
+    )
+  ) +
+  geom_text(
+    data = across_offspring_tip,
+    aes(
+      x = percent_cases,
+      y = percent_transmission,
+      label = disease
+    ),
+    hjust = 0.0,
+    vjust = 1.0,
+    angle = 25,
+    size = 3
+  ) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 5)) +
+  colorspace::scale_color_continuous_diverging(trans = "log10") +
+  labs(
+    x = "Proportion of infectious cases",
+    y = "Expected proportion of transmission",
+    color = "Dispersion\nparameter (k)"
+  ) +
+  geom_hline(aes(yintercept = 0.8),lty = 3) +
+  geom_vline(aes(xintercept = 0.2),lty = 2) +
+  coord_fixed(ratio = 1)
+```
+
 
 ::::::::::::::::::::::::::::::::::
 
@@ -546,9 +634,9 @@ We can also use this number to prevent gathering of certain sized to reduce the 
 
 Use the Ebola estimated parameters for `ebola_sim_clean` object from `{outbreaks}` package.
 
-Evaluate if the contact tracing efforts would be benefit by a backward strategy to increase their probability of contain and quarantine an increased proportion of contacts.
-
 Calculate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size 5, 10, 15 or larger.
+
+Would implementing a backward strategy increase the probability of containing and quarantining more onward cases?
 
 :::::::::::::::: hint
 
@@ -603,8 +691,6 @@ To get the quantile value for the 99th-percentile we need to use the [density fu
 ```{r}
 # get mean
 ebola_mu_mid <- ebola_offspring$estimate["mu"]
-# get upper 95% CI
-ebola_mu_upper <- ebola_mu_mid + offspring_fit$sd[["mu"]] * qnorm(0.975)
 
 # get 99th-percentile from poisson distribution 
 # with mean equal to mu
@@ -612,18 +698,11 @@ qpois(
   p = 0.99,
   lambda = ebola_mu_mid
 )
-
-# get 99th-percentile from poisson distribution 
-# with mean = mu upper 95% CI
-qpois(
-  p = 0.99,
-  lambda = ebola_mu_upper
-)
 ```
 
-These values are close to the ones reported by [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153). See figure below:
+Compare this values with the ones reported by [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153). See figure below:
 
-![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of the number of secondary cases following a Poisson distribution with lambda equal to $R$ ($Z∼Poisson(R)$), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
+![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of the number of secondary cases following a Poisson distribution with lambda equal to the reproduction number ($Z∼Poisson(R)$), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
 
 :::::::::::::::::
 
