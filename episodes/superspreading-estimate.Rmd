@@ -261,7 +261,7 @@ In epidemiology, [negative binomial](https://en.wikipedia.org/wiki/Negative_bino
 
 Calculate the distribution of secondary cases for Ebola using the `ebola_sim_clean` object from `{outbreaks}` package.
 
-Does the offspring distribution is skewed or overdispersed?
+Does the offspring distribution of Ebola is skewed or overdispersed?
 
 :::::::::::::::::: hint
 
@@ -433,7 +433,7 @@ Use the distribution of secondary cases from the `ebola_sim_clean` object from `
 
 Fit a negative binomial distribution to estimate the mean and dispersion parameter of the offspring distribution.
 
-Does the estimated dispersion parameter provide evidence of transmission heterogeneity?
+Does the estimated dispersion parameter of Ebola provide evidence of transmission heterogeneity?
 
 :::::::::::::: hint
 
@@ -492,11 +492,9 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) use a 20/80 rule to show how the core principle of heterogeneous transmission is supported.
 
-- When the 20% most infectious cases contribute to the ~90% of transmission, this is a highly heterogeneous offspring distribution ($k<0.3$), e.g., SARS.
+- When the 20% most infectious cases contribute to the 80% of transmission (or more), this is a highly heterogeneous offspring distribution ($k<0.3$), e.g., SARS.
 
 - When the 20% most infectious cases contribute to the ~50% of transmission, this is a less heterogeneous offspring distribution ($k > 3$), e.g. Ebola.
-
-<!-- ![Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). Superscript ‘v’ indicates a partially vaccinated population.](fig/SEE-individual-reproductive-number-fig-c.png) -->
 
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 library(epiparameter)
@@ -605,7 +603,7 @@ When there is evidence of individual-level variation (i.e. overdispersion), ofte
 Empirical evidence focused on evaluating the efficiency of backward tracing lead to 42% more cases identified than forward tracing supporting its implementation when rigorous suppression of transmission is justified ([Raymenants et al., 2022](https://www.nature.com/articles/s41467-022-32531-6))
 
 
-## Proportion of events in a given cluster size
+## Probability of cases in a given cluster
 
 Using `{superspreading}`, we can calculate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
 
@@ -636,7 +634,7 @@ Use the Ebola estimated parameters for `ebola_sim_clean` object from `{outbreaks
 
 Calculate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size 5, 10, 15 or larger.
 
-Would implementing a backward strategy increase the probability of containing and quarantining more onward cases?
+Would implementing a backward strategy at this stage of the Ebola outbreak increase the probability of containing and quarantining more onward cases?
 
 :::::::::::::::: hint
 
