@@ -483,26 +483,6 @@ proportion_transmission(
 
 :::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::: callout
-
-### Define Superspreading events
-
-Lloyds propose a general protocol for defining a superspreading event:
-
-- define an SSE as any infected individual who infects more than Z(n) others, where Z(n) is the nth percentile of the Poisson(R) distribution. 
-- A 99th-percentile SSE is then any case causing more infections than would occur in 99% of infectious histories in a homogeneous population
-
-```{r}
-qpois(
-  p = 0.99,
-  lambda = offspring_fit$estimate["mu"]
-)
-```
-
-![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of Z∼Poisson(R), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
-
-::::::::::::::::::::::::
-
 ## Backward and forward contact tracing
 
 Contact tracing can be deployed in multiple strategies. Forward tracing targets downstream individuals who may be infected by index individual. Backward tracing targets the upstream primary case who infected the index case (or a setting or event at which the index case was infected) by retracing history of contact to the likely point of exposure up to the upper bound of the incubation period.
@@ -578,6 +558,40 @@ We invite you to read the `{superspreading}` vignette on [Epidemic risk](https:/
 use mers to estimate ...
 
 :::::::::::::::::::::::::::
+
+::::::::::::::::::::::::: challenge
+
+### Define Superspreading events
+
+[Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) propose a general protocol for defining a superspreading event (SSE). If the number of secondary infections caused by each case, $Z$, follows a negative binomial distribution ($R_{o}, k$):
+
+- We define an SSE as any infected individual who infects more than Z(n) others, where Z(n) is the nth percentile of the Poisson(R) distribution. 
+- A 99th-percentile SSE is then any case causing more infections than would occur in 99% of infectious histories in a homogeneous population
+
+Using the corresponding distribution function in R, estimate the SSE threshold to define a SSE.
+
+::::::::::::::::: hint
+
+You can review the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), and then read the `?dpois` reference manual.
+
+In a Poisson distribution, the lambda or rate parameter are equal to the estimated mean from a negative binomial distribution. You can explore this in [The distribution zoo](https://ben18785.shinyapps.io/distribution-zoo/) shiny app.
+
+:::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r}
+qpois(
+  p = 0.99,
+  lambda = offspring_fit$estimate["mu"]
+)
+```
+
+![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of Z∼Poisson(R), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
+
+:::::::::::::::::
+
+::::::::::::::::::::::::
 
 :::::::::::::::::::: challenge
 
