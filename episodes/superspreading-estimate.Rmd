@@ -279,10 +279,6 @@ ebola_contacts <-
     contacts = ebola_sim_clean$contacts
   )
 
-# visualise contact tree
-# (this network can overload your session!)
-#epicontacts::vis_epicontacts(ebola_contacts)
-
 # count secondary cases
 
 ebola_infector_secondary <- ebola_contacts %>%
@@ -300,10 +296,6 @@ ebola_secondary <- ebola_contacts %>%
   replace_na(
     replace = list(secondary_cases = 0)
   )
-
-# arrange in descendant order of secondary cases
-# ebola_secondary %>% 
-#   arrange(desc(secondary_cases))
 
 ## plot the distribution
 ebola_secondary %>%
@@ -374,7 +366,7 @@ fit_density <-
       mu = offspring_fit$estimate[["mu"]],
       size = mid
     )
-  ) %>% 
+  ) %>%
   mutate(label = "Fitted\nnegative\nbinomial\ndistribution")
 
 # plot offspring distribution with density fit
@@ -507,53 +499,57 @@ epidist_string <- epidist_db(
   dplyr::select(disease) %>%
   distinct()
 
-across_offspring <- epidist_string %>% 
+across_offspring <- epidist_string %>%
   mutate(
-    epidist_out = 
+    epidist_out =
       map(
         .x = disease,
         .f = epiparameter::epidist_db,
         epi_dist = "offspring distribution",
-        single_epidist = TRUE)
-  ) %>% 
+        single_epidist = TRUE
+      )
+  ) %>%
   mutate(
-    epidist_params = 
+    epidist_params =
       map(
         .x = epidist_out,
         .f = epiparameter::get_parameters
       )
-  ) %>% 
-  unnest_wider(col = epidist_params) %>% 
-  expand_grid(percent_transmission = seq(0.01,1,0.01)) %>% 
-  # mutate(percent_transmission = 0.8) %>% 
+  ) %>%
+  unnest_wider(col = epidist_params) %>%
+  expand_grid(percent_transmission = seq(0.01, 1, 0.01)) %>%
+  # mutate(percent_transmission = 0.8) %>%
   mutate(
-    transmission_output = 
+    transmission_output =
       pmap(
         .l = select(., R = mean, k = dispersion, percent_transmission),
         .f = superspreading::proportion_transmission,
         format_prop = FALSE
       )
-  ) %>% 
+  ) %>%
   unnest_wider(col = transmission_output) %>%
-  rowwise() %>% 
-  mutate(percent_cases = sum(c_across(cols = starts_with("prop_")),na.rm = T)) %>% 
+  rowwise() %>%
+  mutate(
+    percent_cases =
+      sum(
+        c_across(cols = starts_with("prop_")),
+        na.rm = TRUE
+      )
+  ) %>%
   select(-starts_with("prop_"))
 
-across_offspring_tip <- across_offspring %>% 
-  group_by(disease) %>% 
-  filter(percent_transmission < 0.98, percent_transmission > 0.85) %>% 
-  slice_max(percent_transmission) %>% 
-  # filter(percent_transmission == max(percent_transmission)) %>% 
-  ungroup() %>% 
-  # filter(!str_detect(disease,"SARS|Mpox")) %>% 
+across_offspring_tip <- across_offspring %>%
+  group_by(disease) %>%
+  filter(percent_transmission < 0.98, percent_transmission > 0.85) %>%
+  slice_max(percent_transmission) %>%
+  ungroup() %>%
   mutate(disease = case_when(
-    str_detect(disease,"Hantavirus") ~ "Hantavirus",
-    str_detect(disease,"Ebola") ~ "Ebola",
+    str_detect(disease, stringr::fixed("Hantavirus")) ~ "Hantavirus",
+    str_detect(disease, stringr::fixed("Ebola")) ~ "Ebola",
     TRUE ~ disease
   ))
 
-across_offspring %>% 
-  # as_tibble()
+across_offspring %>%
   ggplot() +
   geom_line(
     aes(
@@ -583,7 +579,7 @@ across_offspring %>%
     color = "Dispersion\nparameter (k)"
   ) +
   # geom_hline(aes(yintercept = 0.8),lty = 3) +
-  geom_vline(aes(xintercept = 0.2),lty = 2) +
+  geom_vline(aes(xintercept = 0.2), lty = 2) +
   coord_fixed(ratio = 1)
 ```
 
@@ -690,7 +686,7 @@ To get the quantile value for the 99th-percentile we need to use the [density fu
 # get mean
 ebola_mu_mid <- ebola_offspring$estimate["mu"]
 
-# get 99th-percentile from poisson distribution 
+# get 99th-percentile from poisson distribution
 # with mean equal to mu
 qpois(
   p = 0.99,
