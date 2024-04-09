@@ -54,7 +54,7 @@ Transmission heterogeneity affects epidemic establishment and the ease of contro
 
 + Conversely, heterogeneity in transmission may provide opportunities for *targeted interventions* if the individuals who contribute more to transmission (due to biological, environmental or behavioral factors) share socio-demographic or geographical characteristics that can be defined.
 
-We can have an early understanding of a disease epidemic potential from the mean reproduction number $R_{0}$ and dispersion $k$ of an offspring distribution to answer questions like:
+We can have an early understanding of a disease epidemic potential from the mean reproduction number $R$ and dispersion $k$ of an offspring distribution to answer questions like:
 
 - What is the probability of an pathogen to cause large outbreak?
 - What is the probability of an outbreak to get extinct?
@@ -64,7 +64,7 @@ We can have an early understanding of a disease epidemic potential from the mean
 
 ### Epidemic Risk assessment accounting for superspreading
 
-These estimates vary non-linearly with respect to the mean reproduction number $R_{0}$ and dispersion $k$ of a given disease.
+These estimates vary non-linearly with respect to the mean reproduction number $R$ and dispersion $k$ of a given disease.
 
 We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html)!
 
@@ -91,17 +91,11 @@ with estimated parameter we then can reconstruct tranmission chains to forecast 
 
 ## Get the offspring distribution
 
-from MERS estimates in estimate episode
+The MERS offspring distribution will follow a negative binomial distribution with mean (reproduction number $R$) and dispersion $k$ values estimated from the linelist and contact data of the previous episode.
 
 ```{r}
 mers_offspring <- c(mean = 0.60, dispersion = 0.02)
 ```
-
-instead of the offspring distribution
-we can also define a poisson process
-using the lambda distribution parameter
-lambda = rate = mean
-
 
 ## Get generation time
 
@@ -154,6 +148,17 @@ each infectee has a sim_id
 the infector sim_id of each infectee is in infector_id
 infectee got infected in generation and time
 as part of the `chain_id` chain
+
+:::::::::::::::::::::::::: callout
+
+`{epichains}` accepts either 
+
+Instead of the offspring distribution
+we can also define a poisson process
+using the lambda distribution parameter
+lambda = rate = mean
+
+::::::::::::::::::::::::::
 
 ## Simulate multiple chains
 
@@ -353,7 +358,7 @@ chains_null <- sim_chains_max %>%
   nrow()
 ```
 
-Although most introductions do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median duration of `r chains_extinct$extinct_duration_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the basic reproduction number $R_0$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
+Although most introductions do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median duration of `r chains_extinct$extinct_duration_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
 
 ::::::::::::::::::::::::::::::::::: spoiler
 
