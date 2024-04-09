@@ -381,7 +381,7 @@ plot(mers_cumcases)
 
 :::::::::::::::::::::::::::::::::::
 
-Plot the observed cumulative number of cases over the previously simulated chains.
+When plotting the observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea in 2015, alongside the previously simulated chains, we identify that the observed cases followed a trajectory that resembled one of the simulated explosive outbreaks.
 
 ```{r,echo=FALSE}
 # Observed cases vs Simulated transmission chains
