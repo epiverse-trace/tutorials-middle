@@ -327,54 +327,7 @@ ggplot() +
   )
 ```
 
-```{r,echo=FALSE,warning=FALSE,message=FALSE}
-library(ggExtra)
-
-p <- sim_chains_max %>%
-  filter(day_max>0) %>% 
-  ggplot() +
-  geom_point(
-    aes(
-      x = day_max,
-      y = cases_total
-    ),
-    alpha = 0.25
-  ) +
-  scale_y_continuous(breaks = scales::breaks_pretty(n = 5)) +
-  scale_x_continuous(breaks = scales::breaks_pretty(n = 5)) +
-  labs(
-    x = "Length of chain",
-    y = "Size of chain"
-  )
-ggExtra::ggMarginal(p)
-```
-
-
-```{r}
-# chains that reached the 100-case threshold
-sim_chains_max %>%
-  arrange(desc(day_max)) %>%
-  filter(cases_total > 100)
-```
-
-```{r,echo=FALSE,message=FALSE,warning=FALSE}
-# proportion that reached the 100-case threshold
-threshhold_summary <- sim_chains_max %>%
-  arrange(desc(day_max)) %>%
-  filter(cases_total > 100) %>%
-  count(name = "chains_theshold") %>%
-  mutate(chains_number = number_chains) %>%
-  mutate(chains_percentage = chains_theshold / chains_number * 100)
-
-chains_null <- sim_chains_max %>%
-  arrange(desc(cases_total)) %>%
-  filter(day_max < 1) %>% 
-  nrow()
-```
-
-Although most introductions do not generate secondary cases (`r chains_null`) or most outbreaks rapidly become extinct, only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because $R_0$ is less than 1, and shows the potential for explosive outbreaks of MERS disease.
-
-::::::::::::::::::::::::::::::::: spoiler
+::::::::::::::::::::::::::::::::::: spoiler
 
 ### Observed cases vs simulated chains
 
@@ -401,6 +354,8 @@ Use `plot()` to make an incidence plot:
 plot(mers_cumcases)
 ```
 
+:::::::::::::::::::::::::::::::::::
+
 Plot the observed cumulative number of cases over the previously simulated chains.
 
 ```{r,echo=FALSE}
@@ -422,16 +377,6 @@ ggplot() +
       color = type
     )
   ) +
-  # geom_point(
-  #   data = sim_chains_max,
-  #   mapping = aes(
-  #     x = day_max,
-  #     y = cases_total,
-  #     group = chain_id
-  #   ),
-  #   color = "grey",
-  #   show.legend = FALSE
-  # ) +
   geom_hline(aes(yintercept = 100), lty = 2) +
   geom_line(
     data = mers_cumcases_type,
@@ -447,6 +392,71 @@ ggplot() +
     y = "Cumulative cases",
     color = "Type"
   )
+```
+
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
+# proportion that reached the 100-case threshold
+threshhold_summary <- sim_chains_max %>%
+  arrange(desc(day_max)) %>%
+  filter(cases_total > 100) %>%
+  count(name = "chains_theshold") %>%
+  mutate(chains_number = number_chains) %>%
+  mutate(chains_percentage = chains_theshold / chains_number * 100)
+
+chains_null <- sim_chains_max %>%
+  arrange(desc(cases_total)) %>%
+  filter(day_max < 1) %>% 
+  nrow()
+```
+
+Although most introductions do not generate secondary cases (`r chains_null`) or most outbreaks rapidly become extinct, only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because $R_0$ is less than 1, and shows the potential for explosive outbreaks of MERS disease.
+
+
+
+::::::::::::::::::::::::::::::::: spoiler
+
+### Outbreaks size and length distribution
+
+We can use `{dplyr}` to get the chains that reached the 100-case threshold:
+
+```{r}
+# chains that reached the 100-case threshold
+sim_chains_max %>%
+  arrange(desc(day_max)) %>%
+  filter(cases_total > 100)
+```
+
+We can use `{skimr}` or `{ggExtra}` to get the distribution of the size and length of simulated outbreaks:
+
+```{r,message=FALSE,warning=FALSE}
+library(skimr)
+
+sim_chains_max %>%
+  filter(day_max>0) %>% 
+  skim()
+```
+
+```{r,warning=FALSE,message=FALSE}
+library(ggExtra)
+
+chains_extinct <- sim_chains_max %>%
+  filter(day_max>0) %>% 
+  ggplot() +
+  geom_point(
+    aes(
+      x = day_max,
+      y = cases_total
+    ),
+    alpha = 0.25
+  ) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 5)) +
+  scale_x_continuous(breaks = scales::breaks_pretty(n = 5)) +
+  labs(
+    x = "Length of chain",
+    y = "Size of chain"
+  )
+
+ggExtra::ggMarginal(chains_extinct)
 ```
 
 :::::::::::::::::::::::::::::::::
