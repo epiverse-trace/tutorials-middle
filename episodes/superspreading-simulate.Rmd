@@ -417,6 +417,8 @@ Although most introductions do not generate secondary cases (`r chains_null`) or
 
 ### Outbreaks size and length distribution
 
+We can consider that, among simulated chains, the ones that generate secondary cases (`length > 0`) are simulated outbreaks.
+
 We can use `{dplyr}` to get the chains that reached the 100-case threshold:
 
 ```{r}
