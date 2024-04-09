@@ -325,6 +325,23 @@ ggplot() +
   )
 ```
 
+```{r,echo=FALSE}
+sim_chains_max %>% 
+  ggplot() +
+  geom_point(
+    aes(
+      x = day_max,
+      y = cases_total
+    ),
+    alpha = 0.25
+  ) +
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  labs(
+    x = "Length of chain",
+    y = "Size of chain"
+  )
+```
+
 ```{r}
 # chains that reached the 100-case threshold
 sim_chains_max %>%
@@ -332,9 +349,9 @@ sim_chains_max %>%
   filter(cases_total > 100)
 ```
 
-```{r}
+```{r,echo=FALSE,message=FALSE,warning=FALSE}
 # proportion that reached the 100-case threshold
-sim_chains_max %>%
+threshhold_summary <- sim_chains_max %>%
   arrange(desc(day_max)) %>%
   filter(cases_total > 100) %>%
   count(name = "chains_theshold") %>%
@@ -342,21 +359,7 @@ sim_chains_max %>%
   mutate(chains_percentage = chains_theshold / chains_number * 100)
 ```
 
-
-```{r,eval=FALSE,echo=FALSE}
-# Visualize transmission chains by daily cases
-ggplot() +
-  geom_line(
-    data = simulated_chains_day,
-    mapping = aes(
-      x = day,
-      y = cases,
-      group = chain_id,
-      color = chain_id
-    ),
-    show.legend = FALSE
-  )
-```
+Although most outbreaks rapidly become extinct, only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because $R_0$ is less than 1, and shows the potential for explosive outbreaks of MERS disease.
 
 ::::::::::::::::::::::::::::::::: spoiler
 
@@ -424,10 +427,10 @@ ggplot() +
       y = count_cumsum,
       color = type
     ),
-    size = 1.5
+    linewidth = 1.5
   ) +
   labs(
-    x = "Day",
+    x = "Day since first report",
     y = "Cumulative cases",
     color = "Type"
   )
@@ -452,20 +455,27 @@ We invite you to read the vignette on [Projecting infectious disease incidence: 
 
 Evaluate for ebola with know data from previous outbreaks
 
+:::::::::::::: hint
+
+::::::::::::::
+
+:::::::::::::: solution
+
 ```{r,message=FALSE,warning=FALSE}
-epidist_db(
+ebola_offspring <- epidist_db(
   disease = "ebola",
   epi_dist = "offspring",
   single_epidist = TRUE
 )
 
-epidist_db(
+ebola_serial <- epidist_db(
   disease = "ebola",
   epi_dist = "serial interval",
   single_epidist = TRUE
 )
 ```
 
+::::::::::::::
 
 :::::::::::::::::::::::::
 
@@ -526,8 +536,8 @@ library(superspreading)
 ```{r}
 # estimate probability to contain
 probability_contain(
-  R = offspring_fit$estimate["mu"],
-  k = offspring_fit$estimate["size"],
+  R = mers_offspring["mean"],
+  k = mers_offspring["dispersion"],
   num_init_infect = 1,
   case_threshold = 100
 )
@@ -535,8 +545,8 @@ probability_contain(
 # Estimate probability of large outbreak
 # with 5 independent imported cases
 probability_epidemic(
-  R = offspring_fit$estimate["mu"],
-  k = offspring_fit$estimate["size"],
+  R = mers_offspring["mean"],
+  k = mers_offspring["dispersion"],
   num_init_infect = 5
 )
 ```
