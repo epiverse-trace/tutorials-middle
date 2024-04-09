@@ -335,15 +335,14 @@ Let's overlap the cumulative number of observed cases using the linelist object 
 
 ```{r,warning=FALSE,message=FALSE}
 library(outbreaks)
-library(incidence2)
 
-mers_cumcases <- mers_korea_2015$linelist %>% 
+mers_cumcases <- mers_korea_2015$linelist %>%
   # incidence2 workflow
-  incidence2::incidence(date_index = "dt_onset") %>% 
-  incidence2::complete_dates() %>% 
+  incidence2::incidence(date_index = "dt_onset") %>%
+  incidence2::complete_dates() %>%
   # wrangling using {dplyr}
-  mutate(count_cumsum = cumsum(count)) %>% 
-  rownames_to_column(var = "day") %>% 
+  mutate(count_cumsum = cumsum(count)) %>%
+  rownames_to_column(var = "day") %>%
   mutate(day = as.numeric(day))
 ```
 
@@ -361,10 +360,10 @@ Plot the observed cumulative number of cases over the previously simulated chain
 ```{r,echo=FALSE}
 # Observed cases vs Simulated transmission chains
 mers_cumcases_type <-
-  mers_cumcases %>% 
-      mutate(type = "Observed")
+  mers_cumcases %>%
+  mutate(type = "Observed")
 simulated_chains_day_type <-
-  simulated_chains_day %>% 
+  simulated_chains_day %>%
   mutate(type = "Simulated")
 
 ggplot() +
@@ -381,7 +380,7 @@ ggplot() +
   geom_line(
     data = mers_cumcases_type,
     mapping = aes(
-      x = day, 
+      x = day,
       y = count_cumsum,
       color = type
     ),
@@ -405,7 +404,7 @@ threshhold_summary <- sim_chains_max %>%
 
 chains_extinct <- sim_chains_max %>%
   arrange(desc(day_max)) %>%
-  filter(day_max > 0) %>% 
+  filter(day_max > 0) %>%
   summarise(
     extinct_length_median = median(day_max),
     extinct_size_median = median(cases_total)
@@ -413,11 +412,11 @@ chains_extinct <- sim_chains_max %>%
 
 chains_null <- sim_chains_max %>%
   arrange(desc(cases_total)) %>%
-  filter(day_max < 1) %>% 
+  filter(day_max < 1) %>%
   nrow()
 ```
 
-Although most introductions do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median length of `r chains_extinct$extinct_length_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because $R_0$ is less than 1, and shows the potential for explosive outbreaks of MERS disease.
+Although most introductions do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median length of `r chains_extinct$extinct_length_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the basic reproduction number $R_0$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), and shows the potential for explosive outbreaks of MERS disease given a offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`.
 
 :::::::::::::::::::::: testimonial
 
