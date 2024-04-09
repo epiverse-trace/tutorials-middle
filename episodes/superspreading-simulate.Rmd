@@ -132,7 +132,9 @@ function(x) generate(x = serial_inverval, times = x)
 
 ## Simulate a single chain
 
-```{r,message=FALSE,warning=FALSE}
+`simulate_chains()` generates a `<epichains>` object
+
+```{r,message=FALSE,warning=FALSE,eval=FALSE}
 simulate_chains(
   # simulation controls
   index_cases = 5,
