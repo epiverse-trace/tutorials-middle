@@ -223,7 +223,7 @@ ggplot() +
     colour = "red"
   ) +
   labs(
-    x = "Individual reproductive number",
+    x = "Individual reproduction number",
     y = "Density"
   )
 ```
@@ -235,7 +235,7 @@ From the histogram and density plot, we can identify that the offspring distribu
 ### Terminology recap
 
 - From linelist and contact data, we calculate the **number of secondary cases** caused by the observed infected individuals.
-- The **individual reproductive number** is a random variable representing the _expected_ number of secondary cases caused by a infected individual.
+- The **individual reproduction number** is a random variable representing the _expected_ number of secondary cases caused by a infected individual.
 - From the stochastic effects in transmission, the number of secondary _infections_ caused by each case is described by an **offspring distribution**.
 - An _empirical_ offspring distribution can be modeled by the **negative-binomial** distribution with mean $R_{0}$ and dispersion parameter $k$.
 
@@ -696,7 +696,7 @@ qpois(
 
 Compare this values with the ones reported by [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153). See figure below:
 
-![Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of the number of secondary cases following a Poisson distribution with lambda equal to the reproduction number ($Z∼Poisson(R)$), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
+![Reported superspreading events (SSEs; diamonds) relative to estimated reproduction number R (squares) for twelve directly transmitted infections. Lines show 5–95 percentile range of the number of secondary cases following a Poisson distribution with lambda equal to the reproduction number ($Z∼Poisson(R)$), and crosses show the 99th-percentile proposed as threshold for SSEs. Stars represent SSEs caused by more than one source case. ‘Other’ diseases are: 1, Streptococcus group A; 2, Lassa fever; 3, Mycoplasma pneumonia; 4, pneumonic plague; 5, tuberculosis. R is not shown for ‘other’ diseases, and is off-scale for monkeypox.](fig/SEE-individual-reproductive-number-fig-d.png)
 
 :::::::::::::::::
 
