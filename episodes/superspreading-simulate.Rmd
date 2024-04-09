@@ -119,12 +119,16 @@ serial_inverval <- epidist_db(
 )
 
 plot(serial_inverval, day_range = 0:25)
+```
 
-serial_inverval$summary_stats %>%
+```{r,echo=FALSE}
+serial_summary <- serial_inverval$summary_stats %>%
   as_tibble() %>%
   select(mean, sd) %>%
   distinct(.keep_all = TRUE)
 ```
+
+mean `r serial_summary$mean` and standard deviation `r serial_summary$sd`.
 
 Similar to the `{cfr}` interface for `{epiparameter}`
 
