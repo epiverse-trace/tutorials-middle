@@ -171,7 +171,7 @@ initial_cases <- 1
 
 [Iteration](https://r4ds.hadley.nz/iteration.html) aims to repeatedly perform the same action on different objects.
 
-Learn how to use the core `{purrr}` functions like the `map_*()` family of functions from the YouTube tutorial on [How to purrr](https://www.youtube.com/watch?v=nd-Y8b22YaQ) by Equitable Equations.
+Learn how to use the core `{purrr}` functions like `map()` from the YouTube tutorial on [How to purrr](https://www.youtube.com/watch?v=nd-Y8b22YaQ) by Equitable Equations.
 
 Or if you previously used the `*apply` family of functions, visit the package vignette on [purrr base R](https://purrr.tidyverse.org/articles/base.html) shares key differences, direct translations, and examples.
 
