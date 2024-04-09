@@ -316,10 +316,7 @@ ggplot() +
     ),
     show.legend = FALSE
   ) +
-  geom_hline(aes(yintercept = 100), lty = 2) +
-  # xlim(0,150) +
-  # ylim(0,300) +
-  NULL
+  geom_hline(aes(yintercept = 100), lty = 2)
 ```
 
 ```{r}
@@ -354,6 +351,70 @@ ggplot() +
     show.legend = FALSE
   )
 ```
+
+::::::::::::::::::::::::::::::::: spoiler
+
+### Observed vs simulated cases
+
+Let's overlap the cumulative number of observed cases using the linelist object from the `mers_korea_2015` dataset of the `{outbreaks}` R package. To prepare the dataset we use `{incidence2}` to convert the linelist to an `<incidence2>` object, complete the missing dates of the time series with `complete_dates()`
+
+```{r}
+library(outbreaks)
+library(incidence2)
+
+mers_cumcases <- mers_korea_2015$linelist %>% 
+  # incidence2 workflow
+  incidence2::incidence(date_index = "dt_onset") %>% 
+  incidence2::complete_dates() %>% 
+  # wrangling using {dplyr}
+  mutate(count_cumsum = cumsum(count)) %>% 
+  rownames_to_column(var = "day") %>% 
+  mutate(day = as.numeric(day))
+```
+
+```{r}
+# plot the incidence2 object
+plot(mers_cumcases)
+```
+
+
+```{r,echo=FALSE}
+# Observed cases vs Simulated transmission chains
+ggplot() +
+  geom_line(
+    data = simulated_chains_day,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = chain_id
+    ),
+    color = "grey",
+    show.legend = FALSE
+  ) +
+  geom_point(
+    data = sim_chains_max,
+    mapping = aes(
+      x = day_max,
+      y = cases_total,
+      group = chain_id,
+      color = chain_id
+    ),
+    color = "grey",
+    show.legend = FALSE
+  ) +
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  geom_line(
+    data = mers_cumcases,
+    mapping = aes(
+      x = day, 
+      y = count_cumsum
+    ),
+    show.legend = FALSE
+  )
+```
+
+:::::::::::::::::::::::::::::::::
+
 
 :::::::::::::::::::::: testimonial
 
