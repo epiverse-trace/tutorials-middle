@@ -273,9 +273,9 @@ simulated_chains_map %>%
 ```{r}
 # daily aggregate of cases
 simulated_chains_day <- simulated_chains_map %>%
-  # use data.frame output from epichains object
+  # use data.frame output from <epichains> object
   as_tibble() %>%
-  # transform chain ID column to factor
+  # transform chain ID column to factor (categorical variable)
   mutate(chain_id = as_factor(chain_id)) %>%
   # get the round number (day) of infection times
   mutate(day = ceiling(time)) %>%
