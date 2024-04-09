@@ -416,7 +416,7 @@ chains_null <- sim_chains_max %>%
   nrow()
 ```
 
-Although most introductions do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median length of `r chains_extinct$extinct_length_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the basic reproduction number $R_0$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), and shows the potential for explosive outbreaks of MERS disease given a offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`.
+Although most introductions do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median length of `r chains_extinct$extinct_length_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the basic reproduction number $R_0$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
 
 :::::::::::::::::::::: testimonial
 
