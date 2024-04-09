@@ -327,8 +327,11 @@ ggplot() +
   )
 ```
 
-```{r,echo=FALSE}
-sim_chains_max %>% 
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+library(ggExtra)
+
+p <- sim_chains_max %>%
+  filter(day_max>0) %>% 
   ggplot() +
   geom_point(
     aes(
@@ -337,12 +340,15 @@ sim_chains_max %>%
     ),
     alpha = 0.25
   ) +
-  geom_hline(aes(yintercept = 100), lty = 2) +
+  scale_y_continuous(breaks = scales::breaks_pretty(n = 5)) +
+  scale_x_continuous(breaks = scales::breaks_pretty(n = 5)) +
   labs(
     x = "Length of chain",
     y = "Size of chain"
   )
+ggExtra::ggMarginal(p)
 ```
+
 
 ```{r}
 # chains that reached the 100-case threshold
@@ -359,9 +365,14 @@ threshhold_summary <- sim_chains_max %>%
   count(name = "chains_theshold") %>%
   mutate(chains_number = number_chains) %>%
   mutate(chains_percentage = chains_theshold / chains_number * 100)
+
+chains_null <- sim_chains_max %>%
+  arrange(desc(cases_total)) %>%
+  filter(day_max < 1) %>% 
+  nrow()
 ```
 
-Although most outbreaks rapidly become extinct, only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because $R_0$ is less than 1, and shows the potential for explosive outbreaks of MERS disease.
+Although most introductions do not generate secondary cases (`r chains_null`) or most outbreaks rapidly become extinct, only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because $R_0$ is less than 1, and shows the potential for explosive outbreaks of MERS disease.
 
 ::::::::::::::::::::::::::::::::: spoiler
 
