@@ -169,7 +169,7 @@ This interface is similar to the one used by `{cfr}` to link with `{epiparameter
 
 ## Simulate a single chain
 
-Now we are prepared to use the `simulate_chains()` function from `{epichains}` to create one transmission chain:
+Now we are prepared to use the `simulate_chains()` function from `{epichains}` to create **one** transmission chain:
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 simulate_chains(
@@ -191,18 +191,30 @@ simulate_chains(
 - offspring distribution, and
 - generation time.
 
-Lines above we described how to specify the offspring distribution and generation time. The simulation controls
+Lines above we described how to specify the offspring distribution and generation time. The **simulation controls** include, at least, two arguments:
 
-generates a `<epichains>` object
+- `index_case`, which define the number of index cases to simulate transmission chains for, and
+- `statistic`, which define a chain statistic to track (either `"size"` or `"length"`) as the stopping criteria for each chain being simulated.
 
-the output dataframe collects
-infectees as observation unit
-each infectee has a sim_id
-the infector sim_id of each infectee is in infector_id
-infectee got infected in generation and time
-as part of the `chain_id` chain
+::::::::::::::::::::::::::: callout
+
+### Stopping criteria
+
+This is an exclusive feature of `{epichains}`. Branching process simulations end when they have gone extinct, that is, no more offspring are being produced, or because of some stopping criterion.
+
+:::::::::::::::::::::::::::
+
+The output of the `simulate_chains()` function creates a `<epichains>` class object.
 
 ## Simulate multiple chains
+
+We can use `simulate_chains()` to create multiple chains and increase the probability to simulate uncontrolled outbreaks projections.
+
+We need to specify three additional elements:
+
+- `set.seed(<integer>)`, which is a random number generator function with a specified seed value, the `<integer>` number, to ensure consistent results across different runs of the code.
+- `number_chains`, which defines the number of simulation to run.
+- `initial_cases`, which defines the number of initial cases to input to the `index_cases` argument explained lines above.
 
 ```{r}
 # Set seed for random number generator
@@ -211,8 +223,9 @@ set.seed(33)
 number_chains <- 1000
 # Number of initial cases
 initial_cases <- 1
-
 ```
+
+`number_chains` and `initial_cases` are conveniently stored in objects to facilitate its reuse downstream in the workflow.
 
 :::::::::::::::::::::::::::::: checklist
 
@@ -228,7 +241,7 @@ Or if you previously used the `*apply` family of functions, visit the package vi
 
 To get multiple chains, we need to apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to `number_chains`.
 
-Let's use `map()`:
+Let's use `map()` to iterate `simulate_chains()` in a vector from 1 to `r number_chains`:
 
 ```{r}
 simulated_chains_map <-
@@ -264,6 +277,10 @@ simulated_chains_map %>%
   count(chain_id, sort = TRUE)
 ```
 
+::::::::::::::::::::::::::::::::: callout
+
+### Read the epichains output
+
 ```{r,echo=FALSE}
 #### get simulated chain with more infections --------------------------------
 
@@ -289,9 +306,7 @@ chain_to_observe <- simulated_chains_map %>%
   pull(chain_id)
 ```
 
-Let's observe closely the simulated `chain_id` number `r chain_to_observe` with three generations.
-
-get epichain summary
+To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's observe closely the simulated `chain_id` number `r chain_to_observe`. Let's use `dplyr::filter()` for this:
 
 ```{r}
 #### get epichain summary ----------------------------------------------------
@@ -300,9 +315,14 @@ simulated_chains_map %>%
   filter(chain_id == chain_to_observe)
 ```
 
-the `NA` includes the infector of the index case, for that reason (known) cases
+Key elements exclusive from this output are in the **footer**:
 
-infectee-infector data frame
+```output
+Number of infectors (known): 3
+Number of generations: 3
+```
+
+The simulated `chain_id` number `r chain_to_observe` has three known infector and three generations. These numbers are more visible when reading the `<epichains>` objects as a data frame:
 
 ```{r}
 #### infector-infectee data frame --------------------------------------------
@@ -312,8 +332,15 @@ simulated_chains_map %>%
   as_tibble()
 ```
 
+The output data frame collects **infectees** as the observation unit. Each infectee has a `sim_id`. Under the `infector_id` column we have the `sim_id` of each _infectee_ that behaved as an _infector_. Within the simulation number, under the `chain_id` column, each infectee got infected in a specific `generation` and (continuous) `time`.
+
+The `Number of infectors (known)` includes the `NA` observation under the `infector_id` column. This refers to the infector specified as index case (in the `index_cases` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
+
+:::::::::::::::::::::::::::::
 
 ## Visualize multiple chains
+
+To visualize the simulated chains, we need some pre-processing. First, let's use `{dplyr}` to get round time numbers, to resemble surveillance days. Second, count the daily number of cases in each simulation (by `chain_id`). Third, calculate the cumulative number of cases within simulation.
 
 ```{r}
 # daily aggregate of cases
@@ -332,6 +359,8 @@ simulated_chains_day <- simulated_chains_map %>%
   ungroup()
 ```
 
+Previous to the plot, let's create a summary table with the total time duration and size of each chain. We can use the `{dplyr}` "combo" of `group_by()`, `summarise()` and `ungroup()`:
+
 ```{r}
 # Summarise the chain duration and size
 sim_chains_max <-
@@ -346,9 +375,12 @@ sim_chains_max <-
   ungroup()
 ```
 
+Now, we are prepared for using the `{ggplot2}` package:
+
 ```{r}
 # Visualize transmission chains by cumulative cases
 ggplot() +
+  # create grouped chain trajectories
   geom_line(
     data = simulated_chains_day,
     mapping = aes(
@@ -359,6 +391,7 @@ ggplot() +
     ),
     show.legend = FALSE
   ) +
+  # create points to visualize the chain end point
   geom_point(
     data = sim_chains_max,
     mapping = aes(
@@ -369,6 +402,7 @@ ggplot() +
     ),
     show.legend = FALSE
   ) +
+  # define a 100-case threshold
   geom_hline(aes(yintercept = 100), lty = 2) +
   labs(
     x = "Day",
@@ -400,7 +434,7 @@ chains_null <- sim_chains_max %>%
   nrow()
 ```
 
-Although most introductions do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median duration of `r chains_extinct$extinct_duration_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
+Although most introductions of `r initial_cases` case per chain do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median duration of `r chains_extinct$extinct_duration_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
 
 ::::::::::::::::::::::::::::::::::: spoiler
 
