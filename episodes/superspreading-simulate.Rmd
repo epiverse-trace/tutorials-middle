@@ -206,7 +206,7 @@ simulated_chains_map <-
   list_rbind()
 ```
 
-```{r}
+```{r,echo=FALSE,eval=FALSE}
 # view infectee number per simulation
 simulated_chains_map %>%
   as_tibble() %>%
@@ -358,11 +358,11 @@ ggplot() +
 
 ::::::::::::::::::::::::::::::::: spoiler
 
-### Observed vs simulated cases
+### Observed cases vs simulated chains
 
 Let's overlap the cumulative number of observed cases using the linelist object from the `mers_korea_2015` dataset of the `{outbreaks}` R package. To prepare the dataset we use `{incidence2}` to convert the linelist to an `<incidence2>` object, complete the missing dates of the time series with `complete_dates()`
 
-```{r}
+```{r,warning=FALSE,message=FALSE}
 library(outbreaks)
 library(incidence2)
 
@@ -376,11 +376,14 @@ mers_cumcases <- mers_korea_2015$linelist %>%
   mutate(day = as.numeric(day))
 ```
 
+Use `plot()` to make an incidence plot:
+
 ```{r}
 # plot the incidence2 object
 plot(mers_cumcases)
 ```
 
+Plot the observed cumulative number of cases over the previously simulated chains.
 
 ```{r,echo=FALSE}
 # Observed cases vs Simulated transmission chains
@@ -419,7 +422,7 @@ ggplot() +
       y = count_cumsum,
       color = type
     ),
-    size = 1
+    size = 1.5
   ) +
   labs(
     x = "Day",
