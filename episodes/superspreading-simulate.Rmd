@@ -91,13 +91,54 @@ with estimated parameter we then can reconstruct tranmission chains to forecast 
 
 ## Get the offspring distribution
 
-The MERS offspring distribution will follow a negative binomial distribution with mean (reproduction number $R$) and dispersion $k$ values estimated from the linelist and contact data of the previous episode.
+The MERS offspring distribution will follow a negative binomial distribution with mean (reproduction number $R$) and dispersion $k$ values estimated from the linelist and contact data of `mers_korea_2015` in the `{outbreaks}` R package in the previous episode.
 
 ```{r}
 mers_offspring <- c(mean = 0.60, dispersion = 0.02)
 ```
 
+The way we input an offspring distribution to `{epichains}` is by defining the R function that generates random values. For example, for a negative binomial distribution we use `rnbinom` with its corresponding `mu` and `size` arguments:
+
+```r
+  offspring_dist = rnbinom,
+  mu = mers_offspring["mean"],
+  size = mers_offspring["dispersion"],
+```
+
+The reference manual in `?rnbinom` tell us the specific arguments we require.
+
+:::::::::::::::::::::::::: spoiler
+
+### Poisson and other distributions
+
+`{epichains}` can accept any R function that generates random numbers, so the specified arguments will change depending of the R function used. The way to know this is by accessing the function reference manual.
+
+For example, let's say that for the offspring distribution we want to use a Poisson distribution. First, read the argument required in the `?rpois` reference manual. Second, specify the `lambda` argument parameter, which is also known as rate or mean in the literature. In `{epichains}`, this can look like this:
+
+```r
+  offspring_dist = rpois,
+  lambda = mers_offspring["mean"],
+```
+
+In this example we can specify `lambda = mers_offspring["mean"]` because in a negative binomial model, when the dispersion parameter $k$ approaches infinity ($k \rightarrow \infty$) the variance equals the mean. This makes the conventional Poisson model an special case of the negative binomial model.
+
+::::::::::::::::::::::::::
+
 ## Get generation time
+
+The generation time distribution is often approximated by the [serial interval](../learners/reference.md#serialinterval) distribution.  This approximation is frequent because it is easier to observe and measure the onset of symptoms than the onset of infectiousness.
+
+:::::::::::::::::::::::::::::::: spoiler
+
+### generation time vs serial interval
+
+![A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
+
+However, using the *serial interval* as an approximation of the *generation time* is primarily valid for diseases in which infectiousness starts after symptom onset ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). In cases where infectiousness starts before symptom onset, the serial intervals can have negative values, which is the case for diseases with pre-symptomatic transmission ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2)).
+
+::::::::::::::::::::::::::::::::
+
+Let's use the `{epiparameter}` package to access and use the available serial interval for MERS disease:
 
 ```{r,message=FALSE,warning=FALSE}
 serial_inverval <- epidist_db(
@@ -116,17 +157,19 @@ serial_summary <- serial_inverval$summary_stats %>%
   distinct(.keep_all = TRUE)
 ```
 
-mean `r serial_summary$mean` and standard deviation `r serial_summary$sd`.
+The serial interval for MERS has a mean of `r serial_summary$mean` days and standard deviation `r serial_summary$sd` days.
 
-Similar to the `{cfr}` interface for `{epiparameter}`
+In `{epichains}` we need to specify the generation time as a function that generates random numbers. Using `{epiparameter}` has the advantage of using the distribution function `epiparameter::generate()` for this input. This will look like this:
 
 ```r
 function(x) generate(x = serial_inverval, times = x)
 ```
 
+This interface is similar to the one used by `{cfr}` to link with `{epiparameter}`. For further context, read the [work with delay distributions](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html) vignette.
+
 ## Simulate a single chain
 
-`simulate_chains()` generates a `<epichains>` object
+Now we are prepared to use the `simulate_chains()` function from `{epichains}` to create one transmission chain:
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 simulate_chains(
@@ -142,23 +185,22 @@ simulate_chains(
 )
 ```
 
+`simulate_chains()` requires, at least, three sets of arguments:
+
+- simulation controls,
+- offspring distribution, and
+- generation time.
+
+Lines above we described how to specify the offspring distribution and generation time. The simulation controls
+
+generates a `<epichains>` object
+
 the output dataframe collects
 infectees as observation unit
 each infectee has a sim_id
 the infector sim_id of each infectee is in infector_id
 infectee got infected in generation and time
 as part of the `chain_id` chain
-
-:::::::::::::::::::::::::: callout
-
-`{epichains}` accepts either 
-
-Instead of the offspring distribution
-we can also define a poisson process
-using the lambda distribution parameter
-lambda = rate = mean
-
-::::::::::::::::::::::::::
 
 ## Simulate multiple chains
 
