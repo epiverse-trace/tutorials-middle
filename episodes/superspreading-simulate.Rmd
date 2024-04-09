@@ -316,7 +316,11 @@ ggplot() +
     ),
     show.legend = FALSE
   ) +
-  geom_hline(aes(yintercept = 100), lty = 2)
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  labs(
+    x = "Day",
+    y = "Cumulative cases"
+  )
 ```
 
 ```{r}
@@ -380,36 +384,47 @@ plot(mers_cumcases)
 
 ```{r,echo=FALSE}
 # Observed cases vs Simulated transmission chains
+mers_cumcases_type <-
+  mers_cumcases %>% 
+      mutate(type = "Observed")
+simulated_chains_day_type <-
+  simulated_chains_day %>% 
+  mutate(type = "Simulated")
+
 ggplot() +
   geom_line(
-    data = simulated_chains_day,
+    data = simulated_chains_day_type,
     mapping = aes(
       x = day,
       y = cases_cumsum,
-      group = chain_id
-    ),
-    color = "grey",
-    show.legend = FALSE
-  ) +
-  geom_point(
-    data = sim_chains_max,
-    mapping = aes(
-      x = day_max,
-      y = cases_total,
       group = chain_id,
-      color = chain_id
-    ),
-    color = "grey",
-    show.legend = FALSE
+      color = type
+    )
   ) +
+  # geom_point(
+  #   data = sim_chains_max,
+  #   mapping = aes(
+  #     x = day_max,
+  #     y = cases_total,
+  #     group = chain_id
+  #   ),
+  #   color = "grey",
+  #   show.legend = FALSE
+  # ) +
   geom_hline(aes(yintercept = 100), lty = 2) +
   geom_line(
-    data = mers_cumcases,
+    data = mers_cumcases_type,
     mapping = aes(
       x = day, 
-      y = count_cumsum
+      y = count_cumsum,
+      color = type
     ),
-    show.legend = FALSE
+    size = 1
+  ) +
+  labs(
+    x = "Day",
+    y = "Cumulative cases",
+    color = "Type"
   )
 ```
 
