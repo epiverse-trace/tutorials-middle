@@ -83,6 +83,8 @@ simulation of uncontrolled outbreaks
 
 with estimated parameter we then can reconstruct tranmission chains to forecast and simulate interventions
 
+![**An example of a transmission chain starting with a single case C1.** Cases are represented by blue circles and arrows indicate who infected whom. The chain grows through generations Gen 1, Gen 2, and Gen 3, producing cases C2, C3, C4, C5, and C6. The chain ends at generation Gen 3 with cases C4, C5, and C6. The size of C1’s chain is 6, including C1 (that is, the sum of all blue circles) and the length is 3, which includes Gen 1 (maximum number of generations reached by C1’s chain).](https://raw.githubusercontent.com/epiverse-trace/epichains/main/vignettes/img/transmission_chain_example.png)
+
 ### branching process
 
 - probability generating function (pgf) of the offspring distribution 
