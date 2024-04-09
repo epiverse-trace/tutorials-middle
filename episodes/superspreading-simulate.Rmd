@@ -94,13 +94,7 @@ with estimated parameter we then can reconstruct tranmission chains to forecast 
 from MERS estimates in estimate episode
 
 ```{r}
-mers_offspring <-
-  c(
-    mean = 0.60,
-    dispersion = 0.02
-  )
-
-mers_offspring
+mers_offspring <- c(mean = 0.60, dispersion = 0.02)
 ```
 
 instead of the offspring distribution
