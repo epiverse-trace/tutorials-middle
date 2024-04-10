@@ -32,20 +32,6 @@ Learners should familiarise themselves with following concept dependencies befor
 
 <!-- what we know -->
 
-<!-- what we dont know -->
-
-<!-- what we are going to do -->
-
-We are going to use `{purrr}`
-
-```{r,message=FALSE,warning=FALSE}
-library(epichains)
-library(epiparameter)
-library(tidyverse)
-```
-
-## Superspreading in decision making
-
 Transmission heterogeneity affects epidemic establishment and the ease of control ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
 
 + Greater heterogeneity reduces the chance of an outbreak emerging from single case. Individuals with more extreme amount of secondary cases are rare.
@@ -54,40 +40,41 @@ Transmission heterogeneity affects epidemic establishment and the ease of contro
 
 + Conversely, heterogeneity in transmission may provide opportunities for *targeted interventions* if the individuals who contribute more to transmission (due to biological, environmental or behavioral factors) share socio-demographic or geographical characteristics that can be defined.
 
-We can have an early understanding of a disease epidemic potential from the mean reproduction number $R$ and dispersion $k$ of an offspring distribution to answer questions like:
+<!-- what we dont know -->
 
-- What is the probability of an pathogen to cause large outbreak?
-- What is the probability of an outbreak to get extinct?
-- What is the probability to contain the ongoing outbreak?
+However, how can we have an early understanding of a disease epidemic potential from the mean reproduction number $R$ and dispersion $k$ of an offspring distribution?
 
-::::::::::::::::::::::::::: testimonial
+<!-- what we are going to do -->
 
-### Epidemic Risk assessment accounting for superspreading
+In this episode we are going to use the `{epichains}` package to simulate transmission chains to estimate the potential for explosive outbreaks. We are going to use it with functions from `{epiparameter}`, `{dplyr}` and `{purrr}`, so also loading the `{tidyverse}` package:
 
-These estimates vary non-linearly with respect to the mean reproduction number $R$ and dispersion $k$ of a given disease.
-
-We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html)!
-
-:::::::::::::::::::::::::::
+```{r,message=FALSE,warning=FALSE}
+library(epichains)
+library(epiparameter)
+library(tidyverse)
+```
 
 ## Simulation of uncontrolled outbreaks
 
-simulation of uncontrolled outbreaks
+Infectious disease epidemics spread through populations when a chain of infected individuals transmit the infection to others. [Branching processes](https://epiverse-trace.github.io/epichains/articles/theoretical_background.html) can be used to model this process. A branching process is a stochastic process where each infectious individual in a generation gives rise to a random number of individuals in the next generation, starting with the index case in generation 1. The distribution of the number of offspring is called the offspring distribution.
 
-- branching process
-    + To assess the effect of individual variation on disease outbreaks, we analyse a branching process model with negative binomial offspring distribution
+`{epichains}` provides methods to analyse and simulate the *size* and *length* of branching processes with an arbitrary offspring distribution. `{epichains}` implements a rapid and low detail model to reconstruct transmission chains to assess epidemic risk, project cases into the future, and simulate interventions.
 
-- estimate tree parameters using branching process
-    + estimate size
-    + estimate length
+::::::::::::::::::: discussion
 
-with estimated parameter we then can reconstruct tranmission chains to forecast and simulate interventions
+### chain size and length
+
+- The **size** of the transmission chain is the total number of individuals infected by a single case, and 
+
+- the **length** of the transmission chain is the number of generations from the first case to the last case they produced before the chain ended. 
+
+The *size* calculation includes the first case and the *length* calculation includes the first generation when the first case starts the chain (See figure below).
 
 ![**An example of a transmission chain starting with a single case C1.** Cases are represented by blue circles and arrows indicate who infected whom. The chain grows through generations Gen 1, Gen 2, and Gen 3, producing cases C2, C3, C4, C5, and C6. The chain ends at generation Gen 3 with cases C4, C5, and C6. The size of C1’s chain is 6, including C1 (that is, the sum of all blue circles) and the length is 3, which includes Gen 1 (maximum number of generations reached by C1’s chain).](https://raw.githubusercontent.com/epiverse-trace/epichains/main/vignettes/img/transmission_chain_example.png)
 
-### branching process
+::::::::::::::::::::
 
-- probability generating function (pgf) of the offspring distribution 
+To use `{epichains}` we need two key delays: the offspring distribution and the generation time!
 
 ## Get the offspring distribution
 
@@ -98,6 +85,8 @@ mers_offspring <- c(mean = 0.60, dispersion = 0.02)
 ```
 
 :::::::::::::::::::::::::::: callout
+
+### offspring distribution for epichains
 
 The way we input an offspring distribution to `{epichains}` is by defining the R function that generates random values. For example, for a negative binomial distribution we use `rnbinom` with its corresponding `mu` and `size` arguments:
 
@@ -164,6 +153,8 @@ serial_summary <- serial_inverval$summary_stats %>%
 The serial interval for MERS has a mean of `r serial_summary$mean` days and standard deviation `r serial_summary$sd` days.
 
 :::::::::::::::::::::::::::: callout
+
+### generation time for epichains
 
 In `{epichains}` we need to specify the generation time as a function that generates random numbers. Using `{epiparameter}` has the advantage of using the distribution function `epiparameter::generate()` for this input. This will look like this:
 
@@ -253,12 +244,10 @@ To get multiple chains, we need to apply the `simulate_chains()` function to eac
 
 ### purrr and epichains
 
-First, let's make a draft sketch of how we use `purrr::map()` with `epichains::simulate_chains()`. The `map()` function requires two arguments:
+First, let's make a minimal sketch of how we use `purrr::map()` with `epichains::simulate_chains()`. The `map()` function requires two arguments:
 
 - `.x`, with a vector of numbers, and
 - `.f`, a function to iterate to each value of the vector.
-
-The `sim` element is placed to register the iteration number (**chain ID**) as a new column in the `<epichains>` output. The `purrr::list_rbind()` function aims to combine all the list outputs from `map()`:
 
 ```r
 map(
@@ -274,6 +263,8 @@ map(
   # combine list outputs (for each chain ID) into a single data frame
   list_rbind()
 ```
+
+The `sim` element is placed to register the iteration number (**chain ID**) as a new column in the `<epichains>` output. The `purrr::list_rbind()` function aims to combine all the list outputs from `map()`.
 
 :::::::::::::::::::::::::::::::
 
@@ -348,7 +339,7 @@ To explore the output format of the `<epichains>` class object of name `simulate
 
 ::::::::::::::::::::::::: solution
 
-### epidemics object
+### the epichains object
 
 Let's use `dplyr::filter()` for this:
 
@@ -372,7 +363,7 @@ The simulated `chain_id` number `r chain_to_observe` has three known infector an
 
 ::::::::::::::::::::::::: solution
 
-### epichains data frame
+### the epichains data frame
 
 ```{r}
 #### infector-infectee data frame --------------------------------------------
@@ -382,7 +373,7 @@ simulated_chains_map %>%
   as_tibble()
 ```
 
-The **story** that chain `r chain_to_observe` is telling is: "One index case infected `sim_id = 1`. Then, in the second generation of transmissions, `sim_id = 1` infected five cases. Later, in the third generation of transmissions, `sim_id = 2` infected three new cases."
+Chain `r chain_to_observe` is telling us an **story**: "In the first transmission generation at `time = 0`, one index case infected the first case with `sim_id = 1`. Then, in the second transmission generation (between `time` 10 to 16), `sim_id = 1` infected five cases. Later, in the third transmission generation (between `time` 26 to 30), `sim_id = 2` infected three new cases."
 
 :::::::::::::::::::::::::
 
@@ -391,6 +382,7 @@ The **story** that chain `r chain_to_observe` is telling is: "One index case inf
 ### an infectee data frame
 
 The output data frame collects **infectees** as the observation unit: 
+
 - Each infectee has a `sim_id`. 
 - Each _infectee_ that behaved as an _infector_ is registered in the `infector_id` column using `sim_id` of that infectee. 
 - Each infectee got infected in a specific `generation` and (continuous) `time`. 
@@ -450,7 +442,8 @@ ggplot() +
       y = cases_cumsum,
       group = chain_id
     ),
-    color = "gray",
+    color = "black",
+    alpha = 0.25,
     show.legend = FALSE
   ) +
   # create points to visualize the chain end point
@@ -564,9 +557,9 @@ ggplot() +
   )
 ```
 
-Notice that the proportion of simulated outbreaks that reached the 100-case threshold increases with the increase of the dispersion parameter $k$.
+Notice that when we increase the dispersion parameter from $k = 0.01$ to $k = \infty$, given a fixed reproduction number $R = 1.5$, the proportion of simulated outbreaks that reached the 100-case threshold increases.
 
-![**Growth of simulated outbreaks with R0 = 1.5 and one initial case, conditional on non-extinction.** Boxes show median and interquartile range (IQR) of the first disease generation with 100 cases; whiskers show most extreme values within 1.5 × IQR of the boxes, and crosses show outliers. Percentages show the proportion of 10,000 simulated outbreaks that reached the 100-case threshold ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).](fig/see-nature04153_Fig2-c.jpg)
+![**Growth of simulated outbreaks with R = 1.5 and one initial case, conditional on non-extinction.** Boxes show median and interquartile range (IQR) of the first disease generation with 100 cases; whiskers show most extreme values within 1.5 × IQR of the boxes, and crosses show outliers. Percentages show the proportion of 10,000 simulated outbreaks that reached the 100-case threshold ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).](fig/see-nature04153_Fig2-c.jpg)
 
 :::::::::::::::::::::: testimonial
 
@@ -581,6 +574,8 @@ We invite you to read the vignette on [Projecting infectious disease incidence: 
 ## Challenges
 
 :::::::::::::::::::::::::: challenge
+
+### Ebola's large outbreak potential
 
 Evaluate the potential of Ebola to generate explosive outbreaks. Use the appropriate package to access delay data from previous outbreaks.
 
@@ -613,6 +608,8 @@ ebola_serial <- epidist_db(
 :::::::::::::::::::::::::
 
 :::::::::::::::::::::::::: challenge
+
+### From a distribution of secondary cases
 
 [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) reused data published by [Faye et al., 2015 (Figure 2)](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2) on the transmission tree on Ebola virus disease in Conakry, Guinea, 2014.
 
@@ -653,13 +650,27 @@ means that although the probability of extinction is high, new index cases also 
 
 :::::::::::::::::::: challenge
 
+### Probability to contain an epidemic
+
 Calculate probabilities for Ebola of a large outbreak and to contain an epidemic. Use the appropriate package to access delay data from previous outbreaks.
 
 :::::::::::::::::: hint
 
 With `{epiparameter}` you can access and use delay distributions from previous outbreaks.
 
-With `{superspreading}` you can get numerical solutions to processes that `{epichains}` solve using branching processes. We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html)!
+:::::::::::::::::::::
+
+::::::::::::::::::: hint
+
+### Epidemic Risk assessment accounting for superspreading
+
+With `{superspreading}` you can get numerical solutions to processes that `{epichains}` solve using branching processes. We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html) and respond to:
+
+- What is the probability of an pathogen to cause large outbreak?
+- What is the probability of an outbreak to get extinct?
+- What is the probability to contain the ongoing outbreak?
+
+Check how these estimates vary non-linearly with respect to the mean reproduction number $R$ and dispersion $k$ of a given disease.
 
 ::::::::::::::::::
 
