@@ -1,6 +1,6 @@
 ---
 title: 'Account for superspreading'
-teaching: 10
+teaching: 30
 exercises: 2
 ---
 

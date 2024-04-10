@@ -1,6 +1,6 @@
 ---
 title: 'Simulate transmission chains'
-teaching: 10
+teaching: 30
 exercises: 2
 ---
 
