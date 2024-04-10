@@ -384,6 +384,8 @@ simulated_chains_map %>%
 
 The **story** that chain `r chain_to_observe` is telling is: "One index case infected `sim_id = 1`. Then, in the second generation of transmissions, `sim_id = 1` infected five cases. Later, in the third generation of transmissions, `sim_id = 2` infected three new cases."
 
+:::::::::::::::::::::::::
+
 ::::::::::::::::::::::::: solution
 
 ### an infectee data frame
