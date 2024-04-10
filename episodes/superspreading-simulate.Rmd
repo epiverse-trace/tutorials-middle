@@ -249,6 +249,10 @@ Or if you previously used the `*apply` family of functions, visit the package vi
 
 To get multiple chains, we need to apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to `number_chains`.
 
+::::::::::::::::::::::::::::::: callout
+
+### purrr and epichains
+
 First, let's make a draft sketch of how we use `purrr::map()` with `epichains::simulate_chains()`. The `map()` function requires two arguments:
 
 - `.x`, with a vector of numbers, and
@@ -270,6 +274,8 @@ map(
   # combine list outputs (for each chain ID) into a single data frame
   list_rbind()
 ```
+
+:::::::::::::::::::::::::::::::
 
 Now, we are prepared to use `map()` to iterate `simulate_chains()` in a vector from 1 to `r number_chains`:
 
@@ -307,7 +313,7 @@ simulated_chains_map %>%
   count(chain_id, sort = TRUE)
 ```
 
-::::::::::::::::::::::::::::::::: callout
+::::::::::::::::::::::::::::::::: discussion
 
 ### Read the epichains output
 
@@ -336,7 +342,15 @@ chain_to_observe <- simulated_chains_map %>%
   pull(chain_id)
 ```
 
-To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's observe closely the simulated `chain_id` number `r chain_to_observe`. Let's use `dplyr::filter()` for this:
+To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's observe closely the simulated `chain_id` number `r chain_to_observe`. 
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### epidemics object
+
+Let's use `dplyr::filter()` for this:
 
 ```{r}
 #### get epichain summary ----------------------------------------------------
@@ -352,7 +366,13 @@ Number of infectors (known): 3
 Number of generations: 3
 ```
 
-The simulated `chain_id` number `r chain_to_observe` has three known infector and three generations. These numbers are more visible when reading the `<epichains>` objects as a data frame:
+The simulated `chain_id` number `r chain_to_observe` has three known infector and three generations. These numbers are more visible when reading the `<epichains>` objects as a data frame.
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### epichains data frame
 
 ```{r}
 #### infector-infectee data frame --------------------------------------------
@@ -364,6 +384,10 @@ simulated_chains_map %>%
 
 The **story** that chain `r chain_to_observe` is telling is: "One index case infected `sim_id = 1`. Then, in the second generation of transmissions, `sim_id = 1` infected five cases. Later, in the third generation of transmissions, `sim_id = 2` infected three new cases."
 
+::::::::::::::::::::::::: solution
+
+### an infectee data frame
+
 The output data frame collects **infectees** as the observation unit: 
 - Each infectee has a `sim_id`. 
 - Each _infectee_ that behaved as an _infector_ is registered in the `infector_id` column using `sim_id` of that infectee. 
@@ -372,7 +396,7 @@ The output data frame collects **infectees** as the observation unit:
 
 **Note:** The `Number of infectors (known)` includes the `NA` observation under the `infector_id` column. This refers to the infector specified as index case (in the `index_cases` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
 
-:::::::::::::::::::::::::::::
+:::::::::::::::::::::::::
 
 ## Visualize multiple chains
 
