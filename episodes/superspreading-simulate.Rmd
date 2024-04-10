@@ -588,7 +588,13 @@ ebola_serial <- epidist_db(
 
 :::::::::::::::::::::::::: challenge
 
-[Christian Althaus](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) reused data published by [Faye et al., 2015 (Figure 2)](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2) on the transmission tree on Ebola virus disease in Conakry, Guinea, 2014.
+[Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) reused data published by [Faye et al., 2015 (Figure 2)](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2) on the transmission tree on Ebola virus disease in Conakry, Guinea, 2014.
+
+Using the data under the **hint** tab, estimate the offspring distribution from the distribution of secondary cases. Then estimate the large outbreak potential from this data.
+
+::::::::::: hint
+
+Code with the transmission tree data written by [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext):
 
 ```{r,message=FALSE,warning=FALSE}
 # Number of individuals in the trees
@@ -604,12 +610,6 @@ c0 %>%
   ggplot(aes(value)) +
   geom_histogram()
 ```
-
-Estimate the offspring distribution from the distribution of secondary cases. Then estimate the large outbreak potential from this data.
-
-::::::::::: hint
-
-...
 
 :::::::::::
 
