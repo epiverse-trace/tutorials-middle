@@ -97,6 +97,8 @@ The MERS offspring distribution will follow a negative binomial distribution wit
 mers_offspring <- c(mean = 0.60, dispersion = 0.02)
 ```
 
+:::::::::::::::::::::::::::: callout
+
 The way we input an offspring distribution to `{epichains}` is by defining the R function that generates random values. For example, for a negative binomial distribution we use `rnbinom` with its corresponding `mu` and `size` arguments:
 
 ```r
@@ -106,6 +108,8 @@ The way we input an offspring distribution to `{epichains}` is by defining the R
 ```
 
 The reference manual in `?rnbinom` tell us the specific arguments we require.
+
+::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::: spoiler
 
@@ -120,7 +124,7 @@ For example, let's say that for the offspring distribution we want to use a Pois
   lambda = mers_offspring["mean"],
 ```
 
-In this example we can specify `lambda = mers_offspring["mean"]` because in a negative binomial model, when the dispersion parameter $k$ approaches infinity ($k \rightarrow \infty$) the variance equals the mean. This makes the conventional Poisson model an special case of the negative binomial model.
+In this example we can specify `lambda = mers_offspring["mean"]` because in a negative binomial model, when the dispersion parameter $k$ approaches infinity ($k \rightarrow \infty$) the variance equals the mean. This makes the conventional Poisson model an special case of the negative binomial model. The mean of the negative binomial model (`mu`) can also be the mean of the poisson model (`lambda`). 
 
 ::::::::::::::::::::::::::
 
@@ -159,6 +163,8 @@ serial_summary <- serial_inverval$summary_stats %>%
 
 The serial interval for MERS has a mean of `r serial_summary$mean` days and standard deviation `r serial_summary$sd` days.
 
+:::::::::::::::::::::::::::: callout
+
 In `{epichains}` we need to specify the generation time as a function that generates random numbers. Using `{epiparameter}` has the advantage of using the distribution function `epiparameter::generate()` for this input. This will look like this:
 
 ```r
@@ -166,6 +172,8 @@ function(x) generate(x = serial_inverval, times = x)
 ```
 
 This interface is similar to the one used by `{cfr}` to link with `{epiparameter}`. For further context, read the [work with delay distributions](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html) vignette.
+
+::::::::::::::::::::::::::::
 
 ## Simulate a single chain
 
@@ -208,7 +216,7 @@ The output of the `simulate_chains()` function creates a `<epichains>` class obj
 
 ## Simulate multiple chains
 
-We can use `simulate_chains()` to create multiple chains and increase the probability to simulate uncontrolled outbreaks projections.
+We can use `simulate_chains()` to create multiple chains and increase the probability to simulate uncontrolled outbreaks projections given an overdispersed offspring distribution.
 
 We need to specify three additional elements:
 
@@ -241,7 +249,29 @@ Or if you previously used the `*apply` family of functions, visit the package vi
 
 To get multiple chains, we need to apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to `number_chains`.
 
-Let's use `map()` to iterate `simulate_chains()` in a vector from 1 to `r number_chains`:
+First, let's make a draft sketch of how we use `purrr::map()` with `epichains::simulate_chains()`. The `map()` function requires two arguments:
+
+- `.x`, with a vector of numbers, and
+- `.f`, a function to iterate to each value of the vector.
+
+The `sim` element is placed to register the iteration number (**chain ID**) as a new column in the `<epichains>` output. The `purrr::list_rbind()` function aims to combine all the list outputs from `map()`:
+
+```r
+map(
+  # vector of numbers (chain IDs)
+  .x = seq_len(number_chains),
+  # function to iterate to each chain ID number
+  .f = function(sim) {
+    simulate_chains(...) %>%
+      # creates a column with the chain ID number
+      mutate(chain_id = sim)
+  }
+) %>%
+  # combine list outputs (for each chain ID) into a single data frame
+  list_rbind()
+```
+
+Now, we are prepared to use `map()` to iterate `simulate_chains()` in a vector from 1 to `r number_chains`:
 
 ```{r}
 simulated_chains_map <-
@@ -332,9 +362,15 @@ simulated_chains_map %>%
   as_tibble()
 ```
 
-The output data frame collects **infectees** as the observation unit. Each infectee has a `sim_id`. Under the `infector_id` column we have the `sim_id` of each _infectee_ that behaved as an _infector_. Within the simulation number, under the `chain_id` column, each infectee got infected in a specific `generation` and (continuous) `time`.
+The **story** that chain `r chain_to_observe` is telling is: "One index case infected `sim_id = 1`. Then, in the second generation of transmissions, `sim_id = 1` infected five cases. Later, in the third generation of transmissions, `sim_id = 2` infected three new cases."
 
-The `Number of infectors (known)` includes the `NA` observation under the `infector_id` column. This refers to the infector specified as index case (in the `index_cases` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
+The output data frame collects **infectees** as the observation unit: 
+- Each infectee has a `sim_id`. 
+- Each _infectee_ that behaved as an _infector_ is registered in the `infector_id` column using `sim_id` of that infectee. 
+- Each infectee got infected in a specific `generation` and (continuous) `time`. 
+- The simulation number is registered under the `chain_id` column.
+
+**Note:** The `Number of infectors (known)` includes the `NA` observation under the `infector_id` column. This refers to the infector specified as index case (in the `index_cases` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
 
 :::::::::::::::::::::::::::::
 
@@ -386,9 +422,9 @@ ggplot() +
     mapping = aes(
       x = day,
       y = cases_cumsum,
-      group = chain_id,
-      color = chain_id
+      group = chain_id
     ),
+    color = "gray",
     show.legend = FALSE
   ) +
   # create points to visualize the chain end point
@@ -434,7 +470,7 @@ chains_null <- sim_chains_max %>%
   nrow()
 ```
 
-Although most introductions of `r initial_cases` case per chain do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median duration of `r chains_extinct$extinct_duration_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
+Although most introductions of `r initial_cases` index case do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median duration of `r chains_extinct$extinct_duration_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
 
 ::::::::::::::::::::::::::::::::::: spoiler
 
@@ -502,6 +538,10 @@ ggplot() +
   )
 ```
 
+Notice that the proportion of simulated outbreaks that reached the 100-case threshold increases with the increase of the dispersion parameter $k$.
+
+![**Growth of simulated outbreaks with R0 = 1.5 and one initial case, conditional on non-extinction.** Boxes show median and interquartile range (IQR) of the first disease generation with 100 cases; whiskers show most extreme values within 1.5 × IQR of the boxes, and crosses show outliers. Percentages show the proportion of 10,000 simulated outbreaks that reached the 100-case threshold ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).](fig/see-nature04153_Fig2-c.jpg)
+
 :::::::::::::::::::::: testimonial
 
 ### Early spread projections
@@ -516,9 +556,11 @@ We invite you to read the vignette on [Projecting infectious disease incidence: 
 
 :::::::::::::::::::::::::: challenge
 
-Evaluate for ebola with know data from previous outbreaks
+Evaluate the potential of Ebola to generate explosive outbreaks. Use the appropriate package to access delay data from previous outbreaks.
 
 :::::::::::::: hint
+
+With `{epiparameter}` you can access and use delay distributions from previous outbreaks.
 
 ::::::::::::::
 
@@ -538,17 +580,15 @@ ebola_serial <- epidist_db(
 )
 ```
 
+<!-- [pending to complete] -->
+
 ::::::::::::::
 
 :::::::::::::::::::::::::
 
 :::::::::::::::::::::::::: challenge
 
-from paper
-Christian Althaus
-<https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext>
-
-data from Fayre et al on ebola
+[Christian Althaus](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) reused data published by [Faye et al., 2015 (Figure 2)](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2) on the transmission tree on Ebola virus disease in Conakry, Guinea, 2014.
 
 ```{r,message=FALSE,warning=FALSE}
 # Number of individuals in the trees
@@ -565,6 +605,7 @@ c0 %>%
   geom_histogram()
 ```
 
+Estimate the offspring distribution from the distribution of secondary cases. Then estimate the large outbreak potential from this data.
 
 ::::::::::: hint
 
@@ -574,13 +615,11 @@ c0 %>%
 
 ::::::::::: solution
 
-remarkable even with R0 less than 1
-with potentially explosive outbreaks
+<!-- [pending to complete] -->
 
-the observed variation in individual infectiousness in Ebola
-means that although the probability of extinction is high,
-new index cases also have the potential for explosive
-regrowth of the epidemic.
+Remarkable, even with R0 less than 1
+with potentially explosive outbreaks. the observed variation in individual infectiousness in Ebola
+means that although the probability of extinction is high, new index cases also have the potential for explosive regrowth of the epidemic.
 
 :::::::::::
 
@@ -588,9 +627,19 @@ regrowth of the epidemic.
 
 :::::::::::::::::::: challenge
 
-Calculate probabilities for Ebola using data from epiparameter using `{superspreading}`
+Calculate probabilities for Ebola of a large outbreak and to contain an epidemic. Use the appropriate package to access delay data from previous outbreaks.
 
 :::::::::::::::::: hint
+
+With `{epiparameter}` you can access and use delay distributions from previous outbreaks.
+
+With `{superspreading}` you can get numerical solutions to processes that `{epichains}` solve using branching processes. We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html)!
+
+::::::::::::::::::
+
+::::::::::::::::::::: hint
+
+Here is an example with the MERS offspring distribution estimates:
 
 ```{r,message=FALSE,warning=FALSE}
 library(superspreading)
@@ -622,23 +671,16 @@ probability_epidemic(
 #' get ebola params
 ```
 
+<!-- [pending to complete] -->
+
 ::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::: testimonial
-
-you can use early linelist data as seed cases to make short term projection of cases
-
-take a look to vignette
-
-<https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html>
-
-:::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use `{epichains}`
+- Use `{epichains}` to simulate the large outbreak potential of diseases with overdispersed offspring distributions.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
