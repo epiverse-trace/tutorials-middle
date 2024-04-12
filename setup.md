@@ -122,9 +122,9 @@ These installation steps could ask you `? Do you want to continue (Y/n)` write `
 
 ::::::::::::::::::::::::::::: spoiler
 
-### error with {epiparameter}
+### do you get an error with {epiparameter}?
 
-If you see an error when installing {epiparameter}, try this alternative code:
+If you get an error message when installing {epiparameter}, try this alternative code:
 
 ```r
 if(!require("devtools")) install.packages("devtools")
