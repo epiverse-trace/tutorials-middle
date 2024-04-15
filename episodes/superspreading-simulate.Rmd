@@ -32,13 +32,13 @@ Learners should familiarise themselves with the following concept dependencies b
 
 <!-- what we know -->
 
-Transmission heterogeneity affects epidemic establishment and the ease of control ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
+Individual variation in transmission can affects both the potential for an epidemic to establish in a population and the ease of control ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
 
-+ Greater heterogeneity reduces the overall probably of a single new case causing a large local outbreak, because most cases infect few others and individuals that generate a large number of secondary cases are relatively rare.
++ Greater variation reduces the overall probably of a single new case causing a large local outbreak, because most cases infect few others and individuals that generate a large number of secondary cases are relatively rare.
 
-+ However, if a 'superspreading event' does occur and the outbreak gets established, this heterogeneity can make an outbreak harder to control using *mass interventions* (i.e. blanket interventions that implicitly assume everyone contributes equally to transmission), because some cases contribute disproportionality: a single uncontrolled case may generate a large number of secondary cases.
++ However, if a 'superspreading event' does occur and the outbreak gets established, this variation can make an outbreak harder to control using *mass interventions* (i.e. blanket interventions that implicitly assume everyone contributes equally to transmission), because some cases contribute disproportionality: a single uncontrolled case may generate a large number of secondary cases.
 
-+ Conversely, heterogeneity in transmission may provide opportunities for *targeted interventions* if the individuals who contribute more to transmission (due to biological or behavioural factors), or the settings in which 'superspreading events' occur, share socio-demographic, environmental or geographical characteristics that can be defined.
++ Conversely, variation in transmission may provide opportunities for *targeted interventions* if the individuals who contribute more to transmission (due to biological or behavioural factors), or the settings in which 'superspreading events' occur, share socio-demographic, environmental or geographical characteristics that can be defined.
 
 <!-- what we dont know -->
 
