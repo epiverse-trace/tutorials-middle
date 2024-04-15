@@ -239,7 +239,7 @@ In this example, we can specify `lambda = mers_offspring["mean"]` because the me
 
 ## Get generation time
 
-The [serial interval](../learners/reference.md#serialinterval) distribution often approximates the generation time distribution. This approximation is frequent because it is easier to observe and measure the onset of symptoms than the onset of infectiousness.
+The [serial interval](../learners/reference.md#serialinterval) distribution is often used to approximate the generation time distribution. This approximation is commonly used because it is easier to observe and measure the onset of symptoms in each case than the precise time of infection.
 
 :::::::::::::::::::::::::::::::: spoiler
 
@@ -304,7 +304,7 @@ simulate_chains(
 )
 ```
 
-`simulate_chains()` requires at least three sets of arguments:
+`simulate_chains()` requires three sets of arguments as a minimum:
 
 - simulation controls,
 - offspring distribution, and
@@ -323,7 +323,7 @@ This is an exclusive feature of `{epichains}`. Branching process simulations end
 
 :::::::::::::::::::::::::::
 
-The `simulate_chains()` output creates a `<epichains>` class object.
+The `simulate_chains()` output creates a `<epichains>` class object, which we can then analyse further in R.
 
 ## Simulate multiple chains
 
