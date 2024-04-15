@@ -178,7 +178,7 @@ The number of secondary cases can be used to _empirically_ estimate the **offspr
 
 - **Mean**, which represents the $R_{0}$, the average number of (secondary) cases produced by a single individual in an entirely susceptible population, and
 
-- **Dispersion**, expressed as $k$, which represents the degree of individual-level variation in transmission by single individuals.
+- **Dispersion**, expressed as $k$, which represents the individual-level variation in transmission by single individuals.
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 # Load parameters
@@ -352,7 +352,7 @@ upper <- mid + offspring_fit$sd[["size"]] * qnorm(0.975)
 ```
 
 From the number secondary cases distribution we estimated a dispersion parameter $k$ of
-`r round(mid, 3)`, with a 95% Confidence Interval from `r round(lower, 3)` to `r round(upper, 3)`. As the value of $k$ is significantly lower than one, we can conclude that the degree of superspreading is high.
+`r round(mid, 3)`, with a 95% Confidence Interval from `r round(lower, 3)` to `r round(upper, 3)`. As the value of $k$ is significantly lower than one, we can conclude that there is considerable potential for superspreading events.
 
 We can overlap the estimated density values of the fitted negative binomial distribution and the histogram of the number of secondary cases:
 
