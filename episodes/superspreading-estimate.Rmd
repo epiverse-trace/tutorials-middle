@@ -484,7 +484,7 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 Research into sexually transmitted and vector-borne diseases has previously suggested a '20/80' rule, with 20% of individuals contributing at least 80% of the transmission potential ([Woolhouse et al](https://www.pnas.org/doi/10.1073/pnas.94.1.338)). On its own, the dispersion parameter $k$ is hard to interpret intuitively, and hence converting into proportional summary can enable easier comparison. When we consider a wider range of pathogens, we can see there is no hard and fast rule for the percentage that generates 80% of transmission, but variation does emerge as a common feature of infectious diseases
 
-- When the 20% most infectious cases contribute to the 80% of transmission (or more), there is a high individual-level variation in transmission, with a highly overdispersed offspring distribution ($k<0.3$), e.g., SARS.
+- When the 20% most infectious cases contribute to the 80% of transmission (or more), there is a high individual-level variation in transmission, with a highly overdispersed offspring distribution ($k<0.3$), e.g., SARS-1.
 
 - When the 20% most infectious cases contribute to the ~50% of transmission, there is a low individual-level variation in transmission, with a moderately dispersed offspring distribution ($k > 3$), e.g. Ebola.
 
@@ -708,7 +708,7 @@ Compare this values with the ones reported by [Lloyd-Smith et al., 2005](https:/
 
 What is the proportion of cases that are responsible of the 80% of transmission?
 
-Use `{superspreading}` and compare the estimates for **MERS** using the offspring distributions parameters from this tutorial episode, with **SARS** and **Ebola** offspring distributions parameter accessible via the `{epiparameter}` R package.
+Use `{superspreading}` and compare the estimates for **MERS** using the offspring distributions parameters from this tutorial episode, with **SARS-1** and **Ebola** offspring distributions parameter accessible via the `{epiparameter}` R package.
 
 ::::::::::::::::::::: hint
 
@@ -727,7 +727,7 @@ epidist_string <- epidist_db(
   paste(collapse = ", ")
 ```
 
-Currently, `{epiparameter}` have offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS:
+Currently, `{epiparameter}` have offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS-1:
 
 ```{r,message=FALSE,warning=FALSE}
 # Load parameters
