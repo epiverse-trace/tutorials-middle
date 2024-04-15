@@ -693,7 +693,7 @@ When we increase the dispersion parameter from $k = 0.01$ to $k = \infty$ - and 
 
 ### Early spread projections
 
-In the epidemic's initial phase, you can use `{epichains}` to apply a branching process model to project the number of future cases. Validation analysis showed that this is a rapid and low-detail model with forecast prediction intervals that are too certain ([Pearson et al., 2020](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.18.2000543#validationofthemodel-1)).
+In the epidemic's initial phase, you can use `{epichains}` to apply a branching process model to project the number of future cases. Even though the model accounts for randomness in transmission and variation in the number of secondary cases, there may be additional local features we have not considered. Analysis of early forecasts made for COVID in different countries using this model structure found that predictions were often overconfident ([Pearson et al., 2020](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.18.2000543#validationofthemodel-1)). This is likely because the real-time model did not include all the changes in the offspring distribution that were happening at the local level as a result of behaviour change and control measures. You can read more about the importance of local context in COVID-19 models in [Eggo et al. (2020)](https://www.nature.com/articles/s43588-020-00014-7).
 
 We invite you to read the vignette on [Projecting infectious disease incidence: a COVID-19 example](https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html)!
 
