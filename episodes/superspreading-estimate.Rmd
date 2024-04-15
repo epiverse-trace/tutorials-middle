@@ -13,15 +13,15 @@ webshot::install_phantomjs(force = TRUE)
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How can we estimate individual-level variation in transmission (i.e. superspreading potential) from contact tracing data?
-- How to account for transmission heterogeneity in decision-making?
+- What are the implications for variation in transmission for decision-making?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Create the offspring distribution from outbreak data using `{epicontacts}`.
-- Estimate the dispersion parameter from the offspring distribution using `{fitdistrplus}`.
-- Estimate the proportion of transmission accounting for superspreading events using `{superspreading}`.
+- Estimate the distribution of onward transmission from infected individuals (i.e. offspring distribution) from outbreak data using `{epicontacts}`.
+- Estimate the extent of individual-level variation (i.e. the dispersion parameter) of the offspring distribution using `{fitdistrplus}`.
+- Estimate the proportion of transmission that is linked to 'superspreading events' using `{superspreading}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -31,9 +31,9 @@ webshot::install_phantomjs(force = TRUE)
 
 Learners should familiarise themselves with following concept dependencies before working through this tutorial: 
 
-**Statistics**: probability distributions. 
+**Statistics**: common probability distributions, particularly Poisson and negative binomial.
 
-**Epidemic theory**: Reproduction number.
+**Epidemic theory**: The reproduction number, R.
 
 :::::::::::::::::::::::::::::::::
 
