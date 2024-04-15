@@ -665,7 +665,7 @@ The probability of having clusters of five people is 1.8%. At this stage, given 
 
 ### Does Ebola have any superspreading event?
 
-[Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) propose a general protocol for defining a superspreading event (SSE). If the number of secondary infections caused by each case, $Z$, follows a negative binomial distribution ($R, k$):
+'Superspreading events' can mean different things to different people, so [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153) proposed a general protocol for defining a superspreading event (SSE). If the number of secondary infections caused by each case, $Z$, follows a negative binomial distribution ($R, k$):
 
 - We define an SSE as any infected individual who infects more than $Z(n)$ others, where $Z(n)$ is the nth percentile of the $Poisson(R)$ distribution. 
 - A 99th-percentile SSE is then any case causing more infections than would occur in 99% of infectious histories in a homogeneous population
