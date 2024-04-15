@@ -198,7 +198,7 @@ To use `{epichains}`, we need to know (or assume) two key epidemiological values
 
 ## Get the offspring distribution
 
-The MERS offspring distribution will follow a negative binomial distribution with mean (reproduction number $R$) and dispersion $k$ values estimated from the linelist and contact data of `mers_korea_2015` in the `{outbreaks}` R package in the previous episode.
+Here we assume the MERS offspring distribution follows a negative binomial distribution, with mean (reproduction number $R$) and dispersion $k$ values estimated from the linelist and contact data of `mers_korea_2015` in the `{outbreaks}` R package in the previous episode.
 
 ```{r}
 mers_offspring <- c(mean = 0.60, dispersion = 0.02)
@@ -208,7 +208,7 @@ mers_offspring <- c(mean = 0.60, dispersion = 0.02)
 
 ### offspring distribution for epichains
 
-We input an offspring distribution to `{epichains}` by defining the R function that generates random values. For example, for a negative binomial distribution, we use `rnbinom` with its corresponding `mu` and `size` arguments:
+We input an offspring distribution to `{epichains}` by referring to the R function that generates random values from the distribution we want. For a negative binomial distribution, we use `rnbinom` with its corresponding `mu` and `size` arguments:
 
 ```r
   offspring_dist = rnbinom,
@@ -224,7 +224,7 @@ The reference manual in `?rnbinom` tells us our required specific arguments.
 
 ### Poisson and other distributions
 
-`{epichains}` can accept any R function that generates random numbers, so the specified arguments will change depending on the R function used. This can be learned by accessing the function reference manual.
+`{epichains}` can accept any R function that generates random numbers, so the specified arguments will change depending on the R function used. For more details on the range of possible options, see the function reference manual.
 
 For example, let's say we want to use a Poisson distribution for the offspring distribution. First, read the argument required in the `?rpois` reference manual. Second, specify the `lambda` argument parameter, also known as rate or mean in the literature. In `{epichains}`, this can look like this:
 
@@ -233,7 +233,7 @@ For example, let's say we want to use a Poisson distribution for the offspring d
   lambda = mers_offspring["mean"],
 ```
 
-In this example, we can specify `lambda = mers_offspring["mean"]` because in a negative binomial model, when the dispersion parameter $k$ approaches infinity ($k \rightarrow \infty$), the variance equals the mean. This makes the conventional Poisson model a special case of the negative binomial model. The mean of the negative binomial model (`mu`) can also be the mean of the Poisson model (`lambda`). 
+In this example, we can specify `lambda = mers_offspring["mean"]` because the mean number of secondary cases generated (i.e. $R$) should be the same regardless of the distribution we assume. What changes is the variance of the distribution, and hence the level of individual-level variation in transmission. When the dispersion parameter $k$ approaches infinity ($k \rightarrow \infty$) in a negative binomial distribution, the variance equals the mean. This makes the conventional Poisson distribution a special case of the negative binomial distribution.
 
 ::::::::::::::::::::::::::
 
