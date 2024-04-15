@@ -6,13 +6,13 @@ exercises: 2
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How to simulate transmission chains?
+- How can we simulate transmission chains based on infection characteristics?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Create a short term projection using branching process with `{epichains}`.
+- Create a short term projection using a branching process with `{epichains}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -22,9 +22,9 @@ exercises: 2
 
 Learners should familiarise themselves with the following concept dependencies before working through this tutorial: 
 
-**Statistics**: probability distributions. 
+**Statistics**: Common probability distributions, including Poisson and negative binomial.
 
-**Epidemic theory**: Reproduction number.
+**Epidemic theory**: The reproduction number, $R$.
 
 :::::::::::::::::::::::::::::::::
 
