@@ -110,11 +110,11 @@ webshot::webshot(
 
 ### Is contact data tidy?
 
-Contact data contains information of whom infected whom. We expect to have the infector (`from`) and the infectee (`to`) plus additional columns of variables related to their contact like location (`exposure`) and date of contact.
+Contact data from a transmission chain can provide information on which infected individuals came into contact with others. We expect to have the infector (`from`) and the infectee (`to`) plus additional columns of variables related to their contact, such as location (`exposure`) and date of contact.
 
-Following [tidy data](https://tidyr.tidyverse.org/articles/tidy-data.html#tidy-data) principles, in contact data the observation unit is the **infector-infectee** pair. Although one infector can infect multiple infectees, from contact tracing investigations we may record infectees contacts with more than one infector. But we should expect to have unique infector-infectee pairs.
+Following [tidy data](https://tidyr.tidyverse.org/articles/tidy-data.html#tidy-data) principles, the observation unit in our contact dataset is the **infector-infectee** pair. Although one infector can infect multiple infectees, from contact tracing investigations we may record contacts linked to more than one infector (e.g. within a household). But we should expect to have unique infector-infectee pairs, because typically each infected person will have acquired the infection from one other.
 
-We can check on replicates for infectees:
+To ensure these unique pairs, we can check on replicates for infectees:
 
 ```{r}
 # no infector-infectee pairs are replicated
