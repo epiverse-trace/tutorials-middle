@@ -228,7 +228,7 @@ ggplot() +
   )
 ```
 
-From the histogram and density plot, we can identify that the offspring distribution is highly skewed or **overdispersed**. In this framework, the superspreading events (SSEs) are realizations from the right-hand tail of the offspring distribution ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).
+From the histogram and density plot, we can identify that the offspring distribution is highly skewed or **overdispersed**. In this framework, the superspreading events (SSEs) are not arbitrary or exceptional, but simply realizations from the right-hand tail of the offspring distribution, which we can quantify and analyse ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).
 
 ::::::::::::::::::::::::::: callout
 
