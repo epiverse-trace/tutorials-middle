@@ -358,7 +358,7 @@ Or, if you previously used the `*apply` family of functions, visit the package v
 
 ::::::::::::::::::::::::::::::
 
-To get multiple chains, we must apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to `number_chains`.
+To get multiple chains, we must apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to `r number_chains`.
 
 ::::::::::::::::::::::::::::::: callout
 
