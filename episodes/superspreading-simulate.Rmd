@@ -794,9 +794,9 @@ With `{epiparameter}` you can access and use delay distributions from previous o
 
 With `{superspreading}`, you can get numerical solutions to processes that `{epichains}` solve using branching processes. We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html) and respond to:
 
-- What is the probability of a pathogen causing a large outbreak?
-- What is the probability of an outbreak becoming extinct?
-- What is the probability of containing the ongoing outbreak?
+- What is the probability that a newly introduced pathogen will cause a large outbreak?
+- What is the probability that an infection will, by chance, fail to establish following initial introduction(s)?
+- What is the probability the outbreak will be contained?
 
 Check how these estimates vary non-linearly with respect to the mean reproduction number $R$ and dispersion $k$ of a given disease.
 
