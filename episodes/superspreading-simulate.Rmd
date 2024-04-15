@@ -34,17 +34,17 @@ Learners should familiarise themselves with the following concept dependencies b
 
 Transmission heterogeneity affects epidemic establishment and the ease of control ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
 
-+ Greater heterogeneity reduces the chance of an outbreak emerging from a single case. Individuals with a more extreme amount of secondary cases are rare.
++ Greater heterogeneity reduces the overall probably of a single new case causing a large local outbreak, because most cases infect few others and individuals that generate a large number of secondary cases are relatively rare.
 
-+ However, if the outbreak gets established, this heterogeneity can make an outbreak hard to control using *mass interventions* (which assumes transmission homogeneity), as a single uncontrolled case can generate a large number of secondary cases.
++ However, if a 'superspreading event' does occur and the outbreak gets established, this heterogeneity can make an outbreak harder to control using *mass interventions* (i.e. blanket interventions that implicitly assume everyone contributes equally to transmission), because some cases contribute disproportionality: a single uncontrolled case may generate a large number of secondary cases.
 
-+ Conversely, heterogeneity in transmission may provide opportunities for *targeted interventions* if the individuals who contribute more to transmission (due to biological, environmental or behavioural factors) share socio-demographic or geographical characteristics that can be defined.
++ Conversely, heterogeneity in transmission may provide opportunities for *targeted interventions* if the individuals who contribute more to transmission (due to biological or behavioural factors), or the settings in which 'superspreading events' occur, share socio-demographic, environmental or geographical characteristics that can be defined.
 
 <!-- what we dont know -->
 
-However, how can we understand the potential of a disease epidemic early from the mean reproduction number $R$ and the dispersion $k$ of an offspring distribution?
+How can we quantify the potential of a new infection to cause a large outbreak based on its reproduction number $R$ and the dispersion $k$ of its offspring distribution?
 
-```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.cap="Observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea, 2015, alongside with simulated transmission chains given a known offspring distribution."}
+```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.cap="Observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea, 2015, alongside with simulated transmission chains assuming an offspring distribution with $R=0.6$ and $k=0.02$."}
 library(epichains)
 library(epiparameter)
 library(tidyverse)
@@ -166,7 +166,7 @@ ggplot() +
 
 <!-- what we are going to do -->
 
-In this episode, we will use the `{epichains}` package to simulate transmission chains to estimate the potential for explosive outbreaks. We are going to use it with functions from `{epiparameter}`, `{dplyr}` and `{purrr}`, so also loading the `{tidyverse}` package:
+In this episode, we will use the `{epichains}` package to simulate transmission chains and estimate the potential for large outbreaks following the introduction of a new case. We are going to use it with functions from `{epiparameter}`, `{dplyr}` and `{purrr}`, so also loading the `{tidyverse}` package:
 
 ```{r,message=FALSE,warning=FALSE}
 library(epichains)
