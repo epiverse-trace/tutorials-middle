@@ -474,7 +474,7 @@ simulated_chains_map %>%
   filter(chain_id == chain_to_observe)
 ```
 
-Key elements exclusive from this output are in the **footer**:
+Key elements from this output are in the footer, the piece of text that appears at the bottom:
 
 ```output
 Number of infectors (known): 3
@@ -623,7 +623,7 @@ Although most introductions of `r initial_cases` index case do not generate seco
 
 ### Observed cases vs simulated chains
 
-Let's overlap the cumulative number of observed cases using the linelist object from the `mers_korea_2015` dataset of the `{outbreaks}` R package. To prepare the dataset we use `{incidence2}` to convert the linelist to an `<incidence2>` object, complete the missing dates of the time series with `complete_dates()`
+Let's overlap the cumulative number of observed cases using the linelist object from the `mers_korea_2015` dataset of the `{outbreaks}` R package. To prepare the dataset so we can plot daily total cases over time, we use `{incidence2}` to convert the linelist to an `<incidence2>` object, complete the missing dates of the time series with `complete_dates()`
 
 ```{r,warning=FALSE,message=FALSE}
 library(outbreaks)
@@ -647,7 +647,7 @@ plot(mers_cumcases)
 
 :::::::::::::::::::::::::::::::::::
 
-When plotting the observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea in 2015 alongside the previously simulated chains, we identify that the observed cases followed a trajectory that resembled a simulated explosive outbreak.
+When plotting the observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea in 2015 alongside the previously simulated chains, we see that the observed cases followed a trajectory that is consistent with the simulated explosive outbreak dynamics (which makes sense, given the simulation uses parameters based on this specific outbreak).
 
 ```{r,echo=FALSE}
 # Observed cases vs Simulated transmission chains
@@ -685,7 +685,7 @@ ggplot() +
   )
 ```
 
-When we increase the dispersion parameter from $k = 0.01$ to $k = \infty$, given a fixed reproduction number $R = 1.5$, the proportion of simulated outbreaks that reached the 100-case threshold increases.
+When we increase the dispersion parameter from $k = 0.01$ to $k = \infty$ - and hence reduce individual-level variation in transmission - and assume a fixed reproduction number $R = 1.5$, the proportion of simulated outbreaks that reached the 100-case threshold increases. This is because the simulated outbreaks now have more of a consistent, clockwise dynamic, rather than the high level of variability seen previously.
 
 ![**Growth of simulated outbreaks with R = 1.5 and one initial case, conditional on non-extinction.** Boxes show the median and interquartile range (IQR) of the first disease generation with 100 cases; whiskers show the most extreme values within 1.5 × IQR of the boxes, and crosses show outliers. Percentages show the proportion of 10,000 simulated outbreaks that reached the 100-case threshold ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).](fig/see-nature04153_Fig2-c.jpg)
 
