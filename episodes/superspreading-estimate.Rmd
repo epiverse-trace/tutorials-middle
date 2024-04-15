@@ -253,7 +253,7 @@ In a Poisson distribution, mean is equal to variance. But when variance is highe
 
 **Negative binomial** distribution is specially useful for discrete data over an unbounded positive range whose sample variance exceeds the sample mean. In such terms, the observations are overdispersed with respect to a Poisson distribution, for which the mean is equal to the variance.
 
-In epidemiology, [negative binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution) have being used to model disease transmission for infectious diseases where the likely number of onward infections may vary considerably from individual to individual and from setting to setting.
+In epidemiology, [negative binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution) have being used to model disease transmission for infectious diseases where the likely number of onward infections may vary considerably from individual to individual and from setting to setting, capturing all variation in infectious histories of individuals, including properties of the biological (i.e. degree of viral shedding) and environmental circumstances (e.g. type and location of contact).
 
 :::::::::::::::::::::::::::::
 
