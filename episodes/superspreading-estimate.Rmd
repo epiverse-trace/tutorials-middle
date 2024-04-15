@@ -588,7 +588,7 @@ across_offspring %>%
 
 ## Backward and forward contact tracing
 
-Contact tracing can be deployed in multiple strategies. Forward tracing targets downstream individuals who may be infected by index individual. Backward tracing targets the upstream primary case who infected the index case (or a setting or event at which the index case was infected) by retracing history of contact to the likely point of exposure up to the upper bound of the incubation period.
+During an outbreak, it is common to try and reduce transmission by identifying people who have come into contact with an infected person, then quarantine them in case they subsequently turn out to be infected. Such contact tracing can be deployed in multiple ways. 'Forward' contact tracing targets downstream contacts who may have been infected by a newly identifed infection (i.e. the 'index case'). 'Backward' tracing instead tracks the upstream primary case who infected the index case (or a setting or event at which the index case was infected), for example by retracing history of contact to the likely point of exposure. This makes it possible to identify others who were also potentially infected by this earlier primary case.
 
 In the presence of individual-level variation in transmission, i.e., with an overdispersed offspring distribution, if this primary case is identified, a larger fraction of the transmission chain can be detected by forward tracing each of the contacts of this primary case  ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
 
@@ -601,7 +601,7 @@ Empirical evidence focused on evaluating the efficiency of backward tracing lead
 
 ## Probability of cases in a given cluster
 
-Using `{superspreading}`, we can calculate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
+Using `{superspreading}`, we can estimate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
 
 ```{r}
 # estimate the probability of
@@ -617,7 +617,7 @@ proportion_cluster_size(
 
 ```
 
-Even though we have an $R<1$, given a highly overdispersed offspring distribution ($k=0.02$) we have a 46.9% probability to find a cluster of 25 people or larger. Then, by following a backwards strategy, contact tracing efforts will increase their probability to find the primary case and successfully contain and quarantine an increased proportion of contacts.
+Even though we have an $R<1$, a highly overdispersed offspring distribution ($k=0.02$) means that if we detect a new case, there is a 47% probability they originated from a cluster of 25 infections or more. Hence, by following a backwards strategy, contact tracing efforts will increase the probability of successfully contain and quarantining this large number of earlier infected individuals, rather than simply focusing on the new case, who is likely to have infected nobody (because $k$ is very small).
 
 We can also use this number to prevent gathering of certain sized to reduce the epidemic by preventing potential superspreading events. Interventions can target to reduce the reproduction number in order to reduce the probability of having clusters of secondary cases.
 
