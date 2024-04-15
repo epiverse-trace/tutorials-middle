@@ -176,17 +176,17 @@ library(tidyverse)
 
 ## Simulation of uncontrolled outbreaks
 
-Infectious disease epidemics spread through populations when a chain of infected individuals transmit the infection to others. [Branching processes](https://epiverse-trace.github.io/epichains/articles/theoretical_background.html) can be used to model this process. A branching process is a stochastic process where each infectious individual in a generation gives rise to a random number of individuals in the next generation, starting with the index case in generation 1. The distribution of the number of offspring is called the offspring distribution.
+Infectious disease epidemics spread through populations when a chain of infected individuals transmit the infection to others. [Branching processes](https://epiverse-trace.github.io/epichains/articles/theoretical_background.html) can be used to model this transmission. A branching process is a stochastic process (i.e. a random process that can be described by a known probability distribution), where each infectious individual gives rise to a random number of individuals in the next generation of infection, starting with the index case in generation 1. The distribution of the number of secondary cases each individual generates is called the offspring distribution ([Azam & Funk, 2024](https://epiverse-trace.github.io/epichains/articles/epichains.html)).
 
-`{epichains}` provides methods to analyse and simulate the *size* and *length* of branching processes with an arbitrary offspring distribution. `{epichains}` implements a rapid and low-detail model to reconstruct transmission chains to assess epidemic risk, project cases into the future, and simulate interventions.
+`{epichains}` provides methods to analyse and simulate the *size* and *length* of branching processes with an given offspring distribution. `{epichains}` implements a rapid and simple model to simulate transmission chains to assess epidemic risk, project cases into the future, and evaluate interventions that change $R$.
 
 ::::::::::::::::::: discussion
 
 ### chain size and length
 
-- The **size** of the transmission chain is the total number of individuals infected by a single case and 
+- The **size** of the transmission chain is defined as the total number of individuals infected across all generations of infection, and 
 
-- the **length** of the transmission chain is the number of generations from the first case to the last case they produced before the chain ended. 
+- the **length** of the transmission chain is the number of generations from the first case to the last case in the outbreak before the chain ended. 
 
 The *size* calculation includes the first case, and the *length* calculation contains the first generation when the first case starts the chain (See figure below).
 
@@ -194,7 +194,7 @@ The *size* calculation includes the first case, and the *length* calculation con
 
 ::::::::::::::::::::
 
-To use `{epichains}`, we need two key delays: the offspring distribution and the generation time!
+To use `{epichains}`, we need to know (or assume) two key epidemiological values: the offspring distribution and the generation time.
 
 ## Get the offspring distribution
 
