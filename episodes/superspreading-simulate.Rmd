@@ -463,6 +463,10 @@ To explore the output format of the `<epichains>` class object of name `simulate
 
 Let's use `dplyr::filter()` for this:
 
+```r
+chain_to_observe <- 806
+```
+
 ```{r}
 #### get epichain summary ----------------------------------------------------
 
