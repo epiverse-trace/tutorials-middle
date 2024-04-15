@@ -388,7 +388,7 @@ The `sim` element is placed to register the iteration number (**chain ID**) as a
 
 :::::::::::::::::::::::::::::::
 
-Now, we are prepared to use `map()` to iterate `simulate_chains()` in a vector from 1 to `r number_chains`:
+Now, we are prepared to use `map()` to repeatedly simulate from `simulate_chains()` and store in a vector from 1 to `number_chains`:
 
 ```{r}
 simulated_chains_map <-
@@ -453,7 +453,7 @@ chain_to_observe <- simulated_chains_map %>%
   pull(chain_id)
 ```
 
-To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's observe closely the simulated `chain_id` number `r chain_to_observe`. 
+To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's look at the simulated `chain_id` number `r chain_to_observe`. 
 
 :::::::::::::::::::::::::::::::::
 
