@@ -47,7 +47,12 @@ Given case data of an epidemic, we can create estimates of the current and futur
 
 ## Create a short-term forecast
 
-The function `epinow()` described in the [quantifying transmission episode](../episodes/quantify-transmissibility.md) is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. Let's use the same code used in that episode to get the input data, delays and priors:
+The function `epinow()` described in the [quantifying transmission episode](../episodes/quantify-transmissibility.md) is a wrapper for the functions: 
+
+- `estimate_infections()`, used to estimate cases by date of infection. 
+- `forecast_infections()`, used to simulate infections using an existing fit (estimate) to observed cases.
+
+Let's use the same code used in that episode to get the input data, delays and priors:
 
 ```{r, echo = TRUE}
 # Read cases dataset
@@ -84,8 +89,11 @@ rt_log_sd <- convert_to_logsd(2, 1)
 
 Now we can extract the short-term forecast using:
 
-```{r, message = FALSE, eval = TRUE}
+```{r, message = FALSE, warning=FALSE, eval = TRUE}
+# Assume we only have the first 90 days of this data
 reported_cases <- cases[1:90, ]
+
+# Estimate and forecast
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
@@ -123,15 +131,22 @@ obs_scale <- list(mean = 0.4, sd = 0.01)
 To run the inference framework with this observation process, we add `obs = obs_opts(scale = obs_scale)` to the input arguments of `epinow()`:
 
 ```{r, message = FALSE,warning=FALSE, eval = TRUE}
+# Define observation model
 obs_scale <- list(mean = 0.4, sd = 0.01)
+
+# Assume we only have the first 90 days of this data
 reported_cases <- cases[1:90, ]
+
+# Estimate and forecast
 estimates <- epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
   delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd)),
+  # Add observation model
   obs = obs_opts(scale = obs_scale)
 )
+
 summary(estimates)
 ```
 
@@ -171,14 +186,18 @@ We must specify the type of observation using `type` in `secondary_opts()`, opti
 
 In this example we specify `secondary_opts(type = "incidence")`. See `?EpiNow2::secondary_opts` for more detail).
 
-The final key input is the delay distribution between the primary and secondary observations. Here this is the delay between case report and death, we assume this follows a gamma distribution with mean of 14 days and standard deviation of 5 days. Using `dist_spec()` we specify a fixed gamma distribution.
+The final key input is the delay distribution between the primary and secondary observations. Here this is the delay between case report and death, we assume this follows a gamma distribution with mean of 14 days and standard deviation of 5 days (Alternatively, we can use `{epiparameter}` to [access epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html)). Using `dist_spec()` we specify a fixed gamma distribution.
 
 There are further function inputs to `estimate_secondary()` which can be specified, including adding an observation process, see `?EpiNow2::estimate_secondary` for detail on these options. 
 
 To find the model fit between cases and deaths : 
 ```{r}
+# Estimate from first 30 days of this data
+cases_to_estimate <- reported_cases_deaths[1:30, ]
+
+# Estimate secondary cases
 estimate_cases_to_deaths <- estimate_secondary(
-  reports = reported_cases_deaths[1:30, ],
+  reports = cases_to_estimate,
   secondary = secondary_opts(type = "incidence"),
   delays = delay_opts(dist_spec(
     mean = 14, sd = 5,
@@ -205,6 +224,7 @@ To use this model fit to forecast deaths, we pass a data frame consisting of the
 
 *Note : in this episode we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
 ```{r}
+# Forecast from day 31 to day 60
 cases_to_forecast <- reported_cases_deaths[31:60, c("date", "primary")]
 colnames(cases_to_forecast) <- c("date", "value")
 ```
@@ -212,16 +232,26 @@ colnames(cases_to_forecast) <- c("date", "value")
 To forecast, we use the model fit `estimate_cases_to_deaths`:  
 
 ```{r}
+# Forecast secondary cases
 deaths_forecast <- forecast_secondary(
   estimate = estimate_cases_to_deaths,
   primary = cases_to_forecast
 )
+
 plot(deaths_forecast)
 ```
 
 The plot shows the forecast secondary observations (deaths) over the dates which we have recorded cases for. 
 It is also possible to forecast deaths using forecast cases, here you would specify `primary` as the `estimates` output from `estimate_infections()`.
 
+
+:::::::::::::::::::::::::: callout
+
+### Credible intervals
+
+In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% credible intervals in order from lightest to darkest.
+
+::::::::::::::::::::::::::
 
 ## Challenge : Ebola outbreak analysis 
 
