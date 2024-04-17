@@ -160,6 +160,8 @@ The data files for the tutorial can be downloaded manually here:
 
 - <https://epiverse-trace.github.io/tutorials-middle/data/ebola_cases.csv>
 
+- <https://epiverse-trace.github.io/tutorials-middle/data/sarscov2_cases_deaths.csv>
+
 ## Your Questions
 
 If you need any assistance installing the software or have any other questions about this tutorial, please send an email to <andree.valle-campos@lshtm.ac.uk>
