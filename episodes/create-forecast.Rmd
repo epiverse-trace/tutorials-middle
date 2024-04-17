@@ -322,13 +322,13 @@ ebola_generation_time <- dist_spec(
 
 We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
 
-```{r, eval=TRUE,echo=FALSE}
+```{r, eval=TRUE,echo=FALSE,warning=FALSE,message=FALSE}
 # read data from the tutorial repository R project
 ebola_cases <-
   readr::read_csv(file.path("data", "ebola_cases.csv"))
 ```
 
-```{r,eval=FALSE,echo=TRUE}
+```{r,eval=FALSE,echo=TRUE,warning=FALSE,message=FALSE}
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 ebola_cases <-
