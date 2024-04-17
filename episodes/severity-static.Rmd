@@ -145,7 +145,7 @@ outbreaks::ebola_sierraleone_2014 %>% as_tibble()
 When we apply `cfr_static()` to `data` directly, we are calculating the naive CFR:
 
 ```{r}
-# Calculate the static CFR without adjusting for delays for the first 30 days
+# Calculate the naive CFR for the first 30 days
 cfr_static(data = ebola1976[1:30,])
 ```
 
@@ -283,7 +283,8 @@ plot(onset_to_death_ebola, day_range = 0:40)
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
 ```{r}
-# Calculate the static CFR while adjusting for delays for the first 30 days
+# Calculate the delay-adjusted CFR 
+# for the first 30 days
 cfr_static(
   data = ebola1976[1:30,],
   delay_density = function(x) density(onset_to_death_ebola, x)
@@ -436,31 +437,6 @@ When we observe the entire course of an epidemic (from $t \rightarrow \infty$), 
 
 On the challenge above, we discovered that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are different. **Why do they differ?**
 
-`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this, `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the *sampling process* defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
-
-:::::::::::::::::::::::::: spoiler
-
-### What is the sampling process?
-
-![The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. ([Nishiura et al., 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
-
-From *aggregated incidence data*, at time $t$ we know the cumulative number of confirmed cases and deaths, $C_{t}$ and $D_{t}$, and wish to estimate the unbiased CFR $\pi$, by way of the factor of underestimation $u_{t}$. 
-
-If we knew the factor of underestimation $u_{t}$ we could specify the size of the population of confirmed cases no longer at risk ($u_{t}C_{t}$, **shaded**), although we do not know which surviving individuals belong to this group. A proportion $\pi$ of those in the group of cases still at risk (size $(1- u_{t})C_{t}$, **unshaded**) is expected to die.
-
-Because each case no longer at risk had an independent probability of dying, $\pi$, the number of deaths, $D_{t}$, is a sample from a binomial distribution with sample size $u_{t}C_{t}$, and probability of dying $p_{t}$ = $\pi$.
-
-This is represented by the following likelihood function to obtain the maximum likelihood estimate of the unbiased CFR $p_{t}$ = $\pi$:
-
-$$
-  {\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} + D_{t} \log{\pi} +
-  (u_{t}C_{t} - D_{t})\log{(1 - \pi)},
-$$
-
-This estimation is performed by the internal function `?cfr:::estimate_severity()`.
-
-::::::::::::::::::::::::::
-
 The `cfr_static()` estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has ended or has progressed such that more deaths are reported, the estimated CFR is then _closest to_ the 'true' unbiased CFR.
 
 Additionally, a _delay-adjusted CFR_ estimated with `cfr_static()` can assess the severity of an emerging infectious disease **earlier** than the biased or naive CFR, during an epidemic.
@@ -474,7 +450,8 @@ We can explore the **early** determination of the _delay-adjusted CFR_ using the
 ::::::::::::::::::::::
 
 ```{r}
-# Calculate the rolling daily naive CFR for all the 73 days in the Ebola dataset
+# Calculate the rolling daily naive CFR 
+# for all the 73 days in the Ebola dataset
 rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
 
 tail(rolling_cfr_naive)
@@ -484,6 +461,7 @@ With `tail()`, we show that the latest CFR estimates. The naive and delay-adjust
 
 ```{r}
 # Calculate the rolling daily delay-adjusted CFR
+# for all the 73 days in the Ebola dataset
 rolling_cfr_adjusted <- cfr::cfr_rolling(
   data = ebola1976,
   delay_density = function(x) density(onset_to_death_ebola, x)
@@ -572,18 +550,9 @@ Is this pattern similar to other outbreaks? We can use the data sets in this epi
 
 ::::::::::::::::::::::
 
-:::::::::::::::::::::: checklist
-
-With `{cfr}`, we estimate the CFR as the proportion of deaths among **confirmed** cases. 
-
-By only using **confirmed** cases, it is clear that all cases that do not seek medical treatment or are not notified will be missed, as well as all asymptomatic cases. This means that the CFR estimate is higher than the proportion of deaths among the infected.
-
-::::::::::::::::::::::
-
-
 :::::::::::::::::::::::::::::::::: spoiler
 
-### CFR estimation during SARS outbreak, Hong Kong, 2003
+### Case study: SARS outbreak, Hong Kong, 2003
 
 Figures A and B show the cumulative numbers of cases and deaths of SARS, and Figure C shows the observed (biased) CFR estimates as a function of time, i.e. the cumulative number of deaths over cases at time $t$. Due to the delay from the onset of symptoms to death, the biased estimate of CFR at time $t$ underestimates the realised CFR at the end of an outbreak (i.e. 302/1755 = 17.2 %). 
 
@@ -595,9 +564,48 @@ Nevertheless, even by only using the observed data for the period March 19 to Ap
 
 ::::::::::::::::::::::::::::::::::
 
+:::::::::::::::::::::: discussion
 
+### Checklist
 
-:::::::::::::::::::::::::: checklist
+With `{cfr}`, we estimate the CFR as the proportion of deaths among **confirmed** cases. 
+
+By only using **confirmed** cases, it is clear that all cases that do not seek medical treatment or are not notified will be missed, as well as all asymptomatic cases. This means that the CFR estimate is higher than the proportion of deaths among the infected.
+
+::::::::::::::::::::::
+
+::::::::::::::::::::::::::: solution
+
+### An early unbiased CFR estimate
+
+`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this, `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the *sampling process* defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
+
+:::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: solution
+
+### What is the sampling process?
+
+![The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. ([Nishiura et al., 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
+
+From *aggregated incidence data*, at time $t$ we know the cumulative number of confirmed cases and deaths, $C_{t}$ and $D_{t}$, and wish to estimate the unbiased CFR $\pi$, by way of the factor of underestimation $u_{t}$. 
+
+If we knew the factor of underestimation $u_{t}$ we could specify the size of the population of confirmed cases no longer at risk ($u_{t}C_{t}$, **shaded**), although we do not know which surviving individuals belong to this group. A proportion $\pi$ of those in the group of cases still at risk (size $(1- u_{t})C_{t}$, **unshaded**) is expected to die.
+
+Because each case no longer at risk had an independent probability of dying, $\pi$, the number of deaths, $D_{t}$, is a sample from a binomial distribution with sample size $u_{t}C_{t}$, and probability of dying $p_{t}$ = $\pi$.
+
+This is represented by the following likelihood function to obtain the maximum likelihood estimate of the unbiased CFR $p_{t}$ = $\pi$:
+
+$$
+  {\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} + D_{t} \log{\pi} +
+  (u_{t}C_{t} - D_{t})\log{(1 - \pi)},
+$$
+
+This estimation is performed by the internal function `?cfr:::estimate_severity()`.
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: solution
 
 ### Limitations
 
