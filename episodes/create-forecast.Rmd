@@ -167,13 +167,14 @@ First, we must format our data to have the following columns:
 + `secondary` : number of secondary observations date, in this example **deaths**.
 
 ```{r}
-reported_cases_deaths <- aggregate(
-  cbind(cases_new, deaths_new) ~ date,
-  data =
-    incidence2::covidregionaldataUK[, c("date", "cases_new", "deaths_new")],
-  FUN = sum
-)
-colnames(reported_cases_deaths) <- c("date", "primary", "secondary")
+reported_cases_deaths <- incidence2::covidregionaldataUK %>%
+  select(date, cases_new, deaths_new) %>%
+  group_by(date) %>%
+  summarise(
+    primary = sum(cases_new, na.rm = TRUE),
+    secondary = sum(deaths_new, na.rm = TRUE)
+    ) %>%
+  ungroup()
 ```
 
 
