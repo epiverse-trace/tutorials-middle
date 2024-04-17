@@ -45,6 +45,15 @@ Learners should familiarise themselves with following concept dependencies befor
 
 Given case data of an epidemic, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future of th epidemic, we need to make an assumption of how observations up to the present are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed. In this tutorial we will create short-term [forecasts](../learners/reference.md#forecast) by assuming the reproduction number will remain the same as its estimate was on the final date for which data was available.
 
+In this tutorial we are going to learn how to use the `{EpiNow2}` package to forecast cases accounting for incomplete observations and forecast secondary observations like deaths.
+
+We’ll use the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
+
+```{r,message=FALSE,warning=FALSE}
+library(EpiNow2)
+library(tidyverse)
+```
+
 ## Create a short-term forecast
 
 The function `epinow()` described in the [quantifying transmission episode](../episodes/quantify-transmissibility.md) is a wrapper for the functions: 
@@ -311,29 +320,32 @@ ebola_generation_time <- dist_spec(
 )
 ```
 
-As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 
+We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
 
 ```{r, eval=TRUE,echo=FALSE}
 # read data from the tutorial repository R project
 ebola_cases <-
-  read.csv(file.path("data", "ebola_cases.csv"))
+  readr::read_csv(file.path("data", "ebola_cases.csv"))
 ```
 
 ```{r,eval=FALSE,echo=TRUE}
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 ebola_cases <-
-  read.csv(here::here("data", "raw-data", "ebola_cases.csv"))
+  readr::read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 ```
 
-```{r,eval=TRUE,echo=TRUE, message = FALSE}
-# format date column
-ebola_cases$date <- as.Date(ebola_cases$date)
+We define an observation model to scale the estimated and forecast number of new infections:
 
+```{r}
 # Define observation model
 # mean of 80% and standard deviation of 1%
 ebola_obs_scale <- list(mean = 0.8, sd = 0.01)
+```
 
+As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 
+
+```{r,eval=TRUE,echo=TRUE, message = FALSE}
 ebola_estimates <- epinow(
   reported_cases = ebola_cases[1:120, ], # first 3 months of data only
   generation_time = generation_time_opts(ebola_generation_time),
