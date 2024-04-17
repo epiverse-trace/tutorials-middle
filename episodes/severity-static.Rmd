@@ -12,8 +12,6 @@ editor_options:
 
 - How can the Case Fatality Risk (CFR) be estimated early in an ongoing epidemic?
 
-- How do we estimate other severity measurements from different data sources?
-
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
@@ -22,7 +20,7 @@ editor_options:
 
 - Estimate a delay-adjusted CFR using `{epiparameter}` and `{cfr}`.
 
-- Estimate severity measurements like the Hospitalization Fatality Risk (HFR) using `{cfr}`.
+- Estimate a delay-adjusted severity for an expanding time series using `{cfr}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -107,8 +105,8 @@ Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the f
 # Load the Ebola 1976 data provided with the {cfr} package
 data("ebola1976")
 
-# view top data
-ebola1976 %>% as_tibble()
+# Assume we only have the first 30 days of this data
+ebola1976[1:30,] %>% as_tibble()
 ```
 
 :::::::::::::::::: callout
@@ -147,8 +145,8 @@ outbreaks::ebola_sierraleone_2014 %>% as_tibble()
 When we apply `cfr_static()` to `data` directly, we are calculating the naive CFR:
 
 ```{r}
-# Calculate the static CFR without adjusting for delays
-cfr_static(data = ebola1976)
+# Calculate the static CFR without adjusting for delays for the first 30 days
+cfr_static(data = ebola1976[1:30,])
 ```
 
 :::::::::::::::::::::::::::::::::::::::: challenge
@@ -171,13 +169,13 @@ Inspect the format of the data input.
 
 We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
 
-```{r, eval=TRUE,echo=FALSE}
+```{r, eval=TRUE,echo=FALSE,warning=FALSE,message=FALSE}
 # read data from the tutorial repository R project
 sarscov2_input <-
   readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
 ```
 
-```{r,eval=FALSE,echo=TRUE}
+```{r,eval=FALSE,echo=TRUE,warning=FALSE,message=FALSE}
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 sarscov2_input <-
@@ -261,21 +259,6 @@ In the USA and Canada, no deaths were attributed to the virus in the first ten d
 
 ::::::::::::::::::::
 
-:::::::::::::::::::: discussion
-
-Based on your experience:
-
-- Share any previous outbreak in which you participated in its response.
-
-Answer to these questions:
-
-- How did you assess the clinical severity of the outbreak?
-- What were the primary sources of bias?
-- What did you do to take into account the identified bias?
-- What complementary analysis would you do to solve the bias?
-
-:::::::::::::::::::: 
-
 ## Delay-adjusted CFR
 
 [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) developed a method that considers the **time delay** from the onset of symptoms to death.
@@ -300,9 +283,9 @@ plot(onset_to_death_ebola, day_range = 0:40)
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
 ```{r}
-# Calculate the static CFR while adjusting for delays
+# Calculate the static CFR while adjusting for delays for the first 30 days
 cfr_static(
-  data = ebola1976,
+  data = ebola1976[1:30,],
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
 ```
@@ -310,7 +293,7 @@ cfr_static(
 ```{r,echo=FALSE}
 out_delay_adjusted <-
   cfr_static(
-    data = ebola1976,
+    data = ebola1976[1:30,],
     delay_density = function(x) density(onset_to_death_ebola, x)
   )
 
@@ -320,37 +303,6 @@ out_high <- out_delay_adjusted %>% pull(severity_high)
 ```
 
 The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_mean` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
-
-::::::::::::::::::::::::::: spoiler
-
-### How does {cfr} works?
-
-To adjust the CFR, [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) use the case and death incidence data to estimate the number of cases with known outcomes:
-
-$$
-  u_t = \dfrac{\sum_{i = 0}^t
-        \sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
-$$
-
-where:
-
-- $c_{t}$ is the daily case incidence at time $t$, 
-- $f_{t}$ is the value of the Probability Mass Function (PMF) of the **delay distribution** between onset and death, and
-- $u_{t}$ represents the underestimation factor of the known outcomes.
-
-$u_{t}$ is used to **scale** the value of the cumulative number of cases in the denominator in the calculation of the CFR. This is calculated internally with the [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) function.
-
-The estimator for CFR can be written as: 
-
-$$p_{t} = \frac{b_{t}}{u_{t}}$$
-
-where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
-
-From this last equation, we observe that the unbiased CFR $p_{t}$ is larger than biased CFR $b_{t}$ because in $u_{t}$ the numerator is smaller than the denominator (note that $f_{t}$ is the probability distribution of the *delay distribution* between onset and death). Therefore, we refer to $b_{t}$ as the biased estimator of CFR.
-
-When we observe the entire course of an epidemic (from $t \rightarrow \infty$), $u_{t}$ tends to 1, making $b_{t}$ tends to $p_{t}$ and become an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
-
-:::::::::::::::::::::::::::
 
 :::::::::::::::::: callout
 
@@ -411,7 +363,7 @@ sarscov2_delay <-
 
 We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
 
-```{r, eval=TRUE,echo=FALSE}
+```{r, eval=TRUE,echo=FALSE,warning=FALSE,message=FALSE}
 # read data from the tutorial repository R project
 sarscov2_input <-
   readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
@@ -448,11 +400,43 @@ Interpret the comparison between the naive and delay-adjusted CFR estimates.
 ::::::::::::::::::::::::::::::::::::::::
 
 
+::::::::::::::::::::::::::: spoiler
+
+### How does {cfr} works?
+
+To adjust the CFR, [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) use the case and death incidence data to estimate the number of cases with known outcomes:
+
+$$
+  u_t = \dfrac{\sum_{i = 0}^t
+        \sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
+$$
+
+where:
+
+- $c_{t}$ is the daily case incidence at time $t$, 
+- $f_{t}$ is the value of the Probability Mass Function (PMF) of the **delay distribution** between onset and death, and
+- $u_{t}$ represents the underestimation factor of the known outcomes.
+
+$u_{t}$ is used to **scale** the value of the cumulative number of cases in the denominator in the calculation of the CFR. This is calculated internally with the [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) function.
+
+The estimator for CFR can be written as: 
+
+$$p_{t} = \frac{b_{t}}{u_{t}}$$
+
+where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
+
+From this last equation, we observe that the unbiased CFR $p_{t}$ is larger than biased CFR $b_{t}$ because in $u_{t}$ the numerator is smaller than the denominator (note that $f_{t}$ is the probability distribution of the *delay distribution* between onset and death). Therefore, we refer to $b_{t}$ as the biased estimator of CFR.
+
+When we observe the entire course of an epidemic (from $t \rightarrow \infty$), $u_{t}$ tends to 1, making $b_{t}$ tends to $p_{t}$ and become an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
+
+:::::::::::::::::::::::::::
+
+
 ## An early-stage CFR estimate
 
-On the challenge above, we discovered that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?
+On the challenge above, we discovered that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are different. **Why do they differ?**
 
-`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this, `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the sampling process defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
+`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this, `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the *sampling process* defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
 
 :::::::::::::::::::::::::: spoiler
 
@@ -477,25 +461,9 @@ This estimation is performed by the internal function `?cfr:::estimate_severity(
 
 ::::::::::::::::::::::::::
 
-The `cfr_static()` estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has clearly ended, or has progressed such that deaths are reported more, the estimated CFR is then _closest to_ the 'true' unbiased CFR.
+The `cfr_static()` estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has ended or has progressed such that more deaths are reported, the estimated CFR is then _closest to_ the 'true' unbiased CFR.
 
 Additionally, a _delay-adjusted CFR_ estimated with `cfr_static()` can assess the severity of an emerging infectious disease **earlier** than the biased or naive CFR, during an epidemic.
-
-This is particularly useful when an _epidemic curve of confirmed cases_ is the only data available (i.e. when individual data from onset to death are unavailable, especially during the early stage of the epidemic). When there are few deaths or none at all, an assumption has to be made for the *delay distribution* from onset to death, e.g. from literature based on previous outbreaks. [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) depict this in the figures with data from the SARS outbreak in Hong Kong, 2003.
-
-:::::::::::::::::::::::::::::::::: spoiler
-
-### CFR estimation during SARS outbreak, Hong Kong, 2003
-
-Figures A and B show the cumulative numbers of cases and deaths of SARS, and Figure C shows the observed (biased) CFR estimates as a function of time, i.e. the cumulative number of deaths over cases at time $t$. Due to the delay from the onset of symptoms to death, the biased estimate of CFR at time $t$ underestimates the realised CFR at the end of an outbreak (i.e. 302/1755 = 17.2 %). 
-
-![Observed (biased) confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_abc.png)
-
-Nevertheless, even by only using the observed data for the period March 19 to April 2, `cfr_static()` can yield an appropriate prediction (Figure D), e.g. the delay-adjusted CFR at March 27 is 18.1 % (95% CI: 10.5, 28.1). An overestimation is seen in the very early stages of the epidemic, but the 95% confidence limits in the later stages include the realised CFR (i.e. 17.2 %).
-
-![Early determination of the delay-adjusted confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_d.png)
-
-::::::::::::::::::::::::::::::::::
 
 We can explore the **early** determination of the _delay-adjusted CFR_ using the `cfr_rolling()` function.
 
@@ -506,13 +474,13 @@ We can explore the **early** determination of the _delay-adjusted CFR_ using the
 ::::::::::::::::::::::
 
 ```{r}
-# Calculate the rolling daily naive CFR
+# Calculate the rolling daily naive CFR for all the 73 days in the Ebola dataset
 rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
 
 tail(rolling_cfr_naive)
 ```
 
-With `tail()`, we show that the latest CFR estimates are equal to the `cfr_static()` outputs
+With `tail()`, we show that the latest CFR estimates. The naive and delay-adjusted estimates have overlapping ranges of 95% confidence intervals.
 
 ```{r}
 # Calculate the rolling daily delay-adjusted CFR
@@ -572,6 +540,8 @@ bind_rows(
 
 The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
 
+**Notice** that this delay-adjusted calculation is particularly useful when an _epidemic curve of confirmed cases_ is the only data available (i.e. when individual data from onset to death are unavailable, especially during the early stage of the epidemic). When there are few deaths or none at all, an assumption has to be made for the *delay distribution* from onset to death, e.g. from literature based on previous outbreaks. [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) depict this in the figures with data from the SARS outbreak in Hong Kong, 2003.
+
 :::::::::::::::::::::::::::::::::::::::::::: discussion
 
 ### Interpret the early-stage CFR estimate
@@ -602,33 +572,6 @@ Is this pattern similar to other outbreaks? We can use the data sets in this epi
 
 ::::::::::::::::::::::
 
-
-
-::::::::::::::::: spoiler
-
-### rolling or time-varying?
-
-The `{cfr}` package has a function called `cfr_time_varying()` with functionality that differs from `cfr_rolling()`.
-
-#### When to use `cfr_rolling()`?
-
-`cfr_rolling()` shows the estimated CFR on each outbreak day, given that future data on cases and deaths is unavailable at the time. The final value of `cfr_rolling()` estimates is identical to `cfr_static()` on the same data.
-
-Remember, as shown above, `cfr_rolling()` is helpful to get early-stage CFR estimates and check whether an outbreak's CFR estimate has stabilised. Thus, `cfr_rolling()` is not sensitive to the length or size of the epidemic.
-
-#### When to use `cfr_time_varying()`?
-
-On the other hand, `cfr_time_varying()` calculates the CFR over a moving window and helps to understand changes in CFR due to changes in the epidemic, e.g. due to a new variant or increased immunity from vaccination.
-
-However, `cfr_time_varying()` is sensitive to sampling uncertainty. Thus, it is sensitive to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. 
-
-For example, with 100 cases, the fatality risk estimate will, roughly speaking, have a 95% confidence interval ±10% of the mean estimate (binomial CI). So if we have >100 cases with expected outcomes *on a given day*, we can get reasonable estimates of the time varying CFR. But if we only have >100 cases *over the course of the whole epidemic*, we probably need to rely on `cfr_rolling()` that uses the cumulative data.
-
-We invite you to read this [vignette about the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
-
-:::::::::::::::::
-
-
 :::::::::::::::::::::: checklist
 
 With `{cfr}`, we estimate the CFR as the proportion of deaths among **confirmed** cases. 
@@ -636,6 +579,23 @@ With `{cfr}`, we estimate the CFR as the proportion of deaths among **confirmed*
 By only using **confirmed** cases, it is clear that all cases that do not seek medical treatment or are not notified will be missed, as well as all asymptomatic cases. This means that the CFR estimate is higher than the proportion of deaths among the infected.
 
 ::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::: spoiler
+
+### CFR estimation during SARS outbreak, Hong Kong, 2003
+
+Figures A and B show the cumulative numbers of cases and deaths of SARS, and Figure C shows the observed (biased) CFR estimates as a function of time, i.e. the cumulative number of deaths over cases at time $t$. Due to the delay from the onset of symptoms to death, the biased estimate of CFR at time $t$ underestimates the realised CFR at the end of an outbreak (i.e. 302/1755 = 17.2 %). 
+
+![Observed (biased) confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_abc.png)
+
+Nevertheless, even by only using the observed data for the period March 19 to April 2, `cfr_static()` can yield an appropriate prediction (Figure D), e.g. the delay-adjusted CFR at March 27 is 18.1 % (95% CI: 10.5, 28.1). An overestimation is seen in the very early stages of the epidemic, but the 95% confidence limits in the later stages include the realised CFR (i.e. 17.2 %).
+
+![Early determination of the delay-adjusted confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_d.png)
+
+::::::::::::::::::::::::::::::::::
+
+
 
 :::::::::::::::::::::::::: checklist
 
@@ -778,6 +738,34 @@ Local factors like testing capacity, the case definition, and sampling regime ca
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Appendix
+
+The `{cfr}` package has a function called `cfr_time_varying()` with functionality that differs from `cfr_rolling()`.
+
+::::::::::::::::: callout
+
+### When to use cfr_rolling()?
+
+**cfr_rolling()** shows the estimated CFR on each outbreak day, given that future data on cases and deaths is unavailable at the time. The final value of _cfr_rolling()_ estimates is identical to _cfr_static()_ on the same data.
+
+Remember, as shown above, _cfr_rolling()_ is helpful to get early-stage CFR estimates and check whether an outbreak's CFR estimate has stabilised. Thus, _cfr_rolling()_ is not sensitive to the length or size of the epidemic.
+
+:::::::::::::::::
+
+::::::::::::::::: callout
+
+### When to use cfr_time_varying()?
+
+On the other hand, **cfr_time_varying()** calculates the CFR over a moving window and helps to understand changes in CFR due to changes in the epidemic, e.g. due to a new variant or increased immunity from vaccination.
+
+However, _cfr_time_varying()_ is sensitive to sampling uncertainty. Thus, it is sensitive to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. 
+
+For example, with 100 cases, the fatality risk estimate will, roughly speaking, have a 95% confidence interval ±10% of the mean estimate (binomial CI). So if we have >100 cases with expected outcomes *on a given day*, we can get reasonable estimates of the time varying CFR. But if we only have >100 cases *over the course of the whole epidemic*, we probably need to rely on **cfr_rolling()** that uses the cumulative data.
+
+We invite you to read this [vignette about the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
+
+:::::::::::::::::
+
 :::::::::::::::::::::::::::::::: discussion
 
 ### More severity measures
@@ -785,6 +773,12 @@ Local factors like testing capacity, the case definition, and sampling regime ca
 Suppose we need to assess the clinical severity of the epidemic in a context different from surveillance data, like the severity among cases that arrive at hospitals or cases you collected from a representative serological survey. 
 
 Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denominator (`deaths`) to estimate more severity measures like the Infection fatality risk (IFR) or the Hospitalisation Fatality Risk (HFR). We can follow this analogy: 
+
+:::::::::::::::::::::::::::::::: 
+
+:::::::::::::::::::::::::::: solution
+
+### Infection and Hospitalization risk
 
 If for a _Case_ fatality risk (CFR), we require: 
 
@@ -820,6 +814,22 @@ Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires:
 ![Schematic diagram of the baseline analyses. Red, blue, and green arrows denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 84, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–194, D3)daily number of laboratory-confirmed cases on March 9–April 243, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission3, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities3, and D7) 16,781 laboratory-confirmed cases identified through universal screening10,11. Pse: RT-PCR sensitivity12. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections13.'}
 
 ::::::::::::::::::::::::::::
+
+:::::::::::::::::::: discussion
+
+Based on your experience:
+
+- Share any previous outbreak in which you participated in its response.
+
+Answer to these questions:
+
+- How did you assess the clinical severity of the outbreak?
+- What were the primary sources of bias?
+- What did you do to take into account the identified bias?
+- What complementary analysis would you do to solve the bias?
+
+:::::::::::::::::::: 
+
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
