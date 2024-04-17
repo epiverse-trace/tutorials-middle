@@ -307,7 +307,7 @@ For distribution functions with parameters not available in `{epiparameter}`, we
 
 :::::::::::::::::: spoiler
 
-## When to use discrete distributions?
+### When to use discrete distributions?
 
 For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropriate choice to pass are **discrete** distributions. This is because we will work with daily case and death data.
 
@@ -419,11 +419,11 @@ When we observe the entire course of an epidemic (from $t \rightarrow \infty$), 
 
 ## An early-stage CFR estimate
 
-On the challenge above, we discovered that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are different. **Why do they differ?**
+On the challenge above, we discovered that the _naive_ and _delay-adjusted_ CFR estimates are different.
 
-The `cfr_static()` estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has ended or has progressed such that more deaths are reported, the estimated CFR is then _closest to_ the 'true' unbiased CFR.
+The **naive** estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has ended or has progressed such that more deaths are reported, the estimated CFR is then _closest to_ the 'true' unbiased CFR.
 
-Additionally, a _delay-adjusted CFR_ estimated with `cfr_static()` can assess the severity of an emerging infectious disease **earlier** than the biased or naive CFR, during an epidemic.
+On the other hand, the **delay-adjusted** estimate can assess the severity of an emerging infectious disease *earlier* than the biased or naive CFR, during an epidemic.
 
 We can explore the **early** determination of the _delay-adjusted CFR_ using the `cfr_rolling()` function.
 
@@ -547,6 +547,55 @@ Note that the estimate has considerable uncertainty at the beginning of the time
 Is this pattern similar to other outbreaks? We can use the data sets in this episode's challenges. We invite you to find it out!
 
 ::::::::::::::::::::::
+
+:::::::::::::::::::::: discussion
+
+### Checklist
+
+With `{cfr}`, we estimate the CFR as the proportion of deaths among **confirmed** cases. 
+
+By only using **confirmed** cases, it is clear that all cases that do not seek medical treatment or are not notified will be missed, as well as all asymptomatic cases. This means that the CFR estimate is higher than the proportion of deaths among the infected.
+
+::::::::::::::::::::::
+
+::::::::::::::::::::::::::: solution
+
+### Why the naive and delay-adjusted differ?
+
+`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this, `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the *sampling process* defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
+
+:::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: solution
+
+### What is the sampling process?
+
+![The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. ([Nishiura et al., 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
+
+From *aggregated incidence data*, at time $t$ we know the cumulative number of confirmed cases and deaths, $C_{t}$ and $D_{t}$, and wish to estimate the unbiased CFR $\pi$, by way of the factor of underestimation $u_{t}$. 
+
+If we knew the factor of underestimation $u_{t}$ we could specify the size of the population of confirmed cases no longer at risk ($u_{t}C_{t}$, **shaded**), although we do not know which surviving individuals belong to this group. A proportion $\pi$ of those in the group of cases still at risk (size $(1- u_{t})C_{t}$, **unshaded**) is expected to die.
+
+Because each case no longer at risk had an independent probability of dying, $\pi$, the number of deaths, $D_{t}$, is a sample from a binomial distribution with sample size $u_{t}C_{t}$, and probability of dying $p_{t}$ = $\pi$.
+
+This is represented by the following likelihood function to obtain the maximum likelihood estimate of the unbiased CFR $p_{t}$ = $\pi$:
+
+$$
+  {\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} + D_{t} \log{\pi} +
+  (u_{t}C_{t} - D_{t})\log{(1 - \pi)},
+$$
+
+This estimation is performed by the internal function `?cfr:::estimate_severity()`.
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: solution
+
+### Limitations
+
+- The delay-adjusted CFR does not address all sources of error in data like the underdiagnosis of infected individuals.
+
+::::::::::::::::::::::::::
 
 ## Challenges
 
@@ -691,55 +740,6 @@ Local factors like testing capacity, the case definition, and sampling regime ca
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::: discussion
-
-### Checklist
-
-With `{cfr}`, we estimate the CFR as the proportion of deaths among **confirmed** cases. 
-
-By only using **confirmed** cases, it is clear that all cases that do not seek medical treatment or are not notified will be missed, as well as all asymptomatic cases. This means that the CFR estimate is higher than the proportion of deaths among the infected.
-
-::::::::::::::::::::::
-
-::::::::::::::::::::::::::: solution
-
-### An early unbiased CFR estimate
-
-`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this, `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the *sampling process* defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
-
-:::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::: solution
-
-### What is the sampling process?
-
-![The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. ([Nishiura et al., 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
-
-From *aggregated incidence data*, at time $t$ we know the cumulative number of confirmed cases and deaths, $C_{t}$ and $D_{t}$, and wish to estimate the unbiased CFR $\pi$, by way of the factor of underestimation $u_{t}$. 
-
-If we knew the factor of underestimation $u_{t}$ we could specify the size of the population of confirmed cases no longer at risk ($u_{t}C_{t}$, **shaded**), although we do not know which surviving individuals belong to this group. A proportion $\pi$ of those in the group of cases still at risk (size $(1- u_{t})C_{t}$, **unshaded**) is expected to die.
-
-Because each case no longer at risk had an independent probability of dying, $\pi$, the number of deaths, $D_{t}$, is a sample from a binomial distribution with sample size $u_{t}C_{t}$, and probability of dying $p_{t}$ = $\pi$.
-
-This is represented by the following likelihood function to obtain the maximum likelihood estimate of the unbiased CFR $p_{t}$ = $\pi$:
-
-$$
-  {\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} + D_{t} \log{\pi} +
-  (u_{t}C_{t} - D_{t})\log{(1 - \pi)},
-$$
-
-This estimation is performed by the internal function `?cfr:::estimate_severity()`.
-
-::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::: solution
-
-### Limitations
-
-- The delay-adjusted CFR does not address all sources of error in data like the underdiagnosis of infected individuals.
-
-::::::::::::::::::::::::::
 
 
 ## Appendix
