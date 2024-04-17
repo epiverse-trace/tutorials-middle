@@ -113,9 +113,11 @@ ebola1976[1:30,] %>% as_tibble()
 
 ### We need aggregated incidence data
 
-`{cfr}` reads **aggregated** incidence data. Similar to the `{EpiNow2}` with the difference that for `{cfr}` we need one more column named `deaths`.
+`{cfr}` reads **aggregated** incidence data. 
 
-```{r}
+<!-- Similar to the `{EpiNow2}` with the difference that for `{cfr}` we need one more column named `deaths`. -->
+
+```{r,eval=FALSE,echo=FALSE}
 EpiNow2::example_confirmed %>% as_tibble()
 ```
 
@@ -201,7 +203,7 @@ sarscov2_input %>%
 
 ::::::::::::: solution
 
-### Preferential ascertainment of severe cases
+### 1. Preferential ascertainment of severe cases
 
 For diseases with a _spectrum_ of clinical presentations, those cases that come to the attention of public health authorities and registered into surveillance databases will typically be people with the most severe symptoms who seek medical care, are admitted to a hospital, or die. 
 
@@ -211,7 +213,7 @@ Therefore, the CFR will typically be higher among _detected cases_ than among th
 
 :::::::::::: solution
 
-### Bias due to delayed reporting of death
+### 2. Bias due to delayed reporting of death
 
 During an _ongoing_ epidemic, there is a delay between the time someone dies and the time their death is reported. Therefore, at any given moment in time, the list of cases includes people who will die and whose death has not yet occurred or has occurred but not yet been reported. Thus, dividing the cumulative number of reported deaths by the cumulative number of reported cases at a specific time point during an outbreak will underestimate the true CFR.
 
@@ -305,18 +307,6 @@ For distribution functions with parameters not available in `{epiparameter}`, we
 
 ::::::::::::::::::
 
-:::::::::::::::::: spoiler
-
-### When to use discrete distributions?
-
-For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropriate choice to pass are **discrete** distributions. This is because we will work with daily case and death data.
-
-We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
-
-However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epidist>` object.
-
-::::::::::::::::::
-
 :::::::::::::::::::::::::::::::::::::::: challenge
 
 Use the same file from the previous challenge ([sarscov2_cases_deaths.csv](data/sarscov2_cases_deaths.csv)).
@@ -383,6 +373,18 @@ Interpret the comparison between the naive and delay-adjusted CFR estimates.
 ::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::: spoiler
+
+### When to use discrete distributions?
+
+For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropriate choice to pass are **discrete** distributions. This is because we will work with daily case and death data.
+
+We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
+
+However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epidist>` object.
+
+::::::::::::::::::
 
 
 ::::::::::::::::::::::::::: spoiler
@@ -782,7 +784,7 @@ Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denomina
 
 :::::::::::::::::::::::::::: solution
 
-### Infection and Hospitalization risk
+### Infection and Hospitalization fatality risk
 
 If for a _Case_ fatality risk (CFR), we require: 
 
