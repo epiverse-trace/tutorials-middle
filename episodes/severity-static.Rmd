@@ -106,7 +106,7 @@ Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the f
 data("ebola1976")
 
 # Assume we only have the first 30 days of this data
-ebola1976[1:30,] %>% as_tibble()
+ebola1976[1:30, ] %>% as_tibble()
 ```
 
 :::::::::::::::::: callout
@@ -134,7 +134,7 @@ When we apply `cfr_static()` to `data` directly, we are calculating the naive CF
 
 ```{r}
 # Calculate the naive CFR for the first 30 days
-cfr_static(data = ebola1976[1:30,])
+cfr_static(data = ebola1976[1:30, ])
 ```
 
 :::::::::::::::::::::::::::::::::::::::: challenge
@@ -269,10 +269,10 @@ plot(onset_to_death_ebola, day_range = 0:40)
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
 ```{r}
-# Calculate the delay-adjusted CFR 
+# Calculate the delay-adjusted CFR
 # for the first 30 days
 cfr_static(
-  data = ebola1976[1:30,],
+  data = ebola1976[1:30, ],
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
 ```
@@ -280,7 +280,7 @@ cfr_static(
 ```{r,echo=FALSE}
 out_delay_adjusted <-
   cfr_static(
-    data = ebola1976[1:30,],
+    data = ebola1976[1:30, ],
     delay_density = function(x) density(onset_to_death_ebola, x)
   )
 
@@ -436,7 +436,7 @@ We can explore the **early** determination of the _delay-adjusted CFR_ using the
 ::::::::::::::::::::::
 
 ```{r}
-# Calculate the rolling daily naive CFR 
+# Calculate the rolling daily naive CFR
 # for all the 73 days in the Ebola dataset
 rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
 
@@ -648,7 +648,7 @@ library(outbreaks)
 library(tidyverse)
 
 # Access delay distribution
-mers_delay <- 
+mers_delay <-
   epidist_db(
     disease = "mers",
     epi_dist = "onset to death",
@@ -656,14 +656,14 @@ mers_delay <-
   )
 
 # Read linelist
-mers_korea_2015$linelist %>% 
-  as_tibble() %>% 
+mers_korea_2015$linelist %>%
+  as_tibble() %>%
   select(starts_with("dt_"))
 
 # Use {incidence2} to count daily incidence
 mers_incidence <- mers_korea_2015$linelist %>%
   # converto to incidence2 object
-  incidence(date_index = c("dt_onset","dt_death")) %>%
+  incidence(date_index = c("dt_onset", "dt_death")) %>%
   # complete dates from first to last
   incidence2::complete_dates()
 
@@ -671,15 +671,18 @@ mers_incidence <- mers_korea_2015$linelist %>%
 mers_incidence
 
 # Prepare data from {incidence2} to {cfr}
-mers_incidence %>% 
-  prepare_data(cases_variable = "dt_onset",deaths_variable = "dt_death")
-
-# Estimate delay-adjusted CFR
-mers_incidence %>% 
+mers_incidence %>%
   prepare_data(
     cases_variable = "dt_onset",
     deaths_variable = "dt_death"
-  ) %>% 
+  )
+
+# Estimate delay-adjusted CFR
+mers_incidence %>%
+  prepare_data(
+    cases_variable = "dt_onset",
+    deaths_variable = "dt_death"
+  ) %>%
   cfr_static(delay_density = function(x) density(mers_delay, x))
 ```
 
