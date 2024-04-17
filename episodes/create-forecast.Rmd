@@ -43,7 +43,7 @@ Learners should familiarise themselves with following concept dependencies befor
 
 ## Introduction
 
-Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future, we need to make an assumption of how observations up to today are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed. In this tutorial we will create short-term forecasts by assuming the reproduction number will remain the same as it was estimated to be on the final date for which data was available.
+Given case data, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future, we need to make an assumption of how observations up to today are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed. In this tutorial we will create short-term forecasts by assuming the reproduction number will remain the same as its estimate was on the final date for which data was available.
 
 ## Create a short-term forecast
 
@@ -151,7 +151,7 @@ summary(estimates)
 
 The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see previous tutorial). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
 
-We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more detail.
+We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more details.
  
 
 ## Forecast secondary observations
@@ -175,7 +175,7 @@ colnames(reported_cases_deaths) <- c("date", "primary", "secondary")
 ```
 
 
-Using the first 30 days of data on cases and deaths, we will estimate the relationship between the primary and secondary observations using `estimate_secondary()`, then forecast future deaths using `forecast_secondary()`. For detail on the model see the [model documentation](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html). 
+Using the first 30 days of data on cases and deaths, we will estimate the relationship between the primary and secondary observations using `estimate_secondary()`, then forecast future deaths using `forecast_secondary()`. For more details on the model see the [model documentation](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html). 
 
 We must specify the type of observation using `type` in `secondary_opts()`, options include:
 
@@ -186,7 +186,7 @@ In this example we specify `secondary_opts(type = "incidence")`. See `?EpiNow2::
 
 The final key input is the delay distribution between the primary and secondary observations. Here this is the delay between case report and death, we assume this follows a gamma distribution with mean of 14 days and standard deviation of 5 days. Using `dist_spec()` we specify a fixed gamma distribution.
 
-There are further function inputs to `estimate_secondary()` which can be specified, including adding an observation process, see `?EpiNow2::estimate_secondary` for detail on the options. 
+There are further function inputs to `estimate_secondary()` which can be specified, including adding an observation process, see `?EpiNow2::estimate_secondary` for detail on these options. 
 
 To find the model fit between cases and deaths : 
 ```{r}
@@ -216,7 +216,7 @@ plot(estimate_cases_to_deaths, primary = TRUE)
 
 To use this model fit to forecast deaths, we pass a data frame consisting of the primary observation (cases) for dates not used in the model fit. 
 
-*Note : in this tutorial we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
+*Note : in this episode we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
 ```{r}
 cases_to_forecast <- reported_cases_deaths[31:60, c("date", "primary")]
 colnames(cases_to_forecast) <- c("date", "value")
@@ -244,7 +244,7 @@ Download the file [ebola_cases.csv](data/ebola_cases.csv) and read it into R. Th
 
 Using the first 3 months (120 days) of data:
 
-1. Estimate of cases increasing or decreasing on day 120 of the outbreak (Hint: Find the effective reproduction number and growth rate on day 120)
+1. Estimate whether cases are increasing or decreasing on day 120 of the outbreak (Hint: Find the effective reproduction number and growth rate on day 120)
 2. Create a two week forecast of number of cases
 
 You can use the following parameter values for the delay distribution(s) and generation time distribution.
