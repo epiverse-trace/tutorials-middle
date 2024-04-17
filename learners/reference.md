@@ -44,7 +44,10 @@ Different sampling approaches can generate biases given left and right censoring
 [Effective reproduction number]{#effectiverepro}
 : The time-varying or effective reproduction number ($Rt$) is similar to the [Basic reproductive number](#basic) ($R0$), but $Rt$ measures the number of persons infected by infectious person when some portion of the population has already been infected. Read more about the [etymology of Reproduction number by Sharma et al, 2023](https://wwwnc.cdc.gov/eid/article/29/8/22-1445_article).
 
-<!-- ## F -->
+## F
+
+[Forecast]{#forecast}
+:  A statement about the future i.e. giving predicted probabilities for future outcomes (if a deterministic forecast then that probability == 1).
 
 ## G
 [Generation time]{#generationtime}
@@ -111,6 +114,12 @@ This can be different to the [incubation period](#incubation) as shown in Figure
 [(Dynamical or Epidemic) Phase bias]{#phasebias}
 : Accounts for population susceptibility at the times transmission pairs are observed.
 It is a type of sampling bias. It affects backward-looking data and is related to the phase of the epidemic: during the exponential growth phase, cases that developed symptoms recently are over-represented in the observed data, while during the declining phase, these cases are underrepresented, leading to the estimation of shorter and longer delay intervals, respectively. ([Park et al., in progress](https://github.com/parksw3/epidist-paper))
+
+[Prediction]{#prediction}
+: Equivalent to forecast (except in a statistical sense when predictions can be any unobserved, including past, data).
+
+[Projection]{#projection}
+: The same as "simulation", i.e. a model run forward; often, but not necessarily always, assuming things may stay the same. A projection may be used as a forecast.
 
 <!-- ## Q -->
 
