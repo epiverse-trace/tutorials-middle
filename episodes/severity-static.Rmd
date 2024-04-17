@@ -1,5 +1,5 @@
 ---
-title: 'Estimate severity'
+title: 'Estimation of outbreak severity'
 teaching: 10
 exercises: 2
 editor_options: 
@@ -50,7 +50,7 @@ We can assess the pandemic potential of an epidemic with two critical measuremen
 
 ![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. HHS: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
 
-One epidemiological approach to estimating the clinical severity is quantifying the Case Fatality Risk or CFR. CFR is the conditional probability of death given confirmed diagnosis, calculated as the cumulative number deaths from an infectious disease over the number of confirmed diagnosed cases. However, calculating this directly during the course of an epidemic tends to result in a naive or biased CFR given the time [delay](../learners/reference.md#delaydist) from onset to death, varying substantially as the epidemic progresses and stabilising at the later stages of the outbreak ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
+One epidemiological approach to estimating the clinical severity is quantifying the Case Fatality Risk (CFR). CFR is the conditional probability of death given confirmed diagnosis, calculated as the cumulative number of deaths from an infectious disease over the number of confirmed diagnosed cases. However, calculating this directly during the course of an epidemic tends to result in a naive or biased CFR given the time [delay](../learners/reference.md#delaydist) from onset to death, varying substantially as the epidemic progresses and stabilising at the later stages of the outbreak ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
 
 ![Observed biased confirmed case fatality risk (CFR) estimates as a function of time (thick line) calculated as the cumulative number of deaths over confirmed cases at time t. The estimate at the end of an outbreak (~May 30) is the realised CFR by the end of the epidemic. The horizontal continuous line and dotted lines show the expected value and the 95% confidence intervals (95% CI) of the predicted delay-adjusted CFR estimate only by using the observed data until 27 Mar 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_c.png){alt='The periods are relevant: Period 1 -- 15 days where CFR is zero to indicate this is due to no reported deaths; Period from Mar 15 -- Apr 26 where CFR appears to be rising; Period Apr 30 -- May 30 where the CFR estimate stabilises.'}
 
@@ -128,15 +128,19 @@ Also, `{cfr}` currently works for *daily* data only, but not for other temporal 
 <!-- suggest ways to deal with raw input weekly data -->
 <!-- https://github.com/epiverse-trace/cfr/issues/117 -->
 
+::::::::::::::::::
+
+::::::::::::::::: callout
+
 ### Aggregated data differ from linelists
 
-Lastly, *aggregated* incidence data differs from **linelist** data, where each observation contains individual-level data.
+*Aggregated* incidence data differs from **linelist** data, where each observation contains individual-level data.
 
 ```{r}
 outbreaks::ebola_sierraleone_2014 %>% as_tibble()
 ```
 
-::::::::::::::::::
+:::::::::::::::::
 
 
 
@@ -149,7 +153,9 @@ cfr_static(data = ebola1976)
 
 :::::::::::::::::::::::::::::::::::::::: challenge
 
-Load the `ebola_kikwit_1995` from the `{outbreaks}` package and estimate the naive CFR.
+Download the file [sarscov2_cases_deaths.csv](data/sarscov2_cases_deaths.csv) and read it into R. 
+
+Estimate the naive CFR.
 
 :::::::::::::::::::: hint
 
@@ -163,20 +169,36 @@ Inspect the format of the data input.
 
 :::::::::::::::::::: solution
 
+We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
+
+```{r, eval=TRUE,echo=FALSE}
+# read data from the tutorial repository R project
+sarscov2_input <-
+  readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r,eval=FALSE,echo=TRUE}
+# read data
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+sarscov2_input <-
+  readr::read_csv(here::here("data", "raw-data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r}
+# Inspect data
+sarscov2_input
+```
+
 We can use `dplyr::rename()` to adapt the external data to fit the data input for `cfr_static()`.
 
 ```{r}
-library(outbreaks)
-
-outbreaks::ebola_kikwit_1995 %>%
-  glimpse()
-
-outbreaks::ebola_kikwit_1995 %>%
+# Rename before Estimate naive CFR
+sarscov2_input %>%
   dplyr::rename(
-    cases = onset,
-    deaths = death
+    cases = cases_jpn,
+    deaths = deaths_jpn
   ) %>%
-  cfr::cfr_static()
+  cfr_static()
 ```
 
 ::::::::::::::::::::
@@ -332,7 +354,7 @@ When we observe the entire course of an epidemic (from $t \rightarrow \infty$), 
 
 :::::::::::::::::: callout
 
-### Use the `<epidist>` class
+### Use the epidist class
 
 When using an `<epidist>` class object we can use this expression as a template:
 
@@ -354,15 +376,15 @@ For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropri
 
 We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
 
-However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads.
-
-In a scenario like the last one, you can opt to discretise the continuous distribution using `epiparameter::discretise()` to an `<epidist>` object.
+However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epidist>` object.
 
 ::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: challenge
 
-Load the `ebola_kikwit_1995` from `{outbreaks}` and estimate the delay-adjusted CFR using the appropriate distribution delay. Then:
+Use the same file from the previous challenge ([sarscov2_cases_deaths.csv](data/sarscov2_cases_deaths.csv)).
+
+Estimate the delay-adjusted CFR using the appropriate distribution delay. Then:
 
 - Compare the naive and the delay-adjusted CFR solutions!
 
@@ -374,20 +396,52 @@ Load the `ebola_kikwit_1995` from `{outbreaks}` and estimate the delay-adjusted 
 
 :::::::::::::::::::: solution
 
-```{r}
-library(outbreaks)
+We use `{epiparameter}` to access a delay distribution for the SARS-CoV-2 aggregated incidence data:
 
-outbreaks::ebola_kikwit_1995 %>% glimpse()
+```{r,message=FALSE,warning=FALSE}
+library(epiparameter)
 
-outbreaks::ebola_kikwit_1995 %>%
-  rename(
-    cases = onset,
-    deaths = death
-  ) %>%
-  cfr::cfr_static(
-    delay_density = function(x) density(onset_to_death_ebola, x)
+sarscov2_delay <-
+  epidist_db(
+    disease = "covid",
+    epi_dist = "onset to death",
+    single_epidist = TRUE
   )
 ```
+
+We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
+
+```{r, eval=TRUE,echo=FALSE}
+# read data from the tutorial repository R project
+sarscov2_input <-
+  readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r,eval=FALSE,echo=TRUE}
+# read data
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+sarscov2_input <-
+  readr::read_csv(here::here("data", "raw-data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r}
+# Inspect data
+sarscov2_input
+```
+
+We can use `dplyr::rename()` to adapt the external data to fit the data input for `cfr_static()`.
+
+```{r}
+# Rename before Estimate naive CFR
+sarscov2_input %>%
+  dplyr::rename(
+    cases = cases_jpn,
+    deaths = deaths_jpn
+  ) %>%
+  cfr_static(delay_density = function(x) density(sarscov2_delay, x))
+```
+
+Interpret the comparison between the naive and delay-adjusted CFR estimates.
 
 ::::::::::::::::::::
 
@@ -583,6 +637,93 @@ By only using **confirmed** cases, it is clear that all cases that do not seek m
 
 ::::::::::::::::::::::
 
+:::::::::::::::::::::::::: checklist
+
+### Limitations
+
+- The delay-adjusted CFR does not address all sources of error in data like the underdiagnosis of infected individuals.
+
+::::::::::::::::::::::::::
+
+
+## Challenges
+
+:::::::::::::::::::::::::::::::::: challenge
+
+### Use incidence2 to rearrange your data
+
+From the `{outbreaks}` package, load the MERS linelist of cases from the `mers_korea_2015` object.
+
+Rearrange your this linelist to fit into the `{cfr}` package input.
+
+Estimate the delay-adjusted HFR using the corresponding distribution delay.
+
+::::::::::::::::: hint
+
+**How to rearrange my input data?**
+
+Rearranging the input data for data analysis can take most of the time. To get ready-to-analyse _aggregated incidence data_, we encourage you to use `{incidence2}`!
+
+First, in the [Get started](https://www.reconverse.org/incidence2/articles/incidence2.html) vignette from the `{incidence2}` package, explore how to use the `date_index` argument when reading a linelist with dates in multiple column.
+
+Then, refer to the `{cfr}` vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html) on how to use the `cfr::prepare_data()` function from incidence2 objects.
+
+<!-- cite howto entry one lineslist + incidence2 + cfr connection -->
+
+:::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r,message=FALSE,warning=FALSE}
+# Load packages
+library(cfr)
+library(epiparameter)
+library(incidence2)
+library(outbreaks)
+library(tidyverse)
+
+# Access delay distribution
+mers_delay <- 
+  epidist_db(
+    disease = "mers",
+    epi_dist = "onset to death",
+    single_epidist = TRUE
+  )
+
+# Read linelist
+mers_korea_2015$linelist %>% 
+  as_tibble() %>% 
+  select(starts_with("dt_"))
+
+# Use {incidence2} to count daily incidence
+mers_incidence <- mers_korea_2015$linelist %>%
+  # converto to incidence2 object
+  incidence(date_index = c("dt_onset","dt_death")) %>%
+  # complete dates from first to last
+  incidence2::complete_dates()
+
+# Inspect incidence2 output
+mers_incidence
+
+# Prepare data from {incidence2} to {cfr}
+mers_incidence %>% 
+  prepare_data(cases_variable = "dt_onset",deaths_variable = "dt_death")
+
+# Estimate delay-adjusted CFR
+mers_incidence %>% 
+  prepare_data(
+    cases_variable = "dt_onset",
+    deaths_variable = "dt_death"
+  ) %>% 
+  cfr_static(delay_density = function(x) density(mers_delay, x))
+```
+
+
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::
+
 :::::::::::::::::::::::::::::::::::::::::::::::::: challenge
 
 ### Severity heterogeneity
@@ -637,16 +778,9 @@ Local factors like testing capacity, the case definition, and sampling regime ca
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::::::::: discussion
 
-:::::::::::::::::::::::::: checklist
-
-### Limitations
-
-- The delay-adjusted CFR does not address all sources of error in data like the underdiagnosis of infected individuals.
-
-::::::::::::::::::::::::::
-
-## More severity measures
+### More severity measures
 
 Suppose we need to assess the clinical severity of the epidemic in a context different from surveillance data, like the severity among cases that arrive at hospitals or cases you collected from a representative serological survey. 
 
@@ -667,7 +801,9 @@ Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires:
 - _hospitalisation_ and death incidence data, and a
 - hospitalisation-to-death delay distribution.
 
-:::::::::::::::::::::::::::: callout
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::: solution
 
 ### Data sources for more severity measures
 
@@ -684,96 +820,6 @@ Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires:
 ![Schematic diagram of the baseline analyses. Red, blue, and green arrows denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 84, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–194, D3)daily number of laboratory-confirmed cases on March 9–April 243, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission3, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities3, and D7) 16,781 laboratory-confirmed cases identified through universal screening10,11. Pse: RT-PCR sensitivity12. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections13.'}
 
 ::::::::::::::::::::::::::::
-
-::::::::::::::::: callout
-
-### How to rearrange my input data?
-
-Rearranging the input data for data analysis can take most of the time.
-
-For _aggregated case data_, we encourage you to use `{incidence2}`! Refer to the `{cfr}` vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html).
-
-<!-- cite howto entry one lineslist + incidence2 + cfr connection -->
-
-:::::::::::::::::
-
-:::::::::::::::::::::::::::::::::: challenge
-
-### Hospitalisation Fatality Risk (HFR)
-
-From the `{covidregionaldata}` package, load COVID cases from the region England from country UK to estimate the delay-adjusted HFR using the corresponding distribution delay.
-
-::::::::::::::::: hint
-
-Use `covidregionaldata::get_regional_data()` to get COVID data from the region England from the country UK.
-
-```{r,eval=FALSE}
-covid_england <-
-  covidregionaldata::get_regional_data(
-    country = "uk",
-    regions = "England",
-    verbose = FALSE
-  )
-```
-
-Also, check out the vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html)
-
-:::::::::::::::::
-
-::::::::::::::::: solution
-
-```{r,message=FALSE,warning=FALSE}
-library(cfr)
-library(covidregionaldata)
-
-covid_england <-
-  covidregionaldata::get_regional_data(
-    country = "uk",
-    regions = "England",
-    verbose = FALSE
-  )
-
-covid_england %>% glimpse()
-
-covid_data_incidence <-
-  covid_england %>%
-  incidence2::incidence(
-    date_index = "date",
-    counts = c("hosp_total", "deaths_total")
-  )
-
-covid_data_incidence
-
-covid_data_prepared <-
-  cfr::prepare_data(
-    data = covid_data_incidence,
-    cases_variable = "hosp_total",
-    deaths_variable = "deaths_total",
-    fill_NA = TRUE
-  )
-
-covid_data_prepared %>% glimpse()
-
-delay_hosp_death <-
-  epiparameter::epidist_db(
-    disease = "covid",
-    epi_dist = "hospitalisation to death",
-    single_epidist = TRUE
-  )
-
-covid_data_prepared %>%
-  cfr::cfr_static(
-    delay_density = function(x) density(delay_hosp_death, x)
-  )
-```
-
-
-
-:::::::::::::::::
-
-::::::::::::::::::::::::::::::::::
-
-
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
