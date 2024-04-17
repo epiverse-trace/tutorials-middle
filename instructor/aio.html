@@ -204,7 +204,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="severity-static.html">2. Estimate severity</a>
+        <a href="severity-static.html">2. Estimation of outbreak severity</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -270,7 +270,7 @@
         
 <section id="aio-create-forecast"><p>Content from <a href="create-forecast.html">Create a short-term forecast</a></p>
 <hr>
-<p>Last updated on 2024-03-25 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/create-forecast.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 60 minutes</p>
@@ -329,27 +329,89 @@ Bayesian analysis.</p>
 <section id="introduction"><h2 class="section-heading">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
-<p>Given case data, we can create estimates of the current and future
-number of cases by accounting for both delays in reporting and under
-reporting. To make statements about the future, we need to make an
-assumption of how observations up to today are related to what we expect
-to happen in the future. The simplest way of doing so is to assume “no
-change”, i.e. the reproduction number remains the same in the future as
-last observed. In this tutorial we will create short-term forecasts by
-assuming the reproduction number will remain the same as it was
-estimated to be on the final date for which data was available.</p>
-</section><section id="create-a-short-term-forecast"><h2 class="section-heading">Create a short-term forecast<a class="anchor" aria-label="anchor" href="#create-a-short-term-forecast"></a>
-</h2>
-<hr class="half-width">
-<p>The function <code>epinow()</code> described in the previous tutorial
-is a wrapper for the function <code>estimate_infections()</code> used to
-estimate cases by date of infection. Using the same code in the previous
-tutorial we can extract the short-term forecast using:</p>
+<p>Given case data of an epidemic, we can create estimates of the
+current and future number of cases by accounting for both delays in
+reporting and under reporting. To make statements about the future of th
+epidemic, we need to make an assumption of how observations up to the
+present are related to what we expect to happen in the future. The
+simplest way of doing so is to assume “no change”, i.e. the reproduction
+number remains the same in the future as last observed. In this tutorial
+we will create short-term <a href="reference.html#forecast">forecasts</a> by assuming the
+reproduction number will remain the same as its estimate was on the
+final date for which data was available.</p>
+<p>In this tutorial we are going to learn how to use the
+<a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> package to forecast cases accounting for
+incomplete observations and forecast secondary observations like
+deaths.</p>
+<p>We’ll use the pipe <code>%&gt;%</code> to connect some of their
+functions, so let’s also call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a>
+package:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">reported_cases</span> <span class="op">&lt;-</span> <span class="va">cases</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">90</span>, <span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">EpiNow2</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
+</div>
+</section><section id="create-a-short-term-forecast"><h2 class="section-heading">Create a short-term forecast<a class="anchor" aria-label="anchor" href="#create-a-short-term-forecast"></a>
+</h2>
+<hr class="half-width">
+<p>The function <code>epinow()</code> described in the <a href="quantify-transmissibility.html">quantifying transmission
+episode</a> is a wrapper for the functions:</p>
+<ul>
+<li>
+<code>estimate_infections()</code>, used to estimate cases by date
+of infection.</li>
+<li>
+<code>forecast_infections()</code>, used to simulate infections
+using an existing fit (estimate) to observed cases.</li>
+</ul>
+<p>Let’s use the same code used in that episode to get the input data,
+delays and priors:</p>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Read cases dataset</span></span>
+<span><span class="va">cases</span> <span class="op">&lt;-</span> <span class="fu">incidence2</span><span class="fu">::</span><span class="va">covidregionaldataUK</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">date</span>, <span class="va">cases_new</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span>confirm <span class="op">=</span> <span class="fu">sum</span><span class="op">(</span><span class="va">cases_new</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Incubation period</span></span>
+<span><span class="va">incubation_period_fixed</span> <span class="op">&lt;-</span> <span class="fu">dist_spec</span><span class="op">(</span></span>
+<span>  mean <span class="op">=</span> <span class="fl">4</span>, sd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  max <span class="op">=</span> <span class="fl">20</span>, distribution <span class="op">=</span> <span class="st">"gamma"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Reporting delay</span></span>
+<span><span class="va">log_mean</span> <span class="op">&lt;-</span> <span class="fu">convert_to_logmean</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">log_sd</span> <span class="op">&lt;-</span> <span class="fu">convert_to_logsd</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">reporting_delay_fixed</span> <span class="op">&lt;-</span> <span class="fu">dist_spec</span><span class="op">(</span></span>
+<span>  mean <span class="op">=</span> <span class="va">log_mean</span>, sd <span class="op">=</span> <span class="va">log_sd</span>,</span>
+<span>  max <span class="op">=</span> <span class="fl">10</span>, distribution <span class="op">=</span> <span class="st">"lognormal"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Generation time</span></span>
+<span><span class="va">generation_time_fixed</span> <span class="op">&lt;-</span> <span class="fu">dist_spec</span><span class="op">(</span></span>
+<span>  mean <span class="op">=</span> <span class="fl">3.6</span>, sd <span class="op">=</span> <span class="fl">3.1</span>,</span>
+<span>  max <span class="op">=</span> <span class="fl">20</span>, distribution <span class="op">=</span> <span class="st">"lognormal"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Rt prior</span></span>
+<span><span class="va">rt_log_mean</span> <span class="op">&lt;-</span> <span class="fu">convert_to_logmean</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">rt_log_sd</span> <span class="op">&lt;-</span> <span class="fu">convert_to_logsd</span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Now we can extract the short-term forecast using:</p>
+<div class="codewrapper sourceCode" id="cb3">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Assume we only have the first 90 days of this data</span></span>
+<span><span class="va">reported_cases</span> <span class="op">&lt;-</span> <span class="va">cases</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">90</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Estimate and forecast</span></span>
 <span><span class="va">estimates</span> <span class="op">&lt;-</span> <span class="fu">epinow</span><span class="op">(</span></span>
 <span>  reported_cases <span class="op">=</span> <span class="va">reported_cases</span>,</span>
 <span>  generation_time <span class="op">=</span> <span class="fu">generation_time_opts</span><span class="op">(</span><span class="va">generation_time_fixed</span><span class="op">)</span>,</span>
@@ -360,10 +422,10 @@ tutorial we can extract the short-term forecast using:</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>WARN [2024-03-25 20:01:41] epinow: There were 1 divergent transitions after warmup. See
+<pre class="output" tabindex="0"><code>WARN [2024-04-17 21:25:16] epinow: There were 2 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-03-25 20:01:41] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-04-17 21:25:16] epinow: Examine the pairs() plot to diagnose sampling problems
  - </code></pre>
 </div>
 <p>We can visualise the estimates of the effective reproduction number
@@ -372,69 +434,36 @@ estimates are split into three categories:</p>
 <ul>
 <li><p><strong>Estimate</strong> (green): utilises all data,</p></li>
 <li><p><strong>Estimate based on partial data</strong> (orange):
-estimates that are based less data are therefore more
-uncertain,</p></li>
+contains a higher degree of uncertainty because such estimates are based
+on less data,</p></li>
 <li><p><strong>Forecast</strong> (purple): forecasts into the
 future.</p></li>
 </ul>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">plot</span><span class="op">(</span><span class="va">estimates</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/create-forecast-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="forecasting-with-estimates-of-r_t" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<div id="forecasting-with-estimates-of-r_t" class="callout-inner">
-<h3 class="callout-title">Forecasting with estimates of<span class="math inline">\(R_t\)</span><a class="anchor" aria-label="anchor" href="#forecasting-with-estimates-of-r_t"></a>
+<figure><img src="../fig/create-forecast-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="section level3">
+<h3 id="forecasting-with-incomplete-observations">Forecasting with incomplete observations<a class="anchor" aria-label="anchor" href="#forecasting-with-incomplete-observations"></a>
 </h3>
-<div class="callout-content">
-<p>By default, the short-term forecasts are created using the latest
-estimate of the reproduction number <span class="math inline">\(R_t\)</span>. As this estimate is based on partial
-data, it has considerable uncertainty.</p>
-<p>The reproduction number that is projected into the future can be
-changed to a less recent estimate based on more data using
-<code>rt_opts()</code>:</p>
-<div class="codewrapper sourceCode" id="cb4">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">rt_opts</span><span class="op">(</span>future <span class="op">=</span> <span class="st">"estimate"</span><span class="op">)</span></span></code></pre>
-</div>
-<p>The result will be less uncertain forecasts (as they are based on
-<span class="math inline">\(R_t\)</span> with a narrower uncertainty
-interval) but the forecasts will be based on less recent estimates of
-<span class="math inline">\(R_t\)</span> and assume no change since
-then.</p>
-<p>Additionally, there is the option to project the value of <span class="math inline">\(R_t\)</span> into the future using a generic model
-by setting <code>future = "project"</code>. As this option uses a model
-to forecast the value of <span class="math inline">\(R_t\)</span>, the
-result will be forecasts that are more uncertain than
-<code>estimate</code>, for an example <a href="https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html#projecting-the-reproduction-number-with-the-gaussian-process" class="external-link">see
-here</a>.</p>
-</div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="incomplete-observations">Incomplete observations<a class="anchor" aria-label="anchor" href="#incomplete-observations"></a>
-</h3>
-<p>In the previous tutorial we accounted for delays in reporting. In
+<p>In the <a href="quantify-transmissibility.html">quantifying
+transmission episode</a> we accounted for delays in reporting. In
 <code>EpiNow2</code> we also can account for incomplete observations as
 in reality, 100% of cases are not reported.</p>
-<p>We will pass another input into <code>epinow()</code> called
+<p>We will pass another argument into <code>epinow()</code> called
 <code>obs</code> to define an observation model. The format of
 <code>obs</code> must be the <code>obs_opt()</code> function (see
 <code>?EpiNow2::obs_opts</code> for more detail).</p>
-<p>Let’s say we believe the COVID-19 outbreak data from the previous
-tutorial do not include all reported cases. We believe that we only
-observe 40% of cases. To specify this in the observation model, we must
-pass a scaling factor with a mean and standard deviation. If we assume
-that 40% of cases are in the case data (with standard deviation 1%),
-then we specify the <code>scale</code> input to <code>obs_opts()</code>
-as follows:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<p>Let’s say we believe the COVID-19 outbreak data in the
+<code>cases</code> object do not include all reported cases. We believe
+that we only observe 40% of cases. To specify this in the observation
+model, we must pass a scaling factor with a mean and standard deviation.
+If we assume that 40% of cases are in the case data (with standard
+deviation 1%), then we specify the <code>scale</code> input to
+<code>obs_opts()</code> as follows:</p>
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -443,30 +472,36 @@ as follows:</p>
 <p>To run the inference framework with this observation process, we add
 <code>obs = obs_opts(scale = obs_scale)</code> to the input arguments of
 <code>epinow()</code>:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">obs_scale</span> <span class="op">&lt;-</span> <span class="fu">list</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.4</span>, sd <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Define observation model</span></span>
+<span><span class="va">obs_scale</span> <span class="op">&lt;-</span> <span class="fu">list</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.4</span>, sd <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Assume we only have the first 90 days of this data</span></span>
 <span><span class="va">reported_cases</span> <span class="op">&lt;-</span> <span class="va">cases</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">90</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Estimate and forecast</span></span>
 <span><span class="va">estimates</span> <span class="op">&lt;-</span> <span class="fu">epinow</span><span class="op">(</span></span>
 <span>  reported_cases <span class="op">=</span> <span class="va">reported_cases</span>,</span>
 <span>  generation_time <span class="op">=</span> <span class="fu">generation_time_opts</span><span class="op">(</span><span class="va">generation_time_fixed</span><span class="op">)</span>,</span>
 <span>  delays <span class="op">=</span> <span class="fu">delay_opts</span><span class="op">(</span><span class="va">incubation_period_fixed</span> <span class="op">+</span> <span class="va">reporting_delay_fixed</span><span class="op">)</span>,</span>
 <span>  rt <span class="op">=</span> <span class="fu">rt_opts</span><span class="op">(</span>prior <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>mean <span class="op">=</span> <span class="va">rt_log_mean</span>, sd <span class="op">=</span> <span class="va">rt_log_sd</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  <span class="co"># Add observation model</span></span>
 <span>  obs <span class="op">=</span> <span class="fu">obs_opts</span><span class="op">(</span>scale <span class="op">=</span> <span class="va">obs_scale</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>WARN [2024-03-25 20:08:12] epinow: There were 4 divergent transitions after warmup. See
+<pre class="output" tabindex="0"><code>WARN [2024-04-17 21:31:36] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-03-25 20:08:12] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-04-17 21:31:36] epinow: Examine the pairs() plot to diagnose sampling problems
  - </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -477,23 +512,25 @@ WARN [2024-03-25 20:08:12] epinow: Examine the pairs() plot to diagnose sampling
 </h3>
 <pre class="output" tabindex="0"><code>                                 measure                 estimate
                                   &lt;char&gt;                   &lt;char&gt;
-1: New confirmed cases by infection date   17836 (10068 -- 30847)
+1: New confirmed cases by infection date    17972 (9907 -- 31157)
 2:        Expected change in daily cases        Likely decreasing
 3:            Effective reproduction no.       0.88 (0.56 -- 1.3)
-4:                        Rate of growth -0.016 (-0.065 -- 0.037)
+4:                        Rate of growth -0.016 (-0.066 -- 0.037)
 5:          Doubling/halving time (days)          -43 (19 -- -11)</code></pre>
 </div>
 <p>The estimates of transmission measures such as the effective
 reproduction number and rate of growth are similar (or the same in
 value) compared to when we didn’t account for incomplete observations
-(see previous tutorial). However the number of new confirmed cases by
-infection date has changed substantially in magnitude to reflect the
-assumption that only 40% of cases are in the data set.</p>
+(see <a href="quantify-transmissibility.html">quantifying transmission
+episode</a> in the “Finding estimates” section). However the number of
+new confirmed cases by infection date has changed substantially in
+magnitude to reflect the assumption that only 40% of cases are in the
+data set.</p>
 <p>We can also change the default distribution from Negative Binomial to
 Poisson, remove the default week effect and more. See
-<code>?EpiNow2::obs_opts</code> for more detail.</p>
+<code>?EpiNow2::obs_opts</code> for more details.</p>
 </div>
-</section><section id="forecast-secondary-observations"><h2 class="section-heading">Forecast secondary observations<a class="anchor" aria-label="anchor" href="#forecast-secondary-observations"></a>
+</section><section id="forecasting-secondary-observations"><h2 class="section-heading">Forecasting secondary observations<a class="anchor" aria-label="anchor" href="#forecasting-secondary-observations"></a>
 </h2>
 <hr class="half-width">
 <p><code>EpiNow2</code> also has the ability to estimate and forecast
@@ -513,22 +550,24 @@ in this example <strong>cases</strong>,</li>
 <code>secondary</code> : number of secondary observations date, in
 this example <strong>deaths</strong>.</li>
 </ul>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">reported_cases_deaths</span> <span class="op">&lt;-</span> <span class="fu">aggregate</span><span class="op">(</span></span>
-<span>  <span class="fu">cbind</span><span class="op">(</span><span class="va">cases_new</span>, <span class="va">deaths_new</span><span class="op">)</span> <span class="op">~</span> <span class="va">date</span>,</span>
-<span>  data <span class="op">=</span></span>
-<span>    <span class="fu">incidence2</span><span class="fu">::</span><span class="va">covidregionaldataUK</span><span class="op">[</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"date"</span>, <span class="st">"cases_new"</span>, <span class="st">"deaths_new"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>  FUN <span class="op">=</span> <span class="va">sum</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu">colnames</span><span class="op">(</span><span class="va">reported_cases_deaths</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"date"</span>, <span class="st">"primary"</span>, <span class="st">"secondary"</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">reported_cases_deaths</span> <span class="op">&lt;-</span> <span class="fu">incidence2</span><span class="fu">::</span><span class="va">covidregionaldataUK</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">date</span>, <span class="va">cases_new</span>, <span class="va">deaths_new</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">summarise</span><span class="op">(</span></span>
+<span>    primary <span class="op">=</span> <span class="fu">sum</span><span class="op">(</span><span class="va">cases_new</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    secondary <span class="op">=</span> <span class="fu">sum</span><span class="op">(</span><span class="va">deaths_new</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Using the first 30 days of data on cases and deaths, we will estimate
 the relationship between the primary and secondary observations using
 <code>estimate_secondary()</code>, then forecast future deaths using
-<code>forecast_secondary()</code>. For detail on the model see the <a href="https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html" class="external-link">model
+<code>forecast_secondary()</code>. For more details on the model see the
+<a href="https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html" class="external-link">model
 documentation</a>.</p>
 <p>We must specify the type of observation using <code>type</code> in
 <code>secondary_opts()</code>, options include:</p>
@@ -546,19 +585,26 @@ past hospital bed usage.</li>
 <p>The final key input is the delay distribution between the primary and
 secondary observations. Here this is the delay between case report and
 death, we assume this follows a gamma distribution with mean of 14 days
-and standard deviation of 5 days. Using <code>dist_spec()</code> we
-specify a fixed gamma distribution.</p>
+and standard deviation of 5 days (Alternatively, we can use
+<code>{epiparameter}</code> to <a href="https://epiverse-trace.github.io/tutorials-early/delays-reuse.html" class="external-link">access
+epidemiological delays</a>). Using <code>dist_spec()</code> we specify a
+fixed gamma distribution.</p>
 <p>There are further function inputs to
 <code>estimate_secondary()</code> which can be specified, including
 adding an observation process, see
-<code>?EpiNow2::estimate_secondary</code> for detail on the options.</p>
+<code>?EpiNow2::estimate_secondary</code> for detail on these
+options.</p>
 <p>To find the model fit between cases and deaths :</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">estimate_cases_to_deaths</span> <span class="op">&lt;-</span> <span class="fu">estimate_secondary</span><span class="op">(</span></span>
-<span>  reports <span class="op">=</span> <span class="va">reported_cases_deaths</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="op">]</span>,</span>
+<code class="sourceCode R"><span><span class="co"># Estimate from first 60 days of this data</span></span>
+<span><span class="va">cases_to_estimate</span> <span class="op">&lt;-</span> <span class="va">reported_cases_deaths</span><span class="op">[</span><span class="fl">31</span><span class="op">:</span><span class="fl">60</span>, <span class="op">]</span></span>
+<span></span>
+<span><span class="co"># Estimate secondary cases</span></span>
+<span><span class="va">estimate_cases_to_deaths</span> <span class="op">&lt;-</span> <span class="fu">estimate_secondary</span><span class="op">(</span></span>
+<span>  reports <span class="op">=</span> <span class="va">cases_to_estimate</span>,</span>
 <span>  secondary <span class="op">=</span> <span class="fu">secondary_opts</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"incidence"</span><span class="op">)</span>,</span>
 <span>  delays <span class="op">=</span> <span class="fu">delay_opts</span><span class="op">(</span><span class="fu">dist_spec</span><span class="op">(</span></span>
 <span>    mean <span class="op">=</span> <span class="fl">14</span>, sd <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -585,7 +631,7 @@ forecast.</p>
 <p>We plot the model fit (shaded ribbons) with the secondary
 observations (bar plot) and primary observations (dotted line) as
 follows:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -594,27 +640,30 @@ follows:</p>
 <figure><img src="../fig/create-forecast-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To use this model fit to forecast deaths, we pass a data frame
 consisting of the primary observation (cases) for dates not used in the
 model fit.</p>
-<p><em>Note : in this tutorial we are using data where we know the
-deaths and cases, so we create a data frame by extracting the cases. But
-in practice, this would be a different data set consisting of cases
+<p><em>Note : in this episode we are using data where we know the deaths
+and cases, so we create a data frame by extracting the cases. But in
+practice, this would be a different data set consisting of cases
 only.</em></p>
-<div class="codewrapper sourceCode" id="cb13">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cases_to_forecast</span> <span class="op">&lt;-</span> <span class="va">reported_cases_deaths</span><span class="op">[</span><span class="fl">31</span><span class="op">:</span><span class="fl">60</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"date"</span>, <span class="st">"primary"</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="fu">colnames</span><span class="op">(</span><span class="va">cases_to_forecast</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"date"</span>, <span class="st">"value"</span><span class="op">)</span></span></code></pre>
-</div>
-<p>To forecast, we use the model fit
-<code>estimate_cases_to_deaths</code>:</p>
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">deaths_forecast</span> <span class="op">&lt;-</span> <span class="fu">forecast_secondary</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="co"># Forecast from day 61 to day 90</span></span>
+<span><span class="va">cases_to_forecast</span> <span class="op">&lt;-</span> <span class="va">reported_cases_deaths</span><span class="op">[</span><span class="fl">61</span><span class="op">:</span><span class="fl">90</span>, <span class="fu">c</span><span class="op">(</span><span class="st">"date"</span>, <span class="st">"primary"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu">colnames</span><span class="op">(</span><span class="va">cases_to_forecast</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"date"</span>, <span class="st">"value"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>To forecast, we use the model fit
+<code>estimate_cases_to_deaths</code>:</p>
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Forecast secondary cases</span></span>
+<span><span class="va">deaths_forecast</span> <span class="op">&lt;-</span> <span class="fu">forecast_secondary</span><span class="op">(</span></span>
 <span>  estimate <span class="op">=</span> <span class="va">estimate_cases_to_deaths</span>,</span>
 <span>  primary <span class="op">=</span> <span class="va">cases_to_forecast</span></span>
 <span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">deaths_forecast</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -627,6 +676,20 @@ dates which we have recorded cases for. It is also possible to forecast
 deaths using forecast cases, here you would specify <code>primary</code>
 as the <code>estimates</code> output from
 <code>estimate_infections()</code>.</p>
+<div id="credible-intervals" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="credible-intervals" class="callout-inner">
+<h3 class="callout-title">Credible intervals<a class="anchor" aria-label="anchor" href="#credible-intervals"></a>
+</h3>
+<div class="callout-content">
+<p>In all <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> output figures, shaded regions reflect
+90%, 50%, and 20% credible intervals in order from lightest to
+darkest.</p>
+</div>
+</div>
+</div>
 </section><section id="challenge-ebola-outbreak-analysis"><h2 class="section-heading">Challenge : Ebola outbreak analysis<a class="anchor" aria-label="anchor" href="#challenge-ebola-outbreak-analysis"></a>
 </h2>
 <hr class="half-width">
@@ -644,10 +707,10 @@ onset and number of confirmed cases of the early stages of the Ebola
 outbreak in Sierra Leone in 2014.</p>
 <p>Using the first 3 months (120 days) of data:</p>
 <ol style="list-style-type: decimal">
-<li>Estimate of cases increasing or decreasing on day 120 of the
-outbreak (Hint: Find the effective reproduction number and growth rate
-on day 120)</li>
-<li>Create a two week forecast of number of cases</li>
+<li>Estimate whether cases are increasing or decreasing on day 120 of
+the outbreak</li>
+<li>Account for a capacity to observe 80% of cases.</li>
+<li>Create a two week forecast of number of cases.</li>
 </ol>
 <p>You can use the following parameter values for the delay
 distribution(s) and generation time distribution.</p>
@@ -666,10 +729,15 @@ deviation of these distributions.</p>
 <div id="accordionHint1" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
-  <h4 class="accordion-header" id="headingHint1">HINT : data format</h4>
+  <h4 class="accordion-header" id="headingHint1">Give me a hint</h4>
 </button>
 <div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
+<p>We use the effective reproduction number and growth rate to estimate
+whether cases are increasing or decreasing.</p>
+<p>We can use the <code>horizon</code> argument within the
+<code>epinow()</code> function to extend the time period of the
+forecast. The default value is of seven days.</p>
 <p>Ensure the data is in the correct format :</p>
 <ul>
 <li>
@@ -697,7 +765,7 @@ generation time.</p>
 <p>We specify the distributions with some uncertainty around the mean
 and standard deviation of the log normal distribution for the incubation
 period and the Gamma distribution for the generation time.</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -713,29 +781,41 @@ period and the Gamma distribution for the generation time.</p>
 <span>  max <span class="op">=</span> <span class="fl">30</span>, distribution <span class="op">=</span> <span class="st">"gamma"</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<p>As we want to also create a two week forecast, we specify
-<code>horizon = 14</code> to forecast 14 days instead of the default 7
-days.</p>
-<div class="codewrapper sourceCode" id="cb17">
+<p>We read the data input using <code>readr::read_csv()</code>. This
+function recognize that the column <code>date</code> is a
+<code>&lt;date&gt;</code> class vector.</p>
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># read data</span></span>
 <span><span class="co"># e.g.: if path to file is data/raw-data/ebola_cases.csv then:</span></span>
 <span><span class="va">ebola_cases</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">read.csv</span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"raw-data"</span>, <span class="st">"ebola_cases.csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"raw-data"</span>, <span class="st">"ebola_cases.csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb18">
+<p>We define an observation model to scale the estimated and forecast
+number of new infections:</p>
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># format date column</span></span>
-<span><span class="va">ebola_cases</span><span class="op">$</span><span class="va">date</span> <span class="op">&lt;-</span> <span class="fu">as.Date</span><span class="op">(</span><span class="va">ebola_cases</span><span class="op">$</span><span class="va">date</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">ebola_estimates</span> <span class="op">&lt;-</span> <span class="fu">epinow</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="co"># Define observation model</span></span>
+<span><span class="co"># mean of 80% and standard deviation of 1%</span></span>
+<span><span class="va">ebola_obs_scale</span> <span class="op">&lt;-</span> <span class="fu">list</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0.8</span>, sd <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span></code></pre>
+</div>
+<p>As we want to also create a two week forecast, we specify
+<code>horizon = 14</code> to forecast 14 days instead of the default 7
+days.</p>
+<div class="codewrapper sourceCode" id="cb20">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ebola_estimates</span> <span class="op">&lt;-</span> <span class="fu">epinow</span><span class="op">(</span></span>
 <span>  reported_cases <span class="op">=</span> <span class="va">ebola_cases</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">120</span>, <span class="op">]</span>, <span class="co"># first 3 months of data only</span></span>
 <span>  generation_time <span class="op">=</span> <span class="fu">generation_time_opts</span><span class="op">(</span><span class="va">ebola_generation_time</span><span class="op">)</span>,</span>
 <span>  delays <span class="op">=</span> <span class="fu">delay_opts</span><span class="op">(</span><span class="va">ebola_incubation_period</span><span class="op">)</span>,</span>
+<span>  <span class="co"># Add observation model</span></span>
+<span>  obs <span class="op">=</span> <span class="fu">obs_opts</span><span class="op">(</span>scale <span class="op">=</span> <span class="va">ebola_obs_scale</span><span class="op">)</span>,</span>
 <span>  <span class="co"># horizon needs to be 14 days to create two week forecast (default is 7 days)</span></span>
 <span>  horizon <span class="op">=</span> <span class="fl">14</span></span>
 <span><span class="op">)</span></span></code></pre>
@@ -743,13 +823,13 @@ days.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>WARN [2024-03-25 20:10:14] epinow: There were 17 divergent transitions after warmup. See
+<pre class="output" tabindex="0"><code>WARN [2024-04-17 21:33:46] epinow: There were 12 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-03-25 20:10:14] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-04-17 21:33:46] epinow: Examine the pairs() plot to diagnose sampling problems
  - </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -760,23 +840,57 @@ WARN [2024-03-25 20:10:14] epinow: Examine the pairs() plot to diagnose sampling
 </h3>
 <pre class="output" tabindex="0"><code>                                 measure                estimate
                                   &lt;char&gt;                  &lt;char&gt;
-1: New confirmed cases by infection date         103 (46 -- 258)
+1: New confirmed cases by infection date         127 (58 -- 320)
 2:        Expected change in daily cases              Increasing
-3:            Effective reproduction no.          1.7 (1 -- 2.9)
-4:                        Rate of growth 0.043 (0.0024 -- 0.092)
-5:          Doubling/halving time (days)         16 (7.6 -- 290)</code></pre>
+3:            Effective reproduction no.        1.7 (1.1 -- 2.9)
+4:                        Rate of growth 0.042 (0.0039 -- 0.091)
+5:          Doubling/halving time (days)         16 (7.7 -- 180)</code></pre>
 </div>
 <p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
-data) is 1.7 (1 – 2.9). The exponential growth rate of case numbers is
-0.043 (0.0024 – 0.092).</p>
+data) is 1.7 (1.1 – 2.9). The exponential growth rate of case numbers is
+0.042 (0.0039 – 0.091).</p>
 <p>Visualize the estimates:</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">plot</span><span class="op">(</span><span class="va">ebola_estimates</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
+</div>
+</div>
+</div>
+<div id="forecasting-with-estimates-of-r_t" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="forecasting-with-estimates-of-r_t" class="callout-inner">
+<h3 class="callout-title">Forecasting with estimates of<span class="math inline">\(R_t\)</span><a class="anchor" aria-label="anchor" href="#forecasting-with-estimates-of-r_t"></a>
+</h3>
+<div class="callout-content">
+<p>By default, the short-term forecasts are created using the latest
+estimate of the reproduction number <span class="math inline">\(R_t\)</span>. As this estimate is based on partial
+data, it has considerable uncertainty.</p>
+<p>The reproduction number that is projected into the future can be
+changed to a less recent estimate based on more data using
+<code>rt_opts()</code>:</p>
+<div class="codewrapper sourceCode" id="cb25">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">rt_opts</span><span class="op">(</span>future <span class="op">=</span> <span class="st">"estimate"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>The result will be less uncertain forecasts (as they are based on
+<span class="math inline">\(R_t\)</span> with a narrower uncertainty
+interval) but the forecasts will be based on less recent estimates of
+<span class="math inline">\(R_t\)</span> and assume no change since
+then.</p>
+<p>Additionally, there is the option to <a href="reference.html#projection">project</a> the value of <span class="math inline">\(R_t\)</span> into the future using a generic model
+by setting <code>future = "project"</code>. As this option uses a model
+to forecast the value of <span class="math inline">\(R_t\)</span>, the
+result will be forecasts that are more uncertain than
+<code>estimate</code>, for an example <a href="https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html#projecting-the-reproduction-number-with-the-gaussian-process" class="external-link">see
+here</a>.</p>
 </div>
 </div>
 </div>
@@ -810,9 +924,9 @@ future behaviour of the reproduction number</li>
 Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  -->
-</section></section><section id="aio-severity-static"><p>Content from <a href="severity-static.html">Estimate severity</a></p>
+</section></section><section id="aio-severity-static"><p>Content from <a href="severity-static.html">Estimation of outbreak severity</a></p>
 <hr>
-<p>Last updated on 2024-03-25 |
+<p>Last updated on 2024-04-17 |
         
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/severity-static.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 12 minutes</p>
@@ -830,8 +944,6 @@ any links that you are not going to use.
 <li><p>Why do we estimate the clinical severity of an epidemic?</p></li>
 <li><p>How can the Case Fatality Risk (CFR) be estimated early in an
 ongoing epidemic?</p></li>
-<li><p>How do we estimate other severity measurements from different
-data sources?</p></li>
 </ul>
 </div>
 </div>
@@ -845,8 +957,8 @@ data sources?</p></li>
 <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>.</p></li>
 <li><p>Estimate a delay-adjusted CFR using <code>{epiparameter}</code>
 and <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>.</p></li>
-<li><p>Estimate severity measurements like the Hospitalization Fatality
-Risk (HFR) using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>.</p></li>
+<li><p>Estimate a delay-adjusted severity for an expanding time series
+using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>.</p></li>
 </ul>
 </div>
 </div>
@@ -889,14 +1001,14 @@ pandemic scenarios. HHS: United States Department of Health and Human
 Services (<a href="https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html" class="external-link">CDC,
 2016</a>).</div>
 </figure><p>One epidemiological approach to estimating the clinical severity is
-quantifying the Case Fatality Risk or CFR. CFR is the conditional
+quantifying the Case Fatality Risk (CFR). CFR is the conditional
 probability of death given confirmed diagnosis, calculated as the
-cumulative number deaths from an infectious disease over the number of
-confirmed diagnosed cases. However, calculating this directly during the
-course of an epidemic tends to result in a naive or biased CFR given the
-time <a href="reference.html#delaydist">delay</a> from onset to death,
-varying substantially as the epidemic progresses and stabilising at the
-later stages of the outbreak (<a href="https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743" class="external-link">Ghani
+cumulative number of deaths from an infectious disease over the number
+of confirmed diagnosed cases. However, calculating this directly during
+the course of an epidemic tends to result in a naive or biased CFR given
+the time <a href="reference.html#delaydist">delay</a> from onset to
+death, varying substantially as the epidemic progresses and stabilising
+at the later stages of the outbreak (<a href="https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743" class="external-link">Ghani
 et al., 2005</a>).</p>
 <figure><img src="../fig/cfr-pone.0006852.g003-fig_c.png" alt="The periods are relevant: Period 1 -- 15 days where CFR is zero to indicate this is due to no reported deaths; Period from Mar 15 -- Apr 26 where CFR appears to be rising; Period Apr 30 -- May 30 where the CFR estimate stabilises." class="figure mx-auto d-block"><div class="figcaption">Observed biased confirmed case fatality risk
 (CFR) estimates as a function of time (thick line) calculated as the
@@ -913,7 +1025,7 @@ et al., 2009</a>)</div>
   <h3 class="accordion-header" id="headingInstructor1">
 <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div>Instructor Note</h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
 <div class="accordion-body">
 <p>The periods are relevant: Period 1 – 15 days where CFR is zero to
 indicate this is due to no reported deaths; Period from Mar 15 – Apr 26
@@ -947,33 +1059,34 @@ package:</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">cfr</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">epiparameter</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">outbreaks</span><span class="op">)</span></span></code></pre>
 </div>
 </section><section id="data-sources-for-clinical-severity"><h2 class="section-heading">Data sources for clinical severity<a class="anchor" aria-label="anchor" href="#data-sources-for-clinical-severity"></a>
 </h2>
 <hr class="half-width">
 <p>What are data sources can we use to estimate the clinical severity of
 a disease outbreak? <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext" class="external-link">Verity
-et al., 2020</a> summaries the spectrum of COVID-19 cases:</p>
+et al., 2020</a> summarises the spectrum of COVID-19 cases:</p>
 <figure><img src="../fig/cfr-spectrum-cases-covid19.jpg" alt="Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic. (Verity et al., 2020)" class="figure mx-auto d-block"><div class="figcaption">Spectrum of COVID-19 cases. The CFR aims to
 estimate the proportion of Deaths among confirmed cases in an epidemic.
 (<a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1" class="external-link">Verity
 et al., 2020</a>)</div>
 </figure><ul>
-<li>At the top of the pyramid, those meeting the WHO case criteria for
-<strong>severe</strong> or critical cases will likely be identified in
-the hospital setting, presenting with atypical viral pneumonia. These
-cases will have been identified in mainland China and among those
-categorised internationally as local transmission.</li>
+<li>At the top of the pyramid, those who met the WHO case criteria for
+<strong>severe</strong> or critical cases would likely have been
+identified in the hospital setting, presenting with atypical viral
+pneumonia. These cases would have been identified in mainland China and
+among those categorised internationally as local transmission.</li>
 <li>Many more cases are likely to be <strong>symptomatic</strong> (i.e.,
 with fever, cough, or myalgia) but might not require hospitalisation.
-These cases will have been identified through links to international
+These cases would have been identified through links to international
 travel to high-risk areas and through contact-tracing of contacts of
-confirmed cases. They might also be identified through population
+confirmed cases. They might be identifiable through population
 surveillance of, for example, influenza-like illness.</li>
 <li>The bottom part of the pyramid represents <strong>mild</strong> (and
 possibly <strong>asymptomatic</strong>) cases. These cases might be
-identified through contact tracing and subsequently via serological
+identifiable through contact tracing and subsequently via serological
 testing.</li>
 </ul></section><section id="naive-cfr"><h2 class="section-heading">Naive CFR<a class="anchor" aria-label="anchor" href="#naive-cfr"></a>
 </h2>
@@ -998,24 +1111,24 @@ an input data frame with three columns named:</p>
 <li><code>cases</code></li>
 <li><code>deaths</code></li>
 </ul>
-<p>Let’s explore the <code>ebola1976</code> dataset, which comes from
-the first Ebola outbreak in what was then called Zaire (now the
-Democratic Republic of the Congo) in 1976, as analysed by Camacho et
-al. (2014).</p>
+<p>Let’s explore the <code>ebola1976</code> dataset, included in {cfr},
+which comes from the first Ebola outbreak in what was then called Zaire
+(now the Democratic Republic of the Congo) in 1976, as analysed by
+Camacho et al. (2014).</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load the Ebola 1976 data provided with the package</span></span>
+<code class="sourceCode R"><span><span class="co"># Load the Ebola 1976 data provided with the {cfr} package</span></span>
 <span><span class="fu">data</span><span class="op">(</span><span class="st">"ebola1976"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># view top data</span></span>
-<span><span class="va">ebola1976</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<span><span class="co"># Assume we only have the first 30 days of this data</span></span>
+<span><span class="va">ebola1976</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="op">]</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code># A tibble: 73 × 3
+<pre class="output" tabindex="0"><code># A tibble: 30 × 3
    date       cases deaths
    &lt;date&gt;     &lt;int&gt;  &lt;int&gt;
  1 1976-08-25     1      0
@@ -1028,7 +1141,7 @@ al. (2014).</p>
  8 1976-09-01     1      0
  9 1976-09-02     1      0
 10 1976-09-03     1      0
-# ℹ 63 more rows</code></pre>
+# ℹ 20 more rows</code></pre>
 </div>
 <div id="we-need-aggregated-incidence-data" class="callout">
 <div class="callout-square">
@@ -1038,90 +1151,35 @@ al. (2014).</p>
 <h3 class="callout-title">We need aggregated incidence data<a class="anchor" aria-label="anchor" href="#we-need-aggregated-incidence-data"></a>
 </h3>
 <div class="callout-content">
-<p><a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> reads <strong>aggregated</strong> incidence data.
-Similar to the <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> with the difference that for
-<a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> we need one more column named
-<code>deaths</code>.</p>
+<p><a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> reads <strong>aggregated</strong> incidence
+data.</p>
+<!-- Similar to the `{EpiNow2}` with the difference that for `{cfr}` we need one more column named `deaths`. -->
+<p>This data input should be <strong>aggregated</strong> by day, which
+means one observation <em>per day</em>, containing the <em>daily</em>
+number of reported cases and deaths. Observations with zero or missing
+values should also be included, similar to time-series data.</p>
+<p>Also, <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> currently works for <em>daily</em> data
+only, but not for other temporal units of data aggregation, e.g.,
+weeks.</p>
+<!-- suggest ways to deal with raw input weekly data -->
+<!-- https://github.com/epiverse-trace/cfr/issues/117 -->
+</div>
+</div>
+</div>
+<p>When we apply <code>cfr_static()</code> to <code>data</code>
+directly, we are calculating the naive CFR:</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">EpiNow2</span><span class="fu">::</span><span class="va">example_confirmed</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code># A tibble: 130 × 2
-   date       confirm
-   &lt;date&gt;       &lt;dbl&gt;
- 1 2020-02-22      14
- 2 2020-02-23      62
- 3 2020-02-24      53
- 4 2020-02-25      97
- 5 2020-02-26      93
- 6 2020-02-27      78
- 7 2020-02-28     250
- 8 2020-02-29     238
- 9 2020-03-01     240
-10 2020-03-02     561
-# ℹ 120 more rows</code></pre>
-</div>
-<p>This data input should be <strong>aggregated</strong> by day, which
-means one observation <em>per day</em>, containing the <em>daily</em>
-number of reported cases and deaths. Observations with zero or missing
-values should also be included, similar to a time-series data.</p>
-<p>Also, <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> currently works for <em>daily</em> data
-only, not weekly data.</p>
-<!-- suggest ways to deal with raw input weekly data -->
-<!-- https://github.com/epiverse-trace/cfr/issues/117 -->
-<div class="section level3">
-<h3 id="aggregated-differs-from-linelist">Aggregated differs from Linelist<a class="anchor" aria-label="anchor" href="#aggregated-differs-from-linelist"></a>
-</h3>
-<p>Lastly, <em>aggregated</em> incidence data differs from
-<strong>linelist</strong> data, where each observation contains
-subject-level data.</p>
-<div class="codewrapper sourceCode" id="cb6">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">outbreaks</span><span class="fu">::</span><span class="va">ebola_sierraleone_2014</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code># A tibble: 11,903 × 8
-      id   age sex   status    date_of_onset date_of_sample district chiefdom   
-   &lt;int&gt; &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;     &lt;date&gt;        &lt;date&gt;         &lt;fct&gt;    &lt;fct&gt;      
- 1     1    20 F     confirmed 2014-05-18    2014-05-23     Kailahun Kissi Teng 
- 2     2    42 F     confirmed 2014-05-20    2014-05-25     Kailahun Kissi Teng 
- 3     3    45 F     confirmed 2014-05-20    2014-05-25     Kailahun Kissi Tonge
- 4     4    15 F     confirmed 2014-05-21    2014-05-26     Kailahun Kissi Teng 
- 5     5    19 F     confirmed 2014-05-21    2014-05-26     Kailahun Kissi Teng 
- 6     6    55 F     confirmed 2014-05-21    2014-05-26     Kailahun Kissi Teng 
- 7     7    50 F     confirmed 2014-05-21    2014-05-26     Kailahun Kissi Teng 
- 8     8     8 F     confirmed 2014-05-22    2014-05-27     Kailahun Kissi Teng 
- 9     9    54 F     confirmed 2014-05-22    2014-05-27     Kailahun Kissi Teng 
-10    10    57 F     confirmed 2014-05-22    2014-05-27     Kailahun Kissi Teng 
-# ℹ 11,893 more rows</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<p>When we use <code>cfr_static()</code> to <code>data</code> only, we
-calculate the naive CFR:</p>
-<div class="codewrapper sourceCode" id="cb8">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate the static CFR without adjusting for delays</span></span>
-<span><span class="fu">cfr_static</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ebola1976</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Calculate the naive CFR for the first 30 days</span></span>
+<span><span class="fu">cfr_static</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ebola1976</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="op">]</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>  severity_mean severity_low severity_high
-1      0.955102    0.9210866     0.9773771</code></pre>
+1     0.4740741    0.3875497     0.5617606</code></pre>
 </div>
 <div id="challenge1" class="callout challenge">
 <div class="callout-square">
@@ -1131,8 +1189,9 @@ calculate the naive CFR:</p>
 <h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
 </h3>
 <div class="callout-content">
-<p>Load the <code>ebola_kikwit_1995</code> from the
-<a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package and estimate the naive CFR.</p>
+<p>Download the file <a href="../data/sarscov2_cases_deaths.csv">sarscov2_cases_deaths.csv</a> and
+read it into R.</p>
+<p>Estimate the naive CFR.</p>
 </div>
 </div>
 </div>
@@ -1141,7 +1200,7 @@ calculate the naive CFR:</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1">Give me a hint</h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>Inspect the format of the data input.</p>
 <ul>
@@ -1159,45 +1218,64 @@ calculate the naive CFR:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<p>We can use <code>dplyr::rename()</code> to adapt the external data to
-fit the data input for <code>cfr_static()</code>.</p>
-<div class="codewrapper sourceCode" id="cb10">
+<p>We read the data input using <code>readr::read_csv()</code>. This
+function recognize that the column <code>date</code> is a
+<code>&lt;date&gt;</code> class vector.</p>
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">outbreaks</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">outbreaks</span><span class="fu">::</span><span class="va">ebola_kikwit_1995</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">glimpse</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># read data</span></span>
+<span><span class="co"># e.g.: if path to file is data/raw-data/ebola_cases.csv then:</span></span>
+<span><span class="va">sarscov2_input</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"raw-data"</span>, <span class="st">"sarscov2_cases_deaths.csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb7">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Inspect data</span></span>
+<span><span class="va">sarscov2_input</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>Rows: 192
-Columns: 4
-$ date      &lt;date&gt; 1995-01-06, 1995-01-07, 1995-01-08, 1995-01-09, 1995-01-10,…
-$ onset     &lt;int&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-$ death     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-$ reporting &lt;lgl&gt; TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…</code></pre>
+<pre class="output" tabindex="0"><code># A tibble: 93 × 3
+   date       cases_jpn deaths_jpn
+   &lt;date&gt;         &lt;dbl&gt;      &lt;dbl&gt;
+ 1 2020-01-20         1          0
+ 2 2020-01-21         1          0
+ 3 2020-01-22         0          0
+ 4 2020-01-23         1          0
+ 5 2020-01-24         1          0
+ 6 2020-01-25         3          0
+ 7 2020-01-26         3          0
+ 8 2020-01-27         4          0
+ 9 2020-01-28         6          0
+10 2020-01-29         7          0
+# ℹ 83 more rows</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb12">
+<p>We can use <code>dplyr::rename()</code> to adapt the external data to
+fit the data input for <code>cfr_static()</code>.</p>
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">outbreaks</span><span class="fu">::</span><span class="va">ebola_kikwit_1995</span> <span class="op">%&gt;%</span></span>
+<code class="sourceCode R"><span><span class="co"># Rename before Estimate naive CFR</span></span>
+<span><span class="va">sarscov2_input</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">rename</span><span class="op">(</span></span>
-<span>    cases <span class="op">=</span> <span class="va">onset</span>,</span>
-<span>    deaths <span class="op">=</span> <span class="va">death</span></span>
+<span>    cases <span class="op">=</span> <span class="va">cases_jpn</span>,</span>
+<span>    deaths <span class="op">=</span> <span class="va">deaths_jpn</span></span>
 <span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">cfr</span><span class="fu">::</span><span class="fu">cfr_static</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">cfr_static</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>  severity_mean severity_low severity_high
-1     0.8082192    0.7583033     0.8517565</code></pre>
+1    0.01895208   0.01828832    0.01963342</code></pre>
 </div>
 </div>
 </div>
@@ -1216,19 +1294,19 @@ $ reporting &lt;lgl&gt; TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, F
 <div class="callout-content">
 <p><a href="https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846" class="external-link">Lipsitch
 et al., 2015</a> describe two potential biases that can affect the
-estimation of CFR (and its possible solutions):</p>
+estimation of CFR (and their potential solutions):</p>
 </div>
 </div>
 </div>
 <div id="accordionSolution2" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
-  <h4 class="accordion-header" id="headingSolution2">Preferential ascertainment of severe cases</h4>
+  <h4 class="accordion-header" id="headingSolution2">1. Preferential ascertainment of severe cases</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
-<p>For diseases with a <em>spectrum</em> of clinical presentation, those
-cases that come to the attention of public health authorities and
+<p>For diseases with a <em>spectrum</em> of clinical presentations,
+those cases that come to the attention of public health authorities and
 registered into surveillance databases will typically be people with the
 most severe symptoms who seek medical care, are admitted to a hospital,
 or die.</p>
@@ -1243,17 +1321,17 @@ definitions of “case”) asymptomatic presentations.</p>
 <div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
-  <h4 class="accordion-header" id="headingSolution3">Bias due to delayed reporting of death</h4>
+  <h4 class="accordion-header" id="headingSolution3">2. Bias due to delayed reporting of death</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>During an <em>ongoing</em> epidemic, there is a delay between the
 time someone dies and the time their death is reported. Therefore, at
-any moment in time, the list of cases includes people who will die and
-whose death has not yet occurred or has occurred but not yet been
+any given moment in time, the list of cases includes people who will die
+and whose death has not yet occurred or has occurred but not yet been
 reported. Thus, dividing the cumulative number of reported deaths by the
-cumulative number of reported cases at any moment will underestimate the
-true CFR.</p>
+cumulative number of reported cases at a specific time point during an
+outbreak will underestimate the true CFR.</p>
 <p>The key determinants of the magnitude of the bias are the epidemic
 <em>growth rate</em> and the <em>distribution of delays</em> from
 case-reporting to death-reporting; the longer the delays and the faster
@@ -1264,30 +1342,13 @@ with this specific bias using <a href="https://github.com/epiverse-trace/cfr" cl
 </div>
 </div>
 </div>
-<div id="accordionInstructor2" class="accordion instructor-note accordion-flush">
+<div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
-  <h3 class="accordion-header" id="headingInstructor2">
-<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div>Instructor Note</h3>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
+  <h4 class="accordion-header" id="headingSolution4">Case study: Influenza A (H1N1), Mexico, 2009</h4>
 </button>
-<div id="collapseInstructor2" class="accordion-collapse collapse" aria-labelledby="headingInstructor2" data-bs-parent="#accordionInstructor2">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
-<p>We can showcase this last bias using the <a href="https://epiverse-trace.github.io/cfr/articles/cfr.html#concept-how-reporting-delays-bias-cfr-estimates" class="external-link">concept
-described in this <code>{cfr}</code> vignette</a>.</p>
-<!-- create code and then a .gif? -->
-</div>
-</div>
-</div>
-</div>
-<div id="biases-during-the-influenza-a-h1n1-outbreak-in-mexico-2009" class="callout testimonial">
-<div class="callout-square">
-<i class="callout-icon" data-feather="heart"></i>
-</div>
-<div id="biases-during-the-influenza-a-h1n1-outbreak-in-mexico-2009" class="callout-inner">
-<h3 class="callout-title">Biases during the Influenza A (H1N1) outbreak
-in Mexico, 2009<a class="anchor" aria-label="anchor" href="#biases-during-the-influenza-a-h1n1-outbreak-in-mexico-2009"></a>
-</h3>
-<div class="callout-content">
 <p>Improving an <em>early</em> epidemiological assessment of a
 delay-adjusted CFR is crucial for determining virulence, shaping the
 level and choices of public health intervention, and providing advice to
@@ -1310,26 +1371,19 @@ comparable with that seen in the 1957 pandemic.</p>
 </div>
 </div>
 </div>
-<div id="discussion2" class="callout discussion">
-<div class="callout-square">
-<i class="callout-icon" data-feather="message-circle"></i>
 </div>
-<div class="callout-inner">
-<h3 class="callout-title">Discussion<a class="anchor" aria-label="anchor" href="#discussion2"></a>
-</h3>
-<div class="callout-content">
-<p>Based on your experience:</p>
-<ul>
-<li>Share any previous outbreak in which you participated in its
-response.</li>
-</ul>
-<p>Answer to these questions:</p>
-<ul>
-<li>How did you assess the clinical severity of the outbreak?</li>
-<li>What were the primary sources of bias?</li>
-<li>What did you do to take into account the identified bias?</li>
-<li>What complementary analysis would you do to solve the bias?</li>
-</ul>
+<div id="accordionInstructor2" class="accordion instructor-note accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
+  <h3 class="accordion-header" id="headingInstructor2">
+<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div>Instructor Note</h3>
+</button>
+<div id="collapseInstructor2" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor2" aria-labelledby="headingInstructor2">
+<div class="accordion-body">
+<p>We can showcase this last bias using the <a href="https://epiverse-trace.github.io/cfr/articles/cfr.html#concept-how-reporting-delays-bias-cfr-estimates" class="external-link">concept
+described in this <code>{cfr}</code> vignette</a>.</p>
+<!-- create code and then a .gif? -->
+</div>
 </div>
 </div>
 </div>
@@ -1343,10 +1397,10 @@ delay</strong> from the onset of symptoms to death.</p>
 to determine the time distribution between onset and death. Therefore,
 we can estimate the <em>distribution delay</em> from historical
 outbreaks or reuse the ones accessible via R packages like
-<code>{epiparameter}</code> or <code>{epireview}</code>, which collects
-them from literature searches and systematic reviews.</p>
+<code>{epiparameter}</code> or <code>{epireview}</code>, which collect
+them from published scientific literature.</p>
 <p>Let’s use <code>{epiparameter}</code>:</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1361,16 +1415,17 @@ them from literature searches and systematic reviews.</p>
 <span><span class="co"># Plot &lt;epidist&gt; object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, day_range <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/severity-static-rendered-unnamed-chunk-7-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To calculate the delay-adjusted CFR, we can use the
+<figure><img src="../fig/severity-static-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To calculate the delay-adjusted CFR, we can use the
 <code>cfr_static()</code> function with the <code>data</code> and
 <code>delay_density</code> arguments.</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate the static CFR while adjusting for delays</span></span>
+<code class="sourceCode R"><span><span class="co"># Calculate the delay-adjusted CFR</span></span>
+<span><span class="co"># for the first 30 days</span></span>
 <span><span class="fu">cfr_static</span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">ebola1976</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">ebola1976</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">30</span>, <span class="op">]</span>,</span>
 <span>  delay_density <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, <span class="va">x</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
@@ -1378,19 +1433,186 @@ them from literature searches and systematic reviews.</p>
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>  severity_mean severity_low severity_high
-1         0.971        0.852             1</code></pre>
+1         0.955         0.74             1</code></pre>
 </div>
 <p>The delay-adjusted CFR indicated that the overall disease severity
 <em>at the end of the outbreak</em> or with the <em>latest data
-available at the moment</em> is 0.971 with a 95% confidence interval
-between 0.852 and 1, slightly higher than the naive one.</p>
+available at the moment</em> is 0.955 with a 95% confidence interval
+between 0.74 and 1, slightly higher than the naive one.</p>
+<div id="use-the-epidist-class" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="use-the-epidist-class" class="callout-inner">
+<h3 class="callout-title">Use the epidist class<a class="anchor" aria-label="anchor" href="#use-the-epidist-class"></a>
+</h3>
+<div class="callout-content">
+<p>When using an <code>&lt;epidist&gt;</code> class object we can use
+this expression as a template:</p>
+<p><code>function(x) density(&lt;EPIDIST_OBJECT&gt;, x)</code></p>
+<p>For distribution functions with parameters not available in
+<code>{epiparameter}</code>, we suggest you two alternatives:</p>
+<ul>
+<li><p>Create an <code>&lt;epidist&gt;</code> class object, to plug into
+other R packages of the outbreak analytics pipeline. Read the <a href="https://epiverse-trace.github.io/epiparameter/reference/epidist.html" class="external-link">reference
+documentation of <code>epiparameter::epidist()</code></a>, or</p></li>
+<li><p>Read <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> vignette for <a href="https://epiverse-trace.github.io/cfr/articles/delay_distributions.html" class="external-link">a
+primer on working with delay distributions</a>.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="challenge2" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
+</h3>
+<div class="callout-content">
+<p>Use the same file from the previous challenge (<a href="../data/sarscov2_cases_deaths.csv">sarscov2_cases_deaths.csv</a>).</p>
+<p>Estimate the delay-adjusted CFR using the appropriate distribution
+delay. Then:</p>
+<ul>
+<li>Compare the naive and the delay-adjusted CFR solutions!</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="accordionHint2" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
+  <h4 class="accordion-header" id="headingHint2">Give me a hint</h4>
+</button>
+<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div class="accordion-body">
+<ul>
+<li>Find the appropriate <code>&lt;epidist&gt;</code> object!</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
+  <h4 class="accordion-header" id="headingSolution5">Show me the solution</h4>
+</button>
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div class="accordion-body">
+<p>We use <code>{epiparameter}</code> to access a delay distribution for
+the SARS-CoV-2 aggregated incidence data:</p>
+<div class="codewrapper sourceCode" id="cb14">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">epiparameter</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sarscov2_delay</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">epidist_db</span><span class="op">(</span></span>
+<span>    disease <span class="op">=</span> <span class="st">"covid"</span>,</span>
+<span>    epi_dist <span class="op">=</span> <span class="st">"onset to death"</span>,</span>
+<span>    single_epidist <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span></code></pre>
+</div>
+<p>We read the data input using <code>readr::read_csv()</code>. This
+function recognize that the column <code>date</code> is a
+<code>&lt;date&gt;</code> class vector.</p>
+<div class="codewrapper sourceCode" id="cb15">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># read data</span></span>
+<span><span class="co"># e.g.: if path to file is data/raw-data/ebola_cases.csv then:</span></span>
+<span><span class="va">sarscov2_input</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"raw-data"</span>, <span class="st">"sarscov2_cases_deaths.csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb16">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Inspect data</span></span>
+<span><span class="va">sarscov2_input</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code># A tibble: 93 × 3
+   date       cases_jpn deaths_jpn
+   &lt;date&gt;         &lt;dbl&gt;      &lt;dbl&gt;
+ 1 2020-01-20         1          0
+ 2 2020-01-21         1          0
+ 3 2020-01-22         0          0
+ 4 2020-01-23         1          0
+ 5 2020-01-24         1          0
+ 6 2020-01-25         3          0
+ 7 2020-01-26         3          0
+ 8 2020-01-27         4          0
+ 9 2020-01-28         6          0
+10 2020-01-29         7          0
+# ℹ 83 more rows</code></pre>
+</div>
+<p>We can use <code>dplyr::rename()</code> to adapt the external data to
+fit the data input for <code>cfr_static()</code>.</p>
+<div class="codewrapper sourceCode" id="cb18">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Rename before Estimate naive CFR</span></span>
+<span><span class="va">sarscov2_input</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">rename</span><span class="op">(</span></span>
+<span>    cases <span class="op">=</span> <span class="va">cases_jpn</span>,</span>
+<span>    deaths <span class="op">=</span> <span class="va">deaths_jpn</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">cfr_static</span><span class="op">(</span>delay_density <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">sarscov2_delay</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>  severity_mean severity_low severity_high
+1         0.055        0.054         0.057</code></pre>
+</div>
+<p>Interpret the comparison between the naive and delay-adjusted CFR
+estimates.</p>
+</div>
+</div>
+</div>
+</div>
 <div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">
+<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>When to use discrete distributions?</h3>
+</button>
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div class="accordion-body">
+<p>For <code>cfr_static()</code> and all the <code>cfr_*()</code> family
+of functions, the most appropriate choice to pass are
+<strong>discrete</strong> distributions. This is because we will work
+with daily case and death data.</p>
+<p>We can assume that evaluating the Probability Distribution Function
+(PDF) of a <em>continuous</em> distribution is equivalent to the
+Probability Mass Function (PMF) of the equivalent <em>discrete</em>
+distribution.</p>
+<p>However, this assumption may not be appropriate for distributions
+with larger peaks. For instance, diseases with an onset-to-death
+distribution that is strongly peaked with a low variance. In such cases,
+the average disparity between the PDF and PMF is expected to be more
+pronounced compared to distributions with broader spreads. One way to
+deal with this is to discretise the continuous distribution using
+<code>epiparameter::discretise()</code> to an
+<code>&lt;epidist&gt;</code> object.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
+  <h3 class="accordion-header" id="headingSpoiler2">
 <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>How does {cfr} works?</h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p>To adjust the CFR, <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
 et al., 2009</a> use the case and death incidence data to estimate the
@@ -1434,237 +1656,18 @@ et al., 2009</a>).</p>
 </div>
 </div>
 </div>
-<div id="use-the-epidist-class" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
-</div>
-<div id="use-the-epidist-class" class="callout-inner">
-<h3 class="callout-title">Use the<code>&lt;epidist&gt;</code>class<a class="anchor" aria-label="anchor" href="#use-the-epidist-class"></a>
-</h3>
-<div class="callout-content">
-<p>When using an <code>&lt;epidist&gt;</code> class object we can use
-this expression as a template:</p>
-<p><code>function(x) density(&lt;EPIDIST_OBJECT&gt;, x)</code></p>
-<p>For distribution functions with parameters not available in
-<code>{epiparameter}</code>, we suggest you two alternatives:</p>
-<ul>
-<li><p>Create an <code>&lt;epidist&gt;</code> class object, to plug into
-other R packages of the outbreak analytics pipeline. Read the <a href="https://epiverse-trace.github.io/epiparameter/reference/epidist.html" class="external-link">reference
-documentation of <code>epiparameter::epidist()</code></a>, or</p></li>
-<li><p>Read <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> vignette for <a href="https://epiverse-trace.github.io/cfr/articles/delay_distributions.html" class="external-link">a
-primer on working with delay distributions</a>.</p></li>
-</ul>
-</div>
-</div>
-</div>
-<div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
-  <h3 class="accordion-header" id="headingSpoiler2">
-<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>When to use discrete distributions?</h3>
-</button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
-<div class="accordion-body">
-<p>For <code>cfr_static()</code> and all the <code>cfr_*()</code> family
-of functions, the most appropriate choice to pass are
-<strong>discrete</strong> distributions. This is because we will work
-with daily case and death data.</p>
-<p>We can assume that evaluating the Probability Distribution Function
-(PDF) of a <em>continuous</em> distribution is equivalent to the
-Probability Mass Function (PMF) of the equivalent <em>discrete</em>
-distribution.</p>
-<p>However, this assumption may not be appropriate for distributions
-with greater picks. For example, when onset-to-death is strongly peaked
-with a low variance. In such cases, the average disparity between the
-PDF and PMF is expected to be more pronounced compared to distributions
-with broader spreads.</p>
-<p>In a scenario like the last one, you can opt to discretise the
-continuous distribution using <code>epiparameter::discretise()</code> to
-an <code>&lt;epidist&gt;</code> object.</p>
-</div>
-</div>
-</div>
-</div>
-<div id="challenge2" class="callout challenge">
-<div class="callout-square">
-<i class="callout-icon" data-feather="zap"></i>
-</div>
-<div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
-</h3>
-<div class="callout-content">
-<p>Load the <code>ebola_kikwit_1995</code> from <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a>
-and estimate the delay-adjusted CFR using the appropriate distribution
-delay. Then:</p>
-<ul>
-<li>Compare the naive and the delay-adjusted CFR solutions!</li>
-</ul>
-</div>
-</div>
-</div>
-<div id="accordionHint2" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
-  <h4 class="accordion-header" id="headingHint2">Give me a hint</h4>
-</button>
-<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
-<div class="accordion-body">
-<ul>
-<li>Find the appropriate <code>&lt;epidist&gt;</code> object!</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
-  <h4 class="accordion-header" id="headingSolution4">Show me the solution</h4>
-</button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
-<div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb17">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">outbreaks</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">outbreaks</span><span class="fu">::</span><span class="va">ebola_kikwit_1995</span> <span class="op">%&gt;%</span> <span class="fu">glimpse</span><span class="op">(</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>Rows: 192
-Columns: 4
-$ date      &lt;date&gt; 1995-01-06, 1995-01-07, 1995-01-08, 1995-01-09, 1995-01-10,…
-$ onset     &lt;int&gt; 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-$ death     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-$ reporting &lt;lgl&gt; TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb19">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">outbreaks</span><span class="fu">::</span><span class="va">ebola_kikwit_1995</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">rename</span><span class="op">(</span></span>
-<span>    cases <span class="op">=</span> <span class="va">onset</span>,</span>
-<span>    deaths <span class="op">=</span> <span class="va">death</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">cfr</span><span class="fu">::</span><span class="fu">cfr_static</span><span class="op">(</span></span>
-<span>    delay_density <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, <span class="va">x</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>  severity_mean severity_low severity_high
-1         0.819         0.72         0.928</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
 </section><section id="an-early-stage-cfr-estimate"><h2 class="section-heading">An early-stage CFR estimate<a class="anchor" aria-label="anchor" href="#an-early-stage-cfr-estimate"></a>
 </h2>
 <hr class="half-width">
-<p>We just found that the difference between the <em>naive</em> and
-<em>delay-adjusted</em> CFR estimates using <code>cfr_static()</code>
-are <em>just slightly</em> different. So, what is the main
-difference?</p>
-<p><a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> method aims to obtain an unbiased estimator “well
-before” observing the entire course of the outbreak. For this
-<a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> uses the underestimation factor <span class="math inline">\(u_{t}\)</span> to estimate the unbiased CFR <span class="math inline">\(p_{t}\)</span> using maximum-likelihood methods,
-given the sampling process defined by <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
-et al., 2009</a>.</p>
-<div id="accordionSpoiler3" class="accordion spoiler-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
-  <h3 class="accordion-header" id="headingSpoiler3">
-<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>What is the sampling process?</h3>
-</button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
-<div class="accordion-body">
-<figure><img src="../fig/cfr-pone.0006852.g001.png" alt="The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. (Nishiura et al., 2009)" class="figure mx-auto d-block"><div class="figcaption">The population of confirmed cases and sampling
-process for estimating the unbiased CFR during the course of an
-outbreak. (<a href="https://doi.org/10.1371/journal.pone.0006852.g001" class="external-link">Nishiura et
-al., 2009</a>)</div>
-</figure><p>From <em>aggregated incidence data</em>, at time <span class="math inline">\(t\)</span> we know the cumulative number of
-confirmed cases and deaths, <span class="math inline">\(C_{t}\)</span>
-and <span class="math inline">\(D_{t}\)</span>, and wish to estimate the
-unbiased CFR <span class="math inline">\(\pi\)</span>, by way of the
-factor of underestimation <span class="math inline">\(u_{t}\)</span>.</p>
-<p>If we knew the factor of underestimation <span class="math inline">\(u_{t}\)</span> we could specify the size of the
-population of confirmed cases no longer at risk (<span class="math inline">\(u_{t}C_{t}\)</span>, <strong>shaded</strong>),
-although we do not know which surviving individuals belong to this
-group. A proportion <span class="math inline">\(\pi\)</span> of those in
-the group of cases still at risk (size <span class="math inline">\((1-
-u_{t})C_{t}\)</span>, <strong>unshaded</strong>) is expected to die.</p>
-<p>Because each case no longer at risk had an independent probability of
-dying, <span class="math inline">\(\pi\)</span>, the number of deaths,
-<span class="math inline">\(D_{t}\)</span>, is a sample from a binomial
-distribution with sample size <span class="math inline">\(u_{t}C_{t}\)</span>, and probability of dying
-<span class="math inline">\(p_{t}\)</span> = <span class="math inline">\(\pi\)</span>.</p>
-<p>This is represented by the following likelihood function to obtain
-the maximum likelihood estimate of the unbiased CFR <span class="math inline">\(p_{t}\)</span> = <span class="math inline">\(\pi\)</span>:</p>
-<p><span class="math display">\[
-  {\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} +
-D_{t} \log{\pi} +
-  (u_{t}C_{t} - D_{t})\log{(1 - \pi)},
-\]</span></p>
-<p>This estimation is performed by the internal function
-<code>?cfr:::estimate_severity()</code>.</p>
-</div>
-</div>
-</div>
-</div>
-<p>The <code>cfr_static()</code> estimate is useful to get an overall
-severity estimate of the outbreak (so far). Once the outbreak has
-clearly ended, or has progressed such that deaths are reported more, the
-estimated CFR is then <em>closest to</em> the ‘true’ unbiased CFR.</p>
-<p>Additionally, a <em>delay-adjusted CFR</em> estimated with
-<code>cfr_static()</code> can assess the severity of an emerging
-infectious disease <strong>earlier</strong> than the biased or naive
-CFR, during an epidemic.</p>
-<p>This is particularly useful when an <em>epidemic curve of confirmed
-cases</em> is the only data available (i.e. when individual data from
-onset to death are unavailable, especially during the early stage of the
-epidemic). When there are few deaths or none at all, an assumption has
-to be made for the <em>delay distribution</em> from onset to death,
-e.g. from literature based on previous outbreaks. <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
-et al., 2009</a> depict this in the figures with data from the SARS
-outbreak in Hong Kong, 2003.</p>
-<div id="accordionSpoiler4" class="accordion spoiler-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
-  <h3 class="accordion-header" id="headingSpoiler4">
-<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>CFR estimation during SARS outbreak, Hong Kong, 2003</h3>
-</button>
-<div id="collapseSpoiler4" class="accordion-collapse collapse" aria-labelledby="headingSpoiler4" data-bs-parent="#accordionSpoiler4">
-<div class="accordion-body">
-<p>Figures A and B show the cumulative numbers of cases and deaths of
-SARS, and Figure C shows the observed (biased) CFR estimates as a
-function of time, i.e. the cumulative number of deaths over cases at
-time <span class="math inline">\(t\)</span>. Due to the delay from the
-onset of symptoms to death, the biased estimate of CFR at time <span class="math inline">\(t\)</span> underestimates the realised CFR at the
-end of an outbreak (i.e. 302/1755 = 17.2 %).</p>
-<figure><img src="../fig/cfr-pone.0006852.g003-fig_abc.png" alt="Observed (biased) confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. (Nishiura et al., 2009)" class="figure mx-auto d-block"><div class="figcaption">Observed (biased) confirmed case fatality risk
-of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. (<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
-et al., 2009</a>)</div>
-</figure><p>Nevertheless, even by only using the observed data for the period
-March 19 to April 2, <code>cfr_static()</code> can yield an appropriate
-prediction (Figure D), e.g. the delay-adjusted CFR at March 27 is 18.1 %
-(95% CI: 10.5, 28.1). An overestimation is seen in the very early stages
-of the epidemic, but the 95% confidence limits in the later stages
-include the realised CFR (i.e. 17.2 %).</p>
-<figure><img src="../fig/cfr-pone.0006852.g003-fig_d.png" alt="Early determination of the delay-adjusted confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. (Nishiura et al., 2009)" class="figure mx-auto d-block"><div class="figcaption">Early determination of the delay-adjusted
-confirmed case fatality risk of severe acute respiratory syndrome (SARS)
-in Hong Kong, 2003. (<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
-et al., 2009</a>)</div>
-</figure>
-</div>
-</div>
-</div>
-</div>
+<p>On the challenge above, we discovered that the <em>naive</em> and
+<em>delay-adjusted</em> CFR estimates are different.</p>
+<p>The <strong>naive</strong> estimate is useful to get an overall
+severity estimate of the outbreak (so far). Once the outbreak has ended
+or has progressed such that more deaths are reported, the estimated CFR
+is then <em>closest to</em> the ‘true’ unbiased CFR.</p>
+<p>On the other hand, the <strong>delay-adjusted</strong> estimate can
+assess the severity of an emerging infectious disease <em>earlier</em>
+than the biased or naive CFR, during an epidemic.</p>
 <p>We can explore the <strong>early</strong> determination of the
 <em>delay-adjusted CFR</em> using the <code>cfr_rolling()</code>
 function.</p>
@@ -1682,11 +1685,12 @@ to that day, saving the user time.</p>
 </div>
 </div>
 </div>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate the rolling daily naive CFR</span></span>
+<span><span class="co"># for all the 73 days in the Ebola dataset</span></span>
 <span><span class="va">rolling_cfr_naive</span> <span class="op">&lt;-</span> <span class="fu">cfr</span><span class="fu">::</span><span class="fu">cfr_rolling</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ebola1976</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tail</span><span class="op">(</span><span class="va">rolling_cfr_naive</span><span class="op">)</span></span></code></pre>
@@ -1702,13 +1706,12 @@ to that day, saving the user time.</p>
 72 1976-11-04     0.9510204    0.9160061     0.9744387
 73 1976-11-05     0.9551020    0.9210866     0.9773771</code></pre>
 </div>
-<p>With <code>tail()</code>, we show that the latest CFR estimates are
-equal to the <code>cfr_static()</code> outputs</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate the rolling daily delay-adjusted CFR</span></span>
+<span><span class="co"># for all the 73 days in the Ebola dataset</span></span>
 <span><span class="va">rolling_cfr_adjusted</span> <span class="op">&lt;-</span> <span class="fu">cfr</span><span class="fu">::</span><span class="fu">cfr_rolling</span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">ebola1976</span>,</span>
 <span>  delay_density <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, <span class="va">x</span><span class="op">)</span></span>
@@ -1727,9 +1730,12 @@ equal to the <code>cfr_static()</code> outputs</p>
 72 1976-11-04         0.971        0.852             1
 73 1976-11-05         0.971        0.852             1</code></pre>
 </div>
+<p>With <code>tail()</code>, we show that the latest CFR estimates. The
+naive and delay-adjusted estimates have overlapping ranges of 95%
+confidence intervals.</p>
 <p>Now, let’s visualise both results in a time series. How would the
 naive and delay-adjusted CFR estimates perform in real time?</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1774,9 +1780,50 @@ naive and delay-adjusted CFR estimates perform in real time?</p>
 <span>    lty <span class="op">=</span> <span class="fl">2</span></span>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/severity-static-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The horizontal line represents the delay-adjusted CFR estimated at
+<figure><img src="../fig/severity-static-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The horizontal line represents the delay-adjusted CFR estimated at
 the outbreak’s end. The dotted line means the estimate has a 95%
 confidence interval (95% CI).</p>
+<p><strong>Notice</strong> that this delay-adjusted calculation is
+particularly useful when an <em>epidemic curve of confirmed cases</em>
+is the only data available (i.e. when individual data from onset to
+death are unavailable, especially during the early stage of the
+epidemic). When there are few deaths or none at all, an assumption has
+to be made for the <em>delay distribution</em> from onset to death,
+e.g. from literature based on previous outbreaks. <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
+et al., 2009</a> depict this in the figures with data from the SARS
+outbreak in Hong Kong, 2003.</p>
+<div id="accordionSpoiler3" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
+  <h3 class="accordion-header" id="headingSpoiler3">
+<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>Case study: SARS outbreak, Hong Kong, 2003</h3>
+</button>
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
+<div class="accordion-body">
+<p>Figures A and B show the cumulative numbers of cases and deaths of
+SARS, and Figure C shows the observed (biased) CFR estimates as a
+function of time, i.e. the cumulative number of deaths over cases at
+time <span class="math inline">\(t\)</span>. Due to the delay from the
+onset of symptoms to death, the biased estimate of CFR at time <span class="math inline">\(t\)</span> underestimates the realised CFR at the
+end of an outbreak (i.e. 302/1755 = 17.2 %).</p>
+<figure><img src="../fig/cfr-pone.0006852.g003-fig_abc.png" alt="Observed (biased) confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. (Nishiura et al., 2009)" class="figure mx-auto d-block"><div class="figcaption">Observed (biased) confirmed case fatality risk
+of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. (<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
+et al., 2009</a>)</div>
+</figure><p>Nevertheless, even by only using the observed data for the period
+March 19 to April 2, <code>cfr_static()</code> can yield an appropriate
+prediction (Figure D), e.g. the delay-adjusted CFR at March 27 is 18.1 %
+(95% CI: 10.5, 28.1). An overestimation is seen in the very early stages
+of the epidemic, but the 95% confidence limits in the later stages
+include the realised CFR (i.e. 17.2 %).</p>
+<figure><img src="../fig/cfr-pone.0006852.g003-fig_d.png" alt="Early determination of the delay-adjusted confirmed case fatality risk of severe acute respiratory syndrome (SARS) in Hong Kong, 2003. (Nishiura et al., 2009)" class="figure mx-auto d-block"><div class="figcaption">Early determination of the delay-adjusted
+confirmed case fatality risk of severe acute respiratory syndrome (SARS)
+in Hong Kong, 2003. (<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
+et al., 2009</a>)</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
 <div id="interpret-the-early-stage-cfr-estimate" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
@@ -1804,7 +1851,7 @@ with the CFR estimated at the end of the outbreak?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3">Give me a hint</h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
 <div class="accordion-body">
 <p>We can use either visual inspection or analysis of the output data
 frames.</p>
@@ -1812,12 +1859,12 @@ frames.</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution6" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
-  <h4 class="accordion-header" id="headingSolution5">Show me the solution</h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
+  <h4 class="accordion-header" id="headingSolution6">Show me the solution</h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
 <p>There is almost one month of difference.</p>
 <p>Note that the estimate has considerable uncertainty at the beginning
@@ -1829,60 +1876,12 @@ in this episode’s challenges. We invite you to find it out!</p>
 </div>
 </div>
 </div>
-<div id="accordionSpoiler5" class="accordion spoiler-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler5" aria-expanded="false" aria-controls="collapseSpoiler5">
-  <h3 class="accordion-header" id="headingSpoiler5">
-<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>rolling or time-varying?</h3>
-</button>
-<div id="collapseSpoiler5" class="accordion-collapse collapse" aria-labelledby="headingSpoiler5" data-bs-parent="#accordionSpoiler5">
-<div class="accordion-body">
-<p>The <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> package has a function called
-<code>cfr_time_varying()</code> with different functionality that makes
-them not comparable.</p>
-<div class="section level4">
-<h4 id="when-to-use-cfr_rolling">When to use <code>cfr_rolling()</code>?<a class="anchor" aria-label="anchor" href="#when-to-use-cfr_rolling"></a>
-</h4>
-<p><code>cfr_rolling()</code> shows the estimated CFR on each outbreak
-day, given that future data on cases and deaths is unavailable at the
-time. The final value of <code>cfr_rolling()</code> estimates is
-identical to <code>cfr_static()</code> on the same data.</p>
-<p>Remember, as shown above, <code>cfr_rolling()</code> is helpful to
-get early-stage CFR estimates and check whether an outbreak’s CFR
-estimate has stabilised. Thus, <code>cfr_rolling()</code> is not
-sensitive to the length or size of the epidemic.</p>
-</div>
-<div class="section level4">
-<h4 id="when-to-use-cfr_time_varying">When to use <code>cfr_time_varying()</code>?<a class="anchor" aria-label="anchor" href="#when-to-use-cfr_time_varying"></a>
-</h4>
-<p>On the other hand, <code>cfr_time_varying()</code> calculates the CFR
-over a moving window and helps to understand changes in CFR due to
-changes in the epidemic, e.g. due to a new variant or increased immunity
-from vaccination.</p>
-<p>However, <code>cfr_time_varying()</code> is sensitive to sampling
-uncertainty. Thus, it is sensitive to the size of the outbreak. The
-higher the number of cases with expected outcomes on a given day, the
-more reasonable estimates of the time-varying CFR we will get.</p>
-<p>For example, with 100 cases, the fatality risk estimate will, roughly
-speaking, have a 95% confidence interval ±10% of the mean estimate
-(binomial CI). So if we have &gt;100 cases with expected outcomes <em>on
-a given day</em>, we can get reasonable estimates of the time varying
-CFR. But if we only have &gt;100 cases <em>over the course of the whole
-epidemic</em>, we probably need to rely on <code>cfr_rolling()</code>
-that uses the cumulative data.</p>
-<p>We invite you to read this <a href="https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html" class="external-link">vignette
-about the <code>cfr_time_varying()</code> function</a>.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div id="checklist1" class="callout checklist">
+<div id="checklist" class="callout discussion">
 <div class="callout-square">
-<i class="callout-icon" data-feather="check-square"></i>
+<i class="callout-icon" data-feather="message-circle"></i>
 </div>
-<div class="callout-inner">
-<h3 class="callout-title">Checklist<a class="anchor" aria-label="anchor" href="#checklist1"></a>
+<div id="checklist" class="callout-inner">
+<h3 class="callout-title">Checklist<a class="anchor" aria-label="anchor" href="#checklist"></a>
 </h3>
 <div class="callout-content">
 <p>With <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>, we estimate the CFR as the proportion of
@@ -1891,6 +1890,314 @@ deaths among <strong>confirmed</strong> cases.</p>
 cases that do not seek medical treatment or are not notified will be
 missed, as well as all asymptomatic cases. This means that the CFR
 estimate is higher than the proportion of deaths among the infected.</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution7" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
+  <h4 class="accordion-header" id="headingSolution7">Why the naive and delay-adjusted differ?</h4>
+</button>
+<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
+<div class="accordion-body">
+<p><a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> method aims to obtain an unbiased estimator “well
+before” observing the entire course of the outbreak. For this,
+<a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> uses the underestimation factor <span class="math inline">\(u_{t}\)</span> to estimate the unbiased CFR <span class="math inline">\(p_{t}\)</span> using maximum-likelihood methods,
+given the <em>sampling process</em> defined by <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
+et al., 2009</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="accordionSolution8" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution8" aria-expanded="false" aria-controls="collapseSolution8">
+  <h4 class="accordion-header" id="headingSolution8">What is the sampling process?</h4>
+</button>
+<div id="collapseSolution8" class="accordion-collapse collapse" data-bs-parent="#accordionSolution8" aria-labelledby="headingSolution8">
+<div class="accordion-body">
+<figure><img src="../fig/cfr-pone.0006852.g001.png" alt="The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. (Nishiura et al., 2009)" class="figure mx-auto d-block"><div class="figcaption">The population of confirmed cases and sampling
+process for estimating the unbiased CFR during the course of an
+outbreak. (<a href="https://doi.org/10.1371/journal.pone.0006852.g001" class="external-link">Nishiura et
+al., 2009</a>)</div>
+</figure><p>From <em>aggregated incidence data</em>, at time <span class="math inline">\(t\)</span> we know the cumulative number of
+confirmed cases and deaths, <span class="math inline">\(C_{t}\)</span>
+and <span class="math inline">\(D_{t}\)</span>, and wish to estimate the
+unbiased CFR <span class="math inline">\(\pi\)</span>, by way of the
+factor of underestimation <span class="math inline">\(u_{t}\)</span>.</p>
+<p>If we knew the factor of underestimation <span class="math inline">\(u_{t}\)</span> we could specify the size of the
+population of confirmed cases no longer at risk (<span class="math inline">\(u_{t}C_{t}\)</span>, <strong>shaded</strong>),
+although we do not know which surviving individuals belong to this
+group. A proportion <span class="math inline">\(\pi\)</span> of those in
+the group of cases still at risk (size <span class="math inline">\((1-
+u_{t})C_{t}\)</span>, <strong>unshaded</strong>) is expected to die.</p>
+<p>Because each case no longer at risk had an independent probability of
+dying, <span class="math inline">\(\pi\)</span>, the number of deaths,
+<span class="math inline">\(D_{t}\)</span>, is a sample from a binomial
+distribution with sample size <span class="math inline">\(u_{t}C_{t}\)</span>, and probability of dying
+<span class="math inline">\(p_{t}\)</span> = <span class="math inline">\(\pi\)</span>.</p>
+<p>This is represented by the following likelihood function to obtain
+the maximum likelihood estimate of the unbiased CFR <span class="math inline">\(p_{t}\)</span> = <span class="math inline">\(\pi\)</span>:</p>
+<p><span class="math display">\[
+  {\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} +
+D_{t} \log{\pi} +
+  (u_{t}C_{t} - D_{t})\log{(1 - \pi)},
+\]</span></p>
+<p>This estimation is performed by the internal function
+<code>?cfr:::estimate_severity()</code>.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="accordionSolution9" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution9" aria-expanded="false" aria-controls="collapseSolution9">
+  <h4 class="accordion-header" id="headingSolution9">Limitations</h4>
+</button>
+<div id="collapseSolution9" class="accordion-collapse collapse" data-bs-parent="#accordionSolution9" aria-labelledby="headingSolution9">
+<div class="accordion-body">
+<ul>
+<li>The delay-adjusted CFR does not address all sources of error in data
+like the underdiagnosis of infected individuals.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</section><section id="challenges"><h2 class="section-heading">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
+</h2>
+<hr class="half-width">
+<div id="aggregated-data-differ-from-linelists" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="aggregated-data-differ-from-linelists" class="callout-inner">
+<h3 class="callout-title">Aggregated data differ from linelists<a class="anchor" aria-label="anchor" href="#aggregated-data-differ-from-linelists"></a>
+</h3>
+<div class="callout-content">
+<p><em>Aggregated</em> incidence data differs from
+<strong>linelist</strong> data, where each observation contains
+individual-level data.</p>
+<div class="codewrapper sourceCode" id="cb25">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">outbreaks</span><span class="fu">::</span><span class="va">ebola_sierraleone_2014</span> <span class="op">%&gt;%</span> <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code># A tibble: 11,903 × 8
+      id   age sex   status    date_of_onset date_of_sample district chiefdom   
+   &lt;int&gt; &lt;dbl&gt; &lt;fct&gt; &lt;fct&gt;     &lt;date&gt;        &lt;date&gt;         &lt;fct&gt;    &lt;fct&gt;      
+ 1     1    20 F     confirmed 2014-05-18    2014-05-23     Kailahun Kissi Teng 
+ 2     2    42 F     confirmed 2014-05-20    2014-05-25     Kailahun Kissi Teng 
+ 3     3    45 F     confirmed 2014-05-20    2014-05-25     Kailahun Kissi Tonge
+ 4     4    15 F     confirmed 2014-05-21    2014-05-26     Kailahun Kissi Teng 
+ 5     5    19 F     confirmed 2014-05-21    2014-05-26     Kailahun Kissi Teng 
+ 6     6    55 F     confirmed 2014-05-21    2014-05-26     Kailahun Kissi Teng 
+ 7     7    50 F     confirmed 2014-05-21    2014-05-26     Kailahun Kissi Teng 
+ 8     8     8 F     confirmed 2014-05-22    2014-05-27     Kailahun Kissi Teng 
+ 9     9    54 F     confirmed 2014-05-22    2014-05-27     Kailahun Kissi Teng 
+10    10    57 F     confirmed 2014-05-22    2014-05-27     Kailahun Kissi Teng 
+# ℹ 11,893 more rows</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="use-incidence2-to-rearrange-your-data" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div id="use-incidence2-to-rearrange-your-data" class="callout-inner">
+<h3 class="callout-title">Use incidence2 to rearrange your data<a class="anchor" aria-label="anchor" href="#use-incidence2-to-rearrange-your-data"></a>
+</h3>
+<div class="callout-content">
+<p>From the <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package, load the MERS linelist of
+cases from the <code>mers_korea_2015</code> object.</p>
+<p>Rearrange your this linelist to fit into the <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>
+package input.</p>
+<p>Estimate the delay-adjusted HFR using the corresponding distribution
+delay.</p>
+</div>
+</div>
+</div>
+<div id="accordionHint4" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
+  <h4 class="accordion-header" id="headingHint4">Give me a hint</h4>
+</button>
+<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div class="accordion-body">
+<p><strong>How to rearrange my input data?</strong></p>
+<p>Rearranging the input data for data analysis can take most of the
+time. To get ready-to-analyse <em>aggregated incidence data</em>, we
+encourage you to use <a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a>!</p>
+<p>First, in the <a href="https://www.reconverse.org/incidence2/articles/incidence2.html" class="external-link">Get
+started</a> vignette from the <a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a> package, explore
+how to use the <code>date_index</code> argument when reading a linelist
+with dates in multiple column.</p>
+<p>Then, refer to the <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> vignette on <a href="https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html" class="external-link">Handling
+data from <code>{incidence2}</code></a> on how to use the
+<code>cfr::prepare_data()</code> function from incidence2 objects.</p>
+<!-- cite howto entry one lineslist + incidence2 + cfr connection -->
+</div>
+</div>
+</div>
+</div>
+<div id="accordionSolution10" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution10" aria-expanded="false" aria-controls="collapseSolution10">
+  <h4 class="accordion-header" id="headingSolution10">Show me the solution</h4>
+</button>
+<div id="collapseSolution10" class="accordion-collapse collapse" data-bs-parent="#accordionSolution10" aria-labelledby="headingSolution10">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb27">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load packages</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">cfr</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">epiparameter</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">incidence2</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">outbreaks</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Access delay distribution</span></span>
+<span><span class="va">mers_delay</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu">epidist_db</span><span class="op">(</span></span>
+<span>    disease <span class="op">=</span> <span class="st">"mers"</span>,</span>
+<span>    epi_dist <span class="op">=</span> <span class="st">"onset to death"</span>,</span>
+<span>    single_epidist <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Read linelist</span></span>
+<span><span class="va">mers_korea_2015</span><span class="op">$</span><span class="va">linelist</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="fu">starts_with</span><span class="op">(</span><span class="st">"dt_"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code># A tibble: 162 × 6
+   dt_onset   dt_report  dt_start_exp dt_end_exp dt_diag    dt_death  
+   &lt;date&gt;     &lt;date&gt;     &lt;date&gt;       &lt;date&gt;     &lt;date&gt;     &lt;date&gt;    
+ 1 2015-05-11 2015-05-19 2015-04-18   2015-05-04 2015-05-20 NA        
+ 2 2015-05-18 2015-05-20 2015-05-15   2015-05-20 2015-05-20 NA        
+ 3 2015-05-20 2015-05-20 2015-05-16   2015-05-16 2015-05-21 2015-06-04
+ 4 2015-05-25 2015-05-26 2015-05-16   2015-05-20 2015-05-26 NA        
+ 5 2015-05-25 2015-05-27 2015-05-17   2015-05-17 2015-05-26 NA        
+ 6 2015-05-24 2015-05-28 2015-05-15   2015-05-17 2015-05-28 2015-06-01
+ 7 2015-05-21 2015-05-28 2015-05-16   2015-05-17 2015-05-28 NA        
+ 8 2015-05-26 2015-05-29 2015-05-15   2015-05-15 2015-05-29 NA        
+ 9 NA         2015-05-29 2015-05-15   2015-05-17 2015-05-29 NA        
+10 2015-05-21 2015-05-29 2015-05-16   2015-05-16 2015-05-29 NA        
+# ℹ 152 more rows</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb29">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Use {incidence2} to count daily incidence</span></span>
+<span><span class="va">mers_incidence</span> <span class="op">&lt;-</span> <span class="va">mers_korea_2015</span><span class="op">$</span><span class="va">linelist</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># converto to incidence2 object</span></span>
+<span>  <span class="fu">incidence</span><span class="op">(</span>date_index <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"dt_onset"</span>, <span class="st">"dt_death"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># complete dates from first to last</span></span>
+<span>  <span class="fu">incidence2</span><span class="fu">::</span><span class="fu">complete_dates</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Inspect incidence2 output</span></span>
+<span><span class="va">mers_incidence</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code># incidence:  72 x 3
+# count vars: dt_death, dt_onset
+   date_index count_variable count
+   &lt;date&gt;     &lt;chr&gt;          &lt;int&gt;
+ 1 2015-05-11 dt_death           0
+ 2 2015-05-11 dt_onset           1
+ 3 2015-05-12 dt_death           0
+ 4 2015-05-12 dt_onset           0
+ 5 2015-05-13 dt_death           0
+ 6 2015-05-13 dt_onset           0
+ 7 2015-05-14 dt_death           0
+ 8 2015-05-14 dt_onset           0
+ 9 2015-05-15 dt_death           0
+10 2015-05-15 dt_onset           0
+# ℹ 62 more rows</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb31">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Prepare data from {incidence2} to {cfr}</span></span>
+<span><span class="va">mers_incidence</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">prepare_data</span><span class="op">(</span></span>
+<span>    cases_variable <span class="op">=</span> <span class="st">"dt_onset"</span>,</span>
+<span>    deaths_variable <span class="op">=</span> <span class="st">"dt_death"</span></span>
+<span>  <span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>         date deaths cases
+1  2015-05-11      0     1
+2  2015-05-12      0     0
+3  2015-05-13      0     0
+4  2015-05-14      0     0
+5  2015-05-15      0     0
+6  2015-05-16      0     0
+7  2015-05-17      0     1
+8  2015-05-18      0     1
+9  2015-05-19      0     0
+10 2015-05-20      0     5
+11 2015-05-21      0     6
+12 2015-05-22      0     2
+13 2015-05-23      0     4
+14 2015-05-24      0     2
+15 2015-05-25      0     3
+16 2015-05-26      0     1
+17 2015-05-27      0     2
+18 2015-05-28      0     1
+19 2015-05-29      0     3
+20 2015-05-30      0     5
+21 2015-05-31      0    10
+22 2015-06-01      2    16
+23 2015-06-02      0    11
+24 2015-06-03      1     7
+25 2015-06-04      1    12
+26 2015-06-05      1     9
+27 2015-06-06      0     7
+28 2015-06-07      0     7
+29 2015-06-08      2     6
+30 2015-06-09      0     1
+31 2015-06-10      2     6
+32 2015-06-11      1     3
+33 2015-06-12      0     0
+34 2015-06-13      0     2
+35 2015-06-14      0     0
+36 2015-06-15      0     1</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb33">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Estimate delay-adjusted CFR</span></span>
+<span><span class="va">mers_incidence</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">prepare_data</span><span class="op">(</span></span>
+<span>    cases_variable <span class="op">=</span> <span class="st">"dt_onset"</span>,</span>
+<span>    deaths_variable <span class="op">=</span> <span class="st">"dt_death"</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">cfr_static</span><span class="op">(</span>delay_density <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">mers_delay</span>, <span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>  severity_mean severity_low severity_high
+1         0.137        0.069          0.24</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1911,12 +2218,12 @@ delay-adjusted CFR stratified by country.</p>
 </div>
 </div>
 </div>
-<div id="accordionHint4" class="accordion challenge-accordion accordion-flush">
+<div id="accordionHint5" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
-  <h4 class="accordion-header" id="headingHint4">Give me a hint</h4>
+<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
+  <h4 class="accordion-header" id="headingHint5">Give me a hint</h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
+<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
 <div class="accordion-body">
 <p>One way to do a <em>stratified analysis</em> is to apply a model to
 nested data. This <a href="https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models" class="external-link"><code>{tidyr}</code>
@@ -1927,14 +2234,14 @@ vignette</a> shows you how to apply the <code>group_by()</code> +
 </div>
 </div>
 </div>
-<div id="accordionSolution6" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution11" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
-  <h4 class="accordion-header" id="headingSolution6">Show me the solution</h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution11" aria-expanded="false" aria-controls="collapseSolution11">
+  <h4 class="accordion-header" id="headingSolution11">Show me the solution</h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution11" class="accordion-collapse collapse" data-bs-parent="#accordionSolution11" aria-labelledby="headingSolution11">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb35">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1954,7 +2261,7 @@ $ country &lt;chr&gt; "Argentina", "Brazil", "Colombia", "France", "Germany", "I
 $ cases   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
 $ deaths  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2018,24 +2325,67 @@ the proportion of cases that are ascertained during an outbreak</a>!</p>
 </div>
 </div>
 </div>
-<div id="limitations" class="callout checklist">
-<div class="callout-square">
-<i class="callout-icon" data-feather="check-square"></i>
-</div>
-<div id="limitations" class="callout-inner">
-<h3 class="callout-title">Limitations<a class="anchor" aria-label="anchor" href="#limitations"></a>
-</h3>
-<div class="callout-content">
-<ul>
-<li>The delay-adjusted CFR does not address all sources of error in data
-like the underdiagnosis of infected individuals.</li>
-</ul>
-</div>
-</div>
-</div>
-</section><section id="more-severity-measures"><h2 class="section-heading">More severity measures<a class="anchor" aria-label="anchor" href="#more-severity-measures"></a>
+</section><section id="appendix"><h2 class="section-heading">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
 </h2>
 <hr class="half-width">
+<p>The <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> package has a function called
+<code>cfr_time_varying()</code> with functionality that differs from
+<code>cfr_rolling()</code>.</p>
+<div id="when-to-use-cfr_rolling" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="when-to-use-cfr_rolling" class="callout-inner">
+<h3 class="callout-title">When to use cfr_rolling()?<a class="anchor" aria-label="anchor" href="#when-to-use-cfr_rolling"></a>
+</h3>
+<div class="callout-content">
+<p><strong>cfr_rolling()</strong> shows the estimated CFR on each
+outbreak day, given that future data on cases and deaths is unavailable
+at the time. The final value of <em>cfr_rolling()</em> estimates is
+identical to <em>cfr_static()</em> on the same data.</p>
+<p>Remember, as shown above, <em>cfr_rolling()</em> is helpful to get
+early-stage CFR estimates and check whether an outbreak’s CFR estimate
+has stabilised. Thus, <em>cfr_rolling()</em> is not sensitive to the
+length or size of the epidemic.</p>
+</div>
+</div>
+</div>
+<div id="when-to-use-cfr_time_varying" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="when-to-use-cfr_time_varying" class="callout-inner">
+<h3 class="callout-title">When to use cfr_time_varying()?<a class="anchor" aria-label="anchor" href="#when-to-use-cfr_time_varying"></a>
+</h3>
+<div class="callout-content">
+<p>On the other hand, <strong>cfr_time_varying()</strong> calculates the
+CFR over a moving window and helps to understand changes in CFR due to
+changes in the epidemic, e.g. due to a new variant or increased immunity
+from vaccination.</p>
+<p>However, <em>cfr_time_varying()</em> is sensitive to sampling
+uncertainty. Thus, it is sensitive to the size of the outbreak. The
+higher the number of cases with expected outcomes on a given day, the
+more reasonable estimates of the time-varying CFR we will get.</p>
+<p>For example, with 100 cases, the fatality risk estimate will, roughly
+speaking, have a 95% confidence interval ±10% of the mean estimate
+(binomial CI). So if we have &gt;100 cases with expected outcomes <em>on
+a given day</em>, we can get reasonable estimates of the time varying
+CFR. But if we only have &gt;100 cases <em>over the course of the whole
+epidemic</em>, we probably need to rely on
+<strong>cfr_rolling()</strong> that uses the cumulative data.</p>
+<p>We invite you to read this <a href="https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html" class="external-link">vignette
+about the <code>cfr_time_varying()</code> function</a>.</p>
+</div>
+</div>
+</div>
+<div id="more-severity-measures" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<div id="more-severity-measures" class="callout-inner">
+<h3 class="callout-title">More severity measures<a class="anchor" aria-label="anchor" href="#more-severity-measures"></a>
+</h3>
+<div class="callout-content">
 <p>Suppose we need to assess the clinical severity of the epidemic in a
 context different from surveillance data, like the severity among cases
 that arrive at hospitals or cases you collected from a representative
@@ -2044,6 +2394,16 @@ serological survey.</p>
 (<code>cases</code>) and denominator (<code>deaths</code>) to estimate
 more severity measures like the Infection fatality risk (IFR) or the
 Hospitalisation Fatality Risk (HFR). We can follow this analogy:</p>
+</div>
+</div>
+</div>
+<div id="accordionSolution12" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution12" aria-expanded="false" aria-controls="collapseSolution12">
+  <h4 class="accordion-header" id="headingSolution12">Infection and Hospitalization fatality risk</h4>
+</button>
+<div id="collapseSolution12" class="accordion-collapse collapse" data-bs-parent="#accordionSolution12" aria-labelledby="headingSolution12">
+<div class="accordion-body">
 <p>If for a <em>Case</em> fatality risk (CFR), we require:</p>
 <ul>
 <li>
@@ -2064,14 +2424,17 @@ requires:</p>
 <em>hospitalisation</em> and death incidence data, and a</li>
 <li>hospitalisation-to-death delay distribution.</li>
 </ul>
-<div id="data-sources-for-more-severity-measures" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-sources-for-more-severity-measures" class="callout-inner">
-<h3 class="callout-title">Data sources for more severity measures<a class="anchor" aria-label="anchor" href="#data-sources-for-more-severity-measures"></a>
-</h3>
-<div class="callout-content">
+</div>
+</div>
+</div>
+<div id="accordionSolution13" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution13" aria-expanded="false" aria-controls="collapseSolution13">
+  <h4 class="accordion-header" id="headingSolution13">Data sources for more severity measures</h4>
+</button>
+<div id="collapseSolution13" class="accordion-collapse collapse" data-bs-parent="#accordionSolution13" aria-labelledby="headingSolution13">
+<div class="accordion-body">
 <p><a href="https://www.nature.com/articles/s41467-020-19238-2/figures/1" class="external-link">Yang
 et al., 2020</a> summarises different definitions and data sources:</p>
 <figure><img src="../fig/cfr-s41467-020-19238-2-fig_a.png" alt="Severity levels of infections with SARS-CoV-2 and parameters of interest. Each level is assumed to be a subset of the level below." class="figure mx-auto d-block"><div class="figcaption">Severity levels of infections with SARS-CoV-2
@@ -2092,197 +2455,27 @@ laboratory-confirmed cases of active screenings.</div>
 </div>
 </div>
 </div>
-<div id="how-to-rearrange-my-input-data" class="callout">
-<div class="callout-square">
-<i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="how-to-rearrange-my-input-data" class="callout-inner">
-<h3 class="callout-title">How to rearrange my input data?<a class="anchor" aria-label="anchor" href="#how-to-rearrange-my-input-data"></a>
+<div id="discussion5" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Discussion<a class="anchor" aria-label="anchor" href="#discussion5"></a>
 </h3>
 <div class="callout-content">
-<p>Rearranging the input data for data analysis can take most of the
-time.</p>
-<p>For <em>aggregated case data</em>, we encourage you to use
-<a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a>! Refer to the <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> vignette on
-<a href="https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html" class="external-link">Handling
-data from <code>{incidence2}</code></a>.</p>
-<!-- cite howto entry one lineslist + incidence2 + cfr connection -->
-</div>
-</div>
-</div>
-<div id="hospitalisation-fatality-risk-hfr" class="callout challenge">
-<div class="callout-square">
-<i class="callout-icon" data-feather="zap"></i>
-</div>
-<div id="hospitalisation-fatality-risk-hfr" class="callout-inner">
-<h3 class="callout-title">Hospitalisation Fatality Risk (HFR)<a class="anchor" aria-label="anchor" href="#hospitalisation-fatality-risk-hfr"></a>
-</h3>
-<div class="callout-content">
-<p>From the <code>{covidregionaldata}</code> package, load COVID cases
-from the region England from country UK to estimate the delay-adjusted
-HFR using the corresponding distribution delay.</p>
-</div>
-</div>
-</div>
-<div id="accordionHint5" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
-  <h4 class="accordion-header" id="headingHint5">Give me a hint</h4>
-</button>
-<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
-<div class="accordion-body">
-<p>Use <code>covidregionaldata::get_regional_data()</code> to get COVID
-data from the region England from the country UK.</p>
-<div class="codewrapper sourceCode" id="cb30">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">covid_england</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">covidregionaldata</span><span class="fu">::</span><span class="fu">get_regional_data</span><span class="op">(</span></span>
-<span>    country <span class="op">=</span> <span class="st">"uk"</span>,</span>
-<span>    regions <span class="op">=</span> <span class="st">"England"</span>,</span>
-<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span></code></pre>
-</div>
-<p>Also, check out the vignette on <a href="https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html" class="external-link">Handling
-data from <code>{incidence2}</code></a></p>
-</div>
-</div>
-</div>
-</div>
-<div id="accordionSolution7" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
-  <h4 class="accordion-header" id="headingSolution7">Show me the solution</h4>
-</button>
-<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
-<div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb31">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">cfr</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">covidregionaldata</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">covid_england</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">covidregionaldata</span><span class="fu">::</span><span class="fu">get_regional_data</span><span class="op">(</span></span>
-<span>    country <span class="op">=</span> <span class="st">"uk"</span>,</span>
-<span>    regions <span class="op">=</span> <span class="st">"England"</span>,</span>
-<span>    verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="va">covid_england</span> <span class="op">%&gt;%</span> <span class="fu">glimpse</span><span class="op">(</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>Rows: 1,415
-Columns: 26
-$ date                             &lt;date&gt; 2020-01-30, 2020-01-31, 2020-02-01, …
-$ region                           &lt;chr&gt; "England", "England", "England", "Eng…
-$ region_code                      &lt;chr&gt; "E92000001", "E92000001", "E92000001"…
-$ cases_new                        &lt;dbl&gt; 1, 0, 0, 1, 18, 0, 1, 0, 0, 3, 1, 1, …
-$ cases_total                      &lt;dbl&gt; 1, 1, 1, 2, 20, 20, 21, 21, 21, 24, 2…
-$ deaths_new                       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ deaths_total                     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ recovered_new                    &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ recovered_total                  &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ hosp_new                         &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ hosp_total                       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ tested_new                       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ tested_total                     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ areaType                         &lt;chr&gt; "nation", "nation", "nation", "nation…
-$ cumCasesByPublishDate            &lt;dbl&gt; NA, 2, 2, 2, 2, 2, 2, 3, 3, 3, 4, 8, …
-$ cumCasesBySpecimenDate           &lt;dbl&gt; 1, 1, 1, 2, 20, 20, 21, 21, 21, 24, 2…
-$ newCasesByPublishDate            &lt;dbl&gt; NA, 2, 0, 0, 0, 0, 0, 1, 0, 0, 1, 4, …
-$ newCasesBySpecimenDate           &lt;dbl&gt; 1, 0, 0, 1, 18, 0, 1, 0, 0, 3, 1, 1, …
-$ cumDeaths28DaysByDeathDate       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ cumDeaths28DaysByPublishDate     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ newDeaths28DaysByDeathDate       &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ newDeaths28DaysByPublishDate     &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ newPillarFourTestsByPublishDate  &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ newPillarOneTestsByPublishDate   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ newPillarThreeTestsByPublishDate &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-$ newPillarTwoTestsByPublishDate   &lt;dbl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, N…</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb33">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">covid_data_incidence</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va">covid_england</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">incidence2</span><span class="fu">::</span><span class="fu">incidence</span><span class="op">(</span></span>
-<span>    date_index <span class="op">=</span> <span class="st">"date"</span>,</span>
-<span>    counts <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"hosp_total"</span>, <span class="st">"deaths_total"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="va">covid_data_incidence</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code># incidence:  2,830 x 3
-# count vars: hosp_total, deaths_total
-   date_index count_variable count
- * &lt;date&gt;     &lt;fct&gt;          &lt;dbl&gt;
- 1 2020-01-30 hosp_total        NA
- 2 2020-01-30 deaths_total      NA
- 3 2020-01-31 hosp_total        NA
- 4 2020-01-31 deaths_total      NA
- 5 2020-02-01 hosp_total        NA
- 6 2020-02-01 deaths_total      NA
- 7 2020-02-02 hosp_total        NA
- 8 2020-02-02 deaths_total      NA
- 9 2020-02-03 hosp_total        NA
-10 2020-02-03 deaths_total      NA
-# ℹ 2,820 more rows</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb35">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">covid_data_prepared</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">cfr</span><span class="fu">::</span><span class="fu">prepare_data</span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">covid_data_incidence</span>,</span>
-<span>    cases_variable <span class="op">=</span> <span class="st">"hosp_total"</span>,</span>
-<span>    deaths_variable <span class="op">=</span> <span class="st">"deaths_total"</span>,</span>
-<span>    fill_NA <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="va">covid_data_prepared</span> <span class="op">%&gt;%</span> <span class="fu">glimpse</span><span class="op">(</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>Rows: 1,415
-Columns: 3
-$ date   &lt;date&gt; 2020-01-30, 2020-01-31, 2020-02-01, 2020-02-02, 2020-02-03, 20…
-$ cases  &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
-$ deaths &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb37">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">delay_hosp_death</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epidist_db</span><span class="op">(</span></span>
-<span>    disease <span class="op">=</span> <span class="st">"covid"</span>,</span>
-<span>    epi_dist <span class="op">=</span> <span class="st">"hospitalisation to death"</span>,</span>
-<span>    single_epidist <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="va">covid_data_prepared</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">cfr</span><span class="fu">::</span><span class="fu">cfr_static</span><span class="op">(</span></span>
-<span>    delay_density <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">delay_hosp_death</span>, <span class="va">x</span><span class="op">)</span></span>
-<span>  <span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>  severity_mean severity_low severity_high
-1         0.215        0.215         0.215</code></pre>
-</div>
-</div>
+<p>Based on your experience:</p>
+<ul>
+<li>Share any previous outbreak in which you participated in its
+response.</li>
+</ul>
+<p>Answer to these questions:</p>
+<ul>
+<li>How did you assess the clinical severity of the outbreak?</li>
+<li>What were the primary sources of bias?</li>
+<li>What did you do to take into account the identified bias?</li>
+<li>What complementary analysis would you do to solve the bias?</li>
+</ul>
 </div>
 </div>
 </div>
@@ -2357,9 +2550,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/aio.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/aio.html",
-  "dateCreated": "2024-04-12",
-  "dateModified": "2024-04-16",
-  "datePublished": "2024-04-16"
+  "dateCreated": "2024-04-17",
+  "dateModified": "2024-04-17",
+  "datePublished": "2024-04-17"
 }
 
   </script><script>
