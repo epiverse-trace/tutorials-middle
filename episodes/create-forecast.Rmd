@@ -173,7 +173,7 @@ reported_cases_deaths <- incidence2::covidregionaldataUK %>%
   summarise(
     primary = sum(cases_new, na.rm = TRUE),
     secondary = sum(deaths_new, na.rm = TRUE)
-    ) %>%
+  ) %>%
   ungroup()
 ```
 
@@ -193,8 +193,8 @@ There are further function inputs to `estimate_secondary()` which can be specifi
 
 To find the model fit between cases and deaths : 
 ```{r}
-# Estimate from first 30 days of this data
-cases_to_estimate <- reported_cases_deaths[1:30, ]
+# Estimate from first 60 days of this data
+cases_to_estimate <- reported_cases_deaths[31:60, ]
 
 # Estimate secondary cases
 estimate_cases_to_deaths <- estimate_secondary(
@@ -225,8 +225,8 @@ To use this model fit to forecast deaths, we pass a data frame consisting of the
 
 *Note : in this episode we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
 ```{r}
-# Forecast from day 31 to day 60
-cases_to_forecast <- reported_cases_deaths[31:60, c("date", "primary")]
+# Forecast from day 61 to day 90
+cases_to_forecast <- reported_cases_deaths[61:90, c("date", "primary")]
 colnames(cases_to_forecast) <- c("date", "value")
 ```
 
@@ -263,7 +263,8 @@ Download the file [ebola_cases.csv](data/ebola_cases.csv) and read it into R. Th
 Using the first 3 months (120 days) of data:
 
 1. Estimate whether cases are increasing or decreasing on day 120 of the outbreak
-2. Create a two week forecast of number of cases
+2. Account for a capacity to observe 80% of cases.
+2. Create a two week forecast of number of cases.
 
 You can use the following parameter values for the delay distribution(s) and generation time distribution.
 
@@ -276,7 +277,7 @@ You may include some uncertainty around the mean and standard deviation of these
 
 We use the effective reproduction number and growth rate to estimate whether cases are increasing or decreasing.
 
-We can use the `horizon` argument within the `epinow()` function to extend the time period of the forecast.
+We can use the `horizon` argument within the `epinow()` function to extend the time period of the forecast. The default value is of seven days.
 
 Ensure the data is in the correct format :
 
@@ -329,10 +330,16 @@ ebola_cases <-
 # format date column
 ebola_cases$date <- as.Date(ebola_cases$date)
 
+# Define observation model
+# mean of 80% and standard deviation of 1%
+ebola_obs_scale <- list(mean = 0.8, sd = 0.01)
+
 ebola_estimates <- epinow(
   reported_cases = ebola_cases[1:120, ], # first 3 months of data only
   generation_time = generation_time_opts(ebola_generation_time),
   delays = delay_opts(ebola_incubation_period),
+  # Add observation model
+  obs = obs_opts(scale = ebola_obs_scale),
   # horizon needs to be 14 days to create two week forecast (default is 7 days)
   horizon = 14
 )
