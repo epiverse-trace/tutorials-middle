@@ -70,17 +70,18 @@ We’ll use the pipe `%>%` to connect some of their functions, so let’s also c
 library(cfr)
 library(epiparameter)
 library(tidyverse)
+library(outbreaks)
 ```
 
 ## Data sources for clinical severity
 
-What are data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summaries the spectrum of COVID-19 cases:
+What are data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summarises the spectrum of COVID-19 cases:
 
 ![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic. ([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
 
-- At the top of the pyramid, those meeting the WHO case criteria for **severe** or critical cases will likely be identified in the hospital setting, presenting with atypical viral pneumonia. These cases will have been identified in mainland China and among those categorised internationally as local transmission. 
-- Many more cases are likely to be **symptomatic** (i.e., with fever, cough, or myalgia) but might not require hospitalisation. These cases will have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might also be identified through population surveillance of, for example, influenza-like illness. 
-- The bottom part of the pyramid represents **mild** (and possibly **asymptomatic**) cases. These cases might be identified through contact tracing and subsequently via serological testing.
+- At the top of the pyramid, those who met the WHO case criteria for **severe** or critical cases would likely have been identified in the hospital setting, presenting with atypical viral pneumonia. These cases would have been identified in mainland China and among those categorised internationally as local transmission. 
+- Many more cases are likely to be **symptomatic** (i.e., with fever, cough, or myalgia) but might not require hospitalisation. These cases would have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might be identifiable through population surveillance of, for example, influenza-like illness. 
+- The bottom part of the pyramid represents **mild** (and possibly **asymptomatic**) cases. These cases might be identifiable through contact tracing and subsequently via serological testing.
 
 
 ## Naive CFR
@@ -100,10 +101,10 @@ To calculate the naive CFR, the `{cfr}` package requires an input data frame wit
 - `cases`
 - `deaths`
 
-Let's explore the `ebola1976` dataset, which comes from the first Ebola outbreak in what was then called Zaire (now the Democratic Republic of the Congo) in 1976, as analysed by Camacho et al. (2014).
+Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the first Ebola outbreak in what was then called Zaire (now the Democratic Republic of the Congo) in 1976, as analysed by Camacho et al. (2014).
 
 ```{r}
-# Load the Ebola 1976 data provided with the package
+# Load the Ebola 1976 data provided with the {cfr} package
 data("ebola1976")
 
 # view top data
@@ -120,16 +121,16 @@ ebola1976 %>% as_tibble()
 EpiNow2::example_confirmed %>% as_tibble()
 ```
 
-This data input should be **aggregated** by day, which means one observation *per day*, containing the *daily* number of reported cases and deaths. Observations with zero or missing values should also be included, similar to a time-series data.
+This data input should be **aggregated** by day, which means one observation *per day*, containing the *daily* number of reported cases and deaths. Observations with zero or missing values should also be included, similar to time-series data.
 
-Also, `{cfr}` currently works for *daily* data only, not weekly data.
+Also, `{cfr}` currently works for *daily* data only, but not for other temporal units of data aggregation, e.g., weeks.
 
 <!-- suggest ways to deal with raw input weekly data -->
 <!-- https://github.com/epiverse-trace/cfr/issues/117 -->
 
-### Aggregated differs from Linelist
+### Aggregated data differ from linelists
 
-Lastly, *aggregated* incidence data differs from **linelist** data, where each observation contains subject-level data.
+Lastly, *aggregated* incidence data differs from **linelist** data, where each observation contains individual-level data.
 
 ```{r}
 outbreaks::ebola_sierraleone_2014 %>% as_tibble()
@@ -139,7 +140,7 @@ outbreaks::ebola_sierraleone_2014 %>% as_tibble()
 
 
 
-When we use `cfr_static()` to `data` only, we calculate the naive CFR:
+When we apply `cfr_static()` to `data` directly, we are calculating the naive CFR:
 
 ```{r}
 # Calculate the static CFR without adjusting for delays
@@ -188,7 +189,7 @@ outbreaks::ebola_kikwit_1995 %>%
 
 ### Two biases that affect CFR estimation
 
-[Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describe two potential biases that can affect the estimation of CFR (and its possible solutions):
+[Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describe two potential biases that can affect the estimation of CFR (and their potential solutions):
 
 :::::::::::::::::::::::::::::
 
@@ -196,7 +197,7 @@ outbreaks::ebola_kikwit_1995 %>%
 
 ### Preferential ascertainment of severe cases
 
-For diseases with a _spectrum_ of clinical presentation, those cases that come to the attention of public health authorities and registered into surveillance databases will typically be people with the most severe symptoms who seek medical care, are admitted to a hospital, or die. 
+For diseases with a _spectrum_ of clinical presentations, those cases that come to the attention of public health authorities and registered into surveillance databases will typically be people with the most severe symptoms who seek medical care, are admitted to a hospital, or die. 
 
 Therefore, the CFR will typically be higher among _detected cases_ than among the entire population of cases, given that the latter may include individuals with mild, subclinical, and (under some definitions of “case”) asymptomatic presentations.
 
@@ -206,7 +207,7 @@ Therefore, the CFR will typically be higher among _detected cases_ than among th
 
 ### Bias due to delayed reporting of death
 
-During an _ongoing_ epidemic, there is a delay between the time someone dies and the time their death is reported. Therefore, at any moment in time, the list of cases includes people who will die and whose death has not yet occurred or has occurred but not yet been reported. Thus, dividing the cumulative number of reported deaths by the cumulative number of reported cases at any moment will underestimate the true CFR.
+During an _ongoing_ epidemic, there is a delay between the time someone dies and the time their death is reported. Therefore, at any given moment in time, the list of cases includes people who will die and whose death has not yet occurred or has occurred but not yet been reported. Thus, dividing the cumulative number of reported deaths by the cumulative number of reported cases at a specific time point during an outbreak will underestimate the true CFR.
 
 The key determinants of the magnitude of the bias are the epidemic _growth rate_ and the _distribution of delays_ from case-reporting to death-reporting; the longer the delays and the faster the growth rate, the greater the bias.
 
@@ -257,7 +258,7 @@ Answer to these questions:
 
 [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) developed a method that considers the **time delay** from the onset of symptoms to death.
 
-Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collects them from literature searches and systematic reviews.
+Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collect them from published scientific literature.
 
 Let's use `{epiparameter}`:
 
@@ -353,7 +354,7 @@ For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropri
 
 We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
 
-However, this assumption may not be appropriate for distributions with greater picks. For example, when onset-to-death is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads.
+However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads.
 
 In a scenario like the last one, you can opt to discretise the continuous distribution using `epiparameter::discretise()` to an `<epidist>` object.
 
@@ -395,9 +396,9 @@ outbreaks::ebola_kikwit_1995 %>%
 
 ## An early-stage CFR estimate
 
-We just found that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?
+On the challenge above, we discovered that the difference between the _naive_ and _delay-adjusted_ CFR estimates using `cfr_static()` are _just slightly_ different. So, what is the main difference?
 
-`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the sampling process defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
+`{cfr}` method aims to obtain an unbiased estimator "well before" observing the entire course of the outbreak. For this, `{cfr}` uses the underestimation factor $u_{t}$ to estimate the unbiased CFR $p_{t}$ using maximum-likelihood methods, given the sampling process defined by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
 
 :::::::::::::::::::::::::: spoiler
 
@@ -553,7 +554,7 @@ Is this pattern similar to other outbreaks? We can use the data sets in this epi
 
 ### rolling or time-varying?
 
-The `{cfr}` package has a function called `cfr_time_varying()` with different functionality that makes them not comparable.
+The `{cfr}` package has a function called `cfr_time_varying()` with functionality that differs from `cfr_rolling()`.
 
 #### When to use `cfr_rolling()`?
 
