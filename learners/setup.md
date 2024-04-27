@@ -103,6 +103,8 @@ During the tutorial, we will need a number of R packages. Packages contain usefu
 Open RStudio and **copy and paste** the following code chunk into the [console window](https://docs.posit.co/ide/user/ide/guide/code/console.html), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command:
 
 ```r
+# for episodes on forecast and severity
+
 if(!require("pak")) install.packages("pak")
 
 new_packages <- c(
@@ -110,7 +112,6 @@ new_packages <- c(
   "cfr",
   "epiverse-trace/epiparameter",
   "incidence2",
-  "covidregionaldata",
   "outbreaks",
   "tidyverse"
 )
@@ -118,21 +119,88 @@ new_packages <- c(
 pak::pkg_install(new_packages)
 ```
 
+```r
+# for episodes on superspreading and transmission chains
+
+if(!require("pak")) install.packages("pak")
+
+superspreading_packages <- c(
+  "epicontacts",
+  "fitdistrplus",
+  "epiverse-trace/superspreading",
+  "epiverse-trace/epichains",
+  "epiverse-trace/epiparameter",
+  "incidence2",
+  "outbreaks",
+  "tidyverse"
+)
+
+pak::pkg_install(superspreading_packages)
+```
+
 These installation steps could ask you `? Do you want to continue (Y/n)` write `Y` and press <kbd>Enter</kbd>.
 
 ::::::::::::::::::::::::::::: spoiler
 
-### do you get an error with {epiparameter}?
+### do you get an error with epiverse-trace packages?
 
-If you get an error message when installing {epiparameter}, try this alternative code:
+If you get an error message when installing {superspreading}, {epichains}, or {epiparameter}, try this alternative code:
 
 ```r
-if(!require("devtools")) install.packages("devtools")
+# for superspreading
+install.packages("superspreading", repos = c("https://epiverse-trace.r-universe.dev"))
 
-devtools::install_github("epiverse-trace/epiparameter")
+# for epiparameter
+install.packages("epiparameter", repos = c("https://epiverse-trace.r-universe.dev"))
+
+# for epichains
+if(!require("remotes")) install.packages("remotes")
+remotes::install_github("epiverse-trace/epichains")
 ```
 
 :::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::: spoiler
+
+### What to do if an Error persist?
+
+If the error message keyword include an string like `Personal access token (PAT)`, you may need to [set up your GitHub token](https://epiverse-trace.github.io/git-rstudio-basics/02-setup.html#set-up-your-github-token).
+
+First, install these R packages:
+
+```r
+if(!require("pak")) install.packages("pak")
+
+new <- c("gh",
+         "gitcreds",
+         "usethis")
+
+pak::pak(new)
+```
+
+Then, follow these three steps to [set up your GitHub token (read this step-by-step guide)](https://epiverse-trace.github.io/git-rstudio-basics/02-setup.html#set-up-your-github-token):
+
+```r
+# Generate a token
+usethis::create_github_token()
+
+# Configure your token 
+gitcreds::gitcreds_set()
+
+# Get a situational report
+usethis::git_sitrep()
+```
+
+Try again installing {epichains}:
+
+```r
+if(!require("remotes")) install.packages("remotes")
+remotes::install_github("epiverse-trace/epichains")
+```
+
+If the error persist, [contact us](#your-questions)!
+
+:::::::::::::::::::::::::::
 
 You should update **all of the packages** required for the tutorial, even if you installed them relatively recently. New versions bring improvements and important bug fixes.
 
