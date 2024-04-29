@@ -111,6 +111,13 @@ estimates <- epinow(
 )
 ```
 
+::::::::::::::::::::::::::::::::: callout
+
+### Do not wait for this to complete!
+
+This last chunk may take 10 minutes to run. Keep reading this tutorial episode while this runs in the background. For more information on computing time, read the "Bayesian inference using Stan" section within the [quantifying transmission](../episodes/quantify-transmissibility.md) episode.
+
+:::::::::::::::::::::::::::::::::
 
 We can visualise the estimates of the effective reproduction number and the estimated number of cases using `plot()`. The estimates are split into three categories:
 
