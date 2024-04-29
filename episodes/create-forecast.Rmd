@@ -186,8 +186,55 @@ reported_cases_deaths <- incidence2::covidregionaldataUK %>%
   ungroup()
 ```
 
+```{r,echo=FALSE,fig.cap="Distribution of secondary cases (deaths). We will drop the first 30 days with no observed deaths. We will use the deaths between day 31 and day 60 to estimate the secondary observations. We will forecast deaths from day 61 to day 90."}
 
-Using the first 30 days of data on cases and deaths, we will estimate the relationship between the primary and secondary observations using `estimate_secondary()`, then forecast future deaths using `forecast_secondary()`. For more details on the model see the [model documentation](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html). 
+# distribution of secondary observations
+estimate_forecast <- reported_cases_deaths %>% 
+  slice(1:90) %>% 
+  # rownames_to_column() %>% 
+  # mutate(rowname = as.numeric(rowname))
+  identity()
+
+ggplot() +
+  geom_col(
+    data = estimate_forecast %>% slice(1:60),
+    mapping = aes(x = date, y = secondary),
+    fill = "black"
+  ) +
+  geom_col(
+    data = estimate_forecast %>% slice(61:90),
+    mapping = aes(x = date, y = secondary),
+    fill = "gray80"
+  ) +
+  geom_vline(aes(xintercept = ymd(20200131)), linetype = 2) +
+  geom_vline(aes(xintercept = ymd(20200228)), linetype = 2) +
+  geom_vline(aes(xintercept = ymd(20200329)), linetype = 2) +
+  geom_vline(aes(xintercept = ymd(20200428)), linetype = 2) +
+  annotate(
+    "text", label = "drop",
+    x = ymd(20200131) %m+% days(5) ,
+    y = 2000,
+    size = 8,
+    colour = "red"
+  ) +
+  annotate(
+    "text", label = "estimate",
+    x = ymd(20200228) %m+% days(10) ,
+    y = 2000,
+    size = 8,
+    colour = "red"
+  ) +
+  annotate(
+    "text", label = "forecast",
+    x = ymd(20200329) %m+% days(10) ,
+    y = 2000,
+    size = 8,
+    colour = "red"
+  ) +
+  NULL
+```
+
+Using the data on cases and deaths between day 31 and day 60, we will estimate the relationship between the primary and secondary observations using `estimate_secondary()`, then forecast future deaths using `forecast_secondary()`. For more details on the model see the [model documentation](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html). 
 
 We must specify the type of observation using `type` in `secondary_opts()`, options include:
 
@@ -202,7 +249,7 @@ There are further function inputs to `estimate_secondary()` which can be specifi
 
 To find the model fit between cases and deaths : 
 ```{r}
-# Estimate from first 60 days of this data
+# Estimate from day 31 to day 60 of this data
 cases_to_estimate <- reported_cases_deaths[31:60, ]
 
 # Estimate secondary cases
