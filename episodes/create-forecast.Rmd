@@ -170,7 +170,16 @@ summary(estimates)
 The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see [quantifying transmission episode](../episodes/quantify-transmissibility.md) in the "Finding estimates" section). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
 
 We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more details.
- 
+
+::::::::::::::::::::::::::: discussion
+
+### What are the implications of this change?
+
+- Compare different percents of observations %
+- How are they different in the number of infections estimated?
+- What are the public health implications of this change?
+
+:::::::::::::::::::::::::::
 
 ## Forecasting secondary observations
 
