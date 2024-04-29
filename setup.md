@@ -207,11 +207,26 @@ You should update **all of the packages** required for the tutorial, even if you
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
 
 ```r
+# for episodes on forecast and severity
+
 library(EpiNow2)
 library(cfr)
 library(epiparameter)
 library(incidence2)
 library(covidregionaldata)
+library(outbreaks)
+library(tidyverse)
+```
+
+```r
+# for episodes on superspreading and transmission chains
+
+library(epicontacts)
+library(fitdistrplus)
+library(superspreading)
+library(epichains)
+library(epiparameter)
+library(incidence2)
 library(outbreaks)
 library(tidyverse)
 ```
