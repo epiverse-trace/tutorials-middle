@@ -4,12 +4,6 @@ teaching: 30
 exercises: 0
 ---
 
-```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
-library(EpiNow2)
-library(ggplot2)
-withr::local_options(list(mc.cores = 4))
-```
-
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - How can I estimate the time-varying reproduction number ($Rt$) and growth rate from a time series of case data?
@@ -50,7 +44,9 @@ But in an ongoing outbreak, the population does not remain entirely susceptible 
 
 ## Introduction
 
-The transmission intensity of an outbreak is quantified using two key metrics: the reproduction number, which informs on the strength of the transmission by indicating how many new cases are expected from each existing case; and the [growth rate](../learners/reference.md#growth), which informs on the speed of the transmission by indicating how rapidly the outbreak is spreading or declining (doubling/halving time) within a population. To estimate these key metrics using case data we must account for delays between the date of infections and date of reported cases. In an outbreak situation, data are usually available on reported dates only, therefore we must use estimation methods to account for these delays when trying to understand changes in transmission over time. For more details on the distinction between speed and strength of transmission and implications for control, see [Dushoff & Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
+The transmission intensity of an outbreak is quantified using two key metrics: the reproduction number, which informs on the strength of the transmission by indicating how many new cases are expected from each existing case; and the [growth rate](../learners/reference.md#growth), which informs on the speed of the transmission by indicating how rapidly the outbreak is spreading or declining (doubling/halving time) within a population. For more details on the distinction between speed and strength of transmission and implications for control, review [Dushoff & Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
+
+To estimate these key metrics using case data we must account for delays between the date of infections and date of reported cases. In an outbreak situation, data are usually available on reported dates only, therefore we must use estimation methods to account for these delays when trying to understand changes in transmission over time.
 
 In the next tutorials we will focus on how to use the functions in `{EpiNow2}` to estimate transmission metrics of case data. We will not cover the theoretical background of the models or inference framework, for details on these concepts see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
@@ -75,12 +71,13 @@ In the ["`Expected change in daily cases`" callout](#expected-change-in-daily-ca
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We’ll use the `{dplyr}` package to arrange some of its inputs, `{ggplot2}` to visualize case distribution, and the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
 
-The first step is to load the `{EpiNow2}` package:
-
-```{r, eval = FALSE}
+```{r,message=FALSE,warning=FALSE}
 library(EpiNow2)
+library(tidyverse)
 ```
+
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
@@ -119,7 +116,11 @@ cases <- incidence2::covidregionaldataUK %>%
 
 ### When to use incidence2?
 
-We can also use the `{incidence2}` package to aggregate cases. However, if you ever need to aggregate you data in a different time **interval** (i.e., days, weeks or months) or per **group** categories, we recommend you to explore the `incidence2::incidence()` function:
+We can also use the `{incidence2}` package to:
+
+- Aggregate cases (similar to the code above) but in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Explore later the [`incidence2::incidence()` reference manual](https://www.reconverse.org/incidence2/reference/incidence.html).
+
+- Complete dates for all the range of dates per group category using `incidence2::complete_dates()`. Read further in its [function reference manual](https://www.reconverse.org/incidence2/reference/complete_dates.html).
 
 ```{r, warning = FALSE, message = FALSE, eval=FALSE}
 library(tidyr)
@@ -132,12 +133,12 @@ incidence2::covidregionaldataUK %>%
   incidence2::incidence(
     date_index = "date",
     counts = "cases_new",
-    groups = "region",
-    interval = "week"
-  )
+    count_values_to = "confirm",
+    date_names_to = "date"
+  ) %>%
+  # complete range of dates
+  incidence2::complete_dates()
 ```
-
-You can also estimate transmission metrics from {incidence2} objects using the `{i2extras}` package. Read further in the [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette!
 
 :::::::::::::::::::::::::
 
@@ -318,6 +319,10 @@ To find the maximum number of available cores on your machine, use `parallel::de
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+::::::::::::::::::::::::: checklist
+
+**Note:** In the code below `_fixed` distributions are used instead of `_variable` (delay distributions with uncertainty). This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.
+
 ```{r, echo = FALSE}
 rt_log_mean <- convert_to_logmean(2, 1)
 rt_log_sd <- convert_to_logsd(2, 1)
@@ -340,50 +345,35 @@ generation_time_fixed <- dist_spec(
 )
 ```
 
-*Note: in the code below fixed distributions are used instead of variable. This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.*
+:::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::: spoiler
-
-### On reducing computation time
-
-Using an appropriate number of samples and chains is crucial for ensuring convergence and obtaining reliable estimates in Bayesian computations using Stan. Inadequate sampling or insufficient chains may lead to issues such as divergent transitions, impacting the accuracy and stability of the inference process.
-
-For the purpose of this tutorial, we can add more configuration details to get an useful output in less time. You can specify a fixed number of `samples` and `chains` to the `stan` argument using the `stan_opts()` function:
-
-The code in the proposed code chunk can take around 10 minutes. We expect this alternative code chunk below using `stan_opts()` to take approximately 3 minutes:
-
-```{r,eval=FALSE}
-estimates <- epinow(
-  # same code as previous chunk
-  reported_cases = reported_cases,
-  generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(
-    incubation_period_fixed + reporting_delay_fixed
-  ),
-  rt = rt_opts(
-    prior = list(mean = rt_log_mean, sd = rt_log_sd)
-  ),
-  # [new] set a fixed number of samples and chains
-  stan = stan_opts(samples = 1000, chains = 3)
-)
-```
-
-:::::::::::::::::::::::::::::::::
+Now you are ready to run `EpiNow2::epinow()` to estimate the time-varying reproduction number:
 
 ```{r, message = FALSE, eval = TRUE}
 reported_cases <- cases[1:90, ]
 
 estimates <- epinow(
+  # cases
   reported_cases = reported_cases,
+  # delays
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(
-    incubation_period_fixed + reporting_delay_fixed
-  ),
-  rt = rt_opts(
-    prior = list(mean = rt_log_mean, sd = rt_log_sd)
-  )
+  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
+  # prior
+  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd)),
+  # computation (optional)
+  stan = stan_opts(samples = 1000, chains = 3)
 )
 ```
+
+::::::::::::::::::::::::::::::::: callout
+
+### Do not wait for this to continue
+
+Using `stan = stan_opts()` is optional. For the purpose of this tutorial on reducing computation time, we specified a fixed number of `samples = 1000` and `chains = 3` to the `stan` argument using the `stan_opts()` function. We expect this to take approximately 3 minutes.
+
+**Remember:** Using an appropriate number of *samples* and *chains* is crucial for ensuring convergence and obtaining reliable estimates in Bayesian computations using Stan. Inadequate sampling or insufficient chains may lead to issues such as divergent transitions, impacting the accuracy and stability of the inference process.
+
+:::::::::::::::::::::::::::::::::
 
 ### Results
 
@@ -460,14 +450,13 @@ To find regional estimates, we use the same inputs as `epinow()` to the function
 
 ```{r, message = FALSE, eval = TRUE}
 estimates_regional <- regional_epinow(
+  # cases
   reported_cases = regional_cases,
+  # delays
   generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(
-    incubation_period_fixed + reporting_delay_fixed
-  ),
-  rt = rt_opts(
-    prior = list(mean = rt_log_mean, sd = rt_log_sd)
-  )
+  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
+  # prior
+  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 )
 
 estimates_regional$summary$summarised_results$table
@@ -475,6 +464,13 @@ estimates_regional$summary$summarised_results$table
 estimates_regional$summary$plots$R
 ```
 
+:::::::::::::::::::::::::: testimonial
+
+### the i2extras package
+
+`{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette.
+
+::::::::::::::::::::::::::
 
 ## Summary
 
