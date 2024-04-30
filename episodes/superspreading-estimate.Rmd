@@ -598,7 +598,7 @@ across_offspring %>%
 
 ::::::::::::::::::::::::::::::::::
 
-## Backward and forward contact tracing
+## Controlling superspreading with contact tracing
 
 During an outbreak, it is common to try and reduce transmission by identifying people who have come into contact with an infected person, then quarantine them in case they subsequently turn out to be infected. Such contact tracing can be deployed in multiple ways. 'Forward' contact tracing targets downstream contacts who may have been infected by a newly identifed infection (i.e. the 'index case'). 'Backward' tracing instead tracks the upstream primary case who infected the index case (or a setting or event at which the index case was infected), for example by retracing history of contact to the likely point of exposure. This makes it possible to identify others who were also potentially infected by this earlier primary case.
 
