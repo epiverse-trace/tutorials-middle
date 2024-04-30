@@ -717,35 +717,192 @@ We invite you to read the vignette on [Projecting infectious disease incidence: 
 
 :::::::::::::::::::::::::: challenge
 
-### Ebola's large outbreak potential
+### Monkeypox large outbreak potential
 
-Evaluate the potential for a new Ebola case to generate an explosive large outbreak. Use the appropriate package to access delay data from previous outbreaks.
+Evaluate the potential for a new Monkey pox (Mpox) case to generate an explosive large outbreak. 
+
+- Simulate 1000 transmission chains with 1 initial case each.
+- Use the appropriate package to access delay data from previous outbreaks.
+- How many simulated trajectories reach more than 100 infected cases?
 
 :::::::::::::: hint
 
 With `{epiparameter}`, you can access and use offspring and delay distributions from previous Ebola outbreaks.
+
+```{r,warning=FALSE,message=FALSE}
+library(epiparameter)
+library(tidyverse)
+
+epidist_db(epi_dist = "offspring") %>%
+  list_distributions() %>% 
+  count(disease, epi_distribution)
+
+epidist_db(epi_dist = "serial interval") %>%
+  list_distributions() %>% 
+  count(disease, epi_distribution)
+```
 
 ::::::::::::::
 
 :::::::::::::: solution
 
 ```{r,message=FALSE,warning=FALSE}
-ebola_offspring <- epidist_db(
-  disease = "ebola",
+# load packages -----------------------------------------------------------
+
+library(epiparameter)
+library(epichains)
+library(tidyverse)
+
+# delays ------------------------------------------------------------------
+
+mpox_offspring_epidist <- epidist_db(
+  disease = "mpox",
   epi_dist = "offspring",
   single_epidist = TRUE
 )
 
-ebola_serial <- epidist_db(
-  disease = "ebola",
+mpox_offspring <- get_parameters(mpox_offspring_epidist)
+
+mpox_serialint <- epidist_db(
+  disease = "mpox",
   epi_dist = "serial interval",
   single_epidist = TRUE
 )
+
+# iterate -----------------------------------------------------------------
+
+# Set seed for random number generator
+set.seed(33)
+# Number of simulation runs
+number_chains <- 1000
+# Number of initial cases
+initial_cases <- 1
+
+simulated_chains_mpox <-
+  # iterate one function across multiple numbers (chain IDs)
+  map(
+    # vector of numbers (chain IDs)
+    .x = seq_len(number_chains),
+    # function to iterate to each chain ID number
+    .f = function(sim) {
+      simulate_chains(
+        # simulation controls
+        index_cases = initial_cases,
+        statistic = "size",
+        # offspring
+        offspring_dist = rnbinom,
+        mu = mpox_offspring["mean"],
+        size = mpox_offspring["dispersion"],
+        # generation
+        generation_time = function(x) generate(x = mpox_serialint, times = x)
+      ) %>%
+        # creates a column with the chain ID number
+        mutate(chain_id = sim)
+    }
+  ) %>%
+  # combine list outputs (for each chain ID) into a single data frame
+  list_rbind()
+
+# visualize ---------------------------------------------------------------
+
+# daily aggregate of cases
+simulated_chains_mpox_day <- simulated_chains_mpox %>%
+  # use data.frame output from <epichains> object
+  as_tibble() %>%
+  # transform chain ID column to factor (categorical variable)
+  mutate(chain_id = as_factor(chain_id)) %>%
+  # get the round number (day) of infection times
+  mutate(day = ceiling(time)) %>%
+  # count the daily number of cases in each simulation (chain ID)
+  count(chain_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (chain ID)
+  group_by(chain_id) %>%
+  mutate(cases_cumsum = cumsum(cases)) %>%
+  ungroup()
+
+# Visualize transmission chains by cumulative cases
+ggplot() +
+  # create grouped chain trajectories
+  geom_line(
+    data = simulated_chains_mpox_day,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = chain_id
+    ),
+    color = "black",
+    alpha = 0.25,
+    show.legend = FALSE
+  ) +
+  # define a 100-case threshold
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  labs(
+    x = "Day",
+    y = "Cumulative cases"
+  )
 ```
 
-<!-- [pending to complete] -->
+Assuming a Monkey pox outbreak with $R$ = 0.32 and $k$ = 0.58, there is no trajectory among 1000 simulations that reach more than 100 infected cases. Compared to MERS ($R$ = 0.6 and $k$ = 0.02).
 
 ::::::::::::::
+
+::::::::::::::::::: hint
+
+### Epidemic Risk assessment accounting for superspreading
+
+With `{superspreading}`, you can get numerical solutions to processes that `{epichains}` solve using branching processes. We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html) and respond to:
+
+- What is the probability that a newly introduced pathogen will cause a large outbreak?
+- What is the probability that an infection will, by chance, fail to establish following initial introduction(s)?
+- What is the probability the outbreak will be contained?
+
+Check how these estimates vary non-linearly with respect to the mean reproduction number $R$ and dispersion $k$ of a given disease.
+
+<!-- draft challenge -->
+
+<!-- Calculate the probability a new Mpox case will lead to a large outbreak in the absence of control measures. Use the appropriate package to access delay data from previous outbreaks. -->
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
+library(superspreading)
+
+# estimate probability to contain
+probability_contain(
+  R = mers_offspring["mean"],
+  k = mers_offspring["dispersion"],
+  num_init_infect = 1,
+  case_threshold = 100
+)
+
+# Estimate the probability of a large outbreak
+# with 5 independent imported cases
+probability_epidemic(
+  R = mers_offspring["mean"],
+  k = mers_offspring["dispersion"],
+  num_init_infect = 5
+)
+```
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
+library(superspreading)
+
+# estimate probability to contain
+probability_contain(
+  R = mpox_offspring_epidist["mean"],
+  k = mpox_offspring_epidist["dispersion"],
+  num_init_infect = 1,
+  case_threshold = 100
+)
+
+# Estimate the probability of a large outbreak
+# with 5 independent imported cases
+probability_epidemic(
+  R = mpox_offspring_epidist["mean"],
+  k = mpox_offspring_epidist["dispersion"],
+  num_init_infect = 5
+)
+```
+
+::::::::::::::::::
 
 :::::::::::::::::::::::::
 
@@ -780,82 +937,90 @@ c0 %>%
 
 ::::::::::: solution
 
-<!-- [pending to complete] -->
+```{r,message=FALSE,warning=FALSE}
+# load packages ---------------------------
+library(fitdistrplus)
+library(epiparameter)
+library(epichains)
+library(tidyverse)
 
-Remarkable, even with R0 less than 1
-with potentially explosive outbreaks. The observed variation in individual infectiousness in Ebola
-means that although the probability of extinction is high, new index cases also have the potential for explosive regrowth of the epidemic.
+# fit a negative binomial distribution ------------------------------------
+
+# Fitting a negative binomial distribution to the number of secondary cases
+fit.cases <- fitdist(c0, "nbinom")
+fit.cases
+
+# serial interval parameters ----------------------------------------------
+
+ebola_serialinter <- epidist_db(
+  disease = "ebola",
+  epi_dist = "serial interval",
+  single_epidist = T
+)
+
+# simulate outbreak trajectories ------------------------------------------
+
+# Set seed for random number generator
+set.seed(645)
+# Number of simulation runs
+number_chains <- 1e2
+# Number of initial cases
+initial_cases <- 1
+
+sim_multiple_chains <- 
+  map(
+    .x = seq_len(number_chains), 
+    .f = function(sim) {
+      simulate_chains(
+        index_cases = initial_cases,
+        # stopping
+        statistic = "size",
+        # offspring
+        offspring_dist = rnbinom,
+        mu = fit.cases$estimate["mu"],
+        size = fit.cases$estimate["size"],
+        # generation
+        generation_time = function(x) generate(x = ebola_serialinter, times = x)
+      ) %>% 
+        mutate(simulation_n = sim)
+    }
+  ) %>%
+  # combine list outputs (for each chain ID) into a single data frame
+  list_rbind()
+
+# visualize ----------------------------------------
+
+sim_chains_aggregate <- 
+  sim_multiple_chains %>% 
+  as_tibble() %>% 
+  mutate(simulation_n = as_factor(simulation_n)) %>% 
+  mutate(day = ceiling(time)) %>%
+  count(simulation_n, day, name = "cases") %>% 
+  group_by(simulation_n) %>% 
+  mutate(cases_cumsum = cumsum(cases)) %>% 
+  ungroup()
+
+ggplot() +
+  geom_line(
+    data = sim_chains_aggregate,
+    mapping = aes(
+      x = day, 
+      y = cases_cumsum, 
+      group = simulation_n#,
+      # color = simulation_n
+    ),
+    show.legend = FALSE
+  ) +
+  # define a 100-case threshold
+  geom_hline(aes(yintercept = 100), lty = 2)
+```
+
+
+Remarkably, even with R0 less than 1 (R = 0.95) we can have potentially explosive outbreaks. The observed variation in individual infectiousness in Ebola means that although the probability of extinction is high, new index cases also have the potential for explosive regrowth of the epidemic.
 
 :::::::::::
 
 :::::::::::::::::::::::::::::
-
-:::::::::::::::::::: challenge
-
-### Probability to contain an epidemic
-
-Calculate probabilities for Ebola of a large outbreak and to contain an epidemic. Use the appropriate package to access delay data from previous outbreaks.
-
-:::::::::::::::::: hint
-
-With `{epiparameter}` you can access and use delay distributions from previous outbreaks.
-
-:::::::::::::::::::::
-
-::::::::::::::::::: hint
-
-### Epidemic Risk assessment accounting for superspreading
-
-With `{superspreading}`, you can get numerical solutions to processes that `{epichains}` solve using branching processes. We invite you to read the `{superspreading}` vignette on [Epidemic risk](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html) and respond to:
-
-- What is the probability that a newly introduced pathogen will cause a large outbreak?
-- What is the probability that an infection will, by chance, fail to establish following initial introduction(s)?
-- What is the probability the outbreak will be contained?
-
-Check how these estimates vary non-linearly with respect to the mean reproduction number $R$ and dispersion $k$ of a given disease.
-
-::::::::::::::::::
-
-::::::::::::::::::::: hint
-
-Here is an example with the MERS offspring distribution estimates:
-
-```{r,message=FALSE,warning=FALSE}
-library(superspreading)
-```
-
-```{r}
-# estimate probability to contain
-probability_contain(
-  R = mers_offspring["mean"],
-  k = mers_offspring["dispersion"],
-  num_init_infect = 1,
-  case_threshold = 100
-)
-
-# Estimate the probability of a large outbreak
-# with 5 independent imported cases
-probability_epidemic(
-  R = mers_offspring["mean"],
-  k = mers_offspring["dispersion"],
-  num_init_infect = 5
-)
-```
-
-::::::::::::::::::
-
-:::::::::::::::::: solution
-
-```{r}
-#' get ebola params
-```
-
-<!-- [pending to complete] -->
-
-::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::
-
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
