@@ -542,7 +542,7 @@ across_offspring <- epidist_string %>%
   mutate(
     transmission_output =
       pmap(
-        .l = select(., R = mean, k = dispersion, percent_transmission),
+        .l = dplyr::select(., R = mean, k = dispersion, percent_transmission),
         .f = superspreading::proportion_transmission,
         format_prop = FALSE, 
         simulate = TRUE # use a numerical simulation
@@ -559,7 +559,7 @@ across_offspring <- epidist_string %>%
         na.rm = TRUE
       )
   ) %>%
-  select(-starts_with("prop_")) %>% 
+  dplyr::select(-starts_with("prop_")) %>% 
   ungroup()
 
 # get a position to the ggplot text annotation
