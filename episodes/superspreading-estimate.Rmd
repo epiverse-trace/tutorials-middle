@@ -57,7 +57,7 @@ In this tutorial, we are going to quantify individual variation in transmission,
 
 We are going to use data from the `{outbreaks}` package, manage the linelist and contacts data using `{epicontacts}`, and estimate distribution parameters with `{fitdistrplus}`. Lastly, we are going to use `{superspreading}` to explore the implications of variation in transmission for decision-making.
 
-We’ll use the pipe `%>%` to connect some of the functions from these packages, so let’s also call the `{tidyverse}` package:
+We’ll use the pipe `%>%` to connect some of the functions from these packages, so let’s also call the `{tidyverse}` package.
 
 ```{r,message=FALSE,warning=FALSE}
 library(outbreaks)
@@ -79,8 +79,8 @@ Let's practice this using the `mers_korea_2015` linelist and contact data from t
 ## first, make an epicontacts object
 epi_contacts <-
   epicontacts::make_epicontacts(
-    linelist = mers_korea_2015$linelist,
-    contacts = mers_korea_2015$contacts
+    linelist = outbreaks::mers_korea_2015$linelist,
+    contacts = outbreaks::mers_korea_2015$contacts
   )
 ```
 
@@ -261,7 +261,7 @@ In epidemiology, [negative binomial](https://en.wikipedia.org/wiki/Negative_bino
 
 Calculate the distribution of secondary cases for Ebola using the `ebola_sim_clean` object from `{outbreaks}` package.
 
-Does the offspring distribution of Ebola is skewed or overdispersed?
+Is the offspring distribution of Ebola skewed or overdispersed?
 
 :::::::::::::::::: hint
 
@@ -315,7 +315,7 @@ From a visual inspection, the distribution of secondary cases for the Ebola data
 
 ## Estimate the dispersion parameter
 
-To empirically estimate the dispersion parameter $k$, we can to fit a negative binomial distribution to the number of secondary cases.
+To empirically estimate the dispersion parameter $k$, we could fit a negative binomial distribution to the number of secondary cases.
 
 We can fit distributions to data using the `{fitdistrplus}` package, which provides maximum likelihood estimates.
 
@@ -706,7 +706,7 @@ Compare this values with the ones reported by [Lloyd-Smith et al., 2005](https:/
 
 ### Expected proportion of transmission
 
-What is the proportion of cases that are responsible of the 80% of transmission?
+What is the proportion of cases responsible for 80% of transmission?
 
 Use `{superspreading}` and compare the estimates for **MERS** using the offspring distributions parameters from this tutorial episode, with **SARS-1** and **Ebola** offspring distributions parameter accessible via the `{epiparameter}` R package.
 
@@ -727,7 +727,7 @@ epidist_string <- epidist_db(
   paste(collapse = ", ")
 ```
 
-Currently, `{epiparameter}` have offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS-1:
+Currently, `{epiparameter}` has offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS-1:
 
 ```{r,message=FALSE,warning=FALSE}
 # Load parameters
