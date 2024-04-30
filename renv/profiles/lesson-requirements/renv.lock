@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.3.2",
+    "Version": "4.3.3",
     "Repositories": [
       {
         "Name": "carpentries",
@@ -481,32 +481,6 @@
         "R"
       ],
       "Hash": "bbc5ab5258e5ddf38f2cd2c5a7afa860"
-    },
-    "covidregionaldata": {
-      "Package": "covidregionaldata",
-      "Version": "0.9.3",
-      "Source": "Repository",
-      "Repository": "https://epiforecasts.r-universe.dev",
-      "Requirements": [
-        "R",
-        "R6",
-        "countrycode",
-        "dplyr",
-        "httr",
-        "jsonlite",
-        "lifecycle",
-        "lubridate",
-        "memoise",
-        "purrr",
-        "readxl",
-        "rlang",
-        "stringr",
-        "tidyr",
-        "tidyselect",
-        "vroom",
-        "xml2"
-      ],
-      "Hash": "5c68c96ea6474fde037f859957ad2bc7"
     },
     "cpp11": {
       "Package": "cpp11",
@@ -1713,7 +1687,7 @@
       "Package": "ragg",
       "Version": "1.2.7",
       "Source": "Repository",
-      "Repository": "https://carpentries.r-universe.dev",
+      "Repository": "CRAN",
       "Requirements": [
         "systemfonts",
         "textshaping"
@@ -2005,7 +1979,7 @@
       "Package": "stringi",
       "Version": "1.8.3",
       "Source": "Repository",
-      "Repository": "https://carpentries.r-universe.dev",
+      "Repository": "CRAN",
       "Requirements": [
         "R",
         "stats",
