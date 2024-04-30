@@ -511,7 +511,7 @@ epidist_string <- epidist_db(
 ) %>%
   list_distributions() %>%
   dplyr::select(disease) %>%
-  distinct() %>% 
+  distinct() %>%
   as_tibble()
 
 # get percent of cases that cause percent of transmission
@@ -544,7 +544,7 @@ across_offspring <- epidist_string %>%
       pmap(
         .l = dplyr::select(., R = mean, k = dispersion, percent_transmission),
         .f = superspreading::proportion_transmission,
-        format_prop = FALSE, 
+        format_prop = FALSE,
         simulate = TRUE # use a numerical simulation
       )
   ) %>%
@@ -559,7 +559,7 @@ across_offspring <- epidist_string %>%
         na.rm = TRUE
       )
   ) %>%
-  dplyr::select(-starts_with("prop_")) %>% 
+  dplyr::select(-starts_with("prop_")) %>%
   ungroup()
 
 # get a position to the ggplot text annotation
@@ -655,8 +655,8 @@ cluster_probability <- proportion_cluster_size(
   cluster_size = c(5, 10, 25)
 )
 
-cluster_probability_percent <- cluster_probability %>% 
-  select(prop_25) %>% 
+cluster_probability_percent <- cluster_probability %>%
+  select(prop_25) %>%
   pull(prop_25)
 
 # cluster_probability_percent
