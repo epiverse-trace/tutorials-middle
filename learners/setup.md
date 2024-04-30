@@ -213,7 +213,6 @@ library(EpiNow2)
 library(cfr)
 library(epiparameter)
 library(incidence2)
-library(covidregionaldata)
 library(outbreaks)
 library(tidyverse)
 ```
