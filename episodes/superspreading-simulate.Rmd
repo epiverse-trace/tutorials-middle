@@ -319,7 +319,7 @@ In the lines above, we described how to specify the offspring distribution and g
 
 ### Stopping criteria
 
-This is an exclusive feature of `{epichains}`. Branching process simulations end when they have gone extinct. No more offspring are being produced because of some stopping criterion.
+This is an customisable feature of `{epichains}`. Branching process simulations end when they have gone extinct. No more offspring are being produced because of some stopping criterion.
 
 :::::::::::::::::::::::::::
 
