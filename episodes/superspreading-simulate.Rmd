@@ -174,6 +174,18 @@ library(epiparameter)
 library(tidyverse)
 ```
 
+::::::::::::::::::: checklist
+
+### The double-colon
+
+The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
+
+For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
+
+This help us remember package functions and avoid namespace conflicts.
+
+:::::::::::::::::::
+
 ## Simulation of uncontrolled outbreaks
 
 Infectious disease epidemics spread through populations when a chain of infected individuals transmit the infection to others. [Branching processes](https://epiverse-trace.github.io/epichains/articles/theoretical_background.html) can be used to model this transmission. A branching process is a stochastic process (i.e. a random process that can be described by a known probability distribution), where each infectious individual gives rise to a random number of individuals in the next generation of infection, starting with the index case in generation 1. The distribution of the number of secondary cases each individual generates is called the offspring distribution ([Azam & Funk, 2024](https://epiverse-trace.github.io/epichains/articles/epichains.html)).
