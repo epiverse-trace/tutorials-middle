@@ -616,6 +616,9 @@ Empirical evidence focused on evaluating the efficiency of backward tracing lead
 Using `{superspreading}`, we can estimate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
 
 ```{r}
+# Set seed for random number generator
+set.seed(33)
+
 # estimate the probability of
 # having a cluster size of 5, 10, or 25
 # secondary cases from a primary case,
@@ -629,6 +632,9 @@ proportion_cluster_size(
 ```
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
+# Set seed for random number generator
+set.seed(33)
+
 cluster_probability <- proportion_cluster_size(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
@@ -638,6 +644,8 @@ cluster_probability <- proportion_cluster_size(
 cluster_probability_percent <- cluster_probability %>% 
   select(prop_25) %>% 
   pull(prop_25)
+
+# cluster_probability_percent
 ```
 
 
