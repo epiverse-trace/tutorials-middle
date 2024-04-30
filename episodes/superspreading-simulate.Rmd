@@ -32,7 +32,7 @@ Learners should familiarise themselves with the following concept dependencies b
 
 <!-- what we know -->
 
-Individual variation in transmission can affects both the potential for an epidemic to establish in a population and the ease of control ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
+Individual variation in transmission can affect both the potential for an epidemic to establish in a population and the ease of control ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)). 
 
 + Greater variation reduces the overall probably of a single new case causing a large local outbreak, because most cases infect few others and individuals that generate a large number of secondary cases are relatively rare.
 
