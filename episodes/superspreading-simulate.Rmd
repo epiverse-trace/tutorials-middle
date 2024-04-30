@@ -63,7 +63,7 @@ mers_cumcases <- mers_korea_2015$linelist %>%
 mers_offspring <- c(mean = 0.60, dispersion = 0.02)
 
 # generation time
-serial_inverval <- epidist_db(
+serial_interval <- epidist_db(
   disease = "mers",
   epi_dist = "serial",
   single_epidist = TRUE
@@ -92,7 +92,7 @@ simulated_chains_map <-
         mu = mers_offspring["mean"],
         size = mers_offspring["dispersion"],
         # generation
-        generation_time = function(x) generate(x = serial_inverval, times = x)
+        generation_time = function(x) generate(x = serial_interval, times = x)
       ) %>%
         # creates a column with the chain ID number
         mutate(chain_id = sim)
@@ -254,17 +254,17 @@ However, using the *serial interval* as an approximation of the *generation time
 Let's use the `{epiparameter}` package to access and use the available serial interval for MERS disease:
 
 ```{r,message=FALSE,warning=FALSE}
-serial_inverval <- epidist_db(
+serial_interval <- epidist_db(
   disease = "mers",
   epi_dist = "serial",
   single_epidist = TRUE
 )
 
-plot(serial_inverval, day_range = 0:25)
+plot(serial_interval, day_range = 0:25)
 ```
 
 ```{r,echo=FALSE}
-serial_summary <- serial_inverval$summary_stats %>%
+serial_summary <- serial_interval$summary_stats %>%
   as_tibble() %>%
   select(mean, sd) %>%
   distinct(.keep_all = TRUE)
@@ -279,7 +279,7 @@ The serial interval for MERS has a mean of `r serial_summary$mean` days and a st
 In `{epichains}`, we need to specify the generation time as a function that generates random numbers. Using `{epiparameter}` has the advantage of using the distribution function `epiparameter::generate()` for this input. This will look like this:
 
 ```r
-function(x) generate(x = serial_inverval, times = x)
+function(x) generate(x = serial_interval, times = x)
 ```
 
 This interface is similar to the one `{cfr}` uses to link with `{epiparameter}`. Read the [work with delay distributions](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html) vignette for further context.
@@ -300,7 +300,7 @@ simulate_chains(
   mu = mers_offspring["mean"],
   size = mers_offspring["dispersion"],
   # generation
-  generation_time = function(x) generate(x = serial_inverval, times = x)
+  generation_time = function(x) generate(x = serial_interval, times = x)
 )
 ```
 
@@ -407,7 +407,7 @@ simulated_chains_map <-
         mu = mers_offspring["mean"],
         size = mers_offspring["dispersion"],
         # generation
-        generation_time = function(x) generate(x = serial_inverval, times = x)
+        generation_time = function(x) generate(x = serial_interval, times = x)
       ) %>%
         # creates a column with the chain ID number
         mutate(chain_id = sim)
