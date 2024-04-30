@@ -502,16 +502,21 @@ Research into sexually transmitted and vector-borne diseases has previously sugg
 
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 library(epiparameter)
+library(superspreading)
 library(tidyverse)
 
+# list of diseases with offspring distribution
 epidist_string <- epidist_db(
   epi_dist = "offspring distribution"
 ) %>%
   list_distributions() %>%
   dplyr::select(disease) %>%
-  distinct()
+  distinct() %>% 
+  as_tibble()
 
+# get percent of cases that cause percent of transmission
 across_offspring <- epidist_string %>%
+  # add column list of epidist objects
   mutate(
     epidist_out =
       map(
@@ -521,6 +526,7 @@ across_offspring <- epidist_string %>%
         single_epidist = TRUE
       )
   ) %>%
+  # get parameters
   mutate(
     epidist_params =
       map(
@@ -528,18 +534,23 @@ across_offspring <- epidist_string %>%
         .f = epiparameter::get_parameters
       )
   ) %>%
+  # unnest parameters
   unnest_wider(col = epidist_params) %>%
-  expand_grid(percent_transmission = seq(0.01, 1, 0.01)) %>%
-  # mutate(percent_transmission = 0.8) %>%
+  # to each disease, add sequence from 0.01 to 1 (proportion of transmission)
+  expand_grid(percent_transmission = seq(from = 0.01, to = 1, by = 0.01)) %>%
+  # estimate proportion of cases responsible of proportion of transmission (row)
   mutate(
     transmission_output =
       pmap(
         .l = select(., R = mean, k = dispersion, percent_transmission),
         .f = superspreading::proportion_transmission,
-        format_prop = FALSE
+        format_prop = FALSE, 
+        simulate = TRUE # use a numerical simulation
       )
   ) %>%
+  # unnest proportion of cases results
   unnest_wider(col = transmission_output) %>%
+  # move each result to one column
   rowwise() %>%
   mutate(
     percent_cases =
@@ -548,8 +559,10 @@ across_offspring <- epidist_string %>%
         na.rm = TRUE
       )
   ) %>%
-  select(-starts_with("prop_"))
+  select(-starts_with("prop_")) %>% 
+  ungroup()
 
+# get a position to the ggplot text annotation
 across_offspring_tip <- across_offspring %>%
   group_by(disease) %>%
   filter(percent_transmission < 0.98, percent_transmission > 0.85) %>%
@@ -561,6 +574,7 @@ across_offspring_tip <- across_offspring %>%
     TRUE ~ disease
   ))
 
+# plot x: proportion of cases, y: proportion of transmission
 across_offspring %>%
   ggplot() +
   geom_line(
@@ -584,7 +598,7 @@ across_offspring %>%
     size = 3
   ) +
   scale_y_continuous(breaks = scales::breaks_pretty(n = 5)) +
-  colorspace::scale_color_continuous_diverging(trans = "log10") +
+  colorspace::scale_color_continuous_diverging(trans = "log10", rev = TRUE) +
   labs(
     x = "Proportion of infectious cases (ranked)",
     y = "Expected proportion of transmission",
