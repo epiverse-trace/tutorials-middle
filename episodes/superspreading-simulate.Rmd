@@ -734,11 +734,11 @@ library(epiparameter)
 library(tidyverse)
 
 epidist_db(epi_dist = "offspring") %>%
-  list_distributions() %>% 
+  list_distributions() %>%
   count(disease, epi_distribution)
 
 epidist_db(epi_dist = "serial interval") %>%
-  list_distributions() %>% 
+  list_distributions() %>%
   count(disease, epi_distribution)
 ```
 
@@ -955,7 +955,7 @@ fit.cases
 ebola_serialinter <- epidist_db(
   disease = "ebola",
   epi_dist = "serial interval",
-  single_epidist = T
+  single_epidist = TRUE
 )
 
 # simulate outbreak trajectories ------------------------------------------
@@ -967,9 +967,9 @@ number_chains <- 1e2
 # Number of initial cases
 initial_cases <- 1
 
-sim_multiple_chains <- 
+sim_multiple_chains <-
   map(
-    .x = seq_len(number_chains), 
+    .x = seq_len(number_chains),
     .f = function(sim) {
       simulate_chains(
         index_cases = initial_cases,
@@ -981,7 +981,7 @@ sim_multiple_chains <-
         size = fit.cases$estimate["size"],
         # generation
         generation_time = function(x) generate(x = ebola_serialinter, times = x)
-      ) %>% 
+      ) %>%
         mutate(simulation_n = sim)
     }
   ) %>%
@@ -990,24 +990,23 @@ sim_multiple_chains <-
 
 # visualize ----------------------------------------
 
-sim_chains_aggregate <- 
-  sim_multiple_chains %>% 
-  as_tibble() %>% 
-  mutate(simulation_n = as_factor(simulation_n)) %>% 
+sim_chains_aggregate <-
+  sim_multiple_chains %>%
+  as_tibble() %>%
+  mutate(simulation_n = as_factor(simulation_n)) %>%
   mutate(day = ceiling(time)) %>%
-  count(simulation_n, day, name = "cases") %>% 
-  group_by(simulation_n) %>% 
-  mutate(cases_cumsum = cumsum(cases)) %>% 
+  count(simulation_n, day, name = "cases") %>%
+  group_by(simulation_n) %>%
+  mutate(cases_cumsum = cumsum(cases)) %>%
   ungroup()
 
 ggplot() +
   geom_line(
     data = sim_chains_aggregate,
     mapping = aes(
-      x = day, 
-      y = cases_cumsum, 
-      group = simulation_n#,
-      # color = simulation_n
+      x = day,
+      y = cases_cumsum,
+      group = simulation_n
     ),
     show.legend = FALSE
   ) +
