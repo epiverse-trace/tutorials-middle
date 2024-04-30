@@ -398,6 +398,8 @@ map(
 
 The `sim` element is placed to register the iteration number (**chain ID**) as a new column in the `<epichains>` output. The `purrr::list_rbind()` function aims to combine all the list outputs from `map()`.
 
+**Why a dot (`.`) as a prefix?** In the [tidy design principles](https://design.tidyverse.org/dots-prefix.html) book we have a chapter on the dot prefix!
+
 :::::::::::::::::::::::::::::::
 
 Now, we are prepared to use `map()` to repeatedly simulate from `simulate_chains()` and store in a vector from 1 to `r number_chains`:
