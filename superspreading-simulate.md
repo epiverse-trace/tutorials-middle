@@ -218,7 +218,9 @@ In the lines above, we described how to specify the offspring distribution and g
 
 ### Stopping criteria
 
-This is an customisable feature of `{epichains}`. Branching process simulations end when they have gone extinct. No more offspring are being produced because of some stopping criterion.
+This is an customisable feature of `{epichains}`. By default, branching process simulations end when they have gone extinct. For long-lasting transmission chains, in `simulate_chains()` you can add the `stat_max` argument. 
+
+For example, if we set an stopping criteria for `statistic = "size"` of `stat_max = 500`, no more offspring will be produced after a chain of size 500.
 
 :::::::::::::::::::::::::::
 

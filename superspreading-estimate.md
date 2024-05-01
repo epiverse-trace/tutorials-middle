@@ -414,13 +414,17 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 ### The dispersion parameter across diseases
 
-Research into sexually transmitted and vector-borne diseases has previously suggested a '20/80' rule, with 20% of individuals contributing at least 80% of the transmission potential ([Woolhouse et al](https://www.pnas.org/doi/10.1073/pnas.94.1.338)). On its own, the dispersion parameter $k$ is hard to interpret intuitively, and hence converting into proportional summary can enable easier comparison. When we consider a wider range of pathogens, we can see there is no hard and fast rule for the percentage that generates 80% of transmission, but variation does emerge as a common feature of infectious diseases
+Research into sexually transmitted and vector-borne diseases has previously suggested a '20/80' rule, with 20% of individuals contributing at least 80% of the transmission potential ([Woolhouse et al](https://www.pnas.org/doi/10.1073/pnas.94.1.338)). 
 
-- When the 20% most infectious cases contribute to the 80% of transmission (or more), there is a high individual-level variation in transmission, with a highly overdispersed offspring distribution ($k<0.3$), e.g., SARS-1.
+On its own, the dispersion parameter $k$ is hard to interpret intuitively, and hence converting into proportional summary can enable easier comparison. When we consider a wider range of pathogens, we can see there is no hard and fast rule for the percentage that generates 80% of transmission, but variation does emerge as a common feature of infectious diseases
 
-- When the 20% most infectious cases contribute to the ~50% of transmission, there is a low individual-level variation in transmission, with a moderately dispersed offspring distribution ($k > 3$), e.g. Ebola.
+- When the 20% most infectious cases contribute to the 80% of transmission (or more), there is a high individual-level variation in transmission, with a highly overdispersed offspring distribution ($k<0.1$), e.g., SARS-1.
 
-<img src="fig/superspreading-estimate-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
+- When the 20% most infectious cases contribute to the ~50% of transmission, there is a low individual-level variation in transmission, with a moderately dispersed offspring distribution ($k > 0.1$), e.g. Pneumonic Plague.
+
+![**Evidence for variation in individual reproductive number**. (Left, c) Proportion of transmission expected from the most infectious 20% of cases, for 10 outbreak or surveillance data sets (triangles). Dashed lines show proportions expected under the 20/80 rule (top) and homogeneity (bottom). (Right, d), Reported superspreading events (SSEs; diamonds) relative to estimated reproductive number R (squares) for twelve directly transmitted infections. Crosses show the 99th-percentile proposed as threshold for SSEs. (More figure details in [Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153))](fig/SEE-individual-reproductive-number-fig-c-d.png)
+
+
 
 
 ::::::::::::::::::::::::::::::::::
