@@ -212,6 +212,30 @@
 </div>
 <!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="superspreading-estimate.html">3. Account for superspreading</a>
+    </div>
+<!--/div.accordion-header-->
+        
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="superspreading-simulate.html">4. Simulate transmission chains</a>
+    </div>
+<!--/div.accordion-header-->
+        
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
                 </div>
               </div>
             </div>
@@ -282,6 +306,23 @@ the latest data available.</p></li>
 would be on each day of the outbreak.</p></li>
 <li><p>Use the <code>delay_density</code> argument to adjust the CFR by
 the corresponding delay distribution.</p></li>
+</ul></section><section id="superspreading-estimate"><h2 class="section-heading"><a href="superspreading-estimate.html">Account for superspreading</a></h2>
+<hr class="half-width">
+<ul>
+<li>Use <a href="https://www.repidemicsconsortium.org/epicontacts/" class="external-link">epicontacts</a> to calculate the number of secondary
+cases cause by a particular individual from linelist and contact
+data.</li>
+<li>Use <a href="https://lbbe.univ-lyon1.fr/fr/fitdistrplus" class="external-link">fitdistrplus</a> to empirically estimate the
+offspring distribution from the number of secondary cases
+distribution.</li>
+<li>Use <code>{superspreading}</code> to estimate the probability of
+having clusters of a given size from primary cases and inform contact
+tracing efforts.</li>
+</ul></section><section id="superspreading-simulate"><h2 class="section-heading"><a href="superspreading-simulate.html">Simulate transmission chains</a></h2>
+<hr class="half-width">
+<ul>
+<li>Use <code>{epichains}</code> to simulate the large outbreak
+potential of diseases with overdispersed offspring distributions.</li>
 </ul></section>
 </div>
     </main>
@@ -329,9 +370,9 @@ the corresponding delay distribution.</p></li>
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/key-points.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/key-points.html",
-  "dateCreated": "2024-04-29",
-  "dateModified": "2024-04-30",
-  "datePublished": "2024-04-30"
+  "dateCreated": "2024-05-01",
+  "dateModified": "2024-05-01",
+  "datePublished": "2024-05-01"
 }
 
   </script><script>
