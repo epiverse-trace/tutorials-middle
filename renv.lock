@@ -289,6 +289,23 @@
       ],
       "Hash": "40415719b5a479b87949f3aa0aee737c"
     },
+    "bpmodels": {
+      "Package": "bpmodels",
+      "Version": "0.3.1",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "bpmodels",
+      "RemoteUsername": "epiverse-trace",
+      "RemotePkgRef": "epiverse-trace/bpmodels",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "07c054090f2b07367855b73a0cc2c43e24bc32d3",
+      "Requirements": [
+        "R",
+        "checkmate"
+      ],
+      "Hash": "4374941c8a9cf7a8991072466918c3b2"
+    },
     "broom": {
       "Package": "broom",
       "Version": "1.0.5",
@@ -487,6 +504,19 @@
       ],
       "Hash": "e8a1e41acf02548751f45c718d55aa6a"
     },
+    "crosstalk": {
+      "Package": "crosstalk",
+      "Version": "1.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R6",
+        "htmltools",
+        "jsonlite",
+        "lazyeval"
+      ],
+      "Hash": "ab12c7b080a57475248a30f4db6298c0"
+    },
     "curl": {
       "Package": "curl",
       "Version": "5.2.0",
@@ -650,6 +680,42 @@
       ],
       "Hash": "bb0eec2fe32e88d9e2836c2f73ea2077"
     },
+    "epichains": {
+      "Package": "epichains",
+      "Version": "0.0.0.9999",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "epichains",
+      "RemoteUsername": "epiverse-trace",
+      "RemotePkgRef": "epiverse-trace/epichains",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "7b5b80b7b8531fba18e827636a45b0d064e73c76",
+      "Requirements": [
+        "R",
+        "checkmate",
+        "stats",
+        "utils"
+      ],
+      "Hash": "e4d58df3ff7111aa1c89356cad126c3b"
+    },
+    "epicontacts": {
+      "Package": "epicontacts",
+      "Version": "1.1.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "colorspace",
+        "dplyr",
+        "grDevices",
+        "igraph",
+        "methods",
+        "threejs",
+        "visNetwork"
+      ],
+      "Hash": "ce65f8ac65b26b2a6c17497a4cd5d3a0"
+    },
     "epiparameter": {
       "Package": "epiparameter",
       "Version": "0.0.0.9000",
@@ -720,6 +786,21 @@
         "viridisLite"
       ],
       "Hash": "66fa5a16464666772f4929f8f5b2fc71"
+    },
+    "fitdistrplus": {
+      "Package": "fitdistrplus",
+      "Version": "1.1-11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "MASS",
+        "R",
+        "grDevices",
+        "methods",
+        "stats",
+        "survival"
+      ],
+      "Hash": "f40ef9686e85681a1ccbf33d9236aeb9"
     },
     "fontawesome": {
       "Package": "fontawesome",
@@ -1054,6 +1135,21 @@
       ],
       "Hash": "2d7b3857980e0e0d0a1fd6f11928ab0f"
     },
+    "htmlwidgets": {
+      "Package": "htmlwidgets",
+      "Version": "1.6.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "grDevices",
+        "htmltools",
+        "jsonlite",
+        "knitr",
+        "rmarkdown",
+        "yaml"
+      ],
+      "Hash": "04291cc45198225444a397606810ac37"
+    },
     "httr": {
       "Package": "httr",
       "Version": "1.4.7",
@@ -1079,6 +1175,29 @@
         "uuid"
       ],
       "Hash": "99df65cfef20e525ed38c3d2577f7190"
+    },
+    "igraph": {
+      "Package": "igraph",
+      "Version": "2.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Matrix",
+        "R",
+        "cli",
+        "cpp11",
+        "grDevices",
+        "graphics",
+        "lifecycle",
+        "magrittr",
+        "methods",
+        "pkgconfig",
+        "rlang",
+        "stats",
+        "utils",
+        "vctrs"
+      ],
+      "Hash": "c3b7d801d722e26e4cd888e042bf9af5"
     },
     "incidence2": {
       "Package": "incidence2",
@@ -1188,6 +1307,16 @@
         "utils"
       ],
       "Hash": "7c5e89f04e72d6611c77451f6331a091"
+    },
+    "lazyeval": {
+      "Package": "lazyeval",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "d908914ae53b04d4c0c0fd72ecc35370"
     },
     "lifecycle": {
       "Package": "lifecycle",
@@ -1876,6 +2005,42 @@
       ],
       "Hash": "960e2ae9e09656611e0b8214ad543207"
     },
+    "superspreading": {
+      "Package": "superspreading",
+      "Version": "0.2.0.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "Remotes": "epiverse-trace/epiparameter, epiverse-trace/bpmodels",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "superspreading",
+      "RemoteUsername": "epiverse-trace",
+      "RemotePkgRef": "epiverse-trace/superspreading",
+      "RemoteRef": "HEAD",
+      "RemoteSha": "4549ff929acb90aee04dc3b66a7fb30503affbc5",
+      "Requirements": [
+        "bpmodels",
+        "checkmate",
+        "rlang",
+        "stats"
+      ],
+      "Hash": "b6902d57c67ae90e59f588c01319aea7"
+    },
+    "survival": {
+      "Package": "survival",
+      "Version": "3.5-7",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "Matrix",
+        "R",
+        "graphics",
+        "methods",
+        "splines",
+        "stats",
+        "utils"
+      ],
+      "Hash": "b8e943d262c3da0b0febd3e04517c197"
+    },
     "sys": {
       "Package": "sys",
       "Version": "3.4.2",
@@ -1905,6 +2070,22 @@
         "systemfonts"
       ],
       "Hash": "997aac9ad649e0ef3b97f96cddd5622b"
+    },
+    "threejs": {
+      "Package": "threejs",
+      "Version": "0.3.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "base64enc",
+        "crosstalk",
+        "htmlwidgets",
+        "igraph",
+        "methods",
+        "stats"
+      ],
+      "Hash": "2ad32c3a8745e827977f394bc387e3b0"
     },
     "tibble": {
       "Package": "tibble",
@@ -2090,6 +2271,24 @@
       ],
       "Hash": "c826c7c4241b6fc89ff55aaea3fa7491"
     },
+    "visNetwork": {
+      "Package": "visNetwork",
+      "Version": "2.1.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "grDevices",
+        "htmltools",
+        "htmlwidgets",
+        "jsonlite",
+        "magrittr",
+        "methods",
+        "stats",
+        "utils"
+      ],
+      "Hash": "3e48b097e8d9a91ecced2ed4817a678d"
+    },
     "vroom": {
       "Package": "vroom",
       "Version": "1.6.5",
@@ -2115,6 +2314,19 @@
         "withr"
       ],
       "Hash": "390f9315bc0025be03012054103d227c"
+    },
+    "webshot": {
+      "Package": "webshot",
+      "Version": "0.5.5",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "callr",
+        "jsonlite",
+        "magrittr"
+      ],
+      "Hash": "16858ee1aba97f902d24049d4a44ef16"
     },
     "withr": {
       "Package": "withr",
