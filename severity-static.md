@@ -30,9 +30,9 @@ editor_options:
 
 This episode requires you to be familiar with:
 
-**Data science** : Basic programming with R.
+**Data science**: Basic programming with R.
 
-**Epidemic theory** : [Delay distributions](../learners/reference.md#delaydist).
+**Epidemic theory**: [Delay distributions](../learners/reference.md#delaydist).
 
 :::::::::::::::::::::::::::::::::
 
@@ -40,17 +40,23 @@ This episode requires you to be familiar with:
 
 Common questions at the early stage of an epidemic include:
 
-- What is the likely public health impact of the outbreak in terms of clinical severity? 
+- What is the likely public health impact of the outbreak in terms of clinical severity?
 - What are the most severely affected groups?
 - Does the outbreak have the potential to cause a very severe pandemic?
 
-We can assess the pandemic potential of an epidemic with two critical measurements: the transmissibility and the clinical severity. ([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062), [CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html))
+We can assess the pandemic potential of an epidemic with two critical measurements: the transmissibility and the clinical severity
+([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062), 
+[CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).
 
-![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. HHS: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
+![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
 
 One epidemiological approach to estimating the clinical severity is quantifying the Case Fatality Risk (CFR). CFR is the conditional probability of death given confirmed diagnosis, calculated as the cumulative number of deaths from an infectious disease over the number of confirmed diagnosed cases. However, calculating this directly during the course of an epidemic tends to result in a naive or biased CFR given the time [delay](../learners/reference.md#delaydist) from onset to death, varying substantially as the epidemic progresses and stabilising at the later stages of the outbreak ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
 
-![Observed biased confirmed case fatality risk (CFR) estimates as a function of time (thick line) calculated as the cumulative number of deaths over confirmed cases at time t. The estimate at the end of an outbreak (~May 30) is the realised CFR by the end of the epidemic. The horizontal continuous line and dotted lines show the expected value and the 95% confidence intervals (95% CI) of the predicted delay-adjusted CFR estimate only by using the observed data until 27 Mar 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_c.png){alt='The periods are relevant: Period 1 -- 15 days where CFR is zero to indicate this is due to no reported deaths; Period from Mar 15 -- Apr 26 where CFR appears to be rising; Period Apr 30 -- May 30 where the CFR estimate stabilises.'}
+![Observed biased confirmed case fatality risk (CFR) estimates as a function of time (thick line) calculated as the cumulative number 
+of deaths over confirmed cases at time t. The estimate at the end of an outbreak (~May 30) is the realised CFR by the end of the epidemic.
+ The horizontal continuous line and dotted lines show the expected value and the 95% confidence intervals ($95\%$ CI) of the predicted delay-adjusted 
+ CFR estimate only by using the observed data until 27 Mar 2003
+  ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_c.png){alt='The periods are relevant: Period 1 -- 15 days where CFR is zero to indicate this is due to no reported deaths; Period from Mar 15 -- Apr 26 where CFR appears to be rising; Period Apr 30 -- May 30 where the CFR estimate stabilises.'}
 
 ::::::::::::::::::::::: instructor
 
@@ -58,11 +64,13 @@ The periods are relevant: Period 1 -- 15 days where CFR is zero to indicate this
 
 :::::::::::::::::::::::
 
-More generally, estimating severity can be helpful even outside of a pandemic planning scenario and in the context of routine public health. Knowing whether an outbreak has or had a different severity from the historical record can motivate causal investigations, which could be intrinsic to the infectious agent (e.g. a new, more severe strain) or due to underlying factors in the population (e.g. reduced immunity or morbidity factors) ([Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846)).
+More generally, estimating severity can be helpful even outside of a pandemic planning scenario and in the context of routine public health. 
+Knowing whether an outbreak has or had a different severity from the historical record can motivate causal investigations, 
+which could be intrinsic to the infectious agent (e.g., a new, more severe strain) or due to underlying factors in the population (e.g. reduced immunity or morbidity factors) ([Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846)).
 
 In this tutorial we are going to learn how to use the `{cfr}` package to calculate and adjust a CFR estimation using [delay distributions](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere, based on the methods developed by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852), also, how we can reuse `{cfr}` functions for more severity measurements.
 
-We’ll use the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
+We’ll use the pipe `%>%` operator to connect  functions, so let’s also call to the `{tidyverse}` package:
 
 
 ```r
@@ -76,7 +84,8 @@ library(outbreaks)
 
 What are data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summarises the spectrum of COVID-19 cases:
 
-![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic. ([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
+![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic. 
+([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
 
 - At the top of the pyramid, those who met the WHO case criteria for **severe** or critical cases would likely have been identified in the hospital setting, presenting with atypical viral pneumonia. These cases would have been identified in mainland China and among those categorised internationally as local transmission. 
 - Many more cases are likely to be **symptomatic** (i.e., with fever, cough, or myalgia) but might not require hospitalisation. These cases would have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might be identifiable through population surveillance of, for example, influenza-like illness. 
@@ -293,7 +302,7 @@ We can showcase this last bias using the [concept described in this `{cfr}` vign
 
 [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) developed a method that considers the **time delay** from the onset of symptoms to death.
 
-Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collect them from published scientific literature.
+Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collect them from published scientific literature. For an step-by-step guide, read the tutorial episode on how to [access to epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html).
 
 Let's use `{epiparameter}`:
 
@@ -506,7 +515,7 @@ We can explore the **early** determination of the _delay-adjusted CFR_ using the
 # for all the 73 days in the Ebola dataset
 rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
 
-tail(rolling_cfr_naive)
+utils::tail(rolling_cfr_naive)
 ```
 
 ```{.output}
@@ -528,7 +537,7 @@ rolling_cfr_adjusted <- cfr::cfr_rolling(
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
 
-tail(rolling_cfr_adjusted)
+utils::tail(rolling_cfr_adjusted)
 ```
 
 ```{.output}
@@ -541,7 +550,7 @@ tail(rolling_cfr_adjusted)
 73 1976-11-05         0.971        0.852             1
 ```
 
-With `tail()`, we show that the latest CFR estimates. The naive and delay-adjusted estimates have overlapping ranges of 95% confidence intervals.
+With `utils::tail()`, we show that the latest CFR estimates. The naive and delay-adjusted estimates have overlapping ranges of 95% confidence intervals.
 
 Now, let's visualise both results in a time series. How would the naive and delay-adjusted CFR estimates perform in real time?
 

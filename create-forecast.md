@@ -40,11 +40,13 @@ Learners should familiarise themselves with following concept dependencies befor
 
 ## Introduction
 
-Given case data of an epidemic, we can create estimates of the current and future number of cases by accounting for both delays in reporting and under reporting. To make statements about the future of th epidemic, we need to make an assumption of how observations up to the present are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e. the reproduction number remains the same in the future as last observed. In this tutorial we will create short-term [forecasts](../learners/reference.md#forecast) by assuming the reproduction number will remain the same as its estimate was on the final date for which data was available.
+Given case data of an epidemic, we can create estimates of the current and future number of cases by accounting for both delays 
+in reporting and under reporting. To make statements about the future of th epidemic, we need to make an assumption of how 
+observations up to the present are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e.,  the reproduction number remains the same in the future as last observed. In this tutorial we will create short-term [forecasts](../learners/reference.md#forecast) by assuming the reproduction number will remain the same as its estimate was on the final date for which data was available.
 
 In this tutorial we are going to learn how to use the `{EpiNow2}` package to forecast cases accounting for incomplete observations and forecast secondary observations like deaths.
 
-We’ll use the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
+We’ll use the pipe `%>%` operator to connect functions, so let’s also call to the `{tidyverse}` package:
 
 
 ```r
@@ -54,12 +56,12 @@ library(tidyverse)
 
 ## Create a short-term forecast
 
-The function `epinow()` described in the [quantifying transmission episode](../episodes/quantify-transmissibility.md) is a wrapper for the functions: 
+The function `epinow()` described in the [quantifying transmission](../episodes/quantify-transmissibility.md) episode is a wrapper for the functions: 
 
-- `estimate_infections()`, used to estimate cases by date of infection. 
-- `forecast_infections()`, used to simulate infections using an existing fit (estimate) to observed cases.
+- `estimate_infections()` used to estimate cases by date of infection. 
+- `forecast_infections()` used to simulate infections using an existing fit (estimate) to observed cases.
 
-Let's use the same code used in that episode to get the input data, delays and priors:
+Let's use the same code used in [quantifying transmission](../episodes/quantify-transmissibility.md) episode to get the input data, delays and priors:
 
 
 ```r
@@ -71,28 +73,34 @@ cases <- incidence2::covidregionaldataUK %>%
   ungroup()
 
 # Incubation period
-incubation_period_fixed <- dist_spec(
+incubation_period_fixed <- EpiNow2::dist_spec(
   mean = 4, sd = 2,
   max = 20, distribution = "gamma"
 )
 
-# Reporting delay
-log_mean <- convert_to_logmean(2, 1)
-log_sd <- convert_to_logsd(2, 1)
-reporting_delay_fixed <- dist_spec(
+# Log-tranformed mean
+log_mean <- EpiNow2::convert_to_logmean(2, 1)
+
+# Log-transformed std
+log_sd <- EpiNow2::convert_to_logsd(2, 1)
+
+# Reporting dalay
+reporting_delay_fixed <- EpiNow2::dist_spec(
   mean = log_mean, sd = log_sd,
   max = 10, distribution = "lognormal"
 )
 
 # Generation time
-generation_time_fixed <- dist_spec(
+generation_time_fixed <- EpiNow2::dist_spec(
   mean = 3.6, sd = 3.1,
   max = 20, distribution = "lognormal"
 )
 
-# Rt prior
-rt_log_mean <- convert_to_logmean(2, 1)
-rt_log_sd <- convert_to_logsd(2, 1)
+# Rt mean prior
+rt_log_mean <- EpiNow2::convert_to_logmean(2, 1)
+
+# Rt std prior
+rt_log_sd <- EpiNow2::convert_to_logsd(2, 1)
 ```
 
 Now we can extract the short-term forecast using:
@@ -103,7 +111,7 @@ Now we can extract the short-term forecast using:
 reported_cases <- cases[1:90, ]
 
 # Estimate and forecast
-estimates <- epinow(
+estimates <- EpiNow2::epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
   delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
@@ -111,14 +119,13 @@ estimates <- epinow(
 )
 ```
 
-```{.output}
-WARN [2024-05-01 00:22:16] epinow: There were 3 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2024-05-01 00:22:16] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
+::::::::::::::::::::::::::::::::: callout
 
+### Do not wait for this to complete!
+
+This last chunk may take 10 minutes to run. Keep reading this tutorial episode while this runs in the background. For more information on computing time, read the "Bayesian inference using Stan" section within the [quantifying transmission](../episodes/quantify-transmissibility.md) episode.
+
+:::::::::::::::::::::::::::::::::
 
 We can visualise the estimates of the effective reproduction number and the estimated number of cases using `plot()`. The estimates are split into three categories:
 
@@ -138,15 +145,14 @@ plot(estimates)
 
 ### Forecasting with incomplete observations 
 
-In the [quantifying transmission episode](../episodes/quantify-transmissibility.md) we accounted for delays in reporting. In `EpiNow2` we also can account for incomplete observations as in reality, 100% of cases are not reported.
-
-We will pass another argument into `epinow()` called `obs` to define an observation model. The format of `obs` must be the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
+In the [quantifying transmission](../episodes/quantify-transmissibility.md) episode we accounted for delays in reporting.In `EpiNow2` we also can account for incomplete observations as in reality, 100% of cases are not reported.
+We will pass another argument into `epinow()` function  called `obs` to define an observation model. The format of `obs` is defined by the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
 
 Let's say we believe the COVID-19 outbreak data in the `cases` object do not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
 
 
 ```r
-obs_scale <- list(mean = 0.4, sd = 0.01)
+obs_scale <- base::list(mean = 0.4, sd = 0.01)
 ```
 
 To run the inference framework with this observation process, we add `obs = obs_opts(scale = obs_scale)` to the input arguments of `epinow()`:
@@ -154,49 +160,68 @@ To run the inference framework with this observation process, we add `obs = obs_
 
 ```r
 # Define observation model
-obs_scale <- list(mean = 0.4, sd = 0.01)
+obs_scale <- base::list(mean = 0.4, sd = 0.01)
 
 # Assume we only have the first 90 days of this data
 reported_cases <- cases[1:90, ]
 
 # Estimate and forecast
-estimates <- epinow(
+estimates <- EpiNow2::epinow(
   reported_cases = reported_cases,
   generation_time = generation_time_opts(generation_time_fixed),
   delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
   rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd)),
   # Add observation model
-  obs = obs_opts(scale = obs_scale)
+  obs = EpiNow2::obs_opts(scale = obs_scale)
 )
+```
 
-summary(estimates)
+```{.output}
+WARN [2024-05-04 02:26:33] epinow: There were 2 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2024-05-04 02:26:33] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
+```r
+base::summary(estimates)
 ```
 
 ```{.output}
                                  measure                 estimate
                                   <char>                   <char>
-1: New confirmed cases by infection date    17884 (9770 -- 30609)
+1: New confirmed cases by infection date   18016 (10081 -- 30016)
 2:        Expected change in daily cases        Likely decreasing
-3:            Effective reproduction no.       0.89 (0.56 -- 1.3)
-4:                        Rate of growth -0.015 (-0.066 -- 0.035)
-5:          Doubling/halving time (days)          -47 (20 -- -11)
+3:            Effective reproduction no.       0.89 (0.57 -- 1.3)
+4:                        Rate of growth -0.015 (-0.064 -- 0.034)
+5:          Doubling/halving time (days)          -46 (21 -- -11)
 ```
 
 
 The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see [quantifying transmission episode](../episodes/quantify-transmissibility.md) in the "Finding estimates" section). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
 
 We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more details.
- 
+
+::::::::::::::::::::::::::: discussion
+
+### What are the implications of this change?
+
+- Compare different percents of observations %
+- How are they different in the number of infections estimated?
+- What are the public health implications of this change?
+
+:::::::::::::::::::::::::::
 
 ## Forecasting secondary observations
 
-`EpiNow2` also has the ability to estimate and forecast secondary observations e.g. deaths, hospitalisations from a primary observation e.g. cases. Here we will illustrate how to forecast the number of deaths arising from observed cases of COVID-19 in the early stages of the UK outbreak. 
+`EpiNow2` also has the ability to estimate and forecast secondary observations, e.g., deaths and hospitalisations, from a primary observation, e.g., cases. Here we will illustrate how to forecast the number of deaths arising from observed cases of COVID-19 in the early stages of the UK outbreak. 
 
 First, we must format our data to have the following columns:
 
-+ `date` : the date (as a date object see `?is.Date()`),
-+ `primary` : number of primary observations on that date, in this example **cases**,
-+ `secondary` : number of secondary observations date, in this example **deaths**.
++ `date`: the date (as a date object see `?is.Date()`),
++ `primary`: number of primary observations on that date, in this example **cases**,
++ `secondary`: number of secondary observations date, in this example **deaths**.
 
 
 ```r
@@ -210,40 +235,45 @@ reported_cases_deaths <- incidence2::covidregionaldataUK %>%
   ungroup()
 ```
 
+<div class="figure" style="text-align: center">
+<img src="fig/create-forecast-rendered-unnamed-chunk-8-1.png" alt="Distribution of secondary cases (deaths). We will drop the first 30 days with no observed deaths. We will use the deaths between day 31 and day 60 to estimate the secondary observations. We will forecast deaths from day 61 to day 90."  />
+<p class="caption">Distribution of secondary cases (deaths). We will drop the first 30 days with no observed deaths. We will use the deaths between day 31 and day 60 to estimate the secondary observations. We will forecast deaths from day 61 to day 90.</p>
+</div>
 
-Using the first 30 days of data on cases and deaths, we will estimate the relationship between the primary and secondary observations using `estimate_secondary()`, then forecast future deaths using `forecast_secondary()`. For more details on the model see the [model documentation](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html). 
+Using the data on cases and deaths between day 31 and day 60, we will estimate the relationship between the primary and secondary observations using `estimate_secondary()`, then forecast future deaths using `forecast_secondary()`. For more details on the model see the [model documentation](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html). 
 
 We must specify the type of observation using `type` in `secondary_opts()`, options include:
 
-+ "incidence" : secondary observations arise from previous primary observations, i.e. deaths arising from recorded cases.
-+ "prevalence" : secondary observations arise from a combination current primary observations and past secondary observations, i.e. hospital bed usage arising from current hospital admissions and past hospital bed usage. 
++ "incidence": secondary observations arise from previous primary observations, i.e., deaths arising from recorded cases.
++ "prevalence": secondary observations arise from a combination current primary observations and past secondary observations, i.e., hospital bed usage arising from current hospital admissions and past hospital bed usage. 
 
-In this example we specify `secondary_opts(type = "incidence")`. See `?EpiNow2::secondary_opts` for more detail).
+In this example we specify `secondary_opts(type = "incidence")`. See `?EpiNow2::secondary_opts` for more detail.
 
 The final key input is the delay distribution between the primary and secondary observations. Here this is the delay between case report and death, we assume this follows a gamma distribution with mean of 14 days and standard deviation of 5 days (Alternatively, we can use `{epiparameter}` to [access epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html)). Using `dist_spec()` we specify a fixed gamma distribution.
 
 There are further function inputs to `estimate_secondary()` which can be specified, including adding an observation process, see `?EpiNow2::estimate_secondary` for detail on these options. 
 
-To find the model fit between cases and deaths : 
+To find the model fit between cases and deaths: 
 
 ```r
-# Estimate from first 60 days of this data
+# Estimate from day 31 to day 60 of this data
 cases_to_estimate <- reported_cases_deaths[31:60, ]
 
 # Estimate secondary cases
-estimate_cases_to_deaths <- estimate_secondary(
+estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
   reports = cases_to_estimate,
-  secondary = secondary_opts(type = "incidence"),
-  delays = delay_opts(dist_spec(
+  secondary = EpiNow2::secondary_opts(type = "incidence"),
+  delays = EpiNow2::delay_opts(EpiNow2::dist_spec(
     mean = 14, sd = 5,
     max = 30, distribution = "gamma"
-  ))
+  )
+  )
 )
 ```
 
 
 ::::::::::::::::::::::::::::::::::::: callout
-### Be cautious of timescale 
+### Be cautious of time-scale 
 
 In the early stages of an outbreak there can be substantial changes in testing and reporting. If there are testing changes from one month to another, then there will be a bias in the model fit. Therefore, you should be cautious of the time-scale of data used in the model fit and forecast.
 
@@ -256,7 +286,7 @@ We plot the model fit (shaded ribbons) with the secondary observations (bar plot
 plot(estimate_cases_to_deaths, primary = TRUE)
 ```
 
-<img src="fig/create-forecast-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/create-forecast-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 To use this model fit to forecast deaths, we pass a data frame consisting of the primary observation (cases) for dates not used in the model fit. 
 
@@ -273,7 +303,7 @@ To forecast, we use the model fit `estimate_cases_to_deaths`:
 
 ```r
 # Forecast secondary cases
-deaths_forecast <- forecast_secondary(
+deaths_forecast <- EpiNow2::forecast_secondary(
   estimate = estimate_cases_to_deaths,
   primary = cases_to_forecast
 )
@@ -285,7 +315,7 @@ plot(deaths_forecast)
 Warning: Removed 30 rows containing missing values (`position_stack()`).
 ```
 
-<img src="fig/create-forecast-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="fig/create-forecast-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 The plot shows the forecast secondary observations (deaths) over the dates which we have recorded cases for. 
 It is also possible to forecast deaths using forecast cases, here you would specify `primary` as the `estimates` output from `estimate_infections()`.
@@ -299,7 +329,7 @@ In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% cred
 
 ::::::::::::::::::::::::::
 
-## Challenge : Ebola outbreak analysis 
+## Challenge: Ebola outbreak analysis 
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
@@ -313,8 +343,8 @@ Using the first 3 months (120 days) of data:
 
 You can use the following parameter values for the delay distribution(s) and generation time distribution.
 
-+ Incubation period : Log normal$(2.487,0.330)$ ([Eichner et al. 2011](https://doi.org/10.1016/j.phrp.2011.04.001) via `{epiparameter}`)
-+ Generation time : Gamma$(15.3, 10.1)$ ([WHO Ebola Response Team 2014](https://www.nejm.org/doi/full/10.1056/NEJMoa1411100))
++ Incubation period: Log normal$(2.487,0.330)$ ([Eichner et al. 2011](https://doi.org/10.1016/j.phrp.2011.04.001) via `{epiparameter}`)
++ Generation time: Gamma$(15.3, 10.1)$ ([WHO Ebola Response Team 2014](https://www.nejm.org/doi/full/10.1056/NEJMoa1411100))
 
 You may include some uncertainty around the mean and standard deviation of these distributions. 
 
@@ -326,8 +356,8 @@ We can use the `horizon` argument within the `epinow()` function to extend the t
 
 Ensure the data is in the correct format :
 
-+ `date` : the date (as a date object see `?is.Date()`),
-+ `confirm` : number of confirmed cases on that date.
++ `date`: the date (as a date object see `?is.Date()`),
++ `confirm`: number of confirmed cases on that date.
 
 ::::::::::::::::::::::
 
@@ -344,13 +374,13 @@ We specify the distributions with some uncertainty around the mean and standard 
 
 
 ```r
-ebola_incubation_period <- dist_spec(
+ebola_incubation_period <- EpiNow2::dist_spec(
   mean = 2.487, sd = 0.330,
   mean_sd = 0.5, sd_sd = 0.5,
   max = 20, distribution = "lognormal"
 )
 
-ebola_generation_time <- dist_spec(
+ebola_generation_time <- EpiNow2::dist_spec(
   mean = 15.3, sd = 10.1,
   mean_sd = 0.5, sd_sd = 0.5,
   max = 30, distribution = "gamma"
@@ -365,8 +395,9 @@ We read the data input using `readr::read_csv()`. This function recognize that t
 ```r
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
-ebola_cases <-
-  readr::read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
+ebola_cases <- readr::read_csv(
+  here::here("data", "raw-data", "ebola_cases.csv")
+)
 ```
 
 We define an observation model to scale the estimated and forecast number of new infections:
@@ -382,10 +413,10 @@ As we want to also create a two week forecast, we specify `horizon = 14` to fore
 
 
 ```r
-ebola_estimates <- epinow(
+ebola_estimates <- EpiNow2::epinow(
   reported_cases = ebola_cases[1:120, ], # first 3 months of data only
   generation_time = generation_time_opts(ebola_generation_time),
-  delays = delay_opts(ebola_incubation_period),
+  delays = EpiNow2::delay_opts(ebola_incubation_period),
   # Add observation model
   obs = obs_opts(scale = ebola_obs_scale),
   # horizon needs to be 14 days to create two week forecast (default is 7 days)
@@ -394,10 +425,10 @@ ebola_estimates <- epinow(
 ```
 
 ```{.output}
-WARN [2024-05-01 00:31:33] epinow: There were 6 divergent transitions after warmup. See
+WARN [2024-05-04 02:28:45] epinow: There were 13 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-05-01 00:31:33] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-05-04 02:28:45] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -408,14 +439,14 @@ summary(ebola_estimates)
 ```{.output}
                                  measure                estimate
                                   <char>                  <char>
-1: New confirmed cases by infection date         128 (58 -- 318)
+1: New confirmed cases by infection date         126 (57 -- 325)
 2:        Expected change in daily cases              Increasing
-3:            Effective reproduction no.          1.7 (1 -- 2.9)
-4:                        Rate of growth 0.043 (0.0029 -- 0.091)
-5:          Doubling/halving time (days)         16 (7.6 -- 240)
+3:            Effective reproduction no.            1.7 (1 -- 3)
+4:                        Rate of growth 0.043 (0.0011 -- 0.092)
+5:          Doubling/halving time (days)         16 (7.5 -- 620)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.7 (1 -- 2.9). The exponential growth rate of case numbers is 0.043 (0.0029 -- 0.091).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.7 (1 -- 3). The exponential growth rate of case numbers is 0.043 (0.0011 -- 0.092).
 
 Visualize the estimates:
 
