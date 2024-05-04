@@ -268,7 +268,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Estimation of outbreak severity</h1>
-        <p>Last updated on 2024-05-01 |
+        <p>Last updated on 2024-05-04 |
         
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/severity-static.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -319,8 +319,8 @@ using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr<
 </h3>
 <div class="callout-content">
 <p>This episode requires you to be familiar with:</p>
-<p><strong>Data science</strong> : Basic programming with R.</p>
-<p><strong>Epidemic theory</strong> : <a href="reference.html#delaydist">Delay distributions</a>.</p>
+<p><strong>Data science</strong>: Basic programming with R.</p>
+<p><strong>Epidemic theory</strong>: <a href="reference.html#delaydist">Delay distributions</a>.</p>
 </div>
 </div>
 </div>
@@ -333,14 +333,14 @@ clinical severity?</li>
 <li>Does the outbreak have the potential to cause a very severe
 pandemic?</li>
 </ul><p>We can assess the pandemic potential of an epidemic with two critical
-measurements: the transmissibility and the clinical severity. (<a href="https://www.science.org/doi/full/10.1126/science.1176062" class="external-link">Fraser
+measurements: the transmissibility and the clinical severity (<a href="https://www.science.org/doi/full/10.1126/science.1176062" class="external-link">Fraser
 et al., 2009</a>, <a href="https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html" class="external-link">CDC,
-2016</a>)</p>
+2016</a>).</p>
 <figure><img src="../fig/cfr-hhs-scenarios-psaf.png" alt="The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases." class="figure mx-auto d-block"><div class="figcaption">HHS Pandemic Planning Scenarios based on the
 Pandemic Severity Assessment Framework. This uses a combined measure of
 clinical severity and transmissibility to characterise influenza
-pandemic scenarios. HHS: United States Department of Health and Human
-Services (<a href="https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html" class="external-link">CDC,
+pandemic scenarios. <strong>HHS</strong>: United States Department of
+Health and Human Services (<a href="https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html" class="external-link">CDC,
 2016</a>).</div>
 </figure><p>One epidemiological approach to estimating the clinical severity is
 quantifying the Case Fatality Risk (CFR). CFR is the conditional
@@ -357,9 +357,8 @@ et al., 2005</a>).</p>
 cumulative number of deaths over confirmed cases at time t. The estimate
 at the end of an outbreak (~May 30) is the realised CFR by the end of
 the epidemic. The horizontal continuous line and dotted lines show the
-expected value and the 95% confidence intervals (95% CI) of the
-predicted delay-adjusted CFR estimate only by using the observed data
-until 27 Mar 2003. (<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
+expected value and the 95% confidence intervals (<span class="math inline">\(95\%\)</span> CI) of the predicted delay-adjusted
+CFR estimate only by using the observed data until 27 Mar 2003 (<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
 et al., 2009</a>)</div>
 </figure><div id="accordionInstructor1" class="accordion instructor-note accordion-flush">
 <div class="accordion-item">
@@ -381,7 +380,7 @@ estimate stabilises.</p>
 pandemic planning scenario and in the context of routine public health.
 Knowing whether an outbreak has or had a different severity from the
 historical record can motivate causal investigations, which could be
-intrinsic to the infectious agent (e.g. a new, more severe strain) or
+intrinsic to the infectious agent (e.g., a new, more severe strain) or
 due to underlying factors in the population (e.g. reduced immunity or
 morbidity factors) (<a href="https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846" class="external-link">Lipsitch
 et al., 2015</a>).</p>
@@ -392,9 +391,8 @@ using <a href="reference.html#delaydist">delay distributions</a> from
 by <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
 et al., 2009</a>, also, how we can reuse <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> functions
 for more severity measurements.</p>
-<p>We’ll use the pipe <code>%&gt;%</code> to connect some of their
-functions, so let’s also call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a>
-package:</p>
+<p>We’ll use the pipe <code>%&gt;%</code> operator to connect functions,
+so let’s also call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> package:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -731,7 +729,9 @@ to determine the time distribution between onset and death. Therefore,
 we can estimate the <em>distribution delay</em> from historical
 outbreaks or reuse the ones accessible via R packages like
 <code>{epiparameter}</code> or <code>{epireview}</code>, which collect
-them from published scientific literature.</p>
+them from published scientific literature. For an step-by-step guide,
+read the tutorial episode on how to <a href="https://epiverse-trace.github.io/tutorials-early/delays-reuse.html" class="external-link">access
+to epidemiological delays</a>.</p>
 <p>Let’s use <code>{epiparameter}</code>:</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1017,7 +1017,7 @@ to that day, saving the user time.</p>
 <span><span class="co"># for all the 73 days in the Ebola dataset</span></span>
 <span><span class="va">rolling_cfr_naive</span> <span class="op">&lt;-</span> <span class="fu">cfr</span><span class="fu">::</span><span class="fu">cfr_rolling</span><span class="op">(</span>data <span class="op">=</span> <span class="va">ebola1976</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tail</span><span class="op">(</span><span class="va">rolling_cfr_naive</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu">tail</span><span class="op">(</span><span class="va">rolling_cfr_naive</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1041,7 +1041,7 @@ to that day, saving the user time.</p>
 <span>  delay_density <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, <span class="va">x</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">tail</span><span class="op">(</span><span class="va">rolling_cfr_adjusted</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu">tail</span><span class="op">(</span><span class="va">rolling_cfr_adjusted</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1054,9 +1054,9 @@ to that day, saving the user time.</p>
 72 1976-11-04         0.971        0.852             1
 73 1976-11-05         0.971        0.852             1</code></pre>
 </div>
-<p>With <code>tail()</code>, we show that the latest CFR estimates. The
-naive and delay-adjusted estimates have overlapping ranges of 95%
-confidence intervals.</p>
+<p>With <code>utils::tail()</code>, we show that the latest CFR
+estimates. The naive and delay-adjusted estimates have overlapping
+ranges of 95% confidence intervals.</p>
 <p>Now, let’s visualise both results in a time series. How would the
 naive and delay-adjusted CFR estimates perform in real time?</p>
 <div class="codewrapper sourceCode" id="cb24">
@@ -1861,7 +1861,7 @@ any links that you are not going to use.
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/severity-static.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/severity-static.html",
   "dateCreated": "2024-05-04",
-  "dateModified": "2024-05-01",
+  "dateModified": "2024-05-04",
   "datePublished": "2024-05-04"
 }
 

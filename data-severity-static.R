@@ -5,9 +5,13 @@ library(outbreaks)
 library(tidyverse)
 
 sarscov2_incidence <- sarscov2_who_2019 %>%
-  incidence(date_index = "date",
-            counts = c("cases_jpn",
-                       "deaths_jpn")) %>%
+  incidence(
+    date_index = "date",
+    counts = c(
+      "cases_jpn",
+      "deaths_jpn"
+    )
+  ) %>%
   complete_dates()
 
 sarscov2_incidence
@@ -22,9 +26,10 @@ sarscov2_incidence %>%
     deaths_jpn = deaths
   ) %>%
   as_tibble() %>%
-  write_csv("episodes/data/sarscov2_cases_deaths.csv")
+  write_csv(file.path("episodes", "data", "sarscov2_cases_deaths.csv"))
 
-sarscov2_input <- read_csv("episodes/data/sarscov2_cases_deaths.csv")
+sarscov2_input <- read_csv(file.path("episodes",
+                                     "data", "sarscov2_cases_deaths.csv"))
 
 sarscov2_input
 
@@ -48,5 +53,3 @@ sarscov2_input %>%
     deaths = deaths_jpn
   ) %>%
   cfr_static(delay_density = function(x) density(sarscov2_delay, x))
-
-
