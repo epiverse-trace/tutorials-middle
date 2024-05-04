@@ -635,6 +635,21 @@ chains_null <- sim_chains_max %>%
 
 Although most introductions of `r initial_cases` index case do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median duration of `r chains_extinct$extinct_duration_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
 
+For a summary of the total time duration and size of each chain, we can use the `{dplyr}` "combo" of `group_by()` and `summarise()`:
+
+```{r,eval=FALSE}
+simulated_chains_day %>%
+  group_by(chain_id) %>%
+  summarise(
+    # duration
+    day_max = max(day),
+    # size
+    cases_total = max(cases_cumsum)
+  ) %>%
+  ungroup()
+```
+
+
 ::::::::::::::::::::::::::::::::::: spoiler
 
 ### Observed cases vs simulated chains
