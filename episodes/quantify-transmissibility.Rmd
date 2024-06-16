@@ -50,6 +50,29 @@ To estimate these key metrics using case data we must account for delays between
 
 In the next tutorials we will focus on how to use the functions in `{EpiNow2}` to estimate transmission metrics of case data. We will not cover the theoretical background of the models or inference framework, for details on these concepts see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
+In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We’ll use the `{dplyr}` package to arrange some of its inputs, `{ggplot2}` to visualize case distribution, and the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
+
+```{r,message=FALSE,warning=FALSE}
+library(EpiNow2)
+library(tidyverse)
+```
+
+::::::::::::::::::: checklist
+
+### The double-colon
+
+The double-colon `::` in R is used to access functions or objects from a specific package without loading the entire package into the current environment. This allows for a more targeted approach to using package components and helps avoid namespace conflicts.
+
+`::` lets you call a specific function from a package by explicitly mentioning the package name. For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package without loading the entire package.
+
+:::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
+
+This tutorial illustrates the usage of `epinow()` to estimate the time-varying reproduction number and infection times. Learners should understand the necessary inputs to the model and the limitations of the model output. 
+
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### Bayesian inference
@@ -70,20 +93,6 @@ Refer to the prior probability distribution and the [posterior probability](http
 In the ["`Expected change in daily cases`" callout](#expected-change-in-daily-cases), by "the posterior probability that $R_t < 1$", we refer specifically to the [area under the posterior probability distribution curve](https://www.nature.com/articles/nmeth.3368/figures/1). 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We’ll use the `{dplyr}` package to arrange some of its inputs, `{ggplot2}` to visualize case distribution, and the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
-
-```{r,message=FALSE,warning=FALSE}
-library(EpiNow2)
-library(tidyverse)
-```
-
-
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
-
-This tutorial illustrates the usage of `epinow()` to estimate the time-varying reproduction number and infection times. Learners should understand the necessary inputs to the model and the limitations of the model output. 
-
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 ## Delay distributions and case data 
@@ -298,7 +307,7 @@ The function `epinow()` is a wrapper for the function `estimate_infections()` us
 There are numerous other inputs that can be passed to `epinow()`, see `EpiNow2::?epinow()` for more detail.
 One optional input is to specify a log normal prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean and standard deviation as arguments of `prior` within `rt_opts()`:
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 rt_log_mean <- convert_to_logmean(2, 1)
 rt_log_sd <- convert_to_logsd(2, 1)
 rt <- rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
@@ -323,25 +332,16 @@ To find the maximum number of available cores on your machine, use `parallel::de
 
 **Note:** In the code below `_fixed` distributions are used instead of `_variable` (delay distributions with uncertainty). This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.
 
-```{r, echo = FALSE}
-rt_log_mean <- convert_to_logmean(2, 1)
-rt_log_sd <- convert_to_logsd(2, 1)
-
-incubation_period_fixed <- dist_spec(
-  mean = 4, sd = 2,
-  max = 20, distribution = "gamma"
-)
-
-log_mean <- convert_to_logmean(2, 1)
-log_sd <- convert_to_logsd(2, 1)
-reporting_delay_fixed <- dist_spec(
-  mean = log_mean, sd = log_sd,
-  max = 10, distribution = "lognormal"
-)
-
+```{r, echo = TRUE}
+# fixed alternatives
 generation_time_fixed <- dist_spec(
   mean = 3.6, sd = 3.1,
   max = 20, distribution = "lognormal"
+)
+
+reporting_delay_fixed <- dist_spec(
+  mean = log_mean, sd = log_sd,
+  max = 10, distribution = "lognormal"
 )
 ```
 
