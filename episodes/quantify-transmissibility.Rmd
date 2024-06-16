@@ -196,13 +196,15 @@ The number of delays and type of delay are a flexible input that depend on the d
 
 The distribution of incubation period for many diseases can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
 
-We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma= 2$ (shape = $4$, scale = $1$) using the function `dist_spec()` as follows:
+We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma= 2$ (shape = $4$, scale = $1$) using the function `Gamma()` as follows:
 
 ```{r}
-incubation_period_fixed <- dist_spec(
-  mean = 4, sd = 2,
-  max = 20, distribution = "gamma"
+incubation_period_fixed <- Gamma(
+  mean = 4,
+  sd = 2,
+  max = 20
 )
+
 incubation_period_fixed
 ```
 
@@ -211,9 +213,9 @@ The argument `max` is the maximum value the distribution can take, in this examp
 ::::::::::::::::::::::::::::::::::::: callout
 ### Why a gamma distrubution? 
 
-The incubation period has to be positive in value. Therefore we must specific a distribution in `dist_spec` which is for positive values only. 
+The incubation period has to be positive in value. Therefore we must specific a distribution in `{EpiNow2}` which is for positive values only. 
 
-`dist_spec()` supports log normal and gamma distributions, which are distributions for positive values only. 
+`Gamma()` supports Gamma distributions and `LogNormal()` Log-normal distributions, which are distributions for positive values only. 
 
 For all types of delay, we will need to use distributions for positive values only - we don't want to include delays of negative days in our analysis!
 
@@ -231,13 +233,13 @@ and a standard deviation ($\sigma$) follows a Normal distribution with standard 
 
 $$\mbox{Normal}(\sigma,\sigma_{\sigma}^2).$$
 
-We specify this using `dist_spec` with the additional arguments `mean_sd` ($\sigma_{\mu}$) and `sd_sd` ($\sigma_{\sigma}$).
+We specify this using `Normal()` for each argument: the mean ($\mu=4$ with $\sigma_{\mu}=0.5$) and standard deviation ($\sigma=2$ with $\sigma_{\sigma}=0.5$).
 
-```{r}
-incubation_period_variable <- dist_spec(
-  mean = 4, sd = 2,
-  mean_sd = 0.5, sd_sd = 0.5,
-  max = 20, distribution = "gamma"
+```{r,warning=FALSE,message=FALSE}
+incubation_period_variable <- Gamma(
+  mean = Normal(mean = 4,sd = 0.5),
+  sd = Normal(mean = 2,sd = 0.5),
+  max = 20
 )
 incubation_period_variable
 ```
@@ -255,8 +257,13 @@ If we want to assume that the mean reporting delay is 2 days (with a standard de
 ```{r}
 log_mean <- convert_to_logmean(2, 1)
 log_sd <- convert_to_logsd(2, 1)
+
 x <- seq(from = 0, to = 10, length = 1000)
-df <- data.frame(x = x, density = dlnorm(x, meanlog = log_mean, sdlog = log_sd))
+df <- data.frame(
+  x = x, 
+  density = dlnorm(x, meanlog = log_mean, sdlog = log_sd)
+)
+
 ggplot(df) +
   geom_line(
     aes(x, density)
@@ -266,20 +273,23 @@ ggplot(df) +
   )
 ```
 
-Using the mean and standard deviation for the log normal distribution, we can specify a fixed or variable distribution using `dist_spec()` as before: 
+Using the mean and standard deviation for the log normal distribution, we can specify a fixed or variable distribution using `LogNormal()` as before: 
 
-```{r}
-reporting_delay_variable <- dist_spec(
-  mean = log_mean, sd = log_sd,
-  mean_sd = 0.5, sd_sd = 0.5,
-  max = 10, distribution = "lognormal"
+```{r,warning=FALSE,message=FALSE}
+reporting_delay_variable <- LogNormal(
+  mean = Normal(mean = log_mean, sd = 0.5),
+  sd = Normal(mean = log_sd, sd = 0.5),
+  max = 10
 )
 ```
+
+:::::::::::::::::: callout
 
 If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a log normal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
 
 ```{r, eval = FALSE }
 delay_data <- rlnorm(500, log(5), 1) # synthetic delay data
+
 reporting_delay <- estimate_delay(
   delay_data,
   samples = 1000,
@@ -287,17 +297,18 @@ reporting_delay <- estimate_delay(
 )
 ```
 
+::::::::::::::::::
 
 ####  Generation time
 
 We also must specify a distribution for the generation time. Here we will use a log normal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
 
 
-```{r}
-generation_time_variable <- dist_spec(
-  mean = 3.6, sd = 3.1,
-  mean_sd = 0.5, sd_sd = 0.5,
-  max = 20, distribution = "lognormal"
+```{r,warning=FALSE,message=FALSE}
+generation_time_variable <- LogNormal(
+  mean = Normal(mean = 3.6, sd = 0.5),
+  sd = Normal(mean = 3.1, sd = 0.5),
+  max = 20
 )
 ```
 
@@ -322,7 +333,7 @@ The Bayesian inference is performed using MCMC methods with the program [Stan](h
 
 To reduce computation time, we can run chains in parallel. To do this, we must set the number of cores to be used. By default, 4 MCMC chains are run (see `stan_opts()$chains`), so we can set an equal number of cores to be used in parallel as follows:
 
-```{r}
+```{r,warning=FALSE,message=FALSE}
 withr::local_options(list(mc.cores = 4))
 ```
 
@@ -356,14 +367,12 @@ reported_cases <- cases[1:90, ]
 
 estimates <- epinow(
   # cases
-  reported_cases = reported_cases,
+  data = reported_cases,
   # delays
   generation_time = generation_time_opts(generation_time_fixed),
   delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
   # prior
-  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd)),
-  # computation (optional)
-  stan = stan_opts(samples = 1000, chains = 3)
+  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
 )
 ```
 
@@ -371,7 +380,7 @@ estimates <- epinow(
 
 ### Do not wait for this to continue
 
-Using `stan = stan_opts()` is optional. For the purpose of this tutorial on reducing computation time, we specified a fixed number of `samples = 1000` and `chains = 3` to the `stan` argument using the `stan_opts()` function. We expect this to take approximately 3 minutes.
+We can optionally use the `stan = stan_opts()` argument and function. For the purpose of this tutorial on reducing computation time, we can specify a fixed number of `samples = 1000` and `chains = 3` to the `stan` argument using the `stan_opts()` function. We expect this to take approximately 3 minutes.
 
 **Remember:** Using an appropriate number of *samples* and *chains* is crucial for ensuring convergence and obtaining reliable estimates in Bayesian computations using Stan. Inadequate sampling or insufficient chains may lead to issues such as divergent transitions, impacting the accuracy and stability of the inference process.
 
@@ -453,7 +462,7 @@ To find regional estimates, we use the same inputs as `epinow()` to the function
 ```{r, message = FALSE, eval = TRUE}
 estimates_regional <- regional_epinow(
   # cases
-  reported_cases = regional_cases,
+  data = regional_cases,
   # delays
   generation_time = generation_time_opts(generation_time_fixed),
   delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
@@ -466,13 +475,13 @@ estimates_regional$summary$summarised_results$table
 estimates_regional$summary$plots$R
 ```
 
-:::::::::::::::::::::::::: testimonial
+<!-- :::::::::::::::::::::::::: testimonial -->
 
-### the i2extras package
+<!-- ### the i2extras package -->
 
-`{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette.
+<!-- `{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette. -->
 
-::::::::::::::::::::::::::
+<!-- :::::::::::::::::::::::::: -->
 
 ## Summary
 
