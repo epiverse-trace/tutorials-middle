@@ -79,6 +79,18 @@ library(tidyverse)
 library(outbreaks)
 ```
 
+::::::::::::::::::: checklist
+
+### The double-colon
+
+The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
+
+For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
+
+This help us remember package functions and avoid namespace conflicts.
+
+:::::::::::::::::::
+
 ## Data sources for clinical severity
 
 What are data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summarises the spectrum of COVID-19 cases:
