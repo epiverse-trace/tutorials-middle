@@ -119,7 +119,7 @@ Let's use `{tidyr}` and `{incidence2}` for this:
 ```{r, warning = FALSE, message = FALSE}
 cases <- incidence2::covidregionaldataUK %>%
   # use {tidyr} to preprocess missing values
-  tidyr::replace_na(list(cases_new = 0)) %>%
+  tidyr::replace_na(base::list(cases_new = 0)) %>%
   # use {incidence2} to compute the daily incidence
   incidence2::incidence(
     date_index = "date",
@@ -127,7 +127,8 @@ cases <- incidence2::covidregionaldataUK %>%
     count_values_to = "confirm",
     date_names_to = "date",
     complete_dates = TRUE
-  )
+  ) %>% 
+  dplyr::select(-count_variable)
 ```
 
 With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`
@@ -344,7 +345,7 @@ One optional input is to specify a *log normal* prior for the effective reproduc
 
 ```{r, eval = TRUE}
 # define prior Rt distribution
-rt <- EpiNow2::rt_opts(prior = list(mean = 2, sd = 2))
+rt <- EpiNow2::rt_opts(prior = base::list(mean = 2, sd = 2))
 ```
 
 ::::::::::::::::::::::::::::::::::::: callout
@@ -356,7 +357,7 @@ The Bayesian inference is performed using MCMC methods with the program [Stan](h
 To reduce computation time, we can run chains in parallel. To do this, we must set the number of cores to be used. By default, 4 MCMC chains are run (see `stan_opts()$chains`), so we can set an equal number of cores to be used in parallel as follows:
 
 ```{r,warning=FALSE,message=FALSE}
-withr::local_options(list(mc.cores = 4))
+withr::local_options(base::list(mc.cores = 4))
 ```
 
 To find the maximum number of available cores on your machine, use `parallel::detectCores()`.
@@ -397,7 +398,7 @@ estimates <- EpiNow2::epinow(
   generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
   # prior
-  rt = EpiNow2::rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+  rt = EpiNow2::rt_opts(prior = base::list(mean = rt_log_mean, sd = rt_log_sd))
 )
 ```
 
@@ -473,7 +474,7 @@ The outbreak data of the start of the COVID-19 pandemic from the United Kingdom 
 ```{r,warning=FALSE,message=FALSE}
 regional_cases <- incidence2::covidregionaldataUK %>%
   # use {tidyr} to preprocess missing values
-  tidyr::replace_na(list(cases_new = 0)) %>%
+  tidyr::replace_na(base::list(cases_new = 0)) %>%
   # use {incidence2} to convert aggregated data to incidence data
   incidence2::incidence(
     date_index = "date",
@@ -482,7 +483,8 @@ regional_cases <- incidence2::covidregionaldataUK %>%
     count_values_to = "confirm",
     date_names_to = "date",
     complete_dates = TRUE
-  )
+  ) %>% 
+  dplyr::select(-count_variable)
 
 # keep the first 90 dates for all regions
 
@@ -510,7 +512,7 @@ estimates_regional <- EpiNow2::regional_epinow(
   generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
   # prior
-  rt = EpiNow2::rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+  rt = EpiNow2::rt_opts(prior = base::list(mean = rt_log_mean, sd = rt_log_sd))
 )
 
 estimates_regional$summary$summarised_results$table
