@@ -8,7 +8,7 @@ editor_options:
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 library(EpiNow2)
-withr::local_options(list(mc.cores = 4))
+withr::local_options(base::list(mc.cores = 4))
 ```
 
 
@@ -80,54 +80,65 @@ Let's use the same code used in [quantifying transmission](../episodes/quantify-
 ```{r, echo = TRUE}
 # Read cases dataset
 cases <- incidence2::covidregionaldataUK %>%
-  select(date, cases_new) %>%
-  group_by(date) %>%
-  summarise(confirm = sum(cases_new, na.rm = TRUE)) %>%
-  ungroup()
+  # use {tidyr} to preprocess missing values
+  tidyr::replace_na(base::list(cases_new = 0)) %>%
+  # use {incidence2} to compute the daily incidence
+  incidence2::incidence(
+    date_index = "date",
+    counts = "cases_new",
+    count_values_to = "confirm",
+    date_names_to = "date",
+    complete_dates = TRUE
+  ) %>% 
+  dplyr::select(-count_variable)
 
 # Incubation period
-incubation_period_fixed <- EpiNow2::dist_spec(
-  mean = 4, sd = 2,
-  max = 20, distribution = "gamma"
+incubation_period_fixed <- EpiNow2::Gamma(
+  mean = 4,
+  sd = 2,
+  max = 20
 )
 
 # Log-tranformed mean
-log_mean <- EpiNow2::convert_to_logmean(2, 1)
+log_mean <- EpiNow2::convert_to_logmean(mean = 2, sd = 1)
 
 # Log-transformed std
-log_sd <- EpiNow2::convert_to_logsd(2, 1)
+log_sd <- EpiNow2::convert_to_logsd(mean = 2, sd = 1)
 
 # Reporting dalay
-reporting_delay_fixed <- EpiNow2::dist_spec(
-  mean = log_mean, sd = log_sd,
-  max = 10, distribution = "lognormal"
+reporting_delay_fixed <- EpiNow2::LogNormal(
+  mean = log_mean,
+  sd = log_sd,
+  max = 10
 )
 
 # Generation time
-generation_time_fixed <- EpiNow2::dist_spec(
-  mean = 3.6, sd = 3.1,
-  max = 20, distribution = "lognormal"
+generation_time_fixed <- EpiNow2::LogNormal(
+  mean = 3.6,
+  sd = 3.1,
+  max = 20
 )
 
 # Rt mean prior
-rt_log_mean <- EpiNow2::convert_to_logmean(2, 1)
+rt_mean <- 2
 
-# Rt std prior
-rt_log_sd <- EpiNow2::convert_to_logsd(2, 1)
+# Rt standard deviation prior
+rt_sd <- 2
 ```
 
 Now we can extract the short-term forecast using:
 
 ```{r, message = FALSE, warning=FALSE, eval = TRUE}
 # Assume we only have the first 90 days of this data
-reported_cases <- cases[1:90, ]
+reported_cases <- cases %>% 
+  dplyr::slice_head(n = 90)
 
 # Estimate and forecast
 estimates <- EpiNow2::epinow(
-  reported_cases = reported_cases,
-  generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd))
+  data = reported_cases,
+  generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
+  delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
+  rt = EpiNow2::rt_opts(prior = base::list(mean = rt_mean, sd = rt_sd))
 )
 ```
 
@@ -170,14 +181,15 @@ To run the inference framework with this observation process, we add `obs = obs_
 obs_scale <- base::list(mean = 0.4, sd = 0.01)
 
 # Assume we only have the first 90 days of this data
-reported_cases <- cases[1:90, ]
+reported_cases <- cases %>% 
+  dplyr::slice_head(n = 90)
 
 # Estimate and forecast
 estimates <- EpiNow2::epinow(
-  reported_cases = reported_cases,
-  generation_time = generation_time_opts(generation_time_fixed),
-  delays = delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  rt = rt_opts(prior = list(mean = rt_log_mean, sd = rt_log_sd)),
+  data = reported_cases,
+  generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
+  delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
+  rt = EpiNow2::rt_opts(prior = base::list(mean = rt_mean, sd = rt_sd)),
   # Add observation model
   obs = EpiNow2::obs_opts(scale = obs_scale)
 )
@@ -212,20 +224,24 @@ First, we must format our data to have the following columns:
 
 ```{r}
 reported_cases_deaths <- incidence2::covidregionaldataUK %>%
-  select(date, cases_new, deaths_new) %>%
-  group_by(date) %>%
-  summarise(
-    primary = sum(cases_new, na.rm = TRUE),
-    secondary = sum(deaths_new, na.rm = TRUE)
-  ) %>%
-  ungroup()
+  # use {tidyr} to preprocess missing values
+  tidyr::replace_na(base::list(cases_new = 0, deaths_new = 0)) %>%
+  # use {incidence2} to compute the daily incidence
+  incidence2::incidence(
+    date_index = "date",
+    counts = c(primary = "cases_new", secondary = "deaths_new"),
+    date_names_to = "date",
+    complete_dates = TRUE
+  ) %>% 
+  # rearrange to wide format for {EpiNow2}
+  pivot_wider(names_from = count_variable, values_from = count)
 ```
 
 ```{r,echo=FALSE,fig.cap="Distribution of secondary cases (deaths). We will drop the first 30 days with no observed deaths. We will use the deaths between day 31 and day 60 to estimate the secondary observations. We will forecast deaths from day 61 to day 90."}
 
 # distribution of secondary observations
 estimate_forecast <- reported_cases_deaths %>%
-  slice(1:90) %>%
+  slice_head(n = 90) %>%
   # rownames_to_column() %>%
   identity()
 
@@ -284,22 +300,26 @@ There are further function inputs to `estimate_secondary()` which can be specifi
 To find the model fit between cases and deaths: 
 ```{r}
 # Estimate from day 31 to day 60 of this data
-cases_to_estimate <- reported_cases_deaths[31:60, ]
+cases_to_estimate <- reported_cases_deaths %>% 
+  slice(31:60)
 
 # Estimate secondary cases
 estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
-  reports = cases_to_estimate,
+  data = cases_to_estimate,
   secondary = EpiNow2::secondary_opts(type = "incidence"),
-  delays = EpiNow2::delay_opts(EpiNow2::dist_spec(
-    mean = 14, sd = 5,
-    max = 30, distribution = "gamma"
-  )
+  delays = EpiNow2::delay_opts(
+    EpiNow2::Gamma(
+      mean = 14,
+      sd = 5,
+      max = 30
+    )
   )
 )
 ```
 
 
 ::::::::::::::::::::::::::::::::::::: callout
+
 ### Be cautious of time-scale 
 
 In the early stages of an outbreak there can be substantial changes in testing and reporting. If there are testing changes from one month to another, then there will be a bias in the model fit. Therefore, you should be cautious of the time-scale of data used in the model fit and forecast.
@@ -317,8 +337,9 @@ To use this model fit to forecast deaths, we pass a data frame consisting of the
 *Note : in this episode we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
 ```{r}
 # Forecast from day 61 to day 90
-cases_to_forecast <- reported_cases_deaths[61:90, c("date", "primary")]
-colnames(cases_to_forecast) <- c("date", "value")
+cases_to_forecast <- reported_cases_deaths %>% 
+  dplyr::slice(61:90) %>% 
+  dplyr::select(date, value = primary)
 ```
 
 To forecast, we use the model fit `estimate_cases_to_deaths`:  
@@ -388,17 +409,17 @@ As the data consists of date of symptom onset, we only need to specify a delay d
 
 We specify the distributions with some uncertainty around the mean and standard deviation of the log normal distribution for the incubation period and the Gamma distribution for the generation time.
 
-```{r,eval=TRUE,echo=TRUE}
-ebola_incubation_period <- EpiNow2::dist_spec(
-  mean = 2.487, sd = 0.330,
-  mean_sd = 0.5, sd_sd = 0.5,
-  max = 20, distribution = "lognormal"
+```{r,eval=TRUE,echo=TRUE,warning=FALSE,message=FALSE}
+ebola_incubation_period <- EpiNow2::LogNormal(
+  mean = EpiNow2::Normal(mean = 2.487,sd = 0.5),
+  sd = EpiNow2::Normal(mean = 0.330, sd = 0.5),
+  max = 20
 )
 
-ebola_generation_time <- EpiNow2::dist_spec(
-  mean = 15.3, sd = 10.1,
-  mean_sd = 0.5, sd_sd = 0.5,
-  max = 30, distribution = "gamma"
+ebola_generation_time <- EpiNow2::Gamma(
+  mean = EpiNow2::Normal(mean = 15.3,sd = 0.5),
+  sd = EpiNow2::Normal(mean = 10.1, sd = 0.5),
+  max = 30
 )
 ```
 
@@ -422,18 +443,18 @@ We define an observation model to scale the estimated and forecast number of new
 ```{r}
 # Define observation model
 # mean of 80% and standard deviation of 1%
-ebola_obs_scale <- list(mean = 0.8, sd = 0.01)
+ebola_obs_scale <- base::list(mean = 0.8, sd = 0.01)
 ```
 
 As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 
 
 ```{r,eval=TRUE,echo=TRUE, message = FALSE}
 ebola_estimates <- EpiNow2::epinow(
-  reported_cases = ebola_cases[1:120, ], # first 3 months of data only
-  generation_time = generation_time_opts(ebola_generation_time),
+  data = ebola_cases[1:120, ], # first 3 months of data only
+  generation_time = EpiNow2::generation_time_opts(ebola_generation_time),
   delays = EpiNow2::delay_opts(ebola_incubation_period),
   # Add observation model
-  obs = obs_opts(scale = ebola_obs_scale),
+  obs = EpiNow2::obs_opts(scale = ebola_obs_scale),
   # horizon needs to be 14 days to create two week forecast (default is 7 days)
   horizon = 14
 )
@@ -456,6 +477,7 @@ plot(ebola_estimates)
 
 
 ::::::::::::::::::::::::::::::::::::: callout
+
 ### Forecasting with estimates of $R_t$
 
 By default, the short-term forecasts are created using the latest estimate of the reproduction number $R_t$. As this estimate is based on partial data, it has considerable uncertainty.  
@@ -463,7 +485,7 @@ By default, the short-term forecasts are created using the latest estimate of th
 The reproduction number that is projected into the future can be changed to a less recent estimate based on more data using `rt_opts()`:
 
 ```{r, eval = FALSE}
-rt_opts(future = "estimate")
+EpiNow2::rt_opts(future = "estimate")
 ```
 
 The result will be less uncertain forecasts (as they are based on $R_t$ with a narrower uncertainty interval) but the forecasts will be based on less recent estimates of $R_t$ and assume no change since then.
