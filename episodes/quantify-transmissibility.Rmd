@@ -236,8 +236,8 @@ We specify this using `Normal()` for each argument: the mean ($\mu=4$ with $\sig
 
 ```{r,warning=FALSE,message=FALSE}
 incubation_period_variable <- EpiNow2::Gamma(
-  mean = Normal(mean = 4,sd = 0.5),
-  sd = Normal(mean = 2,sd = 0.5),
+  mean = EpiNow2::Normal(mean = 4, sd = 0.5),
+  sd = EpiNow2::Normal(mean = 2, sd = 0.5),
   max = 20
 )
 
@@ -260,7 +260,7 @@ log_sd <- convert_to_logsd(2, 1)
 
 x <- seq(from = 0, to = 10, length = 1000)
 df <- data.frame(
-  x = x, 
+  x = x,
   density = dlnorm(x, meanlog = log_mean, sdlog = log_sd)
 )
 
