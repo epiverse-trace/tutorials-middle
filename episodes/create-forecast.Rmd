@@ -450,7 +450,7 @@ As we want to also create a two week forecast, we specify `horizon = 14` to fore
 
 ```{r,eval=TRUE,echo=TRUE, message = FALSE}
 ebola_estimates <- EpiNow2::epinow(
-  data = ebola_cases[1:120, ], # first 3 months of data only
+  data = ebola_cases %>% dplyr::slice(1:120), # first 3 months of data only
   generation_time = EpiNow2::generation_time_opts(ebola_generation_time),
   delays = EpiNow2::delay_opts(ebola_incubation_period),
   # Add observation model
