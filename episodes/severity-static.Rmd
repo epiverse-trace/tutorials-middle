@@ -127,7 +127,8 @@ Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the f
 data("ebola1976")
 
 # Assume we only have the first 30 days of this data
-ebola1976[1:30, ] %>% as_tibble()
+ebola1976 %>% slice_head(n = 30) %>%
+  as_tibble()
 ```
 
 :::::::::::::::::: callout
@@ -155,7 +156,7 @@ When we apply `cfr_static()` to `data` directly, we are calculating the naive CF
 
 ```{r}
 # Calculate the naive CFR for the first 30 days
-cfr_static(data = ebola1976[1:30, ])
+cfr_static(data = ebola1976 %>% slice_head(n = 30))
 ```
 
 :::::::::::::::::::::::::::::::::::::::: challenge
@@ -293,7 +294,7 @@ To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with
 # Calculate the delay-adjusted CFR
 # for the first 30 days
 cfr_static(
-  data = ebola1976[1:30, ],
+  data = ebola1976 %>% slice_head(n = 30),
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
 ```
@@ -301,16 +302,16 @@ cfr_static(
 ```{r,echo=FALSE}
 out_delay_adjusted <-
   cfr_static(
-    data = ebola1976[1:30, ],
+    data = ebola1976 %>% slice_head(n = 30),
     delay_density = function(x) density(onset_to_death_ebola, x)
   )
 
-out_mean <- out_delay_adjusted %>% pull(severity_mean)
+out_estimate <- out_delay_adjusted %>% pull(severity_estimate)
 out_low <- out_delay_adjusted %>% pull(severity_low)
 out_high <- out_delay_adjusted %>% pull(severity_high)
 ```
 
-The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_mean` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
+The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_estimate` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
 
 :::::::::::::::::: callout
 
@@ -504,11 +505,11 @@ bind_rows(
     alpha = 0.2, show.legend = FALSE
   ) +
   geom_line(
-    aes(date, severity_mean, colour = method)
+    aes(date, severity_estimate, colour = method)
   ) +
   geom_hline(
     data = rolling_cfr_adjusted_end,
-    aes(yintercept = severity_mean)
+    aes(yintercept = severity_estimate)
   ) +
   geom_hline(
     data = rolling_cfr_adjusted_end,
