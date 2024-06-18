@@ -127,7 +127,7 @@ cases <- incidence2::covidregionaldataUK %>%
     count_values_to = "confirm",
     date_names_to = "date",
     complete_dates = TRUE
-  ) %>% 
+  ) %>%
   dplyr::select(-count_variable)
 ```
 
@@ -156,8 +156,8 @@ There are case data available for `r dim(cases)[1]` days, but in an outbreak sit
 
 ```{r echo = FALSE}
 # keep the first 90 dates and visualize epicurve
-cases %>% 
-  dplyr::slice_head(n = 90) %>% 
+cases %>%
+  dplyr::slice_head(n = 90) %>%
   # use ggplot2
   ggplot(aes(x = date, y = confirm)) +
   geom_col() +
@@ -283,7 +283,7 @@ epiparameter::epidist(
     meanlog = log_mean,
     sdlog = log_sd
   )
-) %>% 
+) %>%
   plot()
 ```
 
@@ -388,7 +388,7 @@ reporting_delay_fixed <- EpiNow2::LogNormal(
 Now you are ready to run `EpiNow2::epinow()` to estimate the time-varying reproduction number:
 
 ```{r, message = FALSE, eval = TRUE}
-reported_cases <- cases %>% 
+reported_cases <- cases %>%
   dplyr::slice_head(n = 90)
 
 estimates <- EpiNow2::epinow(
@@ -483,14 +483,14 @@ regional_cases <- incidence2::covidregionaldataUK %>%
     count_values_to = "confirm",
     date_names_to = "date",
     complete_dates = TRUE
-  ) %>% 
+  ) %>%
   dplyr::select(-count_variable)
 
 # keep the first 90 dates for all regions
 
 # get vector of first 90 dates
 date_range <- regional_cases %>%
-  dplyr::distinct(date) %>% 
+  dplyr::distinct(date) %>%
   # from incidence2, dates are already arranged in ascendant order
   dplyr::slice_head(n = 90) %>%
   dplyr::pull(date)
