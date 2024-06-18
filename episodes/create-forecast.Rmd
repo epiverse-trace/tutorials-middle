@@ -441,7 +441,7 @@ ebola_cases_raw <- readr::read_csv(
 Preprocess and adapt the raw data for `{EpiNow2}`:
 
 ```{r}
-ebola_cases <- ebola_cases_raw %>% 
+ebola_cases <- ebola_cases_raw %>%
   # use {tidyr} to preprocess missing values
   tidyr::replace_na(base::list(confirm = 0)) %>%
   # use {incidence2} to compute the daily incidence
