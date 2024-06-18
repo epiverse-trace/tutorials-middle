@@ -54,11 +54,16 @@ In the next tutorials we will focus on how to use the functions in `{EpiNow2}` t
 
 In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We'll get input data from `{incidence2}`. We’ll use the `{tidyr}` and `{dplyr}` packages to arrange some of its outputs, `{ggplot2}` to visualize case distribution, and the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
 
-```{r,message=FALSE,warning=FALSE}
+```r
 library(EpiNow2)
 library(incidence2)
 library(tidyverse)
 ```
+
+```{r,echo=FALSE,eval=TRUE,message=FALSE,warning=FALSE}
+library(tidyverse)
+```
+
 
 ::::::::::::::::::: checklist
 
@@ -272,9 +277,11 @@ log_sd <- EpiNow2::convert_to_logsd(mean = 2, sd = 1)
 
 Using `epiparameter::epidist()` we can create a custom distribution. The log normal distribution will look like:
 
-```{r,message=FALSE,warning=FALSE}
+```r
 library(epiparameter)
+```
 
+```{r,message=FALSE,warning=FALSE}
 epiparameter::epidist(
   disease = "covid",
   epi_dist = "reporting delay",

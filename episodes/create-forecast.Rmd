@@ -50,8 +50,12 @@ In this tutorial we are going to learn how to use the `{EpiNow2}` package to for
 
 We’ll use the pipe `%>%` operator to connect functions, so let’s also call to the `{tidyverse}` package:
 
-```{r,message=FALSE,warning=FALSE}
+```r
 library(EpiNow2)
+library(tidyverse)
+```
+
+```{r,echo=FALSE,eval=TRUE,message=FALSE,warning=FALSE}
 library(tidyverse)
 ```
 
