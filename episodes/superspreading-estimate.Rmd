@@ -131,9 +131,9 @@ To ensure these unique pairs, we can check on replicates for infectees:
 ```{r}
 # no infector-infectee pairs are replicated
 epi_contacts %>%
-  pluck("contacts") %>%
-  group_by(to) %>%
-  filter(n() > 1)
+  purrr::pluck("contacts") %>%
+  dplyr::group_by(to) %>%
+  dplyr::filter(dplyr::n() > 1)
 ```
 
 :::::::::::::::::::::::::::
@@ -143,8 +143,8 @@ When each infector-infectee row is unique, the number of entries per infector co
 ```{r}
 # count secondary cases per infector
 infector_secondary <- epi_contacts %>%
-  pluck("contacts") %>%
-  count(from, name = "secondary_cases")
+  purrr::pluck("contacts") %>%
+  dplyr::count(from, name = "secondary_cases")
 ```
 
 But this output only contains number of secondary cases for reported infectors, not for each of the individuals in the whole `epicontacts` object.
@@ -156,11 +156,11 @@ all_secondary <- epi_contacts %>%
   # extract ids in contact *and* linelist using "which" argument
   epicontacts::get_id(which = "all") %>%
   # transform vector to dataframe to use left_join()
-  enframe(name = NULL, value = "from") %>%
+  tibble::enframe(name = NULL, value = "from") %>%
   # join count secondary cases per infectee
-  left_join(infector_secondary) %>%
+  dplyr::left_join(infector_secondary) %>%
   # infectee with missing secondary cases are replaced with zero
-  replace_na(
+  tidyr::replace_na(
     replace = list(secondary_cases = 0)
   )
 ```
@@ -170,7 +170,7 @@ From a histogram of the `all_secondary` object, we can identify the **individual
 ```{r,echo=FALSE,eval=FALSE}
 # arrange in descendant order of secondary cases
 all_secondary %>%
-  arrange(desc(secondary_cases))
+  dplyr::arrange(dplyr::desc(secondary_cases))
 ```
 
 <!-- Visualizing the number of secondary cases on a histogram will help us to relate this with the statistical distribution to fit: -->
@@ -204,8 +204,8 @@ mpox_params <- epiparameter::get_parameters(mpox)
 
 # calculate density fit
 fit_density <-
-  tibble(quantile = 0:40) %>%
-  mutate(
+  dplyr::tibble(quantile = 0:40) %>%
+  dplyr::mutate(
     density = dnbinom(
       x = quantile,
       mu = mpox_params["mean"],
@@ -294,18 +294,18 @@ ebola_contacts <-
 # count secondary cases
 
 ebola_infector_secondary <- ebola_contacts %>%
-  pluck("contacts") %>%
-  count(from, name = "secondary_cases")
+  purrr::pluck("contacts") %>%
+  dplyr::count(from, name = "secondary_cases")
 
 ebola_secondary <- ebola_contacts %>%
   # extract ids in contact *and* linelist using "which" argument
   epicontacts::get_id(which = "all") %>%
   # transform vector to dataframe to use left_join()
-  enframe(name = NULL, value = "from") %>%
+  tibble::enframe(name = NULL, value = "from") %>%
   # join count secondary cases per infectee
-  left_join(ebola_infector_secondary) %>%
+  dplyr::left_join(ebola_infector_secondary) %>%
   # infectee with missing secondary cases are replaced with zero
-  replace_na(
+  tidyr::replace_na(
     replace = list(secondary_cases = 0)
   )
 
@@ -336,8 +336,8 @@ library(fitdistrplus)
 
 ## fit distribution
 offspring_fit <- all_secondary %>%
-  pull(secondary_cases) %>%
-  fitdist(distr = "nbinom")
+  dplyr::pull(secondary_cases) %>%
+  fitdistrplus::fitdist(distr = "nbinom")
 
 offspring_fit
 ```
@@ -371,15 +371,15 @@ We can overlap the estimated density values of the fitted negative binomial dist
 ```{r,echo=FALSE}
 # calculate density fit
 fit_density <-
-  tibble(quantile = 0:40) %>%
-  mutate(
+  tibble::tibble(quantile = 0:40) %>%
+  dplyr::mutate(
     density = dnbinom(
       x = quantile,
       mu = offspring_fit$estimate[["mu"]],
       size = mid
     )
   ) %>%
-  mutate(label = "Fitted\nnegative\nbinomial\ndistribution")
+  dplyr::mutate(label = "Fitted\nnegative\nbinomial\ndistribution")
 
 # plot offspring distribution with density fit
 ggplot() +
@@ -449,8 +449,8 @@ Review how we fitted a negative binomial distribution using the `fitdistrplus::f
 
 ```{r}
 ebola_offspring <- ebola_secondary %>%
-  pull(secondary_cases) %>%
-  fitdist(distr = "nbinom")
+  dplyr::pull(secondary_cases) %>%
+  fitdistrplus::fitdist(distr = "nbinom")
 
 ebola_offspring
 ```
@@ -510,13 +510,13 @@ library(superspreading)
 library(tidyverse)
 
 # list of diseases with offspring distribution
-epidist_string <- epidist_db(
+epidist_string <- epiparameter::epidist_db(
   epi_dist = "offspring distribution"
 ) %>%
-  list_distributions() %>%
+  epiparameter::parameter_tbl() %>%
   dplyr::select(disease) %>%
-  distinct() %>%
-  as_tibble()
+  dplyr::distinct() %>%
+  dplyr::as_tibble()
 
 # get percent of cases that cause percent of transmission
 across_offspring <- epidist_string %>%
@@ -642,7 +642,7 @@ set.seed(33)
 # secondary cases from a primary case,
 # given known reproduction number and
 # dispersion parameter.
-proportion_cluster_size(
+superspreading::proportion_cluster_size(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
   cluster_size = c(5, 10, 25)
@@ -653,15 +653,15 @@ proportion_cluster_size(
 # Set seed for random number generator
 set.seed(33)
 
-cluster_probability <- proportion_cluster_size(
+cluster_probability <- superspreading::proportion_cluster_size(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
   cluster_size = c(5, 10, 25)
 )
 
 cluster_probability_percent <- cluster_probability %>%
-  select(prop_25) %>%
-  pull(prop_25)
+  dplyr::select(prop_25) %>%
+  dplyr::pull(prop_25)
 
 # cluster_probability_percent
 ```
@@ -696,7 +696,7 @@ Review how we estimated the probability of having clusters of a fixed size, give
 # secondary cases from a primary case,
 # given known reproduction number and
 # dispersion parameter.
-proportion_cluster_size(
+superspreading::proportion_cluster_size(
   R = ebola_offspring$estimate["mu"],
   k = ebola_offspring$estimate["size"],
   cluster_size = c(5, 10, 25)
@@ -738,7 +738,7 @@ ebola_mu_mid <- ebola_offspring$estimate["mu"]
 
 # get 99th-percentile from poisson distribution
 # with mean equal to mu
-qpois(
+stats::qpois(
   p = 0.99,
   lambda = ebola_mu_mid
 )
@@ -767,14 +767,14 @@ To use `superspreading::proportion_transmission()` we recommend to read the [Est
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 library(epiparameter)
 
-epidist_string <- epidist_db(
+epidist_string <- epiparameter::epidist_db(
   epi_dist = "offspring distribution"
 ) %>%
-  list_distributions() %>%
+  epiparameter::parameter_tbl() %>%
   dplyr::select(disease) %>%
-  distinct() %>%
-  pull() %>%
-  paste(collapse = ", ")
+  dplyr::distinct() %>%
+  dplyr::pull() %>%
+  base::paste(collapse = ", ")
 ```
 
 Currently, `{epiparameter}` has offspring distributions for `r epidist_string`. Let's access the offspring distribution `mean` and `dispersion` parameters for SARS-1:
@@ -808,7 +808,7 @@ ebola_params
 # estimate
 # proportion of cases that
 # generate 80% of transmission
-proportion_transmission(
+superspreading::proportion_transmission(
   R = ebola_params[["mean"]],
   k = ebola_params[["dispersion"]],
   percent_transmission = 0.8
@@ -819,7 +819,7 @@ proportion_transmission(
 # estimate
 # proportion of cases that
 # generate 80% of transmission
-proportion_transmission(
+superspreading::proportion_transmission(
   R = sars_params[["mean"]],
   k = sars_params[["dispersion"]],
   percent_transmission = 0.8
@@ -831,7 +831,7 @@ proportion_transmission(
 # estimate
 # proportion of cases that
 # generate 80% of transmission
-proportion_transmission(
+superspreading::proportion_transmission(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
   percent_transmission = 0.8
