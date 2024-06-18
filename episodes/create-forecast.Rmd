@@ -7,7 +7,6 @@ editor_options:
 ---
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
-library(EpiNow2)
 withr::local_options(base::list(mc.cores = 4))
 ```
 
@@ -89,7 +88,7 @@ cases <- incidence2::covidregionaldataUK %>%
     count_values_to = "confirm",
     date_names_to = "date",
     complete_dates = TRUE
-  ) %>% 
+  ) %>%
   dplyr::select(-count_variable)
 
 # Incubation period
@@ -130,8 +129,8 @@ Now we can extract the short-term forecast using:
 
 ```{r, message = FALSE, warning=FALSE, eval = TRUE}
 # Assume we only have the first 90 days of this data
-reported_cases <- cases %>% 
-  dplyr::slice_head(n = 90)
+reported_cases <- cases %>%
+  dplyr::slice(1:90)
 
 # Estimate and forecast
 estimates <- EpiNow2::epinow(
@@ -181,8 +180,8 @@ To run the inference framework with this observation process, we add `obs = obs_
 obs_scale <- base::list(mean = 0.4, sd = 0.01)
 
 # Assume we only have the first 90 days of this data
-reported_cases <- cases %>% 
-  dplyr::slice_head(n = 90)
+reported_cases <- cases %>%
+  dplyr::slice(1:90)
 
 # Estimate and forecast
 estimates <- EpiNow2::epinow(
@@ -232,7 +231,7 @@ reported_cases_deaths <- incidence2::covidregionaldataUK %>%
     counts = c(primary = "cases_new", secondary = "deaths_new"),
     date_names_to = "date",
     complete_dates = TRUE
-  ) %>% 
+  ) %>%
   # rearrange to wide format for {EpiNow2}
   pivot_wider(names_from = count_variable, values_from = count)
 ```
@@ -293,14 +292,14 @@ We must specify the type of observation using `type` in `secondary_opts()`, opti
 
 In this example we specify `secondary_opts(type = "incidence")`. See `?EpiNow2::secondary_opts` for more detail.
 
-The final key input is the delay distribution between the primary and secondary observations. Here this is the delay between case report and death, we assume this follows a gamma distribution with mean of 14 days and standard deviation of 5 days (Alternatively, we can use `{epiparameter}` to [access epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html)). Using `dist_spec()` we specify a fixed gamma distribution.
+The final key input is the delay distribution between the primary and secondary observations. Here this is the delay between case report and death, we assume this follows a gamma distribution with mean of 14 days and standard deviation of 5 days (Alternatively, we can use `{epiparameter}` to [access epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html)). Using `Gamma()` we specify a fixed gamma distribution.
 
 There are further function inputs to `estimate_secondary()` which can be specified, including adding an observation process, see `?EpiNow2::estimate_secondary` for detail on these options. 
 
 To find the model fit between cases and deaths: 
 ```{r}
 # Estimate from day 31 to day 60 of this data
-cases_to_estimate <- reported_cases_deaths %>% 
+cases_to_estimate <- reported_cases_deaths %>%
   slice(31:60)
 
 # Estimate secondary cases
@@ -337,8 +336,8 @@ To use this model fit to forecast deaths, we pass a data frame consisting of the
 *Note : in this episode we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
 ```{r}
 # Forecast from day 61 to day 90
-cases_to_forecast <- reported_cases_deaths %>% 
-  dplyr::slice(61:90) %>% 
+cases_to_forecast <- reported_cases_deaths %>%
+  dplyr::slice(61:90) %>%
   dplyr::select(date, value = primary)
 ```
 
@@ -411,13 +410,13 @@ We specify the distributions with some uncertainty around the mean and standard 
 
 ```{r,eval=TRUE,echo=TRUE,warning=FALSE,message=FALSE}
 ebola_incubation_period <- EpiNow2::LogNormal(
-  mean = EpiNow2::Normal(mean = 2.487,sd = 0.5),
+  mean = EpiNow2::Normal(mean = 2.487, sd = 0.5),
   sd = EpiNow2::Normal(mean = 0.330, sd = 0.5),
   max = 20
 )
 
 ebola_generation_time <- EpiNow2::Gamma(
-  mean = EpiNow2::Normal(mean = 15.3,sd = 0.5),
+  mean = EpiNow2::Normal(mean = 15.3, sd = 0.5),
   sd = EpiNow2::Normal(mean = 10.1, sd = 0.5),
   max = 30
 )
