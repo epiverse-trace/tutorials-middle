@@ -127,7 +127,8 @@ Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the f
 data("ebola1976")
 
 # Assume we only have the first 30 days of this data
-ebola1976 %>% slice_head(n = 30) %>%
+ebola1976 %>%
+  slice_head(n = 30) %>%
   as_tibble()
 ```
 
