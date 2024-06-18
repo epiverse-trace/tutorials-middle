@@ -59,10 +59,17 @@ We are going to use data from the `{outbreaks}` package, manage the linelist and
 
 We’ll use the pipe `%>%` to connect some of the functions from these packages, so let’s also call the `{tidyverse}` package.
 
-```{r,message=FALSE,warning=FALSE}
+```r
 library(outbreaks)
 library(epicontacts)
 library(fitdistrplus)
+library(superspreading)
+library(tidyverse)
+```
+
+```{r,message=FALSE,warning=FALSE,eval=TRUE,echo=FALSE}
+library(outbreaks)
+library(epicontacts)
 library(superspreading)
 library(tidyverse)
 ```
@@ -331,9 +338,11 @@ To empirically estimate the dispersion parameter $k$, we could fit a negative bi
 
 We can fit distributions to data using the `{fitdistrplus}` package, which provides maximum likelihood estimates.
 
-```{r}
+```r
 library(fitdistrplus)
+```
 
+```{r}
 ## fit distribution
 offspring_fit <- all_secondary %>%
   dplyr::pull(secondary_cases) %>%
