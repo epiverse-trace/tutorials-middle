@@ -85,7 +85,7 @@ simulated_chains_map <-
     .f = function(sim) {
       simulate_chains(
         # simulation controls
-        index_cases = initial_cases,
+        n_chains = initial_cases,
         statistic = "size",
         # offspring
         offspring_dist = rnbinom,
@@ -305,7 +305,7 @@ Now we are prepared to use the `simulate_chains()` function from `{epichains}` t
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 simulate_chains(
   # simulation controls
-  index_cases = 5,
+  n_chains = 5,
   statistic = "size",
   # offspring
   offspring_dist = rnbinom,
@@ -347,7 +347,7 @@ We need to specify three additional elements:
 
 - `set.seed(<integer>)`, which is a random number generator function with a specified seed value, the `<integer>` number, to ensure consistent results across different runs of the code.
 - `number_chains`, which defines the number of simulations to run.
-- `initial_cases` defines the number of initial cases to input to the `index_cases` argument explained in the lines above.
+- `initial_cases` defines the number of initial cases to input to the `n_chains` argument explained in the lines above.
 
 ```{r}
 # Set seed for random number generator
@@ -416,7 +416,7 @@ simulated_chains_map <-
     .f = function(sim) {
       simulate_chains(
         # simulation controls
-        index_cases = initial_cases,
+        n_chains = initial_cases,
         statistic = "size",
         # offspring
         offspring_dist = rnbinom,
@@ -450,7 +450,7 @@ simulated_chains_map %>%
 chains_subgroup <- simulated_chains_map %>%
   as_tibble() %>%
   group_by(chain_id) %>%
-  distinct(infector_id) %>%
+  distinct(infector) %>%
   count(chain_id) %>%
   filter(n < 5, n >= 3) %>%
   pull(chain_id)
@@ -524,11 +524,11 @@ Chain `r chain_to_observe` tells us a **story**: "In the first transmission gene
 The output data frame collects **infectees** as the observation unit: 
 
 - Each infectee has a `sim_id`. 
-- Each _infectee_ that behaved as an _infector_ is registered in the `infector_id` column using `sim_id` of that infectee. 
+- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `sim_id` of that infectee. 
 - Each infectee got infected in a specific `generation` and (continuous) `time`. 
 - The simulation number is registered under the `chain_id` column.
 
-**Note:** The `Number of infectors (known)` includes the `NA` observation under the `infector_id` column. This refers to the infector specified as index case (in the `index_cases` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
+**Note:** The `Number of infectors (known)` includes the `NA` observation under the `infector` column. This refers to the infector specified as index case (in the `n_chains` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
 
 :::::::::::::::::::::::::
 
@@ -801,7 +801,7 @@ simulated_chains_mpox <-
     .f = function(sim) {
       simulate_chains(
         # simulation controls
-        index_cases = initial_cases,
+        n_chains = initial_cases,
         statistic = "size",
         # offspring
         offspring_dist = rnbinom,
@@ -986,7 +986,7 @@ sim_multiple_chains <-
     .x = seq_len(number_chains),
     .f = function(sim) {
       simulate_chains(
-        index_cases = initial_cases,
+        n_chains = initial_cases,
         # stopping
         statistic = "size",
         # offspring
