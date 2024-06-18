@@ -103,6 +103,19 @@ During the tutorial, we will need a number of R packages. Packages contain usefu
 Open RStudio and **copy and paste** the following code chunk into the [console window](https://docs.posit.co/ide/user/ide/guide/code/console.html), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command:
 
 ```r
+# for episodes on access delays and quantify transmission
+
+new_packages <- c(
+  "EpiNow2",
+  "epiverse-trace/epiparameter",
+  "incidence2",
+  "tidyverse"
+)
+
+pak::pkg_install(new_packages)
+```
+
+```r
 # for episodes on forecast and severity
 
 if(!require("pak")) install.packages("pak")
@@ -182,8 +195,7 @@ install.packages("superspreading", repos = c("https://epiverse-trace.r-universe.
 install.packages("epiparameter", repos = c("https://epiverse-trace.r-universe.dev"))
 
 # for epichains
-if(!require("remotes")) install.packages("remotes")
-remotes::install_github("epiverse-trace/epichains")
+install.packages("epichains", repos = c("https://epiverse-trace.r-universe.dev"))
 ```
 
 :::::::::::::::::::::::::::::
@@ -233,6 +245,15 @@ If the error persist, [contact us](#your-questions)!
 You should update **all of the packages** required for the tutorial, even if you installed them relatively recently. New versions bring improvements and important bug fixes.
 
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
+
+```r
+# for episodes on access delays and quantify transmission
+
+library(EpiNow2)
+library(epiparameter)
+library(incidence2)
+library(tidyverse)
+```
 
 ```r
 # for episodes on forecast and severity
