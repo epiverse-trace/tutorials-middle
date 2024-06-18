@@ -45,7 +45,7 @@ Individual variation in transmission can affect both the potential for an epidem
 How can we quantify the potential of a new infection to cause a large outbreak based on its reproduction number $R$ and the dispersion $k$ of its offspring distribution?
 
 ```{r,echo=FALSE,warning=FALSE,message=FALSE,fig.cap="Observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea, 2015, alongside with simulated transmission chains assuming an offspring distribution with $R=0.6$ and $k=0.02$."}
-library(epichains)
+
 library(epiparameter)
 library(tidyverse)
 library(outbreaks)
@@ -168,8 +168,13 @@ ggplot() +
 
 In this episode, we will use the `{epichains}` package to simulate transmission chains and estimate the potential for large outbreaks following the introduction of a new case. We are going to use it with functions from `{epiparameter}`, `{dplyr}` and `{purrr}`, so also loading the `{tidyverse}` package:
 
-```{r,message=FALSE,warning=FALSE}
+```r
 library(epichains)
+library(epiparameter)
+library(tidyverse)
+```
+
+```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=TRUE}
 library(epiparameter)
 library(tidyverse)
 ```
@@ -764,7 +769,6 @@ epiparameter::epidist_db(epi_dist = "serial interval") %>%
 # load packages -----------------------------------------------------------
 
 library(epiparameter)
-library(epichains)
 library(tidyverse)
 
 # delays ------------------------------------------------------------------
@@ -876,9 +880,11 @@ Check how these estimates vary non-linearly with respect to the mean reproductio
 
 <!-- Calculate the probability a new Mpox case will lead to a large outbreak in the absence of control measures. Use the appropriate package to access delay data from previous outbreaks. -->
 
-```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
+```r
 library(superspreading)
+```
 
+```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
 # estimate probability to contain
 superspreading::probability_contain(
   R = mers_offspring["mean"],
@@ -896,9 +902,11 @@ superspreading::probability_epidemic(
 )
 ```
 
-```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
+```r
 library(superspreading)
+```
 
+```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
 # estimate probability to contain
 superspreading::probability_contain(
   R = mpox_offspring_epidist["mean"],
@@ -951,13 +959,15 @@ c0 %>%
 
 ::::::::::: solution
 
-```{r,message=FALSE,warning=FALSE}
+```r
 # load packages ---------------------------
-library(fitdistrplus)
-library(epiparameter)
 library(epichains)
+library(epiparameter)
+library(fitdistrplus)
 library(tidyverse)
+```
 
+```{r,message=FALSE,warning=FALSE}
 # fit a negative binomial distribution ------------------------------------
 
 # Fitting a negative binomial distribution to the number of secondary cases
