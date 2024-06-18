@@ -157,7 +157,7 @@ When we apply `cfr_static()` to `data` directly, we are calculating the naive CF
 
 ```{r}
 # Calculate the naive CFR for the first 30 days
-cfr_static(data = ebola1976 %>% slice_head(n = 30))
+cfr::cfr_static(data = ebola1976 %>% slice_head(n = 30))
 ```
 
 :::::::::::::::::::::::::::::::::::::::: challenge
@@ -207,7 +207,7 @@ sarscov2_input %>%
     cases = cases_jpn,
     deaths = deaths_jpn
   ) %>%
-  cfr_static()
+  cfr::cfr_static()
 ```
 
 ::::::::::::::::::::
@@ -294,7 +294,7 @@ To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with
 ```{r}
 # Calculate the delay-adjusted CFR
 # for the first 30 days
-cfr_static(
+cfr::cfr_static(
   data = ebola1976 %>% slice_head(n = 30),
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
@@ -302,7 +302,7 @@ cfr_static(
 
 ```{r,echo=FALSE}
 out_delay_adjusted <-
-  cfr_static(
+  cfr::cfr_static(
     data = ebola1976 %>% slice_head(n = 30),
     delay_density = function(x) density(onset_to_death_ebola, x)
   )
@@ -388,7 +388,7 @@ sarscov2_input %>%
     cases = cases_jpn,
     deaths = deaths_jpn
   ) %>%
-  cfr_static(delay_density = function(x) density(sarscov2_delay, x))
+  cfr::cfr_static(delay_density = function(x) density(sarscov2_delay, x))
 ```
 
 Interpret the comparison between the naive and delay-adjusted CFR estimates.
@@ -701,11 +701,11 @@ mers_incidence %>%
 
 # Estimate delay-adjusted CFR
 mers_incidence %>%
-  prepare_data(
+  cfr::prepare_data(
     cases_variable = "dt_onset",
     deaths_variable = "dt_death"
   ) %>%
-  cfr_static(delay_density = function(x) density(mers_delay, x))
+  cfr::cfr_static(delay_density = function(x) density(mers_delay, x))
 ```
 
 
