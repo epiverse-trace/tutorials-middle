@@ -410,9 +410,26 @@ As the data consists of date of symptom onset, we only need to specify a delay d
 We specify the distributions with some uncertainty around the mean and standard deviation of the log normal distribution for the incubation period and the Gamma distribution for the generation time.
 
 ```{r,eval=TRUE,echo=TRUE,warning=FALSE,message=FALSE}
+epiparameter::epidist_db(disease = "ebola", epi_dist = "incubation") %>%
+  epiparameter::parameter_tbl()
+
+ebola_eichner <- epiparameter::epidist_db(
+  disease = "ebola",
+  epi_dist = "incubation",
+  author = "Eichner"
+)
+
+ebola_eichner_parameters <- epiparameter::get_parameters(ebola_eichner)
+
 ebola_incubation_period <- EpiNow2::LogNormal(
-  mean = EpiNow2::Normal(mean = 2.487, sd = 0.5),
-  sd = EpiNow2::Normal(mean = 0.330, sd = 0.5),
+  meanlog = EpiNow2::Normal(
+    mean = ebola_eichner_parameters["meanlog"],
+    sd = 0.5
+  ),
+  sdlog = EpiNow2::Normal(
+    mean = ebola_eichner_parameters["sdlog"],
+    sd = 0.5
+  ),
   max = 20
 )
 
