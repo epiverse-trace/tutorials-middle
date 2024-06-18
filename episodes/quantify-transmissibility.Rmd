@@ -416,7 +416,7 @@ estimates <- EpiNow2::epinow(
 We can optionally use the `stan = stan_opts()` argument and function. For the purpose of this tutorial on reducing computation time, we can specify a fixed number of `samples = 1000` and `chains = 3` to the `stan` argument using the `stan_opts()` function. We expect this to take approximately 3 minutes.
 
 ```r
-# you can add this argument
+# you can add the `stan` argument
 EpiNow2::epinow(
   ...,
   stan = EpiNow2::stan_opts(samples = 1000, chains = 3)
