@@ -122,11 +122,8 @@ generation_time_fixed <- EpiNow2::LogNormal(
   max = 20
 )
 
-# Rt mean prior
-rt_mean <- 2
-
-# Rt standard deviation prior
-rt_sd <- 2
+# define Rt prior distribution
+rt_prior <- EpiNow2::rt_opts(prior = base::list(mean = 2, sd = 2))
 ```
 
 Now we can extract the short-term forecast using:
@@ -141,7 +138,7 @@ estimates <- EpiNow2::epinow(
   data = reported_cases,
   generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  rt = EpiNow2::rt_opts(prior = base::list(mean = rt_mean, sd = rt_sd))
+  rt = rt_prior
 )
 ```
 
@@ -192,7 +189,7 @@ estimates <- EpiNow2::epinow(
   data = reported_cases,
   generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
-  rt = EpiNow2::rt_opts(prior = base::list(mean = rt_mean, sd = rt_sd)),
+  rt = rt_prior,
   # Add observation model
   obs = EpiNow2::obs_opts(scale = obs_scale)
 )
