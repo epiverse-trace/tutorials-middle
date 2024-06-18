@@ -427,16 +427,36 @@ We read the data input using `readr::read_csv()`. This function recognize that t
 
 ```{r, eval=TRUE,echo=FALSE,warning=FALSE,message=FALSE}
 # read data from the tutorial repository R project
-ebola_cases <- readr::read_csv(file.path("data", "ebola_cases.csv"))
+ebola_cases_raw <- readr::read_csv(file.path("data", "ebola_cases.csv"))
 ```
 
 ```{r,eval=FALSE,echo=TRUE,warning=FALSE,message=FALSE}
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
-ebola_cases <- readr::read_csv(
+ebola_cases_raw <- readr::read_csv(
   here::here("data", "raw-data", "ebola_cases.csv")
 )
 ```
+
+Preprocess and adapt the raw data for `{EpiNow2}`:
+
+```{r}
+ebola_cases <- ebola_cases_raw %>% 
+  # use {tidyr} to preprocess missing values
+  tidyr::replace_na(base::list(confirm = 0)) %>%
+  # use {incidence2} to compute the daily incidence
+  incidence2::incidence(
+    date_index = "date",
+    counts = "confirm",
+    count_values_to = "confirm",
+    date_names_to = "date",
+    complete_dates = TRUE
+  ) %>%
+  dplyr::select(-count_variable)
+
+dplyr::as_tibble(ebola_cases)
+```
+
 
 We define an observation model to scale the estimated and forecast number of new infections:
 
