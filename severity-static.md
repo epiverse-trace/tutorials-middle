@@ -73,12 +73,24 @@ In this tutorial we are going to learn how to use the `{cfr}` package to calcula
 We’ll use the pipe `%>%` operator to connect  functions, so let’s also call to the `{tidyverse}` package:
 
 
-```r
+``` r
 library(cfr)
 library(epiparameter)
 library(tidyverse)
 library(outbreaks)
 ```
+
+::::::::::::::::::: checklist
+
+### The double-colon
+
+The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
+
+For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
+
+This help us remember package functions and avoid namespace conflicts.
+
+:::::::::::::::::::
 
 ## Data sources for clinical severity
 
@@ -112,15 +124,17 @@ To calculate the naive CFR, the `{cfr}` package requires an input data frame wit
 Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the first Ebola outbreak in what was then called Zaire (now the Democratic Republic of the Congo) in 1976, as analysed by Camacho et al. (2014).
 
 
-```r
+``` r
 # Load the Ebola 1976 data provided with the {cfr} package
 data("ebola1976")
 
 # Assume we only have the first 30 days of this data
-ebola1976[1:30, ] %>% as_tibble()
+ebola1976 %>%
+  slice_head(n = 30) %>%
+  as_tibble()
 ```
 
-```{.output}
+``` output
 # A tibble: 30 × 3
    date       cases deaths
    <date>     <int>  <int>
@@ -159,14 +173,14 @@ Also, `{cfr}` currently works for *daily* data only, but not for other temporal 
 When we apply `cfr_static()` to `data` directly, we are calculating the naive CFR:
 
 
-```r
+``` r
 # Calculate the naive CFR for the first 30 days
-cfr_static(data = ebola1976[1:30, ])
+cfr::cfr_static(data = ebola1976 %>% slice_head(n = 30))
 ```
 
-```{.output}
-  severity_mean severity_low severity_high
-1     0.4740741    0.3875497     0.5617606
+``` output
+  severity_estimate severity_low severity_high
+1         0.4740741    0.3875497     0.5617606
 ```
 
 :::::::::::::::::::::::::::::::::::::::: challenge
@@ -192,7 +206,7 @@ We read the data input using `readr::read_csv()`. This function recognize that t
 
 
 
-```r
+``` r
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 sarscov2_input <-
@@ -200,12 +214,12 @@ sarscov2_input <-
 ```
 
 
-```r
+``` r
 # Inspect data
 sarscov2_input
 ```
 
-```{.output}
+``` output
 # A tibble: 93 × 3
    date       cases_jpn deaths_jpn
    <date>         <dbl>      <dbl>
@@ -225,19 +239,19 @@ sarscov2_input
 We can use `dplyr::rename()` to adapt the external data to fit the data input for `cfr_static()`.
 
 
-```r
+``` r
 # Rename before Estimate naive CFR
 sarscov2_input %>%
   dplyr::rename(
     cases = cases_jpn,
     deaths = deaths_jpn
   ) %>%
-  cfr_static()
+  cfr::cfr_static()
 ```
 
-```{.output}
-  severity_mean severity_low severity_high
-1    0.01895208   0.01828832    0.01963342
+``` output
+  severity_estimate severity_low severity_high
+1        0.01895208   0.01828832    0.01963342
 ```
 
 ::::::::::::::::::::
@@ -307,7 +321,7 @@ Real-time outbreaks may have a number of deaths that are insufficient to determi
 Let's use `{epiparameter}`:
 
 
-```r
+``` r
 # Get delay distribution
 onset_to_death_ebola <-
   epiparameter::epidist_db(
@@ -325,23 +339,30 @@ plot(onset_to_death_ebola, day_range = 0:40)
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
 
-```r
+``` r
 # Calculate the delay-adjusted CFR
 # for the first 30 days
-cfr_static(
-  data = ebola1976[1:30, ],
+cfr::cfr_static(
+  data = ebola1976 %>% slice_head(n = 30),
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
 ```
 
-```{.output}
-  severity_mean severity_low severity_high
-1         0.955         0.74             1
+``` output
+Total cases = 135 and p = 0.955: using Normal approximation to binomial likelihood.
+```
+
+``` output
+  severity_estimate severity_low severity_high
+1            0.9717       0.8201        0.9866
 ```
 
 
+``` output
+Total cases = 135 and p = 0.955: using Normal approximation to binomial likelihood.
+```
 
-The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is 0.955 with a 95% confidence interval between 0.74 and 1, slightly higher than the naive one.
+The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is 0.9717 with a 95% confidence interval between 0.8201 and 0.9866, slightly higher than the naive one.
 
 :::::::::::::::::: callout
 
@@ -378,7 +399,7 @@ Estimate the delay-adjusted CFR using the appropriate distribution delay. Then:
 We use `{epiparameter}` to access a delay distribution for the SARS-CoV-2 aggregated incidence data:
 
 
-```r
+``` r
 library(epiparameter)
 
 sarscov2_delay <-
@@ -394,7 +415,7 @@ We read the data input using `readr::read_csv()`. This function recognize that t
 
 
 
-```r
+``` r
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 sarscov2_input <-
@@ -402,12 +423,12 @@ sarscov2_input <-
 ```
 
 
-```r
+``` r
 # Inspect data
 sarscov2_input
 ```
 
-```{.output}
+``` output
 # A tibble: 93 × 3
    date       cases_jpn deaths_jpn
    <date>         <dbl>      <dbl>
@@ -427,19 +448,23 @@ sarscov2_input
 We can use `dplyr::rename()` to adapt the external data to fit the data input for `cfr_static()`.
 
 
-```r
+``` r
 # Rename before Estimate naive CFR
 sarscov2_input %>%
   dplyr::rename(
     cases = cases_jpn,
     deaths = deaths_jpn
   ) %>%
-  cfr_static(delay_density = function(x) density(sarscov2_delay, x))
+  cfr::cfr_static(delay_density = function(x) density(sarscov2_delay, x))
 ```
 
-```{.output}
-  severity_mean severity_low severity_high
-1         0.055        0.054         0.057
+``` output
+Total cases = 159402 and p = 0.0734: using Normal approximation to binomial likelihood.
+```
+
+``` output
+  severity_estimate severity_low severity_high
+1             0.047       0.0221        0.2931
 ```
 
 Interpret the comparison between the naive and delay-adjusted CFR estimates.
@@ -510,44 +535,60 @@ We can explore the **early** determination of the _delay-adjusted CFR_ using the
 ::::::::::::::::::::::
 
 
-```r
+``` r
 # Calculate the rolling daily naive CFR
 # for all the 73 days in the Ebola dataset
 rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
+```
 
+``` output
+`cfr_rolling()` is a convenience function to help understand how additional data influences the overall (static) severity. Use `cfr_time_varying()` instead to estimate severity changes over the course of the outbreak.
+```
+
+``` r
 utils::tail(rolling_cfr_naive)
 ```
 
-```{.output}
-         date severity_mean severity_low severity_high
-68 1976-10-31     0.9510204    0.9160061     0.9744387
-69 1976-11-01     0.9510204    0.9160061     0.9744387
-70 1976-11-02     0.9510204    0.9160061     0.9744387
-71 1976-11-03     0.9510204    0.9160061     0.9744387
-72 1976-11-04     0.9510204    0.9160061     0.9744387
-73 1976-11-05     0.9551020    0.9210866     0.9773771
+``` output
+         date severity_estimate severity_low severity_high
+68 1976-10-31         0.9510204    0.9160061     0.9744387
+69 1976-11-01         0.9510204    0.9160061     0.9744387
+70 1976-11-02         0.9510204    0.9160061     0.9744387
+71 1976-11-03         0.9510204    0.9160061     0.9744387
+72 1976-11-04         0.9510204    0.9160061     0.9744387
+73 1976-11-05         0.9551020    0.9210866     0.9773771
 ```
 
 
-```r
+``` r
 # Calculate the rolling daily delay-adjusted CFR
 # for all the 73 days in the Ebola dataset
 rolling_cfr_adjusted <- cfr::cfr_rolling(
   data = ebola1976,
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
+```
 
+``` output
+`cfr_rolling()` is a convenience function to help understand how additional data influences the overall (static) severity. Use `cfr_time_varying()` instead to estimate severity changes over the course of the outbreak.
+```
+
+``` output
+Some daily ratios of total deaths to total cases with known outcome are below 0.01%: some CFR estimates may be unreliable.FALSE
+```
+
+``` r
 utils::tail(rolling_cfr_adjusted)
 ```
 
-```{.output}
-         date severity_mean severity_low severity_high
-68 1976-10-31         0.975        0.856             1
-69 1976-11-01         0.975        0.856             1
-70 1976-11-02         0.971        0.852             1
-71 1976-11-03         0.971        0.852             1
-72 1976-11-04         0.971        0.852             1
-73 1976-11-05         0.971        0.852             1
+``` output
+         date severity_estimate severity_low severity_high
+68 1976-10-31            0.9843       0.9003        0.9925
+69 1976-11-01            0.9843       0.9003        0.9925
+70 1976-11-02            0.9817       0.8838        0.9913
+71 1976-11-03            0.9817       0.8838        0.9913
+72 1976-11-04            0.9817       0.8838        0.9913
+73 1976-11-05            0.9818       0.8843        0.9913
 ```
 
 With `utils::tail()`, we show that the latest CFR estimates. The naive and delay-adjusted estimates have overlapping ranges of 95% confidence intervals.
@@ -555,7 +596,7 @@ With `utils::tail()`, we show that the latest CFR estimates. The naive and delay
 Now, let's visualise both results in a time series. How would the naive and delay-adjusted CFR estimates perform in real time?
 
 
-```r
+``` r
 # get the latest delay-adjusted CFR
 rolling_cfr_adjusted_end <-
   rolling_cfr_adjusted %>%
@@ -580,11 +621,11 @@ bind_rows(
     alpha = 0.2, show.legend = FALSE
   ) +
   geom_line(
-    aes(date, severity_mean, colour = method)
+    aes(date, severity_estimate, colour = method)
   ) +
   geom_hline(
     data = rolling_cfr_adjusted_end,
-    aes(yintercept = severity_mean)
+    aes(yintercept = severity_estimate)
   ) +
   geom_hline(
     data = rolling_cfr_adjusted_end,
@@ -706,11 +747,11 @@ This estimation is performed by the internal function `?cfr:::estimate_severity(
 *Aggregated* incidence data differs from **linelist** data, where each observation contains individual-level data.
 
 
-```r
+``` r
 outbreaks::ebola_sierraleone_2014 %>% as_tibble()
 ```
 
-```{.output}
+``` output
 # A tibble: 11,903 × 8
       id   age sex   status    date_of_onset date_of_sample district chiefdom   
    <int> <dbl> <fct> <fct>     <date>        <date>         <fct>    <fct>      
@@ -756,7 +797,7 @@ Then, refer to the `{cfr}` vignette on [Handling data from `{incidence2}`](https
 ::::::::::::::::: solution
 
 
-```r
+``` r
 # Load packages
 library(cfr)
 library(epiparameter)
@@ -778,7 +819,7 @@ mers_korea_2015$linelist %>%
   select(starts_with("dt_"))
 ```
 
-```{.output}
+``` output
 # A tibble: 162 × 6
    dt_onset   dt_report  dt_start_exp dt_end_exp dt_diag    dt_death  
    <date>     <date>     <date>       <date>     <date>     <date>    
@@ -795,7 +836,7 @@ mers_korea_2015$linelist %>%
 # ℹ 152 more rows
 ```
 
-```r
+``` r
 # Use {incidence2} to count daily incidence
 mers_incidence <- mers_korea_2015$linelist %>%
   # converto to incidence2 object
@@ -807,7 +848,7 @@ mers_incidence <- mers_korea_2015$linelist %>%
 mers_incidence
 ```
 
-```{.output}
+``` output
 # incidence:  72 x 3
 # count vars: dt_death, dt_onset
    date_index count_variable count
@@ -825,7 +866,7 @@ mers_incidence
 # ℹ 62 more rows
 ```
 
-```r
+``` r
 # Prepare data from {incidence2} to {cfr}
 mers_incidence %>%
   prepare_data(
@@ -834,7 +875,7 @@ mers_incidence %>%
   )
 ```
 
-```{.output}
+``` output
          date deaths cases
 1  2015-05-11      0     1
 2  2015-05-12      0     0
@@ -874,19 +915,19 @@ mers_incidence %>%
 36 2015-06-15      0     1
 ```
 
-```r
+``` r
 # Estimate delay-adjusted CFR
 mers_incidence %>%
-  prepare_data(
+  cfr::prepare_data(
     cases_variable = "dt_onset",
     deaths_variable = "dt_death"
   ) %>%
-  cfr_static(delay_density = function(x) density(mers_delay, x))
+  cfr::cfr_static(delay_density = function(x) density(mers_delay, x))
 ```
 
-```{.output}
-  severity_mean severity_low severity_high
-1         0.137        0.069          0.24
+``` output
+  severity_estimate severity_low severity_high
+1            0.0907        0.042        0.4847
 ```
 
 
@@ -912,7 +953,7 @@ One way to do a _stratified analysis_ is to apply a model to nested data. This [
 ::::::::::::::::::::::::: solution
 
 
-```r
+``` r
 library(cfr)
 library(epiparameter)
 library(tidyverse)
@@ -920,7 +961,7 @@ library(tidyverse)
 covid_data %>% glimpse()
 ```
 
-```{.output}
+``` output
 Rows: 20,786
 Columns: 4
 $ date    <date> 2020-01-03, 2020-01-03, 2020-01-03, 2020-01-03, 2020-01-03, 2…
@@ -929,7 +970,7 @@ $ cases   <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,�
 $ deaths  <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
 ```
 
-```r
+``` r
 delay_onset_death <-
   epidist_db(
     disease = "covid",
@@ -951,30 +992,30 @@ covid_data %>%
   unnest(cols = temp)
 ```
 
-```{.output}
+``` output
 # A tibble: 19 × 5
 # Groups:   country [19]
-   country        data                 severity_mean severity_low severity_high
-   <chr>          <list>                       <dbl>        <dbl>         <dbl>
- 1 Argentina      <tibble [1,094 × 3]>         0.013        0.013         0.013
- 2 Brazil         <tibble [1,094 × 3]>         0.019        0.019         0.019
- 3 Colombia       <tibble [1,094 × 3]>         0.022        0.022         0.022
- 4 France         <tibble [1,094 × 3]>         0.004        0.004         0.004
- 5 Germany        <tibble [1,094 × 3]>         0.005        0.005         0.005
- 6 India          <tibble [1,094 × 3]>         0.012        0.012         0.012
- 7 Indonesia      <tibble [1,094 × 3]>         0.024        0.024         0.024
- 8 Iran           <tibble [1,094 × 3]>         0.019        0.019         0.019
- 9 Italy          <tibble [1,094 × 3]>         0.007        0.007         0.007
-10 Mexico         <tibble [1,094 × 3]>         0.046        0.046         0.046
-11 Peru           <tibble [1,094 × 3]>         0.05         0.05          0.05 
-12 Poland         <tibble [1,094 × 3]>         0.019        0.019         0.019
-13 Russia         <tibble [1,094 × 3]>         0.018        0.018         0.018
-14 South Africa   <tibble [1,094 × 3]>         0.025        0.025         0.025
-15 Spain          <tibble [1,094 × 3]>         0.009        0.009         0.009
-16 Turkey         <tibble [1,094 × 3]>         0.006        0.006         0.006
-17 Ukraine        <tibble [1,094 × 3]>         0.02         0.02          0.02 
-18 United Kingdom <tibble [1,094 × 3]>         0.009        0.009         0.009
-19 United States  <tibble [1,094 × 3]>         0.011        0.011         0.011
+   country        data     severity_estimate severity_low severity_high
+   <chr>          <list>               <dbl>        <dbl>         <dbl>
+ 1 Argentina      <tibble>            0.0133       0.0133        0.0133
+ 2 Brazil         <tibble>            0.0195       0.0195        0.0195
+ 3 Colombia       <tibble>            0.0225       0.0224        0.0226
+ 4 France         <tibble>            0.0044       0.0044        0.0044
+ 5 Germany        <tibble>            0.0045       0.0045        0.0045
+ 6 India          <tibble>            0.0119       0.0119        0.0119
+ 7 Indonesia      <tibble>            0.024        0.0239        0.0241
+ 8 Iran           <tibble>            0.0191       0.0191        0.0192
+ 9 Italy          <tibble>            0.0075       0.0075        0.0075
+10 Mexico         <tibble>            0.0461       0.046         0.0462
+11 Peru           <tibble>            0.0318       0.0151        0.202 
+12 Poland         <tibble>            0.0186       0.0186        0.0187
+13 Russia         <tibble>            0.0182       0.0182        0.0182
+14 South Africa   <tibble>            0.0254       0.0253        0.0255
+15 Spain          <tibble>            0.0087       0.0087        0.0087
+16 Turkey         <tibble>            0.006        0.006         0.006 
+17 Ukraine        <tibble>            0.0204       0.0203        0.0205
+18 United Kingdom <tibble>            0.009        0.009         0.009 
+19 United States  <tibble>            0.0111       0.0111        0.0111
 ```
 
 Great! Now you can use similar code for any other stratified analysis like age, regions or more!

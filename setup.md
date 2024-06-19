@@ -18,34 +18,35 @@ Each task has its tutorial website. Each tutorial website consists of a set of e
 
 | [Early task tutorials ➠](https://epiverse-trace.github.io/tutorials-early/) | [Middle task tutorials ➠](https://epiverse-trace.github.io/tutorials-middle) | [Late task tutorials ➠](https://epiverse-trace.github.io/tutorials-late/) |
 |---|---|---|
-| Reading and cleaning case data | Real-time analysis and forecasting | Scenario modelling |
-| Read and clean linelist data, Access delay distributions, and Estimate transmission metrics. | Forecast cases, Estimate severity, and Estimate superspreading. | Simulate disease spread and Investigate interventions. |
+| Read and clean case data, and make linelist | Real-time analysis and forecasting | Scenario modelling |
+| Read, clean and validate case data, convert linelist data to incidence for visualization. | Access delay distributions and estimate transmission metrics, forecast cases, estimate severity and superspreading. | Simulate disease spread and investigate interventions. |
 
 Each episode contains:
 
-+ **Overview** : describes what questions will be answered and what are the objectives of the episode.
++ **Overview**: describes what questions will be answered and what are the objectives of the episode.
 + **Prerequisites**: describes what episodes/packages need to be covered before the current episode.
-+ **Example R code** : work through the episodes on your own computer using the example R code.
-+ **Challenges** : complete challenges to test your understanding.
-+ **Explainers** : add to your understanding of mathematical and modelling concepts with the explainer boxes.
++ **Example R code**: work through the episodes on your own computer using the example R code.
++ **Challenges**: complete challenges to test your understanding.
++ **Explainers**: add to your understanding of mathematical and modelling concepts with the explainer boxes.
 
 Also check out the [glossary](../reference.md) for any terms you may be unfamiliar with.
 
 ### Epiverse-TRACE R packages
 
-Our strategy is to gradually incorporate specialised **R packages** into our traditional analysis pipeline. These packages should fill the gaps in these epidemiology-specific tasks in response to outbreaks.
+Our strategy is to gradually incorporate specialised **R packages** into a traditional analysis pipeline. These packages should fill the gaps in these epidemiology-specific tasks in response to outbreaks.
 
-![In **R**, the fundamental unit of shareable code is the **package**. A package bundles together code, data, documentation, and tests and is easy to share with others ([Wickham and Bryan, 2023](https://r-pkgs.org/introduction.html))](episodes/fig/pkgs-hexlogos-2.png)
+![In **R**, the fundamental unit of shareable code is the **package**. A package bundles together code, data, documentation, and tests and is easy to share with others ([Wickham and Bryan, 2023](https://r-pkgs.org/introduction.html))](episodes/fig/pkgs-hexlogos-2.png).
 
 :::::::::::::::::::::::::::: prereq
 
-This course assumes intermediate R knowledge. This workshop is for you if:
+This content assumes intermediate R knowledge. This tutorials are for you if:
 
-- You can use the magrittr pipe `%>%` and/or native pipe `|>`
-- You are familiar with functions from `{dplyr}`, `{tidyr}`, and `{ggplot2}`
 - You can read data into R, transform and reshape data, and make a wide variety of graphs
+- You are familiar with functions from `{dplyr}`, `{tidyr}`, and `{ggplot2}`
+- You can use the magrittr pipe `%>%` and/or native pipe `|>`.
 
-We expect participants to have some exposure to basic Statistical, Mathematical and Epidemic theory concepts, but NOT intermediate or expert familiarity with modeling.
+
+We expect learners to have some exposure to basic Statistical, Mathematical and Epidemic theory concepts, but NOT intermediate or expert familiarity with modeling.
 
 ::::::::::::::::::::::::::::
 
@@ -101,6 +102,19 @@ During the tutorial, we will need a number of R packages. Packages contain usefu
 -->
 
 Open RStudio and **copy and paste** the following code chunk into the [console window](https://docs.posit.co/ide/user/ide/guide/code/console.html), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command:
+
+```r
+# for episodes on access delays and quantify transmission
+
+new_packages <- c(
+  "EpiNow2",
+  "epiverse-trace/epiparameter",
+  "incidence2",
+  "tidyverse"
+)
+
+pak::pkg_install(new_packages)
+```
 
 ```r
 # for episodes on forecast and severity
@@ -182,8 +196,7 @@ install.packages("superspreading", repos = c("https://epiverse-trace.r-universe.
 install.packages("epiparameter", repos = c("https://epiverse-trace.r-universe.dev"))
 
 # for epichains
-if(!require("remotes")) install.packages("remotes")
-remotes::install_github("epiverse-trace/epichains")
+install.packages("epichains", repos = c("https://epiverse-trace.r-universe.dev"))
 ```
 
 :::::::::::::::::::::::::::::
@@ -233,6 +246,15 @@ If the error persist, [contact us](#your-questions)!
 You should update **all of the packages** required for the tutorial, even if you installed them relatively recently. New versions bring improvements and important bug fixes.
 
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
+
+```r
+# for episodes on access delays and quantify transmission
+
+library(EpiNow2)
+library(epiparameter)
+library(incidence2)
+library(tidyverse)
+```
 
 ```r
 # for episodes on forecast and severity
