@@ -72,16 +72,16 @@ serial_interval <- epidist_db(
 # Set seed for random number generator
 set.seed(33)
 # Number of simulation runs
-number_chains <- 1000
+number_simulations <- 1000
 # Number of initial cases
 initial_cases <- 1
 
 simulated_chains_map <-
-  # iterate one function across multiple numbers (chain IDs)
+  # iterate one function across multiple numbers (simulation IDs)
   purrr::map(
-    # vector of numbers (chain IDs)
-    .x = seq_len(number_chains),
-    # function to iterate to each chain ID number
+    # vector of numbers (simulation IDs)
+    .x = seq_len(number_simulations),
+    # function to iterate to each simulation ID number
     .f = function(sim) {
       epichains::simulate_chains(
         # simulation controls
@@ -94,32 +94,32 @@ simulated_chains_map <-
         # generation
         generation_time = function(x) generate(x = serial_interval, times = x)
       ) %>%
-        # creates a column with the chain ID number
-        dplyr::mutate(chain_id = sim)
+        # creates a column with the simulation ID number
+        dplyr::mutate(simulation_id = sim)
     }
   ) %>%
-  # combine list outputs (for each chain ID) into a single data frame
+  # combine list outputs (for each simulation ID) into a single data frame
   purrr::list_rbind()
 
 # daily aggregate of cases
 simulated_chains_day <- simulated_chains_map %>%
   # use data.frame output from <epichains> object
   as_tibble() %>%
-  # transform chain ID column to factor (categorical variable)
-  mutate(chain_id = as_factor(chain_id)) %>%
+  # transform simulation ID column to factor (categorical variable)
+  mutate(simulation_id = as_factor(simulation_id)) %>%
   # get the round number (day) of infection times
   mutate(day = ceiling(time)) %>%
-  # count the daily number of cases each simulation (chain ID)
-  count(chain_id, day, name = "cases") %>%
-  # calculate the cumulative number of cases for each simulation (chain ID)
-  group_by(chain_id) %>%
+  # count the daily number of cases each simulation (simulation ID)
+  count(simulation_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (simulation ID)
+  group_by(simulation_id) %>%
   mutate(cases_cumsum = cumsum(cases)) %>%
   ungroup()
 
 # Summarise the chain duration and size
 sim_chains_max <-
   simulated_chains_day %>%
-  group_by(chain_id) %>%
+  group_by(simulation_id) %>%
   summarise(
     # duration
     day_max = max(day),
@@ -142,7 +142,7 @@ ggplot() +
     mapping = aes(
       x = day,
       y = cases_cumsum,
-      group = chain_id,
+      group = simulation_id,
       color = type
     )
   ) +
@@ -351,19 +351,19 @@ We can use `simulate_chains()` to create multiple chains and increase the probab
 We need to specify three additional elements:
 
 - `set.seed(<integer>)`, which is a random number generator function with a specified seed value, the `<integer>` number, to ensure consistent results across different runs of the code.
-- `number_chains`, which defines the number of simulations to run.
+- `number_simulations`, which defines the number of simulations to run.
 - `initial_cases` defines the number of initial cases to input to the `n_chains` argument explained in the lines above.
 
 ```{r}
 # Set seed for random number generator
 set.seed(33)
 # Number of simulation runs
-number_chains <- 1000
+number_simulations <- 1000
 # Number of initial cases
 initial_cases <- 1
 ```
 
-`number_chains` and `initial_cases` are conveniently stored in objects to facilitate downstream reuse in the workflow.
+`number_simulations` and `initial_cases` are conveniently stored in objects to facilitate downstream reuse in the workflow.
 
 :::::::::::::::::::::::::::::: checklist
 
@@ -377,7 +377,7 @@ Or, if you previously used the `*apply` family of functions, visit the package v
 
 ::::::::::::::::::::::::::::::
 
-To get multiple chains, we must apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to `r number_chains`.
+To get multiple chains, we must apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to `r number_simulations`.
 
 ::::::::::::::::::::::::::::::: callout
 
@@ -390,34 +390,34 @@ First, let's sketch how we use `purrr::map()` with `epichains::simulate_chains()
 
 ```r
 map(
-  # vector of numbers (chain IDs)
-  .x = seq_len(number_chains),
-  # function to iterate to each chain ID number
+  # vector of numbers (simulation IDs)
+  .x = seq_len(number_simulations),
+  # function to iterate to each simulation ID number
   .f = function(sim) {
     simulate_chains(...) %>%
-      # creates a column with the chain ID number
-      mutate(chain_id = sim)
+      # creates a column with the simulation ID number
+      mutate(simulation_id = sim)
   }
 ) %>%
-  # combine list outputs (for each chain ID) into a single data frame
+  # combine list outputs (for each simulation ID) into a single data frame
   list_rbind()
 ```
 
-The `sim` element is placed to register the iteration number (**chain ID**) as a new column in the `<epichains>` output. The `purrr::list_rbind()` function aims to combine all the list outputs from `map()`.
+The `sim` element is placed to register the iteration number (**simulation ID**) as a new column in the `<epichains>` output. The `purrr::list_rbind()` function aims to combine all the list outputs from `map()`.
 
 **Why a dot (`.`) as a prefix?** In the [tidy design principles](https://design.tidyverse.org/dots-prefix.html) book we have a chapter on the dot prefix!
 
 :::::::::::::::::::::::::::::::
 
-Now, we are prepared to use `map()` to repeatedly simulate from `simulate_chains()` and store in a vector from 1 to `r number_chains`:
+Now, we are prepared to use `map()` to repeatedly simulate from `simulate_chains()` and store in a vector from 1 to `r number_simulations`:
 
 ```{r}
 simulated_chains_map <-
-  # iterate one function across multiple numbers (chain IDs)
+  # iterate one function across multiple numbers (simulation IDs)
   purrr::map(
-    # vector of numbers (chain IDs)
-    .x = seq_len(number_chains),
-    # function to iterate to each chain ID number
+    # vector of numbers (simulation IDs)
+    .x = seq_len(number_simulations),
+    # function to iterate to each simulation ID number
     .f = function(sim) {
       epichains::simulate_chains(
         # simulation controls
@@ -430,11 +430,11 @@ simulated_chains_map <-
         # generation
         generation_time = function(x) generate(x = serial_interval, times = x)
       ) %>%
-        # creates a column with the chain ID number
-        dplyr::mutate(chain_id = sim)
+        # creates a column with the simulation ID number
+        dplyr::mutate(simulation_id = sim)
     }
   ) %>%
-  # combine list outputs (for each chain ID) into a single data frame
+  # combine list outputs (for each simulation ID) into a single data frame
   purrr::list_rbind()
 ```
 
@@ -442,7 +442,7 @@ simulated_chains_map <-
 # view infectee number per simulation
 simulated_chains_map %>%
   dplyr::as_tibble() %>%
-  dplyr::count(chain_id, sort = TRUE)
+  dplyr::count(simulation_id, sort = TRUE)
 ```
 
 ::::::::::::::::::::::::::::::::: discussion
@@ -454,27 +454,27 @@ simulated_chains_map %>%
 
 chains_subgroup <- simulated_chains_map %>%
   as_tibble() %>%
-  group_by(chain_id) %>%
+  group_by(simulation_id) %>%
   distinct(infector) %>%
-  count(chain_id) %>%
+  count(simulation_id) %>%
   filter(n < 5, n >= 3) %>%
-  pull(chain_id)
+  pull(simulation_id)
 
 chain_to_observe <- simulated_chains_map %>%
   as_tibble() %>%
-  count(chain_id, sort = TRUE) %>%
+  count(simulation_id, sort = TRUE) %>%
   filter(
     magrittr::is_in(
-      chain_id, chains_subgroup
+      simulation_id, chains_subgroup
     )
   ) %>%
   filter(n < 10) %>%
   filter(n == max(n)) %>%
-  slice_min(chain_id) %>%
-  pull(chain_id)
+  slice_min(simulation_id) %>%
+  pull(simulation_id)
 ```
 
-To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's look at the simulated `chain_id` number `r chain_to_observe`. 
+To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's look at the simulated `simulation_id` number `r chain_to_observe`. 
 
 :::::::::::::::::::::::::::::::::
 
@@ -492,7 +492,7 @@ chain_to_observe <- 806
 #### get epichain summary ----------------------------------------------------
 
 simulated_chains_map %>%
-  dplyr::filter(chain_id == chain_to_observe)
+  dplyr::filter(simulation_id == chain_to_observe)
 ```
 
 Key elements from this output are in the footer, the piece of text that appears at the bottom:
@@ -502,7 +502,7 @@ Number of infectors (known): 3
 Number of generations: 3
 ```
 
-The simulated `chain_id` number `r chain_to_observe` has three known infectors and three generations. These numbers are more visible when reading the `<epichains>` objects as a data frame.
+The simulated `simulation_id` number `r chain_to_observe` has three known infectors and three generations. These numbers are more visible when reading the `<epichains>` objects as a data frame.
 
 :::::::::::::::::::::::::
 
@@ -514,7 +514,7 @@ The simulated `chain_id` number `r chain_to_observe` has three known infectors a
 #### infector-infectee data frame --------------------------------------------
 
 simulated_chains_map %>%
-  dplyr::filter(chain_id == chain_to_observe) %>%
+  dplyr::filter(simulation_id == chain_to_observe) %>%
   dplyr::as_tibble()
 ```
 
@@ -531,7 +531,7 @@ The output data frame collects **infectees** as the observation unit:
 - Each infectee has a `sim_id`. 
 - Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `sim_id` of that infectee. 
 - Each infectee got infected in a specific `generation` and (continuous) `time`. 
-- The simulation number is registered under the `chain_id` column.
+- The simulation number is registered under the `simulation_id` column.
 
 **Note:** The `Number of infectors (known)` includes the `NA` observation under the `infector` column. This refers to the infector specified as index case (in the `n_chains` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
 
@@ -542,7 +542,7 @@ The output data frame collects **infectees** as the observation unit:
 To visualize the simulated chains, we need some pre-processing:
 
 1. Let's use `{dplyr}` to get round time numbers to resemble surveillance days.
-2. Count the daily cases in each simulation (by `chain_id`).
+2. Count the daily cases in each simulation (by `simulation_id`).
 3. Calculate the cumulative number of cases within a simulation.
 
 ```{r}
@@ -550,14 +550,14 @@ To visualize the simulated chains, we need some pre-processing:
 simulated_chains_day <- simulated_chains_map %>%
   # use data.frame output from <epichains> object
   dplyr::as_tibble() %>%
-  # transform chain ID column to factor (categorical variable)
-  dplyr::mutate(chain_id = as_factor(chain_id)) %>%
+  # transform simulation ID column to factor (categorical variable)
+  dplyr::mutate(simulation_id = as_factor(simulation_id)) %>%
   # get the round number (day) of infection times
   dplyr::mutate(day = ceiling(time)) %>%
-  # count the daily number of cases in each simulation (chain ID)
-  dplyr::count(chain_id, day, name = "cases") %>%
-  # calculate the cumulative number of cases for each simulation (chain ID)
-  dplyr::group_by(chain_id) %>%
+  # count the daily number of cases in each simulation (simulation ID)
+  dplyr::count(simulation_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (simulation ID)
+  dplyr::group_by(simulation_id) %>%
   dplyr::mutate(cases_cumsum = cumsum(cases)) %>%
   dplyr::ungroup()
 ```
@@ -568,7 +568,7 @@ Before the plot, let's create a summary table with the total time duration and s
 # Summarise the chain duration and size
 sim_chains_max <-
   simulated_chains_day %>%
-  dplyr::group_by(chain_id) %>%
+  dplyr::group_by(simulation_id) %>%
   dplyr::summarise(
     # duration
     day_max = max(day),
@@ -591,7 +591,7 @@ ggplot() +
     mapping = aes(
       x = day,
       y = cases_cumsum,
-      group = chain_id
+      group = simulation_id
     ),
     color = "black",
     alpha = 0.25,
@@ -603,8 +603,8 @@ ggplot() +
     mapping = aes(
       x = day_max,
       y = cases_total,
-      group = chain_id,
-      color = chain_id
+      group = simulation_id,
+      color = simulation_id
     ),
     show.legend = FALSE
   ) +
@@ -623,7 +623,7 @@ threshhold_summary <- sim_chains_max %>%
   dplyr::arrange(dplyr::desc(day_max)) %>%
   dplyr::filter(cases_total > 100) %>%
   dplyr::count(name = "chains_theshold") %>%
-  dplyr::mutate(chains_number = number_chains) %>%
+  dplyr::mutate(chains_number = number_simulations) %>%
   dplyr::mutate(chains_percentage = chains_theshold / chains_number * 100)
 
 chains_extinct <- sim_chains_max %>%
@@ -697,7 +697,7 @@ ggplot() +
     mapping = aes(
       x = day,
       y = cases_cumsum,
-      group = chain_id,
+      group = simulation_id,
       color = type
     )
   ) +
@@ -792,16 +792,16 @@ mpox_serialint <- epiparameter::epidist_db(
 # Set seed for random number generator
 set.seed(33)
 # Number of simulation runs
-number_chains <- 1000
+number_simulations <- 1000
 # Number of initial cases
 initial_cases <- 1
 
 simulated_chains_mpox <-
-  # iterate one function across multiple numbers (chain IDs)
+  # iterate one function across multiple numbers (simulation IDs)
   purrr::map(
-    # vector of numbers (chain IDs)
-    .x = seq_len(number_chains),
-    # function to iterate to each chain ID number
+    # vector of numbers (simulation IDs)
+    .x = seq_len(number_simulations),
+    # function to iterate to each simulation ID number
     .f = function(sim) {
       epichains::simulate_chains(
         # simulation controls
@@ -814,11 +814,11 @@ simulated_chains_mpox <-
         # generation
         generation_time = function(x) generate(x = mpox_serialint, times = x)
       ) %>%
-        # creates a column with the chain ID number
-        dplyr::mutate(chain_id = sim)
+        # creates a column with the simulation ID number
+        dplyr::mutate(simulation_id = sim)
     }
   ) %>%
-  # combine list outputs (for each chain ID) into a single data frame
+  # combine list outputs (for each simulation ID) into a single data frame
   purrr::list_rbind()
 
 # visualize ---------------------------------------------------------------
@@ -827,14 +827,14 @@ simulated_chains_mpox <-
 simulated_chains_mpox_day <- simulated_chains_mpox %>%
   # use data.frame output from <epichains> object
   dplyr::as_tibble() %>%
-  # transform chain ID column to factor (categorical variable)
-  dplyr::mutate(chain_id = as_factor(chain_id)) %>%
+  # transform simulation ID column to factor (categorical variable)
+  dplyr::mutate(simulation_id = as_factor(simulation_id)) %>%
   # get the round number (day) of infection times
   dplyr::mutate(day = ceiling(time)) %>%
-  # count the daily number of cases in each simulation (chain ID)
-  dplyr::count(chain_id, day, name = "cases") %>%
-  # calculate the cumulative number of cases for each simulation (chain ID)
-  dplyr::group_by(chain_id) %>%
+  # count the daily number of cases in each simulation (simulation ID)
+  dplyr::count(simulation_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (simulation ID)
+  dplyr::group_by(simulation_id) %>%
   dplyr::mutate(cases_cumsum = cumsum(cases)) %>%
   dplyr::ungroup()
 
@@ -846,7 +846,7 @@ ggplot() +
     mapping = aes(
       x = day,
       y = cases_cumsum,
-      group = chain_id
+      group = simulation_id
     ),
     color = "black",
     alpha = 0.25,
@@ -987,13 +987,13 @@ ebola_serialinter <- epiparameter::epidist_db(
 # Set seed for random number generator
 set.seed(645)
 # Number of simulation runs
-number_chains <- 1e2
+number_simulations <- 1e2
 # Number of initial cases
 initial_cases <- 1
 
 sim_multiple_chains <-
   purrr::map(
-    .x = seq_len(number_chains),
+    .x = seq_len(number_simulations),
     .f = function(sim) {
       epichains::simulate_chains(
         n_chains = initial_cases,
@@ -1009,7 +1009,7 @@ sim_multiple_chains <-
         dplyr::mutate(simulation_n = sim)
     }
   ) %>%
-  # combine list outputs (for each chain ID) into a single data frame
+  # combine list outputs (for each simulation ID) into a single data frame
   purrr::list_rbind()
 
 # visualize ----------------------------------------
