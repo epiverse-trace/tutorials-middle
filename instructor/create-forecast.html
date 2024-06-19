@@ -469,15 +469,6 @@ episode to get the input data, delays and priors:</p>
 <span>  rt <span class="op">=</span> <span class="va">rt_prior</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>WARN [2024-06-19 09:21:56] epinow: There were 4 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2024-06-19 09:21:56] epinow: Examine the pairs() plot to diagnose sampling problems
- - </code></pre>
-</div>
 <div id="do-not-wait-for-this-to-complete" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -503,7 +494,7 @@ contains a higher degree of uncertainty because such estimates are based
 on less data,</p></li>
 <li><p><strong>Forecast</strong> (purple): forecasts into the
 future.</p></li>
-</ul><div class="codewrapper sourceCode" id="cb5">
+</ul><div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -526,7 +517,7 @@ model, we must pass a scaling factor with a mean and standard deviation.
 If we assume that 40% of cases are in the case data (with standard
 deviation 1%), then we specify the <code>scale</code> input to
 <code>obs_opts()</code> as follows:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -535,7 +526,7 @@ deviation 1%), then we specify the <code>scale</code> input to
 <p>To run the inference framework with this observation process, we add
 <code>obs = obs_opts(scale = obs_scale)</code> to the input arguments of
 <code>epinow()</code>:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -554,33 +545,20 @@ deviation 1%), then we specify the <code>scale</code> input to
 <span>  rt <span class="op">=</span> <span class="va">rt_prior</span>,</span>
 <span>  <span class="co"># Add observation model</span></span>
 <span>  obs <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">obs_opts</span><span class="op">(</span>scale <span class="op">=</span> <span class="va">obs_scale</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>WARN [2024-06-19 09:30:42] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2024-06-19 09:30:42] epinow: Examine the pairs() plot to diagnose sampling problems
- - </code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb9">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">base</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">estimates</span><span class="op">)</span></span></code></pre>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">base</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">estimates</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>                            measure              estimate
                              &lt;char&gt;                &lt;char&gt;
-1:           New infections per day 17037 (9230 -- 30414)
+1:           New infections per day 17133 (9481 -- 30848)
 2: Expected change in daily reports     Likely decreasing
-3:       Effective reproduction no.    0.87 (0.58 -- 1.3)
-4:                   Rate of growth -0.047 (-0.19 -- 0.1)
-5:     Doubling/halving time (days)     -15 (6.7 -- -3.7)</code></pre>
+3:       Effective reproduction no.     0.87 (0.6 -- 1.3)
+4:                   Rate of growth -0.044 (-0.18 -- 0.1)
+5:     Doubling/halving time (days)     -16 (6.9 -- -3.8)</code></pre>
 </div>
 <p>The estimates of transmission measures such as the effective
 reproduction number and rate of growth are similar (or the same in
@@ -625,7 +603,7 @@ in this example <strong>cases</strong>,</li>
 <li>
 <code>secondary</code>: number of secondary observations date, in
 this example <strong>deaths</strong>.</li>
-</ul><div class="codewrapper sourceCode" id="cb11">
+</ul><div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -677,7 +655,7 @@ adding an observation process, see
 <code>?EpiNow2::estimate_secondary</code> for detail on these
 options.</p>
 <p>To find the model fit between cases and deaths:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -685,17 +663,18 @@ options.</p>
 <span><span class="va">cases_to_estimate</span> <span class="op">&lt;-</span> <span class="va">reported_cases_deaths</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">slice</span><span class="op">(</span><span class="fl">31</span><span class="op">:</span><span class="fl">60</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># Delay distribution between case report and deaths</span></span>
+<span><span class="va">delay_report_to_death</span> <span class="op">&lt;-</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">Gamma</span><span class="op">(</span></span>
+<span>  mean <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">Normal</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">14</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  sd <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">Normal</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">5</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  max <span class="op">=</span> <span class="fl">30</span></span>
+<span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Estimate secondary cases</span></span>
 <span><span class="va">estimate_cases_to_deaths</span> <span class="op">&lt;-</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">estimate_secondary</span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">cases_to_estimate</span>,</span>
 <span>  secondary <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">secondary_opts</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"incidence"</span><span class="op">)</span>,</span>
-<span>  delays <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">delay_opts</span><span class="op">(</span></span>
-<span>    <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">Gamma</span><span class="op">(</span></span>
-<span>      mean <span class="op">=</span> <span class="fl">14</span>,</span>
-<span>      sd <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>      max <span class="op">=</span> <span class="fl">30</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">)</span></span>
+<span>  delays <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">delay_opts</span><span class="op">(</span><span class="va">delay_report_to_death</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <div id="be-cautious-of-time-scale" class="callout">
@@ -717,7 +696,7 @@ forecast.</p>
 <p>We plot the model fit (shaded ribbons) with the secondary
 observations (bar plot) and primary observations (dotted line) as
 follows:</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -730,18 +709,18 @@ model fit.</p>
 and cases, so we create a data frame by extracting the cases. But in
 practice, this would be a different data set consisting of cases
 only.</em></p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Forecast from day 61 to day 90</span></span>
 <span><span class="va">cases_to_forecast</span> <span class="op">&lt;-</span> <span class="va">reported_cases_deaths</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">slice</span><span class="op">(</span><span class="fl">61</span><span class="op">:</span><span class="fl">90</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="va">date</span>, value <span class="op">=</span> <span class="va">primary</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>value <span class="op">=</span> <span class="va">primary</span><span class="op">)</span></span></code></pre>
 </div>
 <p>To forecast, we use the model fit
 <code>estimate_cases_to_deaths</code>:</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -749,35 +728,44 @@ only.</em></p>
 <span><span class="va">deaths_forecast</span> <span class="op">&lt;-</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">forecast_secondary</span><span class="op">(</span></span>
 <span>  estimate <span class="op">=</span> <span class="va">estimate_cases_to_deaths</span>,</span>
 <span>  primary <span class="op">=</span> <span class="va">cases_to_forecast</span></span>
-<span><span class="op">)</span></span></code></pre>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">plot</span><span class="op">(</span><span class="va">deaths_forecast</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>Error in eval(expr, envir, enclos) : 
-  Exception: variable does not exist; processing stage=data initialization; variable name=delay_params; base type=double (in 'simulate_secondary', line 431, column 2 to column 52)</code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>failed to create the sampler; sampling not done</code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in `fit_model_with_nuts()` at EpiNow2/R/stan.R:97:5:
-! model fitting was timed out or failed</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb19">
+<figure><img src="../fig/create-forecast-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
+  <h3 class="accordion-header" id="headingSpoiler1">
+<div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>make a forecast plot</h3>
+</button>
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div class="accordion-body">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">plot</span><span class="op">(</span><span class="va">deaths_forecast</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">deaths_forecast</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">pluck</span><span class="op">(</span><span class="st">"predictions"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, y <span class="op">=</span> <span class="va">secondary</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_col</span><span class="op">(</span></span>
+<span>    fill <span class="op">=</span> <span class="st">"grey"</span>, col <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span>    show.legend <span class="op">=</span> <span class="cn">FALSE</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_ribbon</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">lower_90</span>, ymax <span class="op">=</span> <span class="va">upper_90</span><span class="op">)</span>,</span>
+<span>              alpha <span class="op">=</span> <span class="fl">0.2</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_ribbon</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">lower_50</span>, ymax <span class="op">=</span> <span class="va">upper_50</span><span class="op">)</span>,</span>
+<span>              alpha <span class="op">=</span> <span class="fl">0.4</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_ribbon</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">lower_20</span>, ymax <span class="op">=</span> <span class="va">upper_20</span><span class="op">)</span>,</span>
+<span>              alpha <span class="op">=</span> <span class="fl">0.6</span>, linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Reports per day"</span>, x <span class="op">=</span> <span class="st">"Date"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_date</span><span class="op">(</span>date_breaks <span class="op">=</span> <span class="st">"week"</span>, date_labels <span class="op">=</span> <span class="st">"%b %d"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_y_continuous</span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="va">comma</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'deaths_forecast' not found</code></pre>
+<figure><img src="../fig/create-forecast-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+</div>
+</div>
 </div>
 <p>The plot shows the forecast secondary observations (deaths) over the
 dates which we have recorded cases for. It is also possible to forecast
@@ -834,7 +822,7 @@ deviation of these distributions.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1">Give me a hint</h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>We use the effective reproduction number and growth rate to estimate
 whether cases are increasing or decreasing.</p>
@@ -856,7 +844,7 @@ forecast. The default value is of seven days.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">SOLUTION</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>To estimate the effective reproduction number and growth rate, we
 will use the function <code>epinow()</code>.</p>
@@ -866,7 +854,7 @@ generation time.</p>
 <p>We specify the distributions with some uncertainty around the mean
 and standard deviation of the log normal distribution for the incubation
 period and the Gamma distribution for the generation time.</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -886,7 +874,7 @@ period and the Gamma distribution for the generation time.</p>
 4 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015         957
 5 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015         792</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -919,7 +907,7 @@ period and the Gamma distribution for the generation time.</p>
 <p>We read the data input using <code>readr::read_csv()</code>. This
 function recognize that the column <code>date</code> is a
 <code>&lt;date&gt;</code> class vector.</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -930,7 +918,7 @@ function recognize that the column <code>date</code> is a
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>Preprocess and adapt the raw data for <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>:</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -969,7 +957,7 @@ function recognize that the column <code>date</code> is a
 </div>
 <p>We define an observation model to scale the estimated and forecast
 number of new infections:</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -980,7 +968,7 @@ number of new infections:</p>
 <p>As we want to also create a two week forecast, we specify
 <code>horizon = 14</code> to forecast 14 days instead of the default 7
 days.</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -997,13 +985,13 @@ days.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>WARN [2024-06-19 09:32:38] epinow: There were 6 divergent transitions after warmup. See
+<pre class="output" tabindex="0"><code>WARN [2024-06-19 14:02:24] epinow: There were 5 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-06-19 09:32:38] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-06-19 14:02:24] epinow: Examine the pairs() plot to diagnose sampling problems
  - </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1012,19 +1000,19 @@ WARN [2024-06-19 09:32:38] epinow: Examine the pairs() plot to diagnose sampling
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                            measure              estimate
-                             &lt;char&gt;                &lt;char&gt;
-1:           New infections per day        81 (32 -- 206)
-2: Expected change in daily reports     Likely increasing
-3:       Effective reproduction no.     1.5 (0.77 -- 2.5)
-4:                   Rate of growth 0.033 (-0.041 -- 0.1)
-5:     Doubling/halving time (days)       21 (6.9 -- -17)</code></pre>
+<pre class="output" tabindex="0"><code>                            measure                estimate
+                             &lt;char&gt;                  &lt;char&gt;
+1:           New infections per day          82 (33 -- 205)
+2: Expected change in daily reports       Likely increasing
+3:       Effective reproduction no.        1.5 (0.8 -- 2.6)
+4:                   Rate of growth 0.032 (-0.037 -- 0.099)
+5:     Doubling/halving time (days)           21 (7 -- -19)</code></pre>
 </div>
 <p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
-data) is 1.5 (0.77 – 2.5). The exponential growth rate of case numbers
-is 0.033 (-0.041 – 0.1).</p>
+data) is 1.5 (0.8 – 2.6). The exponential growth rate of case numbers is
+0.032 (-0.037 – 0.099).</p>
 <p>Visualize the estimates:</p>
-<div class="codewrapper sourceCode" id="cb32">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1048,7 +1036,7 @@ data, it has considerable uncertainty.</p>
 <p>The reproduction number that is projected into the future can be
 changed to a less recent estimate based on more data using
 <code>rt_opts()</code>:</p>
-<div class="codewrapper sourceCode" id="cb33">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
