@@ -355,6 +355,34 @@ deaths_forecast <- EpiNow2::forecast_secondary(
 plot(deaths_forecast)
 ```
 
+:::::::::::::::: spoiler
+
+### make a forecast plot
+
+```{r}
+deaths_forecast %>%
+  purrr::pluck("predictions") %>%
+  ggplot(aes(x = date, y = secondary)) +
+  geom_col(
+    fill = "grey", col = "white",
+    show.legend = FALSE, na.rm = TRUE
+  ) +
+  geom_ribbon(aes(ymin = lower_90, ymax = upper_90),
+              alpha = 0.2, linewidth = 1) +
+  geom_ribbon(aes(ymin = lower_50, ymax = upper_50),
+              alpha = 0.4, linewidth = 1) +
+  geom_ribbon(aes(ymin = lower_20, ymax = upper_20),
+              alpha = 0.6, linewidth = 1) +
+  theme_bw() +
+  labs(y = "Reports per day", x = "Date") +
+  scale_x_date(date_breaks = "week", date_labels = "%b %d") +
+  scale_y_continuous(labels = scales::comma) +
+  theme(axis.text.x = ggplot2::element_text(angle = 90))
+```
+
+
+::::::::::::::::
+
 The plot shows the forecast secondary observations (deaths) over the dates which we have recorded cases for. 
 It is also possible to forecast deaths using forecast cases, here you would specify `primary` as the `estimates` output from `estimate_infections()`.
 
