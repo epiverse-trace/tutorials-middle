@@ -140,14 +140,6 @@ estimates <- EpiNow2::epinow(
 )
 ```
 
-``` output
-WARN [2024-06-19 09:21:56] epinow: There were 4 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2024-06-19 09:21:56] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
 ::::::::::::::::::::::::::::::::: callout
 
 ### Do not wait for this to complete!
@@ -204,28 +196,18 @@ estimates <- EpiNow2::epinow(
   # Add observation model
   obs = EpiNow2::obs_opts(scale = obs_scale)
 )
-```
 
-``` output
-WARN [2024-06-19 09:30:42] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2024-06-19 09:30:42] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 base::summary(estimates)
 ```
 
 ``` output
                             measure              estimate
                              <char>                <char>
-1:           New infections per day 17037 (9230 -- 30414)
+1:           New infections per day 17133 (9481 -- 30848)
 2: Expected change in daily reports     Likely decreasing
-3:       Effective reproduction no.    0.87 (0.58 -- 1.3)
-4:                   Rate of growth -0.047 (-0.19 -- 0.1)
-5:     Doubling/halving time (days)     -15 (6.7 -- -3.7)
+3:       Effective reproduction no.     0.87 (0.6 -- 1.3)
+4:                   Rate of growth -0.044 (-0.18 -- 0.1)
+5:     Doubling/halving time (days)     -16 (6.9 -- -3.8)
 ```
 
 
@@ -294,17 +276,18 @@ To find the model fit between cases and deaths:
 cases_to_estimate <- reported_cases_deaths %>%
   slice(31:60)
 
+# Delay distribution between case report and deaths
+delay_report_to_death <- EpiNow2::Gamma(
+  mean = EpiNow2::Normal(mean = 14, sd = 0.5),
+  sd = EpiNow2::Normal(mean = 5, sd = 0.5),
+  max = 30
+)
+
 # Estimate secondary cases
 estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
   data = cases_to_estimate,
   secondary = EpiNow2::secondary_opts(type = "incidence"),
-  delays = EpiNow2::delay_opts(
-    EpiNow2::Gamma(
-      mean = 14,
-      sd = 5,
-      max = 30
-    )
-  )
+  delays = EpiNow2::delay_opts(delay_report_to_death)
 )
 ```
 
@@ -334,7 +317,7 @@ To use this model fit to forecast deaths, we pass a data frame consisting of the
 # Forecast from day 61 to day 90
 cases_to_forecast <- reported_cases_deaths %>%
   dplyr::slice(61:90) %>%
-  dplyr::select(date, value = primary)
+  dplyr::mutate(value = primary)
 ```
 
 To forecast, we use the model fit `estimate_cases_to_deaths`:  
@@ -346,29 +329,42 @@ deaths_forecast <- EpiNow2::forecast_secondary(
   estimate = estimate_cases_to_deaths,
   primary = cases_to_forecast
 )
-```
 
-``` output
-Error in eval(expr, envir, enclos) : 
-  Exception: variable does not exist; processing stage=data initialization; variable name=delay_params; base type=double (in 'simulate_secondary', line 431, column 2 to column 52)
-```
-
-``` output
-failed to create the sampler; sampling not done
-```
-
-``` error
-Error in `fit_model_with_nuts()` at EpiNow2/R/stan.R:97:5:
-! model fitting was timed out or failed
-```
-
-``` r
 plot(deaths_forecast)
 ```
 
-``` error
-Error in eval(expr, envir, enclos): object 'deaths_forecast' not found
+<img src="fig/create-forecast-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+
+:::::::::::::::: spoiler
+
+### make a forecast plot
+
+
+``` r
+deaths_forecast %>%
+  purrr::pluck("predictions") %>%
+  ggplot(aes(x = date, y = secondary)) +
+  geom_col(
+    fill = "grey", col = "white",
+    show.legend = FALSE, na.rm = TRUE
+  ) +
+  geom_ribbon(aes(ymin = lower_90, ymax = upper_90),
+              alpha = 0.2, linewidth = 1) +
+  geom_ribbon(aes(ymin = lower_50, ymax = upper_50),
+              alpha = 0.4, linewidth = 1) +
+  geom_ribbon(aes(ymin = lower_20, ymax = upper_20),
+              alpha = 0.6, linewidth = 1) +
+  theme_bw() +
+  labs(y = "Reports per day", x = "Date") +
+  scale_x_date(date_breaks = "week", date_labels = "%b %d") +
+  scale_y_continuous(labels = scales::comma) +
+  theme(axis.text.x = ggplot2::element_text(angle = 90))
 ```
+
+<img src="fig/create-forecast-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+
+
+::::::::::::::::
 
 The plot shows the forecast secondary observations (deaths) over the dates which we have recorded cases for. 
 It is also possible to forecast deaths using forecast cases, here you would specify `primary` as the `estimates` output from `estimate_infections()`.
@@ -547,10 +543,10 @@ ebola_estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-06-19 09:32:38] epinow: There were 6 divergent transitions after warmup. See
+WARN [2024-06-19 14:02:24] epinow: There were 5 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-06-19 09:32:38] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-06-19 14:02:24] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -559,16 +555,16 @@ summary(ebola_estimates)
 ```
 
 ``` output
-                            measure              estimate
-                             <char>                <char>
-1:           New infections per day        81 (32 -- 206)
-2: Expected change in daily reports     Likely increasing
-3:       Effective reproduction no.     1.5 (0.77 -- 2.5)
-4:                   Rate of growth 0.033 (-0.041 -- 0.1)
-5:     Doubling/halving time (days)       21 (6.9 -- -17)
+                            measure                estimate
+                             <char>                  <char>
+1:           New infections per day          82 (33 -- 205)
+2: Expected change in daily reports       Likely increasing
+3:       Effective reproduction no.        1.5 (0.8 -- 2.6)
+4:                   Rate of growth 0.032 (-0.037 -- 0.099)
+5:     Doubling/halving time (days)           21 (7 -- -19)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.5 (0.77 -- 2.5). The exponential growth rate of case numbers is 0.033 (-0.041 -- 0.1).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.5 (0.8 -- 2.6). The exponential growth rate of case numbers is 0.032 (-0.037 -- 0.099).
 
 Visualize the estimates:
 
