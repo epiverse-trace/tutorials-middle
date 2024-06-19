@@ -303,17 +303,18 @@ To find the model fit between cases and deaths:
 cases_to_estimate <- reported_cases_deaths %>%
   slice(31:60)
 
+# Delay distribution between case report and deaths
+delay_report_to_death <- EpiNow2::Gamma(
+  mean = EpiNow2::Normal(mean = 14, sd = 0.5),
+  sd = EpiNow2::Normal(mean = 5, sd = 0.5),
+  max = 30
+)
+
 # Estimate secondary cases
 estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
   data = cases_to_estimate,
   secondary = EpiNow2::secondary_opts(type = "incidence"),
-  delays = EpiNow2::delay_opts(
-    EpiNow2::Gamma(
-      mean = 14,
-      sd = 5,
-      max = 30
-    )
-  )
+  delays = EpiNow2::delay_opts(delay_report_to_death)
 )
 ```
 
