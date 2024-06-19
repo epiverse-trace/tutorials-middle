@@ -191,7 +191,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="create-forecast.html">1. Create a short-term forecast</a>
+        <a href="delays-access.html">1. Access epidemiological delay distributions</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -203,7 +203,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="severity-static.html">2. Estimation of outbreak severity</a>
+        <a href="quantify-transmissibility.html">2. Quantifying transmission</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -215,7 +215,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="superspreading-estimate.html">3. Account for superspreading</a>
+        <a href="delays-functions.html">3. Use delay distributions in analysis</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -227,7 +227,43 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="superspreading-simulate.html">4. Simulate transmission chains</a>
+        <a href="create-forecast.html">4. Create a short-term forecast</a>
+    </div>
+<!--/div.accordion-header-->
+        
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="severity-static.html">5. Estimation of outbreak severity</a>
+    </div>
+<!--/div.accordion-header-->
+        
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush7">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading7">
+        <a href="superspreading-estimate.html">6. Account for superspreading</a>
+    </div>
+<!--/div.accordion-header-->
+        
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="superspreading-simulate.html">7. Simulate transmission chains</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -290,7 +326,102 @@
     <main id="main-content" class="main-content"><div class="container lesson-content">
         
         
-<section id="create-forecast"><h2 class="section-heading"><a href="create-forecast.html">Create a short-term forecast</a></h2>
+<section id="delays-access"><h2 class="section-heading"><a href="delays-access.html">Access epidemiological delay distributions</a></h2>
+<hr class="half-width">
+<h3 id="delays-access-figure-1">Figure 1</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Definition of key time periods. From Xiang et al, 2021’</p>
+<figure><img src="fig/time-periods.jpg" alt="Definition of key time periods. From Xiang et al, 2021" class="figure mx-auto d-block"><div class="figcaption">Definition of key time periods. From <a href="https://www.sciencedirect.com/science/article/pii/S2468042721000038" class="external-link">Xiang
+et al, 2021</a>
+</div>
+</figure><hr>
+<h3 id="delays-access-figure-2">Figure 2</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Video from the MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL’</p>
+<figure><img src="fig/reproduction-generation-time.png" alt="Video from the MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL" class="figure mx-auto d-block"><div class="figcaption">Video from the MRC Centre for Global Infectious
+Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group
+with Dr Anne Cori (27-07-2023) at <a href="https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL" class="external-link uri">https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL</a>
+</div>
+</figure><hr>
+<h3 id="delays-access-figure-3">Figure 3</h3>
+<p aria-hidden="true">Image 1 of 1: ‘A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021).’</p>
+<figure><img src="fig/serial-interval-observed.jpeg" alt="A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021)." class="figure mx-auto d-block"><div class="figcaption">A schematic of the relationship of different
+time periods of transmission between an infector and an infectee in a
+transmission pair. Exposure window is defined as the time interval
+having viral exposure, and transmission window is defined as the time
+interval for onward transmission with respect to the infection time (<a href="https://academic.oup.com/jid/article/224/10/1664/6356465" class="external-link">Chung
+Lau et al., 2021</a>).</div>
+</figure><hr>
+<h3 id="delays-access-figure-4">Figure 4</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Serial intervals of possible case pairs in (a) COVID-19 and (b) MERS-CoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset (Althobaity et al., 2022).’</p>
+<figure><img src="fig/serial-interval-pairs.jpg" alt="Serial intervals of possible case pairs in (a) COVID-19 and (b) MERS-CoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset (Althobaity et al., 2022)." class="figure mx-auto d-block"><div class="figcaption">Serial intervals of possible case pairs in (a)
+COVID-19 and (b) MERS-CoV. Pairs represent a presumed infector and their
+presumed infectee plotted by date of symptom onset (<a href="https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6" class="external-link">Althobaity
+et al., 2022</a>).</div>
+</figure><hr>
+<h3 id="delays-access-figure-5">Figure 5</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distributions, Log normal, Gamma, and Weibull distributions, respectively (Althobaity et al., 2022).’</p>
+<figure><img src="fig/seria-interval-fitted-distributions.jpg" alt="Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distributions, Log normal, Gamma, and Weibull distributions, respectively (Althobaity et al., 2022)." class="figure mx-auto d-block"><div class="figcaption">Fitted serial interval distribution for (a)
+COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi
+Arabia. We fitted three commonly used distributions, Log normal, Gamma,
+and Weibull distributions, respectively (<a href="https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5" class="external-link">Althobaity
+et al., 2022</a>).</div>
+</figure><hr>
+<h3 id="delays-access-figure-6">Figure 6</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Serial interval of novel coronavirus (COVID-19) infections overlaid with a published distribution of SARS. (Nishiura et al., 2020)’</p>
+<figure><img src="fig/serial-interval-covid-sars.jpg" alt="Serial interval of novel coronavirus (COVID-19) infections overlaid with a published distribution of SARS. (Nishiura et al., 2020)" class="figure mx-auto d-block"><div class="figcaption">Serial interval of novel coronavirus (COVID-19)
+infections overlaid with a published distribution of SARS. (<a href="https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext" class="external-link">Nishiura
+et al., 2020</a>)</div>
+</figure><hr>
+<h3 id="delays-access-figure-7">Figure 7</h3>
+<figure><img src="fig/delays-access-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="quantify-transmissibility"><h2 class="section-heading"><a href="quantify-transmissibility.html">Quantifying transmission</a></h2>
+<hr class="half-width">
+<h3 id="quantify-transmissibility-figure-1">Figure 1</h3>
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="quantify-transmissibility-figure-2">Figure 2</h3>
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="quantify-transmissibility-figure-3">Figure 3</h3>
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="quantify-transmissibility-figure-4">Figure 4</h3>
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="quantify-transmissibility-figure-5">Figure 5</h3>
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="quantify-transmissibility-figure-6">Figure 6</h3>
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="delays-functions"><h2 class="section-heading"><a href="delays-functions.html">Use delay distributions in analysis</a></h2>
+<hr class="half-width">
+<h3 id="delays-functions-figure-1">Figure 1</h3>
+<p aria-hidden="true">Image 1 of 1: ‘The four probability functions for the normal distribution (Jack Weiss, 2012)’</p>
+<figure><img src="fig/fig5a-normaldistribution.png" alt="The four probability functions for the normal distribution (Jack Weiss, 2012)" class="figure mx-auto d-block"><div class="figcaption">The four probability functions for the normal
+distribution (<a href="https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc" class="external-link">Jack
+Weiss, 2012</a>)</div>
+</figure><hr>
+<h3 id="delays-functions-figure-2">Figure 2</h3>
+<figure><img src="fig/delays-functions-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="delays-functions-figure-3">Figure 3</h3>
+<figure><img src="fig/delays-functions-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="delays-functions-figure-4">Figure 4</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From Marinović et al., 2015’</p>
+<figure><img src="fig/disease-reporting.jpg" alt="Timeline for chain of disease reporting, the Netherlands. Lab, laboratory; PHA, public health authority. From Marinović et al., 2015" class="figure mx-auto d-block"><div class="figcaption">
+<strong>Timeline for chain of disease reporting,
+the Netherlands.</strong> Lab, laboratory; PHA, public health authority.
+From <a href="https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article" class="external-link">Marinović
+et al., 2015</a>
+</div>
+</figure><hr>
+<h3 id="delays-functions-figure-5">Figure 5</h3>
+<p aria-hidden="true">Image 1 of 1: ‘R_{t} is a measure of transmission at time t. Observations after time t must be adjusted. ICU, intensive care unit. From Gostic et al., 2020’</p>
+<figure><img src="fig/rt-adjusting-delays.png" alt="R_{t} is a measure of transmission at time t. Observations after time t must be adjusted. ICU, intensive care unit. From Gostic et al., 2020" class="figure mx-auto d-block"><div class="figcaption">
+<strong><span class="math inline">\(R_{t}\)</span> is a measure of transmission at
+time <span class="math inline">\(t\)</span>.</strong> Observations after
+time <span class="math inline">\(t\)</span> must be adjusted. ICU,
+intensive care unit. From <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007" class="external-link">Gostic
+et al., 2020</a>
+</div>
+</figure><hr>
+<h3 id="delays-functions-figure-6">Figure 6</h3>
+<figure><img src="fig/delays-functions-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="delays-functions-figure-7">Figure 7</h3>
+<figure><img src="fig/delays-functions-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="delays-functions-figure-8">Figure 8</h3>
+<figure><img src="fig/delays-functions-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="create-forecast"><h2 class="section-heading"><a href="create-forecast.html">Create a short-term forecast</a></h2>
 <hr class="half-width">
 <h3 id="create-forecast-figure-1">Figure 1</h3>
 <figure><img src="fig/create-forecast-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
@@ -303,9 +434,7 @@ with no observed deaths. We will use the deaths between day 31 and day
 day 61 to day 90.
 </figcaption></figure><hr>
 <h3 id="create-forecast-figure-3">Figure 3</h3>
-<figure><img src="fig/create-forecast-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="create-forecast-figure-4">Figure 4</h3>
-<figure><img src="fig/create-forecast-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="severity-static"><h2 class="section-heading"><a href="severity-static.html">Estimation of outbreak severity</a></h2>
+<figure><img src="fig/create-forecast-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="severity-static"><h2 class="section-heading"><a href="severity-static.html">Estimation of outbreak severity</a></h2>
 <hr class="half-width">
 <h3 id="severity-static-figure-1">Figure 1</h3>
 <p aria-hidden="true">Image 1 of 1: ‘The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.’</p>
@@ -552,9 +681,9 @@ threshold (<a href="https://www.nature.com/articles/nature04153" class="external
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/images.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/images.html",
-  "dateCreated": "2024-05-04",
-  "dateModified": "2024-06-18",
-  "datePublished": "2024-06-18"
+  "dateCreated": "2024-06-19",
+  "dateModified": "2024-06-19",
+  "datePublished": "2024-06-19"
 }
 
   </script><script>

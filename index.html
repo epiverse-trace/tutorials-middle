@@ -173,7 +173,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="create-forecast.html">1. Create a short-term forecast</a>
+        <a href="delays-access.html">1. Access epidemiological delay distributions</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -182,7 +182,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="severity-static.html">2. Estimation of outbreak severity</a>
+        <a href="quantify-transmissibility.html">2. Quantifying transmission</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -191,7 +191,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="superspreading-estimate.html">3. Account for superspreading</a>
+        <a href="delays-functions.html">3. Use delay distributions in analysis</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -200,7 +200,34 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="superspreading-simulate.html">4. Simulate transmission chains</a>
+        <a href="create-forecast.html">4. Create a short-term forecast</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="severity-static.html">5. Estimation of outbreak severity</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush7">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading7">
+        <a href="superspreading-estimate.html">6. Account for superspreading</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="superspreading-simulate.html">7. Simulate transmission chains</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -248,11 +275,11 @@
         <!-- START: inst/pkgdown/templates/content-syllabus.html -->
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link float-end" href="create-forecast.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="delays-access.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="create-forecast.html" rel="next">Next: Create a short-term... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="delays-access.html" rel="next">Next: Access... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <hr></nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Setup</h1>
       
@@ -292,28 +319,29 @@ task tutorials ➠</a></th>
 task tutorials ➠</a></th>
 <th><a href="https://epiverse-trace.github.io/tutorials-late/" class="external-link">Late task
 tutorials ➠</a></th>
-</tr></thead><tbody><tr class="odd"><td>Reading and cleaning case data</td>
+</tr></thead><tbody><tr class="odd"><td>Read and clean case data, and make linelist</td>
 <td>Real-time analysis and forecasting</td>
 <td>Scenario modelling</td>
-</tr><tr class="even"><td>Read and clean linelist data, Access delay distributions, and
-Estimate transmission metrics.</td>
-<td>Forecast cases, Estimate severity, and Estimate superspreading.</td>
-<td>Simulate disease spread and Investigate interventions.</td>
+</tr><tr class="even"><td>Read, clean and validate case data, convert linelist data to
+incidence for visualization.</td>
+<td>Access delay distributions and estimate transmission metrics,
+forecast cases, estimate severity and superspreading.</td>
+<td>Simulate disease spread and investigate interventions.</td>
 </tr></tbody></table><p>Each episode contains:</p>
 <ul><li>
-<strong>Overview</strong> : describes what questions will be
-answered and what are the objectives of the episode.</li>
+<strong>Overview</strong>: describes what questions will be answered
+and what are the objectives of the episode.</li>
 <li>
 <strong>Prerequisites</strong>: describes what episodes/packages
 need to be covered before the current episode.</li>
 <li>
-<strong>Example R code</strong> : work through the episodes on your
+<strong>Example R code</strong>: work through the episodes on your
 own computer using the example R code.</li>
 <li>
-<strong>Challenges</strong> : complete challenges to test your
+<strong>Challenges</strong>: complete challenges to test your
 understanding.</li>
 <li>
-<strong>Explainers</strong> : add to your understanding of
+<strong>Explainers</strong>: add to your understanding of
 mathematical and modelling concepts with the explainer boxes.</li>
 </ul><p>Also check out the <a href="reference.html">glossary</a> for any
 terms you may be unfamiliar with.</p>
@@ -321,15 +349,11 @@ terms you may be unfamiliar with.</p>
 <div class="section level3">
 <h3 id="epiverse-trace-r-packages">Epiverse-TRACE R packages<a class="anchor" aria-label="anchor" href="#epiverse-trace-r-packages"></a></h3>
 <p>Our strategy is to gradually incorporate specialised <strong>R
-packages</strong> into our traditional analysis pipeline. These packages
+packages</strong> into a traditional analysis pipeline. These packages
 should fill the gaps in these epidemiology-specific tasks in response to
 outbreaks.</p>
-<figure><img src="fig/pkgs-hexlogos-2.png" alt="In R, the fundamental unit of shareable code is the package. A package bundles together code, data, documentation, and tests and is easy to share with others (Wickham and Bryan, 2023)" class="figure mx-auto d-block"><div class="figcaption">In <strong>R</strong>, the fundamental unit of
-shareable code is the <strong>package</strong>. A package bundles
-together code, data, documentation, and tests and is easy to share with
-others (<a href="https://r-pkgs.org/introduction.html" class="external-link">Wickham and
-Bryan, 2023</a>)</div>
-</figure><div id="prereq1" class="callout prereq">
+<p><img src="fig/pkgs-hexlogos-2.png" alt="In R, the fundamental unit of shareable code is the package. A package bundles together code, data, documentation, and tests and is easy to share with others (Wickham and Bryan, 2023)" class="figure">.</p>
+<div id="prereq1" class="callout prereq">
 <div class="callout-square">
 <i class="callout-icon" data-feather="check"></i>
 </div>
@@ -337,17 +361,16 @@ Bryan, 2023</a>)</div>
 <h3 class="callout-title">Prerequisite<a class="anchor" aria-label="anchor" href="#prereq1"></a>
 </h3>
 <div class="callout-content">
-<p>This course assumes intermediate R knowledge. This workshop is for
+<p>This content assumes intermediate R knowledge. This tutorials are for
 you if:</p>
-<ul><li>You can use the magrittr pipe <code>%&gt;%</code> and/or native pipe
-<code>|&gt;</code>
-</li>
+<ul><li>You can read data into R, transform and reshape data, and make a
+wide variety of graphs</li>
 <li>You are familiar with functions from <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>,
 <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a>, and <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a>
 </li>
-<li>You can read data into R, transform and reshape data, and make a
-wide variety of graphs</li>
-</ul><p>We expect participants to have some exposure to basic Statistical,
+<li>You can use the magrittr pipe <code>%&gt;%</code> and/or native pipe
+<code>|&gt;</code>.</li>
+</ul><p>We expect learners to have some exposure to basic Statistical,
 Mathematical and Epidemic theory concepts, but NOT intermediate or
 expert familiarity with modeling.</p>
 </div>
@@ -426,6 +449,21 @@ window</a>, then press the <kbd>Enter</kbd> (Windows and Linux) or
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># for episodes on access delays and quantify transmission</span></span>
+<span></span>
+<span><span class="va">new_packages</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span></span>
+<span>  <span class="st">"EpiNow2"</span>,</span>
+<span>  <span class="st">"epiverse-trace/epiparameter"</span>,</span>
+<span>  <span class="st">"incidence2"</span>,</span>
+<span>  <span class="st">"tidyverse"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="va">new_packages</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># for episodes on forecast and severity</span></span>
 <span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
@@ -441,7 +479,7 @@ window</a>, then press the <kbd>Enter</kbd> (Windows and Linux) or
 <span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="va">new_packages</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -482,7 +520,7 @@ you to follow:</p>
 <strong>Verify <code>Rtools</code> installation</strong>. You can do
 so by using Windows search across your system. Optionally, you can use
 <a href="https://devtools.r-lib.org/" class="external-link">devtools</a> running:</li>
-</ol><div class="codewrapper sourceCode" id="cb3">
+</ol><div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -495,7 +533,7 @@ so by using Windows search across your system. Optionally, you can use
 with default selections.</p></li>
 <li><p><strong>Verify <code>Rtools</code> installation</strong>. Again,
 we can use <a href="https://devtools.r-lib.org/" class="external-link">devtools</a>:</p></li>
-</ol><div class="codewrapper sourceCode" id="cb4">
+</ol><div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -516,7 +554,7 @@ we can use <a href="https://devtools.r-lib.org/" class="external-link">devtools<
 <div class="accordion-body">
 <p>If you get an error message when installing {superspreading},
 {epichains}, or {epiparameter}, try this alternative code:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -527,8 +565,7 @@ we can use <a href="https://devtools.r-lib.org/" class="external-link">devtools<
 <span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"epiparameter"</span>, repos <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"https://epiverse-trace.r-universe.dev"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># for epichains</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"epiverse-trace/epichains"</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"epichains"</span>, repos <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="st">"https://epiverse-trace.r-universe.dev"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -546,7 +583,7 @@ we can use <a href="https://devtools.r-lib.org/" class="external-link">devtools<
 <code>Personal access token (PAT)</code>, you may need to <a href="https://epiverse-trace.github.io/git-rstudio-basics/02-setup.html#set-up-your-github-token" class="external-link">set
 up your GitHub token</a>.</p>
 <p>First, install these R packages:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -560,7 +597,7 @@ up your GitHub token</a>.</p>
 </div>
 <p>Then, follow these three steps to <a href="https://epiverse-trace.github.io/git-rstudio-basics/02-setup.html#set-up-your-github-token" class="external-link">set
 up your GitHub token (read this step-by-step guide)</a>:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -574,7 +611,7 @@ up your GitHub token (read this step-by-step guide)</a>:</p>
 <span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">git_sitrep</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Try again installing {epichains}:</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -591,7 +628,18 @@ the tutorial, even if you installed them relatively recently. New
 versions bring improvements and important bug fixes.</p>
 <p>When the installation has finished, you can try to load the packages
 by pasting the following code into the console:</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># for episodes on access delays and quantify transmission</span></span>
+<span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">EpiNow2</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">epiparameter</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">incidence2</span><span class="op">)</span></span>
+<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -604,7 +652,7 @@ by pasting the following code into the console:</p>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">outbreaks</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -643,11 +691,11 @@ Place links that you need to refer to multiple times across pages here. Delete
 any links that you are not going to use. 
  -->
 </section></section></main><nav class="bottom-pagination mx-md-4" aria-label="Next Chapter"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link float-end" href="create-forecast.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="delays-access.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link float-end" href="create-forecast.html" rel="next">Next: Create a short-term... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
+        <a class="chapter-link float-end" href="delays-access.html" rel="next">Next: Access... <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
     </nav></div>
 <!-- END  : inst/pkgdown/templates/content-syllabus.html -->
@@ -690,9 +738,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/index.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/index.html",
-  "dateCreated": "2024-05-04",
-  "dateModified": "2024-06-18",
-  "datePublished": "2024-06-18"
+  "dateCreated": "2024-06-19",
+  "dateModified": "2024-06-19",
+  "datePublished": "2024-06-19"
 }
 
   </script><script>

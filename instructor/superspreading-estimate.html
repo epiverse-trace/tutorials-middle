@@ -98,11 +98,11 @@
   Real-time analysis and forecasting for outbreak analytics with R
 </div>
 
-<aside class="col-md-12 lesson-progress"><div style="width: 53%" class="percentage">
-    53%
+<aside class="col-md-12 lesson-progress"><div style="width: 72%" class="percentage">
+    72%
   </div>
   <div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 53%" aria-valuenow="53" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
+    <div class="progress-bar incubator" role="progressbar" style="width: 72%" aria-valuenow="72" aria-label="Lesson Progress" aria-valuemin="0" aria-valuemax="100">
     </div>
   </div>
 </aside><div class="container">
@@ -159,7 +159,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="create-forecast.html">1. Create a short-term forecast</a>
+        <a href="delays-access.html">1. Access epidemiological delay distributions</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -168,7 +168,34 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="severity-static.html">2. Estimation of outbreak severity</a>
+        <a href="quantify-transmissibility.html">2. Quantifying transmission</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush4">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading4">
+        <a href="delays-functions.html">3. Use delay distributions in analysis</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush5">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading5">
+        <a href="create-forecast.html">4. Create a short-term forecast</a>
+    </div><!--/div.accordion-header-->
+        
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush6">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading6">
+        <a href="severity-static.html">5. Estimation of outbreak severity</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -180,7 +207,7 @@
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
-        3. Account for superspreading
+        6. Account for superspreading
         </span>
       </button>
     </div><!--/div.accordion-header-->
@@ -199,10 +226,10 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
-<div class="accordion accordion-flush" id="accordionFlush5">
+<div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading5">
-        <a href="superspreading-simulate.html">4. Simulate transmission chains</a>
+    <div class="accordion-header" id="flush-heading8">
+        <a href="superspreading-simulate.html">7. Simulate transmission chains</a>
     </div><!--/div.accordion-header-->
         
   </div><!--/div.accordion-item-->
@@ -266,7 +293,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Account for superspreading</h1>
-        <p>Last updated on 2024-05-21 |
+        <p>Last updated on 2024-06-19 |
         
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-estimate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -454,7 +481,7 @@ South Korea (<a href="https://community.appliedepi.org/t/estimating-the-degree-o
   <h3 class="accordion-header" id="headingSpoiler1">
 <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>Is contact data tidy?</h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p>Contact data from a transmission chain can provide information on
 which infected individuals came into contact with others. We expect to
@@ -477,9 +504,9 @@ infectees:</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># no infector-infectee pairs are replicated</span></span>
 <span><span class="va">epi_contacts</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">pluck</span><span class="op">(</span><span class="st">"contacts"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">to</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">filter</span><span class="op">(</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">pluck</span><span class="op">(</span><span class="st">"contacts"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">to</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -507,8 +534,8 @@ individual.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># count secondary cases per infector</span></span>
 <span><span class="va">infector_secondary</span> <span class="op">&lt;-</span> <span class="va">epi_contacts</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">pluck</span><span class="op">(</span><span class="st">"contacts"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">count</span><span class="op">(</span><span class="va">from</span>, name <span class="op">=</span> <span class="st">"secondary_cases"</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">pluck</span><span class="op">(</span><span class="st">"contacts"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">from</span>, name <span class="op">=</span> <span class="st">"secondary_cases"</span><span class="op">)</span></span></code></pre>
 </div>
 <p>But this output only contains number of secondary cases for reported
 infectors, not for each of the individuals in the whole
@@ -528,11 +555,11 @@ them.</p>
 <span>  <span class="co"># extract ids in contact *and* linelist using "which" argument</span></span>
 <span>  <span class="fu">epicontacts</span><span class="fu">::</span><span class="fu">get_id</span><span class="op">(</span>which <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># transform vector to dataframe to use left_join()</span></span>
-<span>  <span class="fu">enframe</span><span class="op">(</span>name <span class="op">=</span> <span class="cn">NULL</span>, value <span class="op">=</span> <span class="st">"from"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu">enframe</span><span class="op">(</span>name <span class="op">=</span> <span class="cn">NULL</span>, value <span class="op">=</span> <span class="st">"from"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># join count secondary cases per infectee</span></span>
-<span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">infector_secondary</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">left_join</span><span class="op">(</span><span class="va">infector_secondary</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># infectee with missing secondary cases are replaced with zero</span></span>
-<span>  <span class="fu">replace_na</span><span class="op">(</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu">replace_na</span><span class="op">(</span></span>
 <span>    replace <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>secondary_cases <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
@@ -603,7 +630,7 @@ infected individual.</li>
   <h3 class="accordion-header" id="headingSpoiler2">
 <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>Poisson, overdispersion, and Negative Binomial</h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <!-- distribution stories -->
 <p>For occurrences of associated discrete events we can use
@@ -650,7 +677,7 @@ package.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1">Give me a hint</h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p><strong>Note:</strong> This dataset has 5829 cases. Running
 <code>epicontacts::vis_epicontacts()</code> may overload your
@@ -664,7 +691,7 @@ session!</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -680,18 +707,18 @@ session!</p>
 <span><span class="co"># count secondary cases</span></span>
 <span></span>
 <span><span class="va">ebola_infector_secondary</span> <span class="op">&lt;-</span> <span class="va">ebola_contacts</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">pluck</span><span class="op">(</span><span class="st">"contacts"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">count</span><span class="op">(</span><span class="va">from</span>, name <span class="op">=</span> <span class="st">"secondary_cases"</span><span class="op">)</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">pluck</span><span class="op">(</span><span class="st">"contacts"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">from</span>, name <span class="op">=</span> <span class="st">"secondary_cases"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ebola_secondary</span> <span class="op">&lt;-</span> <span class="va">ebola_contacts</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># extract ids in contact *and* linelist using "which" argument</span></span>
 <span>  <span class="fu">epicontacts</span><span class="fu">::</span><span class="fu">get_id</span><span class="op">(</span>which <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># transform vector to dataframe to use left_join()</span></span>
-<span>  <span class="fu">enframe</span><span class="op">(</span>name <span class="op">=</span> <span class="cn">NULL</span>, value <span class="op">=</span> <span class="st">"from"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu">enframe</span><span class="op">(</span>name <span class="op">=</span> <span class="cn">NULL</span>, value <span class="op">=</span> <span class="st">"from"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># join count secondary cases per infectee</span></span>
-<span>  <span class="fu">left_join</span><span class="op">(</span><span class="va">ebola_infector_secondary</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">left_join</span><span class="op">(</span><span class="va">ebola_infector_secondary</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># infectee with missing secondary cases are replaced with zero</span></span>
-<span>  <span class="fu">replace_na</span><span class="op">(</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu">replace_na</span><span class="op">(</span></span>
 <span>    replace <span class="op">=</span> <span class="fu">list</span><span class="op">(</span>secondary_cases <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
@@ -724,12 +751,16 @@ estimates.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">fitdistrplus</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">## fit distribution</span></span>
+<code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">fitdistrplus</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb11">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## fit distribution</span></span>
 <span><span class="va">offspring_fit</span> <span class="op">&lt;-</span> <span class="va">all_secondary</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">pull</span><span class="op">(</span><span class="va">secondary_cases</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">fitdist</span><span class="op">(</span>distr <span class="op">=</span> <span class="st">"nbinom"</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">pull</span><span class="op">(</span><span class="va">secondary_cases</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">fitdistrplus</span><span class="fu">::</span><span class="fu">fitdist</span><span class="op">(</span>distr <span class="op">=</span> <span class="st">"nbinom"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">offspring_fit</span></span></code></pre>
 </div>
@@ -816,7 +847,7 @@ an individual-level variation in transmission?</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2">Give me a hint</h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
 <p>Review how we fitted a negative binomial distribution using the
 <code>fitdistrplus::fitdist()</code> function.</p>
@@ -829,15 +860,15 @@ an individual-level variation in transmission?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Show me the solution</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebola_offspring</span> <span class="op">&lt;-</span> <span class="va">ebola_secondary</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">pull</span><span class="op">(</span><span class="va">secondary_cases</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">fitdist</span><span class="op">(</span>distr <span class="op">=</span> <span class="st">"nbinom"</span><span class="op">)</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">pull</span><span class="op">(</span><span class="va">secondary_cases</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">fitdistrplus</span><span class="fu">::</span><span class="fu">fitdist</span><span class="op">(</span>distr <span class="op">=</span> <span class="st">"nbinom"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ebola_offspring</span></span></code></pre>
 </div>
@@ -850,7 +881,7 @@ Parameters:
 size 2.353899 0.250124611
 mu   0.539300 0.009699219</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -886,7 +917,7 @@ challenge: How do you define an SSE threshold for Ebola?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Select the best model</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>We can use the maximum likelihood estimates from
 <a href="https://lbbe.univ-lyon1.fr/fr/fitdistrplus" class="external-link">fitdistrplus</a> to compare different models and assess fit
@@ -984,7 +1015,7 @@ al., 2022</a>)</p>
 of having a cluster of secondary infections caused by a primary case
 identified by backward tracing of size <span class="math inline">\(X\)</span> or larger (<a href="https://wellcomeopenresearch.org/articles/5-239/v3" class="external-link">Endo et al.,
 2020</a>).</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -996,7 +1027,7 @@ identified by backward tracing of size <span class="math inline">\(X\)</span> or
 <span><span class="co"># secondary cases from a primary case,</span></span>
 <span><span class="co"># given known reproduction number and</span></span>
 <span><span class="co"># dispersion parameter.</span></span>
-<span><span class="fu">proportion_cluster_size</span><span class="op">(</span></span>
+<span><span class="fu">superspreading</span><span class="fu">::</span><span class="fu">proportion_cluster_size</span><span class="op">(</span></span>
 <span>  R <span class="op">=</span> <span class="va">offspring_fit</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="st">"mu"</span><span class="op">]</span>,</span>
 <span>  k <span class="op">=</span> <span class="va">offspring_fit</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="st">"size"</span><span class="op">]</span>,</span>
 <span>  cluster_size <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">25</span><span class="op">)</span></span>
@@ -1045,7 +1076,7 @@ onward cases?</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3">Give me a hint</h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
 <div class="accordion-body">
 <p>Review how we estimated the probability of having clusters of a fixed
 size, given an offspring distribution mean and dispersion parameters,
@@ -1060,9 +1091,9 @@ function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4">Show me the solution</h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1071,7 +1102,7 @@ function.</p>
 <span><span class="co"># secondary cases from a primary case,</span></span>
 <span><span class="co"># given known reproduction number and</span></span>
 <span><span class="co"># dispersion parameter.</span></span>
-<span><span class="fu">proportion_cluster_size</span><span class="op">(</span></span>
+<span><span class="fu">superspreading</span><span class="fu">::</span><span class="fu">proportion_cluster_size</span><span class="op">(</span></span>
 <span>  R <span class="op">=</span> <span class="va">ebola_offspring</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="st">"mu"</span><span class="op">]</span>,</span>
 <span>  k <span class="op">=</span> <span class="va">ebola_offspring</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="st">"size"</span><span class="op">]</span>,</span>
 <span>  cluster_size <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">25</span><span class="op">)</span></span>
@@ -1123,7 +1154,7 @@ for the <code>ebola_sim_clean</code> object from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4">Give me a hint</h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
 <div class="accordion-body">
 <p>In a Poisson distribution, the <strong>lambda</strong> or
 <strong>rate</strong> parameter are equal to the estimated
@@ -1139,12 +1170,12 @@ zoo</a> shiny app.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5">Show me the solution</h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <p>To get the quantile value for the 99th-percentile we need to use the
 <a href="https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc" class="external-link">density
 function</a> for the Poisson distribution <code>dpois()</code>.</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1153,7 +1184,7 @@ function</a> for the Poisson distribution <code>dpois()</code>.</p>
 <span></span>
 <span><span class="co"># get 99th-percentile from poisson distribution</span></span>
 <span><span class="co"># with mean equal to mu</span></span>
-<span><span class="fu">qpois</span><span class="op">(</span></span>
+<span><span class="fu">stats</span><span class="fu">::</span><span class="fu">qpois</span><span class="op">(</span></span>
 <span>  p <span class="op">=</span> <span class="fl">0.99</span>,</span>
 <span>  lambda <span class="op">=</span> <span class="va">ebola_mu_mid</span></span>
 <span><span class="op">)</span></span></code></pre>
@@ -1202,7 +1233,7 @@ the <code>{epiparameter}</code> R package.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5">Give me a hint</h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
 <div class="accordion-body">
 <p>To use <code>superspreading::proportion_transmission()</code> we
 recommend to read the <a href="https://epiverse-trace.github.io/superspreading/reference/proportion_transmission.html" class="external-link">Estimate
@@ -1212,7 +1243,7 @@ reference manual.</p>
 for SARS, Smallpox, Mpox, Pneumonic Plague, Hantavirus Pulmonary
 Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <code>mean</code> and <code>dispersion</code> parameters for SARS-1:</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1240,9 +1271,9 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6">Show me the solution</h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1262,14 +1293,14 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <pre class="output" tabindex="0"><code>      mean dispersion 
        1.5        5.1 </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># estimate</span></span>
 <span><span class="co"># proportion of cases that</span></span>
 <span><span class="co"># generate 80% of transmission</span></span>
-<span><span class="fu">proportion_transmission</span><span class="op">(</span></span>
+<span><span class="fu">superspreading</span><span class="fu">::</span><span class="fu">proportion_transmission</span><span class="op">(</span></span>
 <span>  R <span class="op">=</span> <span class="va">ebola_params</span><span class="op">[[</span><span class="st">"mean"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  k <span class="op">=</span> <span class="va">ebola_params</span><span class="op">[[</span><span class="st">"dispersion"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  percent_transmission <span class="op">=</span> <span class="fl">0.8</span></span>
@@ -1281,7 +1312,7 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <pre class="output" tabindex="0"><code>    R   k prop_80
 1 1.5 5.1   43.2%</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1290,7 +1321,7 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <span><span class="co"># estimate</span></span>
 <span><span class="co"># proportion of cases that</span></span>
 <span><span class="co"># generate 80% of transmission</span></span>
-<span><span class="fu">proportion_transmission</span><span class="op">(</span></span>
+<span><span class="fu">superspreading</span><span class="fu">::</span><span class="fu">proportion_transmission</span><span class="op">(</span></span>
 <span>  R <span class="op">=</span> <span class="va">sars_params</span><span class="op">[[</span><span class="st">"mean"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  k <span class="op">=</span> <span class="va">sars_params</span><span class="op">[[</span><span class="st">"dispersion"</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>  percent_transmission <span class="op">=</span> <span class="fl">0.8</span></span>
@@ -1302,7 +1333,7 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <pre class="output" tabindex="0"><code>     R    k prop_80
 1 1.63 0.16     13%</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1311,7 +1342,7 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <span><span class="co"># estimate</span></span>
 <span><span class="co"># proportion of cases that</span></span>
 <span><span class="co"># generate 80% of transmission</span></span>
-<span><span class="fu">proportion_transmission</span><span class="op">(</span></span>
+<span><span class="fu">superspreading</span><span class="fu">::</span><span class="fu">proportion_transmission</span><span class="op">(</span></span>
 <span>  R <span class="op">=</span> <span class="va">offspring_fit</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="st">"mu"</span><span class="op">]</span>,</span>
 <span>  k <span class="op">=</span> <span class="va">offspring_fit</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="st">"size"</span><span class="op">]</span>,</span>
 <span>  percent_transmission <span class="op">=</span> <span class="fl">0.8</span></span>
@@ -1471,9 +1502,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/superspreading-estimate.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/superspreading-estimate.html",
-  "dateCreated": "2024-05-04",
-  "dateModified": "2024-05-21",
-  "datePublished": "2024-06-18"
+  "dateCreated": "2024-06-19",
+  "dateModified": "2024-06-19",
+  "datePublished": "2024-06-19"
 }
 
   </script><script>
