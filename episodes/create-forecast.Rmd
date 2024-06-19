@@ -298,7 +298,7 @@ The final key input is the delay distribution between the primary and secondary 
 There are further function inputs to `estimate_secondary()` which can be specified, including adding an observation process, see `?EpiNow2::estimate_secondary` for detail on these options. 
 
 To find the model fit between cases and deaths: 
-```{r}
+```{r,warning=FALSE,message=FALSE}
 # Estimate from day 31 to day 60 of this data
 cases_to_estimate <- reported_cases_deaths %>%
   slice(31:60)
