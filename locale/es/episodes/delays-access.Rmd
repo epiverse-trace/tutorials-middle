@@ -1,0 +1,632 @@
+---
+title: Accede a las distribuciones de retrasos epidemiológicos
+teaching: 20
+exercises: 10
+editor_options:
+  chunk_output_type: inline
+---
+
+:::::::::::::::::::::::::::::::::::::: preguntas
+
+- ¿Cómo acceder a las distribuciones del retraso de la enfermedad de una base de datos preestablecida para utilizarlas en el análisis?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objetivos
+
+- Obtener retrasos de una base de datos de búsqueda bibliográfica con `{epiparameter}`.
+- Obtén parámetros de distribución y estadísticas resumidas de distribuciones de retardos.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prerrequisito
+
+## Requisitos previos
+
+Este episodio requiere que estés familiarizado con
+
+**Ciencia de datos** Programación básica con R
+
+**Teoría epidémica** : parámetros epidemiológicos, periodos de tiempo de la enfermedad, como el periodo de incubación, el tiempo de generación y el intervalo serial.
+
+:::::::::::::::::::::::::::::::::
+
+## Introducción
+
+Las enfermedades infecciosas siguen un ciclo de infección, que suele incluir las siguientes fases: periodo presintomático, periodo sintomático y periodo de recuperación, tal y como se describe en su [historia natural](../learners/reference.md#naturalhistory). Estos periodos de tiempo pueden utilizarse para comprender la dinámica de transmisión e informar sobre las intervenciones de prevención y control de la enfermedad.
+
+![Definición de los periodos de tiempo clave. En [Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038)](fig/time-periods.jpg)
+
+::::::::::::::::: llamada
+
+### Definiciones
+
+Mira el [glosario](../learners/reference.md) ¡para ver las definiciones de todos los periodos de tiempo de la figura anterior!
+
+:::::::::::::::::::::::::
+
+Sin embargo, al principio de una epidemia, los esfuerzos de modelización pueden verse retrasados por la falta de un recurso centralizado que resuma los parámetros de entrada para la enfermedad de interés ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Proyectos como `{epiparameter}` y `{epireview}` están construyendo catálogos en línea siguiendo protocolos de síntesis bibliográfica que pueden ayudar a parametrizar modelos accediendo fácilmente a una biblioteca exhaustiva de parámetros epidemiológicos previamente estimados de brotes pasados.
+
+<!-- Los primeros modelos para COVID-19 utilizaban parámetros de otros coronavirus. https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext -->
+
+Para ejemplificar cómo utilizar el `{epiparameter}` R en tu canal de análisis, nuestro objetivo en este episodio será acceder a un conjunto específico de parámetros epidemiológicos de la literatura, en lugar de copiarlos y pegarlos a mano, para introducirlos en un modelo de `{EpiNow2}` flujo de trabajo de análisis.
+
+<En este episodio, aprenderemos a acceder a un conjunto concreto de parámetros epidemiológicos de la bibliografía y a obtener sus **estadísticas resumidas** mediante `{epiparameter}`.  -->
+
+Empecemos cargando el `{epiparameter}` paquete. Utilizaremos la tubería `%>%` para conectar algunas de sus funciones, algunas `{tibble}` y `{dplyr}` funciones, así que llamemos también al `{tidyverse}` paquete:
+
+```{r, warning=FALSE, message=FALSE}
+library(epiparameter)
+library(tidyverse)
+```
+
+::::::::::::::::::: lista de control
+
+### El doble punto
+
+El doble punto `::` en R te permite llamar a una función específica de un paquete sin cargar todo el paquete en el entorno actual.
+
+Por ejemplo `dplyr::filter(data, condition)` utiliza `filter()` del `{dplyr}` paquete.
+
+Esto nos ayuda a recordar las funciones del paquete y a evitar conflictos de espacio de nombres.
+
+:::::::::::::::::::
+
+## El problema
+
+Si queremos estimar la transmisibilidad de una infección, es habitual utilizar un paquete como `{EpiEstim}` o `{EpiNow2}`. Sin embargo, ambos requieren cierta información epidemiológica como entrada. Por ejemplo, en `{EpiNow2}` utilizamos `EpiNow2::Gamma()` para especificar un [tiempo de generación](../learners/reference.md#generationtime) como una distribución de probabilidad añadiendo su `mean` desviación típica (`sd`) y el valor máximo (`max`).
+
+Para especificar un `generation_time` que sigue a un *Gamma* con media $\mu = 4$ y desviación típica $\sigma = 2$ y un valor máximo de 20, escribimos
+
+```r
+generation_time <- 
+  EpiNow2::Gamma(
+    mean = 4,
+    sd = 2,
+    max = 20
+  )
+```
+
+Es una práctica habitual que los analistas busquen manualmente en la bibliografía disponible y copien y peguen la **resumen estadístico** o las **parámetros de distribución** de las publicaciones científicas. Un reto al que nos enfrentamos a menudo es que la información sobre las distintas distribuciones estadísticas no es coherente en toda la bibliografía. `{epiparameter}` El objetivo de 's es facilitar el acceso a estimaciones fiables de los parámetros de distribución para una serie de enfermedades infecciosas, de modo que puedan implementarse fácilmente en las líneas de análisis de brotes.
+
+En este episodio *acceder a* a las estadísticas resumidas del tiempo de generación de COVID-19 de la biblioteca de parámetros epidemiológicos proporcionada por `{epiparameter}`. Estos parámetros pueden utilizarse para estimar la transmisibilidad de esta enfermedad utilizando `{EpiNow2}` en episodios posteriores.
+
+Empecemos por ver cuántas entradas hay disponibles en el **base de datos de distribuciones epidemiológicas** en `{epiparameter}` utilizando `epidist_db()` para la distribución epidemiológica `epi_dist` llamada tiempo de generación con la cadena `"generation"`:
+
+```{r}
+epiparameter::epidist_db(
+  epi_dist = "generation"
+)
+```
+
+Actualmente, en la biblioteca de parámetros epidemiológicos, tenemos uno `"generation"` entrada temporal para la Gripe. En su lugar, podemos consultar `serial` intervalos para `COVID`\-19. ¡Veamos qué debemos tener en cuenta para ello!
+
+## Tiempo de generación vs intervalo en serie
+
+El tiempo de generación, junto con el número de reproducción ($R$), proporcionan información valiosa sobre la fuerza de la transmisión e informan sobre la aplicación de medidas de control. Dado un $R>1$, cuanto más corto sea el tiempo de generación, antes crecerá la incidencia de casos de enfermedad.
+
+![Vídeo del Centro MRC para el Análisis Global de las Enfermedades Infecciosas, Ep 76. Ciencia en Contexto - Grupo de Revisión de Parámetros Epi con la Dra. Anne Cori (27-07-2023) en <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
+
+Para calcular el número de reproducción efectivo ($R_{t}$), el *tiempo de generación* suele aproximarse mediante la [intervalo serial](../learners/reference.md#serialinterval) serial.
+Esta aproximación frecuente se debe a que es más fácil observar y medir el inicio de los síntomas que el inicio de la infecciosidad.
+
+![Esquema de la relación de los distintos periodos de tiempo de transmisión entre un infector y un infectado en un par de transmisión. La ventana de exposición se define como el intervalo de tiempo que tiene la exposición viral, y la ventana de transmisión se define como el intervalo de tiempo para la transmisión hacia adelante con respecto al tiempo de infección ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
+
+Sin embargo, utilizando la *intervalo en serie* como aproximación del *tiempo de generación* es válida principalmente para las enfermedades en las que la infecciosidad comienza después de la aparición de los síntomas ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). En los casos en que la infecciosidad comienza antes de la aparición de los síntomas, los intervalos seriados pueden tener valores negativos, como ocurre en las enfermedades con transmisión presintomática ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712\(20\)30119-3/fulltext#gr2)).
+
+::::::::::::::::: llamada
+
+### De los periodos de tiempo a las distribuciones de probabilidad.
+
+Cuando calculamos el *intervalo serial* vemos que no todos los pares de casos tienen la misma duración temporal. Observaremos esta variabilidad para cualquier par de casos y periodo de tiempo individual, incluido el [periodo de incubación](../learners/reference.md#incubation) y [periodo infeccioso](../learners/reference.md#infectiousness).
+
+![Intervalos seriados de posibles parejas de casos en (a) COVID-19 y (b) MERS-CoV. Las parejas representan un presunto infector y su presunto infectado trazados por fecha de inicio de los síntomas ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/serial-interval-pairs.jpg)
+
+Para resumir estos datos de periodos de tiempo individuales y por parejas, podemos encontrar el **distribuciones estadísticas** que mejor se ajusten a los datos ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
+
+<!-- añade una referencia sobre buenas prácticas para estimar distribuciones -->
+
+![Distribución de intervalos de serie ajustada para (a) COVID-19 y (b) MERS-CoV basada en pares de transmisión notificados en Arabia Saudí. Ajustamos tres distribuciones de uso común, Log normal, Gamma y Weibull, respectivamente ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)).](fig/seria-interval-fitted-distributions.jpg)
+
+Las distribuciones estadísticas se resumen en función de su **estadísticos resumidos** como la *ubicación* (media y percentiles) y *dispersión* (varianza o desviación típica) de la distribución, o con su **parámetros de la distr** que informan sobre la *forma* (forma y tasa/escala) de la distribución. Estos valores estimados pueden indicarse con su **incertidumbre** (intervalos de confianza del 95%).
+
+| Gamma      | media            | forma           | velocidad/escala | 
+| :--------- | :--------------- | :-------------- | :--------------- |
+| MERS-CoV   | 14\.13(13.9-14.7) | 6\.31(4.88-8.52) | 0\.43(0.33-0.60)  | 
+| COVID-19   | 5\.1(5.0-5.5)     | 2\.77(2.09-3.88) | 0\.53(0.38-0.76)  | 
+
+| Weibull    | media            | forma           | velocidad/escala | 
+| :--------- | :--------------- | :-------------- | :--------------- |
+| MERS-CoV   | 14\.2(13.3-15.2)  | 3\.07(2.64-3.63) | 16\.1(15.0-17.1)  | 
+| COVID-19   | 5\.2(4.6-5.9)     | 1\.74(1.46-2.11) | 5\.83(5.08-6.67)  | 
+
+| Log normal | media            | media-log       | sd-log           | 
+| :--------- | :--------------- | :-------------- | :--------------- |
+| MERS-CoV   | 14\.08(13.1-15.2) | 2\.58(2.50-2.68) | 0\.44(0.39-0.5)   | 
+| COVID-19   | 5\.2(4.2-6.5)     | 1\.45(1.31-1.61) | 0\.63(0.54-0.74)  | 
+
+Tabla: Estimaciones de intervalos de serie utilizando las distribuciones Gamma, Weibull y Log Normal. Los intervalos de confianza del 95% para los parámetros de forma y escala (logmedia y sd para Log Normal) se muestran entre paréntesis ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::: desafío
+
+### Intervalo de serie
+
+Supongamos que COVID-19 y SARS tienen valores de número de reproducción similares y que el intervalo en serie se aproxima al tiempo de generación.
+
+Dado el intervalo serial de ambas infecciones en la figura siguiente:
+
+- ¿Cuál sería más difícil de controlar?
+- ¿Por qué llegas a esa conclusión?
+
+![Intervalo seriado de nuevas infecciones por coronavirus (COVID-19) superpuesto a una distribución publicada del SRAS. ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712\(20\)30119-3/fulltext))](fig/serial-interval-covid-sars.jpg)
+
+::::::::::::::::: sugerencia
+
+El pico de cada curva puede informarte sobre la ubicación de la media de cada distribución. Cuanto mayor sea la media, mayor será el intervalo serial.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solución
+
+**¿Cuál sería más difícil de controlar?**
+
+COVID-19
+
+**¿Por qué concluyes eso?**
+
+COVID-19 tiene el intervalo en serie medio más bajo. El valor medio aproximado del intervalo serial de COVID-19 es de unos cuatro días, y el del SARS es de unos siete días. Por lo tanto, es probable que COVID-19 tenga nuevas generaciones en menos tiempo que el SRAS, suponiendo un número similar de reproducciones.
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::: instructor
+
+El objetivo de la evaluación anterior es valorar la interpretación de un tiempo de generación mayor o menor.
+
+::::::::::::::::::::::
+
+## Elección de los parámetros epidemiológicos
+
+En esta sección, utilizaremos `{epiparameter}` para obtener el intervalo de serie de COVID-19, como alternativa al tiempo de generación.
+
+Preguntémonos ahora cuántos parámetros tenemos en la base de datos de distribuciones epidemiológicas (`epidist_db()`) con el `disease` denominado `covid`\-19. ¡Ejecútalo localmente!
+
+```{r, eval=FALSE}
+epiparameter::epidist_db(
+  disease = "covid"
+)
+```
+
+Desde el `{epiparameter}` podemos utilizar la función `epidist_db()` para pedir cualquier `disease` y también para una distribución epidemiológica concreta (`epi_dist`). Ejecútalo en tu consola:
+
+```{r, eval=FALSE}
+epiparameter::epidist_db(
+  disease = "COVID",
+  epi_dist = "serial"
+)
+```
+
+Con esta combinación de consultas, obtenemos más de una distribución de retrasos. Esta salida es un `<epidist>` objeto de clase.
+
+::::::::::::::::: llamada
+
+### INSENSIBLE A MAYÚSCULAS Y MINÚSCULAS
+
+`epidist_db` es [insensible a mayúsculas y minúsculas](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). Esto significa que puedes utilizar cadenas con letras en mayúsculas o minúsculas indistintamente. Cadenas como `"serial"`, `"serial interval"` o `"serial_interval"` también son válidos.
+
+:::::::::::::::::::::::::
+
+Como se sugiere en los resultados, para resumir una `<epidist>` y obtener los nombres de las columnas de la base de datos de parámetros subyacente, podemos añadir la función `epiparameter::parameter_tbl()` al código anterior utilizando la tubería `%>%`:
+
+```{r}
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial"
+) %>%
+  epiparameter::parameter_tbl()
+```
+
+En el `epiparameter::parameter_tbl()` salida, también podemos encontrar distintos tipos de distribuciones de probabilidad (por ejemplo, Log-normal, Weibull, Normal).
+
+`{epiparameter}` utiliza la `base` R para las distribuciones. Por eso **Normal logarítmica** se llama `lnorm`.
+
+::::::::::::::::: spoiler
+
+### ¿Por qué tenemos una entrada "NA"?
+
+Las entradas con un valor omitido (`<NA>`) en el campo `prob_distribution` columna son *no parametrizada* no parametrizadas. Tienen estadísticas de resumen, pero no distribución de probabilidad. Compara estos dos resultados:
+
+```{r, eval=FALSE}
+# get an <epidist> object
+distribution <-
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "serial"
+  )
+
+distribution %>%
+  # pluck the first entry in the object class <list>
+  pluck(1) %>%
+  # check if <epidist> object have distribution parameters
+  is_parameterised()
+
+# check if the second <epidist> object
+# have distribution parameters
+distribution %>%
+  pluck(2) %>%
+  is_parameterised()
+```
+
+### Las entradas parametrizadas tienen un método de Inferencia
+
+Como se detalla en `?is_parameterised` una distribución parametrizada es la entrada que tiene asociada una distribución de probabilidad proporcionada por un `inference_method` como se muestra en `metadata`:
+
+```{r, eval=FALSE}
+distribution[[1]]$metadata$inference_method
+distribution[[2]]$metadata$inference_method
+distribution[[4]]$metadata$inference_method
+```
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::: desafío
+
+### ¡Encuentra tus distribuciones de retraso!
+
+Tómate 2 minutos para explorar `{epiparameter}` biblioteca.
+
+**Elige** una enfermedad de interés (por ejemplo, gripe, sarampión, etc.) y una distribución de retrasos (por ejemplo, el periodo de incubación, desde el inicio hasta la muerte, etc.).
+
+Encuéntrala:
+
+- ¿Cuántas distribuciones de retraso hay para esa enfermedad?
+
+- ¿Cuántos tipos de distribución de probabilidad (por ejemplo, gamma, log normal) hay para un retraso determinado en esa enfermedad?
+
+Pregunta:
+
+- ¿Reconoces los papeles?
+
+- ¿Debería `{epiparameter}` revisión bibliográfica considerar cualquier otro documento?
+
+::::::::::::::::: pista
+
+El `epidist_db()` con `disease` sólo cuenta el número de entradas como
+
+- estudios, y
+- distribuciones de retrasos.
+
+La dirección `epidist_db()` función con `disease` y `epi_dist` obtiene una lista de todas las entradas con:
+
+- la cita completa,
+- en **tipo** de una distribución de probabilidad, y
+- valores de los parámetros de la distribución.
+
+El combo de `epidist_db()` más `parameter_tbl()` obtiene un marco de datos de todas las entradas con columnas como
+
+- el **tipo** de la distribución de probabilidad por retardo, y
+- autor y año del estudio.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solución
+
+Elegimos explorar las distribuciones de retraso del Ébola:
+
+```{r}
+# we expect 16 delays distributions for ebola
+epiparameter::epidist_db(
+  disease = "ebola"
+)
+```
+
+Ahora, a partir de la salida de `epiparameter::epidist_db()` ¿Qué es un [distribución de la descendencia](../learners/reference.md#offspringdist)?
+
+Elegimos encontrar los periodos de incubación del ébola. Esta salida enumera todos los documentos y parámetros encontrados. Ejecútalo localmente si es necesario:
+
+```{r, eval=FALSE}
+epiparameter::epidist_db(
+  disease = "ebola",
+  epi_dist = "incubation"
+)
+```
+
+Utilizamos `parameter_tbl()` para obtener una visualización resumida de todo:
+
+```{r, eval=TRUE}
+# we expect 2 different types of delay distributions
+# for ebola incubation period
+epiparameter::epidist_db(
+  disease = "ebola",
+  epi_dist = "incubation"
+) %>%
+  parameter_tbl()
+```
+
+Encontramos dos tipos de distribuciones de probabilidad para esta consulta: *log normal* y *gamma*.
+
+¿Cómo `{epiparameter}` hacer la recopilación y revisión de la literatura revisada por pares? Te invitamos a leer la viñeta sobre ["Protocolo de Recopilación y Síntesis de Datos"](https://epiverse-trace.github.io/epiparameter/articles/data_protocol.html) ¡!
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+## Selecciona una única distribución
+
+En `epiparameter::epidist_db()` funciona como una función de filtrado o subconjunto. Utilicemos la función `author` para filtrar `Hiroshi Nishiura` los parámetros:
+
+```{r}
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Hiroshi"
+) %>%
+  epiparameter::parameter_tbl()
+```
+
+Seguimos obteniendo más de un parámetro epidemiológico. Podemos establecer el `single_epidist` argumento a `TRUE` a sólo uno:
+
+```{r}
+epiparameter::epidist_db(
+  disease = "covid",
+  epi_dist = "serial",
+  author = "Hiroshi",
+  single_epidist = TRUE
+)
+```
+
+::::::::::::::::: llamada
+
+### ¿Cómo funciona 'single\_epidist'?
+
+Consultando la documentación de ayuda de `?epiparameter::epidist_db()`:
+
+- Si varias entradas coinciden con los argumentos suministrados y `single_epidist = TRUE` entonces el parámetro
+  `<epidist>` con la *mayor tamaño de la muestra* será devuelta.
+- Si varias entradas son iguales después de esta ordenación, el *primera ent* .
+
+¿Qué es un *parametrizado* `<epidist>`? Mira `?is_parameterised`.
+
+:::::::::::::::::::::::::
+
+Asignemos esto `<epidist>` objeto de clase al `covid_serialint` objeto.
+
+```{r, message=FALSE}
+covid_serialint <-
+  epiparameter::epidist_db(
+    disease = "covid",
+    epi_dist = "serial",
+    author = "Nishiura",
+    single_epidist = TRUE
+  )
+```
+
+Puedes utilizar `plot()` para `<epidist>` objetos para visualizarlos:
+
+- la página *Función de densidad de probabilidad (PDF* y
+- la página *Función de distribución acumulativa (FDA*.
+
+```{r}
+# plot <epidist> object
+plot(covid_serialint)
+```
+
+Con la `day_range` argumento, puedes cambiar la duración o el número de días del `x` eje. Explora cómo se ve esto:
+
+```{r, eval=FALSE}
+# plot <epidist> object
+plot(covid_serialint, day_range = 0:20)
+```
+
+## Extrae las estadísticas de resumen
+
+Podemos obtener la `mean` y la desviación típica (`sd`) a partir de `<epidist>` inmersión en el `summary_stats` objeto:
+
+```{r}
+# get the mean
+covid_serialint$summary_stats$mean
+```
+
+¡Ahora tenemos un parámetro epidemiológico que podemos reutilizar! Dado que el `covid_serialint` es un `lnorm` o una distribución log normal, podemos sustituir la **estadísticas de r** que introducimos en el `EpiNow2::LogNormal()` función
+
+```r
+generation_time <- 
+  EpiNow2::LogNormal(
+    mean = covid_serialint$summary_stats$mean, # replaced!
+    sd = covid_serialint$summary_stats$sd, # replaced!
+    max = 20
+  )
+```
+
+En el próximo episodio aprenderemos a utilizar `{EpiNow2}` para especificar correctamente las distribuciones y estimar la transmisibilidad. Después, cómo utilizar **funciones de distribución** para obtener un valor máximo (`max`) para `EpiNow2::LogNormal()` y utiliza `{epiparameter}` en tu análisis.
+
+:::::::::::::::::::::::::::::: llamada
+
+### Distribuciones logarítmicas normales
+
+Si necesitas la log normal **log normales** en lugar de los estadísticos de resumen, podemos utilizar `epiparameter::get_parameters()`:
+
+```{r}
+covid_serialint_parameters <-
+  epiparameter::get_parameters(covid_serialint)
+
+covid_serialint_parameters
+```
+
+Se obtiene un vector de clase `<numeric>` ¡listo para usar como entrada para cualquier otro paquete!
+
+::::::::::::::::::::::::::::::
+
+## Desafíos
+
+:::::::::::::::::::::::::::::: desafío
+
+### Intervalo de serie del ébola
+
+Tómate 1 minuto para
+
+Acceder al intervalo de serie del ébola con el mayor tamaño de muestra.
+
+Responde:
+
+- ¿Qué es el `sd` de la distribución epidemiológica?
+
+- ¿Cuál es la `sample_size` utilizado en ese estudio?
+
+::::::::: pista
+
+Utiliza el `$` más el operador <kbd>tab</kbd> o <kbd>↹</kbd>  para explorarlos como una lista desplegable:
+
+```r
+covid_serialint$
+```
+
+Utiliza el `str()` para mostrar la estructura del `<epidist>` objeto R.
+
+::::::::::::::::::
+
+:::::::::: solución
+
+```{r, eval=TRUE}
+# ebola serial interval
+ebola_serial <-
+  epiparameter::epidist_db(
+    disease = "ebola",
+    epi_dist = "serial",
+    single_epidist = TRUE
+  )
+
+ebola_serial
+```
+
+```{r, eval=TRUE}
+# get the sd
+ebola_serial$summary_stats$sd
+
+# get the sample_size
+ebola_serial$metadata$sample_size
+```
+
+Intenta visualizar esta distribución utilizando `plot()`.
+
+Explora también todos los demás elementos anidados dentro de la función `<epidist>` objeto.
+
+Comparte sobre:
+
+- ¿Qué elementos te parecen útiles para tu análisis?
+- ¿Qué otros elementos te gustaría ver en este objeto? ¿Cómo?
+
+::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::: instructor
+
+Un elemento interesante es el `method_assess` entrada anidada, que se refiere a los métodos utilizados por los autores del estudio para evaluar el sesgo al estimar la distribución del intervalo serial.
+
+```{r}
+covid_serialint$method_assess
+```
+
+¡Exploraremos estos conceptos en los siguientes episodios!
+
+::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::: desafío
+
+### Parámetro de gravedad del ébola
+
+Un parámetro de gravedad como la duración de la hospitalización podría añadirse a la información necesaria sobre la capacidad de camas en respuesta a un brote ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+
+<!-- Además, `{EpiNow2}` también puede incluir la incertidumbre en torno a cada estadística de resumen, como la desviación típica de la desviación típica. -->
+
+Para el ébola:
+
+- ¿Cuál es el informe *estimación pu* de la duración media de la asistencia sanitaria y el aislamiento de casos?
+
+::::::::::::::::: pista
+
+Un retraso informativo debe medir el tiempo transcurrido desde el inicio de los síntomas hasta la recuperación o la muerte.
+
+Encuentra una forma de acceder a todo el `{epiparameter}` base de datos y averigua cómo se puede almacenar ese retraso. En `parameter_tbl()` salida es un marco de datos.
+
+::::::::::::::::::::::
+
+::::::::::::::::: solución
+
+```{r, eval=TRUE}
+# one way to get the list of all the available parameters
+epidist_db(disease = "all") %>%
+  parameter_tbl() %>%
+  as_tibble() %>%
+  distinct(epi_distribution)
+
+ebola_severity <- epidist_db(
+  disease = "ebola",
+  epi_dist = "onset to discharge"
+)
+
+# point estimate
+ebola_severity$summary_stats$mean
+```
+
+Comprueba que para algunos `{epiparameter}` entradas también tendrás la *incertidumbre* en torno a las *estimación puntual* de cada estadística de síntesis:
+
+```{r}
+# 95% confidence intervals
+ebola_severity$summary_stats$mean_ci
+# limits of the confidence intervals
+ebola_severity$summary_stats$mean_ci_limits
+```
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::: debate
+
+### La distribución zoo
+
+Explora esta shinyapp llamada **El zoo de la distrib** ¡!
+
+Sigue estos pasos para reproducir la forma de la distribución de intervalos en serie COVID de `{epiparameter}` (`covid_serialint` objeto):
+
+1. Accede al <https://ben18785.shinyapps.io/distribution-zoo/> sitio web de shiny app,
+2. Ve al panel izquierdo,
+3. Mantén pulsado el botón *Categoría de distribución*: `Continuous Univariate`,
+4. Selecciona un nuevo *Tipo de distribución*: `Log-Normal`,
+5. Mueve el **deslizadores** es decir, el elemento de control gráfico que te permite ajustar un valor moviendo un tirador a lo largo de un carril o barra horizontal hacia la posición `covid_serialint` parámetros.
+
+Reprodúcelos con el botón `distribution` y todos sus elementos de lista: `[[2]]`, `[[3]]` y `[[4]]`. Explora cómo cambia la forma de una distribución cuando cambian sus parámetros.
+
+Comparte sobre:
+
+- ¿Qué otras funciones del sitio web te parecen útiles?
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: instructor
+
+En el contexto de las interfaces de usuario y de las interfaces gráficas de usuario (GUI), como el [Zoo de la Distribución](https://ben18785.shinyapps.io/distribution-zoo/) una aplicación **deslizador** es un elemento de control gráfico que permite a los usuarios ajustar un valor moviendo un tirador a lo largo de un carril o barra. Conceptualmente, proporciona una forma de seleccionar un valor numérico dentro de un rango especificado deslizando o arrastrando visualmente un puntero (el tirador) a lo largo de un eje continuo.
+
+:::::::::::::::::::::::::
+
+<!--
+## Mapa conceptual
+
+actualízalo a partir de la última prueba epiparamétrica 
+-->
+
+::::::::::::::::::::::::::::::::::::: puntos clave
+
+- Utiliza `{epiparameter}` para acceder al catálogo bibliográfico de distribuciones epidemiológicas de retraso.
+- Utiliza `epidist_db()` para seleccionar distribuciones de retraso individuales.
+- Utiliza `parameter_tbl()` para obtener una visión general de las distribuciones de retardo múltiples.
+- Reutiliza las estimaciones conocidas para una enfermedad desconocida en la fase inicial de un brote cuando no se disponga de datos de rastreo de contactos.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
