@@ -140,7 +140,7 @@ estimates <- EpiNow2::epinow(
 )
 ```
 
-::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::: callout
 
 ### ¡No esperes a que se complete!
 
@@ -315,7 +315,7 @@ estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
 )
 ```
 
-::::::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::::::: callout
 
 ### Ten cuidado con la escala de tiempo
 
@@ -382,7 +382,7 @@ deaths_forecast %>%
 El gráfico muestra la previsión de observaciones secundarias (defunciones) en las fechas para las que hemos registrado casos.
 También es posible prever las defunciones mediante la previsión de casos, para lo que debes especificar `primary` como `estimates` salida de `estimate_infections()`.
 
-:::::::::::::::::::::::::: llamada
+:::::::::::::::::::::::::: callout
 
 ### Intervalos creíbles
 
@@ -533,7 +533,7 @@ plot(ebola_estimates)
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::::::: callout
 
 ### Previsión con estimaciones de $R_t$
 

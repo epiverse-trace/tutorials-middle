@@ -37,7 +37,7 @@ Las enfermedades infecciosas siguen un ciclo de infección, que suele incluir la
 
 ![Definición de los periodos de tiempo clave. En [Xiang et al, 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038)](fig/time-periods.jpg)
 
-::::::::::::::::: llamada
+::::::::::::::::: callout
 
 ### Definiciones
 
@@ -114,7 +114,7 @@ Esta aproximación frecuente se debe a que es más fácil observar y medir el in
 
 Sin embargo, utilizando la *intervalo en serie* como aproximación del *tiempo de generación* es válida principalmente para las enfermedades en las que la infecciosidad comienza después de la aparición de los síntomas ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). En los casos en que la infecciosidad comienza antes de la aparición de los síntomas, los intervalos seriados pueden tener valores negativos, como ocurre en las enfermedades con transmisión presintomática ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712\(20\)30119-3/fulltext#gr2)).
 
-::::::::::::::::: llamada
+::::::::::::::::: callout
 
 ### De los periodos de tiempo a las distribuciones de probabilidad.
 
@@ -211,7 +211,7 @@ epiparameter::epidist_db(
 
 Con esta combinación de consultas, obtenemos más de una distribución de retrasos. Esta salida es un `<epidist>` objeto de clase.
 
-::::::::::::::::: llamada
+::::::::::::::::: callout
 
 ### INSENSIBLE A MAYÚSCULAS Y MINÚSCULAS
 
@@ -378,7 +378,7 @@ epiparameter::epidist_db(
 )
 ```
 
-::::::::::::::::: llamada
+::::::::::::::::: callout
 
 ### ¿Cómo funciona 'single\_epidist'?
 
@@ -443,7 +443,7 @@ generation_time <-
 
 En el próximo episodio aprenderemos a utilizar `{EpiNow2}` para especificar correctamente las distribuciones y estimar la transmisibilidad. Después, cómo utilizar **funciones de distribución** para obtener un valor máximo (`max`) para `EpiNow2::LogNormal()` y utiliza `{epiparameter}` en tu análisis.
 
-:::::::::::::::::::::::::::::: llamada
+:::::::::::::::::::::::::::::: callout
 
 ### Distribuciones logarítmicas normales
 
