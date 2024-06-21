@@ -24,7 +24,7 @@ withr::local_options(base::list(mc.cores = 4))
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: prerrequisito
+::::::::::::::::::::::::::::::::::::: prereq
 
 ## Requisitos previos
 
