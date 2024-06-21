@@ -73,7 +73,7 @@ library(tidyverse)
 withr::local_options(list(mc.cores = 4))
 ```
 
-::::::::::::::::::: lista de control
+::::::::::::::::::: checklist
 
 ### El doble punto
 
