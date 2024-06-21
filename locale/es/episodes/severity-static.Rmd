@@ -14,7 +14,7 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: objetivos
+::::::::::::::::::::::::::::::::::::: objectives
 
 - Estimar el CFR a partir de datos de casos agregados utilizando `{cfr}`.
 

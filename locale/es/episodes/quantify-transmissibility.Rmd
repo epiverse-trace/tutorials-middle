@@ -11,7 +11,7 @@ exercises: 0
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: objetivos
+::::::::::::::::::::::::::::::::::::: objectives
 
 - Aprender a estimar las métricas de transmisión a partir de una serie temporal de datos de casos utilizando el paquete R `EpiNow2`
 

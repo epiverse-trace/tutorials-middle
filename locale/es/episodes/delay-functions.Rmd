@@ -12,7 +12,7 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: objetivos
+::::::::::::::::::::::::::::::::::::: objectives
 
 - Utilizar funciones de distribución para distribuciones continuas y discretas almacenadas como `<epidist>` objetos.
 - Convierte una distribución continua en discreta con `{epiparameter}`.

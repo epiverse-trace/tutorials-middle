@@ -17,7 +17,7 @@ withr::local_options(base::list(mc.cores = 4))
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: objetivos
+::::::::::::::::::::::::::::::::::::: objectives
 
 - Aprender a hacer previsiones de casos utilizando el paquete R `EpiNow2`
 - Aprende a incluir un proceso de observación en la estimación

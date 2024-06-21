@@ -12,7 +12,7 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: objetivos
+::::::::::::::::::::::::::::::::::::: objectives
 
 - Obtener retrasos de una base de datos de búsqueda bibliográfica con `{epiparameter}`.
 - Obtén parámetros de distribución y estadísticas resumidas de distribuciones de retardos.
