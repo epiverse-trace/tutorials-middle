@@ -10,7 +10,7 @@ editor_options:
 withr::local_options(base::list(mc.cores = 4))
 ```
 
-:::::::::::::::::::::::::::::::::::::: preguntas
+:::::::::::::::::::::::::::::::::::::: questions
 
 - ¿Cómo puedo crear previsiones a corto plazo a partir de datos de casos?
 - ¿Cómo tengo en cuenta los informes incompletos en las previsiones?

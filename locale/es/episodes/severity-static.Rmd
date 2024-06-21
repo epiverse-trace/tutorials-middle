@@ -6,7 +6,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
-:::::::::::::::::::::::::::::::::::::: preguntas
+:::::::::::::::::::::::::::::::::::::: questions
 
 - ¿Por qué estimamos la gravedad clínica de una epidemia?
 

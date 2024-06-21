@@ -4,7 +4,7 @@ teaching: 30
 exercises: 0
 ---
 
-:::::::::::::::::::::::::::::::::::::: preguntas
+:::::::::::::::::::::::::::::::::::::: questions
 
 - ¿Cómo puedo estimar el número de reproducción variable en el tiempo ($Rt$) y la tasa de crecimiento a partir de una serie temporal de datos de casos?
 - ¿Cómo puedo cuantificar la heterogeneidad geográfica a partir de estas métricas de transmisión?
