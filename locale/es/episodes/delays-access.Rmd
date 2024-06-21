@@ -620,7 +620,7 @@ En el contexto de las interfaces de usuario y de las interfaces gráficas de usu
 actualízalo a partir de la última prueba epiparamétrica 
 -->
 
-::::::::::::::::::::::::::::::::::::: puntos clave
+::::::::::::::::::::::::::::::::::::: keypoints
 
 - Utiliza `{epiparameter}` para acceder al catálogo bibliográfico de distribuciones epidemiológicas de retraso.
 - Utiliza `epidist_db()` para seleccionar distribuciones de retraso individuales.

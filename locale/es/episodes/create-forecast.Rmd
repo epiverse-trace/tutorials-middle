@@ -555,7 +555,7 @@ Además, existe la opción de [proyectar](../learners/reference.md#projection) e
 
 `EpiNow2` puede utilizarse para crear previsiones a corto plazo y estimar la relación entre distintos resultados. Hay una serie de opciones de modelo que pueden implementarse para diferentes análisis, incluida la adición de un proceso de observación para tener en cuenta los informes incompletos. Consulta la [viñeta](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html) para más detalles sobre las distintas opciones de modelo en `EpiNow2` que no se tratan en estos tutoriales.
 
-::::::::::::::::::::::::::::::::::::: puntos clave
+::::::::::::::::::::::::::::::::::::: keypoints
 
 - Podemos crear previsiones a corto plazo haciendo suposiciones sobre el comportamiento futuro del número de reproducción
 - La notificación incompleta de casos puede tenerse en cuenta en las estimaciones
