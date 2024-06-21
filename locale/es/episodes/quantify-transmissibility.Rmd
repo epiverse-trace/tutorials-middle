@@ -61,7 +61,7 @@ library(tidyverse)
 library(tidyverse)
 ```
 
-::::::::::::::::::: lista de control
+::::::::::::::::::: checklist
 
 ### El doble punto
 
@@ -358,7 +358,7 @@ Para averiguar el número máximo de núcleos disponibles en tu máquina, utiliz
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::: lista de control
+::::::::::::::::::::::::: checklist
 
 **Nota:** En el código siguiente `_fixed` se utilizan distribuciones en lugar de `_variable` (distribuciones de retardo con incertidumbre). Esto se hace para acelerar el tiempo de cálculo. En general, se recomienda utilizar distribuciones variables que tengan en cuenta la incertidumbre adicional.
 

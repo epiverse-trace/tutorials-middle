@@ -60,7 +60,7 @@ library(epiparameter)
 library(tidyverse)
 ```
 
-::::::::::::::::::: lista de control
+::::::::::::::::::: checklist
 
 ### El doble punto
 
