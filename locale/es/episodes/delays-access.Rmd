@@ -6,7 +6,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
-:::::::::::::::::::::::::::::::::::::: preguntas
+:::::::::::::::::::::::::::::::::::::: questions
 
 - ¿Cómo acceder a las distribuciones del retraso de la enfermedad de una base de datos preestablecida para utilizarlas en el análisis?
 

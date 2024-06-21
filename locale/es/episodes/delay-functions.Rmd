@@ -6,7 +6,7 @@ editor_options:
   chunk_output_type: inline
 ---
 
-:::::::::::::::::::::::::::::::::::::: preguntas
+:::::::::::::::::::::::::::::::::::::: questions
 
 - ¿Cómo reutilizar los retrasos almacenados en el `{epiparameter}` biblioteca con mi canal de análisis existente?
 
