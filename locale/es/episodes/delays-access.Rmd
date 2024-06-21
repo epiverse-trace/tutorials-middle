@@ -149,7 +149,7 @@ Tabla: Estimaciones de intervalos de serie utilizando las distribuciones Gamma, 
 
 :::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::: challenge
 
 ### Intervalo de serie
 
@@ -272,7 +272,7 @@ distribution[[4]]$metadata$inference_method
 
 :::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::: challenge
 
 ### ¡Encuentra tus distribuciones de retraso!
 
@@ -462,7 +462,7 @@ Se obtiene un vector de clase `<numeric>` ¡listo para usar como entrada para cu
 
 ## Desafíos
 
-:::::::::::::::::::::::::::::: desafío
+:::::::::::::::::::::::::::::: challenge
 
 ### Intervalo de serie del ébola
 
@@ -535,7 +535,7 @@ covid_serialint$method_assess
 
 ::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::: challenge
 
 ### Parámetro de gravedad del ébola
 
