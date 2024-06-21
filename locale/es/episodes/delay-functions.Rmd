@@ -732,7 +732,7 @@ plot(epinow_estimates_igi)
 
 ## Próximos pasos
 
-::::::::::::::::: testimonio
+::::::::::::::::: testimonial
 
 ### ¿Cómo obtener parámetros de distribución a partir de distribuciones estadísticas?
 
@@ -742,7 +742,7 @@ Mira el `{epiparameter}` viñeta en [extracción y conversión de parámetros](h
 
 :::::::::::::::::::::::::::::
 
-::::::::::::::::: testimonio
+::::::::::::::::: testimonial
 
 ### ¿Cómo estimar las distribuciones de retraso de la Enfermedad X?
 

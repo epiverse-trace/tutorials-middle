@@ -575,7 +575,7 @@ estimates_regional$summary$summarised_results$table
 estimates_regional$summary$plots$R
 ```
 
-<!-- :::::::::::::::::::::::::: testimonio -->
+<!-- :::::::::::::::::::::::::: testimonial -->
 
 <!-- ### el paquete i2extras -->
 
