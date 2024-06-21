@@ -763,7 +763,7 @@ Por último, echa un vistazo al último [`{epidist}` paquete R](https://epidist.
 actualízalo a partir de la última prueba epiparamétrica 
 -->
 
-::::::::::::::::::::::::::::::::::::: puntos clave
+::::::::::::::::::::::::::::::::::::: keypoints
 
 - Utilizar funciones de distribución con `<epidist>` para obtener estadísticas resumidas y parámetros informativos de las intervenciones de salud pública, como la Ventana de rastreo de contactos y la Duración de la cuarentena.
 - Utiliza `discretise()` para convertir distribuciones de retraso continuas en discretas.

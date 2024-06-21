@@ -857,7 +857,7 @@ Responde a estas preguntas:
 
 ::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: puntos clave
+::::::::::::::::::::::::::::::::::::: keypoints
 
 - Utiliza `{cfr}` para estimar la gravedad
 

@@ -585,7 +585,7 @@ estimates_regional$summary$plots$R
 
 `EpiNow2` puede utilizarse para estimar las métricas de transmisión a partir de los datos de casos en cualquier momento del curso de un brote. La fiabilidad de estas estimaciones depende de la calidad de los datos y de la elección adecuada de las distribuciones de retraso. En el siguiente tutorial aprenderemos a hacer previsiones e investigaremos algunas de las opciones adicionales de inferencia disponibles en `EpiNow2`.
 
-::::::::::::::::::::::::::::::::::::: puntos clave
+::::::::::::::::::::::::::::::::::::: keypoints
 
 - Las métricas de transmisión pueden estimarse a partir de los datos del caso tras tener en cuenta los retrasos
 - La incertidumbre puede tenerse en cuenta en las distribuciones de retrasos
