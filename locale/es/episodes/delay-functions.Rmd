@@ -371,7 +371,7 @@ base::plot(epinow_estimates_cg)
 
 En `plot()` incluye los casos estimados por fecha de infección, que se reconstruyen a partir de los casos notificados y los retrasos.
 
-:::::::::: llamada
+:::::::::: callout
 
 ### Advertencia
 
@@ -504,7 +504,7 @@ Compara todos los `{EpiNow2}` cifras generadas anteriormente.
 
 ## Desafíos
 
-:::::::::::::::::::::::::::::: llamada
+:::::::::::::::::::::::::::::: callout
 
 ### Un consejo para completar código
 

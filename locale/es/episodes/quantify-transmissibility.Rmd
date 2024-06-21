@@ -31,7 +31,7 @@ Los alumnos deben familiarizarse con los siguientes conceptos antes de trabajar 
 
 :::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::::::: callout
 
 ### Recordatorio: el Número de Reproducción Efectiva, $R_t$
 
@@ -79,7 +79,7 @@ Este tutorial ilustra el uso de `epinow()` para estimar el número de reproducci
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::::::: callout
 
 ### Inferencia bayesiana
 
@@ -175,7 +175,7 @@ Suponemos que hay retrasos desde el momento de la infección hasta el momento en
 
 La distribución del retraso para cada uno de estos procesos puede estimarse a partir de los datos u obtenerse de la bibliografía. Podemos expresar la incertidumbre sobre cuáles son los parámetros correctos de las distribuciones suponiendo que las distribuciones tienen **fijas** fijos o si tienen **variables** variables. Para entender la diferencia entre **fijo** y **variable** distribuciones, consideremos el periodo de incubación.
 
-::::::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::::::: callout
 
 ### Retrasos y datos
 
@@ -211,7 +211,7 @@ incubation_period_fixed
 
 El argumento `max` es el valor máximo que puede tomar la distribución, en este ejemplo 20 días.
 
-::::::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::::::: callout
 
 ### ¿Por qué una distribución gamma?
 
@@ -302,7 +302,7 @@ Podemos trazar distribuciones simples y combinadas generadas por `{EpiNow2}` uti
 plot(incubation_period_variable + reporting_delay_variable)
 ```
 
-:::::::::::::::::: llamada
+:::::::::::::::::: callout
 
 Si disponemos de datos sobre el tiempo transcurrido entre el inicio de los síntomas y la notificación, podemos utilizar la función `estimate_delay()` para estimar una distribución log normal a partir de un vector de retrasos. El código siguiente ilustra cómo utilizar `estimate_delay()` con datos sintéticos de retrasos.
 
@@ -342,7 +342,7 @@ Una entrada opcional es especificar un *log normal* para el número de reproducc
 rt_prior <- EpiNow2::rt_opts(prior = base::list(mean = 2, sd = 2))
 ```
 
-::::::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::::::: callout
 
 ### Inferencia bayesiana con Stan
 
@@ -422,7 +422,7 @@ estimates <- EpiNow2::epinow(
 
 <!-- ``` -->
 
-::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::: callout
 
 ### No esperes a que esto continúe
 
@@ -474,7 +474,7 @@ Como estas estimaciones se basan en datos parciales, tienen un amplio intervalo 
 
 - El tiempo de duplicación (el tiempo que tarda en duplicarse el número de casos) es `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
 
-::::::::::::::::::::::::::::::::::::: llamada
+::::::::::::::::::::::::::::::::::::: callout
 
 ### `Expected change in daily cases`
 

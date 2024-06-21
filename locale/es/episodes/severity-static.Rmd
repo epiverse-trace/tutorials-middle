@@ -132,7 +132,7 @@ ebola1976 %>%
   as_tibble()
 ```
 
-:::::::::::::::::: llamada
+:::::::::::::::::: callout
 
 ### Necesitamos datos de incidencia agregados
 
@@ -315,7 +315,7 @@ out_high <- out_delay_adjusted %>% pull(severity_high)
 
 El CFR ajustado al retraso indicó que la gravedad general de la enfermedad *al final del brote* o con el *últimos datos disponibles en ese m* es `r out_estimate` con un intervalo de confianza del 95% entre `r out_low` y `r out_high` ligeramente superior al ingenuo.
 
-:::::::::::::::::: llamada
+:::::::::::::::::: callout
 
 ### Utiliza la clase epidist
 
@@ -451,7 +451,7 @@ Por otra parte, el **ajustado al re** puede evaluar la gravedad de una enfermeda
 
 Podemos explorar la **temprano** determinación de la *CFR ajustado al retraso* utilizando el `cfr_rolling()` función
 
-:::::::::::::::::::::: llamada
+:::::::::::::::::::::: callout
 
 `cfr_rolling()` es una función utilitaria que calcula automáticamente el CFR de cada día del brote con los datos disponibles hasta ese día, ahorrando tiempo al usuario.
 
@@ -622,7 +622,7 @@ Esta estimación la realiza la función interna `?cfr:::estimate_severity()`.
 
 ## Desafíos
 
-::::::::::::::::: llamada
+::::::::::::::::: callout
 
 ### Los datos agregados difieren de las listas de líneas
 
@@ -769,7 +769,7 @@ Factores locales como la capacidad de análisis, la definición de caso y el ré
 
 La página `{cfr}` tiene una función llamada `cfr_time_varying()` con una funcionalidad distinta de `cfr_rolling()`.
 
-::::::::::::::::: llamada
+::::::::::::::::: callout
 
 ### ¿Cuándo utilizar cfr\_rolling()?
 
@@ -779,7 +779,7 @@ Recuerda, como se muestra arriba *cfr\_rodamiento()* es útil para obtener estim
 
 :::::::::::::::::
 
-::::::::::::::::: llamada
+::::::::::::::::: callout
 
 ### ¿Cuándo utilizar cfr\_time\_varying()?
 
