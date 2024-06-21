@@ -137,7 +137,7 @@ El acceso a la documentación de referencia (archivos de Ayuda) de estas funcion
 
 ::::::::::::::::::
 
-::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::: challenge
 
 ### Ventana para el rastreo de contactos y el intervalo en serie
 
@@ -232,7 +232,7 @@ covid_serialint_discrete_max <-
   quantile(covid_serialint_discrete, p = 0.99)
 ```
 
-::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::: challenge
 
 ### Duración del periodo de cuarentena e incubación
 
@@ -389,7 +389,7 @@ El sitio **distribución del retraso** podría inferirse conjuntamente con los t
 
 ![**$R_{t}$ es una medida de la transmisión en el momento $t$.** Observaciones después del tiempo $t$ deben ajustarse. UCI, unidad de cuidados intensivos. En [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)](fig/rt-adjusting-delays.png)
 
-::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::: challenge
 
 ### Utiliza un periodo de incubación de COVID-19 para estimar Rt
 
@@ -518,7 +518,7 @@ Permite acceder rápidamente a `covid_serialint_parameters["meanlog"]` y `covid_
 
 ::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::: challenge
 
 ### Número de reproducción efectiva del ébola ajustado por retrasos en la notificación
 
@@ -622,7 +622,7 @@ plot(epinow_estimates_egi)
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::: challenge
 
 ### ¿Qué hacer con las distribuciones de Weibull?
 

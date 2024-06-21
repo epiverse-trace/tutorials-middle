@@ -161,7 +161,7 @@ Cuando aplicamos `cfr_static()` a `data` directamente, calculamos el CFR ingenuo
 cfr::cfr_static(data = ebola1976 %>% slice_head(n = 30))
 ```
 
-:::::::::::::::::::::::::::::::::::::::: desafío
+:::::::::::::::::::::::::::::::::::::::: challenge
 
 Descarga el archivo [sarscov2\_casos\_defunciones.csv](data/sarscov2_cases_deaths.csv) y léelo en R.
 
@@ -331,7 +331,7 @@ Para funciones de distribución con parámetros no disponibles en `{epiparameter
 
 ::::::::::::::::::
 
-:::::::::::::::::::::::::::::::::::::::: desafío
+:::::::::::::::::::::::::::::::::::::::: challenge
 
 Utiliza el mismo archivo del reto anterior ([sarscov2\_casos\_muertes.csv](data/sarscov2_cases_deaths.csv)).
 
@@ -634,7 +634,7 @@ outbreaks::ebola_sierraleone_2014 %>% as_tibble()
 
 :::::::::::::::::
 
-:::::::::::::::::::::::::::::::::: desafío
+:::::::::::::::::::::::::::::::::: challenge
 
 ### Utiliza la incidencia2 para reordenar tus datos
 
@@ -711,7 +711,7 @@ mers_incidence %>%
 
 ::::::::::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::::::::::::::::::::::::::: desafío
+:::::::::::::::::::::::::::::::::::::::::::::::::: challenge
 
 ### Heterogeneidad de la gravedad
 

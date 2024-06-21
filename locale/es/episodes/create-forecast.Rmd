@@ -392,7 +392,7 @@ En todos `{EpiNow2}` figuras de resultados, las regiones sombreadas reflejan los
 
 ## Reto: Análisis del brote de ébola
 
-::::::::::::::::::::::::::::::::::::: desafío
+::::::::::::::::::::::::::::::::::::: challenge
 
 Descarga el archivo [casos\_ébola.csv](data/ebola_cases.csv) y léelo en R. Los datos simulados consisten en la fecha de aparición de los síntomas y el número de casos confirmados de las primeras fases del brote de ébola en Sierra Leona en 2014.
 
