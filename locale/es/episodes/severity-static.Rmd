@@ -217,7 +217,7 @@ sarscov2_input %>%
 
 ## Sesgos que afectan a la estimación del CFR
 
-::::::::::::::::::::::::::::: discusión
+::::::::::::::::::::::::::::: discussion
 
 ### Dos sesgos que afectan a la estimación del CFR
 
