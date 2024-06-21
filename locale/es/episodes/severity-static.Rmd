@@ -1,0 +1,872 @@
+---
+title: Estimación de la gravedad del brote
+teaching: 10
+exercises: 2
+editor_options:
+  chunk_output_type: inline
+---
+
+:::::::::::::::::::::::::::::::::::::: preguntas
+
+- ¿Por qué estimamos la gravedad clínica de una epidemia?
+
+- ¿Cómo se puede estimar el Riesgo de Fatalidad (RF) al principio de una epidemia en curso?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objetivos
+
+- Estimar el CFR a partir de datos de casos agregados utilizando `{cfr}`.
+
+- Estima un CFR ajustado al retraso utilizando `{epiparameter}` y `{cfr}`.
+
+- Estima una gravedad ajustada al retraso para una serie temporal en expansión utilizando `{cfr}`.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prerrequisito
+
+## Requisitos previos
+
+Este episodio requiere que estés familiarizado con
+
+**Ciencia de datos** Programación básica con R
+
+**Teoría epidémica**: [Distribuciones de retardo](../learners/reference.md#delaydist).
+
+:::::::::::::::::::::::::::::::::
+
+## Introducción
+
+Entre las preguntas más comunes en la fase inicial de una epidemia se incluyen:
+
+- ¿Cuál es el impacto probable del brote en la salud pública en términos de gravedad clínica?
+- ¿Cuáles son los grupos más gravemente afectados?
+- ¿Tiene el brote potencial para causar una pandemia muy grave?
+
+Podemos evaluar el potencial pandémico de una epidemia con dos medidas críticas: la transmisibilidad y la gravedad clínica
+([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062),
+[CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).
+
+![Escenarios de Planificación de Pandemias del HHS basados en el Marco de Evaluación de la Gravedad de la Pandemia. Éste utiliza una medida combinada de gravedad clínica y transmisibilidad para caracterizar los escenarios de pandemia de gripe. **HHS**: Departamento de Salud y Servicios Humanos de los Estados Unidos ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png)
+
+Un enfoque epidemiológico para estimar la gravedad clínica consiste en cuantificar el Riesgo de Fatalidad de Casos (CFR). El CFR es la probabilidad condicional de muerte dado un diagnóstico confirmado, calculada como el número acumulado de muertes por una enfermedad infecciosa sobre el número de casos diagnosticados confirmados. Sin embargo, calcularlo directamente durante el curso de una epidemia tiende a dar como resultado un CFR ingenuo o sesgado, dado el tiempo [retraso](../learners/reference.md#delaydist) desde el inicio hasta la muerte, que varía sustancialmente a medida que avanza la epidemia y se estabiliza en las últimas fases del brote ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
+
+![Estimaciones del riesgo de letalidad (CFR) confirmado sesgado observado en función del tiempo (línea gruesa) calculado como el número acumulado
+de muertes sobre casos confirmados en el tiempo t. La estimación al final de un brote (~30 de mayo) es el CFR realizado al final de la epidemia.
+La línea continua horizontal y las líneas de puntos muestran el valor esperado y los intervalos de confianza del 95% ($95%$ IC) de la predicción ajustada al retraso
+estimación de CFR sólo utilizando los datos observados hasta el 27 Mar 2003
+([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_c.png)
+
+::::::::::::::::::::::: instructor
+
+Los periodos son relevantes: Periodo 1 -- 15 días en los que el CFR es cero para indicar que se debe a que no se han notificado muertes; Periodo del 15 de marzo -- 26 de abril en el que el CFR parece aumentar; Periodo del 30 de abril -- 30 de mayo en el que la estimación del CFR se estabiliza.
+
+:::::::::::::::::::::::
+
+En términos más generales, estimar la gravedad puede ser útil incluso fuera de un escenario de planificación pandémica y en el contexto de la salud pública rutinaria.
+Saber si un brote tiene o tuvo una gravedad diferente a la del registro histórico puede motivar investigaciones causales,
+que podrían ser intrínsecas al agente infeccioso (por ejemplo, una nueva cepa más grave) o debidas a factores subyacentes en la población (por ejemplo, inmunidad reducida o factores de morbilidad) ([Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846)).
+
+En este tutorial vamos a aprender a utilizar la función `{cfr}` para calcular y ajustar una estimación CFR utilizando [distribuciones de retardo](../learners/reference.md#delaydist) de `{epiparameter}` o de otro lugar, basándose en los métodos desarrollados por [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) además, cómo podemos reutilizar `{cfr}` funciones para más mediciones de gravedad.
+
+Utilizaremos la tubería `%>%` para conectar funciones, así que vamos a llamar también a la función `{tidyverse}` paquete:
+
+```{r, message=FALSE, warning=FALSE}
+library(cfr)
+library(epiparameter)
+library(tidyverse)
+library(outbreaks)
+```
+
+::::::::::::::::::: lista de comprobación
+
+### El doble punto
+
+El doble punto `::` en R te permite llamar a una función específica de un paquete sin cargar todo el paquete en el entorno actual.
+
+Por ejemplo `dplyr::filter(data, condition)` utiliza `filter()` del `{dplyr}` paquete.
+
+Esto nos ayuda a recordar las funciones del paquete y a evitar conflictos de espacio de nombres.
+
+:::::::::::::::::::
+
+## Fuentes de datos para la gravedad clínica
+
+¿Qué fuentes de datos podemos utilizar para estimar la gravedad clínica de un brote de enfermedad? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(20\)30243-7/fulltext) resume el espectro de casos de COVID-19:
+
+![Espectro de casos de COVID-19. El CFR pretende estimar la proporción de Muertes entre los casos confirmados en una epidemia.
+([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(20\)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
+
+- En la cúspide de la pirámide, los que cumplían los criterios de caso de la OMS para **grave** o críticos se habrían identificado probablemente en el ámbito hospitalario, presentando una neumonía vírica atípica. Estos casos se habrían identificado en China continental y entre los categorizados internacionalmente como de transmisión local.
+- Es probable que haya muchos más casos **sintomáticos** (es decir, con fiebre, tos o mialgia) pero que podrían no requerir hospitalización. Estos casos se habrían identificado mediante vínculos con viajes internacionales a zonas de alto riesgo y mediante el rastreo de los contactos de los casos confirmados. Podrían ser identificables a través de la vigilancia de la población de, por ejemplo, enfermedades similares a la gripe.
+- La parte inferior de la pirámide representa **leve** (y posiblemente **asintomática**). Estos casos podrían identificarse mediante el rastreo de contactos y, posteriormente, mediante pruebas serológicas.
+
+## CFR ingenuo
+
+Medimos la gravedad de la enfermedad en términos de riesgo de letalidad (CFR). El CFR se interpreta como la probabilidad condicional de muerte dado un diagnóstico confirmado, calculada como el número acumulado de muertes $D_{t}$ sobre el número acumulado de casos confirmados $C_{t}$ en un momento determinado $t$. Podemos referirnos al *CFR ingenuo* (también CFR burda o sesgada, $b_{t}$):
+
+$$ b_{t} =  \frac{D_{t}}{C_{t}} $$
+
+Este cálculo es *ingenuo* porque tiende a arrojar un CFR sesgado y sobre todo subestimado debido al retraso temporal desde el inicio hasta la muerte, que sólo se estabiliza en las últimas fases del brote.
+
+<!-- ¿añadir aquí la llamada sobre ratio o riesgo?  -->
+
+<!-- https://github.com/epiverse-trace/cfr/issues/130 -->
+
+Para calcular el CFR ingenuo, el `{cfr}` paquete requiere un marco de datos de entrada con tres columnas denominadas:
+
+- `date`
+- `cases`
+- `deaths`
+
+Exploremos el `ebola1976` incluido en {cfr} que procede del primer brote de ébola en lo que entonces se llamaba Zaire (ahora República Democrática del Congo) en 1976, analizado por Camacho et al. (2014).
+
+```{r}
+# Load the Ebola 1976 data provided with the {cfr} package
+data("ebola1976")
+
+# Assume we only have the first 30 days of this data
+ebola1976 %>%
+  slice_head(n = 30) %>%
+  as_tibble()
+```
+
+:::::::::::::::::: llamada
+
+### Necesitamos datos de incidencia agregados
+
+`{cfr}` lee **agregado** datos de incidencia.
+
+<!-- Similar al `{EpiNow2}` con la diferencia de que para `{cfr}` necesitamos una columna más llamada `muertes`. -->
+
+```{r, eval=FALSE, echo=FALSE}
+EpiNow2::example_confirmed %>% as_tibble()
+```
+
+Esta introducción de datos debe ser **agregados** por día, es decir, una observación *por dí* que contiene la *diario* número de casos y muertes notificados. También deben incluirse las observaciones con valores nulos o ausentes, de forma similar a los datos de series temporales.
+
+También, `{cfr}` actualmente funciona para *diario* pero no para otras unidades temporales de agregación de datos, por ejemplo, semanas.
+
+<!-- sugiere formas de tratar los datos semanales de entrada brutos -->
+
+<!-- https://github.com/epiverse-trace/cfr/issues/117 -->
+
+::::::::::::::::::
+
+Cuando aplicamos `cfr_static()` a `data` directamente, calculamos el CFR ingenuo:
+
+```{r}
+# Calculate the naive CFR for the first 30 days
+cfr::cfr_static(data = ebola1976 %>% slice_head(n = 30))
+```
+
+:::::::::::::::::::::::::::::::::::::::: desafío
+
+Descarga el archivo [sarscov2\_casos\_defunciones.csv](data/sarscov2_cases_deaths.csv) y léelo en R.
+
+Estima el CFR ingenuo.
+
+:::::::::::::::::::: pista
+
+Comprueba el formato de los datos introducidos.
+
+- ¿Contiene datos diarios?
+- ¿Los nombres de las columnas son los requeridos por `cfr_static()`?
+- ¿Cómo se renombran los nombres de las columnas de un marco de datos?
+
+::::::::::::::::::::
+
+:::::::::::::::::::: solución
+
+Leemos los datos introducidos mediante `readr::read_csv()`. Esta función reconoce que la columna `date` es una `<date>` vector de clase.
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+# read data from the tutorial repository R project
+sarscov2_input <-
+  readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r, eval=FALSE, echo=TRUE, warning=FALSE, message=FALSE}
+# read data
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+sarscov2_input <-
+  readr::read_csv(here::here("data", "raw-data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r}
+# Inspect data
+sarscov2_input
+```
+
+Podemos utilizar `dplyr::rename()` para adaptar los datos externos a la entrada de datos de `cfr_static()`.
+
+```{r}
+# Rename before Estimate naive CFR
+sarscov2_input %>%
+  dplyr::rename(
+    cases = cases_jpn,
+    deaths = deaths_jpn
+  ) %>%
+  cfr::cfr_static()
+```
+
+::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::
+
+## Sesgos que afectan a la estimación del CFR
+
+::::::::::::::::::::::::::::: discusión
+
+### Dos sesgos que afectan a la estimación del CFR
+
+[Lipsitch y otros, 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describen dos posibles sesgos que pueden afectar a la estimación de la RFC (y sus posibles soluciones):
+
+:::::::::::::::::::::::::::::
+
+::::::::::::: solución
+
+### 1\. Determinación preferente de los casos graves
+
+Para enfermedades con un *espectro* de presentaciones clínicas, los casos que llaman la atención de las autoridades de salud pública y se registran en las bases de datos de vigilancia suelen ser personas con los síntomas más graves que buscan atención médica, ingresan en un hospital o mueren.
+
+Por lo tanto, el CFR será normalmente más alto entre *los casos detectados* que entre toda la población de casos, dado que esta última puede incluir individuos con presentaciones leves, subclínicas y (según algunas definiciones de "caso") asintomáticas.
+
+:::::::::::::
+
+:::::::::::: solución
+
+### 2\. Sesgo debido al retraso en la notificación de la defunción
+
+Durante un *en curso* epidemia, hay un retraso entre el momento en que alguien muere y el momento en que se notifica su muerte. Por lo tanto, en un momento dado, la lista de casos incluye a personas que morirán y cuya muerte aún no se ha producido o se ha producido pero aún no se ha notificado. Así pues, dividir el número acumulado de muertes notificadas por el número acumulado de casos notificados en un momento concreto durante un brote subestimará la verdadera CFR.
+
+Los determinantes clave de la magnitud del sesgo son la epidemia *tasa de crecimiento* y la *distribución de los retrasos* desde la notificación del caso hasta la notificación de la defunción; cuanto más largos sean los retrasos y más rápida sea la tasa de crecimiento, mayor será el sesgo.
+
+En este episodio del tutorial, vamos a centrarnos en las soluciones para hacer frente a este sesgo específico utilizando `{cfr}` ¡!
+
+::::::::::::
+
+:::::::::::::::::::: solución
+
+### Estudio de caso: Gripe A (H1N1), México, 2009
+
+Mejorar una *temprana* epidemiológica de una RFC ajustada al retraso es crucial para determinar la virulencia, configurar el nivel y las opciones de intervención de salud pública y asesorar al público en general.
+
+En 2009, durante el virus de la gripe porcina, Gripe A (H1N1), México tuvo una estimación temprana sesgada de la CFR. Los informes iniciales del gobierno de México sugerían una infección virulenta, mientras que, en otros países, el mismo virus se percibía como leve ([TIME, 2009](https://content.time.com/time/health/article/0,8599,1894534,00.html)).
+
+En EE.UU. y Canadá, no se atribuyó ninguna muerte al virus en los diez primeros días tras la declaración de emergencia de salud pública por parte de la Organización Mundial de la Salud. Incluso en circunstancias similares en la fase inicial de la pandemia mundial, los funcionarios de salud pública, los responsables políticos y el público en general quieren conocer la virulencia de un agente infeccioso emergente.
+
+[Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062) reinterpretó los datos evaluando los sesgos y obteniendo una gravedad clínica inferior a la de la pandemia de gripe de 1918, pero comparable a la observada en la pandemia de 1957.
+
+::::::::::::::::::::
+
+:::::::::::::::::::: instructor
+
+Podemos mostrar este último sesgo utilizando la función [concepto descrito en este `{cfr}` viñeta](https://epiverse-trace.github.io/cfr/articles/cfr.html#concept-how-reporting-delays-bias-cfr-estimates).
+
+<!-- ¿crear código y luego un .gif? -->
+
+::::::::::::::::::::
+
+## CFR ajustado al retraso
+
+[Nishiura y otros, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) desarrollaron un método que tiene en cuenta la **retardo te** desde el inicio de los síntomas hasta la muerte.
+
+Los brotes en tiempo real pueden tener un número de muertes insuficiente para determinar la distribución temporal entre el inicio y la muerte. Por tanto, podemos estimar el *retraso en la dist* a partir de brotes históricos o reutilizar los accesibles mediante paquetes R como `{epiparameter}` o `{epireview}` que los recogen de la literatura científica publicada. Para una guía paso a paso, lee el episodio tutorial sobre cómo [acceder a los retrasos epidemiológicos](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html).
+
+Utilicemos `{epiparameter}`:
+
+```{r, message=FALSE, warning=FALSE}
+# Get delay distribution
+onset_to_death_ebola <-
+  epiparameter::epidist_db(
+    disease = "Ebola",
+    epi_dist = "onset_to_death",
+    single_epidist = TRUE
+  )
+
+# Plot <epidist> object
+plot(onset_to_death_ebola, day_range = 0:40)
+```
+
+Para calcular el CFR ajustado al retardo, podemos utilizar la fórmula `cfr_static()` con la función `data` y `delay_density` argumentos.
+
+```{r}
+# Calculate the delay-adjusted CFR
+# for the first 30 days
+cfr::cfr_static(
+  data = ebola1976 %>% slice_head(n = 30),
+  delay_density = function(x) density(onset_to_death_ebola, x)
+)
+```
+
+```{r, echo=FALSE}
+out_delay_adjusted <-
+  cfr::cfr_static(
+    data = ebola1976 %>% slice_head(n = 30),
+    delay_density = function(x) density(onset_to_death_ebola, x)
+  )
+
+out_estimate <- out_delay_adjusted %>% pull(severity_estimate)
+out_low <- out_delay_adjusted %>% pull(severity_low)
+out_high <- out_delay_adjusted %>% pull(severity_high)
+```
+
+El CFR ajustado al retraso indicó que la gravedad general de la enfermedad *al final del brote* o con el *últimos datos disponibles en ese m* es `r out_estimate` con un intervalo de confianza del 95% entre `r out_low` y `r out_high` ligeramente superior al ingenuo.
+
+:::::::::::::::::: llamada
+
+### Utiliza la clase epidist
+
+Cuando utilices una clase `<epidist>` podemos utilizar esta expresión como plantilla:
+
+`function(x) density(<EPIDIST_OBJECT>, x)`
+
+Para funciones de distribución con parámetros no disponibles en `{epiparameter}` te proponemos dos alternativas:
+
+- Crear una `<epidist>` objeto de clase, para conectarlo a otros paquetes R de la tubería de análisis de brotes. Lee la [documentación de referencia de `epiparameter::epidist()`](https://epiverse-trace.github.io/epiparameter/reference/epidist.html) o
+
+- Lee `{cfr}` viñeta para [una introducción al trabajo con distribuciones de retardo](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html).
+
+::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: desafío
+
+Utiliza el mismo archivo del reto anterior ([sarscov2\_casos\_muertes.csv](data/sarscov2_cases_deaths.csv)).
+
+Estima el CFR ajustado al retraso utilizando el retraso de distribución apropiado. Entonces:
+
+- ¡Compara las soluciones CFR ingenuas y las ajustadas al retraso!
+
+:::::::::::::::::::: pista
+
+- Encuentra el `<epidist>` ¡apropiado!
+
+::::::::::::::::::::
+
+:::::::::::::::::::: solución
+
+Utilizamos `{epiparameter}` para acceder a una distribución de retrasos para los datos de incidencia agregados del SARS-CoV-2:
+
+```{r, message=FALSE, warning=FALSE}
+library(epiparameter)
+
+sarscov2_delay <-
+  epidist_db(
+    disease = "covid",
+    epi_dist = "onset to death",
+    single_epidist = TRUE
+  )
+```
+
+Leemos la entrada de datos mediante `readr::read_csv()`. Esta función reconoce que la columna `date` es una `<date>` vector de clase.
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+# read data from the tutorial repository R project
+sarscov2_input <-
+  readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r, eval=FALSE, echo=TRUE}
+# read data
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+sarscov2_input <-
+  readr::read_csv(here::here("data", "raw-data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r}
+# Inspect data
+sarscov2_input
+```
+
+Podemos utilizar `dplyr::rename()` para adaptar los datos externos a la entrada de datos de `cfr_static()`.
+
+```{r}
+# Rename before Estimate naive CFR
+sarscov2_input %>%
+  dplyr::rename(
+    cases = cases_jpn,
+    deaths = deaths_jpn
+  ) %>%
+  cfr::cfr_static(delay_density = function(x) density(sarscov2_delay, x))
+```
+
+Interpreta la comparación entre las estimaciones CFR ingenuas y las ajustadas al retraso.
+
+::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::: spoiler
+
+### ¿Cuándo utilizar distribuciones discretas?
+
+En `cfr_static()` y todas las `cfr_*()` familia de funciones, la opción más adecuada para pasar son **discretas** discretas. Esto se debe a que trabajaremos con datos diarios de casos y defunciones.
+
+Podemos suponer que la evaluación de la Función de Distribución de Probabilidades (FDP) de una *continua* es equivalente a la función de masa de probabilidad (FMP) de la distribución *discreta* discreta equivalente.
+
+Sin embargo, esta suposición puede no ser adecuada para distribuciones con picos más grandes. Por ejemplo, las enfermedades con una distribución de inicio-muerte que tiene picos fuertes con una varianza baja. En tales casos, se espera que la disparidad media entre la PDF y la PMF sea más pronunciada en comparación con las distribuciones con picos más amplios. Una forma de abordar esto es discretizar la distribución continua utilizando `epiparameter::discretise()` a una `<epidist>` objeto.
+
+::::::::::::::::::
+
+::::::::::::::::::::::::::: spoiler
+
+### ¿Cómo {cfr} funciona?
+
+Para ajustar el CFR, [Nishiura y otros, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) utilizan los datos de incidencia de casos y muertes para estimar el número de casos con resultados conocidos:
+
+$$
+u_t = \dfrac{\sum_{i = 0}^t
+\sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
+$$
+
+donde
+
+- $c_{t}$ es la incidencia diaria de casos en el momento $t$,
+- $f_{t}$ es el valor de la Función de Masa Probable (FMP) de la **distribución del retraso** entre el inicio y la muerte, y
+- $u_{t}$ representa el factor de subestimación de los resultados conocidos.
+
+$u_{t}$ se utiliza para **escalar** el valor del número acumulado de casos en el denominador en el cálculo del CFR. Se calcula internamente con el [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) función
+
+El estimador para CFR puede escribirse como:
+
+$$p_{t} = \frac{b_{t}}{u_{t}}$$
+
+donde $p_{t}$ es la proporción realizada de casos confirmados que morirán a causa de la infección (o la CFR insesgada), y $b_{t}$ es la estimación cruda y sesgada de la CFR (también CFR ingenua).
+
+A partir de esta última ecuación, observamos que la CFR no sesgada $p_{t}$ es mayor que el CFR sesgado $b_{t}$ porque en $u_{t}$ el numerador es menor que el denominador (observa que $f_{t}$ es la distribución de probabilidad del *distribución del retraso* entre el inicio y la muerte). Por tanto, nos referimos a $b_{t}$ como el estimador sesgado del CFR.
+
+Cuando observamos todo el curso de una epidemia (desde $t \rightarrow \infty$), $u_{t}$ tiende a 1, lo que hace que $b_{t}$ tiende a $p_{t}$ y se convierta en un estimador insesgado ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
+
+:::::::::::::::::::::::::::
+
+## Una estimación temprana del CFR
+
+En el reto anterior, descubrimos que el *ingenuo* y *ajustado al retraso* son diferentes.
+
+En **ingenuo** es útil para obtener una estimación global de la gravedad del brote (hasta el momento). Una vez que el brote haya finalizado o haya progresado de forma que se notifiquen más muertes, el CFR estimado es entonces *más cercano a* la "verdadera" CFR no sesgada.
+
+Por otra parte, el **ajustado al re** puede evaluar la gravedad de una enfermedad infecciosa emergente *antes* que el CFR sesgado o ingenuo, durante una epidemia.
+
+Podemos explorar la **temprano** determinación de la *CFR ajustado al retraso* utilizando el `cfr_rolling()` función
+
+:::::::::::::::::::::: llamada
+
+`cfr_rolling()` es una función utilitaria que calcula automáticamente el CFR de cada día del brote con los datos disponibles hasta ese día, ahorrando tiempo al usuario.
+
+::::::::::::::::::::::
+
+```{r}
+# Calculate the rolling daily naive CFR
+# for all the 73 days in the Ebola dataset
+rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
+
+utils::tail(rolling_cfr_naive)
+```
+
+```{r}
+# Calculate the rolling daily delay-adjusted CFR
+# for all the 73 days in the Ebola dataset
+rolling_cfr_adjusted <- cfr::cfr_rolling(
+  data = ebola1976,
+  delay_density = function(x) density(onset_to_death_ebola, x)
+)
+
+utils::tail(rolling_cfr_adjusted)
+```
+
+Con `utils::tail()` mostramos que las últimas estimaciones de CFR. Las estimaciones ingenuas y las ajustadas al retraso tienen rangos superpuestos de intervalos de confianza del 95%.
+
+Ahora, visualicemos ambos resultados en una serie temporal. ¿Cómo se comportarían en tiempo real las estimaciones de CFR ingenuas y las ajustadas al retraso?
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+# get the latest delay-adjusted CFR
+rolling_cfr_adjusted_end <-
+  rolling_cfr_adjusted %>%
+  dplyr::slice_tail()
+
+# bind by rows both output data frames
+bind_rows(
+  rolling_cfr_naive %>%
+    mutate(method = "naive"),
+  rolling_cfr_adjusted %>%
+    mutate(method = "adjusted")
+) %>%
+  # visualise both adjusted and unadjusted rolling estimates
+  ggplot() +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low,
+      ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_estimate, colour = method)
+  ) +
+  geom_hline(
+    data = rolling_cfr_adjusted_end,
+    aes(yintercept = severity_estimate)
+  ) +
+  geom_hline(
+    data = rolling_cfr_adjusted_end,
+    aes(yintercept = severity_low),
+    lty = 2
+  ) +
+  geom_hline(
+    data = rolling_cfr_adjusted_end,
+    aes(yintercept = severity_high),
+    lty = 2
+  )
+```
+
+La línea horizontal representa la CFR ajustada al retraso estimada al final del brote. La línea punteada significa que la estimación tiene un intervalo de confianza del 95% (IC 95%).
+
+**Observa** que este cálculo ajustado al retardo es especialmente útil cuando un *curva epidémica de casos confirmados* es el único dato disponible (es decir, cuando no se dispone de datos individuales desde el inicio hasta la muerte, especialmente durante la fase inicial de la epidemia). Cuando hay pocas muertes o ninguna, hay que hacer una suposición para el *distribución del retraso* desde el inicio hasta la muerte, por ejemplo, a partir de la literatura basada en brotes anteriores. [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) representan esto en las figuras con datos del brote de SRAS en Hong Kong, 2003.
+
+:::::::::::::::::::::::::::::::::: spoiler
+
+### Estudio de caso: Brote de SRAS, Hong Kong, 2003
+
+Las figuras A y B muestran el número acumulado de casos y muertes por SRAS, y la figura C muestra las estimaciones observadas (sesgadas) del CFR en función del tiempo, es decir, el número acumulado de muertes sobre casos en el momento $t$. Debido al retraso desde el inicio de los síntomas hasta la muerte, la estimación sesgada de la CFR en el tiempo $t$ subestima el CFR realizado al final de un brote (es decir, 302/1755 = 17,2%).
+
+![Riesgo observado (sesgado) de letalidad confirmada del síndrome respiratorio agudo grave (SRAS) en Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_abc.png)
+
+No obstante, incluso utilizando únicamente los datos observados para el periodo comprendido entre el 19 de marzo y el 2 de abril, `cfr_static()` se puede obtener una predicción adecuada (Figura D), por ejemplo, la CFR ajustada al retraso en el 27 de marzo es del 18,1% (IC del 95%: 10,5, 28,1). Se observa una sobreestimación en las fases muy tempranas de la epidemia, pero los límites de confianza del 95% en las fases posteriores incluyen el CFR realizado (es decir, 17,2 %).
+
+![Determinación temprana del riesgo de letalidad confirmada ajustado al retraso del síndrome respiratorio agudo grave (SRAS) en Hong Kong, 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_d.png)
+
+::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::: debate
+
+### Interpretar la estimación del CFR en fase inicial
+
+Basándote en la figura anterior:
+
+- ¿Cuánta diferencia en días hay entre la fecha en la que el IC del 95% de la estimación *CFR ajustado por retraso* frente a *CFR ingenua* ¿cruzar con el CFR estimado al final del brote?
+
+Discute:
+
+- ¿Cuáles son las implicaciones para la política de salud pública de tener una *MCR ajustado por retraso* ajustada al retraso?
+
+::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::: sugerencia
+
+Podemos utilizar la inspección visual o el análisis de los marcos de datos de salida.
+
+::::::::::::::::::::::
+
+:::::::::::::::::::::: solución
+
+Hay casi un mes de diferencia.
+
+Nótese que la estimación tiene una incertidumbre considerable al principio de la serie temporal. Al cabo de dos semanas, el CFR ajustado al retraso se aproxima a la estimación global del CFR al final del brote.
+
+¿Es este patrón similar al de otros brotes? Podemos utilizar los conjuntos de datos de los retos de este episodio. ¡Te invitamos a averiguarlo!
+
+::::::::::::::::::::::
+
+:::::::::::::::::::::: debate
+
+### Lista de control
+
+Con `{cfr}` estimamos el CFR como la proporción de muertes entre **confirmadas** confirmados.
+
+Utilizando sólo **confirmado** está claro que se pasarán por alto todos los casos que no busquen tratamiento médico o no sean notificados, así como todos los casos asintomáticos. Esto significa que la estimación de la CFR es superior a la proporción de muertes entre los infectados.
+
+::::::::::::::::::::::
+
+::::::::::::::::::::::::::: solución
+
+### ¿Por qué difieren la ingenua y la ajustada al retraso?
+
+`{cfr}` tiene como objetivo obtener un estimador insesgado "mucho antes" de observar el curso completo del brote. Para ello `{cfr}` utiliza el factor de subestimación $u_{t}$ para estimar el CFR insesgado $p_{t}$ utilizando métodos de máxima verosimilitud, dado el *proceso de muestreo* definido por [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
+
+:::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: solución
+
+### ¿Qué es el proceso de muestreo?
+
+![La población de casos confirmados y el proceso de muestreo para estimar el CFR insesgado durante el transcurso de un brote. ([Nishiura et al., 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
+
+En *datos agregados de incidencia* en el momento $t$ conocemos el número acumulado de casos confirmados y muertes, $C_{t}$ y $D_{t}$ y deseamos estimar el CFR insesgado $\pi$ mediante el factor de subestimación $u_{t}$.
+
+Si conociéramos el factor de subestimación $u_{t}$ podríamos especificar el tamaño de la población de casos confirmados que ya no corren riesgo ($u_{t}C_{t}$, **sombreado**), aunque no sabemos qué individuos supervivientes pertenecen a este grupo. Una proporción $\pi$ de los del grupo de casos aún en riesgo (tamaño $(1- u_{t})C_{t}$, **sin sombrear**) se espera que muera.
+
+Porque cada caso que deja de estar en riesgo tiene una probabilidad independiente de morir, $\pi$ el número de muertes, $D_{t}$ es una muestra de una distribución binomial con tamaño de muestra $u_{t}C_{t}$ y probabilidad de morir $p_{t}$ = $\pi$.
+
+Esto se representa mediante la siguiente función de verosimilitud para obtener la estimación de máxima verosimilitud del CFR insesgado $p_{t}$ = $\pi$:
+
+$$
+{\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} + D_{t} \log{\pi} +
+(u_{t}C_{t} - D_{t})\log{(1 - \pi)},
+$$
+
+Esta estimación la realiza la función interna `?cfr:::estimate_severity()`.
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: solución
+
+### Limitaciones
+
+- El CFR ajustado al retraso no aborda todas las fuentes de error en los datos, como el infradiagnóstico de individuos infectados.
+
+::::::::::::::::::::::::::
+
+## Desafíos
+
+::::::::::::::::: llamada
+
+### Los datos agregados difieren de las listas de líneas
+
+*Agregados* Los datos de incidencia difieren de **lista** en los que cada observación contiene datos a nivel individual.
+
+```{r}
+outbreaks::ebola_sierraleone_2014 %>% as_tibble()
+```
+
+:::::::::::::::::
+
+:::::::::::::::::::::::::::::::::: desafío
+
+### Utiliza la incidencia2 para reordenar tus datos
+
+A partir de la `{outbreaks}` paquete, carga la lista de casos MERS del `mers_korea_2015` objeto.
+
+Reordena esta lista de casos para que encaje en el paquete `{cfr}` entrada del paquete.
+
+Estima el HFR ajustado al retardo utilizando el retardo de distribución correspondiente.
+
+::::::::::::::::: sugerencia
+
+**¿Cómo reorganizar mis datos de entrada?**
+
+Reorganizar los datos de entrada para el análisis de datos puede llevarte la mayor parte del tiempo. Para estar listo para el análisis *datos de incidencia agregados* te animamos a utilizar `{incidence2}` ¡!
+
+Primero, en el [Comenzar](https://www.reconverse.org/incidence2/articles/incidence2.html) de la viñeta `{incidence2}` explora cómo utilizar `date_index` al leer una lista de líneas con fechas en varias columnas.
+
+A continuación, consulta `{cfr}` viñeta sobre [Manejo de datos de `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html) sobre cómo utilizar la función `cfr::prepare_data()` de los objetos incidencia2.
+
+<!-- cita la entrada howto one lineslist + incidencia2 + conexión cfr -->
+
+:::::::::::::::::
+
+::::::::::::::::: solución
+
+```{r, message=FALSE, warning=FALSE}
+# Load packages
+library(cfr)
+library(epiparameter)
+library(incidence2)
+library(outbreaks)
+library(tidyverse)
+
+# Access delay distribution
+mers_delay <-
+  epidist_db(
+    disease = "mers",
+    epi_dist = "onset to death",
+    single_epidist = TRUE
+  )
+
+# Read linelist
+mers_korea_2015$linelist %>%
+  as_tibble() %>%
+  select(starts_with("dt_"))
+
+# Use {incidence2} to count daily incidence
+mers_incidence <- mers_korea_2015$linelist %>%
+  # converto to incidence2 object
+  incidence(date_index = c("dt_onset", "dt_death")) %>%
+  # complete dates from first to last
+  incidence2::complete_dates()
+
+# Inspect incidence2 output
+mers_incidence
+
+# Prepare data from {incidence2} to {cfr}
+mers_incidence %>%
+  prepare_data(
+    cases_variable = "dt_onset",
+    deaths_variable = "dt_death"
+  )
+
+# Estimate delay-adjusted CFR
+mers_incidence %>%
+  cfr::prepare_data(
+    cases_variable = "dt_onset",
+    deaths_variable = "dt_death"
+  ) %>%
+  cfr::cfr_static(delay_density = function(x) density(mers_delay, x))
+```
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::: desafío
+
+### Heterogeneidad de la gravedad
+
+La CFR puede diferir entre poblaciones (por ejemplo, edad, espacio, tratamiento); cuantificar estas heterogeneidades puede ayudar a dirigir los recursos adecuadamente y a comparar distintos regímenes asistenciales ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+
+Utiliza el `cfr::covid_data` marco de datos para estimar una CFR ajustada al retraso estratificada por países.
+
+::::::::::::::::::::::::: sugerencia
+
+Una forma de hacer un *análisis estratificado* es aplicar un modelo a datos anidados. Este [`{tidyr}` viñeta](https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models) te muestra cómo aplicar la `group_by()` + `nest()` a los datos anidados, y luego `mutate()` + `map()` para aplicar el modelo.
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solución
+
+```{r, message=FALSE, warning=FALSE}
+library(cfr)
+library(epiparameter)
+library(tidyverse)
+
+covid_data %>% glimpse()
+
+delay_onset_death <-
+  epidist_db(
+    disease = "covid",
+    epi_dist = "onset to death",
+    single_epidist = TRUE
+  )
+
+covid_data %>%
+  group_by(country) %>%
+  nest() %>%
+  mutate(
+    temp =
+      map(
+        .x = data,
+        .f = cfr::cfr_static,
+        delay_density = function(x) density(delay_onset_death, x)
+      )
+  ) %>%
+  unnest(cols = temp)
+```
+
+¡Estupendo! Ahora puedes utilizar un código similar para cualquier otro análisis estratificado, como la edad, las regiones u otros.
+
+Pero, ¿cómo podemos interpretar que existe una variabilidad de gravedad por países a partir del mismo patógeno diagnosticado?
+
+Factores locales como la capacidad de análisis, la definición de caso y el régimen de muestreo pueden afectar a la notificación de casos y muertes, afectando así a la comprobación de los casos. Echa un vistazo a la `{cfr}` viñeta sobre [Estimar la proporción de casos que se determinan durante un brote](https://epiverse-trace.github.io/cfr/articles/estimate_ascertainment.html) ¡!
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Apéndice
+
+La página `{cfr}` tiene una función llamada `cfr_time_varying()` con una funcionalidad distinta de `cfr_rolling()`.
+
+::::::::::::::::: llamada
+
+### ¿Cuándo utilizar cfr\_rolling()?
+
+**cfr\_desplazam)** muestra el CFR estimado en cada día del brote, dado que los datos futuros sobre casos y muertes no están disponibles en ese momento. El valor final de *cfr\_rodamient)* estimado es idéntico al de *cfr\_estática()* con los mismos datos.
+
+Recuerda, como se muestra arriba *cfr\_rodamiento()* es útil para obtener estimaciones de CFR en las primeras fases y comprobar si la estimación de CFR de un brote se ha estabilizado. Así, *cfr\_rodamient)* no es sensible a la duración ni al tamaño de la epidemia.
+
+:::::::::::::::::
+
+::::::::::::::::: llamada
+
+### ¿Cuándo utilizar cfr\_time\_varying()?
+
+Por otra parte, **cfr\_tiempo\_variante()** calcula la CFR a lo largo de una ventana móvil y ayuda a comprender los cambios en la CFR debidos a cambios en la epidemia, por ejemplo, debidos a una nueva variante o a una mayor inmunidad por vacunación.
+
+Sin embargo, *cfr\_tiempo\_variante()* es sensible a la incertidumbre del muestreo. Por tanto, es sensible al tamaño del brote. Cuanto mayor sea el número de casos con resultados esperados en un día determinado, más estimaciones razonables de la CFR variable en el tiempo obtendremos.
+
+Por ejemplo, con 100 casos, la estimación del riesgo de mortalidad tendrá, a grandes rasgos, un intervalo de confianza del 95% ±10% de la estimación media (IC binomial). Por tanto, si tenemos >100 casos con resultados esperados *en un día det* podemos obtener estimaciones razonables del CFR variable en el tiempo. Pero si sólo tenemos >100 casos *a lo largo de toda la epidemia* probablemente tengamos que basarnos en **cfr\_rodamiento()** que utiliza los datos acumulados.
+
+Te invitamos a leer esto [viñeta sobre la `cfr_time_varying()` función](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
+
+:::::::::::::::::
+
+:::::::::::::::::::::::::::::::: debate
+
+### Más medidas de gravedad
+
+Supongamos que necesitamos evaluar la gravedad clínica de la epidemia en un contexto distinto al de los datos de vigilancia, como la gravedad entre los casos que llegan a los hospitales o los casos que recogiste en una encuesta serológica representativa.
+
+Utilizando `{cfr}` podemos cambiar las entradas para el numerador (`cases`) y el denominador (`deaths`) para estimar más medidas de gravedad, como el Riesgo de Fatalidad por Infección (RFI) o el Riesgo de Fatalidad por Hospitalización (RFH). Podemos seguir esta analogía:
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::: solución
+
+### Riesgo de mortalidad por infección y hospitalización
+
+Si por una *Caso* riesgo de mortalidad (CFR), exigimos:
+
+- *caso* datos de incidencia de casos y muertes, con un
+- distribución de retraso entre casos y muertes (o una aproximación cercana, como entre el inicio de los síntomas y la muerte).
+
+Entonces, la *Infección* (IFR) requiere:
+
+- *infección* y los datos de incidencia de muertes, con un
+- distribución de retraso de la exposición a la muerte (o una aproximación cercana).
+
+Del mismo modo, la *Hospitalización* Fatality Risk (HFR) requiere:
+
+- *hospitalización* datos de incidencia de hospitalización y muerte, y un
+- distribución del retraso de la hospitalización a la muerte.
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::: solución
+
+### Fuentes de datos para más medidas de gravedad
+
+[Yang y otros, 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) resume diferentes definiciones y fuentes de datos:
+
+![Niveles de gravedad de las infecciones por SRAS-CoV-2 y parámetros de interés. Se supone que cada nivel es un subconjunto del nivel inferior.](fig/cfr-s41467-020-19238-2-fig_a.png)
+
+- sCFR riesgo sintomático de letalidad,
+- sCHR riesgo sintomático de hospitalización,
+- mCFR riesgo de caso-fatalidad médicamente atendido,
+- mCHR riesgo de hospitalización de casos atendidos médicamente,
+- HFR riesgo de hospitalización-fatalidad.
+
+![Diagrama esquemático de los análisis de referencia. Las flechas rojas, azules y verdes indican el flujo de datos desde los casos confirmados por laboratorio de la vigilancia pasiva, los casos diagnosticados clínicamente y los casos confirmados por laboratorio de los cribados activos.](fig/cfr-s41467-020-19238-2-fig_b.png)
+
+::::::::::::::::::::::::::::
+
+:::::::::::::::::::: debate
+
+Basándote en tu experiencia:
+
+- Comparte algún brote anterior en el que hayas participado en su respuesta.
+
+Responde a estas preguntas:
+
+- ¿Cómo evaluaste la gravedad clínica del brote?
+- ¿Cuáles fueron las principales fuentes de sesgo?
+- ¿Qué hiciste para tener en cuenta el sesgo identificado?
+- ¿Qué análisis complementario harías para resolver el sesgo?
+
+::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: puntos clave
+
+- Utiliza `{cfr}` para estimar la gravedad
+
+- Utiliza `cfr_static()` para estimar el CFR global con los últimos datos disponibles.
+
+- Utiliza `cfr_rolling()` para mostrar cuál sería el CFR estimado en cada día del brote.
+
+- Utiliza la `delay_density` para ajustar el CFR según la distribución de retrasos correspondiente.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
