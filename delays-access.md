@@ -628,12 +628,12 @@ plot(covid_serialint)
 
 <img src="fig/delays-access-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
 
-With the `day_range` argument, you can change the length or number of days in the `x` axis. Explore what this looks like:
+With the `xlim` argument, you can change the length or number of days in the `x` axis. Explore what this looks like:
 
 
 ``` r
 # plot <epidist> object
-plot(covid_serialint, day_range = 0:20)
+plot(covid_serialint, xlim = c(1, 60))
 ```
 
 
