@@ -429,7 +429,7 @@ estimates <- EpiNow2::epinow(
 
 ### Do not wait for this to continue
 
-For the purpose of this tutorial, we can optionally use `EpiNow2::stan_opts()` to reduce computation time. We can specify a fixed number of `samples = 1000` and `chains = 3` to the `stan` argument of the `EpiNow2::epinow()` function. We expect this to take approximately 3 minutes.
+For the purpose of this tutorial, we can optionally use `EpiNow2::stan_opts()` to reduce computation time. We can specify a fixed number of `samples = 1000` and `chains = 2` to the `stan` argument of the `EpiNow2::epinow()` function. We expect this to take approximately 3 minutes.
 
 <!-- We can optionally set `stan = stan_opts(method = "vb")` to use an approximate sampling method. We expect this to take less than 1 minute. -->
 
@@ -437,7 +437,7 @@ For the purpose of this tutorial, we can optionally use `EpiNow2::stan_opts()` t
 # you can add the `stan` argument
 EpiNow2::epinow(
   ...,
-  stan = EpiNow2::stan_opts(samples = 1000, chains = 3)
+  stan = EpiNow2::stan_opts(samples = 1000, chains = 2)
 )
 ```
 
