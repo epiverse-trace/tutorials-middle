@@ -106,6 +106,8 @@ Open RStudio and **copy and paste** the following code chunk into the [console w
 ```r
 # for episodes on access delays and quantify transmission
 
+if(!require("pak")) install.packages("pak")
+
 new_packages <- c(
   "EpiNow2",
   "epiverse-trace/epiparameter",
