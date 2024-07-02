@@ -463,10 +463,10 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-06-24 12:08:46] epinow: There were 1 divergent transitions after warmup. See
+WARN [2024-07-02 01:17:37] epinow: There were 3 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-06-24 12:08:46] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-07-02 01:17:37] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -533,24 +533,24 @@ summary(estimates)
 ```
 
 ``` output
-                            measure                estimate
-                             <char>                  <char>
-1:           New infections per day    6825 (3648 -- 12086)
-2: Expected change in daily reports       Likely decreasing
-3:       Effective reproduction no.      0.87 (0.58 -- 1.2)
-4:                   Rate of growth -0.047 (-0.19 -- 0.098)
-5:     Doubling/halving time (days)         -15 (7 -- -3.6)
+                            measure              estimate
+                             <char>                <char>
+1:           New infections per day  6804 (3682 -- 12433)
+2: Expected change in daily reports     Likely decreasing
+3:       Effective reproduction no.     0.88 (0.6 -- 1.3)
+4:                   Rate of growth -0.044 (-0.18 -- 0.1)
+5:     Doubling/halving time (days)     -16 (6.8 -- -3.8)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
 + From the summary of our analysis we see that the expected change in daily cases is  with the estimated new confirmed cases .
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.87 (0.58 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.88 (0.6 -- 1.3). 
 
-+ The exponential growth rate of case numbers is -0.047 (-0.19 -- 0.098).
++ The exponential growth rate of case numbers is -0.044 (-0.18 -- 0.1).
 
-+ The doubling time (the time taken for case numbers to double) is -15 (7 -- -3.6).
++ The doubling time (the time taken for case numbers to double) is -16 (6.8 -- -3.8).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in daily cases` 
@@ -645,17 +645,17 @@ estimates_regional <- EpiNow2::regional_epinow(
 ```
 
 ``` output
-INFO [2024-06-24 12:08:52] Producing following optional outputs: regions, summary, samples, plots, latest
-INFO [2024-06-24 12:08:52] Reporting estimates using data up to: 2020-04-28
-INFO [2024-06-24 12:08:52] No target directory specified so returning output
-INFO [2024-06-24 12:08:52] Producing estimates for: East Midlands, East of England, England, London, North East, North West, Northern Ireland, Scotland, South East, South West, Wales, West Midlands, Yorkshire and The Humber
-INFO [2024-06-24 12:08:52] Regions excluded: none
-INFO [2024-06-24 13:06:08] Completed regional estimates
-INFO [2024-06-24 13:06:08] Regions with estimates: 13
-INFO [2024-06-24 13:06:08] Regions with runtime errors: 0
-INFO [2024-06-24 13:06:08] Producing summary
-INFO [2024-06-24 13:06:08] No summary directory specified so returning summary output
-INFO [2024-06-24 13:06:09] No target directory specified so returning timings
+INFO [2024-07-02 01:17:42] Producing following optional outputs: regions, summary, samples, plots, latest
+INFO [2024-07-02 01:17:42] Reporting estimates using data up to: 2020-04-28
+INFO [2024-07-02 01:17:42] No target directory specified so returning output
+INFO [2024-07-02 01:17:42] Producing estimates for: East Midlands, East of England, England, London, North East, North West, Northern Ireland, Scotland, South East, South West, Wales, West Midlands, Yorkshire and The Humber
+INFO [2024-07-02 01:17:42] Regions excluded: none
+INFO [2024-07-02 02:15:29] Completed regional estimates
+INFO [2024-07-02 02:15:29] Regions with estimates: 13
+INFO [2024-07-02 02:15:29] Regions with runtime errors: 0
+INFO [2024-07-02 02:15:29] Producing summary
+INFO [2024-07-02 02:15:29] No summary directory specified so returning summary output
+INFO [2024-07-02 02:15:30] No target directory specified so returning timings
 ```
 
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE,echo=FALSE} -->
@@ -679,49 +679,49 @@ estimates_regional$summary$summarised_results$table
 ``` output
                       Region New infections per day
                       <char>                 <char>
- 1:            East Midlands       337 (202 -- 536)
- 2:          East of England       499 (304 -- 792)
- 3:                  England    3411 (2082 -- 5315)
- 4:                   London       300 (192 -- 455)
- 5:               North East       249 (138 -- 420)
- 6:               North West       542 (323 -- 857)
- 7:         Northern Ireland          43 (21 -- 89)
- 8:                 Scotland       282 (136 -- 567)
- 9:               South East       593 (361 -- 965)
-10:               South West       426 (306 -- 586)
-11:                    Wales         94 (62 -- 136)
-12:            West Midlands       233 (122 -- 421)
-13: Yorkshire and The Humber       457 (280 -- 730)
+ 1:            East Midlands       337 (207 -- 526)
+ 2:          East of England       506 (312 -- 781)
+ 3:                  England    3393 (2087 -- 5262)
+ 4:                   London       302 (193 -- 450)
+ 5:               North East       240 (141 -- 416)
+ 6:               North West       529 (315 -- 841)
+ 7:         Northern Ireland          43 (21 -- 84)
+ 8:                 Scotland       279 (139 -- 571)
+ 9:               South East       590 (353 -- 959)
+10:               South West       425 (305 -- 595)
+11:                    Wales         94 (62 -- 137)
+12:            West Midlands       236 (131 -- 436)
+13: Yorkshire and The Humber       462 (277 -- 741)
     Expected change in daily reports Effective reproduction no.
                               <fctr>                     <char>
- 1:                Likely increasing          1.1 (0.81 -- 1.4)
+ 1:                Likely increasing          1.1 (0.82 -- 1.4)
  2:                           Stable            1 (0.77 -- 1.3)
- 3:                Likely decreasing          0.9 (0.66 -- 1.2)
- 4:                Likely decreasing         0.89 (0.68 -- 1.1)
- 5:                Likely decreasing         0.92 (0.64 -- 1.2)
- 6:                Likely decreasing         0.88 (0.64 -- 1.1)
+ 3:                Likely decreasing         0.89 (0.65 -- 1.2)
+ 4:                Likely decreasing         0.89 (0.67 -- 1.1)
+ 5:                Likely decreasing          0.9 (0.65 -- 1.2)
+ 6:                Likely decreasing         0.88 (0.63 -- 1.1)
  7:                Likely decreasing         0.77 (0.49 -- 1.2)
- 8:                Likely decreasing         0.95 (0.61 -- 1.4)
- 9:                           Stable         0.98 (0.73 -- 1.3)
+ 8:                Likely decreasing          0.94 (0.6 -- 1.4)
+ 9:                           Stable         0.98 (0.71 -- 1.3)
 10:                       Increasing             1.3 (1 -- 1.5)
 11:                       Decreasing        0.71 (0.55 -- 0.89)
-12:                       Decreasing           0.69 (0.44 -- 1)
-13:                Likely decreasing          0.95 (0.7 -- 1.2)
-               Rate of growth Doubling/halving time (days)
-                       <char>                       <char>
- 1:    0.022 (-0.085 -- 0.11)             31 (6.1 -- -8.2)
- 2:     0.0031 (-0.11 -- 0.1)            220 (6.9 -- -6.2)
- 3:   -0.038 (-0.15 -- 0.066)             -18 (11 -- -4.6)
- 4:   -0.031 (-0.13 -- 0.051)             -22 (14 -- -5.3)
- 5:   -0.025 (-0.15 -- 0.083)            -28 (8.3 -- -4.7)
- 6:   -0.041 (-0.15 -- 0.052)             -17 (13 -- -4.7)
- 7:    -0.064 (-0.21 -- 0.11)            -11 (6.3 -- -3.4)
- 8:    -0.012 (-0.16 -- 0.15)            -57 (4.5 -- -4.4)
- 9:   -0.0072 (-0.12 -- 0.11)            -97 (6.3 -- -5.7)
-10:   0.075 (-0.0015 -- 0.15)            9.3 (4.5 -- -470)
-11: -0.089 (-0.17 -- -0.0091)             -7.8 (-76 -- -4)
-12:    -0.11 (-0.26 -- 0.027)            -6.1 (26 -- -2.7)
-13:   -0.025 (-0.14 -- 0.077)                -28 (9 -- -5)
+12:                Likely decreasing           0.69 (0.47 -- 1)
+13:                Likely decreasing         0.95 (0.69 -- 1.2)
+              Rate of growth Doubling/halving time (days)
+                      <char>                       <char>
+ 1:   0.022 (-0.081 -- 0.12)               31 (6 -- -8.6)
+ 2:  0.0037 (-0.11 -- 0.099)              190 (7 -- -6.4)
+ 3:   -0.04 (-0.15 -- 0.066)             -17 (11 -- -4.6)
+ 4:   -0.03 (-0.13 -- 0.048)             -23 (15 -- -5.5)
+ 5:  -0.029 (-0.14 -- 0.083)            -24 (8.4 -- -4.8)
+ 6:   -0.042 (-0.16 -- 0.05)             -17 (14 -- -4.4)
+ 7:   -0.066 (-0.21 -- 0.11)            -10 (6.5 -- -3.4)
+ 8:   -0.013 (-0.16 -- 0.16)            -55 (4.3 -- -4.2)
+ 9:   -0.008 (-0.13 -- 0.11)            -87 (6.5 -- -5.5)
+10:  0.076 (-0.0035 -- 0.16)            9.1 (4.4 -- -200)
+11: -0.089 (-0.17 -- -0.011)             -7.8 (-61 -- -4)
+12:   -0.11 (-0.24 -- 0.036)            -6.3 (19 -- -2.8)
+13:  -0.024 (-0.14 -- 0.078)            -29 (8.9 -- -4.9)
 ```
 
 ``` r
