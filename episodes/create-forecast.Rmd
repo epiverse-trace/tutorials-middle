@@ -399,7 +399,7 @@ In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% cred
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-Download the file [ebola_cases.csv](data/ebola_cases.csv) and read it into R. The simulated data consists of the date of symptom onset and number of confirmed cases of the early stages of the Ebola outbreak in Sierra Leone in 2014.
+Download the file [`ebola_cases.csv`](data/ebola_cases.csv) and read it into R. The simulated data consists of the date of symptom onset and number of confirmed cases of the early stages of the Ebola outbreak in Sierra Leone in 2014.
 
 Using the first 3 months (120 days) of data:
 
