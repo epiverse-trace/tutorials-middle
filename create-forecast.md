@@ -141,10 +141,10 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-07-02 02:33:50] epinow: There were 1 divergent transitions after warmup. See
+WARN [2024-07-03 10:36:49] epinow: There were 13 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-07-02 02:33:50] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-07-03 10:36:49] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -204,18 +204,28 @@ estimates <- EpiNow2::epinow(
   # Add observation model
   obs = EpiNow2::obs_opts(scale = obs_scale)
 )
+```
 
+``` output
+WARN [2024-07-03 10:45:20] epinow: There were 8 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2024-07-03 10:45:20] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
+``` r
 base::summary(estimates)
 ```
 
 ``` output
-                            measure               estimate
-                             <char>                 <char>
-1:           New infections per day  17255 (9237 -- 30502)
-2: Expected change in daily reports      Likely decreasing
-3:       Effective reproduction no.     0.89 (0.59 -- 1.2)
-4:                   Rate of growth -0.04 (-0.19 -- 0.096)
-5:     Doubling/halving time (days)      -17 (7.3 -- -3.7)
+                            measure                estimate
+                             <char>                  <char>
+1:           New infections per day   17397 (9188 -- 30967)
+2: Expected change in daily reports       Likely decreasing
+3:       Effective reproduction no.      0.88 (0.59 -- 1.3)
+4:                   Rate of growth -0.043 (-0.18 -- 0.098)
+5:     Doubling/halving time (days)       -16 (7.1 -- -3.8)
 ```
 
 
@@ -300,7 +310,10 @@ estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
 ```
 
 ``` output
-WARN [2024-07-02 02:43:44] estimate_secondary (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+WARN [2024-07-03 10:45:27] estimate_secondary (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess - 
+WARN [2024-07-03 10:45:27] estimate_secondary (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
@@ -396,7 +409,7 @@ In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% cred
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-Download the file [ebola_cases.csv](data/ebola_cases.csv) and read it into R. The simulated data consists of the date of symptom onset and number of confirmed cases of the early stages of the Ebola outbreak in Sierra Leone in 2014.
+Download the file [`ebola_cases.csv`](data/ebola_cases.csv) and read it into R. The simulated data consists of the date of symptom onset and number of confirmed cases of the early stages of the Ebola outbreak in Sierra Leone in 2014.
 
 Using the first 3 months (120 days) of data:
 
@@ -557,10 +570,10 @@ ebola_estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-07-02 02:45:48] epinow: There were 3 divergent transitions after warmup. See
+WARN [2024-07-03 10:47:45] epinow: There were 9 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-07-02 02:45:48] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-07-03 10:47:45] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -571,14 +584,14 @@ summary(ebola_estimates)
 ``` output
                             measure               estimate
                              <char>                 <char>
-1:           New infections per day         82 (33 -- 204)
+1:           New infections per day         85 (33 -- 220)
 2: Expected change in daily reports      Likely increasing
 3:       Effective reproduction no.      1.5 (0.79 -- 2.7)
-4:                   Rate of growth 0.033 (-0.041 -- 0.11)
-5:     Doubling/halving time (days)        21 (6.4 -- -17)
+4:                   Rate of growth 0.035 (-0.035 -- 0.11)
+5:     Doubling/halving time (days)        20 (6.6 -- -20)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.5 (0.79 -- 2.7). The exponential growth rate of case numbers is 0.033 (-0.041 -- 0.11).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.5 (0.79 -- 2.7). The exponential growth rate of case numbers is 0.035 (-0.035 -- 0.11).
 
 Visualize the estimates:
 
