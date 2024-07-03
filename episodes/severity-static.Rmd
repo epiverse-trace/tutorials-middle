@@ -572,9 +572,7 @@ Is this pattern similar to other outbreaks? We can use the data sets in this epi
 
 ::::::::::::::::::::::
 
-:::::::::::::::::::::: discussion
-
-### Checklist
+:::::::::::::::::::::: checklist
 
 With `{cfr}`, we estimate the CFR as the proportion of deaths among **confirmed** cases. 
 
