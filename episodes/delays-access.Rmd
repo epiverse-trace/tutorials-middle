@@ -243,8 +243,8 @@ Las entradas con un valor faltante (`<NA>`) en la columna `prob_distribution` so
 # get an <epidist> object
 distribution <-
   epiparameter::epidist_db(
-	disease = "covid",
-	epi_dist = "serial"
+    disease = "covid",
+    epi_dist = "serial"
   )
 
 distribution %>%
@@ -397,10 +397,10 @@ Asignemos este objeto de clase `<epidist>` al  objeto`covid_serialint`.
 ```{r, message=FALSE}
 covid_serialint <-
   epiparameter::epidist_db(
-	disease = "covid",
-	epi_dist = "serial",
-	author = "Nishiura",
-	single_epidist = TRUE
+    disease = "covid",
+    epi_dist = "serial",
+    author = "Nishiura",
+    single_epidist = TRUE
   )
 ```
 
@@ -494,9 +494,9 @@ Utiliza el `str()` para mostrar la estructura del objeto de R `<epidist>`.
 # ebola serial interval
 ebola_serial <-
   epiparameter::epidist_db(
-	disease = "ebola",
-	epi_dist = "serial",
-	single_epidist = TRUE
+    disease = "ebola",
+    epi_dist = "serial",
+    single_epidist = TRUE
   )
 
 ebola_serial
@@ -586,7 +586,7 @@ ebola_severity$summary_stats$mean_ci_limits
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::: debate
+::::::::::::::::: discussion
 
 ### Un zoológico de distribuciones
 
