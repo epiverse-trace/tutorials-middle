@@ -94,13 +94,13 @@ En R, todas las distribuciones estadísticas tienen funciones para acceder a lo 
 - `quantile()`: **Cuantil** y
 - `generate()`: Generar valores **aleatorios** de la distribución dada.
 
-:::::::::::: lista de comprobación
+:::::::::::: checklist
 
 ### Funciones para la distribución Normal
 
 Si lo necesitas, ¡lee en detalle acerca de las [funciones de probabilidad de R para la distribución normal](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), cada una de sus definiciones e identifica en qué parte de una distribución se encuentran!
 
-[Las cuatro funciones de probabilidad de la distribución normal ([Jack Weiss, 2012](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc))](fig/fig5a-normaldistribution.png)
+![Las cuatro funciones de probabilidad de la distribución normal ([Jack Weiss, 2012](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc))](fig/fig5a-normaldistribution.png)
 
 ::::::::::::::::::::
 
