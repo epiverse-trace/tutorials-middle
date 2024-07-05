@@ -146,13 +146,13 @@ Con el intervalo de serie COVID-19 (`covid_serialint`) calcula:
 
 - ¿Cuántos más casos atrasados se podrían captar si el método de rastreo de contactos considerara los contactos de hasta 6 días antes del inicio en comparación con los de 2 días antes del inicio?
 
-::::::::::::::::: sugerencia
+::::::::::::::::: hint
 
 En la Figura 5 de las [funciones de probabilidad de R para la distribución normal](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), la sección sombreada representa una probabilidad acumulada de `0.997` para el valor del cuantil en `x = 2`.
 
 ::::::::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ```{r, eval=FALSE}
 plot(covid_serialint)
@@ -171,7 +171,7 @@ Dado el intervalo de serie COVID-19:
 
 ::::::::::::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ### ¿Y si
 
@@ -241,7 +241,7 @@ Calcula:
 
 - ¿En qué plazo exacto de tiempo el 99% de las personas que presentan síntomas de COVID-19 después de la infección los presentan?
 
-::::::::::::::::: pista
+::::::::::::::::: hint
 
 ¿Qué distribución del retraso mide el tiempo entre la infección y la aparición de los síntomas?
 
@@ -265,7 +265,7 @@ generate(covid_serialint_discrete, times = 10)
 
 ::::::::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ```{r, eval=TRUE}
 covid_incubation <-
@@ -286,7 +286,7 @@ Ahora, *¿es esperable este resultado en términos epidemiológicos?*
 
 ::::::::::::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ### ¿Cómo crear un gráfico de distribución?
 
@@ -411,7 +411,7 @@ epinow_estimates <- epinow(
 
 ::::::::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ```{r, eval=TRUE, message=FALSE}
 
@@ -486,7 +486,7 @@ Intenta complementar el argumento `delays` con un retraso de notificación como 
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::: debate
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::: discussion
 
 ### ¿Cuánto ha cambiado?
 
@@ -542,7 +542,7 @@ Para obtener las distribuciones de retrasos utilizando `{epiparameter}` podemos 
 
 ::::::::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ```{r, eval=TRUE, echo=FALSE, message=FALSE}
 # Leer datos del repositorio del proyecto en R
@@ -631,7 +631,7 @@ Utiliza el conjunto de datos `influenza_england_1978_school` del paquete `{outbr
 
 ::::::::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ```{r, message=FALSE, eval=TRUE}
 # ¿Qué parámetros hay disponibles para Influenza?

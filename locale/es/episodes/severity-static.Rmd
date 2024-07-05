@@ -79,7 +79,7 @@ library(tidyverse)
 library(outbreaks)
 ```
 
-::::::::::::::::::: lista de comprobación
+::::::::::::::::::: checklist
 
 ### El doble punto
 
@@ -167,7 +167,7 @@ Descarga el archivo [sarscov2\_casos\_defunciones.csv](data/sarscov2_cases_death
 
 Estima la tasa de letalidad sin ajustar.
 
-:::::::::::::::::::: pista
+:::::::::::::::::::: hint
 
 Comprueba el formato de los datos introducidos.
 
@@ -177,7 +177,7 @@ Comprueba el formato de los datos introducidos.
 
 ::::::::::::::::::::
 
-:::::::::::::::::::: solución
+:::::::::::::::::::: solution
 
 Leemos los datos introducidos mediante `readr::read_csv()`. Esta función reconoce que la columna `date` tiene el formato correcto,`<date>`, que corresponde a fechas.
 
@@ -225,7 +225,7 @@ sarscov2_input %>%
 
 :::::::::::::::::::::::::::::
 
-::::::::::::: solución
+::::::::::::: solution
 
 ### 1\. Sesgo por la identificación predominante de los casos más graves
 
@@ -235,7 +235,7 @@ Por lo tanto, la TL será normalmente más elevada entre *los casos detectados* 
 
 :::::::::::::
 
-:::::::::::: solución
+:::::::::::: solution
 
 ### 2\. Sesgo debido al retraso en la notificación de la defunción
 
@@ -247,7 +247,7 @@ En este episodio del tutorial, vamos a centrarnos en las soluciones para hacer f
 
 ::::::::::::
 
-:::::::::::::::::::: solución
+:::::::::::::::::::: solution
 
 ### Caso de estudio: Gripe A (H1N1), México, 2009
 
@@ -339,13 +339,13 @@ Estima la TL ajustada al retraso temporal utilizando la distribución apropiada 
 
 - ¡Compara los valores de la TL ajustada y sin ajuste temporal!
 
-:::::::::::::::::::: pista
+:::::::::::::::::::: hint
 
 - Encuentra el `<epidist>` ¡apropiado!
 
 ::::::::::::::::::::
 
-:::::::::::::::::::: solución
+:::::::::::::::::::: solution
 
 Utilizamos `{epiparameter}` para acceder a una distribución temporal para los datos de incidencia agregados del SARS-CoV-2:
 
@@ -541,7 +541,7 @@ No obstante, incluso utilizando únicamente los datos observados para el periodo
 
 ::::::::::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::::::::::::::::::::: debate
+:::::::::::::::::::::::::::::::::::::::::::: discussion
 
 ### Interpretar la estimación de la TL en la fase inicial del brote
 
@@ -555,13 +555,13 @@ Discusión:
 
 ::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::::::::: sugerencia
+:::::::::::::::::::::: hint
 
 Podemos utilizar la inspección visual o el análisis de los marcos de datos de salida.
 
 ::::::::::::::::::::::
 
-:::::::::::::::::::::: solución
+:::::::::::::::::::::: solution
 
 Hay casi un mes de diferencia.
 
@@ -571,7 +571,7 @@ Nótese que la estimación tiene una incertidumbre considerable al principio de 
 
 ::::::::::::::::::::::
 
-:::::::::::::::::::::: debate
+:::::::::::::::::::::: discussion
 
 ### Lista de verificación
 
@@ -581,7 +581,7 @@ Utilizando sólo el número de casos **confirmados** está claro que se pasarán
 
 ::::::::::::::::::::::
 
-::::::::::::::::::::::::::: solución
+::::::::::::::::::::::::::: solution
 
 ### ¿Por qué difieren la TL sin ajustar y la ajustada al retraso temporal?
 
@@ -589,7 +589,7 @@ Utilizando sólo el número de casos **confirmados** está claro que se pasarán
 
 :::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::: solución
+:::::::::::::::::::::::::: solution
 
 ### ¿Qué es el proceso de muestreo?
 
@@ -612,7 +612,7 @@ Esta estimación la realiza la función interna `?cfr:::estimate_severity()`.
 
 ::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::: solución
+:::::::::::::::::::::::::: solution
 
 ### Limitaciones
 
@@ -644,7 +644,7 @@ Reordena el listado de casos para que tenga la estructura de entrada requerida p
 
 Estima el HFR ajustado al retardo utilizando el retardo de distribución correspondiente.
 
-::::::::::::::::: sugerencia
+::::::::::::::::: hint
 
 **¿Cómo reorganizar mis datos de entrada?**
 
@@ -658,7 +658,7 @@ A continuación, consulta la viñeta [Manejo de datos de `{incidence2}`](https:/
 
 :::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ```{r, message=FALSE, warning=FALSE}
 # Carga los paquetes
@@ -719,13 +719,13 @@ La TL puede diferir entre poblaciones (por ejemplo, edad, espacio, tratamiento);
 
 Utiliza la base de datos `cfr::covid_data` para estimar una TL ajustada al retraso temporal estratificada por países.
 
-::::::::::::::::::::::::: sugerencia
+::::::::::::::::::::::::: hint
 
 Una forma de hacer un *análisis estratificado* es aplicar un modelo a datos anidados. Esta [viñeta `{tidyr}`](https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models) te muestra cómo aplicar la función `group_by()` + `nest()` a los datos anidados, y luego `mutate()` + `map()` para aplicar el modelo.
 
 :::::::::::::::::::::::::
 
-::::::::::::::::::::::::: solución
+::::::::::::::::::::::::: solution
 
 ```{r, message=FALSE, warning=FALSE}
 library(cfr)
@@ -793,7 +793,7 @@ Te invitamos a leer esta [viñeta sobre `cfr_time_varying()`](https://epiverse-t
 
 :::::::::::::::::
 
-:::::::::::::::::::::::::::::::: debate
+:::::::::::::::::::::::::::::::: discussion
 
 ### Más medidas de gravedad
 
@@ -803,7 +803,7 @@ Utilizando `{cfr}` podemos cambiar las entradas para el numerador **casos** (`ca
 
 ::::::::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::::: solución
+:::::::::::::::::::::::::::: solution
 
 ### Riesgo de mortalidad por infección y hospitalización
 
@@ -824,7 +824,7 @@ Del mismo modo, el *Riesgo de Fatalidad por Hospitalización* (HFR) requiere:
 
 ::::::::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::::: solución
+:::::::::::::::::::::::::::: solution
 
 ### Fuentes de datos para más medidas de gravedad
 
@@ -842,7 +842,7 @@ Del mismo modo, el *Riesgo de Fatalidad por Hospitalización* (HFR) requiere:
 
 ::::::::::::::::::::::::::::
 
-:::::::::::::::::::: debate
+:::::::::::::::::::: discussion
 
 Basándote en tu experiencia:
 
