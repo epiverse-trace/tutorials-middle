@@ -135,7 +135,7 @@ cases <- incidence2::covidregionaldataUK %>%
 Con `incidence2::incidence()` agregamos casos en distintos tiempos *intervalos* (es decir, días, semanas o meses) o por *grupo* categorías. También podemos tener fechas completas para todo el rango de fechas por categoría de grupo utilizando `complete_dates = TRUE`
 Explora más adelante la [`incidence2::incidence()` manual de referencia](https://www.reconverse.org/incidence2/reference/incidence.html)
 
-::::::::::::::::::::::::: alerón
+::::::::::::::::::::::::: spoiler
 
 ### ¿Podemos replicar {incidence2} con {dplyr}?
 
