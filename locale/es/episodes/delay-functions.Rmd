@@ -1,5 +1,5 @@
 ---
-title: Utilizar distribuciones de retraso en el análisis
+title: 'Utilizar distribuciones de retraso en el análisis'
 teaching: 20
 exercises: 10
 editor_options:
