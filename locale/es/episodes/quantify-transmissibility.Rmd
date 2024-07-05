@@ -225,7 +225,7 @@ Para todos los tipos de retraso, tendremos que utilizar distribuciones sólo par
 
 #### Incluyendo la incertidumbre de distribución
 
-Para especificar una **variable** variable, incluimos la incertidumbre en torno a la media $\mu$ y la desviación típica $\sigma$ de nuestra distribución gamma. Si nuestra distribución del periodo de incubación tiene una media $\mu$ y una desviación típica $\sigma$ entonces suponemos que la media ($\mu$) sigue una distribución Normal con desviación típica $\sigma_{\mu}$:
+Para especificar una distribución **variable**, incluimos la incertidumbre en torno a la media $\mu$ y la desviación típica $\sigma$ de nuestra distribución gamma. Si nuestra distribución del periodo de incubación tiene una media $\mu$ y una desviación típica $\sigma$ entonces suponemos que la media ($\mu$) sigue una distribución Normal con desviación típica $\sigma_{\mu}$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
@@ -450,7 +450,7 @@ Podemos extraer y visualizar estimaciones del número de reproducción efectivo 
 estimates$plots$R
 ```
 
-La incertidumbre de las estimaciones aumenta con el tiempo. Esto se debe a que las estimaciones se basan en datos del pasado, dentro de los periodos de retraso. Esta diferencia de incertidumbre se clasifica en **Estimación** (verde) utiliza todos los datos y **Estimación basada en datos parciales** (naranja) estimaciones que se basan en menos datos (porque es más probable que las infecciones que se produjeron en su momento no se hayan observado todavía), por este motivo, tienen intervalos cada vez más amplios hacia la fecha del último punto de datos. Por último, la **Previsión** (morado) es una proyección a futuro.
+La incertidumbre de las estimaciones aumenta con el tiempo. Esto se debe a que las estimaciones se basan en datos del pasado, dentro de los periodos de retraso. Esta diferencia de incertidumbre se clasifica en **Estimación** (verde) utiliza todos los datos y **Estimación basada en datos parciales** (naranja) estimaciones que se basan en menos datos (porque es más probable que las infecciones que se produjeron en su momento no se hayan observado todavía), por este motivo, tienen intervalos cada vez más amplios hacia la fecha del último punto de datos. Por último, el **Pronóstico** (morado) es una proyección a futuro.
 
 También podemos visualizar la estimación de la tasa de crecimiento a lo largo del tiempo:
 
