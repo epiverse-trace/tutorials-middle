@@ -1,5 +1,5 @@
 ---
-title: 'Estimación de la gravedad del brote'
+title: 'Estimación de la severidad del brote'
 teaching: 10
 exercises: 2
 editor_options:
@@ -221,7 +221,7 @@ sarscov2_input %>%
 
 ### Dos sesgos que afectan a la estimación de la TL
 
-[Lipsitch y otros, 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describen dos posibles sesgos que pueden afectar a la estimación de la tasa de letalidad (y sus posibles soluciones):
+[Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describen dos posibles sesgos que pueden afectar a la estimación de la tasa de letalidad (y sus posibles soluciones):
 
 :::::::::::::::::::::::::::::
 
@@ -414,7 +414,7 @@ Sin embargo, esta suposición puede no ser adecuada en el caso de distribuciones
 
 ### ¿Cómo funciona {cfr}?
 
-Para ajustar la tasa de letalidad, [Nishiura y otros, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) utilizan los datos de incidencia de casos y muertes para estimar el número de casos con resultados conocidos:
+Para ajustar la tasa de letalidad, [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) utilizan los datos de incidencia de casos y muertes para estimar el número de casos con resultados conocidos:
 
 $$
 u_t = \dfrac{\sum_{i = 0}^t
@@ -828,7 +828,7 @@ Del mismo modo, el *Riesgo de Fatalidad por Hospitalización* (HFR) requiere:
 
 ### Fuentes de datos para más medidas de gravedad
 
-[Yang y otros, 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) resume diferentes definiciones y fuentes de datos:
+[Yang et al., 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) resume diferentes definiciones y fuentes de datos:
 
 ![Niveles de gravedad de las infecciones por SRAS-CoV-2 y parámetros de interés. Se supone que cada nivel es un subconjunto del nivel inferior.](fig/cfr-s41467-020-19238-2-fig_a.png)
 
