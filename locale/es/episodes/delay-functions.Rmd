@@ -121,7 +121,8 @@ cdf(covid_serialint, q = 10)
 # El valor del cuantil (día) cuando la probabilidad acumulada es 60%
 quantile(covid_serialint, p = 0.6)
 
-# Generar 10 valores aleatorios (días) dada una familia de distribuciones y sus parámetros
+# Generar 10 valores aleatorios (días) dada una familia de distribuciones y
+# sus parámetros
 generate(covid_serialint, times = 10)
 ```
 
@@ -248,7 +249,7 @@ Calcula:
 ¡Las funciones de probabilidad **discretas** para `<epidist>` son las mismas que utilizamos para las *continuas*!
 
 ```{r, eval=FALSE}
-# Grafica esto para tener una imagen de referencia 
+# Grafica esto para tener una imagen de referencia
 plot(covid_serialint_discrete, day_range = 0:20)
 
 # El valor de la densidad cuando el cuantil tiene un valor de 10 (días)
@@ -262,6 +263,7 @@ quantile(covid_serialint_discrete, p = 0.6)
 
 # Generar valores aleatorios
 generate(covid_serialint_discrete, times = 10)
+```
 
 ::::::::::::::::::::::
 
@@ -441,7 +443,7 @@ covid_serial_interval <-
     max = covid_serialint_discrete_max
   )
 
-# Periodo de incubación ---------------------------------------------------------
+# Periodo de incubación -------------------------------------------------------
 
 # Periodo de incubación
 covid_incubation <- epiparameter::epidist_db(
@@ -582,7 +584,7 @@ serial_interval_ebola <-
     max = quantile(ebola_serial_discrete, p = 0.99)
   )
 
-# Tiempo de incubación  ---------------------------------------------------------
+# Tiempo de incubación  -------------------------------------------------------
 
 # Filtrar una distribución para el retraso del periodo de incubación
 ebola_incubation <- epiparameter::epidist_db(
@@ -639,7 +641,7 @@ epiparameter::epidist_db(disease = "influenza") %>%
   epiparameter::parameter_tbl() %>%
   count(epi_distribution)
 
-# Tiempo de generación  ---------------------------------------------------------
+# Tiempo de generación  -------------------------------------------------------
 
 # Leer tiempo de generación
 influenza_generation <-

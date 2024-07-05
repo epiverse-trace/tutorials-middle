@@ -126,7 +126,7 @@ Exploremos la base de datos `ebola1976` incluido en {cfr} que procede del primer
 # Cargamos la base de datos Ebola 1976, incluida en el paquete {cfr}
 data("ebola1976")
 
-# Asumiendo que solo tenemos datos para los primeros 30 días del brote 
+# Asumiendo que solo tenemos datos para los primeros 30 días del brote
 ebola1976 %>%
   slice_head(n = 30) %>%
   as_tibble()
@@ -182,13 +182,13 @@ Comprueba el formato de los datos introducidos.
 Leemos los datos introducidos mediante `readr::read_csv()`. Esta función reconoce que la columna `date` tiene el formato correcto,`<date>`, que corresponde a fechas.
 
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
-# carga la base de datos que se encuentra en el repositorio de este tutorial en R
+# carga la base de datos que se encuentra en el repositorio de este tutorial
 sarscov2_input <-
   readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
 ```
 
 ```{r, eval=FALSE, echo=TRUE, warning=FALSE, message=FALSE}
-# lee la base de datos 
+# lee la base de datos
 # por ejemplo, si la ruta al archivo es data/raw-data/ebola_cases.csv :
 sarscov2_input <-
   readr::read_csv(here::here("data", "raw-data", "sarscov2_cases_deaths.csv"))
@@ -202,7 +202,7 @@ sarscov2_input
 Podemos utilizar `dplyr::rename()` para cambiar los nombres de las columnas de este archivo y adaptarlos a los requeridos por `cfr_static()`.
 
 ```{r}
-# Cambio de nombre de las columnas de la base de datos al formato requerido por `cfr_static`
+# Cambio de nombre de las columnas en base al formato requerido por `cfr_static`
 sarscov2_input %>%
   dplyr::rename(
     cases = cases_jpn,
