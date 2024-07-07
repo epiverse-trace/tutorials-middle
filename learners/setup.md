@@ -297,6 +297,16 @@ Los archivos de datos para el tutorial se pueden descargar manualmente aquí:
 
 - <https://epiverse-trace.github.io/tutorials-middle/data/sarscov2_cases_deaths.csv>
 
+## Lecturas relacionadas
+
+Sobre cuantificar transmisibilidad:
+
+- Gostic KM, McGough L, Baskerville EB, Abbott S, Joshi K, Tedijanto C, Kahn R, Niehus R, Hay JA, De Salazar PM, Hellewell J, Meakin S, Munday JD, Bosse NI, Sherrat K, Thompson RN, White LF, Huisman JS, Scire J, Bonhoeffer S, Stadler T, Wallinga J, Funk S, Lipsitch M, Cobey S. **Practical considerations for measuring the effective reproductive number, Rt.** PLoS Comput Biol. 2020 Dec 10;16(12):e1008409. doi: 10.1371/journal.pcbi.1008409. Erratum in: PLoS Comput Biol. 2021 Dec 8;17(12):e1009679. PMID: 33301457; PMCID: PMC7728287. <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409>
+
+Sobre estimación de severidad
+
+- Nishiura H, Klinkenberg D, Roberts M, Heesterbeek JA. **Early epidemiological assessment of the virulence of emerging infectious diseases: a case study of an influenza pandemic.** PLoS One. 2009 Aug 31;4(8):e6852. doi: 10.1371/journal.pone.0006852. PMID: 19718434; PMCID: PMC2729920. <https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852>
+
 ## Sus preguntas
 
 Si necesita ayuda para instalar el software o tiene alguna otra pregunta sobre este tutorial, envíe un correo electrónico a <andree.valle-campos@lshtm.ac.uk>
