@@ -102,7 +102,7 @@ Esto nos ayuda a recordar las funciones requeridas y evitar usar funciones que f
 - Es probable que haya muchos más casos **sintomáticos** (es decir, con fiebre, tos o mialgia) pero no requiriesen hospitalización. Estos casos se habrían identificado mediante el rastro de casos potenciales en vuelos internacionales a zonas de alto riesgo y mediante el rastreo de los contactos de los casos confirmados, o a través de vigilancia pasiva de otras enfermedades infecciosas respiratorias en la población.
 - La parte inferior de la pirámide representa enfermedad **leve** (y posiblemente **asintomática**). Estos casos podrían identificarse mediante el rastreo de contactos, mediante pruebas serológicas.
 
-  ## probabilidad de muerte no ajustada
+## CFR no ajustado
 
 Medimos la gravedad de la enfermedad en términos de riesgo/probabilidad de muerte (CFR). CFR se interpreta como la probabilidad condicional de muerte dado un diagnóstico confirmado, calculada como el número acumulado de muertes $D_{t}$ sobre el número acumulado de casos confirmados $C_{t}$ en un momento determinado $t$. Podemos referirnos al *CFR sesgado* ($b_{t}$):
 
