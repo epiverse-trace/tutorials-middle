@@ -60,7 +60,7 @@ La línea continua horizontal y las líneas de puntos muestran el valor esperado
 
 ::::::::::::::::::::::: instructor
 
-Los periodos de tiempo son relevantes: Periodo 1 -- 15 días en los que el CFR es cero para indicar que no se han notificado muertes; Periodo del 15 de marzo -- 26 de abril en el que el CFR parece aumentar; Periodo del 30 de abril -- 30 de mayo en el que la estimación de el CFR se estabiliza.
+Los periodos de tiempo son relevantes: Periodo 1 -- 15 días en los que el CFR es cero para indicar que no se han notificado muertes; Periodo del 15 de marzo -- 26 de abril en el que el CFR parece aumentar; Periodo del 30 de abril -- 30 de mayo en el que la estimación del CFR se estabiliza.
 
 :::::::::::::::::::::::
 
@@ -108,7 +108,7 @@ Medimos la gravedad de la enfermedad en términos de riesgo/probabilidad de muer
 
 $$ b_{t} =  \frac{D_{t}}{C_{t}} $$
 
-Este cálculo es *sesgado* porque genera una subestimación de el CFR real, debido al retraso temporal desde el inicio de los síntomas hasta la muerte, que sólo se estabiliza en las últimas fases del brote.
+Este cálculo es *sesgado* porque genera una subestimación del CFR real, debido al retraso temporal desde el inicio de los síntomas hasta la muerte, que sólo se estabiliza en las últimas fases del brote.
 
 <!-- ¿añadir aquí la llamada sobre ratio o riesgo?  -->
 
@@ -215,11 +215,11 @@ sarscov2_input %>%
 
 ::::::::::::::::::::::::::::::::::::::::
 
-## Sesgos que afectan a la estimación de el CFR
+## Sesgos que afectan a la estimación del CFR
 
 ::::::::::::::::::::::::::::: discussion
 
-### Dos sesgos que afectan a la estimación de el CFR
+### Dos sesgos que afectan a la estimación del CFR
 
 [Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) describen dos posibles sesgos que pueden afectar a la estimación de la probabilidad de muerte (y sus posibles soluciones):
 
@@ -337,7 +337,7 @@ Utiliza el mismo archivo del reto anterior ([sarscov2\_casos\_muertes.csv](data/
 
 Estima el CFR ajustado al retraso temporal utilizando la distribución apropiada y
 
-- ¡Compara los valores de el CFR ajustado y sin ajuste temporal!
+- ¡Compara los valores del CFR ajustado y sin ajuste temporal!
 
 :::::::::::::::::::: hint
 
@@ -427,13 +427,13 @@ donde
 - $f_{t}$ es el valor de la función de masa de probabilidad (PMF) de la **distribución temporal** entre el inicio de síntomas y la muerte, y
 - $u_{t}$ representa el factor de subestimación de los resultados conocidos.
 
-$u_{t}$ se utiliza para **escalar** el valor del número acumulado de casos en el denominador en el cálculo de el CFR. Se calcula internamente con la función [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html)
+$u_{t}$ se utiliza para **escalar** el valor del número acumulado de casos en el denominador en el cálculo del CFR. Se calcula internamente con la función [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html)
 
 El estimador para la probabilidad de muerte puede expresarse como:
 
 $$p_{t} = \frac{b_{t}}{u_{t}}$$
 
-donde $p_{t}$ es la proporción realizada de casos confirmados que morirán a causa de la infección (o el CFR real), y $b_{t}$ es la estimación cruda y sesgada de el CFR.
+donde $p_{t}$ es la proporción realizada de casos confirmados que morirán a causa de la infección (o el CFR real), y $b_{t}$ es la estimación cruda y sesgada del CFR.
 
 A partir de esta última ecuación, observamos que el CFR no sesgada $p_{t}$ es mayor que el CFR sesgada $b_{t}$ porque en $u_{t}$ el numerador es menor que el denominador (observa que $f_{t}$ es la distribución de probabilidad del *retraso temporal* entre síntomas y muerte). Por tanto, nos referimos a $b_{t}$ como el estimador sesgado de la probabilidad de muerte.
 
@@ -441,7 +441,7 @@ Cuando observamos todo el curso de una epidemia (desde $t \rightarrow \infty$), 
 
 :::::::::::::::::::::::::::
 
-## Estimación temprana de el CFR
+## Estimación temprana del CFR
 
 En el reto anterior, descubrimos que el valor de la probabilidad de muerte ajustada y no ajustada son diferentes.
 
@@ -476,7 +476,7 @@ rolling_cfr_adjusted <- cfr::cfr_rolling(
 utils::tail(rolling_cfr_adjusted)
 ```
 
-Con `utils::tail()` mostramos como los últimos valores estimados de el CFR ajustado y sin ajustar tienen rangos superpuestos de intervalos de confianza del 95%.
+Con `utils::tail()` mostramos como los últimos valores estimados del CFR ajustado y sin ajustar tienen rangos superpuestos de intervalos de confianza del 95%.
 
 Ahora, visualicemos ambos resultados en una serie temporal. ¿Cómo se comportarían en tiempo real las estimaciones de CFR ajustados y sin ajustar?
 
@@ -543,7 +543,7 @@ No obstante, incluso utilizando únicamente los datos observados para el periodo
 
 :::::::::::::::::::::::::::::::::::::::::::: discussion
 
-### Interpretar la estimación de el CFR en la fase inicial del brote
+### Interpretar la estimación del CFR en la fase inicial del brote
 
 Basándote en la figura anterior:
 
@@ -565,7 +565,7 @@ Podemos utilizar la inspección visual o el análisis de los marcos de datos de 
 
 Hay casi un mes de diferencia.
 
-Nótese que la estimación tiene una incertidumbre considerable al principio de la serie temporal. Al cabo de dos semanas, el CFR ajustado se aproxima a la estimación global de el CFR al final del brote.
+Nótese que la estimación tiene una incertidumbre considerable al principio de la serie temporal. Al cabo de dos semanas, el CFR ajustado se aproxima a la estimación global del CFR al final del brote.
 
 ¿Es este patrón similar al de otros brotes? Podemos utilizar los conjuntos de datos de los retos de este episodio. ¡Te invitamos a averiguarlo!
 
@@ -577,7 +577,7 @@ Nótese que la estimación tiene una incertidumbre considerable al principio de 
 
 Con `{cfr}` estimamos el CFR como la proporción de muertes entre **confirmadas** confirmados.
 
-Utilizando sólo el número de casos **confirmados** está claro que se pasarán por alto todos los casos que no busquen tratamiento médico o no sean notificados, así como todos los casos asintomáticos. Esto significa que la estimación de el CFR es superior a la proporción de muertes entre los infectados.
+Utilizando sólo el número de casos **confirmados** está claro que se pasarán por alto todos los casos que no busquen tratamiento médico o no sean notificados, así como todos los casos asintomáticos. Esto significa que la estimación del CFR es superior a la proporción de muertes entre los infectados.
 
 ::::::::::::::::::::::
 
@@ -601,7 +601,7 @@ Si conociéramos el factor de subestimación $u_{t}$ podríamos especificar el t
 
 Ya que cada caso que deja de estar en riesgo tiene una probabilidad independiente de morir, $\pi$ el número de muertes, $D_{t}$ es una muestra de una distribución binomial con tamaño de muestra $u_{t}C_{t}$ y probabilidad de morir $p_{t}$ = $\pi$.
 
-Esto se representa mediante la siguiente función de verosimilitud para obtener la estimación de máxima verosimilitud de el CFR sin sesgo $p_{t}$ = $\pi$:
+Esto se representa mediante la siguiente función de verosimilitud para obtener la estimación de máxima verosimilitud del CFR sin sesgo $p_{t}$ = $\pi$:
 
 $$
 {\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} + D_{t} \log{\pi} +
@@ -775,7 +775,7 @@ El paquete `{cfr}` tiene una función llamada `cfr_time_varying()` con una funci
 
 **cfr\_rolling()** muestra el CFR estimada en cada día del brote, dado que los datos futuros sobre casos y muertes no están disponibles en ese momento. El valor final de *cfr\_rolling()* estimado es idéntico al de *cfr\_static()* con los mismos datos.
 
-Recuerda, como se muestra arriba *cfr\_rolling()* es útil para obtener estimaciones de el CFR en las primeras fases y comprobar si la estimación de el CFR de un brote se ha estabilizado. Así, *cfr\_rolling()* no es sensible a la duración ni al tamaño de la epidemia.
+Recuerda, como se muestra arriba *cfr\_rolling()* es útil para obtener estimaciones del CFR en las primeras fases y comprobar si la estimación del CFR de un brote se ha estabilizado. Así, *cfr\_rolling()* no es sensible a la duración ni al tamaño de la epidemia.
 
 :::::::::::::::::
 
@@ -785,9 +785,9 @@ Recuerda, como se muestra arriba *cfr\_rolling()* es útil para obtener estimaci
 
 Por otra parte, **cfr\_time\_varying()** calcula el CFR a lo largo de una ventana móvil y ayuda a comprender los cambios en el CFR debidos a cambios en la epidemia, por ejemplo, debidos a una nueva variante o a una mayor inmunidad por vacunación.
 
-Sin embargo, *cfr\_time\_variying()* es sensible a la incertidumbre del muestreo. Por tanto, es sensible al tamaño del brote. Cuanto mayor sea el número de casos con resultados esperados en un día determinado, más estimaciones razonables de el CFR variable en el tiempo obtendremos.
+Sin embargo, *cfr\_time\_variying()* es sensible a la incertidumbre del muestreo. Por tanto, es sensible al tamaño del brote. Cuanto mayor sea el número de casos con resultados esperados en un día determinado, más estimaciones razonables del CFR variable en el tiempo obtendremos.
 
-Por ejemplo, con 100 casos, la estimación del riesgo de mortalidad tendrá, a grandes rasgos, un intervalo de confianza del 95% ±10% de la estimación media (IC binomial). Por tanto, si tenemos >100 casos con resultados esperados *en un día determinado* podemos obtener estimaciones razonables de el CFR variable en el tiempo. Pero si sólo tenemos >100 casos *a lo largo de toda la epidemia* probablemente tengamos que basarnos en **cfr\_rolling()** que utiliza los datos acumulados.
+Por ejemplo, con 100 casos, la estimación del riesgo de mortalidad tendrá, a grandes rasgos, un intervalo de confianza del 95% ±10% de la estimación media (IC binomial). Por tanto, si tenemos >100 casos con resultados esperados *en un día determinado* podemos obtener estimaciones razonables del CFR variable en el tiempo. Pero si sólo tenemos >100 casos *a lo largo de toda la epidemia* probablemente tengamos que basarnos en **cfr\_rolling()** que utiliza los datos acumulados.
 
 Te invitamos a leer esta [viñeta sobre `cfr_time_varying()`](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
 
