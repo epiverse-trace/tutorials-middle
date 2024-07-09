@@ -31,12 +31,12 @@
           </a>
           <span class="visually-hidden">This lesson is in the pre-alpha phase, which means that it is in early development, but has not yet been taught.</span>
         </abbr>
-        
+
       </div>
     </div>
     <div class="selector-container">
-      
-      
+
+
       <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle bordered-button" type="button" id="dropdownMenu1" data-bs-toggle="dropdown" aria-expanded="false">
           <i aria-hidden="true" class="icon" data-feather="eye"></i> Learner View <i data-feather="chevron-down"></i>
@@ -133,7 +133,7 @@
                 </div><!--/div.accordion-flush-->
               </div><!--div.sidenav-view-selector -->
             </div><!--/div.col -->
-      
+
             <hr></div><!--/div.mobile-row -->
 
           <div class="accordion accordion-flush" id="accordionFlush11">
@@ -152,7 +152,7 @@
     <div class="accordion-header" id="flush-heading1">
         <a href="index.html">Summary and Setup</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -161,7 +161,7 @@
     <div class="accordion-header" id="flush-heading2">
         <a href="delays-access.html">1. Access epidemiological delay distributions</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -170,7 +170,7 @@
     <div class="accordion-header" id="flush-heading3">
         <a href="quantify-transmissibility.html">2. Quantifying transmission</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -179,7 +179,7 @@
     <div class="accordion-header" id="flush-heading4">
         <a href="delays-functions.html">3. Use delay distributions in analysis</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -188,7 +188,7 @@
     <div class="accordion-header" id="flush-heading5">
         <a href="create-forecast.html">4. Create a short-term forecast</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -197,7 +197,7 @@
     <div class="accordion-header" id="flush-heading6">
         <a href="severity-static.html">5. Estimation of outbreak severity</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -206,7 +206,7 @@
     <div class="accordion-header" id="flush-heading7">
         <a href="superspreading-estimate.html">6. Account for superspreading</a>
     </div><!--/div.accordion-header-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -220,7 +220,7 @@
         </span>
       </button>
     </div><!--/div.accordion-header-->
-        
+
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" aria-labelledby="flush-headingcurrent" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#introduction">Introduction</a></li>
@@ -233,7 +233,7 @@
 <li><a href="#challenges">Challenges</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
-        
+
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
@@ -265,10 +265,10 @@
               </div>
             </div>
             <hr class="half-width resources"><a href="aio.html">See all in one page</a>
-            
+
 
             <hr class="d-none d-sm-block d-md-none"><div class="d-grid gap-1">
-            
+
             </div>
           </div><!-- /div.accordion -->
         </div><!-- /div.sidebar-inner -->
@@ -296,11 +296,11 @@
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Simulate transmission chains</h1>
         <p>Last updated on 2024-07-02 |
-        
+
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-simulate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
-        
-        
-        
+
+
+
         <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
@@ -346,8 +346,8 @@ including Poisson and negative binomial.</p>
 </div>
 </div>
 </div>
-<section id="introduction"><h2 class="section-heading">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-</h2>
+<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
 <hr class="half-width"><!-- what we know --><p>Individual variation in transmission can affect both the potential
 for an epidemic to establish in a population and the ease of control (<a href="https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371" class="external-link">Cori
 et al., 2017</a>).</p>
@@ -405,8 +405,8 @@ conflicts.</p>
 </div>
 </div>
 </div>
-</section><section id="simulation-of-uncontrolled-outbreaks"><h2 class="section-heading">Simulation of uncontrolled outbreaks<a class="anchor" aria-label="anchor" href="#simulation-of-uncontrolled-outbreaks"></a>
-</h2>
+</section><section><h2 class="section-heading" id="simulation-of-uncontrolled-outbreaks">Simulation of uncontrolled outbreaks<a class="anchor" aria-label="anchor" href="#simulation-of-uncontrolled-outbreaks"></a>
+<a class="anchor" aria-label="anchor" href="#simulation-of-uncontrolled-outbreaks"></a></h2>
 <hr class="half-width"><p>Infectious disease epidemics spread through populations when a chain
 of infected individuals transmit the infection to others. <a href="https://epiverse-trace.github.io/epichains/articles/theoretical_background.html" class="external-link">Branching
 processes</a> can be used to model this transmission. A branching
@@ -456,8 +456,8 @@ generations reached by C1’s chain) (<a href="https://epiverse-trace.github.io/
 <p>To use <code>{epichains}</code>, we need to know (or assume) two key
 epidemiological values: the offspring distribution and the generation
 time.</p>
-</section><section id="get-the-offspring-distribution"><h2 class="section-heading">Get the offspring distribution<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a>
-</h2>
+</section><section><h2 class="section-heading" id="get-the-offspring-distribution">Get the offspring distribution<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a>
+<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a></h2>
 <hr class="half-width"><p>Here we assume the MERS offspring distribution follows a negative
 binomial distribution, with mean (reproduction number <span class="math inline">\(R\)</span>) and dispersion <span class="math inline">\(k\)</span> values estimated from the linelist and
 contact data of <code>mers_korea_2015</code> in the
@@ -531,8 +531,8 @@ binomial distribution.</p>
 </div>
 </div>
 </div>
-</section><section id="get-generation-time"><h2 class="section-heading">Get generation time<a class="anchor" aria-label="anchor" href="#get-generation-time"></a>
-</h2>
+</section><section><h2 class="section-heading" id="get-generation-time">Get generation time<a class="anchor" aria-label="anchor" href="#get-generation-time"></a>
+<a class="anchor" aria-label="anchor" href="#get-generation-time"></a></h2>
 <hr class="half-width"><p>The <a href="reference.html#serialinterval">serial interval</a>
 distribution is often used to approximate the generation time
 distribution. This approximation is commonly used because it is easier
@@ -603,8 +603,8 @@ with delay distributions</a> vignette for further context.</p>
 </div>
 </div>
 </div>
-</section><section id="simulate-a-single-chain"><h2 class="section-heading">Simulate a single chain<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a>
-</h2>
+</section><section><h2 class="section-heading" id="simulate-a-single-chain">Simulate a single chain<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a>
+<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a></h2>
 <hr class="half-width"><p>Now we are prepared to use the <code>simulate_chains()</code>
 function from <code>{epichains}</code> to create <strong>one</strong>
 transmission chain:</p>
@@ -660,8 +660,8 @@ offspring will be produced after a chain of size 500.</p>
 <p>The <code>simulate_chains()</code> output creates a
 <code>&lt;epichains&gt;</code> class object, which we can then analyse
 further in R.</p>
-</section><section id="simulate-multiple-chains"><h2 class="section-heading">Simulate multiple chains<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains"></a>
-</h2>
+</section><section><h2 class="section-heading" id="simulate-multiple-chains">Simulate multiple chains<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains"></a>
+<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains"></a></h2>
 <hr class="half-width"><p>We can use <code>simulate_chains()</code> to create multiple chains
 and increase the probability of simulating uncontrolled outbreak
 projections given an overdispersed offspring distribution.</p>
@@ -931,8 +931,8 @@ and <code>time = 0</code>.</p>
 </div>
 </div>
 </div>
-</section><section id="visualize-multiple-chains"><h2 class="section-heading">Visualize multiple chains<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a>
-</h2>
+</section><section><h2 class="section-heading" id="visualize-multiple-chains">Visualize multiple chains<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a>
+<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a></h2>
 <hr class="half-width"><p>To visualize the simulated chains, we need some pre-processing:</p>
 <ol style="list-style-type: decimal"><li>Let’s use <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> to get round time numbers to resemble
 surveillance days.</li>
@@ -1154,8 +1154,8 @@ predictions using <code>{epichains}</code>.</p>
 </div>
 </div>
 </div>
-</section><section id="challenges"><h2 class="section-heading">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-</h2>
+</section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
+<a class="anchor" aria-label="anchor" href="#challenges"></a></h2>
 <hr class="half-width"><div id="monkeypox-large-outbreak-potential" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -1462,7 +1462,7 @@ Althaus, 2015</a>:</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>Fitting of the distribution ' nbinom ' by maximum likelihood 
+<pre class="output" tabindex="0"><code>Fitting of the distribution ' nbinom ' by maximum likelihood
 Parameters:
       estimate Std. Error
 size 0.1814260 0.03990278
@@ -1557,9 +1557,9 @@ potential of diseases with overdispersed offspring distributions.</li>
 </ul></div>
 </div>
 </div>
-<!-- 
+<!--
 Place links that you need to refer to multiple times across pages here. Delete
-any links that you are not going to use. 
+any links that you are not going to use.
  -->
 </section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter"><div class="d-block d-sm-block d-md-none">
@@ -1584,18 +1584,18 @@ any links that you are not going to use.
       		<footer class="row footer mx-md-3"><hr><div class="col-md-6">
         <p>This lesson is subject to the <a href="CODE_OF_CONDUCT.html">Code of Conduct</a></p>
         <p>
-        
+
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-simulate.Rmd" class="external-link">Edit on GitHub</a>
-        
+
 	
         | <a href="https://github.com/epiverse-trace/tutorials-middle/blob/main/CONTRIBUTING.md" class="external-link">Contributing</a>
         | <a href="https://github.com/epiverse-trace/tutorials-middle/" class="external-link">Source</a></p>
 				<p><a href="https://github.com/epiverse-trace/tutorials-middle/blob/main/CITATION" class="external-link">Cite</a> | <a href="mailto:andree.valle-campos@lshtm.ac.uk">Contact</a> | <a href="https://carpentries.org/about/" class="external-link">About</a></p>
 			</div>
 			<div class="col-md-6">
-        
+
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
-        
+
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
         <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.2)</a></p>
 			</div>
@@ -1620,7 +1620,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html",
   "dateCreated": "2024-07-05",
   "dateModified": "2024-07-02",
-  "datePublished": "2024-07-05"
+  "datePublished": "2024-07-09"
 }
 
   </script><script>
