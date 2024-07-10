@@ -181,20 +181,34 @@ if(!require("devtools")) install.packages("devtools")
 devtools::find_rtools()
 ```
 
+4. Reintentar instalar {EpiNow2} usando {pak}:
+
+```r
+pak::pkg_install("EpiNow2")
+```
+
+Si persiste, intentar usando `install.packages()`:
+
+```r
+install.packages("EpiNow2", repos = c("https://epiforecasts.r-universe.dev", getOption("repos")))
+```
+
+Si el error persiste, [póngase en contacto con nosotros](#sus-preguntas)!
+
 :::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::: spoiler
 
 ### ¿obtiene un error con los paquetes epiverse-trace?
 
-Si recibe un mensaje de error al instalar {superspreading}, {epichains}, o {epiparameter}, pruebe este código alternativo:
+Si recibe un mensaje de error al instalar {epiparameter}, {epichains}, o {superspreading}, pruebe este código alternativo:
 
 ```r
-# for superspreading
-install.packages("superspreading", repos = c("https://epiverse-trace.r-universe.dev"))
-
 # for epiparameter
 install.packages("epiparameter", repos = c("https://epiverse-trace.r-universe.dev"))
+
+# for superspreading
+install.packages("superspreading", repos = c("https://epiverse-trace.r-universe.dev"))
 
 # for epichains
 install.packages("epichains", repos = c("https://epiverse-trace.r-universe.dev"))
@@ -240,7 +254,7 @@ if(!require("remotes")) install.packages("remotes")
 remotes::install_github("epiverse-trace/epichains")
 ```
 
-Si el error persiste, [póngase en contacto con nosotros](#your-questions)!
+Si el error persiste, [póngase en contacto con nosotros](#sus-preguntas)!
 
 :::::::::::::::::::::::::::
 
@@ -283,7 +297,7 @@ library(tidyverse)
 ```
 -->
 
-Si NO aparece un error del tipo `no hay ningún paquete llamado '...'`, ¡puede continuar! Si es así, [contacte con nosotros](#your-questions)!
+Si NO aparece un error del tipo `no hay ningún paquete llamado '...'`, ¡puede continuar! Si es así, [contacte con nosotros](#sus-preguntas)!
 
 ## Conjuntos de datos
 
