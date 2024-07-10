@@ -264,6 +264,17 @@ log_sd <- EpiNow2::convert_to_logsd(mean = 2, sd = 1)
 ```
 -->
 
+Utilizando la media y la desviación estándar de la distribución log normal, podemos especificar una distribución fija o variable utilizando `LogNormal()` como antes:
+
+```{r, warning=FALSE, message=FALSE}
+reporting_delay_variable <- EpiNow2::LogNormal(
+  mean = EpiNow2::Normal(mean = 2, sd = 0.5),
+  sd = EpiNow2::Normal(mean = 1, sd = 0.5),
+  max = 10
+)
+```
+
+
 :::::::::::::::::::::: spoiler
 
 ### Visualiza una distribución log Normal utilizando {epiparameter}
@@ -303,16 +314,6 @@ epiparameter::epidist(
 -->
 
 ::::::::::::::::::::::
-
-Utilizando la media y la desviación estándar de la distribución log normal, podemos especificar una distribución fija o variable utilizando `LogNormal()` como antes:
-
-```{r, warning=FALSE, message=FALSE}
-reporting_delay_variable <- EpiNow2::LogNormal(
-  mean = EpiNow2::Normal(mean = 2, sd = 0.5),
-  sd = EpiNow2::Normal(mean = 1, sd = 0.5),
-  max = 10
-)
-```
 
 Podemos trazar distribuciones simples y combinadas generadas por `{EpiNow2}` utilizando `plot()`. Combinemos en un gráfico el retraso desde la infección hasta la notificación, que incluye el periodo de incubación y el retraso en la notificación:
 
