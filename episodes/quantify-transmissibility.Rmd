@@ -249,10 +249,12 @@ incubation_period_variable
 
 Tras el periodo de incubación, habrá un retraso adicional desde el inicio de los síntomas hasta la notificación del caso: el retraso de notificación. Podemos especificarlo como una distribución fija o variable, o estimar una distribución a partir de los datos.
 
-Al especificar una distribución, es útil visualizar la densidad de probabilidad para ver el pico y la dispersión de la distribución, en este caso utilizaremos una *log normal* logarítmica normal. Podemos utilizar las funciones `convert_to_logmean()` y `convert_to_logsd()` para convertir la media y la desviación típica de una distribución normal en las de una distribución logarítmica normal.
+Al especificar una distribución, es útil visualizar la densidad de probabilidad para ver el pico y la dispersión de la distribución, en este caso utilizaremos una *log normal* logarítmica normal. 
+<!-- Podemos utilizar las funciones `convert_to_logmean()` y `convert_to_logsd()` para convertir la media y la desviación estándar de una distribución normal en las de una distribución logarítmica normal. -->
 
-Si queremos suponer que la media del retraso en la notificación es de 2 días (con una desviación típica de 1 día), escribimos:
+Si queremos suponer que la media del retraso en la notificación es de 2 días (con una desviación estándar de 1 día), escribimos:
 
+<!--
 ```{r}
 # obtener logmean a partir de la media y sd
 log_mean <- EpiNow2::convert_to_logmean(mean = 2, sd = 1)
@@ -260,6 +262,7 @@ log_mean <- EpiNow2::convert_to_logmean(mean = 2, sd = 1)
 # obtener logsd a partir de la media y sd
 log_sd <- EpiNow2::convert_to_logsd(mean = 2, sd = 1)
 ```
+-->
 
 :::::::::::::::::::::: spoiler
 
@@ -276,6 +279,20 @@ epiparameter::epidist(
   disease = "covid",
   epi_dist = "reporting delay", # retraso del reporte
   prob_distribution = "lnorm",
+  summary_stats = epiparameter::create_epidist_summary_stats(
+    mean = 2,
+    sd = 1
+  )
+) %>%
+  plot()
+```
+
+<!--
+```{r, message=FALSE, warning=FALSE}
+epiparameter::epidist(
+  disease = "covid",
+  epi_dist = "reporting delay", # retraso del reporte
+  prob_distribution = "lnorm",
   prob_distribution_params = c(
     meanlog = log_mean,
     sdlog = log_sd
@@ -283,15 +300,16 @@ epiparameter::epidist(
 ) %>%
   plot()
 ```
+-->
 
 ::::::::::::::::::::::
 
-Utilizando la media y la desviación típica de la distribución log normal, podemos especificar una distribución fija o variable utilizando `LogNormal()` como antes:
+Utilizando la media y la desviación estándar de la distribución log normal, podemos especificar una distribución fija o variable utilizando `LogNormal()` como antes:
 
 ```{r, warning=FALSE, message=FALSE}
 reporting_delay_variable <- EpiNow2::LogNormal(
-  meanlog = EpiNow2::Normal(mean = log_mean, sd = 0.5),
-  sdlog = EpiNow2::Normal(mean = log_sd, sd = 0.5),
+  mean = EpiNow2::Normal(mean = 2, sd = 0.5),
+  sd = EpiNow2::Normal(mean = 1, sd = 0.5),
   max = 10
 )
 ```
@@ -371,8 +389,8 @@ generation_time_fixed <- EpiNow2::LogNormal(
 )
 
 reporting_delay_fixed <- EpiNow2::LogNormal(
-  mean = log_mean,
-  sd = log_sd,
+  mean = 2,
+  sd = 1,
   max = 10
 )
 ```
