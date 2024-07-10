@@ -197,7 +197,7 @@ El número de retrasos y su tipo son una entrada flexible que depende de los dat
 
 La distribución del periodo de incubación de muchas enfermedades suele obtenerse de la bibliografía. El paquete `{epiparameter}` contiene una biblioteca de parámetros epidemiológicos de distintas enfermedades obtenidos de la literatura.
 
-Especificamos una distribución gamma (fija) con media $\mu = 4$ y desviación típica $\sigma= 2$ (forma = $4$, escala = $1$) mediante la función `Gamma()` de la siguiente manera:
+Especificamos una distribución gamma (fija) con media $\mu = 4$ y desviación estándar $\sigma= 2$ (forma = $4$, escala = $1$) mediante la función `Gamma()` de la siguiente manera:
 
 ```{r}
 incubation_period_fixed <- EpiNow2::Gamma(
@@ -225,15 +225,15 @@ Para todos los tipos de retraso, tendremos que utilizar distribuciones sólo par
 
 #### Incluyendo la incertidumbre de distribución
 
-Para especificar una distribución **variable**, incluimos la incertidumbre en torno a la media $\mu$ y la desviación típica $\sigma$ de nuestra distribución gamma. Si nuestra distribución del periodo de incubación tiene una media $\mu$ y una desviación típica $\sigma$ entonces suponemos que la media ($\mu$) sigue una distribución Normal con desviación típica $\sigma_{\mu}$:
+Para especificar una distribución **variable**, incluimos la incertidumbre en torno a la media $\mu$ y la desviación estándar $\sigma$ de nuestra distribución gamma. Si nuestra distribución del periodo de incubación tiene una media $\mu$ y una desviación estándar $\sigma$ entonces suponemos que la media ($\mu$) sigue una distribución Normal con desviación estándar $\sigma_{\mu}$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
-y una desviación típica ($\sigma$) sigue una distribución Normal con desviación típica $\sigma_{\sigma}$:
+y una desviación estándar ($\sigma$) sigue una distribución Normal con desviación estándar $\sigma_{\sigma}$:
 
 $$\mbox{Normal}(\sigma,\sigma_{\sigma}^2).$$
 
-Lo especificamos utilizando `Normal()` para cada argumento: la media ($\mu=4$ con $\sigma_{\mu}=0.5$) y la desviación típica ($\sigma=2$ con $\sigma_{\sigma}=0.5$).
+Lo especificamos utilizando `Normal()` para cada argumento: la media ($\mu=4$ con $\sigma_{\mu}=0.5$) y la desviación estándar ($\sigma=2$ con $\sigma_{\sigma}=0.5$).
 
 ```{r, warning=FALSE, message=FALSE}
 incubation_period_variable <- EpiNow2::Gamma(
@@ -320,7 +320,7 @@ reporting_delay <- EpiNow2::estimate_delay(
 
 #### Tiempo de generación
 
-También debemos especificar una distribución para el tiempo de generación. Aquí utilizaremos una distribución log normal con media 3.6 y desviación típica 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
+También debemos especificar una distribución para el tiempo de generación. Aquí utilizaremos una distribución log normal con media 3.6 y desviación estándar 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
 
 ```{r, warning=FALSE, message=FALSE}
 generation_time_variable <- EpiNow2::LogNormal(
@@ -335,7 +335,7 @@ generation_time_variable <- EpiNow2::LogNormal(
 La función `epinow()` es una envoltura de la función `estimate_infections()` utilizada para estimar los casos por fecha de infección. La distribución del tiempo de generación y las distribuciones del retraso deben pasarse utilizando las funciones ` generation_time_opts()` y `delay_opts()` respectivamente.
 
 Hay muchas otras entradas que se pueden pasar a `epinow()` ver `?EpiNow2::epinow()` para más detalles.
-Una entrada opcional es especificar una *log normal* para el número de reproducción efectivo $R_t$ al inicio del brote. Especificamos una media de 2 días y una desviación típica de 2 días como argumentos de `prior` dentro de `rt_opts()`:
+Una entrada opcional es especificar una *log normal* para el número de reproducción efectivo $R_t$ al inicio del brote. Especificamos una media de 2 días y una desviación estándar de 2 días como argumentos de `prior` dentro de `rt_opts()`:
 
 ```{r, eval=TRUE}
 # define Rt prior distribution
