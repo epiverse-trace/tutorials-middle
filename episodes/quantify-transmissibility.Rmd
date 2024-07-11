@@ -504,8 +504,8 @@ Un factor que describe el cambio esperado en los casos diarios, basado en la pro
 | ------------- |-------------|
 |$p < 0,05$ |Aumentando |
 |$0,05 \leq p< 0,4$ |Probable aumento |
-|$0,4 p< 0,6$ |Estable |
-|$0,6 p < 0,95$ |Probable disminución |
+|$0,4 \leq p< 0,6$ |Estable |
+|$0,6 \leq p < 0,95$ |Probable disminución |
 |$0,95 \leq p \leq 1$ |En disminución |
 </center>
 
