@@ -197,7 +197,7 @@ El número de retrasos y su tipo son una entrada flexible que depende de los dat
 
 La distribución del periodo de incubación de muchas enfermedades suele obtenerse de la bibliografía. El paquete `{epiparameter}` contiene una biblioteca de parámetros epidemiológicos de distintas enfermedades obtenidos de la literatura.
 
-Especificamos una distribución gamma (fija) con media $\mu = 4$ y desviación típica $\sigma= 2$ (forma = $4$, escala = $1$) mediante la función `Gamma()` de la siguiente manera:
+Especificamos una distribución gamma (fija) con media $\mu = 4$ y desviación estándar $\sigma= 2$ (forma = $4$, escala = $1$) mediante la función `Gamma()` de la siguiente manera:
 
 ```{r}
 incubation_period_fixed <- EpiNow2::Gamma(
@@ -225,15 +225,15 @@ Para todos los tipos de retraso, tendremos que utilizar distribuciones sólo par
 
 #### Incluyendo la incertidumbre de distribución
 
-Para especificar una distribución **variable**, incluimos la incertidumbre en torno a la media $\mu$ y la desviación típica $\sigma$ de nuestra distribución gamma. Si nuestra distribución del periodo de incubación tiene una media $\mu$ y una desviación típica $\sigma$ entonces suponemos que la media ($\mu$) sigue una distribución Normal con desviación típica $\sigma_{\mu}$:
+Para especificar una distribución **variable**, incluimos la incertidumbre en torno a la media $\mu$ y la desviación estándar $\sigma$ de nuestra distribución gamma. Si nuestra distribución del periodo de incubación tiene una media $\mu$ y una desviación estándar $\sigma$ entonces suponemos que la media ($\mu$) sigue una distribución Normal con desviación estándar $\sigma_{\mu}$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
-y una desviación típica ($\sigma$) sigue una distribución Normal con desviación típica $\sigma_{\sigma}$:
+y una desviación estándar ($\sigma$) sigue una distribución Normal con desviación estándar $\sigma_{\sigma}$:
 
 $$\mbox{Normal}(\sigma,\sigma_{\sigma}^2).$$
 
-Lo especificamos utilizando `Normal()` para cada argumento: la media ($\mu=4$ con $\sigma_{\mu}=0.5$) y la desviación típica ($\sigma=2$ con $\sigma_{\sigma}=0.5$).
+Lo especificamos utilizando `Normal()` para cada argumento: la media ($\mu=4$ con $\sigma_{\mu}=0.5$) y la desviación estándar ($\sigma=2$ con $\sigma_{\sigma}=0.5$).
 
 ```{r, warning=FALSE, message=FALSE}
 incubation_period_variable <- EpiNow2::Gamma(
@@ -249,10 +249,12 @@ incubation_period_variable
 
 Tras el periodo de incubación, habrá un retraso adicional desde el inicio de los síntomas hasta la notificación del caso: el retraso de notificación. Podemos especificarlo como una distribución fija o variable, o estimar una distribución a partir de los datos.
 
-Al especificar una distribución, es útil visualizar la densidad de probabilidad para ver el pico y la dispersión de la distribución, en este caso utilizaremos una *log normal* logarítmica normal. Podemos utilizar las funciones `convert_to_logmean()` y `convert_to_logsd()` para convertir la media y la desviación típica de una distribución normal en las de una distribución logarítmica normal.
+Al especificar una distribución, es útil visualizar la densidad de probabilidad para ver el pico y la dispersión de la distribución, en este caso utilizaremos una *log normal* logarítmica normal. 
+<!-- Podemos utilizar las funciones `convert_to_logmean()` y `convert_to_logsd()` para convertir la media y la desviación estándar de una distribución normal en las de una distribución logarítmica normal. -->
 
-Si queremos suponer que la media del retraso en la notificación es de 2 días (con una desviación típica de 1 día), escribimos:
+Si queremos suponer que la media del retraso en la notificación es de 2 días (con una desviación estándar de 1 día), escribimos:
 
+<!--
 ```{r}
 # obtener logmean a partir de la media y sd
 log_mean <- EpiNow2::convert_to_logmean(mean = 2, sd = 1)
@@ -260,6 +262,18 @@ log_mean <- EpiNow2::convert_to_logmean(mean = 2, sd = 1)
 # obtener logsd a partir de la media y sd
 log_sd <- EpiNow2::convert_to_logsd(mean = 2, sd = 1)
 ```
+-->
+
+Utilizando la media y la desviación estándar de la distribución log normal, podemos especificar una distribución fija o variable utilizando `LogNormal()` como antes:
+
+```{r, warning=FALSE, message=FALSE}
+reporting_delay_variable <- EpiNow2::LogNormal(
+  mean = EpiNow2::Normal(mean = 2, sd = 0.5),
+  sd = EpiNow2::Normal(mean = 1, sd = 0.5),
+  max = 10
+)
+```
+
 
 :::::::::::::::::::::: spoiler
 
@@ -276,6 +290,20 @@ epiparameter::epidist(
   disease = "covid",
   epi_dist = "reporting delay", # retraso del reporte
   prob_distribution = "lnorm",
+  summary_stats = epiparameter::create_epidist_summary_stats(
+    mean = 2,
+    sd = 1
+  )
+) %>%
+  plot()
+```
+
+<!--
+```{r, message=FALSE, warning=FALSE}
+epiparameter::epidist(
+  disease = "covid",
+  epi_dist = "reporting delay", # retraso del reporte
+  prob_distribution = "lnorm",
   prob_distribution_params = c(
     meanlog = log_mean,
     sdlog = log_sd
@@ -283,18 +311,9 @@ epiparameter::epidist(
 ) %>%
   plot()
 ```
+-->
 
 ::::::::::::::::::::::
-
-Utilizando la media y la desviación típica de la distribución log normal, podemos especificar una distribución fija o variable utilizando `LogNormal()` como antes:
-
-```{r, warning=FALSE, message=FALSE}
-reporting_delay_variable <- EpiNow2::LogNormal(
-  meanlog = EpiNow2::Normal(mean = log_mean, sd = 0.5),
-  sdlog = EpiNow2::Normal(mean = log_sd, sd = 0.5),
-  max = 10
-)
-```
 
 Podemos trazar distribuciones simples y combinadas generadas por `{EpiNow2}` utilizando `plot()`. Combinemos en un gráfico el retraso desde la infección hasta la notificación, que incluye el periodo de incubación y el retraso en la notificación:
 
@@ -320,7 +339,7 @@ reporting_delay <- EpiNow2::estimate_delay(
 
 #### Tiempo de generación
 
-También debemos especificar una distribución para el tiempo de generación. Aquí utilizaremos una distribución log normal con media 3.6 y desviación típica 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
+También debemos especificar una distribución para el tiempo de generación. Aquí utilizaremos una distribución log normal con media 3.6 y desviación estándar 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
 
 ```{r, warning=FALSE, message=FALSE}
 generation_time_variable <- EpiNow2::LogNormal(
@@ -335,7 +354,7 @@ generation_time_variable <- EpiNow2::LogNormal(
 La función `epinow()` es una envoltura de la función `estimate_infections()` utilizada para estimar los casos por fecha de infección. La distribución del tiempo de generación y las distribuciones del retraso deben pasarse utilizando las funciones ` generation_time_opts()` y `delay_opts()` respectivamente.
 
 Hay muchas otras entradas que se pueden pasar a `epinow()` ver `?EpiNow2::epinow()` para más detalles.
-Una entrada opcional es especificar una *log normal* para el número de reproducción efectivo $R_t$ al inicio del brote. Especificamos una media de 2 días y una desviación típica de 2 días como argumentos de `prior` dentro de `rt_opts()`:
+Una entrada opcional es especificar una *log normal* para el número de reproducción efectivo $R_t$ al inicio del brote. Especificamos una media de 2 días y una desviación estándar de 2 días como argumentos de `prior` dentro de `rt_opts()`:
 
 ```{r, eval=TRUE}
 # define Rt prior distribution
@@ -371,8 +390,8 @@ generation_time_fixed <- EpiNow2::LogNormal(
 )
 
 reporting_delay_fixed <- EpiNow2::LogNormal(
-  mean = log_mean,
-  sd = log_sd,
+  mean = 2,
+  sd = 1,
   max = 10
 )
 ```
@@ -483,11 +502,11 @@ Un factor que describe el cambio esperado en los casos diarios, basado en la pro
 <center>
 | Probabilidad ($p$) | Cambio esperado |
 | ------------- |-------------|
-|$p < 0,05$ |Aumentando |$ 0,05
+|$p < 0,05$ |Aumentando |
 |$0,05 \leq p< 0,4$ |Probable aumento |
-|0,4 p< 0,6$ Estable
-|0,6 p < 0,95$ Probable disminución
-|0,95 \leq p \leq 1$ |En disminución |Estable
+|$0,4 \leq p< 0,6$ |Estable |
+|$0,6 \leq p < 0,95$ |Probable disminución |
+|$0,95 \leq p \leq 1$ |En disminución |
 </center>
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
