@@ -1,84 +1,86 @@
 ---
-title: Crear una previsión a corto plazo
+title: 'Create a short-term forecast'
 teaching: 30
 exercises: 30
-editor_options:
+editor_options: 
   chunk_output_type: inline
 ---
 
-```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
 withr::local_options(base::list(mc.cores = 4))
 ```
 
-:::::::::::::::::::::::::::::::::::::: questions
 
-- ¿Cómo puedo crear previsiones a corto plazo a partir de datos de casos?
-- ¿Cómo tengo en cuenta los informes incompletos en las previsiones?
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How do I create short-term forecasts from case data?
+- How do I account for incomplete reporting in forecasts?
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Aprender a hacer previsiones de casos utilizando el paquete R `EpiNow2`
-- Aprende a incluir un proceso de observación en la estimación
+- Learn how to make forecasts of cases using R package `EpiNow2`
+- Learn how to include an observation process in estimation
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: prereq
 
-## Requisitos previos
+## Prerequisites
 
-- Tutorial completo [Cuantificar la transmisión](../episodes/quantify-transmissibility.md)
++ Complete tutorial [Quantifying transmission](../episodes/quantify-transmissibility.md)
 
-Los alumnos deben familiarizarse con las siguientes dependencias conceptuales antes de trabajar en este tutorial:
+Learners should familiarise themselves with following concept dependencies before working through this tutorial: 
 
-**Estadísticas** Distribuciones de probabilidad, principio del análisis bayesiano.
+**Statistics** : probability distributions, principle of Bayesian analysis. 
 
-**Teoría epidémica** Número de reproducción efectiva.
+**Epidemic theory** : Effective reproduction number.
 
 :::::::::::::::::::::::::::::::::
 
-## Introducción
+## Introduction
 
-Dados los datos de casos de una epidemia, podemos crear estimaciones del número actual y futuro de casos teniendo en cuenta tanto los retrasos
-en la notificación y la infranotificación. Para hacer afirmaciones sobre el futuro de la epidemia, tenemos que hacer una suposición sobre cómo
-las observaciones hasta el presente están relacionadas con lo que esperamos que ocurra en el futuro. La forma más sencilla de hacerlo es suponer que "no hay cambios", es decir, que el número de reproducciones sigue siendo el mismo en el futuro que el último observado. En este tutorial crearemos [previsiones](../learners/reference.md#forecast) suponiendo que el número de reproducción seguirá siendo el mismo que el estimado en la última fecha para la que se disponía de datos.
+Given case data of an epidemic, we can create estimates of the current and future number of cases by accounting for both delays 
+in reporting and under reporting. To make statements about the future of th epidemic, we need to make an assumption of how 
+observations up to the present are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e.,  the reproduction number remains the same in the future as last observed. In this tutorial we will create short-term [forecasts](../learners/reference.md#forecast) by assuming the reproduction number will remain the same as its estimate was on the final date for which data was available.
 
-En este tutorial vamos a aprender a utilizar la función `{EpiNow2}` para prever los casos teniendo en cuenta las observaciones incompletas y prever las observaciones secundarias, como las defunciones.
+In this tutorial we are going to learn how to use the `{EpiNow2}` package to forecast cases accounting for incomplete observations and forecast secondary observations like deaths.
 
-Utilizaremos la tubería `%>%` para conectar funciones, así que vamos a llamar también a la función `{tidyverse}` paquete:
+We’ll use the pipe `%>%` operator to connect functions, so let’s also call to the `{tidyverse}` package:
 
 ```r
 library(EpiNow2)
 library(tidyverse)
 ```
 
-```{r, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+```{r,echo=FALSE,eval=TRUE,message=FALSE,warning=FALSE}
 library(tidyverse)
 ```
 
 ::::::::::::::::::: checklist
 
-### El doble punto
+### The double-colon
 
-El doble punto `::` en R te permite llamar a una función específica de un paquete sin cargar todo el paquete en el entorno actual.
+The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
 
-Por ejemplo `dplyr::filter(data, condition)` utiliza `filter()` del `{dplyr}` paquete.
+For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
-Esto nos ayuda a recordar las funciones del paquete y a evitar conflictos de espacio de nombres.
+This help us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
-## Crear una previsión a corto plazo
+## Create a short-term forecast
 
-La función `epinow()` descrita en el [cuantificación de la transmisión](../episodes/quantify-transmissibility.md) es una envoltura de las funciones:
+The function `epinow()` described in the [quantifying transmission](../episodes/quantify-transmissibility.md) episode is a wrapper for the functions: 
 
-- `estimate_infections()` utilizadas para estimar los casos por fecha de infección.
-- `forecast_infections()` Se utiliza para simular infecciones utilizando un ajuste existente (estimación) a los casos observados.
+- `estimate_infections()` used to estimate cases by date of infection. 
+- `forecast_infections()` used to simulate infections using an existing fit (estimate) to observed cases.
 
-Utilicemos el mismo código utilizado en [cuantificar la transmisi](../episodes/quantify-transmissibility.md) para obtener los datos de entrada, los retardos y las priors:
+Let's use the same code used in [quantifying transmission](../episodes/quantify-transmissibility.md) episode to get the input data, delays and priors:
 
-```{r, echo=TRUE}
+```{r, echo = TRUE}
 # Read cases dataset
 cases <- incidence2::covidregionaldataUK %>%
   # use {tidyr} to preprocess missing values
@@ -124,9 +126,9 @@ generation_time_fixed <- EpiNow2::LogNormal(
 rt_prior <- EpiNow2::rt_opts(prior = base::list(mean = 2, sd = 2))
 ```
 
-Ahora podemos extraer la previsión a corto plazo utilizando:
+Now we can extract the short-term forecast using:
 
-```{r, message=FALSE, warning=FALSE, eval=TRUE}
+```{r, message = FALSE, warning=FALSE, eval = TRUE}
 # Assume we only have the first 90 days of this data
 reported_cases <- cases %>%
   dplyr::slice(1:90)
@@ -142,38 +144,39 @@ estimates <- EpiNow2::epinow(
 
 ::::::::::::::::::::::::::::::::: callout
 
-### ¡No esperes a que se complete!
+### Do not wait for this to complete!
 
-Esta última parte puede tardar 10 minutos en ejecutarse. Sigue leyendo este episodio del tutorial mientras esto se ejecuta en segundo plano. Para más información sobre el tiempo de computación, lee la sección "Inferencia Bayesiana con Stan" dentro del tutorial [cuantificar la transmisi](../episodes/quantify-transmissibility.md) de la transmisión.
+This last chunk may take 10 minutes to run. Keep reading this tutorial episode while this runs in the background. For more information on computing time, read the "Bayesian inference using Stan" section within the [quantifying transmission](../episodes/quantify-transmissibility.md) episode.
 
 :::::::::::::::::::::::::::::::::
 
-Podemos visualizar las estimaciones del número de reproducciones efectivas y del número estimado de casos utilizando `plot()`. Las estimaciones se dividen en tres categorías:
+We can visualise the estimates of the effective reproduction number and the estimated number of cases using `plot()`. The estimates are split into three categories:
 
-- **Estimación** (verde): utiliza todos los datos,
++ **Estimate** (green): utilises all data,
 
-- **Estimación basada en datos parciales** (naranja): contiene un mayor grado de incertidumbre porque dichas estimaciones se basan en menos datos,
++ **Estimate based on partial data** (orange): contains a higher degree of uncertainty because such estimates are based on less data,
 
-- **Previsión** (morado): previsiones hacia el futuro.
++ **Forecast** (purple): forecasts into the future. 
+
 
 ```{r}
 plot(estimates)
 ```
 
-### Previsión con observaciones incompletas
+### Forecasting with incomplete observations 
 
-En la [cuantificación de la transmisión](../episodes/quantify-transmissibility.md) tuvimos en cuenta los retrasos en la notificación. `EpiNow2` también podemos tener en cuenta las observaciones incompletas, ya que, en realidad, el 100% de los casos no se notifican.
-Pasaremos otro argumento a `epinow()` función llamada `obs` para definir un modelo de observación. El formato de `obs` se define mediante la función `obs_opt()` (véase `?EpiNow2::obs_opts` para más detalles).
+In the [quantifying transmission](../episodes/quantify-transmissibility.md) episode we accounted for delays in reporting.In `EpiNow2` we also can account for incomplete observations as in reality, 100% of cases are not reported.
+We will pass another argument into `epinow()` function  called `obs` to define an observation model. The format of `obs` is defined by the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
 
-Supongamos que creemos que los datos del brote COVID-19 del `cases` objeto no incluyen todos los casos notificados. Creemos que sólo observamos el 40% de los casos. Para especificar esto en el modelo de observación, debemos pasar un factor de escala con una media y una desviación típica. Si suponemos que el 40% de los casos están en los datos de casos (con una desviación típica del 1%), entonces especificamos el factor `scale` de entrada a `obs_opts()` como sigue:
+Let's say we believe the COVID-19 outbreak data in the `cases` object do not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
 
 ```{r}
 obs_scale <- base::list(mean = 0.4, sd = 0.01)
 ```
 
-Para ejecutar el marco de inferencia con este proceso de observación, añadimos `obs = obs_opts(scale = obs_scale)` a los argumentos de entrada de `epinow()`:
+To run the inference framework with this observation process, we add `obs = obs_opts(scale = obs_scale)` to the input arguments of `epinow()`:
 
-```{r, message=FALSE, warning=FALSE, eval=TRUE}
+```{r, message = FALSE,warning=FALSE, eval = TRUE}
 # Define observation model
 obs_scale <- base::list(mean = 0.4, sd = 0.01)
 
@@ -194,29 +197,30 @@ estimates <- EpiNow2::epinow(
 base::summary(estimates)
 ```
 
-Las estimaciones de las medidas de transmisión, como el número de reproducción efectivo y la tasa de crecimiento, son similares (o tienen el mismo valor) que cuando no tuvimos en cuenta las observaciones incompletas (ver [cuantificar el episodio de trans](../episodes/quantify-transmissibility.md) en la sección "Encontrar estimaciones"). Sin embargo, el número de nuevos casos confirmados por fecha de infección ha cambiado sustancialmente de magnitud para reflejar la suposición de que sólo el 40% de los casos están en el conjunto de datos.
 
-También podemos cambiar la distribución por defecto de Binomial Negativa a Poisson, eliminar el efecto de semana por defecto y más. Consulta `?EpiNow2::obs_opts` para más detalles.
+The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see [quantifying transmission episode](../episodes/quantify-transmissibility.md) in the "Finding estimates" section). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
 
-::::::::::::::::::::::::::: debate
+We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more details.
 
-### ¿Cuáles son las implicaciones de este cambio?
+::::::::::::::::::::::::::: discussion
 
-- Comparar diferentes porcentajes de observaciones %
-- ¿En qué se diferencian en el número de infecciones estimadas?
-- ¿Qué implicaciones tiene este cambio para la salud pública?
+### What are the implications of this change?
+
+- Compare different percents of observations %
+- How are they different in the number of infections estimated?
+- What are the public health implications of this change?
 
 :::::::::::::::::::::::::::
 
-## Previsión de observaciones secundarias
+## Forecasting secondary observations
 
-`EpiNow2` también tiene la capacidad de estimar y pronosticar observaciones secundarias, por ejemplo, muertes y hospitalizaciones, a partir de una observación primaria, por ejemplo, casos. Aquí ilustraremos cómo prever el número de muertes derivadas de los casos observados de COVID-19 en las primeras fases del brote del Reino Unido.
+`EpiNow2` also has the ability to estimate and forecast secondary observations, e.g., deaths and hospitalisations, from a primary observation, e.g., cases. Here we will illustrate how to forecast the number of deaths arising from observed cases of COVID-19 in the early stages of the UK outbreak. 
 
-En primer lugar, debemos formatear nuestros datos para que tengan las siguientes columnas:
+First, we must format our data to have the following columns:
 
-- `date`: la fecha (como objeto de fecha ver `?is.Date()`),
-- `primary`: número de observaciones primarias en esa fecha, en este ejemplo **casos**,
-- `secondary`: número de observaciones secundarias fecha, en este ejemplo **defunciones**.
++ `date`: the date (as a date object see `?is.Date()`),
++ `primary`: number of primary observations on that date, in this example **cases**,
++ `secondary`: number of secondary observations date, in this example **deaths**.
 
 ```{r}
 reported_cases_deaths <- incidence2::covidregionaldataUK %>%
@@ -233,7 +237,7 @@ reported_cases_deaths <- incidence2::covidregionaldataUK %>%
   pivot_wider(names_from = count_variable, values_from = count)
 ```
 
-```{r, echo=FALSE, fig.cap="Distribution of secondary cases (deaths). We will drop the first 30 days with no observed deaths. We will use the deaths between day 31 and day 60 to estimate the secondary observations. We will forecast deaths from day 61 to day 90."}
+```{r,echo=FALSE,fig.cap="Distribution of secondary cases (deaths). We will drop the first 30 days with no observed deaths. We will use the deaths between day 31 and day 60 to estimate the secondary observations. We will forecast deaths from day 61 to day 90."}
 
 # distribution of secondary observations
 estimate_forecast <- reported_cases_deaths %>%
@@ -280,22 +284,21 @@ ggplot2::ggplot() +
   NULL
 ```
 
-Utilizando los datos sobre casos y muertes entre el día 31 y el día 60, estimaremos la relación entre las observaciones primarias y secundarias utilizando `estimate_secondary()` y, a continuación, pronosticaremos las muertes futuras mediante `forecast_secondary()`. Para más detalles sobre el modelo, consulta el [documentación del](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html).
+Using the data on cases and deaths between day 31 and day 60, we will estimate the relationship between the primary and secondary observations using `estimate_secondary()`, then forecast future deaths using `forecast_secondary()`. For more details on the model see the [model documentation](https://epiforecasts.io/EpiNow2/dev/articles/estimate_secondary.html). 
 
-Debemos especificar el tipo de observación mediante `type` en `secondary_opts()`, las opciones incluyen:
+We must specify the type of observation using `type` in `secondary_opts()`, options include:
 
-- "incidencia": las observaciones secundarias surgen de las observaciones primarias previas, es decir, de las muertes que surgen de los casos registrados.
-- "Prevalencia": las observaciones secundarias surgen de una combinación de observaciones primarias actuales y observaciones secundarias anteriores, es decir, el uso de camas hospitalarias que surge de los ingresos hospitalarios actuales y del uso de camas hospitalarias anteriores.
++ "incidence": secondary observations arise from previous primary observations, i.e., deaths arising from recorded cases.
++ "prevalence": secondary observations arise from a combination current primary observations and past secondary observations, i.e., hospital bed usage arising from current hospital admissions and past hospital bed usage. 
 
-En este ejemplo especificamos `secondary_opts(type = "incidence")`. Consulta `?EpiNow2::secondary_opts` para más detalles.
+In this example we specify `secondary_opts(type = "incidence")`. See `?EpiNow2::secondary_opts` for more detail.
 
-La última entrada clave es la distribución del retraso entre las observaciones primaria y secundaria. Aquí se trata del retraso entre la notificación del caso y la muerte, suponemos que sigue una distribución gamma con una media de 14 días y una desviación típica de 5 días (Alternativamente, podemos utilizar `{epiparameter}` para [acceder a los retrasos epidemiológicos](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html)). Utilizando `Gamma()` especificamos una distribución gamma fija.
+The final key input is the delay distribution between the primary and secondary observations. Here this is the delay between case report and death, we assume this follows a gamma distribution with mean of 14 days and standard deviation of 5 days (Alternatively, we can use `{epiparameter}` to [access epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html)). Using `Gamma()` we specify a fixed gamma distribution.
 
-Hay más entradas de función para `estimate_secondary()` que se pueden especificar, incluida la adición de un proceso de observación, véase `?EpiNow2::estimate_secondary` para más detalles sobre estas opciones.
+There are further function inputs to `estimate_secondary()` which can be specified, including adding an observation process, see `?EpiNow2::estimate_secondary` for detail on these options. 
 
-Encontrar el ajuste del modelo entre casos y muertes:
-
-```{r, warning=FALSE, message=FALSE}
+To find the model fit between cases and deaths: 
+```{r,warning=FALSE,message=FALSE}
 # Estimate from day 31 to day 60 of this data
 cases_to_estimate <- reported_cases_deaths %>%
   slice(31:60)
@@ -315,24 +318,24 @@ estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
 )
 ```
 
+
 ::::::::::::::::::::::::::::::::::::: callout
 
-### Ten cuidado con la escala de tiempo
+### Be cautious of time-scale 
 
-En las primeras fases de un brote puede haber cambios sustanciales en las pruebas y la notificación. Si hay cambios en las pruebas de un mes a otro, habrá un sesgo en el ajuste del modelo. Por tanto, debes tener cuidado con la escala temporal de los datos utilizados en el ajuste y la previsión del modelo.
+In the early stages of an outbreak there can be substantial changes in testing and reporting. If there are testing changes from one month to another, then there will be a bias in the model fit. Therefore, you should be cautious of the time-scale of data used in the model fit and forecast.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-Trazamos el ajuste del modelo (cintas sombreadas) con las observaciones secundarias (diagrama de barras) y las observaciones primarias (línea de puntos) de la siguiente manera:
+We plot the model fit (shaded ribbons) with the secondary observations (bar plot) and primary observations (dotted line) as follows: 
 
 ```{r}
 plot(estimate_cases_to_deaths, primary = TRUE)
 ```
 
-Para utilizar este ajuste del modelo para pronosticar las muertes, pasamos un marco de datos consistente en la observación primaria (casos) para las fechas no utilizadas en el ajuste del modelo.
+To use this model fit to forecast deaths, we pass a data frame consisting of the primary observation (cases) for dates not used in the model fit. 
 
-*Nota : en este episodio estamos utilizando datos en los que conocemos las muertes y los casos, por lo que creamos un marco de datos extrayendo los casos. Pero, en la práctica, se trataría de otro conjunto de datos formado sólo por los casos.*
-
+*Note : in this episode we are using data where we know the deaths and cases, so we create a data frame by extracting the cases. But in practice, this would be a different data set consisting of cases only.*
 ```{r}
 # Forecast from day 61 to day 90
 cases_to_forecast <- reported_cases_deaths %>%
@@ -340,9 +343,9 @@ cases_to_forecast <- reported_cases_deaths %>%
   dplyr::mutate(value = primary)
 ```
 
-Para pronosticar, utilizamos el ajuste del modelo `estimate_cases_to_deaths`:
+To forecast, we use the model fit `estimate_cases_to_deaths`:  
 
-```{r, warning=FALSE, message=FALSE}
+```{r,warning=FALSE,message=FALSE}
 # Forecast secondary cases
 deaths_forecast <- EpiNow2::forecast_secondary(
   estimate = estimate_cases_to_deaths,
@@ -354,7 +357,7 @@ plot(deaths_forecast)
 
 :::::::::::::::: spoiler
 
-### haz una trama de previsión
+### make a forecast plot
 
 ```{r}
 deaths_forecast %>%
@@ -377,62 +380,65 @@ deaths_forecast %>%
   theme(axis.text.x = ggplot2::element_text(angle = 90))
 ```
 
+
 ::::::::::::::::
 
-El gráfico muestra la previsión de observaciones secundarias (defunciones) en las fechas para las que hemos registrado casos.
-También es posible prever las defunciones mediante la previsión de casos, para lo que debes especificar `primary` como `estimates` salida de `estimate_infections()`.
+The plot shows the forecast secondary observations (deaths) over the dates which we have recorded cases for. 
+It is also possible to forecast deaths using forecast cases, here you would specify `primary` as the `estimates` output from `estimate_infections()`.
+
 
 :::::::::::::::::::::::::: callout
 
-### Intervalos creíbles
+### Credible intervals
 
-En todos `{EpiNow2}` figuras de resultados, las regiones sombreadas reflejan los intervalos de credibilidad del 90%, 50% y 20% en orden de más claro a más oscuro.
+In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% credible intervals in order from lightest to darkest.
 
 ::::::::::::::::::::::::::
 
-## Reto: Análisis del brote de ébola
+## Challenge: Ebola outbreak analysis 
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-Descarga el archivo [casos\_ébola.csv](data/ebola_cases.csv) y léelo en R. Los datos simulados consisten en la fecha de aparición de los síntomas y el número de casos confirmados de las primeras fases del brote de ébola en Sierra Leona en 2014.
+Download the file [ebola_cases.csv](data/ebola_cases.csv) and read it into R. The simulated data consists of the date of symptom onset and number of confirmed cases of the early stages of the Ebola outbreak in Sierra Leone in 2014.
 
-Utiliza los 3 primeros meses (120 días) de datos:
+Using the first 3 months (120 days) of data:
 
-1. Estima si los casos aumentan o disminuyen en el día 120 del brote
-2. Contar con una capacidad de observación del 80% de los casos.
-3. Crea una previsión de dos semanas del número de casos.
+1. Estimate whether cases are increasing or decreasing on day 120 of the outbreak
+2. Account for a capacity to observe 80% of cases.
+2. Create a two week forecast of number of cases.
 
-Puedes utilizar los siguientes valores de parámetro para la distribución o distribuciones del retraso y la distribución del tiempo de generación.
+You can use the following parameter values for the delay distribution(s) and generation time distribution.
 
-- Periodo de incubación: Log normal$(2.487,0.330)$ ([Eichner et al. 2011](https://doi.org/10.1016/j.phrp.2011.04.001) a través de `{epiparameter}`)
-- Tiempo de generación: Gamma$(15.3, 10.1)$ ([Equipo de respuesta al ébola de la OMS 2014](https://www.nejm.org/doi/full/10.1056/NEJMoa1411100))
++ Incubation period: Log normal$(2.487,0.330)$ ([Eichner et al. 2011](https://doi.org/10.1016/j.phrp.2011.04.001) via `{epiparameter}`)
++ Generation time: Gamma$(15.3, 10.1)$ ([WHO Ebola Response Team 2014](https://www.nejm.org/doi/full/10.1056/NEJMoa1411100))
 
-Puedes incluir cierta incertidumbre en torno a la media y la desviación típica de estas distribuciones.
+You may include some uncertainty around the mean and standard deviation of these distributions. 
 
-::::::::::::::::: pista
+::::::::::::::::: hint
 
-Utilizamos el número de reproducción efectivo y la tasa de crecimiento para estimar si los casos aumentan o disminuyen.
+We use the effective reproduction number and growth rate to estimate whether cases are increasing or decreasing.
 
-Podemos utilizar el `horizon` argumento dentro del `epinow()` para ampliar el periodo de tiempo de la previsión. El valor por defecto es de siete días.
+We can use the `horizon` argument within the `epinow()` function to extend the time period of the forecast. The default value is of seven days.
 
-Asegúrate de que los datos tienen el formato correcto :
+Ensure the data is in the correct format :
 
-- `date`: la fecha (como objeto de fecha ver `?is.Date()`),
-- `confirm` número de casos confirmados en esa fecha.
++ `date`: the date (as a date object see `?is.Date()`),
++ `confirm`: number of confirmed cases on that date.
 
 ::::::::::::::::::::::
 
-::::::::::::::::: solución
 
-### SOLUCIÓN
+::::::::::::::::: solution
 
-Para estimar el número efectivo de reproducción y la tasa de crecimiento, utilizaremos la función `epinow()`.
+### SOLUTION
 
-Como los datos consisten en la fecha de aparición de los síntomas, sólo necesitamos especificar una distribución de retardo para el periodo de incubación y el tiempo de generación.
+To estimate the effective reproduction number and growth rate, we will use the function `epinow()`.
 
-Especificamos las distribuciones con cierta incertidumbre en torno a la media y la desviación típica de la distribución log normal para el periodo de incubación y la distribución Gamma para el tiempo de generación.
+As the data consists of date of symptom onset, we only need to specify a delay distribution for the incubation period and the generation time. 
 
-```{r, eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
+We specify the distributions with some uncertainty around the mean and standard deviation of the log normal distribution for the incubation period and the Gamma distribution for the generation time.
+
+```{r,eval=TRUE,echo=TRUE,warning=FALSE,message=FALSE}
 epiparameter::epidist_db(disease = "ebola", epi_dist = "incubation") %>%
   epiparameter::parameter_tbl()
 
@@ -463,14 +469,14 @@ ebola_generation_time <- EpiNow2::Gamma(
 )
 ```
 
-Leemos los datos de entrada utilizando `readr::read_csv()`. Esta función reconoce que la columna `date` es una `<date>` vector de clase.
+We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
 
-```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+```{r, eval=TRUE,echo=FALSE,warning=FALSE,message=FALSE}
 # read data from the tutorial repository R project
 ebola_cases_raw <- readr::read_csv(file.path("data", "ebola_cases.csv"))
 ```
 
-```{r, eval=FALSE, echo=TRUE, warning=FALSE, message=FALSE}
+```{r,eval=FALSE,echo=TRUE,warning=FALSE,message=FALSE}
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 ebola_cases_raw <- readr::read_csv(
@@ -478,7 +484,7 @@ ebola_cases_raw <- readr::read_csv(
 )
 ```
 
-Preprocesa y adapta los datos brutos para `{EpiNow2}`:
+Preprocess and adapt the raw data for `{EpiNow2}`:
 
 ```{r}
 ebola_cases <- ebola_cases_raw %>%
@@ -497,7 +503,8 @@ ebola_cases <- ebola_cases_raw %>%
 dplyr::as_tibble(ebola_cases)
 ```
 
-Definimos un modelo de observación para escalar el número estimado y previsto de nuevas infecciones:
+
+We define an observation model to scale the estimated and forecast number of new infections:
 
 ```{r}
 # Define observation model
@@ -505,9 +512,9 @@ Definimos un modelo de observación para escalar el número estimado y previsto 
 ebola_obs_scale <- base::list(mean = 0.8, sd = 0.01)
 ```
 
-Como queremos crear también una previsión a dos semanas, especificamos `horizon = 14` para prever 14 días en lugar de los 7 días por defecto.
+As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
+```{r,eval=TRUE,echo=TRUE, message = FALSE}
 ebola_estimates <- EpiNow2::epinow(
   data = ebola_cases %>% dplyr::slice(1:120), # first 3 months of data only
   generation_time = EpiNow2::generation_time_opts(ebola_generation_time),
@@ -521,45 +528,47 @@ ebola_estimates <- EpiNow2::epinow(
 summary(ebola_estimates)
 ```
 
-El número de reproducción efectivo $R_t$ estimado (en la última fecha de los datos) es `r summary(ebola_estimates)[measure=="Effective reproduction no."]$estimate`. La tasa de crecimiento exponencial del número de casos es `r summary(ebola_estimates)[measure=="Rate of growth"]$estimate`.
+The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(ebola_estimates)[measure=="Effective reproduction no."]$estimate`. The exponential growth rate of case numbers is `r summary(ebola_estimates)[measure=="Rate of growth"]$estimate`.
 
-Visualiza las estimaciones:
+Visualize the estimates:
 
-```{r, eval=FALSE, echo=TRUE}
+```{r,eval=FALSE,echo=TRUE}
 plot(ebola_estimates)
 ```
 
 :::::::::::::::::::::::::::
 
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 ::::::::::::::::::::::::::::::::::::: callout
 
-### Previsión con estimaciones de $R_t$
+### Forecasting with estimates of $R_t$
 
-Por defecto, las previsiones a corto plazo se crean utilizando la última estimación del número de reproducción $R_t$. Como esta estimación se basa en datos parciales, tiene una incertidumbre considerable.
+By default, the short-term forecasts are created using the latest estimate of the reproduction number $R_t$. As this estimate is based on partial data, it has considerable uncertainty.  
 
-El número de reproducciones que se proyecta en el futuro puede cambiarse por una estimación menos reciente basada en más datos utilizando `rt_opts()`:
+The reproduction number that is projected into the future can be changed to a less recent estimate based on more data using `rt_opts()`:
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 EpiNow2::rt_opts(future = "estimate")
 ```
 
-El resultado serán previsiones menos inciertas (ya que se basan en $R_t$ con un intervalo de incertidumbre más estrecho), pero las previsiones se basarán en estimaciones menos recientes de $R_t$ y supondrán que no ha habido cambios desde entonces.
+The result will be less uncertain forecasts (as they are based on $R_t$ with a narrower uncertainty interval) but the forecasts will be based on less recent estimates of $R_t$ and assume no change since then.
 
-Además, existe la opción de [proyectar](../learners/reference.md#projection) el valor de $R_t$ en el futuro utilizando un modelo genérico fijando `future = "project"`. Como esta opción utiliza un modelo para prever el valor de $R_t$ el resultado serán previsiones más inciertas que `estimate` por ejemplo [ver aquí](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html#projecting-the-reproduction-number-with-the-gaussian-process).
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Resumen
-
-`EpiNow2` puede utilizarse para crear previsiones a corto plazo y estimar la relación entre distintos resultados. Hay una serie de opciones de modelo que pueden implementarse para diferentes análisis, incluida la adición de un proceso de observación para tener en cuenta los informes incompletos. Consulta la [viñeta](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html) para más detalles sobre las distintas opciones de modelo en `EpiNow2` que no se tratan en estos tutoriales.
-
-::::::::::::::::::::::::::::::::::::: keypoints
-
-- Podemos crear previsiones a corto plazo haciendo suposiciones sobre el comportamiento futuro del número de reproducción
-- La notificación incompleta de casos puede tenerse en cuenta en las estimaciones
+Additionally, there is the option to [project](../learners/reference.md#projection) the value of $R_t$ into the future using a generic model by setting `future = "project"`. As this option uses a model to forecast the value of $R_t$, the result will be forecasts that are more uncertain than `estimate`, for an example [see here](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html#projecting-the-reproduction-number-with-the-gaussian-process).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Summary
 
+`EpiNow2` can be used to create short term forecasts and to estimate the relationship between different outcomes. There are a range of model options that can be implemented for different analysis, including adding an observational process to account for incomplete reporting. See the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections_options.html) for more details on different model options in `EpiNow2` that aren't covered in these tutorials. 
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- We can create short-term forecasts by making assumptions about the future behaviour of the reproduction number
+- Incomplete case reporting can be accounted for in estimates
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::

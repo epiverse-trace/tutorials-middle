@@ -1,46 +1,58 @@
 ---
-title: 'Utilizar distribuciones de retraso en el análisis'
+title: 'Use delay distributions in analysis'
 teaching: 20
 exercises: 10
-editor_options:
+editor_options: 
   chunk_output_type: inline
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions
+:::::::::::::::::::::::::::::::::::::: questions 
 
-- ¿Cómo reutilizar los retrasos almacenados en el paquete `{epiparameter}` con mi flujo de análisis existente?
+- How to reuse delays stored in the `{epiparameter}` library with my existing analysis pipeline?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Utilizar funciones de distribución para distribuciones continuas y discretas almacenadas como objetos `<epidist>`.
-- Convertir una distribución continua en discreta con `{epiparameter}`.
-- Conectar las salidas de `{epiparameter}` con entradas de `{EpiNow2}`.
+- Use distribution functions to continuous and discrete distributions stored as `<epidist>` objects.
+- Convert a continuous to a discrete distribution with `{epiparameter}`.
+- Connect `{epiparameter}` outputs with `{EpiNow2}` inputs.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: prereq
 
-## Requisitos previos
+## Prerequisites
 
-- Completar el tutorial [Cuantificar la transmisión](https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html)
+- Complete tutorial [Quantifying transmission](https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html)
 
-Este episodio requiere que estés familiarizado con:
+This episode requires you to be familiar with:
 
-**Ciencia de datos** : Programación básica con R.
+**Data science** : Basic programming with R.
 
-**Estadística** : Distribuciones de probabilidad.
+**Statistics** : Probability distributions.
 
-**Teoría epidémica** Parámetros epidemiológicos, periodos de tiempo, número reproductivo efectivo.
+**Epidemic theory** : Epidemiological parameters, time periods, Effective reproductive number.
 
 :::::::::::::::::::::::::::::::::
 
-## Introducción
+## Introduction
 
-`{epiparameter}` nos ayuda a *elegir* un conjunto específico de parámetros epidemiológicos de la bibliografía, en lugar de copiarlos/pegarlos *a mano*:
+<!-- to activate for EpiNow2@dist-interfase
 
-```{r, message=FALSE}
+:::::::::::::::::: callout
+
+If we write the `[]` next to the last object create like in `covid_serialint_parameters[]`, within `[]` we can use the 
+Tab key <kbd>↹</kbd> 
+to use the [code completion feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE) and have a quick access to `covid_serialint_parameters["meanlog"]` and `covid_serialint_parameters["sdlog"]`. We invite you to try this out in code chunks and the R console!
+
+::::::::::::::::::
+
+-->
+
+`{epiparameter}` help us to *choose* one specific set of epidemiological parameters from the literature, instead of copy/pasting them *by hand*:
+
+```{r,message=FALSE}
 covid_serialint <-
   epiparameter::epidist_db(
     disease = "covid",
@@ -50,7 +62,7 @@ covid_serialint <-
   )
 ```
 
-¡Ahora tenemos un parámetro epidemiológico que podemos utilizar en nuestro análisis! En el bloque de abajo hemos sustituido uno de los parámetros de **estadísticas de resumen** por `EpiNow2::LogNormal()`
+Now, we have an epidemiological parameter we can use in our analysis! In the chunk below we replaced one of the **summary statistics** inputs into `EpiNow2::LogNormal()`
 
 ```r
 generation_time <- 
@@ -61,11 +73,11 @@ generation_time <-
   )
 ```
 
-En este episodio, utilizaremos las **funciones de distribución** que `{epiparameter}` proporciona para obtener un valor máximo (`max`) para este y cualquier otro paquete aguas abajo en tu flujo de análisis.
+In this episode, we will use the **distribution functions** that `{epiparameter}` provides to get a maximum value (`max`) for this and any other package downstream in your analysis pipeline!
 
-Carguemos los paquetes `{epiparameter}` y `{EpiNow2}`. En `{EpiNow2}` estableceremos 4 núcleos para utilizarlos en cálculos paralelos. Utilizaremos el operador *pipe* `%>%`, algunos verbos de `{dplyr}` y `{ggplot2}`, así que llamemos también al paquete `{tidyverse}`:
+Let's load the `{epiparameter}` and `{EpiNow2}` package. For `{EpiNow2}`, we'll set 4 cores to be used in parallel computations. We'll use the pipe `%>%`, some `{dplyr}` verbs and `{ggplot2}`, so let's also call to the `{tidyverse}` package:
 
-```{r, warning=FALSE, message=FALSE}
+```{r,warning=FALSE,message=FALSE}
 library(epiparameter)
 library(EpiNow2)
 library(tidyverse)
@@ -75,60 +87,60 @@ withr::local_options(list(mc.cores = 4))
 
 ::::::::::::::::::: checklist
 
-### El doble punto
+### The double-colon
 
-El doble punto `::` en R te permite llamar a una función específica de un paquete sin cargar todo el paquete en el entorno actual.
+The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
 
-Por ejemplo `dplyr::filter(data, condition)` utiliza `filter()` del paquete `{dplyr}`.
+For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
-Esto nos ayuda a recordar las funciones del paquete y a evitar conflictos con los nombres de las funciones.
+This help us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
-## Funciones de distribución
+## Distribution functions
 
-En R, todas las distribuciones estadísticas tienen funciones para acceder a lo siguiente:
+In R, all the statistical distributions have functions to access the following:
 
-- `density()`: Función de **densidad** de probabilidad (PDF, por sus siglas en inglés),
-- `cdf()`:  Función de distribución acumulada (CDF, por sus siglas en inglés),
-- `quantile()`: **Cuantil** y
-- `generate()`: Generar valores **aleatorios** de la distribución dada.
+- `density()`: Probability **Density** function (PDF),
+- `cdf()`: Cumulative Distribution function (**CDF**),
+- `quantile()`: **Quantile** function, and
+- `generate()`: **Random** values from the given distribution.
 
 :::::::::::: checklist
 
-### Funciones para la distribución Normal
+### Functions for the Normal distribution
 
-Si lo necesitas, ¡lee en detalle acerca de las [funciones de probabilidad de R para la distribución normal](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), cada una de sus definiciones e identifica en qué parte de una distribución se encuentran!
+If you need it, read in detail about the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), each of its definitions and identify in which part of a distribution they are located!
 
-![Las cuatro funciones de probabilidad de la distribución normal ([Jack Weiss, 2012](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc))](fig/fig5a-normaldistribution.png)
+![The four probability functions for the normal distribution ([Jack Weiss, 2012](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc))](fig/fig5a-normaldistribution.png)
 
 ::::::::::::::::::::
 
-Si consultas `?stats::Distributions`, cada tipo de distribución tiene un conjunto único de funciones. Sin embargo, ¡`{epiparameter}` te ofrece las mismas cuatro funciones para acceder a cada uno de los valores anteriores para cualquier objeto `<epidist>` que quieras!
+If you look at `?stats::Distributions`, each type of distribution has a unique set of functions. However, `{epiparameter}` gives you the same four functions to access each of the values above for any `<epidist>` object you want! 
 
-```{r, eval=FALSE}
-# Grafica esto para tener una imagen de referencia
+```{r,eval=FALSE}
+# plot this to have a visual reference
 plot(covid_serialint, day_range = 0:20)
 ```
 
 ```{r}
-# El valor de densidad cuando el cuantil tiene un valor de 10 (días)
+# the density value at quantile value of 10 (days)
 density(covid_serialint, at = 10)
 
-# La probabilidad acumulada cuando el cuantil tiene un valor de 10 (días)
+# the cumulative probability at quantile value of 10 (days)
 cdf(covid_serialint, q = 10)
 
-# El valor del cuantil (día) cuando la probabilidad acumulada es 60%
+# the quantile value (day) at a cumulative probability of 60%
 quantile(covid_serialint, p = 0.6)
 
-# Generar 10 valores aleatorios (días) dada una familia de distribuciones y
-# sus parámetros
+# generate 10 random values (days) given
+# the distribution family and its parameters
 generate(covid_serialint, times = 10)
 ```
 
 ::::::::: instructor
 
-El acceso a la documentación de referencia (archivos de ayuda) de estas funciones es accesible con la notación de tres dobles puntos: `epiparameter:::`
+Access to the reference documentation (Help files) for these functions is accessible with the three double-colon notation: `epiparameter:::`
 
 - `?epiparameter:::density.epidist()`
 - `?epiparameter:::cdf.epidist()`
@@ -139,68 +151,70 @@ El acceso a la documentación de referencia (archivos de ayuda) de estas funcion
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Ventana para el rastreo de contactos y el intervalo en serie
+### Window for contact tracing and the serial interval
 
-El **intervalo serial** es importante en la optimización del rastreo de contactos, ya que proporciona una ventana temporal para la contención de la propagación de una enfermedad ([Fine, 2003](https://academic.oup.com/aje/article/158/11/1039/162725)). A partir del intervalo serial, podemos evaluar la necesidad de ampliar el número de días previos a tener en cuenta para iniciar el rastreo de contactos e incluir más contactos retrospectivos ([Davis et al., 2020](https://assets.publishing.service.gov.uk/media/61e9ab3f8fa8f50597fb3078/S0523_Oxford_-_Backwards_contact_tracing.pdf)).
+The **serial interval** is important in the optimisation of contact tracing since it provides a time window for the containment of a disease spread ([Fine, 2003](https://academic.oup.com/aje/article/158/11/1039/162725)). Depending on the serial interval, we can evaluate the need to expand the number of days pre-onset to consider in the contact tracing to include more backwards contacts ([Davis et al., 2020](https://assets.publishing.service.gov.uk/media/61e9ab3f8fa8f50597fb3078/S0523_Oxford_-_Backwards_contact_tracing.pdf)).
 
-Con el intervalo de serie COVID-19 (`covid_serialint`) calcula:
+With the COVID-19 serial interval (`covid_serialint`) calculate:
 
-- ¿Cuántos más casos atrasados se podrían captar si el método de rastreo de contactos considerara los contactos de hasta 6 días antes del inicio en comparación con los de 2 días antes del inicio?
+- How much more of the backward cases could be captured if the contact tracing method considered contacts up to 6 days pre-onset compared to 2 days pre-onset?
 
 ::::::::::::::::: hint
 
-En la Figura 5 de las [funciones de probabilidad de R para la distribución normal](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), la sección sombreada representa una probabilidad acumulada de `0.997` para el valor del cuantil en `x = 2`.
+In Figure 5 from the [R probability functions for the normal distribution](https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), the shadowed section represents a cumulative probability of `0.997` for the quantile value at `x = 2`.
 
 ::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
-```{r, eval=FALSE}
+```{r,eval=FALSE}
 plot(covid_serialint)
 ```
 
-```{r, eval=TRUE}
+```{r,eval=TRUE}
 cdf(covid_serialint, q = 2)
 cdf(covid_serialint, q = 6)
 ```
 
-Dado el intervalo de serie COVID-19:
+Given the COVID-19 serial interval:
 
-- Un método de rastreo de contactos que considere los contactos hasta 2 días antes del inicio captará alrededor del 11,1% de los casos retrospectivos.
+- A contact tracing method considering contacts up to 2 days pre-onset will capture around 11.1% of backward cases.
 
-- Si este periodo se amplía a 6 días antes del inicio, se podría incluir el 76,2% de los contactos retrospectivos.
+- If this period is extended to 6 days pre-onset, this could include 76.2% of backward contacts.
 
 ::::::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
-### ¿Y si
+### What if
 
-intercambiamos la pregunta entre días y probabilidad acumulada a:
+If we exchange the question between days and cumulative probability to: 
 
-- Al considerar los casos secundarios, ¿cuántos días después del inicio de los síntomas de los casos primarios podemos esperar que se produzca un 55% de inicio de los síntomas?
+- When considering secondary cases, how many days following the symptom onset of primary cases can we expect 55% of symptom onset to occur?
 
-```{r, eval=FALSE}
+```{r,eval=FALSE}
 quantile(covid_serialint, p = 0.55)
 ```
 
-Una interpretación podría ser
+An interpretation could be:
 
-- El 55% del inicio de los síntomas de los casos secundarios ocurrirá después de 4,2 días del inicio de los síntomas de los casos primarios.
+- The 55% percent of the symptom onset of secondary cases will happen after 4.2 days after the symptom onset of primary cases.
 
 ::::::::::::::::::::::::::
 
+
 :::::::::::::::::::::::::::::::::::::::::::
 
-## Discretizar una distribución continua
 
-¡Nos acercamos al final! `EpiNow2::LogNormal()` todavía necesita un valor máximo (`max`).
+## Discretise a continuous distribution
 
-Una forma de hacerlo es obtener el valor del cuantil del percentil 99 de la distribución o la probabilidad acumulada de `0.99` . Para ello, necesitamos acceder al conjunto de funciones de distribución de nuestro objeto `<epidist>`.
+We are getting closer to the end! `EpiNow2::LogNormal()` still needs a maximum value (`max`). 
 
-Podemos utilizar el conjunto de funciones de distribución de una distribución *continua* (como arriba). Sin embargo, estos valores serán *continuos*. Podemos **discretizar** la distribución continua almacenada en nuestro objeto `<epidist>` para obtener valores discretos a partir de una distribución continua.
+One way to do this is to get the quantile value for the distribution's 99th percentile or `0.99` cumulative probability. For this, we need access to the set of distribution functions for our `<epidist>` object.
 
-Cuando usamos `epiparameter::discretise()` sobre la distribución continua, obtenemos una distribución **discreta** (o discretizada):
+We can use the set of distribution functions for a _continuous_ distribution (as above). However, these values will be _continuous_ numbers. We can **discretise** the continuous distribution stored in our `<epidist>` object to get discrete values from a continuous distribution.
+
+When we `epiparameter::discretise()` the continuous distribution we get a **discrete**(-ized) distribution:
 
 ```{r}
 covid_serialint_discrete <-
@@ -209,23 +223,23 @@ covid_serialint_discrete <-
 covid_serialint_discrete
 ```
 
-Identificamos este cambio en la línea de salida `Distribution:` del objeto `<epidist>`. Comprueba de nuevo esta línea:
+We identify this change in the `Distribution:` output line of the `<epidist>` object. Double check this line:
 
 ```
 Distribution: discrete lnorm
 ```
 
-Mientras que para una distribución **continua** trazamos la *Función de densidad de probabilidad (PDF)* para una distribución **discreta**, trazamos la *función de masa de probabilidad (PMF)*:
+While for a **continuous** distribution, we plot the *Probability Density Function (PDF)*, for a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
 
-```{r, eval=FALSE}
-# continua
+```{r,eval=FALSE}
+# continuous
 plot(covid_serialint)
 
-# discreta
+# discrete
 plot(covid_serialint_discrete)
 ```
 
-Para obtener finalmente un valor máximo (`max`), accedamos al valor del cuantil del percentil 99 o cuando la probabilidad acumulada es `0.99` usando `prob_dist$q` de forma similar a como accedemos a los valores de **estadísticas de resumen** (`summary_stats`).
+To finally get a `max` value, let's access the quantile value of the 99th percentile or `0.99` probability of the distribution with the `prob_dist$q` notation, similarly to how we access the `summary_stats` values.
 
 ```{r}
 covid_serialint_discrete_max <-
@@ -234,34 +248,34 @@ covid_serialint_discrete_max <-
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Duración del periodo de cuarentena e incubación
+### Length of quarantine and incubation period
 
-El **periodo de incubación** es un retraso útil para evaluar la duración de la vigilancia activa o la cuarentena ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)). Del mismo modo, los retrasos desde la aparición de los síntomas hasta la recuperación (o la muerte) determinarán la duración necesaria de la asistencia sanitaria y el aislamiento del caso ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+The **incubation period** distribution is a useful delay to assess the length of active monitoring or quarantine ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)). Similarly, delays from symptom onset to recovery (or death) will determine the required duration of health care and case isolation ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
-Calcula:
+Calculate:
 
-- ¿En qué plazo exacto de tiempo el 99% de las personas que presentan síntomas de COVID-19 después de la infección los presentan?
+- Within what exact time frame do 99% of individuals exhibiting COVID-19 symptoms exhibit them after infection?
 
 ::::::::::::::::: hint
 
-¿Qué distribución del retraso mide el tiempo entre la infección y la aparición de los síntomas?
+What delay distribution measures the time between infection and the onset of symptoms?
 
-¡Las funciones de probabilidad **discretas** para `<epidist>` son las mismas que utilizamos para las *continuas*!
+The probability functions for `<epidist>` **discrete** distributions are the same that we used for the *continuous* ones!
 
-```{r, eval=FALSE}
-# Grafica esto para tener una imagen de referencia
+```{r,eval=FALSE}
+# plot to have a visual reference
 plot(covid_serialint_discrete, day_range = 0:20)
 
-# El valor de la densidad cuando el cuantil tiene un valor de 10 (días)
+# density value at quantile value 10 (day)
 density(covid_serialint_discrete, at = 10)
 
-# La probabilidad acumulada cuando el cuantil tiene un valor de 10 (días)
+# cumulative probability at quantile value 10 (day)
 cdf(covid_serialint_discrete, q = 10)
 
-# El valor del cuantil (días) cuando la probabilidad acumulada es 60%
+# In what quantile value (days) do we have the 60% cumulative probability?
 quantile(covid_serialint_discrete, p = 0.6)
 
-# Generar valores aleatorios
+# generate random values
 generate(covid_serialint_discrete, times = 10)
 ```
 
@@ -269,7 +283,7 @@ generate(covid_serialint_discrete, times = 10)
 
 ::::::::::::::::: solution
 
-```{r, eval=TRUE}
+```{r,eval=TRUE}
 covid_incubation <-
   epiparameter::epidist_db(
     disease = "covid",
@@ -282,37 +296,37 @@ covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
 quantile(covid_incubation_discrete, p = 0.99)
 ```
 
-El 99% de los que desarrollan síntomas de COVID-19 lo harán en los 16 días posteriores a la infección.
+99% of those who develop COVID-19 symptoms will do so within 16 days of infection.
 
-Ahora, *¿es esperable este resultado en términos epidemiológicos?*
+Now, _Is this result expected in epidemiological terms?_
 
 ::::::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
-### ¿Cómo crear un gráfico de distribución?
+### How to create a distribution plot?
 
-A partir de un valor máximo con `quantile()` podemos crear una secuencia de valores de cuantiles como un vector numérico y calcular `density()` para cada uno:
+From a maximum value with `quantile()`, we can create a sequence of quantile values as a numeric vector and calculate `density()` values for each:
 
-```{r, eval=TRUE}
-# Crear la visualización para una distribución discreta
-# a partir de un valor máximo de la distribución
+```{r,eval=TRUE}
+# create a discrete distribution visualisation
+# from a maximum value from the distribution
 quantile(covid_serialint_discrete, p = 0.99) %>%
-  # Generar un vector de cuantiles
-  # como una secuencia para cada número natural
+  # generate quantile values
+  # as a sequence for each natural number
   seq(1L, to = ., by = 1L) %>%
-  # Convertir el vector numérico en un data.frame (tibble)
+  # coerce numeric vector to data frame
   as_tibble_col(column_name = "quantile_values") %>%
   mutate(
-    # Calcular los valores de densidad
-    # para cada cuantul en la función de densidad
+    # calculate density values
+    # for each quantile in the density function
     density_values =
       density(
         x = covid_serialint_discrete,
         at = quantile_values
       )
   ) %>%
-  # Graficar
+  # create plot
   ggplot(
     aes(
       x = quantile_values,
@@ -322,28 +336,29 @@ quantile(covid_serialint_discrete, p = 0.99) %>%
   geom_col()
 ```
 
-**Recuerda:** En las infecciones con transmisión presintomática, los intervalos seriales pueden tener valores negativos ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712\(20\)30119-3/fulltext)). ¡Cuando utilizamos el *intervalo serial* para aproximar el *tiempo de generación* necesitamos hacer esta distribución sólo con valores positivos!
+**Remember:** In infections with pre-symptomatic transmission, serial intervals can have negative values ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)). When we use the _serial interval_ to approximate the _generation time_ we need to make this distribution with positive values only!
 
 ::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-## Plug-in `{epiparameter}` a `{EpiNow2}`
 
-¡Ahora podemos introducirlo todo en la función `EpiNow2::LogNormal()`!
+## Plug-in `{epiparameter}` to `{EpiNow2}`
 
-- Las **estadísticas de resumen**: media (`mean`) y desviación estándar (`sd`) de la distribución,
-- un valor máximo (`max`),
-- el nombre de la distribución (`distribution`).
+Now we can plug everything into the `EpiNow2::LogNormal()` function!
 
-Cuando utilices `EpiNow2::LogNormal()` para definir una distribución **log normal** como la del intervalo serial del COVID-19 (`covid_serialint`) podemos especificar la media (`mean`) y la desviación estándar (`sd`) como parámetros. Alternativamente, para obtener los parámetros "naturales" de una distribución log normal podemos convertir sus estadísticos de resumen en parámetros de distribución denominados `meanlog` y `sdlog`. Con `{epiparameter}` podemos obtener directamente los *parámetros de la distribución* utilizando `epiparameter::get_parameters()`:
+- the **summary statistics** `mean` and `sd` of the distribution,
+- a maximum value `max`,
+- the `distribution` name.
+
+When using `EpiNow2::LogNormal()` to define a **log normal** distribution like the one in the `covid_serialint` object we can specify the mean and sd as parameters. Alternatively, to get the "natural" parameters for a log normal distribution we can convert its summary statistics to distribution parameters named `meanlog` and `sdlog`. With `{epiparameter}` we can directly get the *distribution parameters* using `epiparameter::get_parameters()`:
 
 ```{r}
 covid_serialint_parameters <-
   epiparameter::get_parameters(covid_serialint)
 ```
 
-Entonces, tenemos:
+Then, we have:
 
 ```{r}
 serial_interval_covid <-
@@ -356,56 +371,56 @@ serial_interval_covid <-
 serial_interval_covid
 ```
 
-Suponiendo un escenario con COVID-19, utilicemos los primeros 60 días del conjunto de datos `example_confirmed` del paquete `{EpiNow2}` como casos reportados(`reported_cases`) y el recientemente creado intervalo serial COVID (`serial_interval_covid`) como entradas para estimar el número reproductivo variable en el tiempo utilizando `EpiNow2::epinow()`.
+Assuming a COVID-19 scenario, let's use the first 60 days of the `example_confirmed` data set from the `{EpiNow2}` package as `reported_cases` and the recently created `serial_interval_covid` object as inputs to estimate the time-varying reproduction number using `EpiNow2::epinow()`.
 
-```{r, message=FALSE}
+```{r,message=FALSE}
 epinow_estimates_cg <- epinow(
-  # casos
+  # cases
   data = example_confirmed[1:60],
-  # retrasos
+  # delays
   generation_time = generation_time_opts(serial_interval_covid)
 )
 
 base::plot(epinow_estimates_cg)
 ```
 
-`plot()` incluye los casos estimados por fecha de infección, que se reconstruyen a partir de los casos notificados y los retrasos.
+The `plot()` output includes the estimated cases by date of infection, which are reconstructed from the reported cases and delays.
 
 :::::::::: callout
 
-### Advertencia
+### Warning
 
-Utilizar el intervalo serial en lugar del tiempo de generación es una alternativa que puede propagar sesgos en tus estimaciones, más aún en enfermedades con transmisión presintomática reportada. ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465))
+Using the serial interval instead of the generation time is an alternative that can propagate bias in your estimates, even more so in diseases with reported pre-symptomatic transmission. ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465))
 
 ::::::::::::::::::
 
-## Ajuste por retrasos en la notificación
+## Adjusting for reporting delays
 
-Estimar $R_t$ requiere datos sobre el número diario de nuevas infecciones. Debido a los retrasos en el desarrollo de cargas víricas detectables, la aparición de síntomas, la búsqueda de atención sanitaria y la notificación, estas cifras no están fácilmente disponibles. Todas las observaciones reflejan eventos de transmisión de algún momento del pasado. En otras palabras, si $d$ es el tiempo transcurrido desde la infección hasta la observación, las observaciones en el momento $t$ informan a $R_{t−d}$ no $R_t$. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)
+Estimating $R_t$ requires data on the daily number of new infections. Due to lags in the development of detectable viral loads, symptom onset, seeking care, and reporting, these numbers are not readily available. All observations reflect transmission events from some time in the past. In other words, if $d$ is the delay from infection to observation, then observations at time $t$ inform $R_{t−d}$, not $R_t$. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)
 
-![**Calendario de notificación de la cadena de enfermedades, Países Bajos.** Lab, laboratorio; PHA, autoridad sanitaria pública. En [Marinović y otros, 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
+![**Timeline for chain of disease reporting, the Netherlands.** Lab, laboratory; PHA, public health authority. From [Marinović et al., 2015](https://wwwnc.cdc.gov/eid/article/21/2/13-0504_article)](fig/disease-reporting.jpg)
 
-La  **distribución del retraso** podría inferirse conjuntamente con los tiempos de infección subyacentes o estimarse como la suma del [periodo de incubación](../learners/reference.md#incubation) y la distribución de los retrasos desde el inicio de los síntomas hasta la observación a partir de los datos ([retraso en la notificación](../learners/reference.md#reportingdelay)). En `{EpiNow2}` podemos especificar estas dos distribuciones de retraso complementarias con el argumento `delays`.
+The **delay distribution** could be inferred jointly with the underlying times of infection or estimated as the sum of the [incubation period](../learners/reference.md#incubation) distribution and the distribution of delays from symptom onset to observation from line list data ([reporting delay](../learners/reference.md#reportingdelay)). For `{EpiNow2}`, we can specify these two complementary delay distributions in the `delays` argument.
 
-![**$R_{t}$ es una medida de la transmisión en el momento $t$.** Observaciones después del tiempo $t$ deben ajustarse. UCI, unidad de cuidados intensivos. En [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)](fig/rt-adjusting-delays.png)
+![**$R_{t}$ is a measure of transmission at time $t$.** Observations after time $t$ must be adjusted. ICU, intensive care unit. From  [Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)](fig/rt-adjusting-delays.png)
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Utiliza un periodo de incubación de COVID-19 para estimar Rt
+### Use an incubation period for COVID-19 to estimate Rt
 
-Estima el número reproductivo variable en el tiempo para los primeros 60 días del conjunto de datos `example_confirmed ` de `{EpiNow2}`. Accede a un periodo de incubación para COVID-19 a partir de `{epiparameter}` para utilizarlo como retraso de notificación.
+Estimate the time-varying reproduction number for the first 60 days of the `example_confirmed` data set from `{EpiNow2}`. Access to an incubation period for COVID-19 from `{epiparameter}` to use it as a reporting delay.
 
-::::::::::::::::: sugerencia
+::::::::::::::::: hint
 
-Utiliza el último cálculo de `epinow()` usando el argumento `delays` y la función auxiliar `delay_opts()`.
+Use the last `epinow()` calculation using the `delays` argument and the `delay_opts()` helper function.
 
-El argumento `delays` y la función auxiliar `delay_opts()` son análogos al argumento `generation_time` y la función auxiliar `generation_time_opts()`.
+The `delays` argument and the `delay_opts()` helper function are analogous to the `generation_time` argument and the `generation_time_opts()` helper function.
 
 ```r
 epinow_estimates <- epinow(
-  # casos
+  # cases
   reported_cases = example_confirmed[1:60],
-  # retrasos
+  # delays
   generation_time = generation_time_opts(covid_serial_interval),
   delays = delay_opts(covid_incubation_time)
 )
@@ -415,11 +430,11 @@ epinow_estimates <- epinow(
 
 ::::::::::::::::: solution
 
-```{r, eval=TRUE, message=FALSE}
+```{r,eval=TRUE,message=FALSE}
 
-# Tiempo de generación ---------------------------------------------------------
+# generation time ---------------------------------------------------------
 
-# Intervalo serial covid
+# get covid serial interval
 covid_serialint <-
   epiparameter::epidist_db(
     disease = "covid",
@@ -428,7 +443,7 @@ covid_serialint <-
     single_epidist = TRUE
   )
 
-# adaptar epidist para epinow2
+# adapt epidist to epinow2
 covid_serialint_discrete_max <- covid_serialint %>%
   epiparameter::discretise() %>%
   quantile(p = 0.99)
@@ -443,9 +458,9 @@ covid_serial_interval <-
     max = covid_serialint_discrete_max
   )
 
-# Periodo de incubación -------------------------------------------------------
+# incubation time ---------------------------------------------------------
 
-# Periodo de incubación
+# get covid incubation period
 covid_incubation <- epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "incubation",
@@ -453,7 +468,7 @@ covid_incubation <- epiparameter::epidist_db(
   single_epidist = TRUE
 )
 
-# Adaptar epiparameter para epinow2
+# adapt epiparameter to epinow2
 covid_incubation_discrete_max <- covid_incubation %>%
   epiparameter::discretise() %>%
   quantile(p = 0.99)
@@ -470,11 +485,11 @@ covid_incubation_time <-
 
 # epinow ------------------------------------------------------------------
 
-# usar epinow
+# run epinow
 epinow_estimates_cgi <- epinow(
-  # casos
+  # cases
   data = example_confirmed[1:60],
-  # retrasos
+  # delays
   generation_time = generation_time_opts(covid_serial_interval),
   delays = delay_opts(covid_incubation_time)
 )
@@ -482,7 +497,7 @@ epinow_estimates_cgi <- epinow(
 base::plot(epinow_estimates_cgi)
 ```
 
-Intenta complementar el argumento `delays` con un retraso de notificación como el objeto `reporting_delay_fixed` del episodio anterior.
+Try to complement the `delays` argument with a reporting delay like the `reporting_delay_fixed` object of the previous episode.
 
 ::::::::::::::::::::::::::
 
@@ -490,91 +505,92 @@ Intenta complementar el argumento `delays` con un retraso de notificación como 
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::: discussion
 
-### ¿Cuánto ha cambiado?
+### How much has it changed?
 
-Tras añadir el periodo de incubación, debata acerca de:
+After adding the incubation period, discuss:
 
-- ¿Cambia la tendencia del ajuste del modelo en la sección estimación ("Estimate")?
-- ¿Ha cambiado la incertidumbre?
-- ¿Cómo explicaría o interpretaría estos cambios?
+- Does the trend of the model fit in the "Estimate" section change?
+- Has the uncertainty changed?
+- How would you explain or interpret any of these changes?
 
-Compara todas las figuras generadas con `{EpiNow2}` anteriormente.
+Compare all the `{EpiNow2}` figures generated previously.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Desafíos
+## Challenges
 
 :::::::::::::::::::::::::::::: callout
 
-### Un consejo para completar código
+### A code completion tip
 
-Si escribimos el `[ ]` luego del objeto `covid_serialint_parameters[ ]`, dentro de `[ ]` podemos utilizar el la tecla Tab en el teclado <kbd>↹</kbd>
-para usar la [función de completado de código](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE)
+If we write the `[]` next to the object `covid_serialint_parameters[]`, within `[]` we can use the 
+Tab key <kbd>↹</kbd> 
+for [code completion feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE) 
 
-Usar esto permite acceder rápidamente a `covid_serialint_parameters["meanlog"]` y `covid_serialint_parameters["sdlog"]`.
+This gives quick access to `covid_serialint_parameters["meanlog"]` and `covid_serialint_parameters["sdlog"]`. 
 
-¡Te invitamos a probarlo en otros bloques de código y en la consola de R!
+We invite you to try this out in code chunks and the R console!
 
 ::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Número de reproducción efectiva del ébola ajustado por retrasos en la notificación
+### Ebola's effective reproduction number adjusted by reporting delays 
 
-Descarga y lee el [conjunto de datos de ébola](data/ebola_cases.csv):
+Download and read the [Ebola dataset](data/ebola_cases.csv):
 
-- Estime el número reproductivo efectivo utilizando `{EpiNow2}`
-- Ajuste la estimación según los retrasos de notificación disponibles en `{epiparameter}`
-- ¿Por qué eligió ese parámetro?
+- Estimate the effective reproduction number using `{EpiNow2}` 
+- Adjust the estimate by the available reporting delays in `{epiparameter}`
+- Why did you choose that parameter?
 
-::::::::::::::::: pista
+::::::::::::::::: hint
 
-Para calcular el $R_t$ utilizando `{EpiNow2}` necesitamos
+To calculate the $R_t$ using `{EpiNow2}`, we need:
 
-- Los datos de incidencia agregada con los casos confirmados por día, y
-- La distribución del tiempo de generación.
-- Opcionalmente, informar las distribuciones de retrasos cuando estén disponibles (por ejemplo, el periodo de incubación).
+- Aggregated incidence `data`, with confirmed cases per day, and
+- The `generation` time distribution.
+- Optionally, reporting `delays` distributions when available (e.g., incubation period).
 
-Para obtener las distribuciones de retrasos utilizando `{epiparameter}` podemos utilizar funciones como:
+To get delay distribution using `{epiparameter}` we can use functions like:
 
 - `epiparameter::epidist_db()`
 - `epiparameter::parameter_tbl()`
 - `discretise()`
-- `quantile()`
+- `quantile()` 
 
 ::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
-```{r, eval=TRUE, echo=FALSE, message=FALSE}
-# Leer datos del repositorio del proyecto en R
+```{r,eval=TRUE,echo=FALSE,message=FALSE}
+# read data from the tutorial repository R project
 ebola_confirmed <-
   read_csv(file.path("data", "ebola_cases.csv"))
 ```
 
-```{r, eval=FALSE, echo=TRUE}
-# Leer datos
-# e.j.: Si la ruta al archivo es data/raw-data/ebola_cases.csv entonces:
+```{r,eval=FALSE,echo=TRUE}
+# read data
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 ebola_confirmed <-
   read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 
-# Listar las distribuciones
+# list distributions
 epiparameter::epidist_db(disease = "ebola") %>%
   epiparameter::parameter_tbl()
 ```
 
-```{r, message=FALSE, eval=TRUE}
+```{r,message=FALSE,eval=TRUE}
 
-# Tiempo de generación ---------------------------------------------------------
+# generation time ---------------------------------------------------------
 
-# Filtrar una distribución para el tiempo de generación
+# subset one distribution for the generation time
 ebola_serial <- epiparameter::epidist_db(
   disease = "ebola",
   epi_dist = "serial",
   single_epidist = TRUE
 )
 
-# adaptar epiparameter para epinow2
+# adapt epiparameter to epinow2
 ebola_serial_discrete <- epiparameter::discretise(ebola_serial)
 
 serial_interval_ebola <-
@@ -584,16 +600,16 @@ serial_interval_ebola <-
     max = quantile(ebola_serial_discrete, p = 0.99)
   )
 
-# Tiempo de incubación  -------------------------------------------------------
+# incubation time ---------------------------------------------------------
 
-# Filtrar una distribución para el retraso del periodo de incubación
+# subset one distribution for delay of the incubation period
 ebola_incubation <- epiparameter::epidist_db(
   disease = "ebola",
   epi_dist = "incubation",
   single_epidist = TRUE
 )
 
-# adaptar epiparameter para epinow2
+# adapt epiparameter to epinow2
 ebola_incubation_discrete <- epiparameter::discretise(ebola_incubation)
 
 incubation_period_ebola <-
@@ -605,11 +621,11 @@ incubation_period_ebola <-
 
 # epinow ------------------------------------------------------------------
 
-# Usar epinow
+# run epinow
 epinow_estimates_egi <- epinow(
-  # casos
+  # cases
   data = ebola_confirmed,
-  # retrasos
+  # delays
   generation_time = generation_time_opts(serial_interval_ebola),
   delays = delay_opts(incubation_period_ebola)
 )
@@ -621,29 +637,30 @@ plot(epinow_estimates_egi)
 
 :::::::::::::::::::::::::::::::::::::::::::
 
+
 ::::::::::::::::::::::::::::::::: challenge
 
-### ¿Qué hacer con las distribuciones de Weibull?
+### What to do with Weibull distributions?
 
-Utiliza el conjunto de datos `influenza_england_1978_school` del paquete `{outbreaks}` para calcular el número reproductivo efectivo mediante `{EpiNow2}`, ajustando por los retrasos de notificación disponibles en `{epiparameter}`.
+Use the `influenza_england_1978_school` dataset from the `{outbreaks}` package to calculate the effective reproduction number using `{EpiNow2}` adjusting by the available reporting delays in `{epiparameter}`.
 
-::::::::::::::::: sugerencia
+::::::::::::::::: hint
 
-`EpiNow2::NonParametric()` acepta Funciones de Masa de Probabilidad (PMF) de cualquier familia de distribuciones. Lee la guía de referencia sobre [Distribuciones de probabilidad](https://epiforecasts.io/EpiNow2/reference/Distributions.html).
+`EpiNow2::NonParametric()` accepts Probability Mass Functions (PMF) from any distribution family. Read the reference guide on [Probability distributions](https://epiforecasts.io/EpiNow2/reference/Distributions.html).
 
 ::::::::::::::::::::::
 
 ::::::::::::::::: solution
 
-```{r, message=FALSE, eval=TRUE}
-# ¿Qué parámetros hay disponibles para Influenza?
+```{r,message=FALSE,eval=TRUE}
+# What parameters are available for Influenza?
 epiparameter::epidist_db(disease = "influenza") %>%
   epiparameter::parameter_tbl() %>%
   count(epi_distribution)
 
-# Tiempo de generación  -------------------------------------------------------
+# generation time ---------------------------------------------------------
 
-# Leer tiempo de generación
+# Read the generation time
 influenza_generation <-
   epiparameter::epidist_db(
     disease = "influenza",
@@ -652,8 +669,8 @@ influenza_generation <-
 
 influenza_generation
 
-# EpiNow2 permite usar distribuciones Gamma o LogNormal
-# Se puede introducir una PMF
+# EpiNow2 currently accepts Gamma or LogNormal
+# other can pass the PMF function
 
 influenza_generation_discrete <-
   epiparameter::discretise(influenza_generation)
@@ -669,15 +686,15 @@ influenza_generation_pmf <-
 
 influenza_generation_pmf
 
-# EpiNow2::NonParametric() también puede recibir valores de PMF
+# EpiNow2::NonParametric() can also accept the PMF values
 generation_time_influenza <-
   EpiNow2::NonParametric(
     pmf = influenza_generation_pmf
   )
 
-# Periodo de incubación  -------------------------------------------------------
+# incubation period -------------------------------------------------------
 
-# Leer el periodo de incubación
+# Read the incubation period
 influenza_incubation <-
   epiparameter::epidist_db(
     disease = "influenza",
@@ -685,7 +702,7 @@ influenza_incubation <-
     single_epidist = TRUE
   )
 
-# Discretizar el periodo de incubación
+# Discretize incubation period
 influenza_incubation_discrete <-
   epiparameter::discretise(influenza_incubation)
 
@@ -700,7 +717,7 @@ influenza_incubation_pmf <-
 
 influenza_incubation_pmf
 
-# EpiNow2::NonParametric() también puede recibit valores de PMF
+# EpiNow2::NonParametric() can also accept the PMF values
 incubation_time_influenza <-
   EpiNow2::NonParametric(
     pmf = influenza_incubation_pmf
@@ -708,16 +725,16 @@ incubation_time_influenza <-
 
 # epinow ------------------------------------------------------------------
 
-# Leer datos
+# Read data
 influenza_cleaned <-
   outbreaks::influenza_england_1978_school %>%
   select(date, confirm = in_bed)
 
-# Usar epinow
+# Run epinow()
 epinow_estimates_igi <- epinow(
-  # casos
+  # cases
   data = influenza_cleaned,
-  # retrasos
+  # delays
   generation_time = generation_time_opts(generation_time_influenza),
   delays = delay_opts(incubation_time_influenza)
 )
@@ -729,45 +746,45 @@ plot(epinow_estimates_igi)
 
 :::::::::::::::::::::::::::::::::::::::::::
 
-## Próximos pasos
+## Next steps
 
 ::::::::::::::::: testimonial
 
-### ¿Cómo obtener parámetros de distribución a partir de distribuciones estadísticas?
+### How to get distribution parameters from statistical distributions?
 
-¿Cómo obtener la media y la desviación típica de un tiempo de generación con *sólo* parámetros de distribución pero sin estadísticas de resumen como `mean` o `sd` para `EpiNow2::Gamma()` o `EpiNow2::LogNormal()`?
+How to get the mean and standard deviation from a generation time with *only* distribution parameters but no summary statistics like `mean` or `sd` for `EpiNow2::Gamma()` or `EpiNow2::LogNormal()`?
 
-¡Mira en `{epiparameter}` la viñeta [extracción y conversión de parámetros](https://epiverse-trace.github.io/epiparameter/articles/extract_convert.html) y sus [casos de uso](https://epiverse-trace.github.io/epiparameter/articles/extract_convert.html#use-cases) !
+Look at the `{epiparameter}` vignette on [parameter extraction and conversion](https://epiverse-trace.github.io/epiparameter/articles/extract_convert.html) and its [use cases](https://epiverse-trace.github.io/epiparameter/articles/extract_convert.html#use-cases)!
 
 :::::::::::::::::::::::::::::
 
 ::::::::::::::::: testimonial
 
-### ¿Cómo estimar las distribuciones de retraso de la Enfermedad X?
+### How to estimate delay distributions for Disease X?
 
-Consulta este excelente tutorial sobre la estimación del intervalo serial y el período de incubación de la Enfermedad X, teniendo en cuenta *la censura* por medio de inferencia bayesiana con paquetes como `{rstan}` y `{coarseDataTools}`.
+Refer to this excellent tutorial on estimating the serial interval and incubation period of Disease X accounting for *censoring* using Bayesian inference with packages like `{rstan}` and `{coarseDataTools}`.
 
-- Tutorial en Inglés: <https://rpubs.com/tracelac/diseaseX> <!-- para solicitar -->
+- Tutorial in English: <https://rpubs.com/tracelac/diseaseX> <!-- to request -->
 - Tutorial en Español: <https://epiverse-trace.github.io/epimodelac/EnfermedadX.html>
 
-**Luego,** después de obtener tus valores estimados, ¡puedes crear manualmente tus propios objetos con clase ` <epidist>` por medio de `epiparameter::epidist()`! Echa un vistazo a su [guía de referencia sobre "Crear un objeto `<epidist>` "](https://epiverse-trace.github.io/epiparameter/reference/epidist.html#ref-examples) ¡!
+**Then,** after you get your estimated values, you can manually create your own` <epidist>` class objects with `epiparameter::epidist()`! Take a look at its [reference guide on "Create an `<epidist>` object"](https://epiverse-trace.github.io/epiparameter/reference/epidist.html#ref-examples)!
 
-Por último, echa un vistazo al último [paquete de R `{epidist}`](https://epidist.epinowcast.org/) que proporciona métodos para abordar los principales retos de la estimación de distribuciones, como el truncamiento, la censura por intervalos y los sesgos dinámicos.
+Lastly, take a look at the latest [`{epidist}` R package](https://epidist.epinowcast.org/) which provide methods to address key challenges in estimating distributions, including truncation, interval censoring, and dynamical biases.
 
 :::::::::::::::::::::::::::::
 
-<!--
-## Mapa conceptual
 
-actualízalo a partir de la última prueba epiparamétrica 
+<!--
+## Concept map
+
+update it from last epiparameter test 
 -->
 
-::::::::::::::::::::::::::::::::::::: keypoints
+::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Utilizar funciones de distribución con `<epidist>` para obtener estadísticas de resumen y parámetros informativos de las intervenciones de salud pública, como la Ventana de rastreo de contactos y la Duración de la cuarentena.
-- Utilizar `discretise()` para convertir distribuciones de retraso continuas en discretas.
-- Utilizar `{epiparameter}` para obtener los retrasos de información necesarios en las estimaciones de transmisibilidad.
+- Use distribution functions with `<epidist>` objects to get summary statistics and informative parameters for public health interventions like the Window for contact tracing and Length of quarantine.
+- Use `discretise()` to convert continuous to discrete delay distributions.
+- Use `{epiparameter}` to get reporting delays required in transmissibility estimates. 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
 

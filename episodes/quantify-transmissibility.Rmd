@@ -1,55 +1,58 @@
 ---
-title: 'Cuantificar la transmisión'
+title: 'Quantifying transmission'
 teaching: 30
 exercises: 0
 ---
 
-:::::::::::::::::::::::::::::::::::::: questions
+:::::::::::::::::::::::::::::::::::::: questions 
 
-- ¿Cómo puedo estimar el número de reproducción variable en el tiempo ($Rt$) y la tasa de crecimiento a partir de una serie temporal de datos de casos?
-- ¿Cómo puedo cuantificar la heterogeneidad geográfica a partir de estas métricas de transmisión?
+- How can I estimate the time-varying reproduction number ($Rt$) and growth rate from a time series of case data?
+- How can I quantify geographical heterogeneity from these transmission metrics? 
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Aprender a estimar las métricas de transmisión a partir de una serie temporal de datos de casos utilizando el paquete R `EpiNow2`
+- Learn how to estimate transmission metrics from a time series of case data using the R package `EpiNow2`
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: prereq
 
-## Requisitos previos
+## Prerequisites
 
-Los alumnos deben familiarizarse con los siguientes conceptos antes de trabajar con este tutorial:
+Learners should familiarise themselves with following concepts before working through this tutorial: 
 
-**Estadística** Distribuciones de probabilidad y principio del análisis bayesiano.
+**Statistics**: probability distributions, principle of Bayesian analysis. 
 
-**Teoría epidémica** Número de reproducción efectiva.
+**Epidemic theory**: Effective reproduction number.
 
-**Ciencia de los datos** Transformación y visualización de datos. Puedes revisar el episodio en [Agregar y visualizar](https://epiverse-trace.github.io/tutorials-early/describe-cases.html) datos de incidencia.
+**Data science**: Data transformation and visualization. You can review the episode on [Aggregate and visualize](https://epiverse-trace.github.io/tutorials-early/describe-cases.html) incidence data.
 
 :::::::::::::::::::::::::::::::::
 
+
+
 ::::::::::::::::::::::::::::::::::::: callout
+### Reminder: the Effective Reproduction Number, $R_t$ 
 
-### Recordatorio: el Número de Reproducción Efectiva, $R_t$
+The [basic reproduction number](../learners/reference.md#basic), $R_0$, is the average number of cases caused by one infectious individual in a entirely susceptible population. 
 
-El [número básico de reproducción](../learners/reference.md#basic), $R_0$ es el número medio de casos causados por un individuo infeccioso en una población totalmente susceptible.
-
-Pero en un brote en curso, la población no permanece totalmente susceptible, ya que los que se recuperan de la infección suelen ser inmunes. Además, puede haber cambios de comportamiento u otros factores que afecten la transmisión. Por lo tanto, cuando nos interesa controlar los cambios en la transmisión, es más importante tener en cuenta el valor del **número de reproducción efectiva**, $R_t$ y el número medio de casos causados por un individuo infeccioso en la población en el momento $t$.
+But in an ongoing outbreak, the population does not remain entirely susceptible as those that recover from infection are typically immune. Moreover, there can be changes in behaviour or other factors that affect transmission. When we are interested in monitoring changes in transmission we are therefore more interested in the value of the **effective reproduction number**, $R_t$, the average number of cases caused by one infectious individual in the population at time $t$.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Introducción
 
-La intensidad de la transmisión de un brote se cuantifica mediante dos métricas clave: el número de reproducción, que informa sobre la fuerza de la transmisión indicando cuántos casos nuevos se esperan de cada caso existente; y la [tasa de crecimiento](../learners/reference.md#growth) que informa sobre la velocidad de la transmisión, indicando la rapidez con que el brote se propaga o disminuye (tiempo de duplicación/desaparición) dentro de una población. Para más detalles sobre la distinción entre velocidad y fuerza de transmisión y las implicaciones para el control, revisa [Dushoff y Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
+## Introduction
 
-Para estimar estas métricas clave utilizando datos de casos, debemos tener en cuenta los retrasos entre la fecha de las infecciones y la fecha de los casos notificados. En una situación de brote, normalmente sólo se dispone de datos sobre las fechas notificadas, por lo que debemos utilizar métodos de estimación para tener en cuenta estos retrasos cuando intentemos comprender los cambios en la transmisión a lo largo del tiempo.
+The transmission intensity of an outbreak is quantified using two key metrics: the reproduction number, which informs on the strength of the transmission by indicating how many new cases are expected from each existing case; and the [growth rate](../learners/reference.md#growth), which informs on the speed of the transmission by indicating how rapidly the outbreak is spreading or declining (doubling/halving time) within a population. For more details on the distinction between speed and strength of transmission and implications for control, review [Dushoff & Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
 
-En los próximos tutoriales nos centraremos en cómo utilizar las funciones de `{EpiNow2}` para estimar las métricas de transmisión de los datos de casos. No cubriremos el trasfondo teórico de los modelos ni el marco de inferencia; para más detalles sobre estos conceptos, consulta la [viñeta](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
+To estimate these key metrics using case data we must account for delays between the date of infections and date of reported cases. In an outbreak situation, data are usually available on reported dates only, therefore we must use estimation methods to account for these delays when trying to understand changes in transmission over time.
 
-En este tutorial vamos a aprender a utilizar el paquete `{EpiNow2}` para estimar el número de reproducción variable en el tiempo. Obtendremos los datos de entrada de `{incidence2}`. Utilizaremos el paquete `{tidyr}` y `{dplyr}` para ordenar algunas de sus salidas, `{ggplot2}` para visualizar la distribución de casos, y el operador tubería `%>%` para conectar algunas de sus funciones, así que también llamaremos al paquete `{tidyverse}`:
+In the next tutorials we will focus on how to use the functions in `{EpiNow2}` to estimate transmission metrics of case data. We will not cover the theoretical background of the models or inference framework, for details on these concepts see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
+
+In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We'll get input data from `{incidence2}`. We’ll use the `{tidyr}` and `{dplyr}` packages to arrange some of its outputs, `{ggplot2}` to visualize case distribution, and the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
 
 ```r
 library(EpiNow2)
@@ -57,67 +60,68 @@ library(incidence2)
 library(tidyverse)
 ```
 
-```{r, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+```{r,echo=FALSE,eval=TRUE,message=FALSE,warning=FALSE}
 library(tidyverse)
 ```
 
+
 ::::::::::::::::::: checklist
 
-### El doble punto
+### The double-colon
 
-El doble punto `::` en R te permite llamar a una función específica de un paquete sin cargar todo el paquete en el entorno actual.
+The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
 
-Por ejemplo `dplyr::filter(data, condition)` utiliza la función `filter()` del paquete `{dplyr}`.
+For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
-Esto nos ayuda a recordar las funciones del paquete y a evitar conflictos de espacio de nombres.
+This help us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-Este tutorial muestra el uso de la función `epinow()` para estimar el número de reproducción variable en el tiempo y los tiempos de infección, las entradas necesarias para el modelo y las limitaciones de su resultado.
+This tutorial illustrates the usage of `epinow()` to estimate the time-varying reproduction number and infection times. Learners should understand the necessary inputs to the model and the limitations of the model output. 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+
 ::::::::::::::::::::::::::::::::::::: callout
+### Bayesian inference
 
-### Inferencia bayesiana
+The R package `EpiNow2` uses a [Bayesian inference](../learners/reference.md#bayesian) framework to estimate reproduction numbers and infection times based on reporting dates.
 
-El paquete R `EpiNow2` utiliza [inferencia bayesiana](../learners/reference.md#bayesian) para estimar las cifras de reproducción y los tiempos de infección basándose en las fechas de notificación.
+In Bayesian inference, we use prior knowledge (prior distributions) with data (in a likelihood function) to find the posterior probability.
 
-En la inferencia bayesiana, utilizamos el conocimiento previo (distribuciones previas) con los datos (en una función de verosimilitud) para hallar la probabilidad posterior.
-
-<p class="text-center" style="background-color: white">Probabilidad posterior $\propto$ verosimilitud $\times$ probabilidad previa
+<p class="text-center" style="background-color: white">Posterior probability $\propto$ likelihood $\times$ prior probability
 </p>
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-Consulta la distribución de probabilidad a priori y la [probabilidad posterior](https://en.wikipedia.org/wiki/Posterior_probability).
+Refer to the prior probability distribution and the [posterior probability](https://en.wikipedia.org/wiki/Posterior_probability) distribution.
 
-En la ["`Expected change in daily cases`"](#expected-change-in-daily-cases) por "la probabilidad posterior de que $R_t < 1$", nos referimos específicamente a la [área bajo la curva de distribución de probabilidad po](https://www.nature.com/articles/nmeth.3368/figures/1).
+In the ["`Expected change in daily cases`" callout](#expected-change-in-daily-cases), by "the posterior probability that $R_t < 1$", we refer specifically to the [area under the posterior probability distribution curve](https://www.nature.com/articles/nmeth.3368/figures/1). 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Distribuciones de retrasos y datos de casos
 
-### Datos de casos
+## Delay distributions and case data 
+### Case data
 
-Para explorar las funciones de `EpiNow2` utilizaremos los datos del brote del inicio de la pandemia COVID-19 del Reino Unido. Los datos están disponibles en el paquete R `{incidence2}`.
+To illustrate the functions of `EpiNow2` we will use outbreak data of the start of the COVID-19 pandemic from the United Kingdom. The data are available in the R package `{incidence2}`. 
 
 ```{r}
 dplyr::as_tibble(incidence2::covidregionaldataUK)
 ```
 
-Para utilizar los datos, debemos darles formato para que tengan dos columnas:
+To use the data, we must format the data to have two columns:
 
-- `date`: la fecha (para validar si un objeto es de tipo fecha ver `?is.Date()`),
-- `confirm` número de casos confirmados en esa fecha.
++ `date`: the date (as a date object see `?is.Date()`),
++ `confirm`: number of confirmed cases on that date.
 
-Utilicemos `{tidyr}` y `{incidence2}` para ello:
+Let's use `{tidyr}` and `{incidence2}` for this:
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning = FALSE, message = FALSE}
 cases <- incidence2::covidregionaldataUK %>%
   # use {tidyr} to preprocess missing values
   tidyr::replace_na(base::list(cases_new = 0)) %>%
@@ -132,16 +136,16 @@ cases <- incidence2::covidregionaldataUK %>%
   dplyr::select(-count_variable)
 ```
 
-Con `incidence2::incidence()` agregamos casos en distintos tiempos *intervalos* (es decir, días, semanas o meses) o por *grupo* categorías. También podemos tener fechas completas para todo el rango de fechas por categoría de grupo utilizando `complete_dates = TRUE`
-Explora más adelante la [`incidence2::incidence()` manual de referencia](https://www.reconverse.org/incidence2/reference/incidence.html)
+With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`
+Explore later the [`incidence2::incidence()` reference manual](https://www.reconverse.org/incidence2/reference/incidence.html)
 
 ::::::::::::::::::::::::: spoiler
 
-### ¿Podemos replicar {incidence2} con {dplyr}?
+### Can we replicate {incidence2} with {dplyr}?
 
-Podemos obtener un objeto similar a `cases` de la tabla de datos (`data.frame`) `incidence2::covidregionaldataUK` utilizando las siguientes funciones del paquete `{dplyr}`:
+We can get an object similar to `cases` from the `incidence2::covidregionaldataUK` data frame using the `{dplyr}` package.
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
+```{r, warning = FALSE, message = FALSE, eval=FALSE}
 incidence2::covidregionaldataUK %>%
   dplyr::select(date, cases_new) %>%
   dplyr::group_by(date) %>%
@@ -149,13 +153,13 @@ incidence2::covidregionaldataUK %>%
   dplyr::ungroup()
 ```
 
-Sin embargo, la función `incidence2::incidence()` contiene argumentos prácticos como `complete_dates` que facilitan la obtención de un objeto de incidencia con el mismo rango de fechas para cada agrupación sin necesidad de líneas de código adicionales ni de un paquete de series temporales.
+However, the `incidence2::incidence()` function contains convenient arguments like `complete_dates` that facilitate getting an incidence object with the same range of dates for each grouping without the need of extra code lines or a time-series package.
 
 :::::::::::::::::::::::::
 
-Hay datos de casos disponibles para `r dim(cases)[1]` días, pero en una situación de brote es probable que sólo tuviéramos acceso al principio de este conjunto de datos. Por lo tanto, suponemos que sólo disponemos de los primeros 90 días de estos datos.
+There are case data available for `r dim(cases)[1]` days, but in an outbreak situation it is likely we would only have access to the beginning of this data set. Therefore we assume we only have the first 90 days of this data. 
 
-```{r, echo=FALSE}
+```{r echo = FALSE}
 # keep the first 90 dates and visualize epicurve
 cases %>%
   dplyr::slice_head(n = 90) %>%
@@ -167,37 +171,40 @@ cases %>%
   )
 ```
 
-### Distribuciones de retraso
+### Delay distributions 
 
-Suponemos que hay retrasos desde el momento de la infección hasta el momento en que se notifica un caso. Especificamos estos retrasos como distribuciones para tener en cuenta la incertidumbre en las diferencias a nivel individual. El retraso puede consistir en múltiples tipos de retrasos/procesos. Un retraso típico desde el momento de la infección hasta la notificación del caso puede consistir en:
+We assume there are delays from the time of infection until the time a case is reported. We specify these delays as distributions to account for the uncertainty in individual level differences. The delay can consist of multiple types of delays/processes. A typical delay from time of infection to case reporting may consist of:
 
-**tiempo desde la infección hasta la aparición de los síntomas** (el [período de incubación](../learners/reference.md#incubation)) + **tiempo desde el inicio de los síntomas hasta la notificación del caso** (el tiempo de notificación).
+<p class="text-center" style="background-color: aliceblue">**time from infection to symptom onset** (the [incubation period](../learners/reference.md#incubation)) + **time from symptom onset to case notification** (the reporting time)
+.</p>
 
-La distribución del retraso para cada uno de estos procesos puede estimarse a partir de los datos u obtenerse de la bibliografía. Podemos expresar la incertidumbre sobre cuáles son los parámetros correctos de las distribuciones, suponiendo que las distribuciones tienen parámetros **fijos** (`_fixed`) o si tienen parámetros **variables** (`_variable`). Para entender la diferencia entre distribuciones **fijas** y **variables**, consideremos el periodo de incubación.
+The delay distribution for each of these processes can either estimated from data or obtained from the literature. We can express uncertainty about what the correct parameters of the distributions by assuming the distributions have **fixed** parameters or whether they have **variable** parameters. To understand the difference between **fixed** and **variable** distributions, let's consider the incubation period. 
 
 ::::::::::::::::::::::::::::::::::::: callout
 
-### Retrasos y datos
-
-El número de retrasos y su tipo son una entrada flexible que depende de los datos. Los siguientes ejemplos muestran cómo se pueden especificar los retrasos para distintas fuentes de datos:
+### Delays and data
+The number of delays and type of delay are a flexible input that depend on the data. The examples below highlight how the delays can be specified for different data sources:
 
 <center>
 
-| Fuente de datos                | Retraso(s)                                                                                    | 
-| ------------------------------ | --------------------------------------------------------------------------------------------- |
-| Hora de inicio de los síntomas | Periodo de incubación                                                                         | 
-| Hora del informe del caso      | Periodo de incubación + tiempo desde el inicio de los síntomas hasta la notificación del caso | 
-| Tiempo de hospitalización      | Periodo de incubación + tiempo desde el inicio de los síntomas hasta la hospitalización       | 
+| Data source        | Delay(s) |
+| ------------- |-------------|
+|Time of symptom onset      |Incubation period |
+|Time of case report      |Incubation period + time from symptom onset to case notification |
+|Time of hospitalisation   |Incubation period + time from symptom onset to hospitalisation     |
 
 </center>
 
+
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-#### Distribución del periodo de incubación
 
-La distribución del periodo de incubación de muchas enfermedades suele obtenerse de la bibliografía. El paquete `{epiparameter}` contiene una biblioteca de parámetros epidemiológicos de distintas enfermedades obtenidos de la literatura.
 
-Especificamos una distribución gamma (fija) con media $\mu = 4$ y desviación estándar $\sigma= 2$ (forma = $4$, escala = $1$) mediante la función `Gamma()` de la siguiente manera:
+#### Incubation period distribution 
+
+The distribution of incubation period for many diseases can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
+
+We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma= 2$ (shape = $4$, scale = $1$) using the function `Gamma()` as follows:
 
 ```{r}
 incubation_period_fixed <- EpiNow2::Gamma(
@@ -209,33 +216,35 @@ incubation_period_fixed <- EpiNow2::Gamma(
 incubation_period_fixed
 ```
 
-El argumento `max` es el valor máximo que puede tomar la distribución, en este ejemplo 20 días.
+The argument `max` is the maximum value the distribution can take, in this example 20 days. 
 
 ::::::::::::::::::::::::::::::::::::: callout
 
-### ¿Por qué una distribución gamma?
+### Why a gamma distrubution? 
 
-El periodo de incubación debe tener un valor positivo. Por lo tanto, tenemos que especificar una distribución en `{EpiNow2}` que sea sólo para valores positivos.
+The incubation period has to be positive in value. Therefore we must specific a distribution in `{EpiNow2}` which is for positive values only. 
 
-`Gamma()` admite distribuciones Gamma y `LogNormal()` Distribuciones logarítmicas normales, que son distribuciones sólo para valores positivos.
+`Gamma()` supports Gamma distributions and `LogNormal()` Log-normal distributions, which are distributions for positive values only. 
 
-Para todos los tipos de retraso, tendremos que utilizar distribuciones sólo para valores positivos: ¡no queremos incluir retrasos de días negativos en nuestro análisis!
+For all types of delay, we will need to use distributions for positive values only - we don't want to include delays of negative days in our analysis!
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-#### Incluyendo la incertidumbre de distribución
 
-Para especificar una distribución **variable**, incluimos la incertidumbre en torno a la media $\mu$ y la desviación estándar $\sigma$ de nuestra distribución gamma. Si nuestra distribución del periodo de incubación tiene una media $\mu$ y una desviación estándar $\sigma$ entonces suponemos que la media ($\mu$) sigue una distribución Normal con desviación estándar $\sigma_{\mu}$:
+
+####  Including distribution uncertainty
+
+To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma$ of our gamma distribution. If our incubation period distribution has a mean $\mu$ and standard deviation $\sigma$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
-y una desviación estándar ($\sigma$) sigue una distribución Normal con desviación estándar $\sigma_{\sigma}$:
+and a standard deviation ($\sigma$) follows a Normal distribution with standard deviation $\sigma_{\sigma}$:
 
 $$\mbox{Normal}(\sigma,\sigma_{\sigma}^2).$$
 
-Lo especificamos utilizando `Normal()` para cada argumento: la media ($\mu=4$ con $\sigma_{\mu}=0.5$) y la desviación estándar ($\sigma=2$ con $\sigma_{\sigma}=0.5$).
+We specify this using `Normal()` for each argument: the mean ($\mu=4$ with $\sigma_{\mu}=0.5$) and standard deviation ($\sigma=2$ with $\sigma_{\sigma}=0.5$).
 
-```{r, warning=FALSE, message=FALSE}
+```{r,warning=FALSE,message=FALSE}
 incubation_period_variable <- EpiNow2::Gamma(
   mean = EpiNow2::Normal(mean = 4, sd = 0.5),
   sd = EpiNow2::Normal(mean = 2, sd = 0.5),
@@ -245,64 +254,37 @@ incubation_period_variable <- EpiNow2::Gamma(
 incubation_period_variable
 ```
 
-#### Retrasos en los informes
 
-Tras el periodo de incubación, habrá un retraso adicional desde el inicio de los síntomas hasta la notificación del caso: el retraso de notificación. Podemos especificarlo como una distribución fija o variable, o estimar una distribución a partir de los datos.
+####  Reporting delays
 
-Al especificar una distribución, es útil visualizar la densidad de probabilidad para ver el pico y la dispersión de la distribución, en este caso utilizaremos una *log normal* logarítmica normal. 
-<!-- Podemos utilizar las funciones `convert_to_logmean()` y `convert_to_logsd()` para convertir la media y la desviación estándar de una distribución normal en las de una distribución logarítmica normal. -->
+After the incubation period, there will be an additional delay of time from symptom onset to case notification: the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
 
-Si queremos suponer que la media del retraso en la notificación es de 2 días (con una desviación estándar de 1 día), escribimos:
+When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a *log normal* distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a log normal distribution. 
 
-<!--
+If we want to assume that the mean reporting delay is 2 days (with a standard deviation of 1 day), we write: 
+
 ```{r}
-# obtener logmean a partir de la media y sd
+# convert mean to logmean
 log_mean <- EpiNow2::convert_to_logmean(mean = 2, sd = 1)
 
-# obtener logsd a partir de la media y sd
+# convert sd to logsd
 log_sd <- EpiNow2::convert_to_logsd(mean = 2, sd = 1)
 ```
--->
-
-Utilizando la media y la desviación estándar de la distribución log normal, podemos especificar una distribución fija o variable utilizando `LogNormal()` como antes:
-
-```{r, warning=FALSE, message=FALSE}
-reporting_delay_variable <- EpiNow2::LogNormal(
-  mean = EpiNow2::Normal(mean = 2, sd = 0.5),
-  sd = EpiNow2::Normal(mean = 1, sd = 0.5),
-  max = 10
-)
-```
-
 
 :::::::::::::::::::::: spoiler
 
-### Visualiza una distribución log Normal utilizando {epiparameter}
+### Visualize a log Normal distribution using {epiparameter}
 
-Utilizando `epiparameter::epidist()` podemos crear una distribución personalizada. La distribución log normal tendrá el siguiente aspecto:
+Using `epiparameter::epidist()` we can create a custom distribution. The log normal distribution will look like:
 
 ```r
 library(epiparameter)
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r,message=FALSE,warning=FALSE}
 epiparameter::epidist(
   disease = "covid",
-  epi_dist = "reporting delay", # retraso del reporte
-  prob_distribution = "lnorm",
-  summary_stats = epiparameter::create_epidist_summary_stats(
-    mean = 2,
-    sd = 1
-  )
-) %>%
-  plot()
-```
-
-<!--
-```{r, message=FALSE, warning=FALSE}
-epiparameter::epidist(
-  disease = "covid",
-  epi_dist = "reporting delay", # retraso del reporte
+  epi_dist = "reporting delay",
   prob_distribution = "lnorm",
   prob_distribution_params = c(
     meanlog = log_mean,
@@ -311,22 +293,32 @@ epiparameter::epidist(
 ) %>%
   plot()
 ```
--->
 
 ::::::::::::::::::::::
 
-Podemos trazar distribuciones simples y combinadas generadas por `{EpiNow2}` utilizando `plot()`. Combinemos en un gráfico el retraso desde la infección hasta la notificación, que incluye el periodo de incubación y el retraso en la notificación:
+Using the mean and standard deviation for the log normal distribution, we can specify a fixed or variable distribution using `LogNormal()` as before: 
+
+```{r,warning=FALSE,message=FALSE}
+reporting_delay_variable <- EpiNow2::LogNormal(
+  meanlog = EpiNow2::Normal(mean = log_mean, sd = 0.5),
+  sdlog = EpiNow2::Normal(mean = log_sd, sd = 0.5),
+  max = 10
+)
+```
+
+We can plot single and combined distributions generated by `{EpiNow2}` using `plot()`. Let's combine in one plot the delay from infection to report which includes the incubation period and reporting delay:
 
 ```{r}
 plot(incubation_period_variable + reporting_delay_variable)
 ```
 
+
 :::::::::::::::::: callout
 
-Si disponemos de datos sobre el tiempo transcurrido entre el inicio de los síntomas y la notificación, podemos utilizar la función `estimate_delay()` para estimar una distribución log normal a partir de un vector de retrasos. El siguiente código muestra cómo utilizar `estimate_delay()` con datos sintéticos de retrasos.
+If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a log normal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
 
-```{r, eval=FALSE}
-delay_data <- rlnorm(500, log(5), 1) # datos de retraso sintéticos
+```{r, eval = FALSE }
+delay_data <- rlnorm(500, log(5), 1) # synthetic delay data
 
 reporting_delay <- EpiNow2::estimate_delay(
   delay_data,
@@ -337,11 +329,12 @@ reporting_delay <- EpiNow2::estimate_delay(
 
 ::::::::::::::::::
 
-#### Tiempo de generación
+####  Generation time
 
-También debemos especificar una distribución para el tiempo de generación. Aquí utilizaremos una distribución log normal con media 3.6 y desviación estándar 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
+We also must specify a distribution for the generation time. Here we will use a log normal distribution with mean 3.6 and standard deviation 3.1 ([Ganyani et al. 2020](https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257)).
 
-```{r, warning=FALSE, message=FALSE}
+
+```{r,warning=FALSE,message=FALSE}
 generation_time_variable <- EpiNow2::LogNormal(
   mean = EpiNow2::Normal(mean = 3.6, sd = 0.5),
   sd = EpiNow2::Normal(mean = 3.1, sd = 0.5),
@@ -349,40 +342,41 @@ generation_time_variable <- EpiNow2::LogNormal(
 )
 ```
 
-## Estimaciones de hallazgos
 
-La función `epinow()` es una envoltura de la función `estimate_infections()` utilizada para estimar los casos por fecha de infección. La distribución del tiempo de generación y las distribuciones del retraso deben pasarse utilizando las funciones ` generation_time_opts()` y `delay_opts()` respectivamente.
+## Finding estimates
 
-Hay muchas otras entradas que se pueden pasar a `epinow()` ver `?EpiNow2::epinow()` para más detalles.
-Una entrada opcional es especificar una *log normal* para el número de reproducción efectivo $R_t$ al inicio del brote. Especificamos una media de 2 días y una desviación estándar de 2 días como argumentos de `prior` dentro de `rt_opts()`:
+The function `epinow()` is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. The generation time distribution and delay distributions must be passed using the functions ` generation_time_opts()` and `delay_opts()` respectively. 
 
-```{r, eval=TRUE}
+There are numerous other inputs that can be passed to `epinow()`, see `?EpiNow2::epinow()` for more detail.
+One optional input is to specify a *log normal* prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean of 2 days and standard deviation of 2 days as arguments of `prior` within `rt_opts()`:
+
+```{r, eval = TRUE}
 # define Rt prior distribution
 rt_prior <- EpiNow2::rt_opts(prior = base::list(mean = 2, sd = 2))
 ```
 
 ::::::::::::::::::::::::::::::::::::: callout
 
-### Inferencia bayesiana con Stan
+### Bayesian inference using Stan 
 
-La inferencia bayesiana se realiza utilizando métodos MCMC con el programa [Stan](https://mc-stan.org/). Hay una serie de entradas por defecto para las funciones Stan, incluido el número de cadenas y el número de muestras por cadena (ver `?EpiNow2::stan_opts()`).
+The Bayesian inference is performed using MCMC methods with the program [Stan](https://mc-stan.org/). There are a number of default inputs to the Stan functions including the number of chains and number of samples per chain (see `?EpiNow2::stan_opts()`).
 
-Para reducir el tiempo de cálculo, podemos ejecutar las cadenas en paralelo. Para ello, debemos establecer el número de núcleos que se van a utilizar. Por defecto, se ejecutan 4 cadenas MCMC (ver `stan_opts()$chains`), por lo que podemos establecer un número igual de núcleos para que se utilicen en paralelo de la siguiente manera:
+To reduce computation time, we can run chains in parallel. To do this, we must set the number of cores to be used. By default, 4 MCMC chains are run (see `stan_opts()$chains`), so we can set an equal number of cores to be used in parallel as follows:
 
-```{r, warning=FALSE, message=FALSE}
+```{r,warning=FALSE,message=FALSE}
 withr::local_options(base::list(mc.cores = 4))
 ```
 
-Para averiguar el número máximo de núcleos disponibles en tu máquina, utiliza `parallel::detectCores()`.
+To find the maximum number of available cores on your machine, use `parallel::detectCores()`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::: checklist
 
-**Nota:** En el siguiente código `_fixed` se utilizan distribuciones en lugar de `_variable` (distribuciones de retraso con incertidumbre). Esto se hace para acelerar el tiempo de cálculo. En general, se recomienda utilizar distribuciones variables que tengan en cuenta la incertidumbre adicional.
+**Note:** In the code below `_fixed` distributions are used instead of `_variable` (delay distributions with uncertainty). This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.
 
-```{r, echo=TRUE}
-# alternativas: distribuciones con parámetros fijos
+```{r, echo = TRUE}
+# fixed alternatives
 generation_time_fixed <- EpiNow2::LogNormal(
   mean = 3.6,
   sd = 3.1,
@@ -390,26 +384,26 @@ generation_time_fixed <- EpiNow2::LogNormal(
 )
 
 reporting_delay_fixed <- EpiNow2::LogNormal(
-  mean = 2,
-  sd = 1,
+  mean = log_mean,
+  sd = log_sd,
   max = 10
 )
 ```
 
 :::::::::::::::::::::::::
 
-Ahora estás listo para ejecutar `EpiNow2::epinow()` para estimar el número de reproducción variable en el tiempo durante los primeros 90 días:
+Now you are ready to run `EpiNow2::epinow()` to estimate the time-varying reproduction number for the first 90 days:
 
-```{r, message=FALSE, eval=TRUE}
+```{r, message = FALSE, eval = TRUE}
 reported_cases <- cases %>%
   dplyr::slice_head(n = 90)
 ```
 
-```{r, message=FALSE, eval=TRUE, echo=TRUE}
+```{r, message = FALSE, eval = TRUE, echo=TRUE}
 estimates <- EpiNow2::epinow(
-  # casos
+  # cases
   data = reported_cases,
-  # retrasos
+  # delays
   generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
   # prior
@@ -417,113 +411,104 @@ estimates <- EpiNow2::epinow(
 )
 ```
 
-<!-- ```{r, mensaje = FALSE,advertencia=FALSE, eval = TRUE, echo=FALSE} -->
-
-<!-- estimaciones <- EpiNow2::epinow( -->
-
-<!-- # casos -->
-
-<!-- datos = casos_informados, -->
-
-<!-- # retrasos -->
-
-<!-- tiempo_de_generación = EpiNow2::tiempo_de_generación_opts(tiempo_de_generación_fijo), -->
-
-<!-- retrasos = EpiNow2::retraso_opts(periodo_de_incubación_fijo + retraso_de_informe_fijo), -->
-
-<!-- # anterior -->
-
-<!-- rt = rt_previo, -->
-
-<!-- stan = EpiNow2::stan_opts(method = "vb") -->
-
+<!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
+<!-- estimates <- EpiNow2::epinow( -->
+<!--   # cases -->
+<!--   data = reported_cases, -->
+<!--   # delays -->
+<!--   generation_time = EpiNow2::generation_time_opts(generation_time_fixed), -->
+<!--   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed), -->
+<!--   # prior -->
+<!--   rt = rt_prior, -->
+<!--   stan = EpiNow2::stan_opts(method = "vb") -->
 <!-- ) -->
-
 <!-- ``` -->
+
 
 ::::::::::::::::::::::::::::::::: callout
 
-### No esperes a que esto continúe
+### Do not wait for this to continue
 
-Para efectos de este tutorial, podemos utilizar opcionalmente `EpiNow2::stan_opts()` para reducir el tiempo de cálculo. Podemos especificar un número fijo de `samples = 1000` y `chains = 3` al argumento `stan` de la función `EpiNow2::epinow()`. Esperamos que esto lleve aproximadamente 3 minutos.
+For the purpose of this tutorial, we can optionally use `EpiNow2::stan_opts()` to reduce computation time. We can specify a fixed number of `samples = 1000` and `chains = 2` to the `stan` argument of the `EpiNow2::epinow()` function. We expect this to take approximately 3 minutes.
 
-<!-- Podemos establecer opcionalmente `stan = stan_opts(method = "vb")` para utilizar un método de muestreo aproximado. Esperamos que tarde menos de 1 minuto. -->
+<!-- We can optionally set `stan = stan_opts(method = "vb")` to use an approximate sampling method. We expect this to take less than 1 minute. -->
 
 ```r
-# puedes adicionar el argumento `stan`
+# you can add the `stan` argument
 EpiNow2::epinow(
   ...,
-  stan = EpiNow2::stan_opts(samples = 1000, chains = 3)
+  stan = EpiNow2::stan_opts(samples = 1000, chains = 2)
 )
 ```
 
-**Recuerda:** Utilizar un número adecuado de *muestras* y *cadenas* es crucial para garantizar la convergencia y obtener estimaciones fiables en los cálculos bayesianos con Stan. Los resultados más precisos se obtienen a costa de la velocidad.
+**Remember:** Using an appropriate number of *samples* and *chains* is crucial for ensuring convergence and obtaining reliable estimates in Bayesian computations using Stan. More accurate outputs come at the cost of speed.
 
 :::::::::::::::::::::::::::::::::
 
-### Resultados
+### Results
 
-Podemos extraer y visualizar estimaciones del número de reproducción efectivo a lo largo del tiempo:
+We can extract and visualise estimates of the effective reproduction number through time:
 
 ```{r}
 estimates$plots$R
 ```
 
-La incertidumbre de las estimaciones aumenta con el tiempo. Esto se debe a que las estimaciones se basan en datos del pasado, dentro de los periodos de retraso. Esta diferencia de incertidumbre se clasifica en **Estimación** (verde) utiliza todos los datos y **Estimación basada en datos parciales** (naranja) estimaciones que se basan en menos datos (porque es más probable que las infecciones que se produjeron en su momento no se hayan observado todavía), por este motivo, tienen intervalos cada vez más amplios hacia la fecha del último punto de datos. Por último, el **Pronóstico** (morado) es una proyección a futuro.
+The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. This difference in uncertainty is categorised into **Estimate** (green) utilises all data and **Estimate based on partial data** (orange) estimates that are based on less data (because infections that happened at the time are more likely to not have been observed yet) and therefore have increasingly wider intervals towards the date of the last data point. Finally, the **Forecast** (purple) is a projection ahead of time. 
 
-También podemos visualizar la estimación de la tasa de crecimiento a lo largo del tiempo:
-
+We can also visualise the growth rate estimate through time: 
 ```{r}
 estimates$plots$growth_rate
 ```
 
-Para extraer un resumen de las métricas clave de transmisión en la *última fecha* de los datos:
+To extract a summary of the key transmission metrics at the *latest date* in the data:
 
 ```{r}
 summary(estimates)
 ```
 
-Como estas estimaciones se basan en datos parciales, tienen un amplio intervalo de incertidumbre.
+As these estimates are based on partial data, they have a wide uncertainty interval.
 
-- Del resumen de nuestro análisis se desprende que el cambio esperado en los casos diarios es de `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]` con la estimación de nuevos casos confirmados `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`.
++ From the summary of our analysis we see that the expected change in daily cases is `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]` with the estimated new confirmed cases `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`.
 
-- El número de reproducción efectivo $R_t$ estimado (en la última fecha de los datos) es `r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`.
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`. 
 
-- La tasa de crecimiento exponencial del número de casos es `r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`.
++ The exponential growth rate of case numbers is `r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`.
 
-- El tiempo de duplicación (el tiempo que tarda en duplicarse el número de casos) es `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
++ The doubling time (the time taken for case numbers to double) is `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
 
 ::::::::::::::::::::::::::::::::::::: callout
+### `Expected change in daily cases` 
 
-### `Expected change in daily cases`
-
-Un factor que describe el cambio esperado en los casos diarios, basado en la probabilidad posterior de que $R_t < 1$.
+A factor describing expected change in daily cases based on the posterior probability that $R_t < 1$.
 
 <center>
-| Probabilidad ($p$) | Cambio esperado |
+| Probability ($p$)      | Expected change |
 | ------------- |-------------|
-|$p < 0,05$ |Aumentando |
-|$0,05 \leq p< 0,4$ |Probable aumento |
-|$0,4 \leq p< 0,6$ |Estable |
-|$0,6 \leq p < 0,95$ |Probable disminución |
-|$0,95 \leq p \leq 1$ |En disminución |
+|$p < 0.05$    |Increasing |
+|$0.05 \leq p< 0.4$    |Likely increasing |
+|$0.4 \leq p< 0.6$    |Stable |
+|$0.6 \leq p < 0.95$    |Likely decreasing |
+|$0.95 \leq p \leq 1$    |Decreasing |
 </center>
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Cuantificar la heterogeneidad geográfica
 
-Los datos del brote del inicio de la pandemia COVID-19 del Reino Unido del paquete R `{incidence2}` incluyen la región en la que se registraron los casos. Para encontrar estimaciones regionales del número de reproducción efectiva y de casos, debemos dar formato a los datos para que tengan tres columnas:
 
-- `date`: la fecha.
-- `region`: la región.
-- `confirm`: número de casos confirmados para una región en una fecha determinada.
 
-```{r, warning=FALSE, message=FALSE}
+## Quantify geographical heterogeneity
+
+The outbreak data of the start of the COVID-19 pandemic from the United Kingdom from the R package `{incidence2}` includes the region in which the cases were recorded. To find regional estimates of the effective reproduction number and cases, we must format the data to have three columns:
+
++ `date`: the date,
++ `region`: the region, 
++ `confirm`: number of confirmed cases for a region on a given date.
+
+```{r,warning=FALSE,message=FALSE}
 regional_cases <- incidence2::covidregionaldataUK %>%
-  # usar {tidyr} para pre-procesar los valores faltantes
+  # use {tidyr} to preprocess missing values
   tidyr::replace_na(base::list(cases_new = 0)) %>%
-  # usar {incidence2} para convertir datos agregados en datos de incidencia
+  # use {incidence2} to convert aggregated data to incidence data
   incidence2::incidence(
     date_index = "date",
     groups = "region",
@@ -534,29 +519,29 @@ regional_cases <- incidence2::covidregionaldataUK %>%
   ) %>%
   dplyr::select(-count_variable)
 
-# mantener las primeras 90 fechas para todas las regiones
+# keep the first 90 dates for all regions
 
-# obtener el vector de las primeras 90 fechas
+# get vector of first 90 dates
 date_range <- regional_cases %>%
   dplyr::distinct(date) %>%
-  # desde {incidence2}, las fechas ya están ordenadas en orden ascendente
+  # from incidence2, dates are already arranged in ascendant order
   dplyr::slice_head(n = 90) %>%
   dplyr::pull(date)
 
-# filtrar las fechas en la variable date_range
+# filter dates in date_range
 regional_cases <- regional_cases %>%
   dplyr::filter(magrittr::is_in(x = date, table = date_range))
 
 dplyr::as_tibble(regional_cases)
 ```
 
-Para hallar las estimaciones regionales, utilizamos los mismos datos que `epinow()` para la función `regional_epinow()`:
+To find regional estimates, we use the same inputs as `epinow()` to the function `regional_epinow()`:
 
-```{r, message=FALSE, eval=TRUE, echo=TRUE}
+```{r, message = FALSE, eval = TRUE,echo=TRUE}
 estimates_regional <- EpiNow2::regional_epinow(
-  # casos
+  # cases
   data = regional_cases,
-  # retrasos
+  # delays
   generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
   # prior
@@ -564,51 +549,41 @@ estimates_regional <- EpiNow2::regional_epinow(
 )
 ```
 
-<!-- ```{r, mensaje = FALSE,aviso=FALSE, eval = TRUE,echo=FALSE} -->
-
-<!-- estima_regional <- EpiNow2::regional_epinow( -->
-
-<!-- # casos -->
-
-<!-- datos = casos_regionales, -->
-
-<!-- # retrasos -->
-
-<!-- tiempo_de_generación = EpiNow2::tiempo_de_generación_opts(tiempo_de_generación_fijo), -->
-
-<!-- retrasos = EpiNow2::retraso_opts(periodo_de_incubación_fijo + retraso_de_informe_fijo), -->
-
-<!-- # anterior -->
-
-<!-- rt = rt_previo, -->
-
-<!-- stan = EpiNow2::stan_opts(method = "vb") -->
-
+<!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE,echo=FALSE} -->
+<!-- estimates_regional <- EpiNow2::regional_epinow( -->
+<!--   # cases -->
+<!--   data = regional_cases, -->
+<!--   # delays -->
+<!--   generation_time = EpiNow2::generation_time_opts(generation_time_fixed), -->
+<!--   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed), -->
+<!--   # prior -->
+<!--   rt = rt_prior, -->
+<!--   stan = EpiNow2::stan_opts(method = "vb") -->
 <!-- ) -->
-
 <!-- ``` -->
 
-```{r, message=FALSE, eval=TRUE}
+```{r, message = FALSE, eval = TRUE}
 estimates_regional$summary$summarised_results$table
 
 estimates_regional$summary$plots$R
 ```
 
+
 <!-- :::::::::::::::::::::::::: testimonial -->
 
-<!-- ### el paquete i2extras -->
+<!-- ### the i2extras package -->
+
+<!-- `{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette. -->
 
 <!-- :::::::::::::::::::::::::: -->
 
-## Resumen
+## Summary
 
-`EpiNow2` puede utilizarse para estimar las métricas de transmisión a partir de los datos de casos en cualquier momento del curso de un brote. La fiabilidad de estas estimaciones depende de la calidad de los datos y de la elección adecuada de las distribuciones de retraso. En el siguiente tutorial aprenderemos a hacer previsiones e investigaremos algunas de las opciones adicionales de inferencia disponibles en `EpiNow2`.
+`EpiNow2` can be used to estimate transmission metrics from case data at any time in the course of an outbreak. The reliability of these estimates depends on the quality of the data and appropriate choice of delay distributions. In the next tutorial we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`. 
 
-::::::::::::::::::::::::::::::::::::: keypoints
+::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Las métricas de transmisión pueden estimarse a partir de los datos del caso tras tener en cuenta los retrasos
-- La incertidumbre puede tenerse en cuenta en las distribuciones de retrasos
+- Transmission metrics can be estimated from case data after accounting for delays
+- Uncertainty can be accounted for in delay distributions
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-
