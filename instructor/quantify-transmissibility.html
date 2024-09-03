@@ -390,8 +390,7 @@ case data using the R package <code>EpiNow2</code>
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>Learners should familiarise themselves with following concepts before
 working through this tutorial:</p>
@@ -410,7 +409,7 @@ and visualize</a> incidence data.</p>
 </div>
 <div id="reminder-the-effective-reproduction-number-r_t" class="callout-inner">
 <h3 class="callout-title">Reminder: the Effective Reproduction Number,
-<span class="math inline">\(R_t\)</span><a class="anchor" aria-label="anchor" href="#reminder-the-effective-reproduction-number-r_t"></a>
+<span class="math inline">\(R_t\)</span>
 </h3>
 <div class="callout-content">
 <p>The <a href="reference.html#basic">basic reproduction number</a>,
@@ -427,8 +426,7 @@ by one infectious individual in the population at time <span class="math inline"
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
+<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
 <hr class="half-width"><p>The transmission intensity of an outbreak is quantified using two key
 metrics: the reproduction number, which informs on the strength of the
 transmission by indicating how many new cases are expected from each
@@ -468,8 +466,7 @@ package:</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -501,8 +498,7 @@ limitations of the model output.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="bayesian-inference" class="callout-inner">
-<h3 class="callout-title">Bayesian inference<a class="anchor" aria-label="anchor" href="#bayesian-inference"></a>
-</h3>
+<h3 class="callout-title">Bayesian inference</h3>
 <div class="callout-content">
 <p>The R package <code>EpiNow2</code> uses a <a href="reference.html#bayesian">Bayesian inference</a> framework to
 estimate reproduction numbers and infection times based on reporting
@@ -534,8 +530,7 @@ under the posterior probability distribution curve</a>.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="delay-distributions-and-case-data">Delay distributions and case data<a class="anchor" aria-label="anchor" href="#delay-distributions-and-case-data"></a>
-<a class="anchor" aria-label="anchor" href="#delay-distributions-and-case-data"></a></h2>
+</section><section><h2 class="section-heading" id="delay-distributions-and-case-data">Delay distributions and case data<a class="anchor" aria-label="anchor" href="#delay-distributions-and-case-data"></a></h2>
 <hr class="half-width"><div class="section level3">
 <h3 id="case-data">Case data<a class="anchor" aria-label="anchor" href="#case-data"></a></h3>
 <p>To illustrate the functions of <code>EpiNow2</code> we will use
@@ -657,8 +652,7 @@ period.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="delays-and-data" class="callout-inner">
-<h3 class="callout-title">Delays and data<a class="anchor" aria-label="anchor" href="#delays-and-data"></a>
-</h3>
+<h3 class="callout-title">Delays and data</h3>
 <div class="callout-content">
 <p>The number of delays and type of delay are a flexible input that
 depend on the data. The examples below highlight how the delays can be
@@ -713,8 +707,7 @@ can take, in this example 20 days.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="why-a-gamma-distrubution" class="callout-inner">
-<h3 class="callout-title">Why a gamma distrubution?<a class="anchor" aria-label="anchor" href="#why-a-gamma-distrubution"></a>
-</h3>
+<h3 class="callout-title">Why a gamma distrubution?</h3>
 <div class="callout-content">
 <p>The incubation period has to be positive in value. Therefore we must
 specific a distribution in <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> which is for positive
@@ -861,8 +854,7 @@ period and reporting delay:</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout5"></a>
-</h3>
+<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p>If data is available on the time between symptom onset and reporting,
 we can use the function <code>estimate_delay()</code> to estimate a log
@@ -902,8 +894,7 @@ et al. 2020</a>).</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="finding-estimates">Finding estimates<a class="anchor" aria-label="anchor" href="#finding-estimates"></a>
-<a class="anchor" aria-label="anchor" href="#finding-estimates"></a></h2>
+</section><section><h2 class="section-heading" id="finding-estimates">Finding estimates<a class="anchor" aria-label="anchor" href="#finding-estimates"></a></h2>
 <hr class="half-width"><p>The function <code>epinow()</code> is a wrapper for the function
 <code>estimate_infections()</code> used to estimate cases by date of
 infection. The generation time distribution and delay distributions must
@@ -927,8 +918,7 @@ of <code>prior</code> within <code>rt_opts()</code>:</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="bayesian-inference-using-stan" class="callout-inner">
-<h3 class="callout-title">Bayesian inference using Stan<a class="anchor" aria-label="anchor" href="#bayesian-inference-using-stan"></a>
-</h3>
+<h3 class="callout-title">Bayesian inference using Stan</h3>
 <div class="callout-content">
 <p>The Bayesian inference is performed using MCMC methods with the
 program <a href="https://mc-stan.org/" class="external-link">Stan</a>. There are a number of
@@ -955,8 +945,7 @@ equal number of cores to be used in parallel as follows:</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Checklist<a class="anchor" aria-label="anchor" href="#checklist2"></a>
-</h3>
+<h3 class="callout-title">Checklist</h3>
 <div class="callout-content">
 <p><strong>Note:</strong> In the code below <code>_fixed</code>
 distributions are used instead of <code>_variable</code> (delay
@@ -1032,8 +1021,7 @@ WARN [2024-07-02 01:17:37] epinow: Examine the pairs() plot to diagnose sampling
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="do-not-wait-for-this-to-continue" class="callout-inner">
-<h3 class="callout-title">Do not wait for this to continue<a class="anchor" aria-label="anchor" href="#do-not-wait-for-this-to-continue"></a>
-</h3>
+<h3 class="callout-title">Do not wait for this to continue</h3>
 <div class="callout-content">
 <p>For the purpose of this tutorial, we can optionally use
 <code>EpiNow2::stan_opts()</code> to reduce computation time. We can
@@ -1119,9 +1107,7 @@ data) is 0.88 (0.6 – 1.3).</p></li>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="expected-change-in-daily-cases" class="callout-inner">
-<h3 class="callout-title">
-<code>Expected change in daily cases</code><a class="anchor" aria-label="anchor" href="#expected-change-in-daily-cases"></a>
-</h3>
+<h3 class="callout-title"><code>Expected change in daily cases</code></h3>
 <div class="callout-content">
 <p>A factor describing expected change in daily cases based on the
 posterior probability that <span class="math inline">\(R_t &lt;
@@ -1144,8 +1130,7 @@ posterior probability that <span class="math inline">\(R_t &lt;
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="quantify-geographical-heterogeneity">Quantify geographical heterogeneity<a class="anchor" aria-label="anchor" href="#quantify-geographical-heterogeneity"></a>
-<a class="anchor" aria-label="anchor" href="#quantify-geographical-heterogeneity"></a></h2>
+</section><section><h2 class="section-heading" id="quantify-geographical-heterogeneity">Quantify geographical heterogeneity<a class="anchor" aria-label="anchor" href="#quantify-geographical-heterogeneity"></a></h2>
 <hr class="half-width"><p>The outbreak data of the start of the COVID-19 pandemic from the
 United Kingdom from the R package <a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a> includes the
 region in which the cases were recorded. To find regional estimates of
@@ -1314,8 +1299,7 @@ INFO [2024-07-02 02:15:30] No target directory specified so returning timings</c
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">estimates_regional</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">R</span></span></code></pre>
 </div>
-<figure><img src="../fig/quantify-transmissibility-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><!-- :::::::::::::::::::::::::: testimonial --><!-- ### the i2extras package --><!-- `{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette. --><!-- :::::::::::::::::::::::::: --></section><section><h2 class="section-heading" id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
-<a class="anchor" aria-label="anchor" href="#summary"></a></h2>
+<figure><img src="../fig/quantify-transmissibility-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><!-- :::::::::::::::::::::::::: testimonial --><!-- ### the i2extras package --><!-- `{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette. --><!-- :::::::::::::::::::::::::: --></section><section><h2 class="section-heading" id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a></h2>
 <hr class="half-width"><p><code>EpiNow2</code> can be used to estimate transmission metrics
 from case data at any time in the course of an outbreak. The reliability
 of these estimates depends on the quality of the data and appropriate
@@ -1327,8 +1311,7 @@ available in <code>EpiNow2</code>.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul><li>Transmission metrics can be estimated from case data after
 accounting for delays</li>
@@ -1376,7 +1359,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.6)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1399,7 +1382,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/quantify-transmissibility.html",
   "dateCreated": "2024-07-11",
   "dateModified": "2024-07-02",
-  "datePublished": "2024-08-27"
+  "datePublished": "2024-09-03"
 }
 
   </script><script>

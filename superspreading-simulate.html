@@ -388,8 +388,7 @@ characteristics?</li>
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>Learners should familiarise themselves with the following concept
 dependencies before working through this tutorial:</p>
@@ -399,8 +398,7 @@ including Poisson and negative binomial.</p>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
+<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
 <hr class="half-width"><!-- what we know --><p>Individual variation in transmission can affect both the potential
 for an epidemic to establish in a population and the ease of control (<a href="https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371" class="external-link">Cori
 et al., 2017</a>).</p>
@@ -445,8 +443,7 @@ package:</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -458,8 +455,7 @@ conflicts.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="simulation-of-uncontrolled-outbreaks">Simulation of uncontrolled outbreaks<a class="anchor" aria-label="anchor" href="#simulation-of-uncontrolled-outbreaks"></a>
-<a class="anchor" aria-label="anchor" href="#simulation-of-uncontrolled-outbreaks"></a></h2>
+</section><section><h2 class="section-heading" id="simulation-of-uncontrolled-outbreaks">Simulation of uncontrolled outbreaks<a class="anchor" aria-label="anchor" href="#simulation-of-uncontrolled-outbreaks"></a></h2>
 <hr class="half-width"><p>Infectious disease epidemics spread through populations when a chain
 of infected individuals transmit the infection to others. <a href="https://epiverse-trace.github.io/epichains/articles/theoretical_background.html" class="external-link">Branching
 processes</a> can be used to model this transmission. A branching
@@ -481,8 +477,7 @@ project cases into the future, and evaluate interventions that change
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="chain-size-and-length" class="callout-inner">
-<h3 class="callout-title">chain size and length<a class="anchor" aria-label="anchor" href="#chain-size-and-length"></a>
-</h3>
+<h3 class="callout-title">chain size and length</h3>
 <div class="callout-content">
 <ul><li><p>The <strong>size</strong> of the transmission chain is defined as
 the total number of individuals infected across all generations of
@@ -509,8 +504,7 @@ generations reached by C1’s chain) (<a href="https://epiverse-trace.github.io/
 <p>To use <code>{epichains}</code>, we need to know (or assume) two key
 epidemiological values: the offspring distribution and the generation
 time.</p>
-</section><section><h2 class="section-heading" id="get-the-offspring-distribution">Get the offspring distribution<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a>
-<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a></h2>
+</section><section><h2 class="section-heading" id="get-the-offspring-distribution">Get the offspring distribution<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a></h2>
 <hr class="half-width"><p>Here we assume the MERS offspring distribution follows a negative
 binomial distribution, with mean (reproduction number <span class="math inline">\(R\)</span>) and dispersion <span class="math inline">\(k\)</span> values estimated from the linelist and
 contact data of <code>mers_korea_2015</code> in the
@@ -526,8 +520,7 @@ contact data of <code>mers_korea_2015</code> in the
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="offspring-distribution-for-epichains" class="callout-inner">
-<h3 class="callout-title">offspring distribution for epichains<a class="anchor" aria-label="anchor" href="#offspring-distribution-for-epichains"></a>
-</h3>
+<h3 class="callout-title">offspring distribution for epichains</h3>
 <div class="callout-content">
 <p>We input an offspring distribution to <code>{epichains}</code> by
 referring to the R function that generates random values from the
@@ -551,7 +544,7 @@ specific arguments.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson and other distributions </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p><code>{epichains}</code> can accept any R function that generates
 random numbers, so the specified arguments will change depending on the
@@ -584,8 +577,7 @@ binomial distribution.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="get-generation-time">Get generation time<a class="anchor" aria-label="anchor" href="#get-generation-time"></a>
-<a class="anchor" aria-label="anchor" href="#get-generation-time"></a></h2>
+</section><section><h2 class="section-heading" id="get-generation-time">Get generation time<a class="anchor" aria-label="anchor" href="#get-generation-time"></a></h2>
 <hr class="half-width"><p>The <a href="reference.html#serialinterval">serial interval</a>
 distribution is often used to approximate the generation time
 distribution. This approximation is commonly used because it is easier
@@ -596,7 +588,7 @@ precise time of infection.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> generation time vs serial interval </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <figure><img src="fig/serial-interval-observed.jpeg" alt="A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021)." class="figure mx-auto d-block"><div class="figcaption">A schematic of the relationship of different
 time periods of transmission between an infector and an infectee in a
@@ -636,8 +628,7 @@ deviation of 2.8 days.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="generation-time-for-epichains" class="callout-inner">
-<h3 class="callout-title">generation time for epichains<a class="anchor" aria-label="anchor" href="#generation-time-for-epichains"></a>
-</h3>
+<h3 class="callout-title">generation time for epichains</h3>
 <div class="callout-content">
 <p>In <code>{epichains}</code>, we need to specify the generation time
 as a function that generates random numbers. Using
@@ -656,8 +647,7 @@ with delay distributions</a> vignette for further context.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="simulate-a-single-chain">Simulate a single chain<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a>
-<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a></h2>
+</section><section><h2 class="section-heading" id="simulate-a-single-chain">Simulate a single chain<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a></h2>
 <hr class="half-width"><p>Now we are prepared to use the <code>simulate_chains()</code>
 function from <code>{epichains}</code> to create <strong>one</strong>
 transmission chain:</p>
@@ -697,8 +687,7 @@ criteria for each chain being simulated.</li>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="stopping-criteria" class="callout-inner">
-<h3 class="callout-title">Stopping criteria<a class="anchor" aria-label="anchor" href="#stopping-criteria"></a>
-</h3>
+<h3 class="callout-title">Stopping criteria</h3>
 <div class="callout-content">
 <p>This is an customisable feature of <code>{epichains}</code>. By
 default, branching process simulations end when they have gone extinct.
@@ -713,8 +702,7 @@ offspring will be produced after a chain of size 500.</p>
 <p>The <code>simulate_chains()</code> output creates a
 <code>&lt;epichains&gt;</code> class object, which we can then analyse
 further in R.</p>
-</section><section><h2 class="section-heading" id="simulate-multiple-chains">Simulate multiple chains<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains"></a>
-<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains"></a></h2>
+</section><section><h2 class="section-heading" id="simulate-multiple-chains">Simulate multiple chains<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains"></a></h2>
 <hr class="half-width"><p>We can use <code>simulate_chains()</code> to create multiple chains
 and increase the probability of simulating uncontrolled outbreak
 projections given an overdispersed offspring distribution.</p>
@@ -750,8 +738,7 @@ workflow.</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="iteration-using-purrr" class="callout-inner">
-<h3 class="callout-title">Iteration using purrr<a class="anchor" aria-label="anchor" href="#iteration-using-purrr"></a>
-</h3>
+<h3 class="callout-title">Iteration using purrr</h3>
 <div class="callout-content">
 <p><a href="https://r4ds.hadley.nz/iteration.html" class="external-link">Iteration</a> aims to
 perform the same action on different objects repeatedly.</p>
@@ -772,8 +759,7 @@ sequence of numbers from 1 to 1000.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="purrr-and-epichains" class="callout-inner">
-<h3 class="callout-title">purrr and epichains<a class="anchor" aria-label="anchor" href="#purrr-and-epichains"></a>
-</h3>
+<h3 class="callout-title">purrr and epichains</h3>
 <div class="callout-content">
 <p>First, let’s sketch how we use <code>purrr::map()</code> with
 <code>epichains::simulate_chains()</code>. The <code>map()</code>
@@ -846,8 +832,7 @@ from <code>simulate_chains()</code> and store in a vector from 1 to
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="read-the-epichains-output" class="callout-inner">
-<h3 class="callout-title">Read the epichains output<a class="anchor" aria-label="anchor" href="#read-the-epichains-output"></a>
-</h3>
+<h3 class="callout-title">Read the epichains output</h3>
 <div class="callout-content">
 <p>To explore the output format of the <code>&lt;epichains&gt;</code>
 class object of name <code>simulated_chains_map</code>, let’s look at
@@ -860,7 +845,7 @@ the simulated <code>simulation_id</code> number 806.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> The epichains object </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Let’s use <code>dplyr::filter()</code> for this:</p>
 <div class="codewrapper sourceCode" id="cb11">
@@ -918,7 +903,7 @@ reading the <code>&lt;epichains&gt;</code> objects as a data frame.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> The epichains data frame </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -962,7 +947,7 @@ transmission generation (between <code>time</code> 26 to 30),
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> An infectee data frame </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>The output data frame collects <strong>infectees</strong> as the
 observation unit:</p>
@@ -984,8 +969,7 @@ and <code>time = 0</code>.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="visualize-multiple-chains">Visualize multiple chains<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a>
-<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a></h2>
+</section><section><h2 class="section-heading" id="visualize-multiple-chains">Visualize multiple chains<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a></h2>
 <hr class="half-width"><p>To visualize the simulated chains, we need some pre-processing:</p>
 <ol style="list-style-type: decimal"><li>Let’s use <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> to get round time numbers to resemble
 surveillance days.</li>
@@ -1123,7 +1107,7 @@ outbreaks of MERS disease.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Observed cases vs simulated chains </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
 <div class="accordion-body">
 <p>Let’s overlap the cumulative number of observed cases using the
 linelist object from the <code>mers_korea_2015</code> dataset of the
@@ -1185,8 +1169,7 @@ threshold (<a href="https://www.nature.com/articles/nature04153" class="external
 <i class="callout-icon" data-feather="heart"></i>
 </div>
 <div id="early-spread-projections" class="callout-inner">
-<h3 class="callout-title">Early spread projections<a class="anchor" aria-label="anchor" href="#early-spread-projections"></a>
-</h3>
+<h3 class="callout-title">Early spread projections</h3>
 <div class="callout-content">
 <p>In the epidemic’s initial phase, you can use <code>{epichains}</code>
 to apply a branching process model to project the number of future
@@ -1207,15 +1190,13 @@ predictions using <code>{epichains}</code>.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-<a class="anchor" aria-label="anchor" href="#challenges"></a></h2>
+</section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a></h2>
 <hr class="half-width"><div id="monkeypox-large-outbreak-potential" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="monkeypox-large-outbreak-potential" class="callout-inner">
-<h3 class="callout-title">Monkeypox large outbreak potential<a class="anchor" aria-label="anchor" href="#monkeypox-large-outbreak-potential"></a>
-</h3>
+<h3 class="callout-title">Monkeypox large outbreak potential</h3>
 <div class="callout-content">
 <p>Evaluate the potential for a new Monkey pox (Mpox) case to generate
 an explosive large outbreak.</p>
@@ -1232,7 +1213,7 @@ cases?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>With <code>{epiparameter}</code>, you can access and use offspring
 and delay distributions from previous Ebola outbreaks.</p>
@@ -1292,7 +1273,7 @@ and delay distributions from previous Ebola outbreaks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1403,7 +1384,7 @@ MERS (<span class="math inline">\(R\)</span> = 0.6 and <span class="math inline"
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Epidemic Risk assessment accounting for superspreading </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
 <p>With <code>{superspreading}</code>, you can get numerical solutions
 to processes that <code>{epichains}</code> solve using branching
@@ -1442,8 +1423,7 @@ disease.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="from-a-distribution-of-secondary-cases" class="callout-inner">
-<h3 class="callout-title">From a distribution of secondary cases<a class="anchor" aria-label="anchor" href="#from-a-distribution-of-secondary-cases"></a>
-</h3>
+<h3 class="callout-title">From a distribution of secondary cases</h3>
 <div class="callout-content">
 <p><a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext" class="external-link">Christian
 Althaus, 2015</a> reused data published by <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2" class="external-link">Faye
@@ -1460,7 +1440,7 @@ estimate the large outbreak potential from this data.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
 <div class="accordion-body">
 <p>Code with the transmission tree data written by <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext" class="external-link">Christian
 Althaus, 2015</a>:</p>
@@ -1490,7 +1470,7 @@ Althaus, 2015</a>:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1602,8 +1582,7 @@ explosive regrowth of the epidemic.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul><li>Use <code>{epichains}</code> to simulate the large outbreak
 potential of diseases with overdispersed offspring distributions.</li>
@@ -1650,7 +1629,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.6)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1673,7 +1652,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html",
   "dateCreated": "2024-07-11",
   "dateModified": "2024-07-02",
-  "datePublished": "2024-08-27"
+  "datePublished": "2024-09-03"
 }
 
   </script><script>

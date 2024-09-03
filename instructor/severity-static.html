@@ -395,8 +395,7 @@ using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr<
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>This episode requires you to be familiar with:</p>
 <p><strong>Data science</strong>: Basic programming with R.</p>
@@ -404,8 +403,7 @@ using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr<
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
+<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
 <hr class="half-width"><p>Common questions at the early stage of an epidemic include:</p>
 <ul><li>What is the likely public health impact of the outbreak in terms of
 clinical severity?</li>
@@ -486,8 +484,7 @@ so let’s also call to the <a href="https://tidyverse.tidyverse.org" class="ext
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -499,8 +496,7 @@ conflicts.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="data-sources-for-clinical-severity">Data sources for clinical severity<a class="anchor" aria-label="anchor" href="#data-sources-for-clinical-severity"></a>
-<a class="anchor" aria-label="anchor" href="#data-sources-for-clinical-severity"></a></h2>
+</section><section><h2 class="section-heading" id="data-sources-for-clinical-severity">Data sources for clinical severity<a class="anchor" aria-label="anchor" href="#data-sources-for-clinical-severity"></a></h2>
 <hr class="half-width"><p>What are data sources can we use to estimate the clinical severity of
 a disease outbreak? <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext" class="external-link">Verity
 et al., 2020</a> summarises the spectrum of COVID-19 cases:</p>
@@ -523,8 +519,7 @@ surveillance of, for example, influenza-like illness.</li>
 possibly <strong>asymptomatic</strong>) cases. These cases might be
 identifiable through contact tracing and subsequently via serological
 testing.</li>
-</ul></section><section><h2 class="section-heading" id="naive-cfr">Naive CFR<a class="anchor" aria-label="anchor" href="#naive-cfr"></a>
-<a class="anchor" aria-label="anchor" href="#naive-cfr"></a></h2>
+</ul></section><section><h2 class="section-heading" id="naive-cfr">Naive CFR<a class="anchor" aria-label="anchor" href="#naive-cfr"></a></h2>
 <hr class="half-width"><p>We measure disease severity in terms of case fatality risk (CFR). The
 CFR is interpreted as the conditional probability of death given
 confirmed diagnosis, calculated as the cumulative number of deaths <span class="math inline">\(D_{t}\)</span> over the cumulative number of
@@ -582,8 +577,7 @@ Camacho et al. (2014).</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="we-need-aggregated-incidence-data" class="callout-inner">
-<h3 class="callout-title">We need aggregated incidence data<a class="anchor" aria-label="anchor" href="#we-need-aggregated-incidence-data"></a>
-</h3>
+<h3 class="callout-title">We need aggregated incidence data</h3>
 <div class="callout-content">
 <p><a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> reads <strong>aggregated</strong> incidence
 data.</p>
@@ -620,8 +614,7 @@ directly, we are calculating the naive CFR:</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Download the file <a href="../data/sarscov2_cases_deaths.csv">sarscov2_cases_deaths.csv</a> and
 read it into R.</p>
@@ -713,15 +706,13 @@ fit the data input for <code>cfr_static()</code>.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="biases-that-affect-cfr-estimation">Biases that affect CFR estimation<a class="anchor" aria-label="anchor" href="#biases-that-affect-cfr-estimation"></a>
-<a class="anchor" aria-label="anchor" href="#biases-that-affect-cfr-estimation"></a></h2>
+</section><section><h2 class="section-heading" id="biases-that-affect-cfr-estimation">Biases that affect CFR estimation<a class="anchor" aria-label="anchor" href="#biases-that-affect-cfr-estimation"></a></h2>
 <hr class="half-width"><div id="two-biases-that-affect-cfr-estimation" class="callout discussion">
 <div class="callout-square">
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="two-biases-that-affect-cfr-estimation" class="callout-inner">
-<h3 class="callout-title">Two biases that affect CFR estimation<a class="anchor" aria-label="anchor" href="#two-biases-that-affect-cfr-estimation"></a>
-</h3>
+<h3 class="callout-title">Two biases that affect CFR estimation</h3>
 <div class="callout-content">
 <p><a href="https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846" class="external-link">Lipsitch
 et al., 2015</a> describe two potential biases that can affect the
@@ -817,8 +808,7 @@ described in this <code>{cfr}</code> vignette</a>.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="delay-adjusted-cfr">Delay-adjusted CFR<a class="anchor" aria-label="anchor" href="#delay-adjusted-cfr"></a>
-<a class="anchor" aria-label="anchor" href="#delay-adjusted-cfr"></a></h2>
+</section><section><h2 class="section-heading" id="delay-adjusted-cfr">Delay-adjusted CFR<a class="anchor" aria-label="anchor" href="#delay-adjusted-cfr"></a></h2>
 <hr class="half-width"><p><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
 et al., 2009</a> developed a method that considers the <strong>time
 delay</strong> from the onset of symptoms to death.</p>
@@ -885,8 +875,7 @@ between 0.8201 and 0.9866, slightly higher than the naive one.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="use-the-epidist-class" class="callout-inner">
-<h3 class="callout-title">Use the epidist class<a class="anchor" aria-label="anchor" href="#use-the-epidist-class"></a>
-</h3>
+<h3 class="callout-title">Use the epidist class</h3>
 <div class="callout-content">
 <p>When using an <code>&lt;epidist&gt;</code> class object we can use
 this expression as a template:</p>
@@ -906,8 +895,7 @@ primer on working with delay distributions</a>.</p></li>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Use the same file from the previous challenge (<a href="../data/sarscov2_cases_deaths.csv">sarscov2_cases_deaths.csv</a>).</p>
 <p>Estimate the delay-adjusted CFR using the appropriate distribution
@@ -1092,8 +1080,7 @@ et al., 2009</a>).</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="an-early-stage-cfr-estimate">An early-stage CFR estimate<a class="anchor" aria-label="anchor" href="#an-early-stage-cfr-estimate"></a>
-<a class="anchor" aria-label="anchor" href="#an-early-stage-cfr-estimate"></a></h2>
+</section><section><h2 class="section-heading" id="an-early-stage-cfr-estimate">An early-stage CFR estimate<a class="anchor" aria-label="anchor" href="#an-early-stage-cfr-estimate"></a></h2>
 <hr class="half-width"><p>On the challenge above, we discovered that the <em>naive</em> and
 <em>delay-adjusted</em> CFR estimates are different.</p>
 <p>The <strong>naive</strong> estimate is useful to get an overall
@@ -1111,8 +1098,7 @@ function.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout3"></a>
-</h3>
+<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p><code>cfr_rolling()</code> is a utility function that automatically
 calculates CFR for each day of the outbreak with the data available up
@@ -1285,8 +1271,7 @@ et al., 2009</a>)</div>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="interpret-the-early-stage-cfr-estimate" class="callout-inner">
-<h3 class="callout-title">Interpret the early-stage CFR estimate<a class="anchor" aria-label="anchor" href="#interpret-the-early-stage-cfr-estimate"></a>
-</h3>
+<h3 class="callout-title">Interpret the early-stage CFR estimate</h3>
 <div class="callout-content">
 <p>Based on the figure above:</p>
 <ul><li>How much difference in days is between the date in which the 95% CI
@@ -1333,8 +1318,7 @@ in this episode’s challenges. We invite you to find it out!</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="checklist" class="callout-inner">
-<h3 class="callout-title">Checklist<a class="anchor" aria-label="anchor" href="#checklist"></a>
-</h3>
+<h3 class="callout-title">Checklist</h3>
 <div class="callout-content">
 <p>With <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>, we estimate the CFR as the proportion of
 deaths among <strong>confirmed</strong> cases.</p>
@@ -1414,15 +1398,13 @@ like the underdiagnosis of infected individuals.</li>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-<a class="anchor" aria-label="anchor" href="#challenges"></a></h2>
+</section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a></h2>
 <hr class="half-width"><div id="aggregated-data-differ-from-linelists" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="aggregated-data-differ-from-linelists" class="callout-inner">
-<h3 class="callout-title">Aggregated data differ from linelists<a class="anchor" aria-label="anchor" href="#aggregated-data-differ-from-linelists"></a>
-</h3>
+<h3 class="callout-title">Aggregated data differ from linelists</h3>
 <div class="callout-content">
 <p><em>Aggregated</em> incidence data differs from
 <strong>linelist</strong> data, where each observation contains
@@ -1459,8 +1441,7 @@ individual-level data.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="use-incidence2-to-rearrange-your-data" class="callout-inner">
-<h3 class="callout-title">Use incidence2 to rearrange your data<a class="anchor" aria-label="anchor" href="#use-incidence2-to-rearrange-your-data"></a>
-</h3>
+<h3 class="callout-title">Use incidence2 to rearrange your data</h3>
 <div class="callout-content">
 <p>From the <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package, load the MERS linelist of
 cases from the <code>mers_korea_2015</code> object.</p>
@@ -1655,8 +1636,7 @@ data from <code>{incidence2}</code></a> on how to use the
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="severity-heterogeneity" class="callout-inner">
-<h3 class="callout-title">Severity heterogeneity<a class="anchor" aria-label="anchor" href="#severity-heterogeneity"></a>
-</h3>
+<h3 class="callout-title">Severity heterogeneity</h3>
 <div class="callout-content">
 <p>The CFR may differ across populations (e.g. age, space, treatment);
 quantifying these heterogeneities can help target resources
@@ -1774,8 +1754,7 @@ the proportion of cases that are ascertained during an outbreak</a>!</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
-<a class="anchor" aria-label="anchor" href="#appendix"></a></h2>
+</section><section><h2 class="section-heading" id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a></h2>
 <hr class="half-width"><p>The <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> package has a function called
 <code>cfr_time_varying()</code> with functionality that differs from
 <code>cfr_rolling()</code>.</p>
@@ -1784,8 +1763,7 @@ the proportion of cases that are ascertained during an outbreak</a>!</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="when-to-use-cfr_rolling" class="callout-inner">
-<h3 class="callout-title">When to use cfr_rolling()?<a class="anchor" aria-label="anchor" href="#when-to-use-cfr_rolling"></a>
-</h3>
+<h3 class="callout-title">When to use cfr_rolling()?</h3>
 <div class="callout-content">
 <p><strong>cfr_rolling()</strong> shows the estimated CFR on each
 outbreak day, given that future data on cases and deaths is unavailable
@@ -1803,8 +1781,7 @@ length or size of the epidemic.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="when-to-use-cfr_time_varying" class="callout-inner">
-<h3 class="callout-title">When to use cfr_time_varying()?<a class="anchor" aria-label="anchor" href="#when-to-use-cfr_time_varying"></a>
-</h3>
+<h3 class="callout-title">When to use cfr_time_varying()?</h3>
 <div class="callout-content">
 <p>On the other hand, <strong>cfr_time_varying()</strong> calculates the
 CFR over a moving window and helps to understand changes in CFR due to
@@ -1831,8 +1808,7 @@ about the <code>cfr_time_varying()</code> function</a>.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="more-severity-measures" class="callout-inner">
-<h3 class="callout-title">More severity measures<a class="anchor" aria-label="anchor" href="#more-severity-measures"></a>
-</h3>
+<h3 class="callout-title">More severity measures</h3>
 <div class="callout-content">
 <p>Suppose we need to assess the clinical severity of the epidemic in a
 context different from surveillance data, like the severity among cases
@@ -1900,8 +1876,7 @@ laboratory-confirmed cases of active screenings.</div>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Discussion<a class="anchor" aria-label="anchor" href="#discussion5"></a>
-</h3>
+<h3 class="callout-title">Discussion</h3>
 <div class="callout-content">
 <p>Based on your experience:</p>
 <ul><li>Share any previous outbreak in which you participated in its
@@ -1919,8 +1894,7 @@ response.</li>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul><li><p>Use <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> to estimate severity</p></li>
 <li><p>Use <code>cfr_static()</code> to estimate the overall CFR with
@@ -1972,7 +1946,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.6)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1995,7 +1969,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/severity-static.html",
   "dateCreated": "2024-07-11",
   "dateModified": "2024-07-02",
-  "datePublished": "2024-08-27"
+  "datePublished": "2024-09-03"
 }
 
   </script><script>

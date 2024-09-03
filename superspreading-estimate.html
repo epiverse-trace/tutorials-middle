@@ -394,8 +394,7 @@ dispersion parameter) of the offspring distribution using
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>Learners should familiarise themselves with following concept
 dependencies before working through this tutorial:</p>
@@ -405,8 +404,7 @@ particularly Poisson and negative binomial.</p>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
+<section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a></h2>
 <hr class="half-width"><!-- we know --><p>From smallpox to severe acute respiratory syndrome coronavirus 2
 (SARS-CoV-2), some infected individuals spread infection to more people
 than others. Disease transmission is the result of a combination of
@@ -478,8 +476,7 @@ functions from these packages, so let’s also call the
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -491,8 +488,7 @@ conflicts.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="the-individual-reprodution-number">The individual reprodution number<a class="anchor" aria-label="anchor" href="#the-individual-reprodution-number"></a>
-<a class="anchor" aria-label="anchor" href="#the-individual-reprodution-number"></a></h2>
+</section><section><h2 class="section-heading" id="the-individual-reprodution-number">The individual reprodution number<a class="anchor" aria-label="anchor" href="#the-individual-reprodution-number"></a></h2>
 <hr class="half-width"><p>The individual reproduction number is defined as the number of
 secondary cases caused by a particular infected individual.</p>
 <p>Early in an outbreak we can use contact data to reconstruct
@@ -531,7 +527,7 @@ South Korea (<a href="https://community.appliedepi.org/t/estimating-the-degree-o
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Is contact data tidy? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Contact data from a transmission chain can provide information on
 which infected individuals came into contact with others. We expect to
@@ -655,8 +651,7 @@ quantify and analyse (<a href="https://www.nature.com/articles/nature04153" clas
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="terminology-recap" class="callout-inner">
-<h3 class="callout-title">Terminology recap<a class="anchor" aria-label="anchor" href="#terminology-recap"></a>
-</h3>
+<h3 class="callout-title">Terminology recap</h3>
 <div class="callout-content">
 <ul><li>From linelist and contact data, we calculate the <strong>number of
 secondary cases</strong> caused by the observed infected
@@ -679,7 +674,7 @@ infected individual.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson, overdispersion, and Negative Binomial </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <!-- distribution stories -->
 <p>For occurrences of associated discrete events we can use
@@ -711,8 +706,7 @@ and environmental circumstances (e.g. type and location of contact).</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Calculate the distribution of secondary cases for Ebola using the
 <code>ebola_sim_clean</code> object from <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a>
@@ -726,7 +720,7 @@ package.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p><strong>Note:</strong> This dataset has 5829 cases. Running
 <code>epicontacts::vis_epicontacts()</code> may overload your
@@ -740,7 +734,7 @@ session!</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -789,8 +783,7 @@ overdispersion.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="estimate-the-dispersion-parameter">Estimate the dispersion parameter<a class="anchor" aria-label="anchor" href="#estimate-the-dispersion-parameter"></a>
-<a class="anchor" aria-label="anchor" href="#estimate-the-dispersion-parameter"></a></h2>
+</section><section><h2 class="section-heading" id="estimate-the-dispersion-parameter">Estimate the dispersion parameter<a class="anchor" aria-label="anchor" href="#estimate-the-dispersion-parameter"></a></h2>
 <hr class="half-width"><p>To empirically estimate the dispersion parameter <span class="math inline">\(k\)</span>, we could fit a negative binomial
 distribution to the number of secondary cases.</p>
 <p>We can fit distributions to data using the
@@ -827,8 +820,7 @@ mu   0.60452947 0.337893199</code></pre>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="name-of-parameters" class="callout-inner">
-<h3 class="callout-title">Name of parameters<a class="anchor" aria-label="anchor" href="#name-of-parameters"></a>
-</h3>
+<h3 class="callout-title">Name of parameters</h3>
 <div class="callout-content">
 <p>From the <a href="https://lbbe-software.github.io/fitdistrplus/" class="external-link">fitdistrplus</a> output:</p>
 <ul><li>The <code>size</code> object refers to the estimated dispersion
@@ -852,8 +844,7 @@ cases:</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="individual-level-variation-in-transmission" class="callout-inner">
-<h3 class="callout-title">Individual-level variation in transmission<a class="anchor" aria-label="anchor" href="#individual-level-variation-in-transmission"></a>
-</h3>
+<h3 class="callout-title">Individual-level variation in transmission</h3>
 <div class="callout-content">
 <p>The individual-level variation in transmission is defined by the
 relationship between the mean (<span class="math inline">\(R_{0}\)</span>), dispersion (<span class="math inline">\(k\)</span>), and the variance of a negative
@@ -877,8 +868,7 @@ model.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Use the distribution of secondary cases from the
 <code>ebola_sim_clean</code> object from <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a>
@@ -895,7 +885,7 @@ an individual-level variation in transmission?</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>Review how we fitted a negative binomial distribution using the
 <code>fitdistrplus::fitdist()</code> function.</p>
@@ -908,7 +898,7 @@ an individual-level variation in transmission?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -965,7 +955,7 @@ challenge: How do you define an SSE threshold for Ebola?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Select the best model </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>We can use the maximum likelihood estimates from
 <a href="https://lbbe-software.github.io/fitdistrplus/" class="external-link">fitdistrplus</a> to compare different models and assess fit
@@ -983,8 +973,7 @@ this!</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-dispersion-parameter-across-diseases" class="callout-inner">
-<h3 class="callout-title">The dispersion parameter across diseases<a class="anchor" aria-label="anchor" href="#the-dispersion-parameter-across-diseases"></a>
-</h3>
+<h3 class="callout-title">The dispersion parameter across diseases</h3>
 <div class="callout-content">
 <p>Research into sexually transmitted and vector-borne diseases has
 previously suggested a ‘20/80’ rule, with 20% of individuals
@@ -1016,8 +1005,7 @@ threshold for SSEs. (More figure details in <a href="https://www.nature.com/arti
 </figure></div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="controlling-superspreading-with-contact-tracing">Controlling superspreading with contact tracing<a class="anchor" aria-label="anchor" href="#controlling-superspreading-with-contact-tracing"></a>
-<a class="anchor" aria-label="anchor" href="#controlling-superspreading-with-contact-tracing"></a></h2>
+</section><section><h2 class="section-heading" id="controlling-superspreading-with-contact-tracing">Controlling superspreading with contact tracing<a class="anchor" aria-label="anchor" href="#controlling-superspreading-with-contact-tracing"></a></h2>
 <hr class="half-width"><p>During an outbreak, it is common to try and reduce transmission by
 identifying people who have come into contact with an infected person,
 then quarantine them in case they subsequently turn out to be infected.
@@ -1057,8 +1045,7 @@ tracing lead to 42% more cases identified than forward tracing
 supporting its implementation when rigorous suppression of transmission
 is justified (<a href="https://www.nature.com/articles/s41467-022-32531-6" class="external-link">Raymenants et
 al., 2022</a>)</p>
-</section><section><h2 class="section-heading" id="probability-of-cases-in-a-given-cluster">Probability of cases in a given cluster<a class="anchor" aria-label="anchor" href="#probability-of-cases-in-a-given-cluster"></a>
-<a class="anchor" aria-label="anchor" href="#probability-of-cases-in-a-given-cluster"></a></h2>
+</section><section><h2 class="section-heading" id="probability-of-cases-in-a-given-cluster">Probability of cases in a given cluster<a class="anchor" aria-label="anchor" href="#probability-of-cases-in-a-given-cluster"></a></h2>
 <hr class="half-width"><p>Using <code>{superspreading}</code>, we can estimate the probability
 of having a cluster of secondary infections caused by a primary case
 identified by backward tracing of size <span class="math inline">\(X\)</span> or larger (<a href="https://wellcomeopenresearch.org/articles/5-239/v3" class="external-link">Endo et al.,
@@ -1105,8 +1092,7 @@ reduce the probability of having clusters of secondary cases.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="backward-contact-tracing-for-ebola" class="callout-inner">
-<h3 class="callout-title">Backward contact tracing for Ebola<a class="anchor" aria-label="anchor" href="#backward-contact-tracing-for-ebola"></a>
-</h3>
+<h3 class="callout-title">Backward contact tracing for Ebola</h3>
 <div class="callout-content">
 <p>Use the Ebola estimated parameters for <code>ebola_sim_clean</code>
 object from <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package.</p>
@@ -1124,7 +1110,7 @@ onward cases?</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>Review how we estimated the probability of having clusters of a fixed
 size, given an offspring distribution mean and dispersion parameters,
@@ -1139,7 +1125,7 @@ function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1170,15 +1156,13 @@ cases.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-<a class="anchor" aria-label="anchor" href="#challenges"></a></h2>
+</section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a></h2>
 <hr class="half-width"><div id="does-ebola-have-any-superspreading-event" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="does-ebola-have-any-superspreading-event" class="callout-inner">
-<h3 class="callout-title">Does Ebola have any superspreading event?<a class="anchor" aria-label="anchor" href="#does-ebola-have-any-superspreading-event"></a>
-</h3>
+<h3 class="callout-title">Does Ebola have any superspreading event?</h3>
 <div class="callout-content">
 <p>‘Superspreading events’ can mean different things to different
 people, so <a href="https://www.nature.com/articles/nature04153" class="external-link">Lloyd-Smith et al.,
@@ -1202,7 +1186,7 @@ for the <code>ebola_sim_clean</code> object from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>In a Poisson distribution, the <strong>lambda</strong> or
 <strong>rate</strong> parameter are equal to the estimated
@@ -1218,7 +1202,7 @@ zoo</a> shiny app.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <p>To get the quantile value for the 99th-percentile we need to use the
 <a href="https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc" class="external-link">density
@@ -1263,8 +1247,7 @@ and is off-scale for monkeypox.</div>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="expected-proportion-of-transmission" class="callout-inner">
-<h3 class="callout-title">Expected proportion of transmission<a class="anchor" aria-label="anchor" href="#expected-proportion-of-transmission"></a>
-</h3>
+<h3 class="callout-title">Expected proportion of transmission</h3>
 <div class="callout-content">
 <p>What is the proportion of cases responsible for 80% of
 transmission?</p>
@@ -1281,7 +1264,7 @@ the <code>{epiparameter}</code> R package.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5"> Give me a hint </h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
 <div class="accordion-body">
 <p>To use <code>superspreading::proportion_transmission()</code> we
 recommend to read the <a href="https://epiverse-trace.github.io/superspreading/reference/proportion_transmission.html" class="external-link">Estimate
@@ -1319,7 +1302,7 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1417,8 +1400,7 @@ with high dispersion parameters.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="inverse-dispersion" class="callout-inner">
-<h3 class="callout-title">inverse-dispersion?<a class="anchor" aria-label="anchor" href="#inverse-dispersion"></a>
-</h3>
+<h3 class="callout-title">inverse-dispersion?</h3>
 <div class="callout-content">
 <p>The dispersion parameter <span class="math inline">\(k\)</span> can
 be expressed differently across the literature.</p>
@@ -1437,8 +1419,7 @@ this!</li>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="heterogeneity" class="callout-inner">
-<h3 class="callout-title">heterogeneity?<a class="anchor" aria-label="anchor" href="#heterogeneity"></a>
-</h3>
+<h3 class="callout-title">heterogeneity?</h3>
 <div class="callout-content">
 <p>The individual-level variation in transmission is also referred as
 the heterogeneity in the transmission or degree of heterogeneity in <a href="https://wellcomeopenresearch.org/articles/5-83" class="external-link">Lloyd-Smith et
@@ -1456,8 +1437,7 @@ et al., 2018</a>).</p>
 <i class="callout-icon" data-feather="heart"></i>
 </div>
 <div id="read-these-blog-posts" class="callout-inner">
-<h3 class="callout-title">Read these blog posts<a class="anchor" aria-label="anchor" href="#read-these-blog-posts"></a>
-</h3>
+<h3 class="callout-title">Read these blog posts</h3>
 <div class="callout-content">
 <p>The <a href="https://plus.maths.org/content/monkeypox" class="external-link">Tracing
 monkeypox</a> article from the <a href="https://maths.org/juniper/" class="external-link">JUNIPER</a> consortium showcases the
@@ -1474,8 +1454,7 @@ contagion online.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul><li>Use <a href="https://www.repidemicsconsortium.org/epicontacts/" class="external-link">epicontacts</a> to calculate the number of secondary
 cases cause by a particular individual from linelist and contact
@@ -1529,7 +1508,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.6)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1552,7 +1531,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/superspreading-estimate.html",
   "dateCreated": "2024-07-11",
   "dateModified": "2024-07-02",
-  "datePublished": "2024-08-27"
+  "datePublished": "2024-09-03"
 }
 
   </script><script>

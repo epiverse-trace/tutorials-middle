@@ -426,8 +426,7 @@ distributions.</li>
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>This episode requires you to be familiar with:</p>
 <p><strong>Data science</strong> : Basic programming with R.</p>
@@ -438,7 +437,6 @@ and serial interval.</p>
 </div>
 </div>
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
 <p>Infectious diseases follow an infection cycle, which usually includes
@@ -454,8 +452,7 @@ et al, 2021</a>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="definitions" class="callout-inner">
-<h3 class="callout-title">Definitions<a class="anchor" aria-label="anchor" href="#definitions"></a>
-</h3>
+<h3 class="callout-title">Definitions</h3>
 <div class="callout-content">
 <p>Look at the <a href="reference.html">glossary</a> for the definitions
 of all the time periods of the figure above!</p>
@@ -493,8 +490,7 @@ also call to the <a href="https://tidyverse.tidyverse.org" class="external-link"
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -507,7 +503,6 @@ conflicts.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="the-problem">The problem<a class="anchor" aria-label="anchor" href="#the-problem"></a>
-<a class="anchor" aria-label="anchor" href="#the-problem"></a>
 </h2>
 <hr class="half-width">
 <p>If we want to estimate the transmissibility of an infection, it’s
@@ -587,7 +582,6 @@ Parameters:
 at the <code>serial</code> intervals for <code>COVID</code>-19. Let find
 what we need to consider for this!</p>
 </section><section><h2 class="section-heading" id="generation-time-vs-serial-interval">Generation time vs serial interval<a class="anchor" aria-label="anchor" href="#generation-time-vs-serial-interval"></a>
-<a class="anchor" aria-label="anchor" href="#generation-time-vs-serial-interval"></a>
 </h2>
 <hr class="half-width">
 <p>The generation time, jointly with the reproduction number (<span class="math inline">\(R\)</span>), provide valuable insights on the
@@ -622,8 +616,7 @@ et al., 2020</a>).</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="from-time-periods-to-probability-distributions." class="callout-inner">
-<h3 class="callout-title">From time periods to probability distributions.<a class="anchor" aria-label="anchor" href="#from-time-periods-to-probability-distributions."></a>
-</h3>
+<h3 class="callout-title">From time periods to probability distributions.</h3>
 <div class="callout-content">
 <p>When we calculate the <em>serial interval</em>, we see that not all
 case pairs have the same time length. We will observe this variability
@@ -727,8 +720,7 @@ et al., 2022</a>).</caption>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="serial-interval" class="callout-inner">
-<h3 class="callout-title">Serial interval<a class="anchor" aria-label="anchor" href="#serial-interval"></a>
-</h3>
+<h3 class="callout-title">Serial interval</h3>
 <div class="callout-content">
 <p>Assume that COVID-19 and SARS have similar reproduction number values
 and that the serial interval approximates the generation time.</p>
@@ -778,7 +770,6 @@ in less time than SARS, assuming similar reproduction numbers.</p>
 </div>
 
 </section><section><h2 class="section-heading" id="choosing-epidemiological-parameters">Choosing epidemiological parameters<a class="anchor" aria-label="anchor" href="#choosing-epidemiological-parameters"></a>
-<a class="anchor" aria-label="anchor" href="#choosing-epidemiological-parameters"></a>
 </h2>
 <hr class="half-width">
 <p>In this section, we will use <code>{epiparameter}</code> to obtain
@@ -815,8 +806,7 @@ This output is an <code>&lt;epidist&gt;</code> class object.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="case-insensitive" class="callout-inner">
-<h3 class="callout-title">CASE-INSENSITIVE<a class="anchor" aria-label="anchor" href="#case-insensitive"></a>
-</h3>
+<h3 class="callout-title">CASE-INSENSITIVE</h3>
 <div class="callout-content">
 <p><code>epidist_db</code> is <a href="https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity" class="external-link">case-insensitive</a>.
 This means that you can use strings with letters in upper or lower case
@@ -925,8 +915,7 @@ with it provided by an <code>inference_method</code> as shown in
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="find-your-delay-distributions" class="callout-inner">
-<h3 class="callout-title">Find your delay distributions!<a class="anchor" aria-label="anchor" href="#find-your-delay-distributions"></a>
-</h3>
+<h3 class="callout-title">Find your delay distributions!</h3>
 <div class="callout-content">
 <p>Take 2 minutes to explore the <code>{epiparameter}</code>
 library.</p>
@@ -1126,7 +1115,6 @@ Collation and Synthesis Protocol”</a>!</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="select-a-single-distribution">Select a single distribution<a class="anchor" aria-label="anchor" href="#select-a-single-distribution"></a>
-<a class="anchor" aria-label="anchor" href="#select-a-single-distribution"></a>
 </h2>
 <hr class="half-width">
 <p>The <code>epiparameter::epidist_db()</code> function works as a
@@ -1203,8 +1191,7 @@ Parameters:
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="how-does-single_epidist-works" class="callout-inner">
-<h3 class="callout-title">How does ‘single_epidist’ works?<a class="anchor" aria-label="anchor" href="#how-does-single_epidist-works"></a>
-</h3>
+<h3 class="callout-title">How does ‘single_epidist’ works?</h3>
 <div class="callout-content">
 <p>Looking at the help documentation for
 <code>?epiparameter::epidist_db()</code>:</p>
@@ -1288,7 +1275,6 @@ like:</p>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">covid_serialint</span>, xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 </section><section><h2 class="section-heading" id="extract-the-summary-statistics">Extract the summary statistics<a class="anchor" aria-label="anchor" href="#extract-the-summary-statistics"></a>
-<a class="anchor" aria-label="anchor" href="#extract-the-summary-statistics"></a>
 </h2>
 <hr class="half-width">
 <p>We can get the <code>mean</code> and standard deviation
@@ -1331,8 +1317,7 @@ use <strong>distribution functions</strong> to get a maximum value
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="log-normal-distributions" class="callout-inner">
-<h3 class="callout-title">Log normal distributions<a class="anchor" aria-label="anchor" href="#log-normal-distributions"></a>
-</h3>
+<h3 class="callout-title">Log normal distributions</h3>
 <div class="callout-content">
 <p>If you need the log normal <strong>distribution parameters</strong>
 instead of the summary statistics, we can use
@@ -1358,7 +1343,6 @@ as input for any other package!</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-<a class="anchor" aria-label="anchor" href="#challenges"></a>
 </h2>
 <hr class="half-width">
 <div id="ebolas-serial-interval" class="callout challenge">
@@ -1366,8 +1350,7 @@ as input for any other package!</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="ebolas-serial-interval" class="callout-inner">
-<h3 class="callout-title">Ebola’s serial interval<a class="anchor" aria-label="anchor" href="#ebolas-serial-interval"></a>
-</h3>
+<h3 class="callout-title">Ebola’s serial interval</h3>
 <div class="callout-content">
 <p>Take 1 minute to:</p>
 <p>Get access to the Ebola serial interval with the highest sample
@@ -1504,8 +1487,7 @@ Parameters:
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="ebolas-severity-parameter" class="callout-inner">
-<h3 class="callout-title">Ebola’s severity parameter<a class="anchor" aria-label="anchor" href="#ebolas-severity-parameter"></a>
-</h3>
+<h3 class="callout-title">Ebola’s severity parameter</h3>
 <div class="callout-content">
 <p>A severity parameter like the duration of hospitalisation could add
 to the information needed about the bed capacity in response to an
@@ -1643,8 +1625,7 @@ summary statistic:</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="the-distribution-zoo" class="callout-inner">
-<h3 class="callout-title">The distribution zoo<a class="anchor" aria-label="anchor" href="#the-distribution-zoo"></a>
-</h3>
+<h3 class="callout-title">The distribution zoo</h3>
 <div class="callout-content">
 <p>Explore this shinyapp called <strong>The Distribution
 Zoo</strong>!</p>
@@ -1686,8 +1667,7 @@ update it from last epiparameter test
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Use <code>{epiparameter}</code> to access the literature catalogue
@@ -1749,8 +1729,7 @@ case data using the R package <code>EpiNow2</code>
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>Learners should familiarise themselves with following concepts before
 working through this tutorial:</p>
@@ -1769,7 +1748,7 @@ and visualize</a> incidence data.</p>
 </div>
 <div id="reminder-the-effective-reproduction-number-r_t" class="callout-inner">
 <h3 class="callout-title">Reminder: the Effective Reproduction Number,
-<span class="math inline">\(R_t\)</span><a class="anchor" aria-label="anchor" href="#reminder-the-effective-reproduction-number-r_t"></a>
+<span class="math inline">\(R_t\)</span>
 </h3>
 <div class="callout-content">
 <p>The <a href="reference.html#basic">basic reproduction number</a>,
@@ -1787,7 +1766,6 @@ by one infectious individual in the population at time <span class="math inline"
 </div>
 </div>
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
 <p>The transmission intensity of an outbreak is quantified using two key
@@ -1829,8 +1807,7 @@ package:</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -1848,8 +1825,7 @@ conflicts.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="bayesian-inference" class="callout-inner">
-<h3 class="callout-title">Bayesian inference<a class="anchor" aria-label="anchor" href="#bayesian-inference"></a>
-</h3>
+<h3 class="callout-title">Bayesian inference</h3>
 <div class="callout-content">
 <p>The R package <code>EpiNow2</code> uses a <a href="reference.html#bayesian">Bayesian inference</a> framework to
 estimate reproduction numbers and infection times based on reporting
@@ -1866,7 +1842,6 @@ likelihood <span class="math inline">\(\times\)</span> prior probability
 </div>
 
 </section><section><h2 class="section-heading" id="delay-distributions-and-case-data">Delay distributions and case data<a class="anchor" aria-label="anchor" href="#delay-distributions-and-case-data"></a>
-<a class="anchor" aria-label="anchor" href="#delay-distributions-and-case-data"></a>
 </h2>
 <hr class="half-width">
 <div class="section level3">
@@ -1995,8 +1970,7 @@ period.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="delays-and-data" class="callout-inner">
-<h3 class="callout-title">Delays and data<a class="anchor" aria-label="anchor" href="#delays-and-data"></a>
-</h3>
+<h3 class="callout-title">Delays and data</h3>
 <div class="callout-content">
 <p>The number of delays and type of delay are a flexible input that
 depend on the data. The examples below highlight how the delays can be
@@ -2068,8 +2042,7 @@ can take, in this example 20 days.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="why-a-gamma-distrubution" class="callout-inner">
-<h3 class="callout-title">Why a gamma distrubution?<a class="anchor" aria-label="anchor" href="#why-a-gamma-distrubution"></a>
-</h3>
+<h3 class="callout-title">Why a gamma distrubution?</h3>
 <div class="callout-content">
 <p>The incubation period has to be positive in value. Therefore we must
 specific a distribution in <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> which is for positive
@@ -2219,8 +2192,7 @@ period and reporting delay:</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout5"></a>
-</h3>
+<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p>If data is available on the time between symptom onset and reporting,
 we can use the function <code>estimate_delay()</code> to estimate a log
@@ -2262,7 +2234,6 @@ et al. 2020</a>).</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="finding-estimates">Finding estimates<a class="anchor" aria-label="anchor" href="#finding-estimates"></a>
-<a class="anchor" aria-label="anchor" href="#finding-estimates"></a>
 </h2>
 <hr class="half-width">
 <p>The function <code>epinow()</code> is a wrapper for the function
@@ -2288,8 +2259,7 @@ of <code>prior</code> within <code>rt_opts()</code>:</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="bayesian-inference-using-stan" class="callout-inner">
-<h3 class="callout-title">Bayesian inference using Stan<a class="anchor" aria-label="anchor" href="#bayesian-inference-using-stan"></a>
-</h3>
+<h3 class="callout-title">Bayesian inference using Stan</h3>
 <div class="callout-content">
 <p>The Bayesian inference is performed using MCMC methods with the
 program <a href="https://mc-stan.org/" class="external-link">Stan</a>. There are a number of
@@ -2316,8 +2286,7 @@ equal number of cores to be used in parallel as follows:</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Checklist<a class="anchor" aria-label="anchor" href="#checklist2"></a>
-</h3>
+<h3 class="callout-title">Checklist</h3>
 <div class="callout-content">
 <p><strong>Note:</strong> In the code below <code>_fixed</code>
 distributions are used instead of <code>_variable</code> (delay
@@ -2393,8 +2362,7 @@ WARN [2024-07-02 01:17:37] epinow: Examine the pairs() plot to diagnose sampling
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="do-not-wait-for-this-to-continue" class="callout-inner">
-<h3 class="callout-title">Do not wait for this to continue<a class="anchor" aria-label="anchor" href="#do-not-wait-for-this-to-continue"></a>
-</h3>
+<h3 class="callout-title">Do not wait for this to continue</h3>
 <div class="callout-content">
 <p>For the purpose of this tutorial, we can optionally use
 <code>EpiNow2::stan_opts()</code> to reduce computation time. We can
@@ -2483,9 +2451,7 @@ data) is 0.88 (0.6 – 1.3).</p></li>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="expected-change-in-daily-cases" class="callout-inner">
-<h3 class="callout-title">
-<code>Expected change in daily cases</code><a class="anchor" aria-label="anchor" href="#expected-change-in-daily-cases"></a>
-</h3>
+<h3 class="callout-title"><code>Expected change in daily cases</code></h3>
 <div class="callout-content">
 <p>A factor describing expected change in daily cases based on the
 posterior probability that <span class="math inline">\(R_t &lt;
@@ -2525,7 +2491,6 @@ posterior probability that <span class="math inline">\(R_t &lt;
 </div>
 </div>
 </section><section><h2 class="section-heading" id="quantify-geographical-heterogeneity">Quantify geographical heterogeneity<a class="anchor" aria-label="anchor" href="#quantify-geographical-heterogeneity"></a>
-<a class="anchor" aria-label="anchor" href="#quantify-geographical-heterogeneity"></a>
 </h2>
 <hr class="half-width">
 <p>The outbreak data of the start of the COVID-19 pandemic from the
@@ -2699,7 +2664,6 @@ INFO [2024-07-02 02:15:30] No target directory specified so returning timings</c
 <code class="sourceCode R"><span><span class="va">estimates_regional</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">R</span></span></code></pre>
 </div>
 <figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><!-- :::::::::::::::::::::::::: testimonial --><!-- ### the i2extras package --><!-- `{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette. --><!-- :::::::::::::::::::::::::: --></section><section><h2 class="section-heading" id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
-<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
 <hr class="half-width">
 <p><code>EpiNow2</code> can be used to estimate transmission metrics
@@ -2713,8 +2677,7 @@ available in <code>EpiNow2</code>.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Transmission metrics can be estimated from case data after
@@ -2772,8 +2735,7 @@ stored as <code>&lt;epidist&gt;</code> objects.</li>
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <ul>
 <li>Complete tutorial <a href="https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html" class="external-link">Quantifying
@@ -2789,7 +2751,6 @@ periods, Effective reproductive number.</p>
 </div>
 </div>
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
 <!-- to activate for EpiNow2@dist-interfase
@@ -2855,8 +2816,7 @@ call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidy
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -2869,7 +2829,6 @@ conflicts.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="distribution-functions">Distribution functions<a class="anchor" aria-label="anchor" href="#distribution-functions"></a>
-<a class="anchor" aria-label="anchor" href="#distribution-functions"></a>
 </h2>
 <hr class="half-width">
 <p>In R, all the statistical distributions have functions to access the
@@ -2893,8 +2852,7 @@ given distribution.</li>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="functions-for-the-normal-distribution" class="callout-inner">
-<h3 class="callout-title">Functions for the Normal distribution<a class="anchor" aria-label="anchor" href="#functions-for-the-normal-distribution"></a>
-</h3>
+<h3 class="callout-title">Functions for the Normal distribution</h3>
 <div class="callout-content">
 <p>If you need it, read in detail about the <a href="https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc" class="external-link">R
 probability functions for the normal distribution</a>, each of its
@@ -2975,8 +2933,7 @@ want!</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="window-for-contact-tracing-and-the-serial-interval" class="callout-inner">
-<h3 class="callout-title">Window for contact tracing and the serial interval<a class="anchor" aria-label="anchor" href="#window-for-contact-tracing-and-the-serial-interval"></a>
-</h3>
+<h3 class="callout-title">Window for contact tracing and the serial interval</h3>
 <div class="callout-content">
 <p>The <strong>serial interval</strong> is important in the optimisation
 of contact tracing since it provides a time window for the containment
@@ -3086,7 +3043,6 @@ after 4.2 days after the symptom onset of primary cases.</li>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="discretise-a-continuous-distribution">Discretise a continuous distribution<a class="anchor" aria-label="anchor" href="#discretise-a-continuous-distribution"></a>
-<a class="anchor" aria-label="anchor" href="#discretise-a-continuous-distribution"></a>
 </h2>
 <hr class="half-width">
 <p>We are getting closer to the end! <code>EpiNow2::LogNormal()</code>
@@ -3159,8 +3115,7 @@ how we access the <code>summary_stats</code> values.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="length-of-quarantine-and-incubation-period" class="callout-inner">
-<h3 class="callout-title">Length of quarantine and incubation period<a class="anchor" aria-label="anchor" href="#length-of-quarantine-and-incubation-period"></a>
-</h3>
+<h3 class="callout-title">Length of quarantine and incubation period</h3>
 <div class="callout-content">
 <p>The <strong>incubation period</strong> distribution is a useful delay
 to assess the length of active monitoring or quarantine (<a href="https://www.acpjournals.org/doi/10.7326/M20-0504" class="external-link">Lauer et al.,
@@ -3309,7 +3264,7 @@ distribution with positive values only!</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="plug-in-epiparameter-to-epinow2">Plug-in <code>{epiparameter}</code> to <code>{EpiNow2}</code><a class="anchor" aria-label="anchor" href="#plug-in-epiparameter-to-epinow2"></a>
+</section><section><h2 class="section-heading" id="plug-in-epiparameter-to-epinow2">Plug-in <code>{epiparameter}</code> to <code>{EpiNow2}</code>
 <a class="anchor" aria-label="anchor" href="#plug-in-epiparameter-to-epinow2"></a>
 </h2>
 <hr class="half-width">
@@ -3400,8 +3355,7 @@ delays.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="warning" class="callout-inner">
-<h3 class="callout-title">Warning<a class="anchor" aria-label="anchor" href="#warning"></a>
-</h3>
+<h3 class="callout-title">Warning</h3>
 <div class="callout-content">
 <p>Using the serial interval instead of the generation time is an
 alternative that can propagate bias in your estimates, even more so in
@@ -3411,7 +3365,6 @@ Lau et al., 2021</a>)</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="adjusting-for-reporting-delays">Adjusting for reporting delays<a class="anchor" aria-label="anchor" href="#adjusting-for-reporting-delays"></a>
-<a class="anchor" aria-label="anchor" href="#adjusting-for-reporting-delays"></a>
 </h2>
 <hr class="half-width">
 <p>Estimating <span class="math inline">\(R_t\)</span> requires data on
@@ -3445,8 +3398,7 @@ et al., 2020</a>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="use-an-incubation-period-for-covid-19-to-estimate-rt" class="callout-inner">
-<h3 class="callout-title">Use an incubation period for COVID-19 to estimate Rt<a class="anchor" aria-label="anchor" href="#use-an-incubation-period-for-covid-19-to-estimate-rt"></a>
-</h3>
+<h3 class="callout-title">Use an incubation period for COVID-19 to estimate Rt</h3>
 <div class="callout-content">
 <p>Estimate the time-varying reproduction number for the first 60 days
 of the <code>example_confirmed</code> data set from
@@ -3585,8 +3537,7 @@ episode.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="how-much-has-it-changed" class="callout-inner">
-<h3 class="callout-title">How much has it changed?<a class="anchor" aria-label="anchor" href="#how-much-has-it-changed"></a>
-</h3>
+<h3 class="callout-title">How much has it changed?</h3>
 <div class="callout-content">
 <p>After adding the incubation period, discuss:</p>
 <ul>
@@ -3601,7 +3552,6 @@ previously.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-<a class="anchor" aria-label="anchor" href="#challenges"></a>
 </h2>
 <hr class="half-width">
 <div id="a-code-completion-tip" class="callout">
@@ -3609,8 +3559,7 @@ previously.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="a-code-completion-tip" class="callout-inner">
-<h3 class="callout-title">A code completion tip<a class="anchor" aria-label="anchor" href="#a-code-completion-tip"></a>
-</h3>
+<h3 class="callout-title">A code completion tip</h3>
 <div class="callout-content">
 <p>If we write the <code>[]</code> next to the object
 <code>covid_serialint_parameters[]</code>, within <code>[]</code> we can
@@ -3628,8 +3577,7 @@ completion feature</a></p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="ebolas-effective-reproduction-number-adjusted-by-reporting-delays" class="callout-inner">
-<h3 class="callout-title">Ebola’s effective reproduction number adjusted by reporting delays<a class="anchor" aria-label="anchor" href="#ebolas-effective-reproduction-number-adjusted-by-reporting-delays"></a>
-</h3>
+<h3 class="callout-title">Ebola’s effective reproduction number adjusted by reporting delays</h3>
 <div class="callout-content">
 <p>Download and read the <a href="data/ebola_cases.csv">Ebola
 dataset</a>:</p>
@@ -3771,8 +3719,7 @@ WARN [2024-07-02 02:24:47] epinow: Examine the pairs() plot to diagnose sampling
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="what-to-do-with-weibull-distributions" class="callout-inner">
-<h3 class="callout-title">What to do with Weibull distributions?<a class="anchor" aria-label="anchor" href="#what-to-do-with-weibull-distributions"></a>
-</h3>
+<h3 class="callout-title">What to do with Weibull distributions?</h3>
 <div class="callout-content">
 <p>Use the <code>influenza_england_1978_school</code> dataset from the
 <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package to calculate the effective reproduction
@@ -3954,7 +3901,6 @@ Parameters:
 </div>
 </div>
 </section><section><h2 class="section-heading" id="next-steps">Next steps<a class="anchor" aria-label="anchor" href="#next-steps"></a>
-<a class="anchor" aria-label="anchor" href="#next-steps"></a>
 </h2>
 <hr class="half-width">
 <div id="how-to-get-distribution-parameters-from-statistical-distributions" class="callout testimonial">
@@ -3962,8 +3908,7 @@ Parameters:
 <i class="callout-icon" data-feather="heart"></i>
 </div>
 <div id="how-to-get-distribution-parameters-from-statistical-distributions" class="callout-inner">
-<h3 class="callout-title">How to get distribution parameters from statistical distributions?<a class="anchor" aria-label="anchor" href="#how-to-get-distribution-parameters-from-statistical-distributions"></a>
-</h3>
+<h3 class="callout-title">How to get distribution parameters from statistical distributions?</h3>
 <div class="callout-content">
 <p>How to get the mean and standard deviation from a generation time
 with <em>only</em> distribution parameters but no summary statistics
@@ -3980,8 +3925,7 @@ cases</a>!</p>
 <i class="callout-icon" data-feather="heart"></i>
 </div>
 <div id="how-to-estimate-delay-distributions-for-disease-x" class="callout-inner">
-<h3 class="callout-title">How to estimate delay distributions for Disease X?<a class="anchor" aria-label="anchor" href="#how-to-estimate-delay-distributions-for-disease-x"></a>
-</h3>
+<h3 class="callout-title">How to estimate delay distributions for Disease X?</h3>
 <div class="callout-content">
 <p>Refer to this excellent tutorial on estimating the serial interval
 and incubation period of Disease X accounting for <em>censoring</em>
@@ -4015,8 +3959,7 @@ update it from last epiparameter test
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Use distribution functions with <code>&lt;epidist&gt;</code> objects
@@ -4077,8 +4020,7 @@ any links that you are not going to use.
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <ul>
 <li>Complete tutorial <a href="quantify-transmissibility.html">Quantifying transmission</a>
@@ -4093,7 +4035,6 @@ Bayesian analysis.</p>
 </div>
 </div>
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
 <p>Given case data of an epidemic, we can create estimates of the
@@ -4124,8 +4065,7 @@ so let’s also call to the <a href="https://tidyverse.tidyverse.org" class="ext
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -4138,7 +4078,6 @@ conflicts.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="create-a-short-term-forecast">Create a short-term forecast<a class="anchor" aria-label="anchor" href="#create-a-short-term-forecast"></a>
-<a class="anchor" aria-label="anchor" href="#create-a-short-term-forecast"></a>
 </h2>
 <hr class="half-width">
 <p>The function <code>epinow()</code> described in the <a href="quantify-transmissibility.html">quantifying transmission</a>
@@ -4232,8 +4171,7 @@ WARN [2024-07-02 02:33:50] epinow: Examine the pairs() plot to diagnose sampling
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="do-not-wait-for-this-to-complete" class="callout-inner">
-<h3 class="callout-title">Do not wait for this to complete!<a class="anchor" aria-label="anchor" href="#do-not-wait-for-this-to-complete"></a>
-</h3>
+<h3 class="callout-title">Do not wait for this to complete!</h3>
 <div class="callout-content">
 <p>This last chunk may take 10 minutes to run. Keep reading this
 tutorial episode while this runs in the background. For more information
@@ -4337,8 +4275,7 @@ Poisson, remove the default week effect and more. See
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="what-are-the-implications-of-this-change" class="callout-inner">
-<h3 class="callout-title">What are the implications of this change?<a class="anchor" aria-label="anchor" href="#what-are-the-implications-of-this-change"></a>
-</h3>
+<h3 class="callout-title">What are the implications of this change?</h3>
 <div class="callout-content">
 <ul>
 <li>Compare different percents of observations %</li>
@@ -4350,7 +4287,6 @@ Poisson, remove the default week effect and more. See
 </div>
 </div>
 </section><section><h2 class="section-heading" id="forecasting-secondary-observations">Forecasting secondary observations<a class="anchor" aria-label="anchor" href="#forecasting-secondary-observations"></a>
-<a class="anchor" aria-label="anchor" href="#forecasting-secondary-observations"></a>
 </h2>
 <hr class="half-width">
 <p><code>EpiNow2</code> also has the ability to estimate and forecast
@@ -4458,8 +4394,7 @@ https://mc-stan.org/misc/warnings.html#tail-ess - </code></pre>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="be-cautious-of-time-scale" class="callout-inner">
-<h3 class="callout-title">Be cautious of time-scale<a class="anchor" aria-label="anchor" href="#be-cautious-of-time-scale"></a>
-</h3>
+<h3 class="callout-title">Be cautious of time-scale</h3>
 <div class="callout-content">
 <p>In the early stages of an outbreak there can be substantial changes
 in testing and reporting. If there are testing changes from one month to
@@ -4553,8 +4488,7 @@ as the <code>estimates</code> output from
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="credible-intervals" class="callout-inner">
-<h3 class="callout-title">Credible intervals<a class="anchor" aria-label="anchor" href="#credible-intervals"></a>
-</h3>
+<h3 class="callout-title">Credible intervals</h3>
 <div class="callout-content">
 <p>In all <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> output figures, shaded regions reflect
 90%, 50%, and 20% credible intervals in order from lightest to
@@ -4563,7 +4497,6 @@ darkest.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="challenge-ebola-outbreak-analysis">Challenge: Ebola outbreak analysis<a class="anchor" aria-label="anchor" href="#challenge-ebola-outbreak-analysis"></a>
-<a class="anchor" aria-label="anchor" href="#challenge-ebola-outbreak-analysis"></a>
 </h2>
 <hr class="half-width">
 <div id="challenge1" class="callout challenge">
@@ -4571,8 +4504,7 @@ darkest.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Download the file <a href="data/ebola_cases.csv">ebola_cases.csv</a>
 and read it into R. The simulated data consists of the date of symptom
@@ -4811,7 +4743,7 @@ is 0.033 (-0.041 – 0.11).</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="forecasting-with-estimates-of-r_t" class="callout-inner">
-<h3 class="callout-title">Forecasting with estimates of <span class="math inline">\(R_t\)</span><a class="anchor" aria-label="anchor" href="#forecasting-with-estimates-of-r_t"></a>
+<h3 class="callout-title">Forecasting with estimates of <span class="math inline">\(R_t\)</span>
 </h3>
 <div class="callout-content">
 <p>By default, the short-term forecasts are created using the latest
@@ -4841,7 +4773,6 @@ here</a>.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
-<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
 <hr class="half-width">
 <p><code>EpiNow2</code> can be used to create short term forecasts and
@@ -4856,8 +4787,7 @@ aren’t covered in these tutorials.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>We can create short-term forecasts by making assumptions about the
@@ -4916,8 +4846,7 @@ using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr<
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>This episode requires you to be familiar with:</p>
 <p><strong>Data science</strong>: Basic programming with R.</p>
@@ -4926,7 +4855,6 @@ using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr<
 </div>
 </div>
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
 <p>Common questions at the early stage of an epidemic include:</p>
@@ -4996,8 +4924,7 @@ so let’s also call to the <a href="https://tidyverse.tidyverse.org" class="ext
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -5010,7 +4937,6 @@ conflicts.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="data-sources-for-clinical-severity">Data sources for clinical severity<a class="anchor" aria-label="anchor" href="#data-sources-for-clinical-severity"></a>
-<a class="anchor" aria-label="anchor" href="#data-sources-for-clinical-severity"></a>
 </h2>
 <hr class="half-width">
 <p>What are data sources can we use to estimate the clinical severity of
@@ -5037,7 +4963,6 @@ possibly <strong>asymptomatic</strong>) cases. These cases might be
 identifiable through contact tracing and subsequently via serological
 testing.</li>
 </ul></section><section><h2 class="section-heading" id="naive-cfr">Naive CFR<a class="anchor" aria-label="anchor" href="#naive-cfr"></a>
-<a class="anchor" aria-label="anchor" href="#naive-cfr"></a>
 </h2>
 <hr class="half-width">
 <p>We measure disease severity in terms of case fatality risk (CFR). The
@@ -5099,8 +5024,7 @@ Camacho et al. (2014).</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="we-need-aggregated-incidence-data" class="callout-inner">
-<h3 class="callout-title">We need aggregated incidence data<a class="anchor" aria-label="anchor" href="#we-need-aggregated-incidence-data"></a>
-</h3>
+<h3 class="callout-title">We need aggregated incidence data</h3>
 <div class="callout-content">
 <p><a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> reads <strong>aggregated</strong> incidence
 data.</p>
@@ -5137,8 +5061,7 @@ directly, we are calculating the naive CFR:</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Download the file <a href="data/sarscov2_cases_deaths.csv">sarscov2_cases_deaths.csv</a> and
 read it into R.</p>
@@ -5233,7 +5156,6 @@ fit the data input for <code>cfr_static()</code>.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="biases-that-affect-cfr-estimation">Biases that affect CFR estimation<a class="anchor" aria-label="anchor" href="#biases-that-affect-cfr-estimation"></a>
-<a class="anchor" aria-label="anchor" href="#biases-that-affect-cfr-estimation"></a>
 </h2>
 <hr class="half-width">
 <div id="two-biases-that-affect-cfr-estimation" class="callout discussion">
@@ -5241,8 +5163,7 @@ fit the data input for <code>cfr_static()</code>.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="two-biases-that-affect-cfr-estimation" class="callout-inner">
-<h3 class="callout-title">Two biases that affect CFR estimation<a class="anchor" aria-label="anchor" href="#two-biases-that-affect-cfr-estimation"></a>
-</h3>
+<h3 class="callout-title">Two biases that affect CFR estimation</h3>
 <div class="callout-content">
 <p><a href="https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846" class="external-link">Lipsitch
 et al., 2015</a> describe two potential biases that can affect the
@@ -5326,7 +5247,6 @@ comparable with that seen in the 1957 pandemic.</p>
 </div>
 
 </section><section><h2 class="section-heading" id="delay-adjusted-cfr">Delay-adjusted CFR<a class="anchor" aria-label="anchor" href="#delay-adjusted-cfr"></a>
-<a class="anchor" aria-label="anchor" href="#delay-adjusted-cfr"></a>
 </h2>
 <hr class="half-width">
 <p><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
@@ -5395,8 +5315,7 @@ between 0.8201 and 0.9866, slightly higher than the naive one.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="use-the-epidist-class" class="callout-inner">
-<h3 class="callout-title">Use the epidist class<a class="anchor" aria-label="anchor" href="#use-the-epidist-class"></a>
-</h3>
+<h3 class="callout-title">Use the epidist class</h3>
 <div class="callout-content">
 <p>When using an <code>&lt;epidist&gt;</code> class object we can use
 this expression as a template:</p>
@@ -5418,8 +5337,7 @@ primer on working with delay distributions</a>.</p></li>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Use the same file from the previous challenge (<a href="data/sarscov2_cases_deaths.csv">sarscov2_cases_deaths.csv</a>).</p>
 <p>Estimate the delay-adjusted CFR using the appropriate distribution
@@ -5611,7 +5529,6 @@ et al., 2009</a>).</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="an-early-stage-cfr-estimate">An early-stage CFR estimate<a class="anchor" aria-label="anchor" href="#an-early-stage-cfr-estimate"></a>
-<a class="anchor" aria-label="anchor" href="#an-early-stage-cfr-estimate"></a>
 </h2>
 <hr class="half-width">
 <p>On the challenge above, we discovered that the <em>naive</em> and
@@ -5631,8 +5548,7 @@ function.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Callout<a class="anchor" aria-label="anchor" href="#callout3"></a>
-</h3>
+<h3 class="callout-title">Callout</h3>
 <div class="callout-content">
 <p><code>cfr_rolling()</code> is a utility function that automatically
 calculates CFR for each day of the outbreak with the data available up
@@ -5806,8 +5722,7 @@ et al., 2009</a>)</div>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="interpret-the-early-stage-cfr-estimate" class="callout-inner">
-<h3 class="callout-title">Interpret the early-stage CFR estimate<a class="anchor" aria-label="anchor" href="#interpret-the-early-stage-cfr-estimate"></a>
-</h3>
+<h3 class="callout-title">Interpret the early-stage CFR estimate</h3>
 <div class="callout-content">
 <p>Based on the figure above:</p>
 <ul>
@@ -5858,8 +5773,7 @@ in this episode’s challenges. We invite you to find it out!</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="checklist" class="callout-inner">
-<h3 class="callout-title">Checklist<a class="anchor" aria-label="anchor" href="#checklist"></a>
-</h3>
+<h3 class="callout-title">Checklist</h3>
 <div class="callout-content">
 <p>With <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>, we estimate the CFR as the proportion of
 deaths among <strong>confirmed</strong> cases.</p>
@@ -5942,7 +5856,6 @@ like the underdiagnosis of infected individuals.</li>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-<a class="anchor" aria-label="anchor" href="#challenges"></a>
 </h2>
 <hr class="half-width">
 <div id="aggregated-data-differ-from-linelists" class="callout">
@@ -5950,8 +5863,7 @@ like the underdiagnosis of infected individuals.</li>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="aggregated-data-differ-from-linelists" class="callout-inner">
-<h3 class="callout-title">Aggregated data differ from linelists<a class="anchor" aria-label="anchor" href="#aggregated-data-differ-from-linelists"></a>
-</h3>
+<h3 class="callout-title">Aggregated data differ from linelists</h3>
 <div class="callout-content">
 <p><em>Aggregated</em> incidence data differs from
 <strong>linelist</strong> data, where each observation contains
@@ -5988,8 +5900,7 @@ individual-level data.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="use-incidence2-to-rearrange-your-data" class="callout-inner">
-<h3 class="callout-title">Use incidence2 to rearrange your data<a class="anchor" aria-label="anchor" href="#use-incidence2-to-rearrange-your-data"></a>
-</h3>
+<h3 class="callout-title">Use incidence2 to rearrange your data</h3>
 <div class="callout-content">
 <p>From the <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package, load the MERS linelist of
 cases from the <code>mers_korea_2015</code> object.</p>
@@ -6184,8 +6095,7 @@ data from <code>{incidence2}</code></a> on how to use the
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="severity-heterogeneity" class="callout-inner">
-<h3 class="callout-title">Severity heterogeneity<a class="anchor" aria-label="anchor" href="#severity-heterogeneity"></a>
-</h3>
+<h3 class="callout-title">Severity heterogeneity</h3>
 <div class="callout-content">
 <p>The CFR may differ across populations (e.g. age, space, treatment);
 quantifying these heterogeneities can help target resources
@@ -6304,7 +6214,6 @@ the proportion of cases that are ascertained during an outbreak</a>!</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
-<a class="anchor" aria-label="anchor" href="#appendix"></a>
 </h2>
 <hr class="half-width">
 <p>The <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> package has a function called
@@ -6315,8 +6224,7 @@ the proportion of cases that are ascertained during an outbreak</a>!</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="when-to-use-cfr_rolling" class="callout-inner">
-<h3 class="callout-title">When to use cfr_rolling()?<a class="anchor" aria-label="anchor" href="#when-to-use-cfr_rolling"></a>
-</h3>
+<h3 class="callout-title">When to use cfr_rolling()?</h3>
 <div class="callout-content">
 <p><strong>cfr_rolling()</strong> shows the estimated CFR on each
 outbreak day, given that future data on cases and deaths is unavailable
@@ -6334,8 +6242,7 @@ length or size of the epidemic.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="when-to-use-cfr_time_varying" class="callout-inner">
-<h3 class="callout-title">When to use cfr_time_varying()?<a class="anchor" aria-label="anchor" href="#when-to-use-cfr_time_varying"></a>
-</h3>
+<h3 class="callout-title">When to use cfr_time_varying()?</h3>
 <div class="callout-content">
 <p>On the other hand, <strong>cfr_time_varying()</strong> calculates the
 CFR over a moving window and helps to understand changes in CFR due to
@@ -6362,8 +6269,7 @@ about the <code>cfr_time_varying()</code> function</a>.</p>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="more-severity-measures" class="callout-inner">
-<h3 class="callout-title">More severity measures<a class="anchor" aria-label="anchor" href="#more-severity-measures"></a>
-</h3>
+<h3 class="callout-title">More severity measures</h3>
 <div class="callout-content">
 <p>Suppose we need to assess the clinical severity of the epidemic in a
 context different from surveillance data, like the severity among cases
@@ -6440,8 +6346,7 @@ laboratory-confirmed cases of active screenings.</div>
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Discussion<a class="anchor" aria-label="anchor" href="#discussion5"></a>
-</h3>
+<h3 class="callout-title">Discussion</h3>
 <div class="callout-content">
 <p>Based on your experience:</p>
 <ul>
@@ -6463,8 +6368,7 @@ response.</li>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li><p>Use <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> to estimate severity</p></li>
@@ -6530,8 +6434,7 @@ dispersion parameter) of the offspring distribution using
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>Learners should familiarise themselves with following concept
 dependencies before working through this tutorial:</p>
@@ -6542,7 +6445,6 @@ particularly Poisson and negative binomial.</p>
 </div>
 </div>
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
 <!-- we know --><p>From smallpox to severe acute respiratory syndrome coronavirus 2
@@ -6616,8 +6518,7 @@ functions from these packages, so let’s also call the
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -6630,7 +6531,6 @@ conflicts.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="the-individual-reprodution-number">The individual reprodution number<a class="anchor" aria-label="anchor" href="#the-individual-reprodution-number"></a>
-<a class="anchor" aria-label="anchor" href="#the-individual-reprodution-number"></a>
 </h2>
 <hr class="half-width">
 <p>The individual reproduction number is defined as the number of
@@ -6671,7 +6571,7 @@ South Korea (<a href="https://community.appliedepi.org/t/estimating-the-degree-o
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Is contact data tidy? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Contact data from a transmission chain can provide information on
 which infected individuals came into contact with others. We expect to
@@ -6797,8 +6697,7 @@ quantify and analyse (<a href="https://www.nature.com/articles/nature04153" clas
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="terminology-recap" class="callout-inner">
-<h3 class="callout-title">Terminology recap<a class="anchor" aria-label="anchor" href="#terminology-recap"></a>
-</h3>
+<h3 class="callout-title">Terminology recap</h3>
 <div class="callout-content">
 <ul>
 <li>From linelist and contact data, we calculate the <strong>number of
@@ -6823,7 +6722,7 @@ infected individual.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson, overdispersion, and Negative Binomial </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <!-- distribution stories -->
 <p>For occurrences of associated discrete events we can use
@@ -6855,8 +6754,7 @@ and environmental circumstances (e.g. type and location of contact).</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge1"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Calculate the distribution of secondary cases for Ebola using the
 <code>ebola_sim_clean</code> object from <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a>
@@ -6870,7 +6768,7 @@ package.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p><strong>Note:</strong> This dataset has 5829 cases. Running
 <code>epicontacts::vis_epicontacts()</code> may overload your
@@ -6884,7 +6782,7 @@ session!</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -6934,7 +6832,6 @@ overdispersion.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="estimate-the-dispersion-parameter">Estimate the dispersion parameter<a class="anchor" aria-label="anchor" href="#estimate-the-dispersion-parameter"></a>
-<a class="anchor" aria-label="anchor" href="#estimate-the-dispersion-parameter"></a>
 </h2>
 <hr class="half-width">
 <p>To empirically estimate the dispersion parameter <span class="math inline">\(k\)</span>, we could fit a negative binomial
@@ -6973,8 +6870,7 @@ mu   0.60452947 0.337893199</code></pre>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="name-of-parameters" class="callout-inner">
-<h3 class="callout-title">Name of parameters<a class="anchor" aria-label="anchor" href="#name-of-parameters"></a>
-</h3>
+<h3 class="callout-title">Name of parameters</h3>
 <div class="callout-content">
 <p>From the <a href="https://lbbe-software.github.io/fitdistrplus/" class="external-link">fitdistrplus</a> output:</p>
 <ul>
@@ -7000,8 +6896,7 @@ cases:</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="individual-level-variation-in-transmission" class="callout-inner">
-<h3 class="callout-title">Individual-level variation in transmission<a class="anchor" aria-label="anchor" href="#individual-level-variation-in-transmission"></a>
-</h3>
+<h3 class="callout-title">Individual-level variation in transmission</h3>
 <div class="callout-content">
 <p>The individual-level variation in transmission is defined by the
 relationship between the mean (<span class="math inline">\(R_{0}\)</span>), dispersion (<span class="math inline">\(k\)</span>), and the variance of a negative
@@ -7025,8 +6920,7 @@ model.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Challenge<a class="anchor" aria-label="anchor" href="#challenge2"></a>
-</h3>
+<h3 class="callout-title">Challenge</h3>
 <div class="callout-content">
 <p>Use the distribution of secondary cases from the
 <code>ebola_sim_clean</code> object from <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a>
@@ -7043,7 +6937,7 @@ an individual-level variation in transmission?</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>Review how we fitted a negative binomial distribution using the
 <code>fitdistrplus::fitdist()</code> function.</p>
@@ -7056,7 +6950,7 @@ an individual-level variation in transmission?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7113,7 +7007,7 @@ challenge: How do you define an SSE threshold for Ebola?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Select the best model </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>We can use the maximum likelihood estimates from
 <a href="https://lbbe-software.github.io/fitdistrplus/" class="external-link">fitdistrplus</a> to compare different models and assess fit
@@ -7131,8 +7025,7 @@ this!</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-dispersion-parameter-across-diseases" class="callout-inner">
-<h3 class="callout-title">The dispersion parameter across diseases<a class="anchor" aria-label="anchor" href="#the-dispersion-parameter-across-diseases"></a>
-</h3>
+<h3 class="callout-title">The dispersion parameter across diseases</h3>
 <div class="callout-content">
 <p>Research into sexually transmitted and vector-borne diseases has
 previously suggested a ‘20/80’ rule, with 20% of individuals
@@ -7168,7 +7061,6 @@ threshold for SSEs. (More figure details in <a href="https://www.nature.com/arti
 </div>
 </div>
 </section><section><h2 class="section-heading" id="controlling-superspreading-with-contact-tracing">Controlling superspreading with contact tracing<a class="anchor" aria-label="anchor" href="#controlling-superspreading-with-contact-tracing"></a>
-<a class="anchor" aria-label="anchor" href="#controlling-superspreading-with-contact-tracing"></a>
 </h2>
 <hr class="half-width">
 <p>During an outbreak, it is common to try and reduce transmission by
@@ -7211,7 +7103,6 @@ supporting its implementation when rigorous suppression of transmission
 is justified (<a href="https://www.nature.com/articles/s41467-022-32531-6" class="external-link">Raymenants et
 al., 2022</a>)</p>
 </section><section><h2 class="section-heading" id="probability-of-cases-in-a-given-cluster">Probability of cases in a given cluster<a class="anchor" aria-label="anchor" href="#probability-of-cases-in-a-given-cluster"></a>
-<a class="anchor" aria-label="anchor" href="#probability-of-cases-in-a-given-cluster"></a>
 </h2>
 <hr class="half-width">
 <p>Using <code>{superspreading}</code>, we can estimate the probability
@@ -7260,8 +7151,7 @@ reduce the probability of having clusters of secondary cases.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="backward-contact-tracing-for-ebola" class="callout-inner">
-<h3 class="callout-title">Backward contact tracing for Ebola<a class="anchor" aria-label="anchor" href="#backward-contact-tracing-for-ebola"></a>
-</h3>
+<h3 class="callout-title">Backward contact tracing for Ebola</h3>
 <div class="callout-content">
 <p>Use the Ebola estimated parameters for <code>ebola_sim_clean</code>
 object from <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package.</p>
@@ -7279,7 +7169,7 @@ onward cases?</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>Review how we estimated the probability of having clusters of a fixed
 size, given an offspring distribution mean and dispersion parameters,
@@ -7294,7 +7184,7 @@ function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7326,7 +7216,6 @@ cases.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-<a class="anchor" aria-label="anchor" href="#challenges"></a>
 </h2>
 <hr class="half-width">
 <div id="does-ebola-have-any-superspreading-event" class="callout challenge">
@@ -7334,8 +7223,7 @@ cases.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="does-ebola-have-any-superspreading-event" class="callout-inner">
-<h3 class="callout-title">Does Ebola have any superspreading event?<a class="anchor" aria-label="anchor" href="#does-ebola-have-any-superspreading-event"></a>
-</h3>
+<h3 class="callout-title">Does Ebola have any superspreading event?</h3>
 <div class="callout-content">
 <p>‘Superspreading events’ can mean different things to different
 people, so <a href="https://www.nature.com/articles/nature04153" class="external-link">Lloyd-Smith et al.,
@@ -7361,7 +7249,7 @@ for the <code>ebola_sim_clean</code> object from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>In a Poisson distribution, the <strong>lambda</strong> or
 <strong>rate</strong> parameter are equal to the estimated
@@ -7377,7 +7265,7 @@ zoo</a> shiny app.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <p>To get the quantile value for the 99th-percentile we need to use the
 <a href="https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc" class="external-link">density
@@ -7423,8 +7311,7 @@ and is off-scale for monkeypox.</div>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="expected-proportion-of-transmission" class="callout-inner">
-<h3 class="callout-title">Expected proportion of transmission<a class="anchor" aria-label="anchor" href="#expected-proportion-of-transmission"></a>
-</h3>
+<h3 class="callout-title">Expected proportion of transmission</h3>
 <div class="callout-content">
 <p>What is the proportion of cases responsible for 80% of
 transmission?</p>
@@ -7441,7 +7328,7 @@ the <code>{epiparameter}</code> R package.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5"> Give me a hint </h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
 <div class="accordion-body">
 <p>To use <code>superspreading::proportion_transmission()</code> we
 recommend to read the <a href="https://epiverse-trace.github.io/superspreading/reference/proportion_transmission.html" class="external-link">Estimate
@@ -7479,7 +7366,7 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7577,8 +7464,7 @@ with high dispersion parameters.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="inverse-dispersion" class="callout-inner">
-<h3 class="callout-title">inverse-dispersion?<a class="anchor" aria-label="anchor" href="#inverse-dispersion"></a>
-</h3>
+<h3 class="callout-title">inverse-dispersion?</h3>
 <div class="callout-content">
 <p>The dispersion parameter <span class="math inline">\(k\)</span> can
 be expressed differently across the literature.</p>
@@ -7599,8 +7485,7 @@ this!</li>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="heterogeneity" class="callout-inner">
-<h3 class="callout-title">heterogeneity?<a class="anchor" aria-label="anchor" href="#heterogeneity"></a>
-</h3>
+<h3 class="callout-title">heterogeneity?</h3>
 <div class="callout-content">
 <p>The individual-level variation in transmission is also referred as
 the heterogeneity in the transmission or degree of heterogeneity in <a href="https://wellcomeopenresearch.org/articles/5-83" class="external-link">Lloyd-Smith et
@@ -7618,8 +7503,7 @@ et al., 2018</a>).</p>
 <i class="callout-icon" data-feather="heart"></i>
 </div>
 <div id="read-these-blog-posts" class="callout-inner">
-<h3 class="callout-title">Read these blog posts<a class="anchor" aria-label="anchor" href="#read-these-blog-posts"></a>
-</h3>
+<h3 class="callout-title">Read these blog posts</h3>
 <div class="callout-content">
 <p>The <a href="https://plus.maths.org/content/monkeypox" class="external-link">Tracing
 monkeypox</a> article from the <a href="https://maths.org/juniper/" class="external-link">JUNIPER</a> consortium showcases the
@@ -7636,8 +7520,7 @@ contagion online.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Use <a href="https://www.repidemicsconsortium.org/epicontacts/" class="external-link">epicontacts</a> to calculate the number of secondary
@@ -7697,8 +7580,7 @@ characteristics?</li>
 <i class="callout-icon" data-feather="check"></i>
 </div>
 <div id="prerequisites" class="callout-inner">
-<h3 class="callout-title">Prerequisites<a class="anchor" aria-label="anchor" href="#prerequisites"></a>
-</h3>
+<h3 class="callout-title">Prerequisites</h3>
 <div class="callout-content">
 <p>Learners should familiarise themselves with the following concept
 dependencies before working through this tutorial:</p>
@@ -7709,7 +7591,6 @@ including Poisson and negative binomial.</p>
 </div>
 </div>
 <section><h2 class="section-heading" id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
-<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <hr class="half-width">
 <!-- what we know --><p>Individual variation in transmission can affect both the potential
@@ -7758,8 +7639,7 @@ package:</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="the-double-colon" class="callout-inner">
-<h3 class="callout-title">The double-colon<a class="anchor" aria-label="anchor" href="#the-double-colon"></a>
-</h3>
+<h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
 <p>The double-colon <code>::</code> in R let you call a specific
 function from a package without loading the entire package into the
@@ -7772,7 +7652,6 @@ conflicts.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="simulation-of-uncontrolled-outbreaks">Simulation of uncontrolled outbreaks<a class="anchor" aria-label="anchor" href="#simulation-of-uncontrolled-outbreaks"></a>
-<a class="anchor" aria-label="anchor" href="#simulation-of-uncontrolled-outbreaks"></a>
 </h2>
 <hr class="half-width">
 <p>Infectious disease epidemics spread through populations when a chain
@@ -7796,8 +7675,7 @@ project cases into the future, and evaluate interventions that change
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="chain-size-and-length" class="callout-inner">
-<h3 class="callout-title">chain size and length<a class="anchor" aria-label="anchor" href="#chain-size-and-length"></a>
-</h3>
+<h3 class="callout-title">chain size and length</h3>
 <div class="callout-content">
 <ul>
 <li><p>The <strong>size</strong> of the transmission chain is defined as
@@ -7828,7 +7706,6 @@ generations reached by C1’s chain) (<a href="https://epiverse-trace.github.io/
 epidemiological values: the offspring distribution and the generation
 time.</p>
 </section><section><h2 class="section-heading" id="get-the-offspring-distribution">Get the offspring distribution<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a>
-<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a>
 </h2>
 <hr class="half-width">
 <p>Here we assume the MERS offspring distribution follows a negative
@@ -7846,8 +7723,7 @@ contact data of <code>mers_korea_2015</code> in the
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="offspring-distribution-for-epichains" class="callout-inner">
-<h3 class="callout-title">offspring distribution for epichains<a class="anchor" aria-label="anchor" href="#offspring-distribution-for-epichains"></a>
-</h3>
+<h3 class="callout-title">offspring distribution for epichains</h3>
 <div class="callout-content">
 <p>We input an offspring distribution to <code>{epichains}</code> by
 referring to the R function that generates random values from the
@@ -7871,7 +7747,7 @@ specific arguments.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson and other distributions </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p><code>{epichains}</code> can accept any R function that generates
 random numbers, so the specified arguments will change depending on the
@@ -7905,7 +7781,6 @@ binomial distribution.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="get-generation-time">Get generation time<a class="anchor" aria-label="anchor" href="#get-generation-time"></a>
-<a class="anchor" aria-label="anchor" href="#get-generation-time"></a>
 </h2>
 <hr class="half-width">
 <p>The <a href="reference.html#serialinterval">serial interval</a>
@@ -7918,7 +7793,7 @@ precise time of infection.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> generation time vs serial interval </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <figure><img src="fig/serial-interval-observed.jpeg" alt="A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021)." class="figure mx-auto d-block"><div class="figcaption">A schematic of the relationship of different
 time periods of transmission between an infector and an infectee in a
@@ -7958,8 +7833,7 @@ deviation of 2.8 days.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="generation-time-for-epichains" class="callout-inner">
-<h3 class="callout-title">generation time for epichains<a class="anchor" aria-label="anchor" href="#generation-time-for-epichains"></a>
-</h3>
+<h3 class="callout-title">generation time for epichains</h3>
 <div class="callout-content">
 <p>In <code>{epichains}</code>, we need to specify the generation time
 as a function that generates random numbers. Using
@@ -7979,7 +7853,6 @@ with delay distributions</a> vignette for further context.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="simulate-a-single-chain">Simulate a single chain<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a>
-<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a>
 </h2>
 <hr class="half-width">
 <p>Now we are prepared to use the <code>simulate_chains()</code>
@@ -8025,8 +7898,7 @@ criteria for each chain being simulated.</li>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="stopping-criteria" class="callout-inner">
-<h3 class="callout-title">Stopping criteria<a class="anchor" aria-label="anchor" href="#stopping-criteria"></a>
-</h3>
+<h3 class="callout-title">Stopping criteria</h3>
 <div class="callout-content">
 <p>This is an customisable feature of <code>{epichains}</code>. By
 default, branching process simulations end when they have gone extinct.
@@ -8042,7 +7914,6 @@ offspring will be produced after a chain of size 500.</p>
 <code>&lt;epichains&gt;</code> class object, which we can then analyse
 further in R.</p>
 </section><section><h2 class="section-heading" id="simulate-multiple-chains">Simulate multiple chains<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains"></a>
-<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains"></a>
 </h2>
 <hr class="half-width">
 <p>We can use <code>simulate_chains()</code> to create multiple chains
@@ -8082,8 +7953,7 @@ workflow.</p>
 <i class="callout-icon" data-feather="check-square"></i>
 </div>
 <div id="iteration-using-purrr" class="callout-inner">
-<h3 class="callout-title">Iteration using purrr<a class="anchor" aria-label="anchor" href="#iteration-using-purrr"></a>
-</h3>
+<h3 class="callout-title">Iteration using purrr</h3>
 <div class="callout-content">
 <p><a href="https://r4ds.hadley.nz/iteration.html" class="external-link">Iteration</a> aims to
 perform the same action on different objects repeatedly.</p>
@@ -8104,8 +7974,7 @@ sequence of numbers from 1 to 1000.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="purrr-and-epichains" class="callout-inner">
-<h3 class="callout-title">purrr and epichains<a class="anchor" aria-label="anchor" href="#purrr-and-epichains"></a>
-</h3>
+<h3 class="callout-title">purrr and epichains</h3>
 <div class="callout-content">
 <p>First, let’s sketch how we use <code>purrr::map()</code> with
 <code>epichains::simulate_chains()</code>. The <code>map()</code>
@@ -8180,8 +8049,7 @@ from <code>simulate_chains()</code> and store in a vector from 1 to
 <i class="callout-icon" data-feather="message-circle"></i>
 </div>
 <div id="read-the-epichains-output" class="callout-inner">
-<h3 class="callout-title">Read the epichains output<a class="anchor" aria-label="anchor" href="#read-the-epichains-output"></a>
-</h3>
+<h3 class="callout-title">Read the epichains output</h3>
 <div class="callout-content">
 <p>To explore the output format of the <code>&lt;epichains&gt;</code>
 class object of name <code>simulated_chains_map</code>, let’s look at
@@ -8194,7 +8062,7 @@ the simulated <code>simulation_id</code> number 806.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> The epichains object </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Let’s use <code>dplyr::filter()</code> for this:</p>
 <div class="codewrapper sourceCode" id="cb11">
@@ -8252,7 +8120,7 @@ reading the <code>&lt;epichains&gt;</code> objects as a data frame.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> The epichains data frame </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -8296,7 +8164,7 @@ transmission generation (between <code>time</code> 26 to 30),
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> An infectee data frame </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>The output data frame collects <strong>infectees</strong> as the
 observation unit:</p>
@@ -8321,7 +8189,6 @@ and <code>time = 0</code>.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="visualize-multiple-chains">Visualize multiple chains<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a>
-<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a>
 </h2>
 <hr class="half-width">
 <p>To visualize the simulated chains, we need some pre-processing:</p>
@@ -8463,7 +8330,7 @@ outbreaks of MERS disease.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Observed cases vs simulated chains </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
 <div class="accordion-body">
 <p>Let’s overlap the cumulative number of observed cases using the
 linelist object from the <code>mers_korea_2015</code> dataset of the
@@ -8526,8 +8393,7 @@ threshold (<a href="https://www.nature.com/articles/nature04153" class="external
 <i class="callout-icon" data-feather="heart"></i>
 </div>
 <div id="early-spread-projections" class="callout-inner">
-<h3 class="callout-title">Early spread projections<a class="anchor" aria-label="anchor" href="#early-spread-projections"></a>
-</h3>
+<h3 class="callout-title">Early spread projections</h3>
 <div class="callout-content">
 <p>In the epidemic’s initial phase, you can use <code>{epichains}</code>
 to apply a branching process model to project the number of future
@@ -8549,7 +8415,6 @@ predictions using <code>{epichains}</code>.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="challenges">Challenges<a class="anchor" aria-label="anchor" href="#challenges"></a>
-<a class="anchor" aria-label="anchor" href="#challenges"></a>
 </h2>
 <hr class="half-width">
 <div id="monkeypox-large-outbreak-potential" class="callout challenge">
@@ -8557,8 +8422,7 @@ predictions using <code>{epichains}</code>.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="monkeypox-large-outbreak-potential" class="callout-inner">
-<h3 class="callout-title">Monkeypox large outbreak potential<a class="anchor" aria-label="anchor" href="#monkeypox-large-outbreak-potential"></a>
-</h3>
+<h3 class="callout-title">Monkeypox large outbreak potential</h3>
 <div class="callout-content">
 <p>Evaluate the potential for a new Monkey pox (Mpox) case to generate
 an explosive large outbreak.</p>
@@ -8577,7 +8441,7 @@ cases?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>With <code>{epiparameter}</code>, you can access and use offspring
 and delay distributions from previous Ebola outbreaks.</p>
@@ -8637,7 +8501,7 @@ and delay distributions from previous Ebola outbreaks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -8748,7 +8612,7 @@ MERS (<span class="math inline">\(R\)</span> = 0.6 and <span class="math inline"
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Epidemic Risk assessment accounting for superspreading </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
 <p>With <code>{superspreading}</code>, you can get numerical solutions
 to processes that <code>{epichains}</code> solve using branching
@@ -8789,8 +8653,7 @@ disease.</p>
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <div id="from-a-distribution-of-secondary-cases" class="callout-inner">
-<h3 class="callout-title">From a distribution of secondary cases<a class="anchor" aria-label="anchor" href="#from-a-distribution-of-secondary-cases"></a>
-</h3>
+<h3 class="callout-title">From a distribution of secondary cases</h3>
 <div class="callout-content">
 <p><a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext" class="external-link">Christian
 Althaus, 2015</a> reused data published by <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2" class="external-link">Faye
@@ -8807,7 +8670,7 @@ estimate the large outbreak potential from this data.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
 <div class="accordion-body">
 <p>Code with the transmission tree data written by <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext" class="external-link">Christian
 Althaus, 2015</a>:</p>
@@ -8838,7 +8701,7 @@ Althaus, 2015</a>:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -8950,8 +8813,7 @@ explosive regrowth of the epidemic.</p>
 <i class="callout-icon" data-feather="key"></i>
 </div>
 <div class="callout-inner">
-<h3 class="callout-title">Key Points<a class="anchor" aria-label="anchor" href="#keypoints1"></a>
-</h3>
+<h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
 <li>Use <code>{epichains}</code> to simulate the large outbreak
@@ -8989,7 +8851,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.5)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
+        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.6)</a>, <a href="https://github.com/carpentries/pegboard/tree/ad2542f7f7b9c3f90cc871b355ff81ec14a09ca9" class="external-link">pegboard (0.7.6)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.3)</a></p>
 			</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -9012,8 +8874,8 @@ any links that you are not going to use.
   "url": "https://epiverse-trace.github.io/tutorials-middle/aio.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/aio.html",
   "dateCreated": "2024-07-11",
-  "dateModified": "2024-08-27",
-  "datePublished": "2024-08-27"
+  "dateModified": "2024-09-03",
+  "datePublished": "2024-09-03"
 }
 
   </script><script>
