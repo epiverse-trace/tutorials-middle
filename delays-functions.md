@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1] 2.629466 2.483460 9.277600 4.372944 5.750135 3.398539 6.322681 3.608962
- [9] 1.336754 7.022370
+ [1] 7.663488 6.717673 2.782662 2.731463 3.450016 9.705230 3.705973 1.589038
+ [9] 4.884075 3.595120
 ```
 
 ::::::::: instructor
@@ -473,10 +473,10 @@ epinow_estimates_cg <- epinow(
 ```
 
 ``` output
-WARN [2024-07-02 02:18:36] epinow: There were 3 divergent transitions after warmup. See
+WARN [2024-09-24 02:59:27] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-07-02 02:18:36] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-09-24 02:59:27] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -598,10 +598,10 @@ epinow_estimates_cgi <- epinow(
 ```
 
 ``` output
-WARN [2024-07-02 02:22:28] epinow: There were 9 divergent transitions after warmup. See
+WARN [2024-09-24 03:01:12] epinow: There were 4 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-07-02 02:22:28] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-09-24 03:01:12] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -743,10 +743,10 @@ epinow_estimates_egi <- epinow(
 ```
 
 ``` output
-WARN [2024-07-02 02:24:47] epinow: There were 4 divergent transitions after warmup. See
+WARN [2024-09-24 03:03:22] epinow: There were 10 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-07-02 02:24:47] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-09-24 03:03:22] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
