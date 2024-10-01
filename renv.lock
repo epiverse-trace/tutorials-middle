@@ -664,7 +664,6 @@
       "RemoteRepo": "epichains",
       "RemoteUsername": "epiverse-trace",
       "RemotePkgRef": "epiverse-trace/epichains",
-      "RemoteRef": "HEAD",
       "RemoteSha": "92df0ab50e116b45a4745f42b24182b780ba9e6a",
       "Requirements": [
         "R",
@@ -2029,12 +2028,10 @@
       "Version": "0.2.0.9000",
       "Source": "GitHub",
       "RemoteType": "github",
-      "Remotes": "epiverse-trace/epiparameter, epiverse-trace/bpmodels",
       "RemoteHost": "api.github.com",
       "RemoteRepo": "superspreading",
       "RemoteUsername": "epiverse-trace",
       "RemotePkgRef": "epiverse-trace/superspreading",
-      "RemoteRef": "HEAD",
       "RemoteSha": "d3392611f14bb1e1c2a684126de8d830b8bddc8e",
       "Requirements": [
         "bpmodels",
