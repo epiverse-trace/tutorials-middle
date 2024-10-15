@@ -379,7 +379,7 @@ characteristics?</li>
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul><li>Create a short term projection using a branching process with
-<code>{epichains}</code>.</li>
+<a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>.</li>
 </ul></div>
 </div>
 </div>
@@ -426,7 +426,7 @@ outbreak based on its reproduction number <span class="math inline">\(R\)</span>
 Observed number of cumulative cases from the Middle East respiratory
 syndrome (MERS) outbreak in South Korea, 2015, alongside with simulated
 transmission chains assuming an offspring distribution with <span class="math inline">\(R=0.6\)</span> and <span class="math inline">\(k=0.02\)</span>.
-</figcaption></figure><!-- what we are going to do --><p>In this episode, we will use the <code>{epichains}</code> package to
+</figcaption></figure><!-- what we are going to do --><p>In this episode, we will use the <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> package to
 simulate transmission chains and estimate the potential for large
 outbreaks following the introduction of a new case. We are going to use
 it with functions from <code>{epiparameter}</code>, <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>
@@ -468,9 +468,9 @@ generation of infection, starting with the index case in generation 1.
 The distribution of the number of secondary cases each individual
 generates is called the offspring distribution (<a href="https://epiverse-trace.github.io/epichains/articles/epichains.html" class="external-link">Azam
 &amp; Funk, 2024</a>).</p>
-<p><code>{epichains}</code> provides methods to analyse and simulate the
+<p><a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> provides methods to analyse and simulate the
 <em>size</em> and <em>length</em> of branching processes with an given
-offspring distribution. <code>{epichains}</code> implements a rapid and
+offspring distribution. <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> implements a rapid and
 simple model to simulate transmission chains to assess epidemic risk,
 project cases into the future, and evaluate interventions that change
 <span class="math inline">\(R\)</span>.</p>
@@ -503,7 +503,7 @@ generations reached by C1’s chain) (<a href="https://epiverse-trace.github.io/
 </figure></div>
 </div>
 </div>
-<p>To use <code>{epichains}</code>, we need to know (or assume) two key
+<p>To use <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>, we need to know (or assume) two key
 epidemiological values: the offspring distribution and the generation
 time.</p>
 </section><section><h2 class="section-heading" id="get-the-offspring-distribution">Get the offspring distribution<a class="anchor" aria-label="anchor" href="#get-the-offspring-distribution"></a></h2>
@@ -524,7 +524,7 @@ contact data of <code>mers_korea_2015</code> in the
 <div id="offspring-distribution-for-epichains" class="callout-inner">
 <h3 class="callout-title">offspring distribution for epichains</h3>
 <div class="callout-content">
-<p>We input an offspring distribution to <code>{epichains}</code> by
+<p>We input an offspring distribution to <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> by
 referring to the R function that generates random values from the
 distribution we want. For a negative binomial distribution, we use
 <code>rnbinom</code> with its corresponding <code>mu</code> and
@@ -548,7 +548,7 @@ specific arguments.</p>
 </button>
 <div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
-<p><code>{epichains}</code> can accept any R function that generates
+<p><a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> can accept any R function that generates
 random numbers, so the specified arguments will change depending on the
 R function used. For more details on the range of possible options, see
 the function reference manual.</p>
@@ -556,7 +556,7 @@ the function reference manual.</p>
 offspring distribution. First, read the argument required in the
 <code>?rpois</code> reference manual. Second, specify the
 <code>lambda</code> argument parameter, also known as rate or mean in
-the literature. In <code>{epichains}</code>, this can look like
+the literature. In <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>, this can look like
 this:</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -632,7 +632,7 @@ deviation of 2.8 days.</p>
 <div id="generation-time-for-epichains" class="callout-inner">
 <h3 class="callout-title">generation time for epichains</h3>
 <div class="callout-content">
-<p>In <code>{epichains}</code>, we need to specify the generation time
+<p>In <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>, we need to specify the generation time
 as a function that generates random numbers. Using
 <code>{epiparameter}</code> has the advantage of using the distribution
 function <code>epiparameter::generate()</code> for this input. This will
@@ -651,7 +651,7 @@ with delay distributions</a> vignette for further context.</p>
 </div>
 </section><section><h2 class="section-heading" id="simulate-a-single-chain">Simulate a single chain<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a></h2>
 <hr class="half-width"><p>Now we are prepared to use the <code>simulate_chains()</code>
-function from <code>{epichains}</code> to create <strong>one</strong>
+function from <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> to create <strong>one</strong>
 transmission chain:</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -691,7 +691,7 @@ criteria for each chain being simulated.</li>
 <div id="stopping-criteria" class="callout-inner">
 <h3 class="callout-title">Stopping criteria</h3>
 <div class="callout-content">
-<p>This is an customisable feature of <code>{epichains}</code>. By
+<p>This is an customisable feature of <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>. By
 default, branching process simulations end when they have gone extinct.
 For long-lasting transmission chains, in <code>simulate_chains()</code>
 you can add the <code>stat_max</code> argument.</p>
@@ -1173,7 +1173,7 @@ threshold (<a href="https://www.nature.com/articles/nature04153" class="external
 <div id="early-spread-projections" class="callout-inner">
 <h3 class="callout-title">Early spread projections</h3>
 <div class="callout-content">
-<p>In the epidemic’s initial phase, you can use <code>{epichains}</code>
+<p>In the epidemic’s initial phase, you can use <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>
 to apply a branching process model to project the number of future
 cases. Even though the model accounts for randomness in transmission and
 variation in the number of secondary cases, there may be additional
@@ -1188,7 +1188,7 @@ COVID-19 models in <a href="https://www.nature.com/articles/s43588-020-00014-7" 
 al. (2020)</a>.</p>
 <p>We invite you to read the vignette on <a href="https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html" class="external-link">Projecting
 infectious disease incidence: a COVID-19 example</a>! for more on making
-predictions using <code>{epichains}</code>.</p>
+predictions using <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>.</p>
 </div>
 </div>
 </div>
@@ -1389,7 +1389,7 @@ MERS (<span class="math inline">\(R\)</span> = 0.6 and <span class="math inline"
 <div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
 <p>With <code>{superspreading}</code>, you can get numerical solutions
-to processes that <code>{epichains}</code> solve using branching
+to processes that <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> solve using branching
 processes. We invite you to read the <code>{superspreading}</code>
 vignette on <a href="https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html" class="external-link">Epidemic
 risk</a> and respond to:</p>
@@ -1586,7 +1586,7 @@ explosive regrowth of the epidemic.</p>
 <div class="callout-inner">
 <h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
-<ul><li>Use <code>{epichains}</code> to simulate the large outbreak
+<ul><li>Use <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> to simulate the large outbreak
 potential of diseases with overdispersed offspring distributions.</li>
 </ul></div>
 </div>
@@ -1654,7 +1654,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/superspreading-simulate.html",
   "dateCreated": "2024-07-11",
   "dateModified": "2024-09-24",
-  "datePublished": "2024-10-08"
+  "datePublished": "2024-10-15"
 }
 
   </script><script>
