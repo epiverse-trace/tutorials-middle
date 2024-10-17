@@ -144,7 +144,7 @@ superspreading_packages <- c(
   "epicontacts",
   "fitdistrplus",
   "epiverse-trace/superspreading",
-  "epiverse-trace/epichains",
+  "epichains",
   "epiverse-trace/epiparameter",
   "incidence2",
   "outbreaks",
@@ -234,11 +234,11 @@ gitcreds::gitcreds_set()
 usethis::git_sitrep()
 ```
 
-Try again installing {epichains}:
+Try again installing a package like {superspreading}:
 
 ```r
 if(!require("remotes")) install.packages("remotes")
-remotes::install_github("epiverse-trace/epichains")
+remotes::install_github("epiverse-trace/superspreading")
 ```
 
 If the error persist, [contact us](#your-questions)!
