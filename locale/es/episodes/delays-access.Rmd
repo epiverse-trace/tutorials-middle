@@ -128,7 +128,7 @@ Para resumir estos datos de periodos de tiempo individuales y de pares, podemos 
 
 ![Distribución ajustada del intervalo serial para (a) COVID-19 y (b) MERS-CoV basada en pares de transmisión notificados en Arabia Saudí. Ajustamos tres distribuciones comunmente usadas, Log normal, Gamma y Weibull, respectivamente ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)).](fig/seria-interval-fitted-distributions.jpg)
 
-Las distribuciones estadísticas se resumen en función de sus  **estadísticas de resumen** como la *ubicación* (media y percentiles) y *dispersión* (varianza o desviación estándar) de la distribución, o con su **parámetros de distribución** que informan sobre la *forma* (forma y tasa/escala) de la distribución. Estos valores estimados pueden reportarse con su **incertidumbre** (intervalos de confianza del 95%).
+Las distribuciones estadísticas se resumen en función de sus  **estadísticas de resumen** como la *ubicación* (media y percentiles) y *dispersión* (varianza o desviación estándar) de la distribución, o con su **parámetros de distribución** que informan sobre la *forma* (shape y rate/scale) de la distribución. Estos valores estimados pueden reportarse con su **incertidumbre** (intervalos de confianza del 95%).
 
 | Gamma  	| media        	| forma       	| velocidad/escala |
 | :--------- | :--------------- | :-------------- | :--------------- |
@@ -140,12 +140,12 @@ Las distribuciones estadísticas se resumen en función de sus  **estadísticas 
 | MERS-CoV   | 14\.2(13.3-15.2)  | 3\.07(2.64-3.63) | 16\.1(15.0-17.1)  |
 | COVID-19   | 5\.2(4.6-5.9) 	| 1\.74(1.46-2.11) | 5\.83(5.08-6.67)  |
 
-| Log normal | media        	| media-log   	| sd-log       	|
+| Log normal | media        	| mean-log   	| sd-log       	|
 | :--------- | :--------------- | :-------------- | :--------------- |
 | MERS-CoV   | 14\.08(13.1-15.2) | 2\.58(2.50-2.68) | 0\.44(0.39-0.5)   |
 | COVID-19   | 5\.2(4.2-6.5) 	| 1\.45(1.31-1.61) | 0\.63(0.54-0.74)  |
 
-Tabla: Estimaciones del intervalo serial utilizando las distribuciones Gamma, Weibull y Log Normal. Los intervalos de confianza del 95% para los parámetros de forma y escala (logmedia y sd para Log Normal) se muestran entre paréntesis ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
+Tabla: Estimaciones del intervalo serial utilizando las distribuciones Gamma, Weibull y Log Normal. Los intervalos de confianza del 95% para los parámetros de forma y escala (*shape* y *rate*, en inglés) para Gamma (meanlog y sdlog para Log Normal) se muestran entre paréntesis ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
 
 :::::::::::::::::::::::::
 
@@ -373,7 +373,6 @@ Seguimos obteniendo más de un parámetro epidemiológico. Podemos establecer el
 epiparameter::epidist_db(
   disease = "covid",
   epi_dist = "serial",
-  author = "Hiroshi",
   single_epidist = TRUE
 )
 ```
@@ -399,7 +398,6 @@ covid_serialint <-
   epiparameter::epidist_db(
     disease = "covid",
     epi_dist = "serial",
-    author = "Nishiura",
     single_epidist = TRUE
   )
 ```
