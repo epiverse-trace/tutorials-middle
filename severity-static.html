@@ -348,7 +348,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Estimation of outbreak severity</h1>
-        <p>Last updated on 2024-09-24 |
+        <p>Last updated on 2024-11-05 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/severity-static.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -1735,14 +1735,14 @@ the proportion of cases that are ascertained during an outbreak</a>!</p>
 <div id="when-to-use-cfr_rolling" class="callout-inner">
 <h3 class="callout-title">When to use cfr_rolling()?</h3>
 <div class="callout-content">
-<p><strong>cfr_rolling()</strong> shows the estimated CFR on each
-outbreak day, given that future data on cases and deaths is unavailable
-at the time. The final value of <em>cfr_rolling()</em> estimates is
-identical to <em>cfr_static()</em> on the same data.</p>
-<p>Remember, as shown above, <em>cfr_rolling()</em> is helpful to get
-early-stage CFR estimates and check whether an outbreak’s CFR estimate
-has stabilised. Thus, <em>cfr_rolling()</em> is not sensitive to the
-length or size of the epidemic.</p>
+<p><code>cfr_rolling()</code> shows the estimated CFR on each outbreak
+day, given that future data on cases and deaths is unavailable at the
+time. The final value of <code>cfr_rolling()</code> estimates is
+identical to <code>cfr_static()</code> on the same data.</p>
+<p>Remember, as shown above, <code>cfr_rolling()</code> is helpful to
+get early-stage CFR estimates and check whether an outbreak’s CFR
+estimate has stabilised. Thus, <code>cfr_rolling()</code> is not
+sensitive to the length or size of the epidemic.</p>
 </div>
 </div>
 </div>
@@ -1751,13 +1751,14 @@ length or size of the epidemic.</p>
 <i class="callout-icon" data-feather="bell"></i>
 </div>
 <div id="when-to-use-cfr_time_varying" class="callout-inner">
-<h3 class="callout-title">When to use cfr_time_varying()?</h3>
+<h3 class="callout-title">When to use
+<code>cfr_time_varying()</code>?</h3>
 <div class="callout-content">
-<p>On the other hand, <strong>cfr_time_varying()</strong> calculates the
-CFR over a moving window and helps to understand changes in CFR due to
+<p>On the other hand, <code>cfr_time_varying()</code> calculates the CFR
+over a moving window and helps to understand changes in CFR due to
 changes in the epidemic, e.g. due to a new variant or increased immunity
 from vaccination.</p>
-<p>However, <em>cfr_time_varying()</em> is sensitive to sampling
+<p>However, <code>cfr_time_varying()</code> is sensitive to sampling
 uncertainty. Thus, it is sensitive to the size of the outbreak. The
 higher the number of cases with expected outcomes on a given day, the
 more reasonable estimates of the time-varying CFR we will get.</p>
@@ -1766,8 +1767,8 @@ speaking, have a 95% confidence interval ±10% of the mean estimate
 (binomial CI). So if we have &gt;100 cases with expected outcomes <em>on
 a given day</em>, we can get reasonable estimates of the time varying
 CFR. But if we only have &gt;100 cases <em>over the course of the whole
-epidemic</em>, we probably need to rely on
-<strong>cfr_rolling()</strong> that uses the cumulative data.</p>
+epidemic</em>, we probably need to rely on <code>cfr_rolling()</code>
+that uses the cumulative data.</p>
 <p>We invite you to read this <a href="https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html" class="external-link">vignette
 about the <code>cfr_time_varying()</code> function</a>.</p>
 </div>
@@ -1938,7 +1939,7 @@ any links that you are not going to use.
   "url": "https://epiverse-trace.github.io/tutorials-middle/severity-static.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/severity-static.html",
   "dateCreated": "2024-11-05",
-  "dateModified": "2024-09-24",
+  "dateModified": "2024-11-05",
   "datePublished": "2024-11-05"
 }
 
