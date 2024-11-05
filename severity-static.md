@@ -1037,21 +1037,21 @@ The `{cfr}` package has a function called `cfr_time_varying()` with functionalit
 
 ### When to use cfr_rolling()?
 
-**cfr_rolling()** shows the estimated CFR on each outbreak day, given that future data on cases and deaths is unavailable at the time. The final value of _cfr_rolling()_ estimates is identical to _cfr_static()_ on the same data.
+`cfr_rolling()` shows the estimated CFR on each outbreak day, given that future data on cases and deaths is unavailable at the time. The final value of `cfr_rolling()` estimates is identical to `cfr_static()` on the same data.
 
-Remember, as shown above, _cfr_rolling()_ is helpful to get early-stage CFR estimates and check whether an outbreak's CFR estimate has stabilised. Thus, _cfr_rolling()_ is not sensitive to the length or size of the epidemic.
+Remember, as shown above, `cfr_rolling()` is helpful to get early-stage CFR estimates and check whether an outbreak's CFR estimate has stabilised. Thus, `cfr_rolling()` is not sensitive to the length or size of the epidemic.
 
 :::::::::::::::::
 
 ::::::::::::::::: callout
 
-### When to use cfr_time_varying()?
+### When to use `cfr_time_varying()`?
 
-On the other hand, **cfr_time_varying()** calculates the CFR over a moving window and helps to understand changes in CFR due to changes in the epidemic, e.g. due to a new variant or increased immunity from vaccination.
+On the other hand, `cfr_time_varying()` calculates the CFR over a moving window and helps to understand changes in CFR due to changes in the epidemic, e.g. due to a new variant or increased immunity from vaccination.
 
-However, _cfr_time_varying()_ is sensitive to sampling uncertainty. Thus, it is sensitive to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. 
+However, `cfr_time_varying()` is sensitive to sampling uncertainty. Thus, it is sensitive to the size of the outbreak. The higher the number of cases with expected outcomes on a given day, the more reasonable estimates of the time-varying CFR we will get. 
 
-For example, with 100 cases, the fatality risk estimate will, roughly speaking, have a 95% confidence interval ±10% of the mean estimate (binomial CI). So if we have >100 cases with expected outcomes *on a given day*, we can get reasonable estimates of the time varying CFR. But if we only have >100 cases *over the course of the whole epidemic*, we probably need to rely on **cfr_rolling()** that uses the cumulative data.
+For example, with 100 cases, the fatality risk estimate will, roughly speaking, have a 95% confidence interval ±10% of the mean estimate (binomial CI). So if we have >100 cases with expected outcomes *on a given day*, we can get reasonable estimates of the time varying CFR. But if we only have >100 cases *over the course of the whole epidemic*, we probably need to rely on `cfr_rolling()` that uses the cumulative data.
 
 We invite you to read this [vignette about the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
 
