@@ -201,10 +201,10 @@ The number of secondary cases can be used to _empirically_ estimate the **offspr
 
 ```{r,echo=FALSE,message=FALSE,warning=FALSE}
 # Load parameters
-mpox <- epiparameter::epidist_db(
+mpox <- epiparameter::epiparameter_db(
   disease = "SARS",
-  epi_dist = "offspring_distribution",
-  single_epidist = TRUE
+  epi_name = "offspring_distribution",
+  single_epiparameter = TRUE
 )
 mpox_params <- epiparameter::get_parameters(mpox)
 # mpox_params
@@ -519,8 +519,8 @@ library(superspreading)
 library(tidyverse)
 
 # list of diseases with offspring distribution
-epidist_string <- epiparameter::epidist_db(
-  epi_dist = "offspring distribution"
+epidist_string <- epiparameter::epiparameter_db(
+  epi_name = "offspring distribution"
 ) %>%
   epiparameter::parameter_tbl() %>%
   dplyr::select(disease) %>%
@@ -534,9 +534,9 @@ across_offspring <- epidist_string %>%
     epidist_out =
       map(
         .x = disease,
-        .f = epiparameter::epidist_db,
-        epi_dist = "offspring distribution",
-        single_epidist = TRUE
+        .f = epiparameter::epiparameter_db,
+        epi_name = "offspring distribution",
+        single_epiparameter = TRUE
       )
   ) %>%
   # get parameters
@@ -776,8 +776,8 @@ To use `superspreading::proportion_transmission()` we recommend to read the [Est
 ```{r,message=FALSE,warning=FALSE,echo=FALSE}
 library(epiparameter)
 
-epidist_string <- epiparameter::epidist_db(
-  epi_dist = "offspring distribution"
+epidist_string <- epiparameter::epiparameter_db(
+  epi_name = "offspring distribution"
 ) %>%
   epiparameter::parameter_tbl() %>%
   dplyr::select(disease) %>%
@@ -790,10 +790,10 @@ Currently, `{epiparameter}` has offspring distributions for `r epidist_string`. 
 
 ```{r,message=FALSE,warning=FALSE}
 # Load parameters
-sars <- epiparameter::epidist_db(
+sars <- epiparameter::epiparameter_db(
   disease = "SARS",
-  epi_dist = "offspring distribution",
-  single_epidist = TRUE
+  epi_name = "offspring distribution",
+  single_epiparameter = TRUE
 )
 sars_params <- epiparameter::get_parameters(sars)
 sars_params
@@ -806,10 +806,10 @@ sars_params
 ```{r,message=FALSE,warning=FALSE}
 #' estimate for ebola --------------
 
-ebola_epiparameter <- epiparameter::epidist_db(
+ebola_epiparameter <- epiparameter::epiparameter_db(
   disease = "Ebola",
-  epi_dist = "offspring distribution",
-  single_epidist = TRUE
+  epi_name = "offspring distribution",
+  single_epiparameter = TRUE
 )
 ebola_params <- epiparameter::get_parameters(ebola_epiparameter)
 ebola_params

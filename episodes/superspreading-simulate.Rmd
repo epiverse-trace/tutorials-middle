@@ -63,10 +63,10 @@ mers_cumcases <- mers_korea_2015$linelist %>%
 mers_offspring <- c(mean = 0.60, dispersion = 0.02)
 
 # generation time
-serial_interval <- epidist_db(
+serial_interval <- epiparameter_db(
   disease = "mers",
-  epi_dist = "serial",
-  single_epidist = TRUE
+  epi_name = "serial",
+  single_epiparameter = TRUE
 )
 
 # Set seed for random number generator
@@ -271,10 +271,10 @@ However, using the *serial interval* as an approximation of the *generation time
 Let's use the `{epiparameter}` package to access and use the available serial interval for MERS disease:
 
 ```{r,message=FALSE,warning=FALSE}
-serial_interval <- epidist_db(
+serial_interval <- epiparameter_db(
   disease = "mers",
-  epi_dist = "serial",
-  single_epidist = TRUE
+  epi_name = "serial",
+  single_epiparameter = TRUE
 )
 
 plot(serial_interval, day_range = 0:25)
@@ -752,20 +752,20 @@ With `{epiparameter}`, you can access and use offspring and delay distributions 
 library(epiparameter)
 library(tidyverse)
 
-epiparameter::epidist_db(epi_dist = "offspring") %>%
+epiparameter::epiparameter_db(epi_name = "offspring") %>%
   epiparameter::parameter_tbl() %>%
-  dplyr::count(disease, epi_distribution)
+  dplyr::count(disease, epi_name)
 
-epiparameter::epidist_db(epi_dist = "serial interval") %>%
+epiparameter::epiparameter_db(epi_name = "serial interval") %>%
   epiparameter::parameter_tbl() %>%
-  dplyr::count(disease, epi_distribution)
+  dplyr::count(disease, epi_name)
 ```
 
 ::::::::::::::
 
 :::::::::::::: solution
 
-```{r,message=FALSE,warning=FALSE}
+```{r,message=FALSE,warning=FALSE warning=FALSE, r,message=FALSE}
 # load packages -----------------------------------------------------------
 
 library(epiparameter)
@@ -773,18 +773,18 @@ library(tidyverse)
 
 # delays ------------------------------------------------------------------
 
-mpox_offspring_epidist <- epiparameter::epidist_db(
+mpox_offspring_epidist <- epiparameter::epiparameter_db(
   disease = "mpox",
-  epi_dist = "offspring",
-  single_epidist = TRUE
+  epi_name = "offspring",
+  single_epiparameter = TRUE
 )
 
 mpox_offspring <- epiparameter::get_parameters(mpox_offspring_epidist)
 
-mpox_serialint <- epiparameter::epidist_db(
+mpox_serialint <- epiparameter::epiparameter_db(
   disease = "mpox",
-  epi_dist = "serial interval",
-  single_epidist = TRUE
+  epi_name = "serial interval",
+  single_epiparameter = TRUE
 )
 
 # iterate -----------------------------------------------------------------
@@ -909,8 +909,8 @@ library(superspreading)
 ```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
 # estimate probability to contain
 superspreading::probability_contain(
-  R = mpox_offspring_epidist["mean"],
-  k = mpox_offspring_epidist["dispersion"],
+  R = mpox_offspring["mean"],
+  k = mpox_offspring["dispersion"],
   num_init_infect = 1,
   case_threshold = 100
 )
@@ -918,8 +918,8 @@ superspreading::probability_contain(
 # Estimate the probability of a large outbreak
 # with 5 independent imported cases
 superspreading::probability_epidemic(
-  R = mpox_offspring_epidist["mean"],
-  k = mpox_offspring_epidist["dispersion"],
+  R = mpox_offspring["mean"],
+  k = mpox_offspring["dispersion"],
   num_init_infect = 5
 )
 ```
@@ -976,10 +976,10 @@ fit.cases
 
 # serial interval parameters ----------------------------------------------
 
-ebola_serialinter <- epiparameter::epidist_db(
+ebola_serialinter <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "serial interval",
-  single_epidist = TRUE
+  epi_name = "serial interval",
+  single_epiparameter = TRUE
 )
 
 # simulate outbreak trajectories ------------------------------------------
