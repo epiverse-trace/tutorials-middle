@@ -275,21 +275,24 @@ log_sd <- EpiNow2::convert_to_logsd(mean = 2, sd = 1)
 
 ### Visualize a log Normal distribution using {epiparameter}
 
-Using `epiparameter::epidist()` we can create a custom distribution. The log normal distribution will look like:
+Using `epiparameter::epiparameter()` we can create a custom distribution. The log normal distribution will look like:
 
 ```r
 library(epiparameter)
 ```
 
 ```{r,message=FALSE,warning=FALSE}
-epiparameter::epidist(
+epiparameter::epiparameter(
   disease = "covid",
-  epi_dist = "reporting delay",
-  prob_distribution = "lnorm",
-  prob_distribution_params = c(
-    meanlog = log_mean,
-    sdlog = log_sd
-  )
+  epi_name = "reporting delay",
+  prob_distribution = 
+    epiparameter::create_prob_distribution(
+      prob_distribution = "lnorm",
+      prob_distribution_params = c(
+        meanlog = log_mean,
+        sdlog = log_sd
+      )
+    ),
 ) %>%
   plot()
 ```
