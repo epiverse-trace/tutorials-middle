@@ -94,25 +94,31 @@ It is a common practice for analysts to manually search the available literature
 
 In this episode, we will *access* the summary statistics of generation time for COVID-19 from the library of epidemiological parameters provided by `{epiparameter}`. These metrics can be used to estimate the transmissibility of this disease using `{EpiNow2}` in subsequent episodes.
 
-Let's start by looking at how many entries are available in the **epidemiological distributions database** in `{epiparameter}` using `epidist_db()` for the epidemiological distribution `epi_dist` called generation time with the string `"generation"`:
+Let's start by looking at how many entries are available in the **epidemiological distributions database** in `{epiparameter}` using `epiparameter_db()` for the epidemiological distribution `epi_name` called generation time with the string `"generation"`:
 
 
 ``` r
-epiparameter::epidist_db(
-  epi_dist = "generation"
+epiparameter::epiparameter_db(
+  epi_name = "generation"
 )
 ```
 
 ``` output
-Returning 1 results that match the criteria (1 are parameterised). 
-Use subset to filter by entry variables or single_epidist to return a single entry. 
+Returning 3 results that match the criteria (2 are parameterised). 
+Use subset to filter by entry variables or single_epiparameter to return a single entry. 
 To retrieve the citation for each use the 'get_citation' function
 ```
 
 ``` output
+# List of 3 <epiparameter> objects
+Number of diseases: 2
+❯ Chikungunya ❯ Influenza
+Number of epi parameters: 1
+❯ generation time
+[[1]]
 Disease: Influenza
 Pathogen: Influenza-A-H1N1
-Epi Distribution: generation time
+Epi Parameter: generation time
 Study: Lessler J, Reich N, Cummings D, New York City Department of Health and
 Mental Hygiene Swine Influenza Investigation Team (2009). "Outbreak of
 2009 Pandemic Influenza A (H1N1) at a New York City School." _The New
@@ -122,6 +128,37 @@ Distribution: weibull
 Parameters:
   shape: 2.360
   scale: 3.180
+
+[[2]]
+Disease: Chikungunya
+Pathogen: Chikungunya Virus
+Epi Parameter: generation time
+Study: Salje H, Cauchemez S, Alera M, Rodriguez-Barraquer I, Thaisomboonsuk B,
+Srikiatkhachorn A, Lago C, Villa D, Klungthong C, Tac-An I, Fernandez
+S, Velasco J, Roque Jr V, Nisalak A, Macareo L, Levy J, Cummings D,
+Yoon I (2015). "Reconstruction of 60 Years of Chikungunya Epidemiology
+in the Philippines Demonstrates Episodic and Focal Transmission." _The
+Journal of Infectious Diseases_. doi:10.1093/infdis/jiv470
+<https://doi.org/10.1093/infdis/jiv470>.
+Parameters: <no parameters>
+
+[[3]]
+Disease: Chikungunya
+Pathogen: Chikungunya Virus
+Epi Parameter: generation time
+Study: Guzzetta G, Vairo F, Mammone A, Lanini S, Poletti P, Manica M, Rosa R,
+Caputo B, Solimini A, della Torre A, Scognamiglio P, Zumla A, Ippolito
+G, Merler S (2020). "Spatial modes for transmission of chikungunya
+virus during a large chikungunya outbreak in Italy: a modeling
+analysis." _BMC Medicine_. doi:10.1186/s12916-020-01674-y
+<https://doi.org/10.1186/s12916-020-01674-y>.
+Distribution: gamma
+Parameters:
+  shape: 8.633
+  scale: 1.447
+
+# ℹ Use `parameter_tbl()` to see a summary table of the parameters.
+# ℹ Explore database online at: https://epiverse-trace.github.io/epiparameter/articles/database.html
 ```
 
 Currently, in the library of epidemiological parameters, we have one `"generation"` time entry for Influenza. Instead, we can look at the `serial` intervals for `COVID`-19. Let find what we need to consider for this!
@@ -219,22 +256,22 @@ The objective of the assessment above is to assess the interpretation of a large
 
 In this section, we will use `{epiparameter}` to obtain the serial interval for COVID-19, as an alternative to the generation time.
 
-Let's ask now how many parameters we have in the epidemiological distributions database (`epidist_db()`) with the `disease` named `covid`-19. Run this locally!
+Let's ask now how many parameters we have in the epidemiological distributions database (`epiparameter_db()`) with the `disease` named `covid`-19. Run this locally!
 
 
 ``` r
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "covid"
 )
 ```
 
-From the `{epiparameter}` package, we can use the `epidist_db()` function to ask for any `disease` and also for a specific epidemiological distribution (`epi_dist`). Run this in your console:
+From the `{epiparameter}` package, we can use the `epiparameter_db()` function to ask for any `disease` and also for a specific epidemiological distribution (`epi_name`). Run this in your console:
 
 
 ``` r
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "COVID",
-  epi_dist = "serial"
+  epi_name = "serial"
 )
 ```
 
@@ -244,7 +281,7 @@ With this query combination, we get more than one delay distribution. This outpu
 
 ### CASE-INSENSITIVE
 
-`epidist_db` is [case-insensitive](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). This means that you can use strings with letters in upper or lower case indistinctly. Strings like `"serial"`, `"serial interval"` or `"serial_interval"` are also valid.
+`epiparameter_db` is [case-insensitive](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). This means that you can use strings with letters in upper or lower case indistinctly. Strings like `"serial"`, `"serial interval"` or `"serial_interval"` are also valid.
 
 :::::::::::::::::::::::::
 
@@ -252,28 +289,28 @@ As suggested in the outputs, to summarise an `<epidist>` object and get the colu
 
 
 ``` r
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "serial"
+  epi_name = "serial"
 ) %>%
   epiparameter::parameter_tbl()
 ```
 
 ``` output
 Returning 4 results that match the criteria (3 are parameterised). 
-Use subset to filter by entry variables or single_epidist to return a single entry. 
+Use subset to filter by entry variables or single_epiparameter to return a single entry. 
 To retrieve the citation for each use the 'get_citation' function
 ```
 
 ``` output
 # Parameter table:
 # A data frame:    4 × 7
-  disease  pathogen  epi_distribution prob_distribution author  year sample_size
-  <chr>    <chr>     <chr>            <chr>             <chr>  <dbl>       <dbl>
-1 COVID-19 SARS-CoV… serial interval  <NA>              Alene…  2021        3924
-2 COVID-19 SARS-CoV… serial interval  lnorm             Nishi…  2020          28
-3 COVID-19 SARS-CoV… serial interval  weibull           Nishi…  2020          18
-4 COVID-19 SARS-CoV… serial interval  norm              Yang …  2020         131
+  disease  pathogen   epi_name        prob_distribution author  year sample_size
+  <chr>    <chr>      <chr>           <chr>             <chr>  <dbl>       <dbl>
+1 COVID-19 SARS-CoV-2 serial interval <NA>              Alene…  2021        3924
+2 COVID-19 SARS-CoV-2 serial interval lnorm             Nishi…  2020          28
+3 COVID-19 SARS-CoV-2 serial interval weibull           Nishi…  2020          18
+4 COVID-19 SARS-CoV-2 serial interval norm              Yang …  2020         131
 ```
 
 In the `epiparameter::parameter_tbl()` output, we can also find different types of probability distributions (e.g., Log-normal, Weibull, Normal).
@@ -290,9 +327,9 @@ Entries with a missing value (`<NA>`) in the `prob_distribution` column are *non
 ``` r
 # get an <epidist> object
 distribution <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "serial"
+    epi_name = "serial"
   )
 
 distribution %>%
@@ -344,18 +381,18 @@ Ask:
 
 ::::::::::::::::: hint
 
-The `epidist_db()` function with `disease` alone counts the number of entries like:
+The `epiparameter_db()` function with `disease` alone counts the number of entries like:
 
 - studies, and
 - delay distributions.
 
-The `epidist_db()` function with `disease` and `epi_dist` gets a list of all entries with:
+The `epiparameter_db()` function with `disease` and `epi_name` gets a list of all entries with:
 
 - the complete citation, 
 - the **type** of a probability distribution, and 
 - distribution parameter values.
 
-The combo of `epidist_db()` plus `parameter_tbl()` gets a data frame of all entries with columns like:
+The combo of `epiparameter_db()` plus `parameter_tbl()` gets a data frame of all entries with columns like:
 
 - the **type** of the probability distribution per delay, and
 - author and year of the study.
@@ -369,27 +406,27 @@ We choose to explore Ebola's delay distributions:
 
 ``` r
 # we expect 16 delays distributions for ebola
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "ebola"
 )
 ```
 
 ``` output
 Returning 17 results that match the criteria (17 are parameterised). 
-Use subset to filter by entry variables or single_epidist to return a single entry. 
+Use subset to filter by entry variables or single_epiparameter to return a single entry. 
 To retrieve the citation for each use the 'get_citation' function
 ```
 
 ``` output
-# List of 17 <epidist> objects
+# List of 17 <epiparameter> objects
 Number of diseases: 1
 ❯ Ebola Virus Disease
-Number of epi distributions: 9
+Number of epi parameters: 9
 ❯ hospitalisation to death ❯ hospitalisation to discharge ❯ incubation period ❯ notification to death ❯ notification to discharge ❯ offspring distribution ❯ onset to death ❯ onset to discharge ❯ serial interval
 [[1]]
 Disease: Ebola Virus Disease
 Pathogen: Ebola Virus
-Epi Distribution: offspring distribution
+Epi Parameter: offspring distribution
 Study: Lloyd-Smith J, Schreiber S, Kopp P, Getz W (2005). "Superspreading and
 the effect of individual variation on disease emergence." _Nature_.
 doi:10.1038/nature04153 <https://doi.org/10.1038/nature04153>.
@@ -401,7 +438,7 @@ Parameters:
 [[2]]
 Disease: Ebola Virus Disease
 Pathogen: Ebola Virus-Zaire Subtype
-Epi Distribution: incubation period
+Epi Parameter: incubation period
 Study: Eichner M, Dowell S, Firese N (2011). "Incubation period of ebola
 hemorrhagic virus subtype zaire." _Osong Public Health and Research
 Perspectives_. doi:10.1016/j.phrp.2011.04.001
@@ -414,7 +451,7 @@ Parameters:
 [[3]]
 Disease: Ebola Virus Disease
 Pathogen: Ebola Virus-Zaire Subtype
-Epi Distribution: onset to death
+Epi Parameter: onset to death
 Study: The Ebola Outbreak Epidemiology Team, Barry A, Ahuka-Mundeke S, Ali
 Ahmed Y, Allarangar Y, Anoko J, Archer B, Abedi A, Bagaria J, Belizaire
 M, Bhatia S, Bokenge T, Bruni E, Cori A, Dabire E, Diallo A, Diallo B,
@@ -440,18 +477,18 @@ Parameters:
 # ℹ 14 more elements
 # ℹ Use `print(n = ...)` to see more elements.
 # ℹ Use `parameter_tbl()` to see a summary table of the parameters.
-# ℹ Explore database online at: https://epiverse-trace.github.io/epiparameter/dev/articles/database.html
+# ℹ Explore database online at: https://epiverse-trace.github.io/epiparameter/articles/database.html
 ```
 
-Now, from the output of `epiparameter::epidist_db()`, What is an [offspring distribution](../learners/reference.md#offspringdist)?
+Now, from the output of `epiparameter::epiparameter_db()`, What is an [offspring distribution](../learners/reference.md#offspringdist)?
 
 We choose to find Ebola's incubation periods. This output list all the papers and parameters found. Run this locally if needed:
 
 
 ``` r
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "incubation"
+  epi_name = "incubation"
 )
 ```
 
@@ -461,29 +498,29 @@ We use `parameter_tbl()` to get a summary display of all:
 ``` r
 # we expect 2 different types of delay distributions
 # for ebola incubation period
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "incubation"
+  epi_name = "incubation"
 ) %>%
   parameter_tbl()
 ```
 
 ``` output
 Returning 5 results that match the criteria (5 are parameterised). 
-Use subset to filter by entry variables or single_epidist to return a single entry. 
+Use subset to filter by entry variables or single_epiparameter to return a single entry. 
 To retrieve the citation for each use the 'get_citation' function
 ```
 
 ``` output
 # Parameter table:
 # A data frame:    5 × 7
-  disease   pathogen epi_distribution prob_distribution author  year sample_size
-  <chr>     <chr>    <chr>            <chr>             <chr>  <dbl>       <dbl>
-1 Ebola Vi… Ebola V… incubation peri… lnorm             Eichn…  2011         196
-2 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015        1798
-3 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015          49
-4 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015         957
-5 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015         792
+  disease           pathogen epi_name prob_distribution author  year sample_size
+  <chr>             <chr>    <chr>    <chr>             <chr>  <dbl>       <dbl>
+1 Ebola Virus Dise… Ebola V… incubat… lnorm             Eichn…  2011         196
+2 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015        1798
+3 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015          49
+4 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015         957
+5 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015         792
 ```
 
 We find two types of probability distributions for this query: _log normal_ and _gamma_.
@@ -497,13 +534,13 @@ How does `{epiparameter}` do the collection and review of peer-reviewed literatu
 
 ## Select a single distribution
 
-The `epiparameter::epidist_db()` function works as a filtering or subset function. Let's use the `author` argument to filter `Hiroshi Nishiura` parameters:
+The `epiparameter::epiparameter_db()` function works as a filtering or subset function. Let's use the `author` argument to filter `Hiroshi Nishiura` parameters:
 
 
 ``` r
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "serial",
+  epi_name = "serial",
   author = "Hiroshi"
 ) %>%
   epiparameter::parameter_tbl()
@@ -511,28 +548,28 @@ epiparameter::epidist_db(
 
 ``` output
 Returning 2 results that match the criteria (2 are parameterised). 
-Use subset to filter by entry variables or single_epidist to return a single entry. 
+Use subset to filter by entry variables or single_epiparameter to return a single entry. 
 To retrieve the citation for each use the 'get_citation' function
 ```
 
 ``` output
 # Parameter table:
 # A data frame:    2 × 7
-  disease  pathogen  epi_distribution prob_distribution author  year sample_size
-  <chr>    <chr>     <chr>            <chr>             <chr>  <dbl>       <dbl>
-1 COVID-19 SARS-CoV… serial interval  lnorm             Nishi…  2020          28
-2 COVID-19 SARS-CoV… serial interval  weibull           Nishi…  2020          18
+  disease  pathogen   epi_name        prob_distribution author  year sample_size
+  <chr>    <chr>      <chr>           <chr>             <chr>  <dbl>       <dbl>
+1 COVID-19 SARS-CoV-2 serial interval lnorm             Nishi…  2020          28
+2 COVID-19 SARS-CoV-2 serial interval weibull           Nishi…  2020          18
 ```
 
-We still get more than one epidemiological parameter. We can set the `single_epidist` argument to `TRUE` to only one:
+We still get more than one epidemiological parameter. We can set the `single_epiparameter` argument to `TRUE` to only one:
 
 
 ``` r
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "serial",
+  epi_name = "serial",
   author = "Hiroshi",
-  single_epidist = TRUE
+  single_epiparameter = TRUE
 )
 ```
 
@@ -547,7 +584,7 @@ To retrieve the citation use the 'get_citation' function
 ``` output
 Disease: COVID-19
 Pathogen: SARS-CoV-2
-Epi Distribution: serial interval
+Epi Parameter: serial interval
 Study: Nishiura H, Linton N, Akhmetzhanov A (2020). "Serial interval of novel
 coronavirus (COVID-19) infections." _International Journal of
 Infectious Diseases_. doi:10.1016/j.ijid.2020.02.060
@@ -560,11 +597,11 @@ Parameters:
 
 ::::::::::::::::: callout
 
-### How does 'single_epidist' works?
+### How does 'single_epiparameter' works?
 
-Looking at the help documentation for `?epiparameter::epidist_db()`:
+Looking at the help documentation for `?epiparameter::epiparameter_db()`:
 
-- If multiple entries match the arguments supplied and `single_epidist = TRUE`, then the parameterised
+- If multiple entries match the arguments supplied and `single_epiparameter = TRUE`, then the parameterised
 `<epidist>` with the *largest sample size* will be returned.
 - If multiple entries are equal after this sorting, the *first entry* will be returned.
 
@@ -577,11 +614,11 @@ Let's assign this `<epidist>` class object to the `covid_serialint` object.
 
 ``` r
 covid_serialint <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "serial",
+    epi_name = "serial",
     author = "Nishiura",
-    single_epidist = TRUE
+    single_epiparameter = TRUE
   )
 ```
 
@@ -721,10 +758,10 @@ Use the `str()` to display the structure of the `<epidist>` R object.
 ``` r
 # ebola serial interval
 ebola_serial <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "ebola",
-    epi_dist = "serial",
-    single_epidist = TRUE
+    epi_name = "serial",
+    single_epiparameter = TRUE
   )
 ```
 
@@ -749,7 +786,7 @@ ebola_serial
 ``` output
 Disease: Ebola Virus Disease
 Pathogen: Ebola Virus
-Epi Distribution: serial interval
+Epi Parameter: serial interval
 Study: WHO Ebola Response Team, Agua-Agum J, Ariyarajah A, Aylward B, Blake I,
 Brennan R, Cori A, Donnelly C, Dorigatti I, Dye C, Eckmanns T, Ferguson
 N, Formenty P, Fraser C, Garcia E, Garske T, Hinsley W, Holmes D,
@@ -848,21 +885,21 @@ Find a way to access the whole `{epiparameter}` database and find how that delay
 
 ``` r
 # one way to get the list of all the available parameters
-epidist_db(disease = "all") %>%
+epiparameter_db(disease = "all") %>%
   parameter_tbl() %>%
   as_tibble() %>%
-  distinct(epi_distribution)
+  distinct(epi_name)
 ```
 
 ``` output
-Returning 122 results that match the criteria (99 are parameterised). 
-Use subset to filter by entry variables or single_epidist to return a single entry. 
+Returning 125 results that match the criteria (100 are parameterised). 
+Use subset to filter by entry variables or single_epiparameter to return a single entry. 
 To retrieve the citation for each use the 'get_citation' function
 ```
 
 ``` output
-# A tibble: 12 × 1
-   epi_distribution            
+# A tibble: 13 × 1
+   epi_name                    
    <chr>                       
  1 incubation period           
  2 serial interval             
@@ -876,18 +913,19 @@ To retrieve the citation for each use the 'get_citation' function
 10 onset to discharge          
 11 onset to hospitalisation    
 12 onset to ventilation        
+13 case fatality risk          
 ```
 
 ``` r
-ebola_severity <- epidist_db(
+ebola_severity <- epiparameter_db(
   disease = "ebola",
-  epi_dist = "onset to discharge"
+  epi_name = "onset to discharge"
 )
 ```
 
 ``` output
 Returning 1 results that match the criteria (1 are parameterised). 
-Use subset to filter by entry variables or single_epidist to return a single entry. 
+Use subset to filter by entry variables or single_epiparameter to return a single entry. 
 To retrieve the citation for each use the 'get_citation' function
 ```
 
@@ -962,7 +1000,7 @@ update it from last epiparameter test
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Use `{epiparameter}` to access the literature catalogue of epidemiological delay distributions.
-- Use `epidist_db()` to select single delay distributions.
+- Use `epiparameter_db()` to select single delay distributions.
 - Use `parameter_tbl()` for an overview of multiple delay distributions.
 - Reuse known estimates for unknown disease in the early stage of an outbreak when no contact tracing data is available.
 

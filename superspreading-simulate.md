@@ -156,10 +156,10 @@ Let's use the `{epiparameter}` package to access and use the available serial in
 
 
 ``` r
-serial_interval <- epidist_db(
+serial_interval <- epiparameter_db(
   disease = "mers",
-  epi_dist = "serial",
-  single_epidist = TRUE
+  epi_name = "serial",
+  single_epiparameter = TRUE
 )
 
 plot(serial_interval, day_range = 0:25)
@@ -626,15 +626,15 @@ With `{epiparameter}`, you can access and use offspring and delay distributions 
 library(epiparameter)
 library(tidyverse)
 
-epiparameter::epidist_db(epi_dist = "offspring") %>%
+epiparameter::epiparameter_db(epi_name = "offspring") %>%
   epiparameter::parameter_tbl() %>%
-  dplyr::count(disease, epi_distribution)
+  dplyr::count(disease, epi_name)
 ```
 
 ``` output
 # Parameter table:
 # A data frame:    6 × 3
-  disease                       epi_distribution           n
+  disease                       epi_name                   n
   <chr>                         <chr>                  <int>
 1 Ebola Virus Disease           offspring distribution     1
 2 Hantavirus Pulmonary Syndrome offspring distribution     1
@@ -645,22 +645,22 @@ epiparameter::epidist_db(epi_dist = "offspring") %>%
 ```
 
 ``` r
-epiparameter::epidist_db(epi_dist = "serial interval") %>%
+epiparameter::epiparameter_db(epi_name = "serial interval") %>%
   epiparameter::parameter_tbl() %>%
-  dplyr::count(disease, epi_distribution)
+  dplyr::count(disease, epi_name)
 ```
 
 ``` output
 # Parameter table:
 # A data frame:    6 × 3
-  disease               epi_distribution     n
-  <chr>                 <chr>            <int>
-1 COVID-19              serial interval      4
-2 Ebola Virus Disease   serial interval      4
-3 Influenza             serial interval      1
-4 MERS                  serial interval      2
-5 Marburg Virus Disease serial interval      2
-6 Mpox                  serial interval      5
+  disease               epi_name            n
+  <chr>                 <chr>           <int>
+1 COVID-19              serial interval     4
+2 Ebola Virus Disease   serial interval     4
+3 Influenza             serial interval     1
+4 MERS                  serial interval     2
+5 Marburg Virus Disease serial interval     2
+6 Mpox                  serial interval     5
 ```
 
 ::::::::::::::
@@ -676,18 +676,18 @@ library(tidyverse)
 
 # delays ------------------------------------------------------------------
 
-mpox_offspring_epidist <- epiparameter::epidist_db(
+mpox_offspring_epidist <- epiparameter::epiparameter_db(
   disease = "mpox",
-  epi_dist = "offspring",
-  single_epidist = TRUE
+  epi_name = "offspring",
+  single_epiparameter = TRUE
 )
 
 mpox_offspring <- epiparameter::get_parameters(mpox_offspring_epidist)
 
-mpox_serialint <- epiparameter::epidist_db(
+mpox_serialint <- epiparameter::epiparameter_db(
   disease = "mpox",
-  epi_dist = "serial interval",
-  single_epidist = TRUE
+  epi_name = "serial interval",
+  single_epiparameter = TRUE
 )
 
 # iterate -----------------------------------------------------------------
@@ -785,15 +785,7 @@ Check how these estimates vary non-linearly with respect to the mean reproductio
 
 <!-- Calculate the probability a new Mpox case will lead to a large outbreak in the absence of control measures. Use the appropriate package to access delay data from previous outbreaks. -->
 
-```r
-library(superspreading)
-```
 
-
-
-```r
-library(superspreading)
-```
 
 
 
@@ -863,10 +855,10 @@ mu   0.9537995 0.19812301
 ``` r
 # serial interval parameters ----------------------------------------------
 
-ebola_serialinter <- epiparameter::epidist_db(
+ebola_serialinter <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "serial interval",
-  single_epidist = TRUE
+  epi_name = "serial interval",
+  single_epiparameter = TRUE
 )
 
 # simulate outbreak trajectories ------------------------------------------

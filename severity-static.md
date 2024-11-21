@@ -92,6 +92,21 @@ This help us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
+:::::::::::::::::::: discussion
+
+Based on your experience:
+
+- Share any previous outbreak in which you participated in its response.
+
+Answer to these questions:
+
+- How did you assess the clinical severity of the outbreak?
+- What were the primary sources of bias?
+- What did you do to take into account the identified bias?
+- What complementary analysis would you do to solve the bias?
+
+:::::::::::::::::::: 
+
 ## Data sources for clinical severity
 
 What are data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summarises the spectrum of COVID-19 cases:
@@ -129,9 +144,11 @@ Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the f
 data("ebola1976")
 
 # Assume we only have the first 30 days of this data
-ebola1976 %>%
-  slice_head(n = 30) %>%
-  as_tibble()
+ebola_30days <- ebola1976 %>%
+  dplyr::slice_head(n = 30) %>%
+  dplyr::as_tibble()
+
+ebola_30days
 ```
 
 ``` output
@@ -175,7 +192,7 @@ When we apply `cfr_static()` to `data` directly, we are calculating the naive CF
 
 ``` r
 # Calculate the naive CFR for the first 30 days
-cfr::cfr_static(data = ebola1976 %>% slice_head(n = 30))
+cfr::cfr_static(data = ebola_30days)
 ```
 
 ``` output
@@ -324,10 +341,10 @@ Let's use `{epiparameter}`:
 ``` r
 # Get delay distribution
 onset_to_death_ebola <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "Ebola",
-    epi_dist = "onset_to_death",
-    single_epidist = TRUE
+    epi_name = "onset_to_death",
+    single_epiparameter = TRUE
   )
 
 # Plot <epidist> object
@@ -343,26 +360,19 @@ To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with
 # Calculate the delay-adjusted CFR
 # for the first 30 days
 cfr::cfr_static(
-  data = ebola1976 %>% slice_head(n = 30),
+  data = ebola_30days,
   delay_density = function(x) density(onset_to_death_ebola, x)
 )
 ```
 
 ``` output
-Total cases = 135 and p = 0.955: using Normal approximation to binomial likelihood.
-```
-
-``` output
   severity_estimate severity_low severity_high
-1            0.9717       0.8201        0.9866
+1            0.9502        0.881        0.9861
 ```
 
 
-``` output
-Total cases = 135 and p = 0.955: using Normal approximation to binomial likelihood.
-```
 
-The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is 0.9717 with a 95% confidence interval between 0.8201 and 0.9866, slightly higher than the naive one.
+The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is 0.9502 with a 95% confidence interval between 0.881 and 0.9861, slightly higher than the naive one.
 
 :::::::::::::::::: callout
 
@@ -403,10 +413,10 @@ We use `{epiparameter}` to access a delay distribution for the SARS-CoV-2 aggreg
 library(epiparameter)
 
 sarscov2_delay <-
-  epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "onset to death",
-    single_epidist = TRUE
+    epi_name = "onset to death",
+    single_epiparameter = TRUE
   )
 ```
 
@@ -455,16 +465,14 @@ sarscov2_input %>%
     cases = cases_jpn,
     deaths = deaths_jpn
   ) %>%
-  cfr::cfr_static(delay_density = function(x) density(sarscov2_delay, x))
-```
-
-``` output
-Total cases = 159402 and p = 0.0734: using Normal approximation to binomial likelihood.
+  cfr::cfr_static(
+    delay_density = function(x) density(sarscov2_delay, x)
+  )
 ```
 
 ``` output
   severity_estimate severity_low severity_high
-1             0.047       0.0221        0.2931
+1            0.0734        0.071        0.0759
 ```
 
 Interpret the comparison between the naive and delay-adjusted CFR estimates.
@@ -536,8 +544,8 @@ We can explore the **early** determination of the _delay-adjusted CFR_ using the
 
 
 ``` r
-# Calculate the rolling daily naive CFR
 # for all the 73 days in the Ebola dataset
+# Calculate the rolling daily naive CFR
 rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
 ```
 
@@ -545,24 +553,10 @@ rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
 `cfr_rolling()` is a convenience function to help understand how additional data influences the overall (static) severity. Use `cfr_time_varying()` instead to estimate severity changes over the course of the outbreak.
 ```
 
-``` r
-utils::tail(rolling_cfr_naive)
-```
-
-``` output
-         date severity_estimate severity_low severity_high
-68 1976-10-31         0.9510204    0.9160061     0.9744387
-69 1976-11-01         0.9510204    0.9160061     0.9744387
-70 1976-11-02         0.9510204    0.9160061     0.9744387
-71 1976-11-03         0.9510204    0.9160061     0.9744387
-72 1976-11-04         0.9510204    0.9160061     0.9744387
-73 1976-11-05         0.9551020    0.9210866     0.9773771
-```
-
 
 ``` r
-# Calculate the rolling daily delay-adjusted CFR
 # for all the 73 days in the Ebola dataset
+# Calculate the rolling daily delay-adjusted CFR
 rolling_cfr_adjusted <- cfr::cfr_rolling(
   data = ebola1976,
   delay_density = function(x) density(onset_to_death_ebola, x)
@@ -577,37 +571,25 @@ rolling_cfr_adjusted <- cfr::cfr_rolling(
 Some daily ratios of total deaths to total cases with known outcome are below 0.01%: some CFR estimates may be unreliable.FALSE
 ```
 
+With `utils::tail()`, we show that the latest CFR estimates. The naive and delay-adjusted estimates have overlapping ranges of 95% confidence intervals.
+
+
 ``` r
+# Print the tail of the data frame
+utils::tail(rolling_cfr_naive)
 utils::tail(rolling_cfr_adjusted)
 ```
-
-``` output
-         date severity_estimate severity_low severity_high
-68 1976-10-31            0.9843       0.9003        0.9925
-69 1976-11-01            0.9843       0.9003        0.9925
-70 1976-11-02            0.9817       0.8838        0.9913
-71 1976-11-03            0.9817       0.8838        0.9913
-72 1976-11-04            0.9817       0.8838        0.9913
-73 1976-11-05            0.9818       0.8843        0.9913
-```
-
-With `utils::tail()`, we show that the latest CFR estimates. The naive and delay-adjusted estimates have overlapping ranges of 95% confidence intervals.
 
 Now, let's visualise both results in a time series. How would the naive and delay-adjusted CFR estimates perform in real time?
 
 
 ``` r
-# get the latest delay-adjusted CFR
-rolling_cfr_adjusted_end <-
-  rolling_cfr_adjusted %>%
-  dplyr::slice_tail()
-
 # bind by rows both output data frames
-bind_rows(
+dplyr::bind_rows(
   rolling_cfr_naive %>%
-    mutate(method = "naive"),
+    dplyr::mutate(method = "naive"),
   rolling_cfr_adjusted %>%
-    mutate(method = "adjusted")
+    dplyr::mutate(method = "adjusted")
 ) %>%
   # visualise both adjusted and unadjusted rolling estimates
   ggplot() +
@@ -622,24 +604,10 @@ bind_rows(
   ) +
   geom_line(
     aes(date, severity_estimate, colour = method)
-  ) +
-  geom_hline(
-    data = rolling_cfr_adjusted_end,
-    aes(yintercept = severity_estimate)
-  ) +
-  geom_hline(
-    data = rolling_cfr_adjusted_end,
-    aes(yintercept = severity_low),
-    lty = 2
-  ) +
-  geom_hline(
-    data = rolling_cfr_adjusted_end,
-    aes(yintercept = severity_high),
-    lty = 2
   )
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
 
@@ -740,6 +708,55 @@ This estimation is performed by the internal function `?cfr:::estimate_severity(
 
 ## Challenges
 
+:::::::::::::::::::::::::::::::: discussion
+
+### More severity measures
+
+Suppose we need to assess the clinical severity of the epidemic in a context different from surveillance data, like the severity among cases that arrive at hospitals or cases you collected from a representative serological survey. 
+
+Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denominator (`deaths`) to estimate more severity measures like the Infection fatality risk (IFR) or the Hospitalisation Fatality Risk (HFR). We can follow this analogy: 
+
+:::::::::::::::::::::::::::::::: 
+
+:::::::::::::::::::::::::::: solution
+
+### Infection and Hospitalization fatality risk
+
+If for a _Case_ fatality risk (CFR), we require: 
+
+- _case_ and death incidence data, with a 
+- case-to-death delay distribution (or close approximation, such as symptom onset-to-death).
+
+Then, the _Infection_ fatality risk (IFR) requires: 
+
+- _infection_ and death incidence data, with an 
+- exposure-to-death delay distribution (or close approximation).
+
+Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires: 
+
+- _hospitalisation_ and death incidence data, and a
+- hospitalisation-to-death delay distribution.
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::: solution
+
+### Data sources for more severity measures
+
+[Yang et al., 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) summarises different definitions and data sources:
+
+![Severity levels of infections with SARS-CoV-2 and parameters of interest. Each level is assumed to be a subset of the level below.](fig/cfr-s41467-020-19238-2-fig_a.png)
+
+- sCFR symptomatic case-fatality risk, 
+- sCHR symptomatic case-hospitalisation risk, 
+- mCFR medically attended case-fatality risk, 
+- mCHR medically attended case-hospitalisation risk, 
+- HFR hospitalisation-fatality risk. 
+
+![Schematic diagram of the baseline analyses. Red, blue, and green arrows denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 84, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–194, D3)daily number of laboratory-confirmed cases on March 9–April 243, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission3, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities3, and D7) 16,781 laboratory-confirmed cases identified through universal screening10,11. Pse: RT-PCR sensitivity12. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections13.'}
+
+::::::::::::::::::::::::::::
+
 ::::::::::::::::: callout
 
 ### Aggregated data differ from linelists
@@ -807,10 +824,10 @@ library(tidyverse)
 
 # Access delay distribution
 mers_delay <-
-  epidist_db(
+  epiparameter::epiparameter_db(
     disease = "mers",
-    epi_dist = "onset to death",
-    single_epidist = TRUE
+    epi_name = "onset to death",
+    single_epiparameter = TRUE
   )
 
 # Read linelist
@@ -927,7 +944,7 @@ mers_incidence %>%
 
 ``` output
   severity_estimate severity_low severity_high
-1            0.0907        0.042        0.4847
+1            0.1377       0.0716        0.2288
 ```
 
 
@@ -972,10 +989,10 @@ $ deaths  <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,�
 
 ``` r
 delay_onset_death <-
-  epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "onset to death",
-    single_epidist = TRUE
+    epi_name = "onset to death",
+    single_epiparameter = TRUE
   )
 
 covid_data %>%
@@ -1007,7 +1024,7 @@ covid_data %>%
  8 Iran           <tibble>            0.0191       0.0191        0.0192
  9 Italy          <tibble>            0.0075       0.0075        0.0075
 10 Mexico         <tibble>            0.0461       0.046         0.0462
-11 Peru           <tibble>            0.0318       0.0151        0.202 
+11 Peru           <tibble>            0.0502       0.0501        0.0504
 12 Poland         <tibble>            0.0186       0.0186        0.0187
 13 Russia         <tibble>            0.0182       0.0182        0.0182
 14 South Africa   <tibble>            0.0254       0.0253        0.0255
@@ -1056,70 +1073,6 @@ For example, with 100 cases, the fatality risk estimate will, roughly speaking, 
 We invite you to read this [vignette about the `cfr_time_varying()` function](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
 
 :::::::::::::::::
-
-:::::::::::::::::::::::::::::::: discussion
-
-### More severity measures
-
-Suppose we need to assess the clinical severity of the epidemic in a context different from surveillance data, like the severity among cases that arrive at hospitals or cases you collected from a representative serological survey. 
-
-Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denominator (`deaths`) to estimate more severity measures like the Infection fatality risk (IFR) or the Hospitalisation Fatality Risk (HFR). We can follow this analogy: 
-
-:::::::::::::::::::::::::::::::: 
-
-:::::::::::::::::::::::::::: solution
-
-### Infection and Hospitalization fatality risk
-
-If for a _Case_ fatality risk (CFR), we require: 
-
-- _case_ and death incidence data, with a 
-- case-to-death delay distribution (or close approximation, such as symptom onset-to-death).
-
-Then, the _Infection_ fatality risk (IFR) requires: 
-
-- _infection_ and death incidence data, with an 
-- exposure-to-death delay distribution (or close approximation).
-
-Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires: 
-
-- _hospitalisation_ and death incidence data, and a
-- hospitalisation-to-death delay distribution.
-
-::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::: solution
-
-### Data sources for more severity measures
-
-[Yang et al., 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) summarises different definitions and data sources:
-
-![Severity levels of infections with SARS-CoV-2 and parameters of interest. Each level is assumed to be a subset of the level below.](fig/cfr-s41467-020-19238-2-fig_a.png)
-
-- sCFR symptomatic case-fatality risk, 
-- sCHR symptomatic case-hospitalisation risk, 
-- mCFR medically attended case-fatality risk, 
-- mCHR medically attended case-hospitalisation risk, 
-- HFR hospitalisation-fatality risk. 
-
-![Schematic diagram of the baseline analyses. Red, blue, and green arrows denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 84, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–194, D3)daily number of laboratory-confirmed cases on March 9–April 243, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission3, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities3, and D7) 16,781 laboratory-confirmed cases identified through universal screening10,11. Pse: RT-PCR sensitivity12. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections13.'}
-
-::::::::::::::::::::::::::::
-
-:::::::::::::::::::: discussion
-
-Based on your experience:
-
-- Share any previous outbreak in which you participated in its response.
-
-Answer to these questions:
-
-- How did you assess the clinical severity of the outbreak?
-- What were the primary sources of bias?
-- What did you do to take into account the identified bias?
-- What complementary analysis would you do to solve the bias?
-
-:::::::::::::::::::: 
 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 

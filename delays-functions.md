@@ -55,11 +55,11 @@ to use the [code completion feature](https://support.posit.co/hc/en-us/articles/
 
 ``` r
 covid_serialint <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "serial",
+    epi_name = "serial",
     author = "Nishiura",
-    single_epidist = TRUE
+    single_epiparameter = TRUE
   )
 ```
 
@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  3.829872 14.071787  2.395378 10.110918  9.204568  5.868817  6.524684
- [8]  2.575604  3.993840  7.958049
+ [1] 4.736256 2.329965 1.547535 5.100827 3.992958 3.121801 1.910949 4.995859
+ [9] 5.731022 1.920042
 ```
 
 ::::::::: instructor
@@ -268,7 +268,7 @@ covid_serialint_discrete
 ``` output
 Disease: COVID-19
 Pathogen: SARS-CoV-2
-Epi Distribution: serial interval
+Epi Parameter: serial interval
 Study: Nishiura H, Linton N, Akhmetzhanov A (2020). "Serial interval of novel
 coronavirus (COVID-19) infections." _International Journal of
 Infectious Diseases_. doi:10.1016/j.ijid.2020.02.060
@@ -345,10 +345,10 @@ generate(covid_serialint_discrete, times = 10)
 
 ``` r
 covid_incubation <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "incubation",
-    single_epidist = TRUE
+    epi_name = "incubation",
+    single_epiparameter = TRUE
   )
 ```
 
@@ -473,10 +473,10 @@ epinow_estimates_cg <- epinow(
 ```
 
 ``` output
-WARN [2024-11-19 03:07:08] epinow: There were 2 divergent transitions after warmup. See
+WARN [2024-11-21 16:59:28] epinow: There were 32 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-19 03:07:08] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-11-21 16:59:28] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -538,11 +538,11 @@ epinow_estimates <- epinow(
 
 # get covid serial interval
 covid_serialint <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "serial",
+    epi_name = "serial",
     author = "Nishiura",
-    single_epidist = TRUE
+    single_epiparameter = TRUE
   )
 
 # adapt epidist to epinow2
@@ -563,11 +563,11 @@ covid_serial_interval <-
 # incubation time ---------------------------------------------------------
 
 # get covid incubation period
-covid_incubation <- epiparameter::epidist_db(
+covid_incubation <- epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "incubation",
+  epi_name = "incubation",
   author = "Natalie",
-  single_epidist = TRUE
+  single_epiparameter = TRUE
 )
 
 # adapt epiparameter to epinow2
@@ -598,10 +598,10 @@ epinow_estimates_cgi <- epinow(
 ```
 
 ``` output
-WARN [2024-11-19 03:09:21] epinow: There were 4 divergent transitions after warmup. See
+WARN [2024-11-21 17:00:45] epinow: There were 20 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-19 03:09:21] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-11-21 17:00:45] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -667,7 +667,7 @@ To calculate the $R_t$ using `{EpiNow2}`, we need:
 
 To get delay distribution using `{epiparameter}` we can use functions like:
 
-- `epiparameter::epidist_db()`
+- `epiparameter::epiparameter_db()`
 - `epiparameter::parameter_tbl()`
 - `discretise()`
 - `quantile()` 
@@ -686,7 +686,7 @@ ebola_confirmed <-
   read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 
 # list distributions
-epiparameter::epidist_db(disease = "ebola") %>%
+epiparameter::epiparameter_db(disease = "ebola") %>%
   epiparameter::parameter_tbl()
 ```
 
@@ -695,10 +695,10 @@ epiparameter::epidist_db(disease = "ebola") %>%
 # generation time ---------------------------------------------------------
 
 # subset one distribution for the generation time
-ebola_serial <- epiparameter::epidist_db(
+ebola_serial <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "serial",
-  single_epidist = TRUE
+  epi_name = "serial",
+  single_epiparameter = TRUE
 )
 
 # adapt epiparameter to epinow2
@@ -714,10 +714,10 @@ serial_interval_ebola <-
 # incubation time ---------------------------------------------------------
 
 # subset one distribution for delay of the incubation period
-ebola_incubation <- epiparameter::epidist_db(
+ebola_incubation <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "incubation",
-  single_epidist = TRUE
+  epi_name = "incubation",
+  single_epiparameter = TRUE
 )
 
 # adapt epiparameter to epinow2
@@ -743,10 +743,10 @@ epinow_estimates_egi <- epinow(
 ```
 
 ``` output
-WARN [2024-11-19 03:11:50] epinow: There were 5 divergent transitions after warmup. See
+WARN [2024-11-21 17:02:46] epinow: There were 17 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-19 03:11:50] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-11-21 17:02:46] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -778,15 +778,15 @@ Use the `influenza_england_1978_school` dataset from the `{outbreaks}` package t
 
 ``` r
 # What parameters are available for Influenza?
-epiparameter::epidist_db(disease = "influenza") %>%
+epiparameter::epiparameter_db(disease = "influenza") %>%
   epiparameter::parameter_tbl() %>%
-  count(epi_distribution)
+  count(epi_name)
 ```
 
 ``` output
 # Parameter table:
 # A data frame:    3 × 2
-  epi_distribution      n
+  epi_name              n
   <chr>             <int>
 1 generation time       1
 2 incubation period    15
@@ -798,9 +798,9 @@ epiparameter::epidist_db(disease = "influenza") %>%
 
 # Read the generation time
 influenza_generation <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "influenza",
-    epi_dist = "generation"
+    epi_name = "generation"
   )
 
 influenza_generation
@@ -809,7 +809,7 @@ influenza_generation
 ``` output
 Disease: Influenza
 Pathogen: Influenza-A-H1N1
-Epi Distribution: generation time
+Epi Parameter: generation time
 Study: Lessler J, Reich N, Cummings D, New York City Department of Health and
 Mental Hygiene Swine Influenza Investigation Team (2009). "Outbreak of
 2009 Pandemic Influenza A (H1N1) at a New York City School." _The New
@@ -855,10 +855,10 @@ generation_time_influenza <-
 
 # Read the incubation period
 influenza_incubation <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "influenza",
-    epi_dist = "incubation",
-    single_epidist = TRUE
+    epi_name = "incubation",
+    single_epiparameter = TRUE
   )
 
 # Discretize incubation period
@@ -903,7 +903,24 @@ epinow_estimates_igi <- epinow(
   generation_time = generation_time_opts(generation_time_influenza),
   delays = delay_opts(incubation_time_influenza)
 )
+```
 
+``` output
+WARN [2024-11-21 17:02:52] epinow: Specifying nonparametric generation times with nonzero first element was deprecated in EpiNow2 1.6.0. - 
+WARN [2024-11-21 17:02:54] epinow: There were 15 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2024-11-21 17:02:54] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+WARN [2024-11-21 17:02:54] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess - 
+WARN [2024-11-21 17:02:54] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess - 
+```
+
+``` r
 plot(epinow_estimates_igi)
 ```
 

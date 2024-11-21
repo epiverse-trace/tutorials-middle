@@ -141,10 +141,12 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-11-19 03:20:14] epinow: There were 4 divergent transitions after warmup. See
+WARN [2024-11-21 17:09:29] epinow: There were 9 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-19 03:20:14] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-11-21 17:09:29] epinow: There were 1386 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
+WARN [2024-11-21 17:09:29] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -207,10 +209,12 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-11-19 03:29:30] epinow: There were 3 divergent transitions after warmup. See
+WARN [2024-11-21 17:16:25] epinow: There were 7 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-19 03:29:30] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-11-21 17:16:25] epinow: There were 1801 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
+WARN [2024-11-21 17:16:25] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -219,13 +223,13 @@ base::summary(estimates)
 ```
 
 ``` output
-                            measure                estimate
-                             <char>                  <char>
-1:           New infections per day   17165 (9235 -- 30156)
-2: Expected change in daily reports       Likely decreasing
-3:       Effective reproduction no.      0.88 (0.59 -- 1.3)
-4:                   Rate of growth -0.042 (-0.18 -- 0.096)
-5:     Doubling/halving time (days)       -17 (7.2 -- -3.8)
+                            measure               estimate
+                             <char>                 <char>
+1:           New infections per day  17598 (9983 -- 30783)
+2: Expected change in daily reports      Likely decreasing
+3:       Effective reproduction no.     0.89 (0.62 -- 1.2)
+4:                   Rate of growth -0.041 (-0.17 -- 0.09)
+5:     Doubling/halving time (days)      -17 (7.7 -- -4.1)
 ```
 
 
@@ -310,7 +314,7 @@ estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
 ```
 
 ``` output
-WARN [2024-11-19 03:29:38] estimate_secondary (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+WARN [2024-11-21 17:16:32] estimate_secondary (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#bulk-ess - 
 ```
@@ -358,37 +362,6 @@ plot(deaths_forecast)
 ```
 
 <img src="fig/create-forecast-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
-
-:::::::::::::::: spoiler
-
-### make a forecast plot
-
-
-``` r
-deaths_forecast %>%
-  purrr::pluck("predictions") %>%
-  ggplot(aes(x = date, y = secondary)) +
-  geom_col(
-    fill = "grey", col = "white",
-    show.legend = FALSE, na.rm = TRUE
-  ) +
-  geom_ribbon(aes(ymin = lower_90, ymax = upper_90),
-              alpha = 0.2, linewidth = 1) +
-  geom_ribbon(aes(ymin = lower_50, ymax = upper_50),
-              alpha = 0.4, linewidth = 1) +
-  geom_ribbon(aes(ymin = lower_20, ymax = upper_20),
-              alpha = 0.6, linewidth = 1) +
-  theme_bw() +
-  labs(y = "Reports per day", x = "Date") +
-  scale_x_date(date_breaks = "week", date_labels = "%b %d") +
-  scale_y_continuous(labels = scales::comma) +
-  theme(axis.text.x = ggplot2::element_text(angle = 90))
-```
-
-<img src="fig/create-forecast-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
-
-
-::::::::::::::::
 
 The plot shows the forecast secondary observations (deaths) over the dates which we have recorded cases for. 
 It is also possible to forecast deaths using forecast cases, here you would specify `primary` as the `estimates` output from `estimate_infections()`.
@@ -447,26 +420,29 @@ We specify the distributions with some uncertainty around the mean and standard 
 
 
 ``` r
-epiparameter::epidist_db(disease = "ebola", epi_dist = "incubation") %>%
+epiparameter::epiparameter_db(
+  disease = "ebola",
+  epi_name = "incubation"
+) %>%
   epiparameter::parameter_tbl()
 ```
 
 ``` output
 # Parameter table:
 # A data frame:    5 × 7
-  disease   pathogen epi_distribution prob_distribution author  year sample_size
-  <chr>     <chr>    <chr>            <chr>             <chr>  <dbl>       <dbl>
-1 Ebola Vi… Ebola V… incubation peri… lnorm             Eichn…  2011         196
-2 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015        1798
-3 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015          49
-4 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015         957
-5 Ebola Vi… Ebola V… incubation peri… gamma             WHO E…  2015         792
+  disease           pathogen epi_name prob_distribution author  year sample_size
+  <chr>             <chr>    <chr>    <chr>             <chr>  <dbl>       <dbl>
+1 Ebola Virus Dise… Ebola V… incubat… lnorm             Eichn…  2011         196
+2 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015        1798
+3 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015          49
+4 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015         957
+5 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015         792
 ```
 
 ``` r
-ebola_eichner <- epiparameter::epidist_db(
+ebola_eichner <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "incubation",
+  epi_name = "incubation",
   author = "Eichner"
 )
 
@@ -567,17 +543,11 @@ ebola_estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-11-19 03:31:33] epinow: There were 32 divergent transitions after warmup. See
+WARN [2024-11-21 17:18:16] epinow: There were 11 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-19 03:31:33] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-11-21 17:18:16] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
-WARN [2024-11-19 03:31:35] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess - 
-WARN [2024-11-19 03:31:36] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
 
 ``` r
@@ -587,14 +557,14 @@ summary(ebola_estimates)
 ``` output
                             measure              estimate
                              <char>                <char>
-1:           New infections per day        83 (36 -- 204)
+1:           New infections per day        91 (38 -- 217)
 2: Expected change in daily reports     Likely increasing
-3:       Effective reproduction no.     1.5 (0.88 -- 2.6)
-4:                   Rate of growth 0.035 (-0.025 -- 0.1)
-5:     Doubling/halving time (days)       20 (6.6 -- -28)
+3:       Effective reproduction no.     1.6 (0.89 -- 2.7)
+4:                   Rate of growth 0.038 (-0.029 -- 0.1)
+5:     Doubling/halving time (days)       18 (6.7 -- -24)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.5 (0.88 -- 2.6). The exponential growth rate of case numbers is 0.035 (-0.025 -- 0.1).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (0.89 -- 2.7). The exponential growth rate of case numbers is 0.038 (-0.029 -- 0.1).
 
 Visualize the estimates:
 

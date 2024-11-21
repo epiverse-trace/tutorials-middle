@@ -513,7 +513,7 @@ superspreading::proportion_cluster_size(
 
 ``` output
        R        k prop_5 prop_10 prop_25
-1 0.5393 2.353899   1.8%      0%      0%
+1 0.5393 2.353899  1.84%      0%      0%
 ```
 
 The probability of having clusters of five people is 1.8%. At this stage, given this offspring distribution parameters, a backward strategy may not increase the probability of contain and quarantine more onward cases.
@@ -589,10 +589,10 @@ Currently, `{epiparameter}` has offspring distributions for SARS, Smallpox, Mpox
 
 ``` r
 # Load parameters
-sars <- epiparameter::epidist_db(
+sars <- epiparameter::epiparameter_db(
   disease = "SARS",
-  epi_dist = "offspring distribution",
-  single_epidist = TRUE
+  epi_name = "offspring distribution",
+  single_epiparameter = TRUE
 )
 sars_params <- epiparameter::get_parameters(sars)
 sars_params
@@ -611,10 +611,10 @@ sars_params
 ``` r
 #' estimate for ebola --------------
 
-ebola_epiparameter <- epiparameter::epidist_db(
+ebola_epiparameter <- epiparameter::epiparameter_db(
   disease = "Ebola",
-  epi_dist = "offspring distribution",
-  single_epidist = TRUE
+  epi_name = "offspring distribution",
+  single_epiparameter = TRUE
 )
 ebola_params <- epiparameter::get_parameters(ebola_epiparameter)
 ebola_params
@@ -674,7 +674,7 @@ superspreading::proportion_transmission(
 
 ``` output
           R          k prop_80
-1 0.6045295 0.02039807    2.1%
+1 0.6045295 0.02039807   2.13%
 ```
 
 MERS has the lowest percent of cases (2.1%) responsible of the 80% of the transmission, representative of highly overdispersed offspring distributions.
