@@ -765,7 +765,7 @@ epiparameter::epiparameter_db(epi_name = "serial interval") %>%
 
 :::::::::::::: solution
 
-```{r,message=FALSE,warning=FALSE warning=FALSE}
+```{r,message=FALSE,warning=FALSE}
 # load packages -----------------------------------------------------------
 
 library(epiparameter)
