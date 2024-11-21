@@ -234,8 +234,7 @@
         <ul><li><a href="#introduction">Introduction</a></li>
 <li><a href="#delay-distributions-and-case-data">Delay distributions and case data</a></li>
 <li><a href="#finding-estimates">Finding estimates</a></li>
-<li><a href="#quantify-geographical-heterogeneity">Quantify geographical heterogeneity</a></li>
-<li><a href="#summary">Summary</a></li>
+<li><a href="#challenge">Challenge</a></li>
         </ul></div><!--/div.accordion-body-->
     </div><!--/div.accordion-collapse-->
 
@@ -345,7 +344,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Quantifying transmission</h1>
-        <p>Last updated on 2024-11-19 |
+        <p>Last updated on 2024-11-21 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/quantify-transmissibility.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -490,10 +489,8 @@ dates.</p>
 <p>In Bayesian inference, we use prior knowledge (prior distributions)
 with data (in a likelihood function) to find the posterior
 probability.</p>
-<p class="text-center" style="background-color: white">
-Posterior probability <span class="math inline">\(\propto\)</span>
-likelihood <span class="math inline">\(\times\)</span> prior probability
-</p>
+<p><span class="math inline">\(Posterior \, probability \propto
+likelihood \times prior \, probability\)</span></p>
 </div>
 </div>
 </div>
@@ -567,7 +564,7 @@ reference manual</a></p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Can we replicate {incidence2} with {dplyr}? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p>We can get an object similar to <code>cases</code> from the
 <code>incidence2::covidregionaldataUK</code> data frame using the
@@ -603,10 +600,11 @@ a case is reported. We specify these delays as distributions to account
 for the uncertainty in individual level differences. The delay can
 consist of multiple types of delays/processes. A typical delay from time
 of infection to case reporting may consist of:</p>
-<p class="text-center" style="background-color: aliceblue">
-<strong>time from infection to symptom onset</strong> (the <a href="reference.html#incubation">incubation period</a>) + <strong>time
-from symptom onset to case notification</strong> (the reporting time) .
-</p>
+<blockquote>
+<p><strong>time from infection to symptom onset</strong> (the <a href="reference.html#incubation">incubation period</a>) + <strong>time
+from symptom onset to case notification</strong> (the reporting time)
+.</p>
+</blockquote>
 <p>The delay distribution for each of these processes can either
 estimated from data or obtained from the literature. We can express
 uncertainty about what the correct parameters of the distributions by
@@ -743,32 +741,31 @@ can specify this as a fixed or variable distribution, or estimate a
 distribution from data.</p>
 <p>When specifying a distribution, it is useful to visualise the
 probability density to see the peak and spread of the distribution, in
-this case we will use a <em>log normal</em> distribution. We can use the
-functions <code>convert_to_logmean()</code> and
-<code>convert_to_logsd()</code> to convert the mean and standard
-deviation of a normal distribution to that of a log normal
-distribution.</p>
+this case we will use a <em>log normal</em> distribution.</p>
 <p>If we want to assume that the mean reporting delay is 2 days (with a
-standard deviation of 1 day), we write:</p>
+uncertainty of 0.5 days) and a standard deviation of 1 day (with
+uncertainty of 0.5 days), we can specify a variable distribution using
+<code>LogNormal()</code> as before:</p>
 <div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># convert mean to logmean</span></span>
-<span><span class="va">log_mean</span> <span class="op">&lt;-</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">convert_to_logmean</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># convert sd to logsd</span></span>
-<span><span class="va">log_sd</span> <span class="op">&lt;-</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">convert_to_logsd</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">reporting_delay_variable</span> <span class="op">&lt;-</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">LogNormal</span><span class="op">(</span></span>
+<span>  meanlog <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">Normal</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  sdlog <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">Normal</span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">1</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  max <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span></code></pre>
 </div>
 <div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Visualize a log Normal distribution using {epiparameter} </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
-<p>Using <code>epiparameter::epidist()</code> we can create a custom
-distribution. The log normal distribution will look like:</p>
+<p>Using <code>epiparameter::epiparameter()</code> we can create a
+custom distribution. The fixed log normal distribution will look
+like:</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -779,14 +776,17 @@ distribution. The log normal distribution will look like:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epidist</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter</span><span class="op">(</span></span>
 <span>  disease <span class="op">=</span> <span class="st">"covid"</span>,</span>
-<span>  epi_dist <span class="op">=</span> <span class="st">"reporting delay"</span>,</span>
-<span>  prob_distribution <span class="op">=</span> <span class="st">"lnorm"</span>,</span>
-<span>  prob_distribution_params <span class="op">=</span> <span class="fu">c</span><span class="op">(</span></span>
-<span>    meanlog <span class="op">=</span> <span class="va">log_mean</span>,</span>
-<span>    sdlog <span class="op">=</span> <span class="va">log_sd</span></span>
-<span>  <span class="op">)</span></span>
+<span>  epi_name <span class="op">=</span> <span class="st">"reporting delay"</span>,</span>
+<span>  prob_distribution <span class="op">=</span></span>
+<span>    <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">create_prob_distribution</span><span class="op">(</span></span>
+<span>      prob_distribution <span class="op">=</span> <span class="st">"lnorm"</span>,</span>
+<span>      prob_distribution_params <span class="op">=</span> <span class="fu">c</span><span class="op">(</span></span>
+<span>        meanlog <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>        sdlog <span class="op">=</span> <span class="fl">1</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
 <span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">plot</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
@@ -794,30 +794,17 @@ distribution. The log normal distribution will look like:</p>
 </div>
 </div>
 </div>
-<p>Using the mean and standard deviation for the log normal
-distribution, we can specify a fixed or variable distribution using
-<code>LogNormal()</code> as before:</p>
-<div class="codewrapper sourceCode" id="cb13">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">reporting_delay_variable</span> <span class="op">&lt;-</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">LogNormal</span><span class="op">(</span></span>
-<span>  meanlog <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">Normal</span><span class="op">(</span>mean <span class="op">=</span> <span class="va">log_mean</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
-<span>  sdlog <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">Normal</span><span class="op">(</span>mean <span class="op">=</span> <span class="va">log_sd</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
-<span>  max <span class="op">=</span> <span class="fl">10</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
 <p>We can plot single and combined distributions generated by
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> using <code>plot()</code>. Let’s combine in one
 plot the delay from infection to report which includes the incubation
 period and reporting delay:</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">plot</span><span class="op">(</span><span class="va">incubation_period_variable</span> <span class="op">+</span> <span class="va">reporting_delay_variable</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="callout5" class="callout">
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="callout5" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
@@ -828,7 +815,7 @@ period and reporting delay:</p>
 we can use the function <code>estimate_delay()</code> to estimate a log
 normal distribution from a vector of delays. The code below illustrates
 how to use <code>estimate_delay()</code> with synthetic delay data.</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -850,7 +837,7 @@ how to use <code>estimate_delay()</code> with synthetic delay data.</p>
 will use a log normal distribution with mean 3.6 and standard deviation
 3.1 (<a href="https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257" class="external-link">Ganyani
 et al. 2020</a>).</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -874,7 +861,7 @@ detail. One optional input is to specify a <em>log normal</em> prior for
 the effective reproduction number <span class="math inline">\(R_t\)</span> at the start of the outbreak. We
 specify a mean of 2 days and standard deviation of 2 days as arguments
 of <code>prior</code> within <code>rt_opts()</code>:</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -897,7 +884,7 @@ number of samples per chain (see
 this, we must set the number of cores to be used. By default, 4 MCMC
 chains are run (see <code>stan_opts()$chains</code>), so we can set an
 equal number of cores to be used in parallel as follows:</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -920,7 +907,7 @@ distributions are used instead of <code>_variable</code> (delay
 distributions with uncertainty). This is to speed up computation time.
 It is generally recommended to use variable distributions that account
 for additional uncertainty.</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -932,8 +919,8 @@ for additional uncertainty.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">reporting_delay_fixed</span> <span class="op">&lt;-</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">LogNormal</span><span class="op">(</span></span>
-<span>  mean <span class="op">=</span> <span class="va">log_mean</span>,</span>
-<span>  sd <span class="op">=</span> <span class="va">log_sd</span>,</span>
+<span>  mean <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  sd <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  max <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
@@ -942,14 +929,14 @@ for additional uncertainty.</p>
 </div>
 <p>Now you are ready to run <code>EpiNow2::epinow()</code> to estimate
 the time-varying reproduction number for the first 90 days:</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reported_cases</span> <span class="op">&lt;-</span> <span class="va">cases</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">slice_head</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">90</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -966,10 +953,12 @@ the time-varying reproduction number for the first 90 days:</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>WARN [2024-11-19 02:06:28] epinow: There were 1 divergent transitions after warmup. See
+<pre class="output" tabindex="0"><code>WARN [2024-11-21 16:57:53] epinow: There were 15 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. -
-WARN [2024-11-19 02:06:28] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2024-11-21 16:57:53] epinow: There were 1352 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded -
+WARN [2024-11-21 16:57:53] epinow: Examine the pairs() plot to diagnose sampling problems
  - </code></pre>
 </div>
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
@@ -998,14 +987,14 @@ specify a fixed number of <code>samples = 1000</code> and
 <code>EpiNow2::epinow()</code> function. We expect this to take
 approximately 3 minutes.</p>
 <!-- We can optionally set `stan = stan_opts(method = "vb")` to use an approximate sampling method. We expect this to take less than 1 minute. -->
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># you can add the `stan` argument</span></span>
 <span><span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">epinow</span><span class="op">(</span></span>
 <span>  <span class="va">...</span>,</span>
-<span>  stan <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">stan_opts</span><span class="op">(</span>samples <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  stan <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">stan_opts</span><span class="op">(</span>samples <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p><strong>Remember:</strong> Using an appropriate number of
@@ -1019,13 +1008,13 @@ More accurate outputs come at the cost of speed.</p>
 <h3 id="results">Results<a class="anchor" aria-label="anchor" href="#results"></a></h3>
 <p>We can extract and visualise estimates of the effective reproduction
 number through time:</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">estimates</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">R</span></span></code></pre>
 </div>
-<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The uncertainty in the estimates increases through time. This is
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The uncertainty in the estimates increases through time. This is
 because estimates are informed by data in the past - within the delay
 periods. This difference in uncertainty is categorised into
 <strong>Estimate</strong> (green) utilises all data and <strong>Estimate
@@ -1035,15 +1024,15 @@ not have been observed yet) and therefore have increasingly wider
 intervals towards the date of the last data point. Finally, the
 <strong>Forecast</strong> (purple) is a projection ahead of time.</p>
 <p>We can also visualise the growth rate estimate through time:</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">estimates</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">growth_rate</span></span></code></pre>
 </div>
-<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To extract a summary of the key transmission metrics at the
+<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To extract a summary of the key transmission metrics at the
 <em>latest date</em> in the data:</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1052,24 +1041,24 @@ intervals towards the date of the last data point. Finally, the
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                            measure               estimate
-                             &lt;char&gt;                 &lt;char&gt;
-1:           New infections per day   6752 (3556 -- 12180)
-2: Expected change in daily reports      Likely decreasing
-3:       Effective reproduction no.     0.87 (0.57 -- 1.2)
-4:                   Rate of growth -0.048 (-0.2 -- 0.096)
-5:     Doubling/halving time (days)      -14 (7.2 -- -3.5)</code></pre>
+<pre class="output" tabindex="0"><code>                            measure                estimate
+                             &lt;char&gt;                  &lt;char&gt;
+1:           New infections per day    6554 (2919 -- 13181)
+2: Expected change in daily reports       Likely decreasing
+3:       Effective reproduction no.      0.88 (0.53 -- 1.3)
+4:                   Rate of growth -0.045 (-0.21 -- 0.099)
+5:     Doubling/halving time (days)         -16 (7 -- -3.2)</code></pre>
 </div>
 <p>As these estimates are based on partial data, they have a wide
 uncertainty interval.</p>
 <ul><li><p>From the summary of our analysis we see that the expected change
 in daily cases is with the estimated new confirmed cases .</p></li>
 <li><p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
-data) is 0.87 (0.57 – 1.2).</p></li>
-<li><p>The exponential growth rate of case numbers is -0.048 (-0.2 –
-0.096).</p></li>
+data) is 0.88 (0.53 – 1.3).</p></li>
+<li><p>The exponential growth rate of case numbers is -0.045 (-0.21 –
+0.099).</p></li>
 <li><p>The doubling time (the time taken for case numbers to double) is
--14 (7.2 – -3.5).</p></li>
+-16 (7 – -3.2).</p></li>
 </ul><div id="expected-change-in-daily-cases" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -1097,9 +1086,46 @@ posterior probability that <span class="math inline">\(R_t &lt;
 </div>
 </div>
 </div>
+<div id="credible-intervals" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
 </div>
-</section><section><h2 class="section-heading" id="quantify-geographical-heterogeneity">Quantify geographical heterogeneity<a class="anchor" aria-label="anchor" href="#quantify-geographical-heterogeneity"></a></h2>
-<hr class="half-width"><p>The outbreak data of the start of the COVID-19 pandemic from the
+<div id="credible-intervals" class="callout-inner">
+<h3 class="callout-title">Credible intervals</h3>
+<div class="callout-content">
+<p>In all <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> output figures, shaded regions reflect
+90%, 50%, and 20% credible intervals in order from lightest to
+darkest.</p>
+</div>
+</div>
+</div>
+<div id="checklist3" class="callout checklist">
+<div class="callout-square">
+<i class="callout-icon" data-feather="check-square"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Checklist</h3>
+<div class="callout-content">
+<p><code>EpiNow2</code> can be used to estimate transmission metrics
+from case data at any time in the course of an outbreak. The reliability
+of these estimates depends on the quality of the data and appropriate
+choice of delay distributions. In the next tutorial we will learn how to
+make forecasts and investigate some of the additional inference options
+available in <code>EpiNow2</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="challenge">Challenge<a class="anchor" aria-label="anchor" href="#challenge"></a></h2>
+<hr class="half-width"><div id="challenge1" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge</h3>
+<div class="callout-content">
+<p><strong>Quantify geographical heterogeneity</strong></p>
+<p>The outbreak data of the start of the COVID-19 pandemic from the
 United Kingdom from the R package <a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a> includes the
 region in which the cases were recorded. To find regional estimates of
 the effective reproduction number and cases, we must format the data to
@@ -1111,7 +1137,33 @@ have three columns:</p>
 <li>
 <code>confirm</code>: number of confirmed cases for a region on a
 given date.</li>
-</ul><div class="codewrapper sourceCode" id="cb28">
+</ul><p>Generate regional Rt estimates from the
+<code>incidence2::covidregionaldataUK</code> data frame by:</p>
+<ul><li>use <a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a> to convert aggregated data to
+incidence data by the variable <code>region</code>,</li>
+<li>keep the first 90 dates for all regions,</li>
+<li>estimate the Rt per region using the defined generation time and
+delays in this episode.</li>
+</ul><div class="codewrapper sourceCode" id="cb27">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">regional_cases</span> <span class="op">&lt;-</span> <span class="fu">incidence2</span><span class="fu">::</span><span class="va">covidregionaldataUK</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># use {tidyr} to preprocess missing values</span></span>
+<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu">replace_na</span><span class="op">(</span><span class="fu">base</span><span class="fu">::</span><span class="fu">list</span><span class="op">(</span>cases_new <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="accordionHint1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
+  <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
+</button>
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div class="accordion-body">
+<p>To wrangle data, you can:</p>
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1127,45 +1179,26 @@ given date.</li>
 <span>    date_names_to <span class="op">=</span> <span class="st">"date"</span>,</span>
 <span>    complete_dates <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">count_variable</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># keep the first 90 dates for all regions</span></span>
-<span></span>
-<span><span class="co"># get vector of first 90 dates</span></span>
-<span><span class="va">date_range</span> <span class="op">&lt;-</span> <span class="va">regional_cases</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">distinct</span><span class="op">(</span><span class="va">date</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># from incidence2, dates are already arranged in ascendant order</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">slice_head</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">90</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">pull</span><span class="op">(</span><span class="va">date</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># filter dates in date_range</span></span>
-<span><span class="va">regional_cases</span> <span class="op">&lt;-</span> <span class="va">regional_cases</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="fu">magrittr</span><span class="fu">::</span><span class="fu">is_in</span><span class="op">(</span>x <span class="op">=</span> <span class="va">date</span>, table <span class="op">=</span> <span class="va">date_range</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu">as_tibble</span><span class="op">(</span><span class="va">regional_cases</span><span class="op">)</span></span></code></pre>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">count_variable</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">date</span> <span class="op">&lt;</span> <span class="fu">ymd</span><span class="op">(</span><span class="fl">20200301</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code># A tibble: 1,170 × 3
-   date       region           confirm
-   &lt;date&gt;     &lt;chr&gt;              &lt;dbl&gt;
- 1 2020-01-30 East Midlands          0
- 2 2020-01-30 East of England        0
- 3 2020-01-30 England                2
- 4 2020-01-30 London                 0
- 5 2020-01-30 North East             0
- 6 2020-01-30 North West             0
- 7 2020-01-30 Northern Ireland       0
- 8 2020-01-30 Scotland               0
- 9 2020-01-30 South East             0
-10 2020-01-30 South West             0
-# ℹ 1,160 more rows</code></pre>
+<p>To learn how to do the regional estimation of Rt, read the Get
+started vignette section on <code>regional_epinow()</code> at <a href="https://epiforecasts.io/EpiNow2/articles/EpiNow2.html#regional_epinow" class="external-link uri">https://epiforecasts.io/EpiNow2/articles/EpiNow2.html#regional_epinow</a></p>
 </div>
+</div>
+</div>
+</div>
+<div id="accordionSolution1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
+  <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
+</button>
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div class="accordion-body">
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
 <code>regional_epinow()</code>:</p>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1179,101 +1212,23 @@ given date.</li>
 <span>  rt <span class="op">=</span> <span class="va">rt_prior</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>INFO [2024-11-19 02:06:33] Producing following optional outputs: regions, summary, samples, plots, latest
-INFO [2024-11-19 02:06:33] Reporting estimates using data up to: 2020-04-28
-INFO [2024-11-19 02:06:33] No target directory specified so returning output
-INFO [2024-11-19 02:06:33] Producing estimates for: East Midlands, East of England, England, London, North East, North West, Northern Ireland, Scotland, South East, South West, Wales, West Midlands, Yorkshire and The Humber
-INFO [2024-11-19 02:06:33] Regions excluded: none
-INFO [2024-11-19 03:05:14] Completed regional estimates
-INFO [2024-11-19 03:05:14] Regions with estimates: 13
-INFO [2024-11-19 03:05:14] Regions with runtime errors: 0
-INFO [2024-11-19 03:05:14] Producing summary
-INFO [2024-11-19 03:05:14] No summary directory specified so returning summary output
-INFO [2024-11-19 03:05:15] No target directory specified so returning timings</code></pre>
-</div>
-<!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE,echo=FALSE} -->
-<!-- estimates_regional <- EpiNow2::regional_epinow( -->
-<!--   # cases -->
-<!--   data = regional_cases, -->
-<!--   # delays -->
-<!--   generation_time = EpiNow2::generation_time_opts(generation_time_fixed), -->
-<!--   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed), -->
-<!--   # prior -->
-<!--   rt = rt_prior, -->
-<!--   stan = EpiNow2::stan_opts(method = "vb") -->
-<!-- ) -->
-<!-- ``` -->
-<div class="codewrapper sourceCode" id="cb32">
+<p>Plot the results with:</p>
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">estimates_regional</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">summarised_results</span><span class="op">$</span><span class="va">table</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">estimates_regional</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">summarised_results</span><span class="op">$</span><span class="va">table</span></span>
+<span></span>
+<span><span class="va">estimates_regional</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">R</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>                      Region New infections per day
-                      &lt;char&gt;                 &lt;char&gt;
- 1:            East Midlands       338 (200 -- 529)
- 2:          East of England       497 (306 -- 767)
- 3:                  England    3325 (2061 -- 5288)
- 4:                   London       300 (193 -- 457)
- 5:               North East       244 (136 -- 431)
- 6:               North West       533 (314 -- 848)
- 7:         Northern Ireland          43 (22 -- 89)
- 8:                 Scotland       282 (138 -- 573)
- 9:               South East       583 (355 -- 955)
-10:               South West       419 (296 -- 597)
-11:                    Wales         94 (63 -- 139)
-12:            West Midlands       240 (125 -- 435)
-13: Yorkshire and The Humber       456 (279 -- 731)
-    Expected change in daily reports Effective reproduction no.
-                              &lt;fctr&gt;                     &lt;char&gt;
- 1:                Likely increasing          1.1 (0.79 -- 1.4)
- 2:                           Stable            1 (0.76 -- 1.3)
- 3:                Likely decreasing         0.89 (0.65 -- 1.2)
- 4:                Likely decreasing         0.88 (0.67 -- 1.1)
- 5:                Likely decreasing         0.92 (0.63 -- 1.3)
- 6:                Likely decreasing         0.87 (0.63 -- 1.1)
- 7:                Likely decreasing         0.77 (0.51 -- 1.2)
- 8:                           Stable         0.95 (0.61 -- 1.4)
- 9:                           Stable         0.98 (0.72 -- 1.3)
-10:                       Increasing             1.3 (1 -- 1.5)
-11:                       Decreasing        0.71 (0.55 -- 0.92)
-12:                Likely decreasing           0.71 (0.45 -- 1)
-13:                Likely decreasing          0.95 (0.7 -- 1.2)
-               Rate of growth Doubling/halving time (days)
-                       &lt;char&gt;                       &lt;char&gt;
- 1:    0.022 (-0.094 -- 0.11)             32 (6.3 -- -7.3)
- 2:  -0.0021 (-0.11 -- 0.093)           -330 (7.4 -- -6.1)
- 3:   -0.044 (-0.15 -- 0.065)             -16 (11 -- -4.5)
- 4:   -0.033 (-0.13 -- 0.057)             -21 (12 -- -5.3)
- 5:   -0.027 (-0.16 -- 0.094)            -26 (7.4 -- -4.4)
- 6:   -0.044 (-0.16 -- 0.052)             -16 (13 -- -4.4)
- 7:     -0.068 (-0.2 -- 0.11)            -10 (6.4 -- -3.5)
- 8:    -0.011 (-0.16 -- 0.16)            -64 (4.4 -- -4.4)
- 9:    -0.0096 (-0.12 -- 0.1)            -72 (6.7 -- -5.6)
-10:   0.073 (-0.0098 -- 0.16)             9.5 (4.4 -- -71)
-11: -0.091 (-0.17 -- -0.0029)            -7.6 (-240 -- -4)
-12:    -0.11 (-0.25 -- 0.036)            -6.6 (19 -- -2.7)
-13:   -0.025 (-0.14 -- 0.077)                -28 (9 -- -5)</code></pre>
+<figure><img src="fig/quantify-transmissibility-regional.png" class="figure mx-auto d-block"></figure></div>
 </div>
-<div class="codewrapper sourceCode" id="cb34">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">estimates_regional</span><span class="op">$</span><span class="va">summary</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">R</span></span></code></pre>
 </div>
-<figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><!-- :::::::::::::::::::::::::: testimonial --><!-- ### the i2extras package --><!-- `{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette. --><!-- :::::::::::::::::::::::::: --></section><section><h2 class="section-heading" id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a></h2>
-<hr class="half-width"><p><code>EpiNow2</code> can be used to estimate transmission metrics
-from case data at any time in the course of an outbreak. The reliability
-of these estimates depends on the quality of the data and appropriate
-choice of delay distributions. In the next tutorial we will learn how to
-make forecasts and investigate some of the additional inference options
-available in <code>EpiNow2</code>.</p>
+</div>
+<!-- :::::::::::::::::::::::::: testimonial -->
+<!-- ### the i2extras package -->
+<!-- `{i2extras}` package also estimate transmission metrics like growth rate and doubling/halving time at different time intervals (i.e., days, weeks, or months). `{i2extras}` require `{incidence2}` objects as inputs. Read further in its [Fitting curves](https://www.reconverse.org/i2extras/articles/fitting_epicurves.html) vignette. -->
+<!-- :::::::::::::::::::::::::: -->
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -1348,9 +1303,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html",
-  "dateCreated": "2024-11-05",
-  "dateModified": "2024-11-19",
-  "datePublished": "2024-11-19"
+  "dateCreated": "2024-11-21",
+  "dateModified": "2024-11-21",
+  "datePublished": "2024-11-21"
 }
 
   </script><script>
