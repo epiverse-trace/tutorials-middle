@@ -186,13 +186,13 @@
     },
     "RcppParallel": {
       "Package": "RcppParallel",
-      "Version": "5.1.9",
+      "Version": "5.1.7",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R"
       ],
-      "Hash": "f38a72a419b91faac0ce5d9eee04c120"
+      "Hash": "a45594a00f5dbb073d5ec9f48592a08a"
     },
     "StanHeaders": {
       "Package": "StanHeaders",
