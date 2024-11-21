@@ -495,9 +495,17 @@ In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% cred
 
 ::::::::::::::::::::::::::
 
+::::::::::: checklist
+
+`EpiNow2` can be used to estimate transmission metrics from case data at any time in the course of an outbreak. The reliability of these estimates depends on the quality of the data and appropriate choice of delay distributions. In the next tutorial we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`.
+
+:::::::::::
+
+## Challenge
+
 ::::::::::::::::::: challenge
 
-### Quantify geographical heterogeneity
+**Quantify geographical heterogeneity**
 
 The outbreak data of the start of the COVID-19 pandemic from the United Kingdom from the R package `{incidence2}` includes the region in which the cases were recorded. To find regional estimates of the effective reproduction number and cases, we must format the data to have three columns:
 
@@ -580,9 +588,6 @@ estimates_regional$summary$plots$R
 
 <!-- :::::::::::::::::::::::::: -->
 
-## Summary
-
-`EpiNow2` can be used to estimate transmission metrics from case data at any time in the course of an outbreak. The reliability of these estimates depends on the quality of the data and appropriate choice of delay distributions. In the next tutorial we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`. 
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
