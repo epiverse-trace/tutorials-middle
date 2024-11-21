@@ -93,11 +93,11 @@ It is a common practice for analysts to manually search the available literature
 
 In this episode, we will *access* the summary statistics of generation time for COVID-19 from the library of epidemiological parameters provided by `{epiparameter}`. These metrics can be used to estimate the transmissibility of this disease using `{EpiNow2}` in subsequent episodes.
 
-Let's start by looking at how many entries are available in the **epidemiological distributions database** in `{epiparameter}` using `epidist_db()` for the epidemiological distribution `epi_dist` called generation time with the string `"generation"`:
+Let's start by looking at how many entries are available in the **epidemiological distributions database** in `{epiparameter}` using `epiparameter_db()` for the epidemiological distribution `epi_name` called generation time with the string `"generation"`:
 
 ```{r}
-epiparameter::epidist_db(
-  epi_dist = "generation"
+epiparameter::epiparameter_db(
+  epi_name = "generation"
 )
 ```
 
@@ -196,20 +196,20 @@ The objective of the assessment above is to assess the interpretation of a large
 
 In this section, we will use `{epiparameter}` to obtain the serial interval for COVID-19, as an alternative to the generation time.
 
-Let's ask now how many parameters we have in the epidemiological distributions database (`epidist_db()`) with the `disease` named `covid`-19. Run this locally!
+Let's ask now how many parameters we have in the epidemiological distributions database (`epiparameter_db()`) with the `disease` named `covid`-19. Run this locally!
 
 ```{r,eval=FALSE}
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "covid"
 )
 ```
 
-From the `{epiparameter}` package, we can use the `epidist_db()` function to ask for any `disease` and also for a specific epidemiological distribution (`epi_dist`). Run this in your console:
+From the `{epiparameter}` package, we can use the `epiparameter_db()` function to ask for any `disease` and also for a specific epidemiological distribution (`epi_name`). Run this in your console:
 
 ```{r,eval=FALSE}
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "COVID",
-  epi_dist = "serial"
+  epi_name = "serial"
 )
 ```
 
@@ -219,16 +219,16 @@ With this query combination, we get more than one delay distribution. This outpu
 
 ### CASE-INSENSITIVE
 
-`epidist_db` is [case-insensitive](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). This means that you can use strings with letters in upper or lower case indistinctly. Strings like `"serial"`, `"serial interval"` or `"serial_interval"` are also valid.
+`epiparameter_db` is [case-insensitive](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). This means that you can use strings with letters in upper or lower case indistinctly. Strings like `"serial"`, `"serial interval"` or `"serial_interval"` are also valid.
 
 :::::::::::::::::::::::::
 
 As suggested in the outputs, to summarise an `<epidist>` object and get the column names from the underlying parameter database, we can add the `epiparameter::parameter_tbl()` function to the previous code using the pipe `%>%`:
 
 ```{r}
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "serial"
+  epi_name = "serial"
 ) %>%
   epiparameter::parameter_tbl()
 ```
@@ -246,9 +246,9 @@ Entries with a missing value (`<NA>`) in the `prob_distribution` column are *non
 ```{r,eval=FALSE}
 # get an <epidist> object
 distribution <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "serial"
+    epi_name = "serial"
   )
 
 distribution %>%
@@ -299,18 +299,18 @@ Ask:
 
 ::::::::::::::::: hint
 
-The `epidist_db()` function with `disease` alone counts the number of entries like:
+The `epiparameter_db()` function with `disease` alone counts the number of entries like:
 
 - studies, and
 - delay distributions.
 
-The `epidist_db()` function with `disease` and `epi_dist` gets a list of all entries with:
+The `epiparameter_db()` function with `disease` and `epi_name` gets a list of all entries with:
 
 - the complete citation, 
 - the **type** of a probability distribution, and 
 - distribution parameter values.
 
-The combo of `epidist_db()` plus `parameter_tbl()` gets a data frame of all entries with columns like:
+The combo of `epiparameter_db()` plus `parameter_tbl()` gets a data frame of all entries with columns like:
 
 - the **type** of the probability distribution per delay, and
 - author and year of the study.
@@ -323,19 +323,19 @@ We choose to explore Ebola's delay distributions:
 
 ```{r}
 # we expect 16 delays distributions for ebola
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "ebola"
 )
 ```
 
-Now, from the output of `epiparameter::epidist_db()`, What is an [offspring distribution](../learners/reference.md#offspringdist)?
+Now, from the output of `epiparameter::epiparameter_db()`, What is an [offspring distribution](../learners/reference.md#offspringdist)?
 
 We choose to find Ebola's incubation periods. This output list all the papers and parameters found. Run this locally if needed:
 
 ```{r, eval=FALSE}
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "incubation"
+  epi_name = "incubation"
 )
 ```
 
@@ -344,9 +344,9 @@ We use `parameter_tbl()` to get a summary display of all:
 ```{r,eval=TRUE}
 # we expect 2 different types of delay distributions
 # for ebola incubation period
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "incubation"
+  epi_name = "incubation"
 ) %>%
   parameter_tbl()
 ```
@@ -362,35 +362,35 @@ How does `{epiparameter}` do the collection and review of peer-reviewed literatu
 
 ## Select a single distribution
 
-The `epiparameter::epidist_db()` function works as a filtering or subset function. Let's use the `author` argument to filter `Hiroshi Nishiura` parameters:
+The `epiparameter::epiparameter_db()` function works as a filtering or subset function. Let's use the `author` argument to filter `Hiroshi Nishiura` parameters:
 
 ```{r}
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "serial",
+  epi_name = "serial",
   author = "Hiroshi"
 ) %>%
   epiparameter::parameter_tbl()
 ```
 
-We still get more than one epidemiological parameter. We can set the `single_epidist` argument to `TRUE` to only one:
+We still get more than one epidemiological parameter. We can set the `single_epiparameter` argument to `TRUE` to only one:
 
 ```{r}
-epiparameter::epidist_db(
+epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "serial",
+  epi_name = "serial",
   author = "Hiroshi",
-  single_epidist = TRUE
+  single_epiparameter = TRUE
 )
 ```
 
 ::::::::::::::::: callout
 
-### How does 'single_epidist' works?
+### How does 'single_epiparameter' works?
 
-Looking at the help documentation for `?epiparameter::epidist_db()`:
+Looking at the help documentation for `?epiparameter::epiparameter_db()`:
 
-- If multiple entries match the arguments supplied and `single_epidist = TRUE`, then the parameterised
+- If multiple entries match the arguments supplied and `single_epiparameter = TRUE`, then the parameterised
 `<epidist>` with the *largest sample size* will be returned.
 - If multiple entries are equal after this sorting, the *first entry* will be returned.
 
@@ -402,11 +402,11 @@ Let's assign this `<epidist>` class object to the `covid_serialint` object.
 
 ```{r,message=FALSE}
 covid_serialint <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "serial",
+    epi_name = "serial",
     author = "Nishiura",
-    single_epidist = TRUE
+    single_epiparameter = TRUE
   )
 ```
 
@@ -524,10 +524,10 @@ Use the `str()` to display the structure of the `<epidist>` R object.
 ```{r,eval=TRUE}
 # ebola serial interval
 ebola_serial <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "ebola",
-    epi_dist = "serial",
-    single_epidist = TRUE
+    epi_name = "serial",
+    single_epiparameter = TRUE
   )
 
 ebola_serial
@@ -591,14 +591,14 @@ Find a way to access the whole `{epiparameter}` database and find how that delay
 
 ```{r,eval=TRUE}
 # one way to get the list of all the available parameters
-epidist_db(disease = "all") %>%
+epiparameter_db(disease = "all") %>%
   parameter_tbl() %>%
   as_tibble() %>%
-  distinct(epi_distribution)
+  distinct(epi_name)
 
-ebola_severity <- epidist_db(
+ebola_severity <- epiparameter_db(
   disease = "ebola",
-  epi_dist = "onset to discharge"
+  epi_name = "onset to discharge"
 )
 
 # point estimate
@@ -655,7 +655,7 @@ update it from last epiparameter test
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
 - Use `{epiparameter}` to access the literature catalogue of epidemiological delay distributions.
-- Use `epidist_db()` to select single delay distributions.
+- Use `epiparameter_db()` to select single delay distributions.
 - Use `parameter_tbl()` for an overview of multiple delay distributions.
 - Reuse known estimates for unknown disease in the early stage of an outbreak when no contact tracing data is available.
 
