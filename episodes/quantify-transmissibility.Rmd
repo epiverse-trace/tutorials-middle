@@ -285,14 +285,14 @@ library(epiparameter)
 epiparameter::epiparameter(
   disease = "covid",
   epi_name = "reporting delay",
-  prob_distribution = 
+  prob_distribution =
     epiparameter::create_prob_distribution(
       prob_distribution = "lnorm",
       prob_distribution_params = c(
         meanlog = log_mean,
         sdlog = log_sd
       )
-    ),
+    )
 ) %>%
   plot()
 ```
