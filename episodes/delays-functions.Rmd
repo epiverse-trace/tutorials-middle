@@ -54,11 +54,11 @@ to use the [code completion feature](https://support.posit.co/hc/en-us/articles/
 
 ```{r,message=FALSE}
 covid_serialint <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "serial",
+    epi_name = "serial",
     author = "Nishiura",
-    single_epidist = TRUE
+    single_epiparameter = TRUE
   )
 ```
 
@@ -285,10 +285,10 @@ generate(covid_serialint_discrete, times = 10)
 
 ```{r,eval=TRUE}
 covid_incubation <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "incubation",
-    single_epidist = TRUE
+    epi_name = "incubation",
+    single_epiparameter = TRUE
   )
 
 covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
@@ -436,11 +436,11 @@ epinow_estimates <- epinow(
 
 # get covid serial interval
 covid_serialint <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "covid",
-    epi_dist = "serial",
+    epi_name = "serial",
     author = "Nishiura",
-    single_epidist = TRUE
+    single_epiparameter = TRUE
   )
 
 # adapt epidist to epinow2
@@ -461,11 +461,11 @@ covid_serial_interval <-
 # incubation time ---------------------------------------------------------
 
 # get covid incubation period
-covid_incubation <- epiparameter::epidist_db(
+covid_incubation <- epiparameter::epiparameter_db(
   disease = "covid",
-  epi_dist = "incubation",
+  epi_name = "incubation",
   author = "Natalie",
-  single_epidist = TRUE
+  single_epiparameter = TRUE
 )
 
 # adapt epiparameter to epinow2
@@ -553,7 +553,7 @@ To calculate the $R_t$ using `{EpiNow2}`, we need:
 
 To get delay distribution using `{epiparameter}` we can use functions like:
 
-- `epiparameter::epidist_db()`
+- `epiparameter::epiparameter_db()`
 - `epiparameter::parameter_tbl()`
 - `discretise()`
 - `quantile()` 
@@ -575,7 +575,7 @@ ebola_confirmed <-
   read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
 
 # list distributions
-epiparameter::epidist_db(disease = "ebola") %>%
+epiparameter::epiparameter_db(disease = "ebola") %>%
   epiparameter::parameter_tbl()
 ```
 
@@ -584,10 +584,10 @@ epiparameter::epidist_db(disease = "ebola") %>%
 # generation time ---------------------------------------------------------
 
 # subset one distribution for the generation time
-ebola_serial <- epiparameter::epidist_db(
+ebola_serial <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "serial",
-  single_epidist = TRUE
+  epi_name = "serial",
+  single_epiparameter = TRUE
 )
 
 # adapt epiparameter to epinow2
@@ -603,10 +603,10 @@ serial_interval_ebola <-
 # incubation time ---------------------------------------------------------
 
 # subset one distribution for delay of the incubation period
-ebola_incubation <- epiparameter::epidist_db(
+ebola_incubation <- epiparameter::epiparameter_db(
   disease = "ebola",
-  epi_dist = "incubation",
-  single_epidist = TRUE
+  epi_name = "incubation",
+  single_epiparameter = TRUE
 )
 
 # adapt epiparameter to epinow2
@@ -654,17 +654,17 @@ Use the `influenza_england_1978_school` dataset from the `{outbreaks}` package t
 
 ```{r,message=FALSE,eval=TRUE}
 # What parameters are available for Influenza?
-epiparameter::epidist_db(disease = "influenza") %>%
+epiparameter::epiparameter_db(disease = "influenza") %>%
   epiparameter::parameter_tbl() %>%
-  count(epi_distribution)
+  count(epi_name)
 
 # generation time ---------------------------------------------------------
 
 # Read the generation time
 influenza_generation <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "influenza",
-    epi_dist = "generation"
+    epi_name = "generation"
   )
 
 influenza_generation
@@ -696,10 +696,10 @@ generation_time_influenza <-
 
 # Read the incubation period
 influenza_incubation <-
-  epiparameter::epidist_db(
+  epiparameter::epiparameter_db(
     disease = "influenza",
-    epi_dist = "incubation",
-    single_epidist = TRUE
+    epi_name = "incubation",
+    single_epiparameter = TRUE
   )
 
 # Discretize incubation period
