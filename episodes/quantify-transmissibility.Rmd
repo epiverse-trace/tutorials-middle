@@ -258,16 +258,14 @@ incubation_period_variable
 
 After the incubation period, there will be an additional delay of time from symptom onset to case notification: the reporting delay. We can specify this as a fixed or variable distribution, or estimate a distribution from data. 
 
-When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a *log normal* distribution. We can use the functions `convert_to_logmean()` and `convert_to_logsd()` to  convert the mean and standard deviation of a normal distribution to that of a log normal distribution. 
+When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a *log normal* distribution.
 
-If we want to assume that the mean reporting delay is 2 days (with a standard deviation of 1 day), we write: 
-
-Using the mean and standard deviation for the log normal distribution, we can specify a fixed or variable distribution using `LogNormal()` as before: 
+If we want to assume that the mean reporting delay is 2 days (with a uncertainty of 0.5 days) and a standard deviation of 1 day (with uncertainty of 0.5 days), we can specify a variable distribution using `LogNormal()` as before:
 
 ```{r,warning=FALSE,message=FALSE}
 reporting_delay_variable <- EpiNow2::LogNormal(
-  meanlog = EpiNow2::Normal(mean = log_mean, sd = 0.5),
-  sdlog = EpiNow2::Normal(mean = log_sd, sd = 0.5),
+  meanlog = EpiNow2::Normal(mean = 2, sd = 0.5),
+  sdlog = EpiNow2::Normal(mean = 1, sd = 0.5),
   max = 10
 )
 ```
@@ -276,7 +274,7 @@ reporting_delay_variable <- EpiNow2::LogNormal(
 
 ### Visualize a log Normal distribution using {epiparameter}
 
-Using `epiparameter::epiparameter()` we can create a custom distribution. The log normal distribution will look like:
+Using `epiparameter::epiparameter()` we can create a custom distribution. The fixed log normal distribution will look like:
 
 ```r
 library(epiparameter)
@@ -290,8 +288,8 @@ epiparameter::epiparameter(
     epiparameter::create_prob_distribution(
       prob_distribution = "lnorm",
       prob_distribution_params = c(
-        meanlog = log_mean,
-        sdlog = log_sd
+        meanlog = 2,
+        sdlog = 1
       )
     )
 ) %>%
@@ -378,8 +376,8 @@ generation_time_fixed <- EpiNow2::LogNormal(
 )
 
 reporting_delay_fixed <- EpiNow2::LogNormal(
-  mean = log_mean,
-  sd = log_sd,
+  mean = 2,
+  sd = 1,
   max = 10
 )
 ```
