@@ -765,7 +765,7 @@ epiparameter::epiparameter_db(epi_name = "serial interval") %>%
 
 :::::::::::::: solution
 
-```{r,message=FALSE,warning=FALSE warning=FALSE, r,message=FALSE}
+```{r,message=FALSE,warning=FALSE warning=FALSE}
 # load packages -----------------------------------------------------------
 
 library(epiparameter)
@@ -880,10 +880,6 @@ Check how these estimates vary non-linearly with respect to the mean reproductio
 
 <!-- Calculate the probability a new Mpox case will lead to a large outbreak in the absence of control measures. Use the appropriate package to access delay data from previous outbreaks. -->
 
-```r
-library(superspreading)
-```
-
 ```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
 # estimate probability to contain
 superspreading::probability_contain(
@@ -900,10 +896,6 @@ superspreading::probability_epidemic(
   k = mers_offspring["dispersion"],
   num_init_infect = 5
 )
-```
-
-```r
-library(superspreading)
 ```
 
 ```{r,message=FALSE,warning=FALSE,echo=FALSE,eval=FALSE}
