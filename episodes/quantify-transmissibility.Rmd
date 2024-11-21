@@ -496,7 +496,13 @@ A factor describing expected change in daily cases based on the posterior probab
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+:::::::::::::::::::::::::: callout
 
+### Credible intervals
+
+In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% credible intervals in order from lightest to darkest.
+
+::::::::::::::::::::::::::
 
 
 ## Quantify geographical heterogeneity
