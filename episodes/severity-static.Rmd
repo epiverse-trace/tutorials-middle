@@ -158,7 +158,7 @@ ebola_30days
 <!-- Similar to the `{EpiNow2}` with the difference that for `{cfr}` we need one more column named `deaths`. -->
 
 ```{r,eval=FALSE,echo=FALSE}
-EpiNow2::example_confirmed %>% 
+EpiNow2::example_confirmed %>%
   dplyr::as_tibble()
 ```
 
