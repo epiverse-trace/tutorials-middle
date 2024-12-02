@@ -395,7 +395,7 @@ La  **distribución del retraso** podría inferirse conjuntamente con los tiempo
 
 Estima el número reproductivo variable en el tiempo para los primeros 60 días del conjunto de datos `example_confirmed ` de `{EpiNow2}`. Accede a un periodo de incubación para COVID-19 a partir de `{epiparameter}` para utilizarlo como retraso de notificación.
 
-::::::::::::::::: sugerencia
+::::::::::::::::: hint
 
 Utiliza el último cálculo de `epinow()` usando el argumento `delays` y la función auxiliar `delay_opts()`.
 
@@ -527,7 +527,7 @@ Descarga y lee el [conjunto de datos de ébola](data/ebola_cases.csv):
 - Ajuste la estimación según los retrasos de notificación disponibles en `{epiparameter}`
 - ¿Por qué eligió ese parámetro?
 
-::::::::::::::::: pista
+::::::::::::::::: hint
 
 Para calcular el $R_t$ utilizando `{EpiNow2}` necesitamos
 
@@ -627,7 +627,7 @@ plot(epinow_estimates_egi)
 
 Utiliza el conjunto de datos `influenza_england_1978_school` del paquete `{outbreaks}` para calcular el número reproductivo efectivo mediante `{EpiNow2}`, ajustando por los retrasos de notificación disponibles en `{epiparameter}`.
 
-::::::::::::::::: sugerencia
+::::::::::::::::: hint
 
 `EpiNow2::NonParametric()` acepta Funciones de Masa de Probabilidad (PMF) de cualquier familia de distribuciones. Lee la guía de referencia sobre [Distribuciones de probabilidad](https://epiforecasts.io/EpiNow2/reference/Distributions.html).
 
