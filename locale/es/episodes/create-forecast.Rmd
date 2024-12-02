@@ -198,7 +198,7 @@ Las estimaciones de las medidas de transmisión, como el número de reproducció
 
 También podemos cambiar la distribución por defecto de Binomial Negativa a Poisson, eliminar el efecto de semana por defecto y más. Consulta `?EpiNow2::obs_opts` para más detalles.
 
-::::::::::::::::::::::::::: debate
+::::::::::::::::::::::::::: discussion
 
 ### ¿Cuáles son las implicaciones de este cambio?
 
@@ -409,7 +409,7 @@ Puedes utilizar los siguientes valores de parámetro para la distribución o dis
 
 Puedes incluir cierta incertidumbre en torno a la media y la desviación típica de estas distribuciones.
 
-::::::::::::::::: pista
+::::::::::::::::: hint
 
 Utilizamos el número de reproducción efectivo y la tasa de crecimiento para estimar si los casos aumentan o disminuyen.
 
@@ -422,7 +422,7 @@ Asegúrate de que los datos tienen el formato correcto :
 
 ::::::::::::::::::::::
 
-::::::::::::::::: solución
+::::::::::::::::: solution
 
 ### SOLUCIÓN
 
