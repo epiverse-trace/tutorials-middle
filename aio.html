@@ -412,7 +412,7 @@ pre-established database for use in analysis?</li>
 <h3 class="card-title">Objectives</h3>
 <ul>
 <li>Get delays from a literature search database with
-<code>{epiparameter}</code>.</li>
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>.</li>
 <li>Get distribution parameters and summary statistics of delay
 distributions.</li>
 </ul>
@@ -462,19 +462,19 @@ of all the time periods of the figure above!</p>
 <p>However, early in an epidemic, modelling efforts can be delayed by
 the lack of a centralised resource that summarises input parameters for
 the disease of interest (<a href="https://mrc-ide.github.io/epireview/" class="external-link">Nash et al., 2023</a>).
-Projects like <code>{epiparameter}</code> and <code>{epireview}</code>
+Projects like <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> and <code>{epireview}</code>
 are building online catalogues following literature synthesis protocols
 that can help parametrise models by easily accessing a comprenhensive
 library of previously estimated epidemiological parameters from past
 outbreaks.</p>
 <!-- Early models for COVID-19 used parameters from other coronaviruses. https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext -->
-<p>To exemplify how to use the <code>{epiparameter}</code> R package in
+<p>To exemplify how to use the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> R package in
 your analysis pipeline, our goal in this episode will be to access one
 specific set of epidemiological parameters from the literature, instead
 of copying-and-pasting them by hand, to plug them into an
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> analysis workflow.</p>
 <!-- In this episode, we'll learn how to access one specific set of epidemiological parameters from the literature and then get their **summary statistics** using `{epiparameter}`.  -->
-<p>Let’s start loading the <code>{epiparameter}</code> package. We’ll
+<p>Let’s start loading the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> package. We’ll
 use the pipe <code>%&gt;%</code> to connect some of their functions,
 some <a href="https://tibble.tidyverse.org/" class="external-link">tibble</a> and <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions, so let’s
 also call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> package:</p>
@@ -532,18 +532,18 @@ literature and copy and paste the <strong>summary statistics</strong> or
 the <strong>distribution parameters</strong> from scientific
 publications. A challenge that is often faced is that the reporting of
 different statistical distributions is not consistent across the
-literature. <code>{epiparameter}</code>’s objective is to facilitate the
+literature. <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>’s objective is to facilitate the
 access to reliable estimates of distribution parameters for a range of
 infectious diseases, so that they can easily be implemented in outbreak
 analytic pipelines.</p>
 <p>In this episode, we will <em>access</em> the summary statistics of
 generation time for COVID-19 from the library of epidemiological
-parameters provided by <code>{epiparameter}</code>. These metrics can be
+parameters provided by <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>. These metrics can be
 used to estimate the transmissibility of this disease using
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> in subsequent episodes.</p>
 <p>Let’s start by looking at how many entries are available in the
 <strong>epidemiological distributions database</strong> in
-<code>{epiparameter}</code> using <code>epiparameter_db()</code> for the
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> using <code>epiparameter_db()</code> for the
 epidemiological distribution <code>epi_name</code> called generation
 time with the string <code>"generation"</code>:</p>
 <div class="codewrapper sourceCode" id="cb3">
@@ -809,7 +809,7 @@ in less time than SARS, assuming similar reproduction numbers.</p>
 </section><section><h2 class="section-heading" id="choosing-epidemiological-parameters">Choosing epidemiological parameters<a class="anchor" aria-label="anchor" href="#choosing-epidemiological-parameters"></a>
 </h2>
 <hr class="half-width">
-<p>In this section, we will use <code>{epiparameter}</code> to obtain
+<p>In this section, we will use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to obtain
 the serial interval for COVID-19, as an alternative to the generation
 time.</p>
 <p>Let’s ask now how many parameters we have in the epidemiological
@@ -823,7 +823,7 @@ distributions database (<code>epiparameter_db()</code>) with the
 <span>  disease <span class="op">=</span> <span class="st">"covid"</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<p>From the <code>{epiparameter}</code> package, we can use the
+<p>From the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> package, we can use the
 <code>epiparameter_db()</code> function to ask for any
 <code>disease</code> and also for a specific epidemiological
 distribution (<code>epi_name</code>). Run this in your console:</p>
@@ -890,7 +890,7 @@ To retrieve the citation for each use the 'get_citation' function</code></pre>
 <p>In the <code>epiparameter::parameter_tbl()</code> output, we can also
 find different types of probability distributions (e.g., Log-normal,
 Weibull, Normal).</p>
-<p><code>{epiparameter}</code> uses the <code>base</code> R naming
+<p><a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> uses the <code>base</code> R naming
 convention for distributions. This is why <strong>Log normal</strong> is
 called <code>lnorm</code>.</p>
 <div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
@@ -954,7 +954,7 @@ with it provided by an <code>inference_method</code> as shown in
 <div id="find-your-delay-distributions" class="callout-inner">
 <h3 class="callout-title">Find your delay distributions!</h3>
 <div class="callout-content">
-<p>Take 2 minutes to explore the <code>{epiparameter}</code>
+<p>Take 2 minutes to explore the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 library.</p>
 <p><strong>Choose</strong> a disease of interest (e.g., Influenza,
 Measles, etc.) and a delay distribution (e.g., the incubation period,
@@ -968,7 +968,7 @@ normal) are for a given delay in that disease?</p></li>
 <p>Ask:</p>
 <ul>
 <li><p>Do you recognise the papers?</p></li>
-<li><p>Should <code>{epiparameter}</code> literature review consider any
+<li><p>Should <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> literature review consider any
 other paper?</p></li>
 </ul>
 </div>
@@ -1144,7 +1144,7 @@ To retrieve the citation for each use the 'get_citation' function</code></pre>
 </div>
 <p>We find two types of probability distributions for this query:
 <em>log normal</em> and <em>gamma</em>.</p>
-<p>How does <code>{epiparameter}</code> do the collection and review of
+<p>How does <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> do the collection and review of
 peer-reviewed literature? We invite you to read the vignette on <a href="https://epiverse-trace.github.io/epiparameter/articles/data_protocol.html" class="external-link">“Data
 Collation and Synthesis Protocol”</a>!</p>
 </div>
@@ -1348,7 +1348,7 @@ numbers we plug into the <code>EpiNow2::LogNormal()</code> function:</p>
 correctly specify distributions, estimate transmissibility. Then, how to
 use <strong>distribution functions</strong> to get a maximum value
 (<code>max</code>) for <code>EpiNow2::LogNormal()</code> and use
-<code>{epiparameter}</code> in your analysis.</p>
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> in your analysis.</p>
 <div id="log-normal-distributions" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -1548,7 +1548,7 @@ health care and case isolation?</li>
 <div class="accordion-body">
 <p>An informative delay should measure the time from symptom onset to
 recovery or death.</p>
-<p>Find a way to access the whole <code>{epiparameter}</code> database
+<p>Find a way to access the whole <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> database
 and find how that delay may be stored. The <code>parameter_tbl()</code>
 output is a dataframe.</p>
 </div>
@@ -1627,7 +1627,7 @@ To retrieve the citation for each use the 'get_citation' function</code></pre>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 15.1</code></pre>
 </div>
-<p>Check that for some <code>{epiparameter}</code> entries you will also
+<p>Check that for some <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> entries you will also
 have the <em>uncertainty</em> around the <em>point estimate</em> of each
 summary statistic:</p>
 <div class="codewrapper sourceCode" id="cb52">
@@ -1668,7 +1668,7 @@ summary statistic:</p>
 <p>Explore this shinyapp called <strong>The Distribution
 Zoo</strong>!</p>
 <p>Follow these steps to reproduce the form of the COVID serial interval
-distribution from <code>{epiparameter}</code>
+distribution from <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 (<code>covid_serialint</code> object):</p>
 <ol style="list-style-type: decimal">
 <li>Access the <a href="https://ben18785.shinyapps.io/distribution-zoo/" class="external-link uri">https://ben18785.shinyapps.io/distribution-zoo/</a> shiny
@@ -1708,7 +1708,7 @@ update it from last epiparameter test
 <h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
 <ul>
-<li>Use <code>{epiparameter}</code> to access the literature catalogue
+<li>Use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to access the literature catalogue
 of epidemiological delay distributions.</li>
 <li>Use <code>epiparameter_db()</code> to select single delay
 distributions.</li>
@@ -1951,7 +1951,7 @@ reference manual</a></p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Can we replicate {incidence2} with {dplyr}? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p>We can get an object similar to <code>cases</code> from the
 <code>incidence2::covidregionaldataUK</code> data frame using the
@@ -2046,7 +2046,7 @@ notification</td>
 <h4 id="incubation-period-distribution">Incubation period distribution<a class="anchor" aria-label="anchor" href="#incubation-period-distribution"></a>
 </h4>
 <p>The distribution of incubation period for many diseases can usually
-be obtained from the literature. The package <code>{epiparameter}</code>
+be obtained from the literature. The package <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 contains a library of epidemiological parameters for different diseases
 obtained from the literature.</p>
 <p>We specify a (fixed) gamma distribution with mean <span class="math inline">\(\mu = 4\)</span> and standard deviation <span class="math inline">\(\sigma= 2\)</span> (shape = <span class="math inline">\(4\)</span>, scale = <span class="math inline">\(1\)</span>) using the function
@@ -2169,7 +2169,7 @@ uncertainty of 0.5 days), we can specify a variable distribution using
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Visualize a log Normal distribution using {epiparameter} </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p>Using <code>epiparameter::epiparameter()</code> we can create a
 custom distribution. The fixed log normal distribution will look
@@ -2597,7 +2597,7 @@ delays in this episode.</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>To wrangle data, you can:</p>
 <div class="codewrapper sourceCode" id="cb28">
@@ -2630,7 +2630,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
@@ -2702,7 +2702,7 @@ any links that you are not going to use.
 <div class="inner">
 <h3 class="card-title">Questions</h3>
 <ul>
-<li>How to reuse delays stored in the <code>{epiparameter}</code>
+<li>How to reuse delays stored in the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 library with my existing analysis pipeline?</li>
 </ul>
 </div>
@@ -2716,8 +2716,8 @@ library with my existing analysis pipeline?</li>
 <li>Use distribution functions to continuous and discrete distributions
 stored as <code>&lt;epidist&gt;</code> objects.</li>
 <li>Convert a continuous to a discrete distribution with
-<code>{epiparameter}</code>.</li>
-<li>Connect <code>{epiparameter}</code> outputs with
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>.</li>
+<li>Connect <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> outputs with
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> inputs.</li>
 </ul>
 </div>
@@ -2758,7 +2758,7 @@ to use the [code completion feature](https://support.posit.co/hc/en-us/articles/
 
 ::::::::::::::::::
 
---><p><code>{epiparameter}</code> help us to <em>choose</em> one specific
+--><p><a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> help us to <em>choose</em> one specific
 set of epidemiological parameters from the literature, instead of
 copy/pasting them <em>by hand</em>:</p>
 <div class="codewrapper sourceCode" id="cb1">
@@ -2788,10 +2788,10 @@ statistics</strong> inputs into <code>EpiNow2::LogNormal()</code></p>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
 <p>In this episode, we will use the <strong>distribution
-functions</strong> that <code>{epiparameter}</code> provides to get a
+functions</strong> that <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> provides to get a
 maximum value (<code>max</code>) for this and any other package
 downstream in your analysis pipeline!</p>
-<p>Let’s load the <code>{epiparameter}</code> and <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>
+<p>Let’s load the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> and <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>
 package. For <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>, we’ll set 4 cores to be used in
 parallel computations. We’ll use the pipe <code>%&gt;%</code>, some
 <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> verbs and <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a>, so let’s also
@@ -2862,7 +2862,7 @@ Weiss, 2012</a>)</div>
 </div>
 <p>If you look at <code>?stats::Distributions</code>, each type of
 distribution has a unique set of functions. However,
-<code>{epiparameter}</code> gives you the same four functions to access
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> gives you the same four functions to access
 each of the values above for any <code>&lt;epidist&gt;</code> object you
 want!</p>
 <div class="codewrapper sourceCode" id="cb4">
@@ -2952,7 +2952,7 @@ days pre-onset?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>In Figure 5 from the <a href="https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc" class="external-link">R
 probability functions for the normal distribution</a>, the shadowed
@@ -2967,7 +2967,7 @@ the quantile value at <code>x = 2</code>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3013,7 +3013,7 @@ include 76.2% of backward contacts.</p></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> What if </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>If we exchange the question between days and cumulative probability
 to:</p>
@@ -3131,7 +3131,7 @@ COVID-19 symptoms exhibit them after infection?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>What delay distribution measures the time between infection and the
 onset of symptoms?</p>
@@ -3166,7 +3166,7 @@ the <em>continuous</em> ones!</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3215,7 +3215,7 @@ of infection.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> How to create a distribution plot? </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>From a maximum value with <code>quantile()</code>, we can create a
 sequence of quantile values as a numeric vector and calculate
@@ -3277,7 +3277,7 @@ normal</strong> distribution like the one in the
 parameters. Alternatively, to get the “natural” parameters for a log
 normal distribution we can convert its summary statistics to
 distribution parameters named <code>meanlog</code> and
-<code>sdlog</code>. With <code>{epiparameter}</code> we can directly get
+<code>sdlog</code>. With <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> we can directly get
 the <em>distribution parameters</em> using
 <code>epiparameter::get_parameters()</code>:</p>
 <div class="codewrapper sourceCode" id="cb30">
@@ -3398,7 +3398,7 @@ et al., 2020</a>
 <p>Estimate the time-varying reproduction number for the first 60 days
 of the <code>example_confirmed</code> data set from
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>. Access to an incubation period for COVID-19 from
-<code>{epiparameter}</code> to use it as a reporting delay.</p>
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to use it as a reporting delay.</p>
 </div>
 </div>
 </div>
@@ -3407,7 +3407,7 @@ of the <code>example_confirmed</code> data set from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>Use the last <code>epinow()</code> calculation using the
 <code>delays</code> argument and the <code>delay_opts()</code> helper
@@ -3437,7 +3437,7 @@ function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3581,7 +3581,7 @@ dataset</a>:</p>
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>
 </li>
 <li>Adjust the estimate by the available reporting delays in
-<code>{epiparameter}</code>
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 </li>
 <li>Why did you choose that parameter?</li>
 </ul>
@@ -3593,7 +3593,7 @@ dataset</a>:</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>To calculate the <span class="math inline">\(R_t\)</span> using
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>, we need:</p>
@@ -3604,7 +3604,7 @@ day, and</li>
 <li>Optionally, reporting <code>delays</code> distributions when
 available (e.g., incubation period).</li>
 </ul>
-<p>To get delay distribution using <code>{epiparameter}</code> we can
+<p>To get delay distribution using <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> we can
 use functions like:</p>
 <ul>
 <li><code>epiparameter::epiparameter_db()</code></li>
@@ -3621,7 +3621,7 @@ use functions like:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb40">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3719,7 +3719,7 @@ WARN [2024-11-21 17:02:46] epinow: Examine the pairs() plot to diagnose sampling
 <p>Use the <code>influenza_england_1978_school</code> dataset from the
 <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package to calculate the effective reproduction
 number using <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> adjusting by the available reporting
-delays in <code>{epiparameter}</code>.</p>
+delays in <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>.</p>
 </div>
 </div>
 </div>
@@ -3728,7 +3728,7 @@ delays in <code>{epiparameter}</code>.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5"> Give me a hint </h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
 <div class="accordion-body">
 <p><code>EpiNow2::NonParametric()</code> accepts Probability Mass
 Functions (PMF) from any distribution family. Read the reference guide
@@ -3743,7 +3743,7 @@ distributions</a>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb44">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3929,7 +3929,7 @@ https://mc-stan.org/misc/warnings.html#tail-ess - </code></pre>
 with <em>only</em> distribution parameters but no summary statistics
 like <code>mean</code> or <code>sd</code> for
 <code>EpiNow2::Gamma()</code> or <code>EpiNow2::LogNormal()</code>?</p>
-<p>Look at the <code>{epiparameter}</code> vignette on <a href="https://epiverse-trace.github.io/epiparameter/articles/extract_convert.html" class="external-link">parameter
+<p>Look at the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> vignette on <a href="https://epiverse-trace.github.io/epiparameter/articles/extract_convert.html" class="external-link">parameter
 extraction and conversion</a> and its <a href="https://epiverse-trace.github.io/epiparameter/articles/extract_convert.html#use-cases" class="external-link">use
 cases</a>!</p>
 </div>
@@ -3983,7 +3983,7 @@ interventions like the Window for contact tracing and Length of
 quarantine.</li>
 <li>Use <code>discretise()</code> to convert continuous to discrete
 delay distributions.</li>
-<li>Use <code>{epiparameter}</code> to get reporting delays required in
+<li>Use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to get reporting delays required in
 transmissibility estimates.</li>
 </ul>
 </div>
@@ -4383,7 +4383,7 @@ hospital bed usage.</li>
 secondary observations. Here this is the delay between case report and
 death, we assume this follows a gamma distribution with mean of 14 days
 and standard deviation of 5 days (Alternatively, we can use
-<code>{epiparameter}</code> to <a href="https://epiverse-trace.github.io/tutorials-early/delays-reuse.html" class="external-link">access
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to <a href="https://epiverse-trace.github.io/tutorials-early/delays-reuse.html" class="external-link">access
 epidemiological delays</a>). Using <code>Gamma()</code> we specify a
 fixed gamma distribution.</p>
 <p>There are further function inputs to
@@ -4518,7 +4518,7 @@ the outbreak</li>
 distribution(s) and generation time distribution.</p>
 <ul>
 <li>Incubation period: Log normal<span class="math inline">\((2.487,0.330)\)</span> (<a href="https://doi.org/10.1016/j.phrp.2011.04.001" class="external-link">Eichner et
-al. 2011</a> via <code>{epiparameter}</code>)</li>
+al. 2011</a> via <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>)</li>
 <li>Generation time: Gamma<span class="math inline">\((15.3,
 10.1)\)</span> (<a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1411100" class="external-link">WHO Ebola
 Response Team 2014</a>)</li>
@@ -4533,7 +4533,7 @@ deviation of these distributions.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>We use the effective reproduction number and growth rate to estimate
 whether cases are increasing or decreasing.</p>
@@ -4557,7 +4557,7 @@ forecast. The default value is of seven days.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> SOLUTION </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>To estimate the effective reproduction number and growth rate, we
 will use the function <code>epinow()</code>.</p>
@@ -4831,7 +4831,7 @@ ongoing epidemic?</p></li>
 <ul>
 <li><p>Estimate the CFR from aggregated case data using
 <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>.</p></li>
-<li><p>Estimate a delay-adjusted CFR using <code>{epiparameter}</code>
+<li><p>Estimate a delay-adjusted CFR using <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 and <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>.</p></li>
 <li><p>Estimate a delay-adjusted severity for an expanding time series
 using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a>.</p></li>
@@ -4904,7 +4904,7 @@ et al., 2015</a>).</p>
 <p>In this tutorial we are going to learn how to use the
 <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> package to calculate and adjust a CFR estimation
 using <a href="reference.html#delaydist">delay distributions</a> from
-<code>{epiparameter}</code> or elsewhere, based on the methods developed
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> or elsewhere, based on the methods developed
 by <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
 et al., 2009</a>, also, how we can reuse <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> functions
 for more severity measurements.</p>
@@ -5280,11 +5280,11 @@ delay</strong> from the onset of symptoms to death.</p>
 to determine the time distribution between onset and death. Therefore,
 we can estimate the <em>distribution delay</em> from historical
 outbreaks or reuse the ones accessible via R packages like
-<code>{epiparameter}</code> or <code>{epireview}</code>, which collect
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> or <code>{epireview}</code>, which collect
 them from published scientific literature. For an step-by-step guide,
 read the tutorial episode on how to <a href="https://epiverse-trace.github.io/tutorials-early/delays-reuse.html" class="external-link">access
 to epidemiological delays</a>.</p>
-<p>Let’s use <code>{epiparameter}</code>:</p>
+<p>Let’s use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>:</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -5335,7 +5335,7 @@ between 0.881 and 0.9861, slightly higher than the naive one.</p>
 this expression as a template:</p>
 <p><code>function(x) density(&lt;EPIDIST_OBJECT&gt;, x)</code></p>
 <p>For distribution functions with parameters not available in
-<code>{epiparameter}</code>, we suggest you two alternatives:</p>
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, we suggest you two alternatives:</p>
 <ul>
 <li><p>Create an <code>&lt;epidist&gt;</code> class object, to plug into
 other R packages of the outbreak analytics pipeline. Read the <a href="https://epiverse-trace.github.io/epiparameter/reference/epidist.html" class="external-link">reference
@@ -5383,7 +5383,7 @@ delay. Then:</p>
 </button>
 <div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
-<p>We use <code>{epiparameter}</code> to access a delay distribution for
+<p>We use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to access a delay distribution for
 the SARS-CoV-2 aggregated incidence data:</p>
 <div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7264,7 +7264,7 @@ transmission?</p>
 <strong>MERS</strong> using the offspring distributions parameters from
 this tutorial episode, with <strong>SARS-1</strong> and
 <strong>Ebola</strong> offspring distributions parameter accessible via
-the <code>{epiparameter}</code> R package.</p>
+the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> R package.</p>
 </div>
 </div>
 </div>
@@ -7279,7 +7279,7 @@ the <code>{epiparameter}</code> R package.</p>
 recommend to read the <a href="https://epiverse-trace.github.io/superspreading/reference/proportion_transmission.html" class="external-link">Estimate
 what proportion of cases cause a certain proportion of transmission</a>
 reference manual.</p>
-<p>Currently, <code>{epiparameter}</code> has offspring distributions
+<p>Currently, <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> has offspring distributions
 for SARS, Smallpox, Mpox, Pneumonic Plague, Hantavirus Pulmonary
 Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <code>mean</code> and <code>dispersion</code> parameters for SARS-1:</p>
@@ -7568,7 +7568,7 @@ transmission chains assuming an offspring distribution with <span class="math in
 </figcaption></figure><!-- what we are going to do --><p>In this episode, we will use the <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> package to
 simulate transmission chains and estimate the potential for large
 outbreaks following the introduction of a new case. We are going to use
-it with functions from <code>{epiparameter}</code>, <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>
+it with functions from <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>
 and <a href="https://purrr.tidyverse.org/" class="external-link">purrr</a>, so also loading the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a>
 package:</p>
 <div class="codewrapper sourceCode" id="cb1">
@@ -7757,7 +7757,7 @@ et al., 2020</a>).</p>
 </div>
 </div>
 </div>
-<p>Let’s use the <code>{epiparameter}</code> package to access and use
+<p>Let’s use the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> package to access and use
 the available serial interval for MERS disease:</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7782,7 +7782,7 @@ deviation of 2.8 days.</p>
 <div class="callout-content">
 <p>In <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>, we need to specify the generation time
 as a function that generates random numbers. Using
-<code>{epiparameter}</code> has the advantage of using the distribution
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> has the advantage of using the distribution
 function <code>epiparameter::generate()</code> for this input. This will
 look like this:</p>
 <div class="codewrapper sourceCode" id="cb6">
@@ -7792,7 +7792,7 @@ look like this:</p>
 <code class="sourceCode R"><span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">serial_interval</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span></code></pre>
 </div>
 <p>This interface is similar to the one <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> uses to link
-with <code>{epiparameter}</code>. Read the <a href="https://epiverse-trace.github.io/cfr/articles/delay_distributions.html" class="external-link">work
+with <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>. Read the <a href="https://epiverse-trace.github.io/cfr/articles/delay_distributions.html" class="external-link">work
 with delay distributions</a> vignette for further context.</p>
 </div>
 </div>
@@ -8388,7 +8388,7 @@ cases?</li>
 </button>
 <div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
-<p>With <code>{epiparameter}</code>, you can access and use offspring
+<p>With <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, you can access and use offspring
 and delay distributions from previous Ebola outbreaks.</p>
 <div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -8807,8 +8807,8 @@ any links that you are not going to use.
   "url": "https://epiverse-trace.github.io/tutorials-middle/aio.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/aio.html",
   "dateCreated": "2024-11-21",
-  "dateModified": "2025-01-07",
-  "datePublished": "2025-01-07"
+  "dateModified": "2025-01-14",
+  "datePublished": "2025-01-14"
 }
 
   </script><script>

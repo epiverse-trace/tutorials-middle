@@ -378,7 +378,7 @@ pre-established database for use in analysis?</li>
 <div class="inner bordered">
 <h3 class="card-title">Objectives</h3>
 <ul><li>Get delays from a literature search database with
-<code>{epiparameter}</code>.</li>
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>.</li>
 <li>Get distribution parameters and summary statistics of delay
 distributions.</li>
 </ul></div>
@@ -425,19 +425,19 @@ of all the time periods of the figure above!</p>
 <p>However, early in an epidemic, modelling efforts can be delayed by
 the lack of a centralised resource that summarises input parameters for
 the disease of interest (<a href="https://mrc-ide.github.io/epireview/" class="external-link">Nash et al., 2023</a>).
-Projects like <code>{epiparameter}</code> and <code>{epireview}</code>
+Projects like <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> and <code>{epireview}</code>
 are building online catalogues following literature synthesis protocols
 that can help parametrise models by easily accessing a comprenhensive
 library of previously estimated epidemiological parameters from past
 outbreaks.</p>
 <!-- Early models for COVID-19 used parameters from other coronaviruses. https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext -->
-<p>To exemplify how to use the <code>{epiparameter}</code> R package in
+<p>To exemplify how to use the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> R package in
 your analysis pipeline, our goal in this episode will be to access one
 specific set of epidemiological parameters from the literature, instead
 of copying-and-pasting them by hand, to plug them into an
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> analysis workflow.</p>
 <!-- In this episode, we'll learn how to access one specific set of epidemiological parameters from the literature and then get their **summary statistics** using `{epiparameter}`.  -->
-<p>Let’s start loading the <code>{epiparameter}</code> package. We’ll
+<p>Let’s start loading the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> package. We’ll
 use the pipe <code>%&gt;%</code> to connect some of their functions,
 some <a href="https://tibble.tidyverse.org/" class="external-link">tibble</a> and <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions, so let’s
 also call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> package:</p>
@@ -493,18 +493,18 @@ literature and copy and paste the <strong>summary statistics</strong> or
 the <strong>distribution parameters</strong> from scientific
 publications. A challenge that is often faced is that the reporting of
 different statistical distributions is not consistent across the
-literature. <code>{epiparameter}</code>’s objective is to facilitate the
+literature. <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>’s objective is to facilitate the
 access to reliable estimates of distribution parameters for a range of
 infectious diseases, so that they can easily be implemented in outbreak
 analytic pipelines.</p>
 <p>In this episode, we will <em>access</em> the summary statistics of
 generation time for COVID-19 from the library of epidemiological
-parameters provided by <code>{epiparameter}</code>. These metrics can be
+parameters provided by <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>. These metrics can be
 used to estimate the transmissibility of this disease using
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> in subsequent episodes.</p>
 <p>Let’s start by looking at how many entries are available in the
 <strong>epidemiological distributions database</strong> in
-<code>{epiparameter}</code> using <code>epiparameter_db()</code> for the
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> using <code>epiparameter_db()</code> for the
 epidemiological distribution <code>epi_name</code> called generation
 time with the string <code>"generation"</code>:</p>
 <div class="codewrapper sourceCode" id="cb3">
@@ -745,7 +745,7 @@ of a larger or shorter generation time.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="choosing-epidemiological-parameters">Choosing epidemiological parameters<a class="anchor" aria-label="anchor" href="#choosing-epidemiological-parameters"></a></h2>
-<hr class="half-width"><p>In this section, we will use <code>{epiparameter}</code> to obtain
+<hr class="half-width"><p>In this section, we will use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to obtain
 the serial interval for COVID-19, as an alternative to the generation
 time.</p>
 <p>Let’s ask now how many parameters we have in the epidemiological
@@ -759,7 +759,7 @@ distributions database (<code>epiparameter_db()</code>) with the
 <span>  disease <span class="op">=</span> <span class="st">"covid"</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<p>From the <code>{epiparameter}</code> package, we can use the
+<p>From the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> package, we can use the
 <code>epiparameter_db()</code> function to ask for any
 <code>disease</code> and also for a specific epidemiological
 distribution (<code>epi_name</code>). Run this in your console:</p>
@@ -826,7 +826,7 @@ To retrieve the citation for each use the 'get_citation' function</code></pre>
 <p>In the <code>epiparameter::parameter_tbl()</code> output, we can also
 find different types of probability distributions (e.g., Log-normal,
 Weibull, Normal).</p>
-<p><code>{epiparameter}</code> uses the <code>base</code> R naming
+<p><a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> uses the <code>base</code> R naming
 convention for distributions. This is why <strong>Log normal</strong> is
 called <code>lnorm</code>.</p>
 <div id="accordionSpoiler1" class="accordion spoiler-accordion accordion-flush">
@@ -889,7 +889,7 @@ with it provided by an <code>inference_method</code> as shown in
 <div id="find-your-delay-distributions" class="callout-inner">
 <h3 class="callout-title">Find your delay distributions!</h3>
 <div class="callout-content">
-<p>Take 2 minutes to explore the <code>{epiparameter}</code>
+<p>Take 2 minutes to explore the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 library.</p>
 <p><strong>Choose</strong> a disease of interest (e.g., Influenza,
 Measles, etc.) and a delay distribution (e.g., the incubation period,
@@ -900,7 +900,7 @@ onset to death, etc.).</p>
 normal) are for a given delay in that disease?</p></li>
 </ul><p>Ask:</p>
 <ul><li><p>Do you recognise the papers?</p></li>
-<li><p>Should <code>{epiparameter}</code> literature review consider any
+<li><p>Should <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> literature review consider any
 other paper?</p></li>
 </ul></div>
 </div>
@@ -1069,7 +1069,7 @@ To retrieve the citation for each use the 'get_citation' function</code></pre>
 </div>
 <p>We find two types of probability distributions for this query:
 <em>log normal</em> and <em>gamma</em>.</p>
-<p>How does <code>{epiparameter}</code> do the collection and review of
+<p>How does <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> do the collection and review of
 peer-reviewed literature? We invite you to read the vignette on <a href="https://epiverse-trace.github.io/epiparameter/articles/data_protocol.html" class="external-link">“Data
 Collation and Synthesis Protocol”</a>!</p>
 </div>
@@ -1265,7 +1265,7 @@ numbers we plug into the <code>EpiNow2::LogNormal()</code> function:</p>
 correctly specify distributions, estimate transmissibility. Then, how to
 use <strong>distribution functions</strong> to get a maximum value
 (<code>max</code>) for <code>EpiNow2::LogNormal()</code> and use
-<code>{epiparameter}</code> in your analysis.</p>
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> in your analysis.</p>
 <div id="log-normal-distributions" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -1489,7 +1489,7 @@ health care and case isolation?</li>
 <div class="accordion-body">
 <p>An informative delay should measure the time from symptom onset to
 recovery or death.</p>
-<p>Find a way to access the whole <code>{epiparameter}</code> database
+<p>Find a way to access the whole <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> database
 and find how that delay may be stored. The <code>parameter_tbl()</code>
 output is a dataframe.</p>
 </div>
@@ -1568,7 +1568,7 @@ To retrieve the citation for each use the 'get_citation' function</code></pre>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 15.1</code></pre>
 </div>
-<p>Check that for some <code>{epiparameter}</code> entries you will also
+<p>Check that for some <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> entries you will also
 have the <em>uncertainty</em> around the <em>point estimate</em> of each
 summary statistic:</p>
 <div class="codewrapper sourceCode" id="cb52">
@@ -1609,7 +1609,7 @@ summary statistic:</p>
 <p>Explore this shinyapp called <strong>The Distribution
 Zoo</strong>!</p>
 <p>Follow these steps to reproduce the form of the COVID serial interval
-distribution from <code>{epiparameter}</code>
+distribution from <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 (<code>covid_serialint</code> object):</p>
 <ol style="list-style-type: decimal"><li>Access the <a href="https://ben18785.shinyapps.io/distribution-zoo/" class="external-link uri">https://ben18785.shinyapps.io/distribution-zoo/</a> shiny
 app website,</li>
@@ -1661,7 +1661,7 @@ update it from last epiparameter test
 <div class="callout-inner">
 <h3 class="callout-title">Key Points</h3>
 <div class="callout-content">
-<ul><li>Use <code>{epiparameter}</code> to access the literature catalogue
+<ul><li>Use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to access the literature catalogue
 of epidemiological delay distributions.</li>
 <li>Use <code>epiparameter_db()</code> to select single delay
 distributions.</li>
@@ -1735,7 +1735,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/delays-access.html",
   "dateCreated": "2024-11-21",
   "dateModified": "2024-11-21",
-  "datePublished": "2025-01-07"
+  "datePublished": "2025-01-14"
 }
 
   </script><script>

@@ -429,7 +429,7 @@ transmission chains assuming an offspring distribution with <span class="math in
 </figcaption></figure><!-- what we are going to do --><p>In this episode, we will use the <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> package to
 simulate transmission chains and estimate the potential for large
 outbreaks following the introduction of a new case. We are going to use
-it with functions from <code>{epiparameter}</code>, <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>
+it with functions from <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>
 and <a href="https://purrr.tidyverse.org/" class="external-link">purrr</a>, so also loading the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a>
 package:</p>
 <div class="codewrapper sourceCode" id="cb1">
@@ -609,7 +609,7 @@ et al., 2020</a>).</p>
 </div>
 </div>
 </div>
-<p>Let’s use the <code>{epiparameter}</code> package to access and use
+<p>Let’s use the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> package to access and use
 the available serial interval for MERS disease:</p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -634,7 +634,7 @@ deviation of 2.8 days.</p>
 <div class="callout-content">
 <p>In <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a>, we need to specify the generation time
 as a function that generates random numbers. Using
-<code>{epiparameter}</code> has the advantage of using the distribution
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> has the advantage of using the distribution
 function <code>epiparameter::generate()</code> for this input. This will
 look like this:</p>
 <div class="codewrapper sourceCode" id="cb6">
@@ -644,7 +644,7 @@ look like this:</p>
 <code class="sourceCode R"><span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">serial_interval</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span></code></pre>
 </div>
 <p>This interface is similar to the one <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> uses to link
-with <code>{epiparameter}</code>. Read the <a href="https://epiverse-trace.github.io/cfr/articles/delay_distributions.html" class="external-link">work
+with <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>. Read the <a href="https://epiverse-trace.github.io/cfr/articles/delay_distributions.html" class="external-link">work
 with delay distributions</a> vignette for further context.</p>
 </div>
 </div>
@@ -1217,7 +1217,7 @@ cases?</li>
 </button>
 <div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
-<p>With <code>{epiparameter}</code>, you can access and use offspring
+<p>With <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, you can access and use offspring
 and delay distributions from previous Ebola outbreaks.</p>
 <div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1642,7 +1642,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/superspreading-simulate.html",
   "dateCreated": "2024-11-21",
   "dateModified": "2024-11-21",
-  "datePublished": "2025-01-07"
+  "datePublished": "2025-01-14"
 }
 
   </script><script>

@@ -718,7 +718,7 @@ hospital bed usage.</li>
 secondary observations. Here this is the delay between case report and
 death, we assume this follows a gamma distribution with mean of 14 days
 and standard deviation of 5 days (Alternatively, we can use
-<code>{epiparameter}</code> to <a href="https://epiverse-trace.github.io/tutorials-early/delays-reuse.html" class="external-link">access
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to <a href="https://epiverse-trace.github.io/tutorials-early/delays-reuse.html" class="external-link">access
 epidemiological delays</a>). Using <code>Gamma()</code> we specify a
 fixed gamma distribution.</p>
 <p>There are further function inputs to
@@ -848,7 +848,7 @@ the outbreak</li>
 </ol><p>You can use the following parameter values for the delay
 distribution(s) and generation time distribution.</p>
 <ul><li>Incubation period: Log normal<span class="math inline">\((2.487,0.330)\)</span> (<a href="https://doi.org/10.1016/j.phrp.2011.04.001" class="external-link">Eichner et
-al. 2011</a> via <code>{epiparameter}</code>)</li>
+al. 2011</a> via <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>)</li>
 <li>Generation time: Gamma<span class="math inline">\((15.3,
 10.1)\)</span> (<a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1411100" class="external-link">WHO Ebola
 Response Team 2014</a>)</li>
@@ -862,7 +862,7 @@ deviation of these distributions.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>We use the effective reproduction number and growth rate to estimate
 whether cases are increasing or decreasing.</p>
@@ -884,7 +884,7 @@ forecast. The default value is of seven days.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> SOLUTION </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>To estimate the effective reproduction number and growth rate, we
 will use the function <code>epinow()</code>.</p>
@@ -1183,7 +1183,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/create-forecast.html",
   "dateCreated": "2024-11-21",
   "dateModified": "2024-11-21",
-  "datePublished": "2025-01-07"
+  "datePublished": "2025-01-14"
 }
 
   </script><script>
