@@ -385,7 +385,7 @@ individuals (i.e. offspring distribution) from outbreak data using
 dispersion parameter) of the offspring distribution using
 <a href="https://lbbe-software.github.io/fitdistrplus/" class="external-link">fitdistrplus</a>.</li>
 <li>Estimate the proportion of transmission that is linked to
-‘superspreading events’ using <code>{superspreading}</code>.</li>
+‘superspreading events’ using <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a>.</li>
 </ul></div>
 </div>
 </div>
@@ -458,7 +458,7 @@ implications of superspreading for contact tracing interventions.</p>
 <p>We are going to use data from the <a href="https://github.com/reconhub/outbreaks" class="external-link">outbreaks</a> package,
 manage the linelist and contacts data using <a href="https://www.repidemicsconsortium.org/epicontacts/" class="external-link">epicontacts</a>,
 and estimate distribution parameters with <a href="https://lbbe-software.github.io/fitdistrplus/" class="external-link">fitdistrplus</a>.
-Lastly, we are going to use <code>{superspreading}</code> to explore the
+Lastly, we are going to use <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a> to explore the
 implications of variation in transmission for decision-making.</p>
 <p>We’ll use the pipe <code>%&gt;%</code> to connect some of the
 functions from these packages, so let’s also call the
@@ -964,7 +964,7 @@ challenge: How do you define an SSE threshold for Ebola?</p>
 performance using estimators like the AIC and BIC. Read further in the
 vignette on <a href="https://epiverse-trace.github.io/superspreading/articles/estimate_individual_level_transmission.html" class="external-link">Estimate
 individual-level transmission</a> and use the
-<code>{superspreading}</code> helper function <code>ic_tbl()</code> for
+<a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a> helper function <code>ic_tbl()</code> for
 this!</p>
 </div>
 </div>
@@ -1048,7 +1048,7 @@ supporting its implementation when rigorous suppression of transmission
 is justified (<a href="https://www.nature.com/articles/s41467-022-32531-6" class="external-link">Raymenants et
 al., 2022</a>)</p>
 </section><section><h2 class="section-heading" id="probability-of-cases-in-a-given-cluster">Probability of cases in a given cluster<a class="anchor" aria-label="anchor" href="#probability-of-cases-in-a-given-cluster"></a></h2>
-<hr class="half-width"><p>Using <code>{superspreading}</code>, we can estimate the probability
+<hr class="half-width"><p>Using <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a>, we can estimate the probability
 of having a cluster of secondary infections caused by a primary case
 identified by backward tracing of size <span class="math inline">\(X\)</span> or larger (<a href="https://wellcomeopenresearch.org/articles/5-239/v3" class="external-link">Endo et al.,
 2020</a>).</p>
@@ -1253,7 +1253,7 @@ and is off-scale for monkeypox.</div>
 <div class="callout-content">
 <p>What is the proportion of cases responsible for 80% of
 transmission?</p>
-<p>Use <code>{superspreading}</code> and compare the estimates for
+<p>Use <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a> and compare the estimates for
 <strong>MERS</strong> using the offspring distributions parameters from
 this tutorial episode, with <strong>SARS-1</strong> and
 <strong>Ebola</strong> offspring distributions parameter accessible via
@@ -1464,7 +1464,7 @@ data.</li>
 <li>Use <a href="https://lbbe-software.github.io/fitdistrplus/" class="external-link">fitdistrplus</a> to empirically estimate the
 offspring distribution from the number of secondary cases
 distribution.</li>
-<li>Use <code>{superspreading}</code> to estimate the probability of
+<li>Use <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a> to estimate the probability of
 having clusters of a given size from primary cases and inform contact
 tracing efforts.</li>
 </ul></div>
@@ -1510,7 +1510,7 @@ any links that you are not going to use.
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
 
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.10)</a>, <a href="https://github.com/carpentries/pegboard/tree/bad0be19a12f0c6545801b276ddf26c945f8bfd1" class="external-link">pegboard (0.7.7)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.5)</a></p>
+        <p>Built with <a href="https://github.com/epiverse-trace/sandpaper/tree/patch-renv-github-bug" class="external-link">sandpaper (0.16.11)</a>, <a href="https://github.com/carpentries/pegboard/tree/bad0be19a12f0c6545801b276ddf26c945f8bfd1" class="external-link">pegboard (0.7.7)</a>, and <a href="https://github.com/epiverse-trace/varnish/tree/epiversetheme" class="external-link">varnish (1.0.5)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -1533,7 +1533,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/superspreading-estimate.html",
   "dateCreated": "2024-11-21",
   "dateModified": "2024-11-21",
-  "datePublished": "2025-01-21"
+  "datePublished": "2025-01-28"
 }
 
   </script><script>
