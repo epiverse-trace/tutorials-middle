@@ -454,12 +454,12 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-11-21 16:57:53] epinow: There were 15 divergent transitions after warmup. See
+WARN [2025-02-04 01:25:21] epinow: There were 15 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-21 16:57:53] epinow: There were 1352 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+WARN [2025-02-04 01:25:21] epinow: There were 968 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2024-11-21 16:57:53] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-04 01:25:21] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -526,24 +526,24 @@ summary(estimates)
 ```
 
 ``` output
-                            measure                estimate
-                             <char>                  <char>
-1:           New infections per day    6554 (2919 -- 13181)
-2: Expected change in daily reports       Likely decreasing
-3:       Effective reproduction no.      0.88 (0.53 -- 1.3)
-4:                   Rate of growth -0.045 (-0.21 -- 0.099)
-5:     Doubling/halving time (days)         -16 (7 -- -3.2)
+                            measure             estimate
+                             <char>               <char>
+1:           New infections per day 6705 (2972 -- 13559)
+2: Expected change in daily reports    Likely decreasing
+3:       Effective reproduction no.   0.88 (0.54 -- 1.3)
+4:                   Rate of growth -0.045 (-0.2 -- 0.1)
+5:     Doubling/halving time (days)    -16 (6.7 -- -3.4)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
 + From the summary of our analysis we see that the expected change in daily cases is  with the estimated new confirmed cases .
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.88 (0.53 -- 1.3). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.88 (0.54 -- 1.3). 
 
-+ The exponential growth rate of case numbers is -0.045 (-0.21 -- 0.099).
++ The exponential growth rate of case numbers is -0.045 (-0.2 -- 0.1).
 
-+ The doubling time (the time taken for case numbers to double) is -16 (7 -- -3.2).
++ The doubling time (the time taken for case numbers to double) is -16 (6.7 -- -3.4).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in daily cases` 

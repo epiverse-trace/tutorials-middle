@@ -141,12 +141,12 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-11-21 17:09:29] epinow: There were 9 divergent transitions after warmup. See
+WARN [2025-02-04 01:37:07] epinow: There were 5 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-21 17:09:29] epinow: There were 1386 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+WARN [2025-02-04 01:37:07] epinow: There were 1472 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2024-11-21 17:09:29] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-04 01:37:07] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -209,13 +209,16 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-11-21 17:16:25] epinow: There were 7 divergent transitions after warmup. See
+WARN [2025-02-04 01:43:51] epinow: There were 15 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-21 17:16:25] epinow: There were 1801 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+WARN [2025-02-04 01:43:51] epinow: There were 1201 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2024-11-21 17:16:25] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-04 01:43:51] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
+WARN [2025-02-04 01:43:52] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess - 
 ```
 
 ``` r
@@ -223,13 +226,13 @@ base::summary(estimates)
 ```
 
 ``` output
-                            measure               estimate
-                             <char>                 <char>
-1:           New infections per day  17598 (9983 -- 30783)
-2: Expected change in daily reports      Likely decreasing
-3:       Effective reproduction no.     0.89 (0.62 -- 1.2)
-4:                   Rate of growth -0.041 (-0.17 -- 0.09)
-5:     Doubling/halving time (days)      -17 (7.7 -- -4.1)
+                            measure                estimate
+                             <char>                  <char>
+1:           New infections per day   17666 (9897 -- 31135)
+2: Expected change in daily reports       Likely decreasing
+3:       Effective reproduction no.       0.9 (0.61 -- 1.3)
+4:                   Rate of growth -0.035 (-0.17 -- 0.092)
+5:     Doubling/halving time (days)       -20 (7.6 -- -4.1)
 ```
 
 
@@ -311,12 +314,6 @@ estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
   secondary = EpiNow2::secondary_opts(type = "incidence"),
   delays = EpiNow2::delay_opts(delay_report_to_death)
 )
-```
-
-``` output
-WARN [2024-11-21 17:16:32] estimate_secondary (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess - 
 ```
 
 
@@ -543,11 +540,20 @@ ebola_estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2024-11-21 17:18:16] epinow: There were 11 divergent transitions after warmup. See
+WARN [2025-02-04 01:45:49] epinow: There were 483 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2024-11-21 17:18:16] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-04 01:45:49] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
+WARN [2025-02-04 01:45:51] epinow: The largest R-hat is NA, indicating chains have not mixed.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#r-hat - 
+WARN [2025-02-04 01:45:53] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess - 
+WARN [2025-02-04 01:45:54] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
 
 ``` r
@@ -555,16 +561,16 @@ summary(ebola_estimates)
 ```
 
 ``` output
-                            measure              estimate
-                             <char>                <char>
-1:           New infections per day        91 (38 -- 217)
-2: Expected change in daily reports     Likely increasing
-3:       Effective reproduction no.     1.6 (0.89 -- 2.7)
-4:                   Rate of growth 0.038 (-0.029 -- 0.1)
-5:     Doubling/halving time (days)       18 (6.7 -- -24)
+                            measure                estimate
+                             <char>                  <char>
+1:           New infections per day          73 (19 -- 197)
+2: Expected change in daily reports       Likely increasing
+3:       Effective reproduction no.       1.4 (0.51 -- 2.5)
+4:                   Rate of growth 0.025 (-0.037 -- 0.093)
+5:     Doubling/halving time (days)         27 (7.5 -- -19)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (0.89 -- 2.7). The exponential growth rate of case numbers is 0.038 (-0.029 -- 0.1).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.4 (0.51 -- 2.5). The exponential growth rate of case numbers is 0.025 (-0.037 -- 0.093).
 
 Visualize the estimates:
 
