@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  4.659860 10.022774  6.501705  2.572396  3.306480  4.675752  5.633987
- [8]  3.848728  7.532589  4.565095
+ [1]  2.488053  5.720186 10.743108  1.501036  3.439268  2.327996  1.895375
+ [8]  2.345107  3.868546  7.871055
 ```
 
 ::::::::: instructor
@@ -473,10 +473,10 @@ epinow_estimates_cg <- epinow(
 ```
 
 ``` output
-WARN [2025-02-04 01:26:54] epinow: There were 6 divergent transitions after warmup. See
+WARN [2025-02-18 02:00:53] epinow: There were 9 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-04 01:26:54] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-18 02:00:53] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -598,10 +598,10 @@ epinow_estimates_cgi <- epinow(
 ```
 
 ``` output
-WARN [2025-02-04 01:28:22] epinow: There were 7 divergent transitions after warmup. See
+WARN [2025-02-18 02:02:08] epinow: There were 15 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-04 01:28:22] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-18 02:02:08] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -743,10 +743,10 @@ epinow_estimates_egi <- epinow(
 ```
 
 ``` output
-WARN [2025-02-04 01:30:22] epinow: There were 25 divergent transitions after warmup. See
+WARN [2025-02-18 02:03:58] epinow: There were 5 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-04 01:30:22] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-18 02:03:58] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -906,11 +906,11 @@ epinow_estimates_igi <- epinow(
 ```
 
 ``` output
-WARN [2025-02-04 01:30:28] epinow: Specifying nonparametric generation times with nonzero first element was deprecated in EpiNow2 1.6.0. - 
-WARN [2025-02-04 01:30:30] epinow: There were 2 divergent transitions after warmup. See
+WARN [2025-02-18 02:04:04] epinow: Specifying nonparametric generation times with nonzero first element was deprecated in EpiNow2 1.6.0. - 
+WARN [2025-02-18 02:04:07] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-04 01:30:30] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-18 02:04:07] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
