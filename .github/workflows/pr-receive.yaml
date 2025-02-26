@@ -48,7 +48,7 @@ jobs:
   build-md-source:
     name: "Build markdown source files if valid"
     needs: test-pr
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: ${{ needs.test-pr.outputs.is_valid == 'true' }}
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -81,7 +81,7 @@ jobs:
           cache-version: ${{ secrets.CACHE_VERSION }}
 
       - name: "Setup Package Cache"
-        uses: carpentries/actions/setup-lesson-deps@main
+        uses: Bisaloo/actions/setup-lesson-deps@patch-1
         with:
           cache-version: ${{ secrets.CACHE_VERSION }}
 
