@@ -132,7 +132,10 @@ cases <- incidence2::covidregionaldataUK %>%
     date_names_to = "date",
     complete_dates = TRUE
   ) %>%
-  dplyr::select(-count_variable)
+  # drop one column to adapt {EpiNow2} input
+  dplyr::select(-count_variable) %>%
+  # keep the first 90 dates and visualize epicurve
+  dplyr::slice_head(n = 90)
 ```
 
 With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`
@@ -149,7 +152,8 @@ incidence2::covidregionaldataUK %>%
   dplyr::select(date, cases_new) %>%
   dplyr::group_by(date) %>%
   dplyr::summarise(confirm = sum(cases_new, na.rm = TRUE)) %>%
-  dplyr::ungroup()
+  dplyr::ungroup() %>%
+  dplyr::slice_head(n = 90)
 ```
 
 However, the `incidence2::incidence()` function contains convenient arguments like `complete_dates` that facilitate getting an incidence object with the same range of dates for each grouping without the need of extra code lines or a time-series package.
@@ -159,9 +163,7 @@ However, the `incidence2::incidence()` function contains convenient arguments li
 There are case data available for `r dim(cases)[1]` days, but in an outbreak situation it is likely we would only have access to the beginning of this data set. Therefore we assume we only have the first 90 days of this data. 
 
 ```{r echo = FALSE}
-# keep the first 90 dates and visualize epicurve
 cases %>%
-  dplyr::slice_head(n = 90) %>%
   # use ggplot2
   ggplot(aes(x = date, y = confirm)) +
   geom_col() +
@@ -386,15 +388,10 @@ reporting_delay_fixed <- EpiNow2::LogNormal(
 
 Now you are ready to run `EpiNow2::epinow()` to estimate the time-varying reproduction number for the first 90 days:
 
-```{r, message = FALSE, eval = TRUE}
-reported_cases <- cases %>%
-  dplyr::slice_head(n = 90)
-```
-
 ```{r, message = FALSE, eval = TRUE, echo=TRUE}
 estimates <- EpiNow2::epinow(
-  # cases
-  data = reported_cases,
+  # reported cases
+  data = cases,
   # delays
   generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
@@ -405,8 +402,8 @@ estimates <- EpiNow2::epinow(
 
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
 <!-- estimates <- EpiNow2::epinow( -->
-<!--   # cases -->
-<!--   data = reported_cases, -->
+<!--   # reported cases -->
+<!--   data = cases, -->
 <!--   # delays -->
 <!--   generation_time = EpiNow2::generation_time_opts(generation_time_fixed), -->
 <!--   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed), -->
