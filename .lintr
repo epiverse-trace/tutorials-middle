@@ -3,7 +3,6 @@ linters: all_linters(
     object_name_linter = NULL,
     implicit_integer_linter = NULL,
     brace_linter = NULL,
-    extraction_operator_linter = NULL,
     missing_package_linter = NULL,
     library_call_linter = NULL,
     namespace_linter = NULL,
