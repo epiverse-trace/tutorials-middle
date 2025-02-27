@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  2.488053  5.720186 10.743108  1.501036  3.439268  2.327996  1.895375
- [8]  2.345107  3.868546  7.871055
+ [1] 4.177327 4.366853 1.952109 3.728053 3.142757 2.319085 3.029869 6.134666
+ [9] 1.267885 4.510559
 ```
 
 ::::::::: instructor
@@ -273,7 +273,7 @@ Study: Nishiura H, Linton N, Akhmetzhanov A (2020). "Serial interval of novel
 coronavirus (COVID-19) infections." _International Journal of
 Infectious Diseases_. doi:10.1016/j.ijid.2020.02.060
 <https://doi.org/10.1016/j.ijid.2020.02.060>.
-Distribution: discrete lnorm
+Distribution: discrete lnorm (days)
 Parameters:
   meanlog: 1.386
   sdlog: 0.568
@@ -473,10 +473,10 @@ epinow_estimates_cg <- epinow(
 ```
 
 ``` output
-WARN [2025-02-18 02:00:53] epinow: There were 9 divergent transitions after warmup. See
+WARN [2025-02-27 20:30:16] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-18 02:00:53] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-27 20:30:16] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -595,17 +595,7 @@ epinow_estimates_cgi <- epinow(
   generation_time = generation_time_opts(covid_serial_interval),
   delays = delay_opts(covid_incubation_time)
 )
-```
 
-``` output
-WARN [2025-02-18 02:02:08] epinow: There were 15 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-18 02:02:08] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 base::plot(epinow_estimates_cgi)
 ```
 
@@ -683,7 +673,15 @@ To get delay distribution using `{epiparameter}` we can use functions like:
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 ebola_confirmed <-
-  read_csv(here::here("data", "raw-data", "ebola_cases.csv"))
+  read_csv(here::here("data", "raw-data", "ebola_cases.csv")) %>%
+  incidence2::incidence(
+    date_index = "date",
+    counts = "confirm",
+    count_values_to = "confirm",
+    date_names_to = "date",
+    complete_dates = TRUE
+  ) %>%
+  dplyr::select(-count_variable)
 
 # list distributions
 epiparameter::epiparameter_db(disease = "ebola") %>%
@@ -740,17 +738,7 @@ epinow_estimates_egi <- epinow(
   generation_time = generation_time_opts(serial_interval_ebola),
   delays = delay_opts(incubation_period_ebola)
 )
-```
 
-``` output
-WARN [2025-02-18 02:03:58] epinow: There were 5 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-18 02:03:58] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 plot(epinow_estimates_egi)
 ```
 
@@ -815,7 +803,7 @@ Mental Hygiene Swine Influenza Investigation Team (2009). "Outbreak of
 2009 Pandemic Influenza A (H1N1) at a New York City School." _The New
 England Journal of Medicine_. doi:10.1056/NEJMoa0906089
 <https://doi.org/10.1056/NEJMoa0906089>.
-Distribution: weibull
+Distribution: weibull (days)
 Parameters:
   shape: 2.360
   scale: 3.180
@@ -834,14 +822,14 @@ influenza_generation_max <-
 influenza_generation_pmf <-
   density(
     influenza_generation_discrete,
-    at = 1:influenza_generation_max
+    at = 0:influenza_generation_max
   )
 
 influenza_generation_pmf
 ```
 
 ``` output
-[1] 0.06312336 0.22134988 0.29721220 0.23896828 0.12485164 0.04309454
+[1] 0.00000000 0.06312336 0.22134988 0.29721220 0.23896828 0.12485164 0.04309454
 ```
 
 ``` r
@@ -871,14 +859,15 @@ influenza_incubation_max <-
 influenza_incubation_pmf <-
   density(
     influenza_incubation_discrete,
-    at = 1:influenza_incubation_max
+    at = 0:influenza_incubation_max
   )
 
 influenza_incubation_pmf
 ```
 
 ``` output
-[1] 0.05749151 0.16687705 0.22443092 0.21507632 0.16104546 0.09746609 0.04841928
+[1] 0.00000000 0.05749151 0.16687705 0.22443092 0.21507632 0.16104546 0.09746609
+[8] 0.04841928
 ```
 
 ``` r
@@ -903,18 +892,7 @@ epinow_estimates_igi <- epinow(
   generation_time = generation_time_opts(generation_time_influenza),
   delays = delay_opts(incubation_time_influenza)
 )
-```
 
-``` output
-WARN [2025-02-18 02:04:04] epinow: Specifying nonparametric generation times with nonzero first element was deprecated in EpiNow2 1.6.0. - 
-WARN [2025-02-18 02:04:07] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-18 02:04:07] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 plot(epinow_estimates_igi)
 ```
 

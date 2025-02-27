@@ -373,7 +373,7 @@ ebola_offspring
 Fitting of the distribution ' nbinom ' by maximum likelihood 
 Parameters:
      estimate  Std. Error
-size 2.353899 0.250124611
+size 2.353899 0.250124609
 mu   0.539300 0.009699219
 ```
 

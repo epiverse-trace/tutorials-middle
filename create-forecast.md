@@ -120,7 +120,7 @@ generation_time_fixed <- EpiNow2::LogNormal(
 )
 
 # define Rt prior distribution
-rt_prior <- EpiNow2::rt_opts(prior = base::list(mean = 2, sd = 2))
+rt_prior <- EpiNow2::rt_opts(prior = EpiNow2::LogNormal(mean = 2, sd = 2))
 ```
 
 Now we can extract the short-term forecast using:
@@ -141,19 +141,10 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2025-02-27 12:33:53] epinow: There were 22 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-27 12:33:53] epinow: There were 1073 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+WARN [2025-02-27 20:35:38] epinow: There were 11 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2025-02-27 12:33:53] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-27 20:35:38] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
-WARN [2025-02-27 12:33:55] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess - 
-WARN [2025-02-27 12:33:56] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
 
 ::::::::::::::::::::::::::::::::: callout
@@ -189,7 +180,7 @@ Let's say we believe the COVID-19 outbreak data in the `cases` object do not inc
 
 
 ``` r
-obs_scale <- base::list(mean = 0.4, sd = 0.01)
+obs_scale <- EpiNow2::Normal(mean = 0.4, sd = 0.01)
 ```
 
 To run the inference framework with this observation process, we add `obs = obs_opts(scale = obs_scale)` to the input arguments of `epinow()`:
@@ -197,7 +188,7 @@ To run the inference framework with this observation process, we add `obs = obs_
 
 ``` r
 # Define observation model
-obs_scale <- base::list(mean = 0.4, sd = 0.01)
+obs_scale <- EpiNow2::Normal(mean = 0.4, sd = 0.01)
 
 # Assume we only have the first 90 days of this data
 reported_cases <- cases %>%
@@ -212,30 +203,18 @@ estimates <- EpiNow2::epinow(
   # Add observation model
   obs = EpiNow2::obs_opts(scale = obs_scale)
 )
-```
 
-``` output
-WARN [2025-02-27 12:39:33] epinow: There were 6 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-27 12:39:33] epinow: There were 1278 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
-https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2025-02-27 12:39:33] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 base::summary(estimates)
 ```
 
 ``` output
-                            measure                estimate
-                             <char>                  <char>
-1:           New infections per day   17618 (9888 -- 30351)
-2: Expected change in daily reports       Likely decreasing
-3:       Effective reproduction no.      0.89 (0.62 -- 1.2)
-4:                   Rate of growth -0.039 (-0.17 -- 0.081)
-5:     Doubling/halving time (days)         -18 (8.5 -- -4)
+                        measure                 estimate
+                         <char>                   <char>
+1:       New infections per day   20165 (13146 -- 30383)
+2:   Expected change in reports                   Stable
+3:   Effective reproduction no.       0.97 (0.77 -- 1.2)
+4:               Rate of growth -0.011 (-0.091 -- 0.067)
+5: Doubling/halving time (days)         -65 (10 -- -7.6)
 ```
 
 
@@ -398,7 +377,7 @@ You may include some uncertainty around the mean and standard deviation of these
 
 We use the effective reproduction number and growth rate to estimate whether cases are increasing or decreasing.
 
-We can use the `horizon` argument within the `epinow()` function to extend the time period of the forecast. The default value is of seven days.
+We can use the `horizon` argument within the `forecast_opts()` provided to `forecast` argument in `epinow()` function to extend the time period of the forecast. The default value is of seven days.
 
 Ensure the data is in the correct format :
 
@@ -524,7 +503,7 @@ We define an observation model to scale the estimated and forecast number of new
 ``` r
 # Define observation model
 # mean of 80% and standard deviation of 1%
-ebola_obs_scale <- base::list(mean = 0.8, sd = 0.01)
+ebola_obs_scale <- EpiNow2::Normal(mean = 0.8, sd = 0.01)
 ```
 
 As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 
@@ -538,15 +517,15 @@ ebola_estimates <- EpiNow2::epinow(
   # Add observation model
   obs = EpiNow2::obs_opts(scale = ebola_obs_scale),
   # horizon needs to be 14 days to create two week forecast (default is 7 days)
-  horizon = 14
+  forecast = EpiNow2::forecast_opts(horizon = 14)
 )
 ```
 
 ``` output
-WARN [2025-02-27 12:41:05] epinow: There were 28 divergent transitions after warmup. See
+WARN [2025-02-27 20:40:15] epinow: There were 10 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-02-27 12:41:05] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-02-27 20:40:15] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -555,16 +534,16 @@ summary(ebola_estimates)
 ```
 
 ``` output
-                            measure                estimate
-                             <char>                  <char>
-1:           New infections per day          92 (39 -- 204)
-2: Expected change in daily reports       Likely increasing
-3:       Effective reproduction no.       1.6 (0.91 -- 2.5)
-4:                   Rate of growth 0.039 (-0.029 -- 0.095)
-5:     Doubling/halving time (days)         18 (7.3 -- -24)
+                        measure                estimate
+                         <char>                  <char>
+1:       New infections per day          90 (48 -- 193)
+2:   Expected change in reports              Increasing
+3:   Effective reproduction no.        1.6 (1.2 -- 2.4)
+4:               Rate of growth 0.041 (0.0025 -- 0.086)
+5: Doubling/halving time (days)           17 (8 -- 270)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (0.91 -- 2.5). The exponential growth rate of case numbers is 0.039 (-0.029 -- 0.095).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.2 -- 2.4). The exponential growth rate of case numbers is 0.041 (0.0025 -- 0.086).
 
 Visualize the estimates:
 

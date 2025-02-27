@@ -124,7 +124,7 @@ Mental Hygiene Swine Influenza Investigation Team (2009). "Outbreak of
 2009 Pandemic Influenza A (H1N1) at a New York City School." _The New
 England Journal of Medicine_. doi:10.1056/NEJMoa0906089
 <https://doi.org/10.1056/NEJMoa0906089>.
-Distribution: weibull
+Distribution: weibull (days)
 Parameters:
   shape: 2.360
   scale: 3.180
@@ -141,6 +141,7 @@ in the Philippines Demonstrates Episodic and Focal Transmission." _The
 Journal of Infectious Diseases_. doi:10.1093/infdis/jiv470
 <https://doi.org/10.1093/infdis/jiv470>.
 Parameters: <no parameters>
+Mean: 14 (days)
 
 [[3]]
 Disease: Chikungunya
@@ -152,7 +153,7 @@ G, Merler S (2020). "Spatial modes for transmission of chikungunya
 virus during a large chikungunya outbreak in Italy: a modeling
 analysis." _BMC Medicine_. doi:10.1186/s12916-020-01674-y
 <https://doi.org/10.1186/s12916-020-01674-y>.
-Distribution: gamma
+Distribution: gamma (days)
 Parameters:
   shape: 8.633
   scale: 1.447
@@ -430,7 +431,7 @@ Epi Parameter: offspring distribution
 Study: Lloyd-Smith J, Schreiber S, Kopp P, Getz W (2005). "Superspreading and
 the effect of individual variation on disease emergence." _Nature_.
 doi:10.1038/nature04153 <https://doi.org/10.1038/nature04153>.
-Distribution: nbinom
+Distribution: nbinom (No units)
 Parameters:
   mean: 1.500
   dispersion: 5.100
@@ -443,7 +444,7 @@ Study: Eichner M, Dowell S, Firese N (2011). "Incubation period of ebola
 hemorrhagic virus subtype zaire." _Osong Public Health and Research
 Perspectives_. doi:10.1016/j.phrp.2011.04.001
 <https://doi.org/10.1016/j.phrp.2011.04.001>.
-Distribution: lnorm
+Distribution: lnorm (days)
 Parameters:
   meanlog: 2.487
   sdlog: 0.330
@@ -469,7 +470,7 @@ Lay Y, Kitenge E (2018). "Outbreak of Ebola virus disease in the
 Democratic Republic of the Congo, April–May, 2018: an epidemiological
 study." _The Lancet_. doi:10.1016/S0140-6736(18)31387-4
 <https://doi.org/10.1016/S0140-6736%2818%2931387-4>.
-Distribution: gamma
+Distribution: gamma (days)
 Parameters:
   shape: 2.400
   scale: 3.333
@@ -589,7 +590,7 @@ Study: Nishiura H, Linton N, Akhmetzhanov A (2020). "Serial interval of novel
 coronavirus (COVID-19) infections." _International Journal of
 Infectious Diseases_. doi:10.1016/j.ijid.2020.02.060
 <https://doi.org/10.1016/j.ijid.2020.02.060>.
-Distribution: lnorm
+Distribution: lnorm (days)
 Parameters:
   meanlog: 1.386
   sdlog: 0.568
@@ -797,7 +798,7 @@ Kerkhove M, Varsaneux O, Kannangarage N (2015). "West African Ebola
 Epidemic after One Year — Slowing but Not Yet under Control." _The New
 England Journal of Medicine_. doi:10.1056/NEJMc1414992
 <https://doi.org/10.1056/NEJMc1414992>.
-Distribution: gamma
+Distribution: gamma (days)
 Parameters:
   shape: 2.188
   scale: 6.490
