@@ -697,7 +697,7 @@ influenza_generation_max <-
 influenza_generation_pmf <-
   density(
     influenza_generation_discrete,
-    at = 1:influenza_generation_max
+    at = 0:influenza_generation_max
   )
 
 influenza_generation_pmf
@@ -728,7 +728,7 @@ influenza_incubation_max <-
 influenza_incubation_pmf <-
   density(
     influenza_incubation_discrete,
-    at = 1:influenza_incubation_max
+    at = 0:influenza_incubation_max
   )
 
 influenza_incubation_pmf
