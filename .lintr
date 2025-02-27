@@ -10,6 +10,7 @@ linters: all_linters(
     unused_import_linter = NULL,
     consecutive_mutate_linter = NULL,
     nrow_subset_linter = NULL,
+    cyclocomp_linter = NULL,
     undesirable_function_linter(
       modify_defaults(
         default_undesirable_functions,
