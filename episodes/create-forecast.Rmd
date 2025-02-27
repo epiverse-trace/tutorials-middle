@@ -123,7 +123,7 @@ generation_time_fixed <- EpiNow2::LogNormal(
 )
 
 # define Rt prior distribution
-rt_prior <- EpiNow2::rt_opts(prior = base::list(mean = 2, sd = 2))
+rt_prior <- EpiNow2::rt_opts(prior = EpiNow2::LogNormal(mean = 2, sd = 2))
 ```
 
 Now we can extract the short-term forecast using:
@@ -171,14 +171,14 @@ We will pass another argument into `epinow()` function  called `obs` to define a
 Let's say we believe the COVID-19 outbreak data in the `cases` object do not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
 
 ```{r}
-obs_scale <- base::list(mean = 0.4, sd = 0.01)
+obs_scale <- EpiNow2::Normal(mean = 0.4, sd = 0.01)
 ```
 
 To run the inference framework with this observation process, we add `obs = obs_opts(scale = obs_scale)` to the input arguments of `epinow()`:
 
 ```{r, message = FALSE,warning=FALSE, eval = TRUE}
 # Define observation model
-obs_scale <- base::list(mean = 0.4, sd = 0.01)
+obs_scale <- EpiNow2::Normal(mean = 0.4, sd = 0.01)
 
 # Assume we only have the first 90 days of this data
 reported_cases <- cases %>%
@@ -484,7 +484,7 @@ We define an observation model to scale the estimated and forecast number of new
 ```{r}
 # Define observation model
 # mean of 80% and standard deviation of 1%
-ebola_obs_scale <- base::list(mean = 0.8, sd = 0.01)
+ebola_obs_scale <- EpiNow2::Normal(mean = 0.8, sd = 0.01)
 ```
 
 As we want to also create a two week forecast, we specify `horizon = 14` to forecast 14 days instead of the default 7 days. 

@@ -344,7 +344,7 @@ One optional input is to specify a *log normal* prior for the effective reproduc
 
 ```{r, eval = TRUE}
 # define Rt prior distribution
-rt_prior <- EpiNow2::rt_opts(prior = base::list(mean = 2, sd = 2))
+rt_prior <- EpiNow2::rt_opts(prior = EpiNow2::LogNormal(mean = 2, sd = 2))
 ```
 
 ::::::::::::::::::::::::::::::::::::: callout
@@ -485,7 +485,7 @@ A factor describing expected change in daily cases based on the posterior probab
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::: callout
+::::::::::::::::::::::::: callout
 
 ### Credible intervals
 
