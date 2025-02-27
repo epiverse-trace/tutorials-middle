@@ -565,7 +565,7 @@ To get delay distribution using `{epiparameter}` we can use functions like:
 ```{r,eval=TRUE,echo=FALSE,message=FALSE}
 # read data from the tutorial repository R project
 ebola_confirmed <-
-  read_csv(file.path("data", "ebola_cases.csv")) %>% 
+  read_csv(file.path("data", "ebola_cases.csv")) %>%
   incidence2::incidence(
     date_index = "date",
     counts = "confirm",
@@ -580,7 +580,7 @@ ebola_confirmed <-
 # read data
 # e.g.: if path to file is data/raw-data/ebola_cases.csv then:
 ebola_confirmed <-
-  read_csv(here::here("data", "raw-data", "ebola_cases.csv")) %>% 
+  read_csv(here::here("data", "raw-data", "ebola_cases.csv")) %>%
   incidence2::incidence(
     date_index = "date",
     counts = "confirm",
