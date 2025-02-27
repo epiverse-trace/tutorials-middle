@@ -586,10 +586,11 @@ Now, let's visualise both results in a time series. How would the naive and dela
 ``` r
 # bind by rows both output data frames
 dplyr::bind_rows(
-  rolling_cfr_naive %>%
-    dplyr::mutate(method = "naive"),
-  rolling_cfr_adjusted %>%
-    dplyr::mutate(method = "adjusted")
+  list(
+    naive = rolling_cfr_naive,
+    adjusted = rolling_cfr_adjusted
+  ),
+  .id = "method"
 ) %>%
   # visualise both adjusted and unadjusted rolling estimates
   ggplot() +
