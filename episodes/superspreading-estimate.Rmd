@@ -7,7 +7,6 @@ exercises: 2
 ```{r setup, echo= FALSE, message = FALSE, warning = FALSE}
 library(webshot)
 webshot::install_phantomjs(force = TRUE)
-Sys.setenv(OPENSSL_CONF="/dev/null")
 ```
 
 
@@ -110,20 +109,19 @@ epicontacts::vis_epicontacts(epi_contacts)
 ```
 
 ```{r,echo=FALSE}
-# visualise contact network
-network <-
-  vis_epicontacts(epi_contacts) %>%
-  visNetwork::visPhysics(solver = "barnesHut")
-
-fname <- "network.html"
-
-visNetwork::visSave(network, fname)
-
-webshot::webshot(
-  fname,
-  delay = 5,
-  zoom = 10
-)
+withr::with_envvar(c(OPENSSL_CONF = file.path("/dev", "null")), {
+  # visualise contact network
+  network <-
+    vis_epicontacts(epi_contacts) %>%
+    visNetwork::visPhysics(solver = "barnesHut")
+  fname <- "network.html"
+  visNetwork::visSave(network, fname)
+  webshot::webshot(
+    fname,
+    delay = 5,
+    zoom = 10
+  )
+})
 ```
 
 ::::::::::::::::::::::::::: spoiler
