@@ -389,7 +389,7 @@ You may include some uncertainty around the mean and standard deviation of these
 
 We use the effective reproduction number and growth rate to estimate whether cases are increasing or decreasing.
 
-We can use the `horizon` argument within the `epinow()` function to extend the time period of the forecast. The default value is of seven days.
+We can use the `horizon` argument within the `forecast_opts()` provided to `forecast` argument in `epinow()` function to extend the time period of the forecast. The default value is of seven days.
 
 Ensure the data is in the correct format :
 
@@ -496,7 +496,7 @@ ebola_estimates <- EpiNow2::epinow(
   # Add observation model
   obs = EpiNow2::obs_opts(scale = ebola_obs_scale),
   # horizon needs to be 14 days to create two week forecast (default is 7 days)
-  horizon = 14
+  forecast = EpiNow2::forecast_opts(horizon = 14)
 )
 
 summary(ebola_estimates)
