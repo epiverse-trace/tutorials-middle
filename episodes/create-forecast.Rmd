@@ -242,7 +242,6 @@ reported_cases_deaths <- incidence2::covidregionaldataUK %>%
 # distribution of secondary observations
 estimate_forecast <- reported_cases_deaths %>%
   slice_head(n = 90) %>%
-  # rownames_to_column() %>%
   identity()
 
 ggplot2::ggplot() +
