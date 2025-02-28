@@ -151,7 +151,10 @@ cases <- incidence2::covidregionaldataUK %>%
     date_names_to = "date",
     complete_dates = TRUE
   ) %>%
-  dplyr::select(-count_variable)
+  # drop one column to adapt {EpiNow2} input
+  dplyr::select(-count_variable) %>%
+  # keep the first 90 dates and visualize epicurve
+  dplyr::slice_head(n = 90)
 ```
 
 With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`
@@ -169,14 +172,15 @@ incidence2::covidregionaldataUK %>%
   dplyr::select(date, cases_new) %>%
   dplyr::group_by(date) %>%
   dplyr::summarise(confirm = sum(cases_new, na.rm = TRUE)) %>%
-  dplyr::ungroup()
+  dplyr::ungroup() %>%
+  dplyr::slice_head(n = 90)
 ```
 
 However, the `incidence2::incidence()` function contains convenient arguments like `complete_dates` that facilitate getting an incidence object with the same range of dates for each grouping without the need of extra code lines or a time-series package.
 
 :::::::::::::::::::::::::
 
-There are case data available for 490 days, but in an outbreak situation it is likely we would only have access to the beginning of this data set. Therefore we assume we only have the first 90 days of this data. 
+In an outbreak situation it is likely we would only have access to the beginning of the input data set. Therefore we assume we only have the first 90 days of this data. 
 
 <img src="fig/quantify-transmissibility-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
@@ -436,15 +440,9 @@ Now you are ready to run `EpiNow2::epinow()` to estimate the time-varying reprod
 
 
 ``` r
-reported_cases <- cases %>%
-  dplyr::slice_head(n = 90)
-```
-
-
-``` r
 estimates <- EpiNow2::epinow(
-  # cases
-  data = reported_cases,
+  # reported cases
+  data = cases,
   # delays
   generation_time = EpiNow2::generation_time_opts(generation_time_fixed),
   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed),
@@ -455,8 +453,8 @@ estimates <- EpiNow2::epinow(
 
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
 <!-- estimates <- EpiNow2::epinow( -->
-<!--   # cases -->
-<!--   data = reported_cases, -->
+<!--   # reported cases -->
+<!--   data = cases, -->
 <!--   # delays -->
 <!--   generation_time = EpiNow2::generation_time_opts(generation_time_fixed), -->
 <!--   delays = EpiNow2::delay_opts(incubation_period_fixed + reporting_delay_fixed), -->
@@ -496,7 +494,7 @@ We can extract and visualise estimates of the effective reproduction number thro
 estimates$plots$R
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
 
 The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. This difference in uncertainty is categorised into **Estimate** (green) utilises all data and **Estimate based on partial data** (orange) estimates that are based on less data (because infections that happened at the time are more likely to not have been observed yet) and therefore have increasingly wider intervals towards the date of the last data point. Finally, the **Forecast** (purple) is a projection ahead of time. 
 
@@ -506,7 +504,7 @@ We can also visualise the growth rate estimate through time:
 estimates$plots$growth_rate
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
 
 To extract a summary of the key transmission metrics at the *latest date* in the data:
 
@@ -518,22 +516,22 @@ summary(estimates)
 ``` output
                         measure               estimate
                          <char>                 <char>
-1:       New infections per day   8005 (4807 -- 13640)
-2:   Expected change in reports                 Stable
-3:   Effective reproduction no.     0.97 (0.74 -- 1.3)
-4:               Rate of growth -0.011 (-0.1 -- 0.081)
-5: Doubling/halving time (days)      -64 (8.6 -- -6.9)
+1:       New infections per day   7815 (4709 -- 12858)
+2:   Expected change in reports      Likely decreasing
+3:   Effective reproduction no.     0.96 (0.73 -- 1.2)
+4:               Rate of growth -0.015 (-0.1 -- 0.073)
+5: Doubling/halving time (days)      -46 (9.5 -- -6.6)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
 + From the summary of our analysis we see that the expected change in daily cases is  with the estimated new confirmed cases .
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.3). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.011 (-0.1 -- 0.081).
++ The exponential growth rate of case numbers is -0.015 (-0.1 -- 0.073).
 
-+ The doubling time (the time taken for case numbers to double) is -64 (8.6 -- -6.9).
++ The doubling time (the time taken for case numbers to double) is -46 (9.5 -- -6.6).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in daily cases` 
