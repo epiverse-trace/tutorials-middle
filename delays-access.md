@@ -535,41 +535,26 @@ How does `{epiparameter}` do the collection and review of peer-reviewed literatu
 
 ## Select a single distribution
 
-The `epiparameter::epiparameter_db()` function works as a filtering or subset function. Let's use the `author` argument to filter `Hiroshi Nishiura` parameters:
+The `epiparameter::epiparameter_db()` function works as a filtering or subset function. We can use the `author` argument to keep `Hiroshi Nishiura` parameters, or the `subset` argument to keep parameters from studies with a sample size higher than 10:
 
 
 ``` r
 epiparameter::epiparameter_db(
   disease = "covid",
   epi_name = "serial",
-  author = "Hiroshi"
+  author = "Nishiura",
+  subset = sample_size > 10
 ) %>%
   epiparameter::parameter_tbl()
 ```
 
-``` output
-Returning 2 results that match the criteria (2 are parameterised). 
-Use subset to filter by entry variables or single_epiparameter to return a single entry. 
-To retrieve the citation for each use the 'get_citation' function
-```
-
-``` output
-# Parameter table:
-# A data frame:    2 × 7
-  disease  pathogen   epi_name        prob_distribution author  year sample_size
-  <chr>    <chr>      <chr>           <chr>             <chr>  <dbl>       <dbl>
-1 COVID-19 SARS-CoV-2 serial interval lnorm             Nishi…  2020          28
-2 COVID-19 SARS-CoV-2 serial interval weibull           Nishi…  2020          18
-```
-
-We still get more than one epidemiological parameter. We can set the `single_epiparameter` argument to `TRUE` to only one:
+We still get more than one epidemiological parameter. Instead, we can set the `single_epiparameter` argument to `TRUE` for only one:
 
 
 ``` r
 epiparameter::epiparameter_db(
   disease = "covid",
   epi_name = "serial",
-  author = "Hiroshi",
   single_epiparameter = TRUE
 )
 ```
@@ -618,7 +603,6 @@ covid_serialint <-
   epiparameter::epiparameter_db(
     disease = "covid",
     epi_name = "serial",
-    author = "Nishiura",
     single_epiparameter = TRUE
   )
 ```
@@ -721,7 +705,9 @@ covid_serialint_parameters
 1.3862617 0.5679803 
 ```
 
-This gets a vector of class `<numeric>` ready to use as input for any other package!
+This gets a vector of class `<numeric>` ready to use as input for any other package! 
+
+Consider that {EpiNow2} functions also accept distribution parameters as inputs. Run `?EpiNow2::LogNormal` to read the [Probability distributions](https://epiforecasts.io/EpiNow2/reference/Distributions.html) reference manual.
 
 ::::::::::::::::::::::::::::::
 
