@@ -160,7 +160,7 @@ However, the `incidence2::incidence()` function contains convenient arguments li
 
 :::::::::::::::::::::::::
 
-There are case data available for `r dim(cases)[1]` days, but in an outbreak situation it is likely we would only have access to the beginning of this data set. Therefore we assume we only have the first 90 days of this data. 
+In an outbreak situation it is likely we would only have access to the beginning of the input data set. Therefore we assume we only have the first 90 days of this data. 
 
 ```{r echo = FALSE}
 cases %>%
