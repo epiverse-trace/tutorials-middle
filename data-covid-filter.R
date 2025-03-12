@@ -1,3 +1,5 @@
+#' aim
+#' summative assessments for group challenges
 
 library(tidyverse)
 library(incidence2)
