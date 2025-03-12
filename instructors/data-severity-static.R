@@ -1,3 +1,6 @@
+#' aim:
+#' formative assessment in severity episode
+
 library(cfr)
 library(epiparameter)
 library(incidence2)
@@ -16,6 +19,8 @@ sarscov2_incidence <- sarscov2_who_2019 %>%
 
 sarscov2_incidence
 
+plot(sarscov2_incidence)
+
 sarscov2_incidence %>%
   prepare_data(
     cases_variable = "cases_jpn",
@@ -31,25 +36,3 @@ sarscov2_incidence %>%
 sarscov2_input <- read_csv(file.path("episodes",
                                      "data", "sarscov2_cases_deaths.csv"))
 
-sarscov2_input
-
-sarscov2_delay <-
-  epidist_db(
-    disease = "covid",
-    epi_dist = "onset to death",
-    single_epidist = TRUE
-  )
-
-sarscov2_input %>%
-  dplyr::rename(
-    cases = cases_jpn,
-    deaths = deaths_jpn
-  ) %>%
-  cfr_static()
-
-sarscov2_input %>%
-  dplyr::rename(
-    cases = cases_jpn,
-    deaths = deaths_jpn
-  ) %>%
-  cfr_static(delay_density = function(x) density(sarscov2_delay, x))
