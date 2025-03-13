@@ -303,7 +303,7 @@ onset_to_death_ebola <-
     single_epiparameter = TRUE
   )
 
-# Plot <epidist> object
+# Plot <epiparameter> object
 plot(onset_to_death_ebola, day_range = 0:40)
 ```
 
@@ -334,15 +334,15 @@ The delay-adjusted CFR indicated that the overall disease severity _at the end o
 
 :::::::::::::::::: callout
 
-### Use the epidist class
+### Use the epiparameter class
 
-When using an `<epidist>` class object we can use this expression as a template:
+When using an `<epiparameter>` class object we can use this expression as a template:
 
-`function(x) density(<EPIDIST_OBJECT>, x)`
+`function(x) density(<EPIPARAMETER_OBJECT>, x)`
 
 For distribution functions with parameters not available in `{epiparameter}`, we suggest you two alternatives: 
 
-- Create an `<epidist>` class object, to plug into other R packages of the outbreak analytics pipeline. Read the [reference documentation of `epiparameter::epidist()`](https://epiverse-trace.github.io/epiparameter/reference/epidist.html), or
+- Create an `<epiparameter>` class object, to plug into other R packages of the outbreak analytics pipeline. Read the [reference documentation of `epiparameter::epiparameter()`](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html), or
 
 - Read `{cfr}` vignette for [a primer on working with delay distributions](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html).
 
@@ -358,7 +358,7 @@ Estimate the delay-adjusted CFR using the appropriate distribution delay. Then:
 
 :::::::::::::::::::: hint
 
-- Find the appropriate `<epidist>` object!
+- Find the appropriate `<epiparameter>` object!
 
 ::::::::::::::::::::
 
@@ -425,7 +425,7 @@ For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropri
 
 We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
 
-However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epidist>` object.
+However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epiparameter>` object.
 
 ::::::::::::::::::
 
