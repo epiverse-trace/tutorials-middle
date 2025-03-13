@@ -213,7 +213,7 @@ epiparameter::epiparameter_db(
 )
 ```
 
-With this query combination, we get more than one delay distribution. This output is an `<epidist>` class object.
+With this query combination, we get more than one delay distribution. This output is an `<epiparameter>` class object.
 
 ::::::::::::::::: callout
 
@@ -223,7 +223,7 @@ With this query combination, we get more than one delay distribution. This outpu
 
 :::::::::::::::::::::::::
 
-As suggested in the outputs, to summarise an `<epidist>` object and get the column names from the underlying parameter database, we can add the `epiparameter::parameter_tbl()` function to the previous code using the pipe `%>%`:
+As suggested in the outputs, to summarise an `<epiparameter>` object and get the column names from the underlying parameter database, we can add the `epiparameter::parameter_tbl()` function to the previous code using the pipe `%>%`:
 
 ```{r}
 epiparameter::epiparameter_db(
@@ -244,7 +244,7 @@ In the `epiparameter::parameter_tbl()` output, we can also find different types 
 Entries with a missing value (`<NA>`) in the `prob_distribution` column are *non-parameterised* entries. They have summary statistics but no probability distribution. Compare these two outputs:
 
 ```{r,eval=FALSE}
-# get an <epidist> object
+# get an <epiparameter> object
 distribution <-
   epiparameter::epiparameter_db(
     disease = "covid",
@@ -254,10 +254,10 @@ distribution <-
 distribution %>%
   # pluck the first entry in the object class <list>
   pluck(1) %>%
-  # check if <epidist> object have distribution parameters
+  # check if <epiparameter> object have distribution parameters
   is_parameterised()
 
-# check if the second <epidist> object
+# check if the second <epiparameter> object
 # have distribution parameters
 distribution %>%
   pluck(2) %>%
@@ -391,14 +391,14 @@ epiparameter::epiparameter_db(
 Looking at the help documentation for `?epiparameter::epiparameter_db()`:
 
 - If multiple entries match the arguments supplied and `single_epiparameter = TRUE`, then the parameterised
-`<epidist>` with the *largest sample size* will be returned.
+`<epiparameter>` with the *largest sample size* will be returned.
 - If multiple entries are equal after this sorting, the *first entry* will be returned.
 
-What is a *parametrised* `<epidist>`? Look at `?is_parameterised`.
+What is a *parametrised* `<epiparameter>`? Look at `?is_parameterised`.
 
 :::::::::::::::::::::::::
 
-Let's assign this `<epidist>` class object to the `covid_serialint` object.
+Let's assign this `<epiparameter>` class object to the `covid_serialint` object.
 
 ```{r,message=FALSE}
 covid_serialint <-
@@ -433,27 +433,27 @@ This only seems to work in code chunks and R console!
 
 -->
 
-You can use `plot()` to `<epidist>` objects to visualise:
+You can use `plot()` to `<epiparameter>` objects to visualise:
 
 - the *Probability Density Function (PDF)* and 
 - the *Cumulative Distribution Function (CDF)*.
 
 ```{r}
-# plot <epidist> object
+# plot <epiparameter> object
 plot(covid_serialint)
 ```
 
 With the `xlim` argument, you can change the length or number of days in the `x` axis. Explore what this looks like:
 
 ```{r,eval=FALSE}
-# plot <epidist> object
+# plot <epiparameter> object
 plot(covid_serialint, xlim = c(1, 60))
 ```
 
 
 ## Extract the summary statistics
 
-We can get the `mean` and standard deviation (`sd`) from this `<epidist>` diving into the `summary_stats` object:
+We can get the `mean` and standard deviation (`sd`) from this `<epiparameter>` diving into the `summary_stats` object:
 
 ```{r}
 # get the mean
@@ -516,7 +516,7 @@ Use the `$` operator plus the <kbd>tab</kbd> or <kbd>↹</kbd>  keyboard button 
 covid_serialint$
 ```
 
-Use the `str()` to display the structure of the `<epidist>` R object.
+Use the `str()` to display the structure of the `<epiparameter>` R object.
 
 ::::::::::::::::::
 
@@ -544,7 +544,7 @@ ebola_serial$metadata$sample_size
 
 Try to visualise this distribution using `plot()`.
 
-Also, explore all the other nested elements within the `<epidist>` object.
+Also, explore all the other nested elements within the `<epiparameter>` object.
 
 Share about: 
 
