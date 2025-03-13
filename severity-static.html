@@ -348,7 +348,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Estimation of outbreak severity</h1>
-        <p>Last updated on 2025-03-05 |
+        <p>Last updated on 2025-03-13 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/severity-static.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -823,7 +823,7 @@ to epidemiological delays</a>.</p>
 <span>    single_epiparameter <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Plot &lt;epidist&gt; object</span></span>
+<span><span class="co"># Plot &lt;epiparameter&gt; object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, day_range <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">40</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/severity-static-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To calculate the delay-adjusted CFR, we can use the
@@ -850,21 +850,22 @@ to epidemiological delays</a>.</p>
 <em>at the end of the outbreak</em> or with the <em>latest data
 available at the moment</em> is 0.9502 with a 95% confidence interval
 between 0.881 and 0.9861, slightly higher than the naive one.</p>
-<div id="use-the-epidist-class" class="callout">
+<div id="use-the-epiparameter-class" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="use-the-epidist-class" class="callout-inner">
-<h3 class="callout-title">Use the epidist class</h3>
+<div id="use-the-epiparameter-class" class="callout-inner">
+<h3 class="callout-title">Use the epiparameter class</h3>
 <div class="callout-content">
-<p>When using an <code>&lt;epidist&gt;</code> class object we can use
-this expression as a template:</p>
-<p><code>function(x) density(&lt;EPIDIST_OBJECT&gt;, x)</code></p>
+<p>When using an <code>&lt;epiparameter&gt;</code> class object we can
+use this expression as a template:</p>
+<p><code>function(x) density(&lt;EPIPARAMETER_OBJECT&gt;, x)</code></p>
 <p>For distribution functions with parameters not available in
 <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, we suggest you two alternatives:</p>
-<ul><li><p>Create an <code>&lt;epidist&gt;</code> class object, to plug into
-other R packages of the outbreak analytics pipeline. Read the <a href="https://epiverse-trace.github.io/epiparameter/reference/epidist.html" class="external-link">reference
-documentation of <code>epiparameter::epidist()</code></a>, or</p></li>
+<ul><li><p>Create an <code>&lt;epiparameter&gt;</code> class object, to plug
+into other R packages of the outbreak analytics pipeline. Read the <a href="https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html" class="external-link">reference
+documentation of <code>epiparameter::epiparameter()</code></a>,
+or</p></li>
 <li><p>Read <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> vignette for <a href="https://epiverse-trace.github.io/cfr/articles/delay_distributions.html" class="external-link">a
 primer on working with delay distributions</a>.</p></li>
 </ul></div>
@@ -891,7 +892,7 @@ delay. Then:</p>
 </button>
 <div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
-<ul><li>Find the appropriate <code>&lt;epidist&gt;</code> object!</li>
+<ul><li>Find the appropriate <code>&lt;epiparameter&gt;</code> object!</li>
 </ul></div>
 </div>
 </div>
@@ -1005,7 +1006,7 @@ the average disparity between the PDF and PMF is expected to be more
 pronounced compared to distributions with broader spreads. One way to
 deal with this is to discretise the continuous distribution using
 <code>epiparameter::discretise()</code> to an
-<code>&lt;epidist&gt;</code> object.</p>
+<code>&lt;epiparameter&gt;</code> object.</p>
 </div>
 </div>
 </div>
@@ -1883,9 +1884,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/severity-static.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/severity-static.html",
-  "dateCreated": "2025-03-12",
-  "dateModified": "2025-03-05",
-  "datePublished": "2025-03-12"
+  "dateCreated": "2025-03-13",
+  "dateModified": "2025-03-13",
+  "datePublished": "2025-03-13"
 }
 
   </script><script>
