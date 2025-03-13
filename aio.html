@@ -386,7 +386,7 @@
         
 <section id="aio-delays-access"><p>Content from <a href="delays-access.html">Access epidemiological delay distributions</a></p>
 <hr>
-<p>Last updated on 2025-03-05 |
+<p>Last updated on 2025-03-13 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/delays-access.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -838,7 +838,7 @@ distribution (<code>epi_name</code>). Run this in your console:</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>With this query combination, we get more than one delay distribution.
-This output is an <code>&lt;epidist&gt;</code> class object.</p>
+This output is an <code>&lt;epiparameter&gt;</code> class object.</p>
 <div id="case-insensitive" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -855,8 +855,8 @@ also valid.</p>
 </div>
 </div>
 <p>As suggested in the outputs, to summarise an
-<code>&lt;epidist&gt;</code> object and get the column names from the
-underlying parameter database, we can add the
+<code>&lt;epiparameter&gt;</code> object and get the column names from
+the underlying parameter database, we can add the
 <code>epiparameter::parameter_tbl()</code> function to the previous code
 using the pipe <code>%&gt;%</code>:</p>
 <div class="codewrapper sourceCode" id="cb8">
@@ -909,7 +909,7 @@ Compare these two outputs:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># get an &lt;epidist&gt; object</span></span>
+<code class="sourceCode R"><span><span class="co"># get an &lt;epiparameter&gt; object</span></span>
 <span><span class="va">distribution</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span></span>
 <span>    disease <span class="op">=</span> <span class="st">"covid"</span>,</span>
@@ -919,10 +919,10 @@ Compare these two outputs:</p>
 <span><span class="va">distribution</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># pluck the first entry in the object class &lt;list&gt;</span></span>
 <span>  <span class="fu">pluck</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># check if &lt;epidist&gt; object have distribution parameters</span></span>
+<span>  <span class="co"># check if &lt;epiparameter&gt; object have distribution parameters</span></span>
 <span>  <span class="fu">is_parameterised</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># check if the second &lt;epidist&gt; object</span></span>
+<span><span class="co"># check if the second &lt;epiparameter&gt; object</span></span>
 <span><span class="co"># have distribution parameters</span></span>
 <span><span class="va">distribution</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">pluck</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -1221,18 +1221,18 @@ Parameters:
 <ul>
 <li>If multiple entries match the arguments supplied and
 <code>single_epiparameter = TRUE</code>, then the parameterised
-<code>&lt;epidist&gt;</code> with the <em>largest sample size</em> will
-be returned.</li>
+<code>&lt;epiparameter&gt;</code> with the <em>largest sample size</em>
+will be returned.</li>
 <li>If multiple entries are equal after this sorting, the <em>first
 entry</em> will be returned.</li>
 </ul>
-<p>What is a <em>parametrised</em> <code>&lt;epidist&gt;</code>? Look at
-<code>?is_parameterised</code>.</p>
+<p>What is a <em>parametrised</em> <code>&lt;epiparameter&gt;</code>?
+Look at <code>?is_parameterised</code>.</p>
 </div>
 </div>
 </div>
-<p>Let’s assign this <code>&lt;epidist&gt;</code> class object to the
-<code>covid_serialint</code> object.</p>
+<p>Let’s assign this <code>&lt;epiparameter&gt;</code> class object to
+the <code>covid_serialint</code> object.</p>
 <div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1273,7 +1273,7 @@ This only seems to work in code chunks and R console!
 ::::::::::::::::::
 
 -->
-<p>You can use <code>plot()</code> to <code>&lt;epidist&gt;</code>
+<p>You can use <code>plot()</code> to <code>&lt;epiparameter&gt;</code>
 objects to visualise:</p>
 <ul>
 <li>the <em>Probability Density Function (PDF)</em> and</li>
@@ -1283,7 +1283,7 @@ objects to visualise:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># plot &lt;epidist&gt; object</span></span>
+<code class="sourceCode R"><span><span class="co"># plot &lt;epiparameter&gt; object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">covid_serialint</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/delays-access-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>With the <code>xlim</code> argument, you can change the length or
@@ -1293,15 +1293,15 @@ like:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># plot &lt;epidist&gt; object</span></span>
+<code class="sourceCode R"><span><span class="co"># plot &lt;epiparameter&gt; object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">covid_serialint</span>, xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 </section><section><h2 class="section-heading" id="extract-the-summary-statistics">Extract the summary statistics<a class="anchor" aria-label="anchor" href="#extract-the-summary-statistics"></a>
 </h2>
 <hr class="half-width">
 <p>We can get the <code>mean</code> and standard deviation
-(<code>sd</code>) from this <code>&lt;epidist&gt;</code> diving into the
-<code>summary_stats</code> object:</p>
+(<code>sd</code>) from this <code>&lt;epiparameter&gt;</code> diving
+into the <code>summary_stats</code> object:</p>
 <div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1404,7 +1404,7 @@ distribution?</p></li>
 <pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>covid_serialint<span class="sc">$</span></span></code></pre>
 </div>
 <p>Use the <code>str()</code> to display the structure of the
-<code>&lt;epidist&gt;</code> R object.</p>
+<code>&lt;epiparameter&gt;</code> R object.</p>
 </div>
 </div>
 </div>
@@ -1496,7 +1496,7 @@ Parameters:
 </div>
 <p>Try to visualise this distribution using <code>plot()</code>.</p>
 <p>Also, explore all the other nested elements within the
-<code>&lt;epidist&gt;</code> object.</p>
+<code>&lt;epiparameter&gt;</code> object.</p>
 <p>Share about:</p>
 <ul>
 <li>What elements do you find useful for your analysis?</li>
@@ -2901,8 +2901,8 @@ object you want!</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code> [1]  2.955609  4.976827 28.739956  1.797500  2.313165  4.365976  4.954863
- [8]  2.968215  2.297179  7.080620</code></pre>
+<pre class="output" tabindex="0"><code> [1] 4.794255 5.107670 4.818578 8.206317 5.806076 2.566620 3.772609 4.956510
+ [9] 4.635954 5.876066</code></pre>
 </div>
 
 <div id="window-for-contact-tracing-and-the-serial-interval" class="callout challenge">
@@ -3473,9 +3473,35 @@ function.</p>
 <span>  <span class="co"># delays</span></span>
 <span>  generation_time <span class="op">=</span> <span class="fu">generation_time_opts</span><span class="op">(</span><span class="va">covid_serial_interval</span><span class="op">)</span>,</span>
 <span>  delays <span class="op">=</span> <span class="fu">delay_opts</span><span class="op">(</span><span class="va">covid_incubation_time</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">base</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_cgi</span><span class="op">)</span></span></code></pre>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>WARN [2025-03-13 17:19:49] epinow: There were 52 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded -
+WARN [2025-03-13 17:19:49] epinow: There were 1 chains where the estimated Bayesian Fraction of Missing Information was low. See
+https://mc-stan.org/misc/warnings.html#bfmi-low -
+WARN [2025-03-13 17:19:49] epinow: Examine the pairs() plot to diagnose sampling problems
+ -
+WARN [2025-03-13 17:19:50] epinow: The largest R-hat is NA, indicating chains have not mixed.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#r-hat -
+WARN [2025-03-13 17:19:51] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess -
+WARN [2025-03-13 17:19:52] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess -
+WARN [2025-03-13 17:19:53] epinow: NAs introduced by coercion to integer range - .f, .x[[i]], ...
+WARN [2025-03-13 17:19:53] epinow: NAs introduced by coercion to integer range - .f, .x[[i]], ...
+WARN [2025-03-13 17:19:53] epinow: NAs introduced by coercion to integer range - .f, .x[[i]], ...</code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb37">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">base</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_cgi</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/delays-functions-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Try to complement the <code>delays</code> argument with a reporting
 delay like the <code>reporting_delay_fixed</code> object of the previous
@@ -3580,7 +3606,7 @@ use functions like:</p>
 </button>
 <div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb36">
+<div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3601,7 +3627,7 @@ use functions like:</p>
 <span><span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span>disease <span class="op">=</span> <span class="st">"ebola"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">parameter_tbl</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb37">
+<div class="codewrapper sourceCode" id="cb39">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3652,22 +3678,9 @@ use functions like:</p>
 <span>  <span class="co"># delays</span></span>
 <span>  generation_time <span class="op">=</span> <span class="fu">generation_time_opts</span><span class="op">(</span><span class="va">serial_interval_ebola</span><span class="op">)</span>,</span>
 <span>  delays <span class="op">=</span> <span class="fu">delay_opts</span><span class="op">(</span><span class="va">incubation_period_ebola</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>WARN [2025-03-13 17:20:01] epinow: There were 2 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. -
-WARN [2025-03-13 17:20:01] epinow: Examine the pairs() plot to diagnose sampling problems
- - </code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb39">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_egi</span><span class="op">)</span></span></code></pre>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_egi</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/delays-functions-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
 </div>

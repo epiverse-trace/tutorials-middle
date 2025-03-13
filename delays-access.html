@@ -347,7 +347,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Access epidemiological delay distributions</h1>
-        <p>Last updated on 2025-03-05 |
+        <p>Last updated on 2025-03-13 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/delays-access.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -760,7 +760,7 @@ distribution (<code>epi_name</code>). Run this in your console:</p>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>With this query combination, we get more than one delay distribution.
-This output is an <code>&lt;epidist&gt;</code> class object.</p>
+This output is an <code>&lt;epiparameter&gt;</code> class object.</p>
 <div id="case-insensitive" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -777,8 +777,8 @@ also valid.</p>
 </div>
 </div>
 <p>As suggested in the outputs, to summarise an
-<code>&lt;epidist&gt;</code> object and get the column names from the
-underlying parameter database, we can add the
+<code>&lt;epiparameter&gt;</code> object and get the column names from
+the underlying parameter database, we can add the
 <code>epiparameter::parameter_tbl()</code> function to the previous code
 using the pipe <code>%&gt;%</code>:</p>
 <div class="codewrapper sourceCode" id="cb8">
@@ -831,7 +831,7 @@ Compare these two outputs:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># get an &lt;epidist&gt; object</span></span>
+<code class="sourceCode R"><span><span class="co"># get an &lt;epiparameter&gt; object</span></span>
 <span><span class="va">distribution</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span></span>
 <span>    disease <span class="op">=</span> <span class="st">"covid"</span>,</span>
@@ -841,10 +841,10 @@ Compare these two outputs:</p>
 <span><span class="va">distribution</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># pluck the first entry in the object class &lt;list&gt;</span></span>
 <span>  <span class="fu">pluck</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># check if &lt;epidist&gt; object have distribution parameters</span></span>
+<span>  <span class="co"># check if &lt;epiparameter&gt; object have distribution parameters</span></span>
 <span>  <span class="fu">is_parameterised</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># check if the second &lt;epidist&gt; object</span></span>
+<span><span class="co"># check if the second &lt;epiparameter&gt; object</span></span>
 <span><span class="co"># have distribution parameters</span></span>
 <span><span class="va">distribution</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">pluck</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -1129,17 +1129,17 @@ Parameters:
 <code>?epiparameter::epiparameter_db()</code>:</p>
 <ul><li>If multiple entries match the arguments supplied and
 <code>single_epiparameter = TRUE</code>, then the parameterised
-<code>&lt;epidist&gt;</code> with the <em>largest sample size</em> will
-be returned.</li>
+<code>&lt;epiparameter&gt;</code> with the <em>largest sample size</em>
+will be returned.</li>
 <li>If multiple entries are equal after this sorting, the <em>first
 entry</em> will be returned.</li>
-</ul><p>What is a <em>parametrised</em> <code>&lt;epidist&gt;</code>? Look at
-<code>?is_parameterised</code>.</p>
+</ul><p>What is a <em>parametrised</em> <code>&lt;epiparameter&gt;</code>?
+Look at <code>?is_parameterised</code>.</p>
 </div>
 </div>
 </div>
-<p>Let’s assign this <code>&lt;epidist&gt;</code> class object to the
-<code>covid_serialint</code> object.</p>
+<p>Let’s assign this <code>&lt;epiparameter&gt;</code> class object to
+the <code>covid_serialint</code> object.</p>
 <div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1180,7 +1180,7 @@ This only seems to work in code chunks and R console!
 ::::::::::::::::::
 
 -->
-<p>You can use <code>plot()</code> to <code>&lt;epidist&gt;</code>
+<p>You can use <code>plot()</code> to <code>&lt;epiparameter&gt;</code>
 objects to visualise:</p>
 <ul><li>the <em>Probability Density Function (PDF)</em> and</li>
 <li>the <em>Cumulative Distribution Function (CDF)</em>.</li>
@@ -1188,7 +1188,7 @@ objects to visualise:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># plot &lt;epidist&gt; object</span></span>
+<code class="sourceCode R"><span><span class="co"># plot &lt;epiparameter&gt; object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">covid_serialint</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/delays-access-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>With the <code>xlim</code> argument, you can change the length or
@@ -1198,13 +1198,13 @@ like:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># plot &lt;epidist&gt; object</span></span>
+<code class="sourceCode R"><span><span class="co"># plot &lt;epiparameter&gt; object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">covid_serialint</span>, xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">1</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 </section><section><h2 class="section-heading" id="extract-the-summary-statistics">Extract the summary statistics<a class="anchor" aria-label="anchor" href="#extract-the-summary-statistics"></a></h2>
 <hr class="half-width"><p>We can get the <code>mean</code> and standard deviation
-(<code>sd</code>) from this <code>&lt;epidist&gt;</code> diving into the
-<code>summary_stats</code> object:</p>
+(<code>sd</code>) from this <code>&lt;epiparameter&gt;</code> diving
+into the <code>summary_stats</code> object:</p>
 <div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1303,7 +1303,7 @@ distribution?</p></li>
 <pre class="sourceCode r" tabindex="0"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>covid_serialint<span class="sc">$</span></span></code></pre>
 </div>
 <p>Use the <code>str()</code> to display the structure of the
-<code>&lt;epidist&gt;</code> R object.</p>
+<code>&lt;epiparameter&gt;</code> R object.</p>
 </div>
 </div>
 </div>
@@ -1395,7 +1395,7 @@ Parameters:
 </div>
 <p>Try to visualise this distribution using <code>plot()</code>.</p>
 <p>Also, explore all the other nested elements within the
-<code>&lt;epidist&gt;</code> object.</p>
+<code>&lt;epiparameter&gt;</code> object.</p>
 <p>Share about:</p>
 <ul><li>What elements do you find useful for your analysis?</li>
 <li>What other elements would you like to see in this object? How?</li>
@@ -1659,7 +1659,7 @@ any links that you are not going to use.
   "url": "https://epiverse-trace.github.io/tutorials-middle/delays-access.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/delays-access.html",
   "dateCreated": "2025-03-13",
-  "dateModified": "2025-03-05",
+  "dateModified": "2025-03-13",
   "datePublished": "2025-03-13"
 }
 
