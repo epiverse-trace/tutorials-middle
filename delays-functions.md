@@ -14,7 +14,7 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Use distribution functions to continuous and discrete distributions stored as `<epidist>` objects.
+- Use distribution functions to continuous and discrete distributions stored as `<epiparameter>` objects.
 - Convert a continuous to a discrete distribution with `{epiparameter}`.
 - Connect `{epiparameter}` outputs with `{EpiNow2}` inputs.
 
@@ -118,7 +118,7 @@ If you need it, read in detail about the [R probability functions for the normal
 
 ::::::::::::::::::::
 
-If you look at `?stats::Distributions`, each type of distribution has a unique set of functions. However, `{epiparameter}` gives you the same four functions to access each of the values above for any `<epidist>` object you want! 
+If you look at `?stats::Distributions`, each type of distribution has a unique set of functions. However, `{epiparameter}` gives you the same four functions to access each of the values above for any `<epiparameter>` object you want! 
 
 
 ``` r
@@ -161,18 +161,18 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  4.322987  5.663090  3.680686  3.176411  5.273274  5.336117  4.489004
- [8] 29.397919  4.449324  2.959804
+ [1] 5.775239 4.083842 3.374113 2.218826 3.787504 4.486593 3.612816 9.337781
+ [9] 2.474745 5.425098
 ```
 
 ::::::::: instructor
 
 Access to the reference documentation (Help files) for these functions is accessible with the three double-colon notation: `epiparameter:::`
 
-- `?epiparameter:::density.epidist()`
-- `?epiparameter:::cdf.epidist()`
-- `?epiparameter:::quantile.epidist()`
-- `?epiparameter:::generate.epidist()`
+- `?epiparameter:::density.epiparameter()`
+- `?epiparameter:::cdf.epiparameter()`
+- `?epiparameter:::quantile.epiparameter()`
+- `?epiparameter:::generate.epiparameter()`
 
 ::::::::::::::::::
 
@@ -251,9 +251,9 @@ An interpretation could be:
 
 We are getting closer to the end! `EpiNow2::LogNormal()` still needs a maximum value (`max`). 
 
-One way to do this is to get the quantile value for the distribution's 99th percentile or `0.99` cumulative probability. For this, we need access to the set of distribution functions for our `<epidist>` object.
+One way to do this is to get the quantile value for the distribution's 99th percentile or `0.99` cumulative probability. For this, we need access to the set of distribution functions for our `<epiparameter>` object.
 
-We can use the set of distribution functions for a _continuous_ distribution (as above). However, these values will be _continuous_ numbers. We can **discretise** the continuous distribution stored in our `<epidist>` object to get discrete values from a continuous distribution.
+We can use the set of distribution functions for a _continuous_ distribution (as above). However, these values will be _continuous_ numbers. We can **discretise** the continuous distribution stored in our `<epiparameter>` object to get discrete values from a continuous distribution.
 
 When we `epiparameter::discretise()` the continuous distribution we get a **discrete**(-ized) distribution:
 
@@ -279,7 +279,7 @@ Parameters:
   sdlog: 0.568
 ```
 
-We identify this change in the `Distribution:` output line of the `<epidist>` object. Double check this line:
+We identify this change in the `Distribution:` output line of the `<epiparameter>` object. Double check this line:
 
 ```
 Distribution: discrete lnorm
@@ -318,7 +318,7 @@ Calculate:
 
 What delay distribution measures the time between infection and the onset of symptoms?
 
-The probability functions for `<epidist>` **discrete** distributions are the same that we used for the *continuous* ones!
+The probability functions for `<epiparameter>` **discrete** distributions are the same that we used for the *continuous* ones!
 
 
 ``` r
@@ -473,10 +473,10 @@ epinow_estimates_cg <- epinow(
 ```
 
 ``` output
-WARN [2025-03-05 15:57:47] epinow: There were 1 divergent transitions after warmup. See
+WARN [2025-03-13 17:19:49] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-03-05 15:57:48] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-03-13 17:19:49] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -545,7 +545,7 @@ covid_serialint <-
     single_epiparameter = TRUE
   )
 
-# adapt epidist to epinow2
+# adapt epiparameter to epinow2
 covid_serialint_discrete_max <- covid_serialint %>%
   epiparameter::discretise() %>%
   quantile(p = 0.99)
@@ -923,7 +923,7 @@ Refer to this excellent tutorial on estimating the serial interval and incubatio
 - Tutorial in English: <https://rpubs.com/tracelac/diseaseX> <!-- to request -->
 - Tutorial en Español: <https://epiverse-trace.github.io/epimodelac/EnfermedadX.html>
 
-**Then,** after you get your estimated values, you can manually create your own` <epidist>` class objects with `epiparameter::epidist()`! Take a look at its [reference guide on "Create an `<epidist>` object"](https://epiverse-trace.github.io/epiparameter/reference/epidist.html#ref-examples)!
+**Then,** after you get your estimated values, you can manually create your own` <epiparameter>` class objects with `epiparameter::epiparameter()`! Take a look at its [reference guide on "Create an `<epiparameter>` object"](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html#ref-examples)!
 
 Lastly, take a look at the latest [`{epidist}` R package](https://epidist.epinowcast.org/) which provide methods to address key challenges in estimating distributions, including truncation, interval censoring, and dynamical biases.
 
@@ -938,7 +938,7 @@ update it from last epiparameter test
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
-- Use distribution functions with `<epidist>` objects to get summary statistics and informative parameters for public health interventions like the Window for contact tracing and Length of quarantine.
+- Use distribution functions with `<epiparameter>` objects to get summary statistics and informative parameters for public health interventions like the Window for contact tracing and Length of quarantine.
 - Use `discretise()` to convert continuous to discrete delay distributions.
 - Use `{epiparameter}` to get reporting delays required in transmissibility estimates. 
 

@@ -676,13 +676,13 @@ library(tidyverse)
 
 # delays ------------------------------------------------------------------
 
-mpox_offspring_epidist <- epiparameter::epiparameter_db(
+mpox_offspring_epiparam <- epiparameter::epiparameter_db(
   disease = "mpox",
   epi_name = "offspring",
   single_epiparameter = TRUE
 )
 
-mpox_offspring <- epiparameter::get_parameters(mpox_offspring_epidist)
+mpox_offspring <- epiparameter::get_parameters(mpox_offspring_epiparam)
 
 mpox_serialint <- epiparameter::epiparameter_db(
   disease = "mpox",
