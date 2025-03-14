@@ -451,14 +451,6 @@ estimates <- EpiNow2::epinow(
 )
 ```
 
-``` output
-WARN [2025-03-05 15:56:49] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-03-05 15:56:49] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
 <!-- estimates <- EpiNow2::epinow( -->
 <!--   # reported cases -->
@@ -524,22 +516,22 @@ summary(estimates)
 ``` output
                         measure                estimate
                          <char>                  <char>
-1:       New infections per day    7942 (4638 -- 13597)
+1:       New infections per day    7969 (4640 -- 13415)
 2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.73 -- 1.3)
-4:               Rate of growth -0.011 (-0.11 -- 0.082)
-5: Doubling/halving time (days)       -64 (8.4 -- -6.5)
+3:   Effective reproduction no.      0.96 (0.72 -- 1.2)
+4:               Rate of growth -0.014 (-0.11 -- 0.079)
+5: Doubling/halving time (days)       -50 (8.7 -- -6.4)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
 + From the summary of our analysis we see that the expected change in daily cases is  with the estimated new confirmed cases .
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.73 -- 1.3). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.72 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.011 (-0.11 -- 0.082).
++ The exponential growth rate of case numbers is -0.014 (-0.11 -- 0.079).
 
-+ The doubling time (the time taken for case numbers to double) is -64 (8.4 -- -6.5).
++ The doubling time (the time taken for case numbers to double) is -50 (8.7 -- -6.4).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in daily cases` 
