@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1] 2.113056 2.162364 2.513674 4.813090 4.512386 4.761373 4.595148 2.770148
- [9] 4.342929 2.405060
+ [1]  5.618764 11.854418  7.528508  2.308690  4.074645  5.913211  4.409226
+ [8]  7.204945  2.551309  1.812146
 ```
 
 ::::::::: instructor
@@ -731,11 +731,9 @@ epinow_estimates_egi <- epinow(
 ```
 
 ``` output
-WARN [2025-03-14 20:23:38] epinow: There were 4 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-03-14 20:23:38] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
+WARN [2025-03-18 01:28:40] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
 
 ``` r
