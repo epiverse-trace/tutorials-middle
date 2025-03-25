@@ -141,10 +141,9 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2025-03-18 01:32:09] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-03-18 01:32:09] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-03-25 02:02:34] epinow: There were 2 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
+WARN [2025-03-25 02:02:34] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -209,13 +208,13 @@ base::summary(estimates)
 ```
 
 ``` output
-                        measure                estimate
-                         <char>                  <char>
-1:       New infections per day  20172 (13520 -- 30009)
-2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.78 -- 1.2)
-4:               Rate of growth -0.011 (-0.09 -- 0.068)
-5: Doubling/halving time (days)        -64 (10 -- -7.7)
+                        measure                 estimate
+                         <char>                   <char>
+1:       New infections per day   19965 (13074 -- 29904)
+2:   Expected change in reports        Likely decreasing
+3:   Effective reproduction no.       0.96 (0.75 -- 1.2)
+4:               Rate of growth -0.014 (-0.097 -- 0.064)
+5: Doubling/halving time (days)         -50 (11 -- -7.1)
 ```
 
 
@@ -523,12 +522,7 @@ ebola_estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2025-03-18 01:36:32] epinow: There were 3 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-03-18 01:36:32] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-WARN [2025-03-18 01:36:36] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+WARN [2025-03-25 02:07:05] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
@@ -540,14 +534,14 @@ summary(ebola_estimates)
 ``` output
                         measure               estimate
                          <char>                 <char>
-1:       New infections per day         94 (50 -- 195)
+1:       New infections per day         91 (48 -- 192)
 2:   Expected change in reports             Increasing
-3:   Effective reproduction no.       1.7 (1.2 -- 2.5)
-4:               Rate of growth 0.042 (0.0059 -- 0.09)
-5: Doubling/halving time (days)        17 (7.7 -- 120)
+3:   Effective reproduction no.       1.6 (1.2 -- 2.4)
+4:               Rate of growth 0.04 (0.0018 -- 0.084)
+5: Doubling/halving time (days)        17 (8.3 -- 380)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.7 (1.2 -- 2.5). The exponential growth rate of case numbers is 0.042 (0.0059 -- 0.09).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.2 -- 2.4). The exponential growth rate of case numbers is 0.04 (0.0018 -- 0.084).
 
 Visualize the estimates:
 

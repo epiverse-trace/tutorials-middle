@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  5.618764 11.854418  7.528508  2.308690  4.074645  5.913211  4.409226
- [8]  7.204945  2.551309  1.812146
+ [1]  2.0091409  0.8854043  1.7201494  2.7688723  1.6826305 16.3262563
+ [7]  3.3938741  4.0063264  2.7771664  5.5601549
 ```
 
 ::::::::: instructor
@@ -728,15 +728,7 @@ epinow_estimates_egi <- epinow(
   generation_time = generation_time_opts(serial_interval_ebola),
   delays = delay_opts(incubation_period_ebola)
 )
-```
 
-``` output
-WARN [2025-03-18 01:28:40] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess - 
-```
-
-``` r
 plot(epinow_estimates_egi)
 ```
 
