@@ -1,0 +1,29 @@
+---
+title: "Untitled"
+format: 
+  html: default
+  docx: default
+  gfm: default
+keep-md: true
+format-links: false
+---
+
+::: {.content-hidden when-format="html"}
+
+<!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
+
+:::
+
+# Practical
+
+visible for students and everyone
+
+::: {.content-visible unless-format="docx"}
+
+# Solutions
+
+visible for instructors at md too
+
+:::
+
+# stop
