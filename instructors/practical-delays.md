@@ -26,6 +26,14 @@ Instructions, as a group:
 - Create one copy of the Posit Cloud project `<paste link>`.
 - Solve the challenge using the `Code chunk` as a guide.
 - Paste your figure and table outputs.
+- Write your answer to these questions:
+  - What phase of the epidemic are you observing? (Exponential growth
+    phase, near peak, or decay end phase)
+  - Does the expected change in daily reports consistent with the
+    estimated effective reproductive number, growth rate, and doubling
+    time?
+  - Interpret: How would you communicate these results to a
+    decision-maker?
 - **Report** to all the group at the end of the session.
 
 ### Inputs
@@ -42,113 +50,11 @@ Instructions, as a group:
 | Ebola   | The time difference between symptom onset and case report follows a Lognormal distribution with uncertainty. The **mean** follows a Normal distribution with mean = 4 and sd = 0.5. The **standard deviation** follows a Normal distribution with mean = 1 and sd = 0.5. Bound the distribution with max = 5. |
 | COVID   | The time difference between symptom onset and case report follows a Gamma distribution with uncertainty. The **mean** follows a Normal distribution with mean = 2 and sd = 0.5. The **standard deviation** follows a Normal distribution with mean = 1 and sd = 0.5. Bound the distribution with a max = 5.   |
 
-### Code chunk
+### Solutions
 
-``` r
-# Load packages
-library(epiparameter)
-library(EpiNow2)
-library(tidyverse)
+<!-- visible for instructors and learners after practical (solutions) -->
 
-
-# Read reported cases
-dat <- read_rds("paste/link/url/here") %>%
-  dplyr::select(date, confirm)
-
-
-# Access parameters for delay distributions
-
-
-
-# Get maximum value for each distribution
-
-
-
-# Extract parameters
-
-
-
-# Adapt {epiparameter} to {EpiNow2} distribution interfase
-
-
-
-# Set the number of parallel cores
-withr::local_options(list(mc.cores = parallel::detectCores() - 1))
-
-
-# Estimate transmission using EpiNow2::epinow()
-# with EpiNow2::*_opts() functions for delays and stan
-
-
-
-# Print plot and summary table outputs
-
-
-```
-
-### Paste outputs. Write your interpretation
-
-Group 1
-
-| output | paste here |
-|--------|------------|
-| figure |            |
-| table  |            |
-
-Reply with your Interpretation and Discussion:
-
-
-
-
-
-
-------------------------------------------------------------------------
-
-Group 2
-
-| output | paste here |
-|--------|------------|
-| figure |            |
-| table  |            |
-
-Reply with your Interpretation and Discussion:
-
-
-
-
-
-
-------------------------------------------------------------------------
-
-Group 3
-
-| output | paste here |
-|--------|------------|
-| figure |            |
-| table  |            |
-
-Reply with your Interpretation and Discussion:
-
-
-
-
-
-
-------------------------------------------------------------------------
-
-Group 4
-
-| output | paste here |
-|--------|------------|
-| figure |            |
-| table  |            |
-
-Reply with your Interpretation and Discussion:
-
-
-
-
-
+solutions
 
 ## Severity
 

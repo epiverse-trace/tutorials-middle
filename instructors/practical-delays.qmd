@@ -38,6 +38,10 @@ Instructions, as a group:
 - Create one copy of the Posit Cloud project `<paste link>`.
 - Solve the challenge using the `Code chunk` as a guide.
 - Paste your figure and table outputs.
+- Write your answer to these questions:
+  - What phase of the epidemic are you observing? (Exponential growth phase, near peak, or decay end phase)
+  - Does the expected change in daily reports consistent with the estimated effective reproductive number, growth rate, and doubling time?
+  - Interpret: How would you communicate these results to a decision-maker?
 - **Report** to all the group at the end of the session.
 
 ### Inputs
@@ -54,7 +58,9 @@ Instructions, as a group:
 | Ebola | The time difference between symptom onset and case report follows a Lognormal distribution with uncertainty. The **mean** follows a Normal distribution with mean = 4 and sd = 0.5. The **standard deviation** follows a Normal distribution with mean = 1 and sd = 0.5. Bound the distribution with max = 5. |
 | COVID | The time difference between symptom onset and case report follows a Gamma distribution with uncertainty. The **mean** follows a Normal distribution with mean = 2 and sd = 0.5. The **standard deviation** follows a Normal distribution with mean = 1 and sd = 0.5. Bound the distribution with a max = 5. |
 
-: {tbl-colwidths="[15,85]"}
+: {tbl-colwidths="[10,90]"}
+
+::: {.content-visible when-format="docx"}
 
 ### Code chunk
 
@@ -101,7 +107,9 @@ withr::local_options(list(mc.cores = parallel::detectCores() - 1))
 
 ```
 
-### Paste outputs. Write your interpretation
+### Your answers
+
+Paste outputs. Write your interpretations:
 
 Group 1
 
@@ -187,6 +195,17 @@ Reply with your Interpretation and Discussion:
 
 
 ```
+:::
+
+::: {.content-visible unless-format="docx"}
+
+### Solutions
+
+<!-- visible for instructors and learners after practical (solutions) -->
+
+solutions
+
+:::
 
 
 ## Severity
