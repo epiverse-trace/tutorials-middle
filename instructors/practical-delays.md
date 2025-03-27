@@ -1,5 +1,4 @@
-# Group Challenge Week 2: Access delays to estimate transmission and
-severity
+# Week 2: Access delays to estimate transmission and severity
 
 <!-- visible for instructors only -->
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
@@ -16,46 +15,34 @@ A reminder of our Code of Conduct:
 
 ## Transmission
 
+Estimate $R_{t}$, *new infections*, *new reports*, *growth rate*, and
+*doubling/halving time* using the following available inputs:
+
+- Incidence of reported cases per day
+- Reporting delay
+
 Instructions, as a group:
 
-- Create a copy of the Posit Cloud project `<paste link>` (one per
-  group)
-- Access the required Input Parameters
-- Add the required delays for an appropriate estimate of the effective
-  reproduction number
-- **REPORT:** Reply pasting the code ready to run as a comment.
+- Create one copy of the Posit Cloud project `<paste link>`.
+- Solve the challenge using the `Code chunk` as a guide.
+- Paste your figure and table outputs.
+- **Report** to all the group at the end of the session.
 
-### Input Data
+### Inputs
 
-Based on you group number, choose your data set to work:
+| Group | Incidence     | Link                                                                      |
+|-------|---------------|---------------------------------------------------------------------------|
+| 1     | COVID 30 days | <https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds> |
+| 2     | Ebola 35 days | <https://epiverse-trace.github.io/tutorials-middle/data/ebola_35days.rds> |
+| 3     | Ebola 60 days | <https://epiverse-trace.github.io/tutorials-middle/data/ebola_60days.rds> |
+| 4     | COVID 60 days | <https://epiverse-trace.github.io/tutorials-middle/data/covid_60days.rds> |
 
-1.  COVID 30 dias:
-    <https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds>
-2.  Ebola 35 dias:
-    <https://epiverse-trace.github.io/tutorials-middle/data/ebola_35days.rds>
-3.  Ebola 60 dias:
-    <https://epiverse-trace.github.io/tutorials-middle/data/ebola_60days.rds>
-4.  COVID 60 dias:
-    <https://epiverse-trace.github.io/tutorials-middle/data/covid_60days.rds>
+| Disease | Reporting delays                                                                                                                                                                                                                                                                                              |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Ebola   | The time difference between symptom onset and case report follows a Lognormal distribution with uncertainty. The **mean** follows a Normal distribution with mean = 4 and sd = 0.5. The **standard deviation** follows a Normal distribution with mean = 1 and sd = 0.5. Bound the distribution with max = 5. |
+| COVID   | The time difference between symptom onset and case report follows a Gamma distribution with uncertainty. The **mean** follows a Normal distribution with mean = 2 and sd = 0.5. The **standard deviation** follows a Normal distribution with mean = 1 and sd = 0.5. Bound the distribution with a max = 5.   |
 
-### Input Parameters
-
-- Non-explicit input parameters could be accessed from historical
-  outbreaks.
-- Ebola:
-  - The time difference between symptom onset and case report follows a
-    Lognormal distribution with uncertainty. The **mean** follows a
-    Normal distribution with mean = 4 and sd = 0.5. The **standard
-    deviation** follows a Normal distribution with mean = 1 and sd =
-    0.5. Bound the distribution with max = 5.
-- COVID
-  - The time difference between symptom onset and case report follows a
-    Gamma distribution with uncertainty. The **mean** follows a Normal
-    distribution with mean = 2 and sd = 0.5. The **standard deviation**
-    follows a Normal distribution with mean = 1 and sd = 0.5. Bound the
-    distribution with a max = 5.
-
-### Write your solution
+### Code chunk
 
 ``` r
 # Load packages
@@ -63,24 +50,105 @@ library(epiparameter)
 library(EpiNow2)
 library(tidyverse)
 
-# Read data frame
-covid30 <- read_rds("paste/url/here") %>%
+
+# Read reported cases
+dat <- read_rds("paste/link/url/here") %>%
   dplyr::select(date, confirm)
 
-# Access parameters
+
+# Access parameters for delay distributions
 
 
-# Get maximum value for the distribution
+
+# Get maximum value for each distribution
+
+
+
+# Extract parameters
+
 
 
 # Adapt {epiparameter} to {EpiNow2} distribution interfase
 
 
-# Run EpiNow2::epinow() using EpiNow2::*_opts() functions
+
+# Set the number of parallel cores
+withr::local_options(list(mc.cores = parallel::detectCores() - 1))
 
 
-# Plot {EpiNow2} output
+# Estimate transmission using EpiNow2::epinow()
+# with EpiNow2::*_opts() functions for delays and stan
+
+
+
+# Print plot and summary table outputs
+
+
 ```
+
+### Paste outputs. Write your interpretation
+
+Group 1
+
+| output | paste here |
+|--------|------------|
+| figure |            |
+| table  |            |
+
+Reply with your Interpretation and Discussion:
+
+
+
+
+
+
+------------------------------------------------------------------------
+
+Group 2
+
+| output | paste here |
+|--------|------------|
+| figure |            |
+| table  |            |
+
+Reply with your Interpretation and Discussion:
+
+
+
+
+
+
+------------------------------------------------------------------------
+
+Group 3
+
+| output | paste here |
+|--------|------------|
+| figure |            |
+| table  |            |
+
+Reply with your Interpretation and Discussion:
+
+
+
+
+
+
+------------------------------------------------------------------------
+
+Group 4
+
+| output | paste here |
+|--------|------------|
+| figure |            |
+| table  |            |
+
+Reply with your Interpretation and Discussion:
+
+
+
+
+
 
 ## Severity
 
