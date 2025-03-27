@@ -12,6 +12,7 @@ format-links: false
 
 <!-- visible for instructors only -->
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
+<!-- commit .md and .qmd files together -->
 
 :::
 
