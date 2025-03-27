@@ -1,29 +1,36 @@
 ---
 title: "Untitled"
 format: 
-  html: default
-  docx: default
-  gfm: default
+  html: default # learners solutions
+  docx: default # learners practical
+  gfm: default # instructors
 keep-md: true
 format-links: false
 ---
 
 ::: {.content-hidden when-format="html"}
 
+<!-- visible for instructors only -->
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
 
 :::
 
 # Practical
 
-visible for students and everyone
+<!-- visible for learners and instructors at practical -->
+
+practical
+
+
 
 ::: {.content-visible unless-format="docx"}
 
 # Solutions
 
-visible for instructors at md too
+<!-- visible for instructors and learners after practical (solutions) -->
+
+solutions
 
 :::
 
-# stop
+# end
