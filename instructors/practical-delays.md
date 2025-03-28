@@ -266,20 +266,9 @@ plot(covid_estimates)
 
 #### Group 1: COVID 30 days
 
-| G1  | With reporting delay (only)                        | With reporting delay plus Incubation time          |
-|-----|----------------------------------------------------|----------------------------------------------------|
-| -\> | ![image](https://hackmd.io/_uploads/rkkSwKowR.png) | ![image](https://hackmd.io/_uploads/BJl8wYiDC.png) |
-
-With reporting delay (only):
-
-    > summary(covid30_epinow)
-                                measure              estimate
-                                 <char>                <char>
-    1:           New infections per day  7722 (5556 -- 10954)
-    2: Expected change in daily reports            Increasing
-    3:       Effective reproduction no.      1.5 (1.2 -- 1.9)
-    4:                   Rate of growth 0.095 (0.027 -- 0.17)
-    5:     Doubling/halving time (days)       7.3 (4.2 -- 25)
+| G1  | With reporting delay plus Incubation time          |
+|-----|----------------------------------------------------|
+|     | ![image](https://hackmd.io/_uploads/BJl8wYiDC.png) |
 
 With reporting delay plus Incubation time:
 
@@ -294,20 +283,9 @@ With reporting delay plus Incubation time:
 
 ### Group 2: Ebola 35 days
 
-| G2  | With reporting delay (only)                        | With reporting delay plus Incubation time          |
-|-----|----------------------------------------------------|----------------------------------------------------|
-| -\> | ![image](https://hackmd.io/_uploads/BJtBttjwA.png) | ![image](https://hackmd.io/_uploads/H1ZrYYsvR.png) |
-
-With reporting delay (only):
-
-    > summary(ebola35_epinow)
-                                measure                estimate
-                                 <char>                  <char>
-    1:           New infections per day             8 (3 -- 18)
-    2: Expected change in daily reports                  Stable
-    3:       Effective reproduction no.       1.1 (0.49 -- 2.2)
-    4:                   Rate of growth -0.016 (-0.14 -- 0.096)
-    5:     Doubling/halving time (days)       -43 (7.2 -- -4.8)
+| G2  | With reporting delay plus Incubation time          |
+|-----|----------------------------------------------------|
+|     | ![image](https://hackmd.io/_uploads/H1ZrYYsvR.png) |
 
 With reporting delay plus Incubation time:
 
@@ -322,20 +300,9 @@ With reporting delay plus Incubation time:
 
 ### Group 3: Ebola 60 days
 
-| G3  | With reporting delay (only)                        | With reporting delay plus Incubation time          |
-|-----|----------------------------------------------------|----------------------------------------------------|
-| -\> | ![image](https://hackmd.io/_uploads/S1J6YtivR.png) | ![image](https://hackmd.io/_uploads/Byu3FFoDR.png) |
-
-With reporting delay (only):
-
-    > summary(ebola60_epinow)
-                                measure                estimate
-                                 <char>                  <char>
-    1:           New infections per day              0 (0 -- 0)
-    2: Expected change in daily reports              Decreasing
-    3:       Effective reproduction no.    0.11 (0.028 -- 0.33)
-    4:                   Rate of growth -0.13 (-0.28 -- -0.016)
-    5:     Doubling/halving time (days)      -5.2 (-45 -- -2.5)
+| G3  | With reporting delay plus Incubation time          |
+|-----|----------------------------------------------------|
+|     | ![image](https://hackmd.io/_uploads/Byu3FFoDR.png) |
 
 With reporting delay plus Incubation time:
 
@@ -350,20 +317,9 @@ With reporting delay plus Incubation time:
 
 ### Group 4: COVID 60 days
 
-| G4  | With reporting delay (only)                        | With reporting delay plus Incubation time          |
-|-----|----------------------------------------------------|----------------------------------------------------|
-| -\> | ![image](https://hackmd.io/_uploads/SkVR8YovR.png) | ![image](https://hackmd.io/_uploads/S1q6ItjvC.png) |
-
-With reporting delay (only):
-
-    > summary(covid60_epinow)
-                                measure                estimate
-                                 <char>                  <char>
-    1:           New infections per day     2565 (1951 -- 3340)
-    2: Expected change in daily reports       Likely decreasing
-    3:       Effective reproduction no.        0.84 (0.67 -- 1)
-    4:                   Rate of growth -0.041 (-0.11 -- 0.018)
-    5:     Doubling/halving time (days)        -17 (38 -- -6.1)
+| G4  | With reporting delay plus Incubation time          |
+|-----|----------------------------------------------------|
+|     | ![image](https://hackmd.io/_uploads/S1q6ItjvC.png) |
 
 With reporting delay plus Incubation time:
 
