@@ -99,7 +99,7 @@ $Posterior \, probability \propto likelihood \times prior \, probability$
 
 Refer to the prior probability distribution and the [posterior probability](https://en.wikipedia.org/wiki/Posterior_probability) distribution.
 
-In the ["`Expected change in daily cases`" callout](#expected-change-in-daily-cases), by "the posterior probability that $R_t < 1$", we refer specifically to the [area under the posterior probability distribution curve](https://www.nature.com/articles/nmeth.3368/figures/1). 
+In the ["`Expected change in reports`" callout](#expected-change-in-daily-cases), by "the posterior probability that $R_t < 1$", we refer specifically to the [area under the posterior probability distribution curve](https://www.nature.com/articles/nmeth.3368/figures/1). 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -457,7 +457,7 @@ summary(estimates)
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in daily cases is `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in daily cases"]` with the estimated new confirmed cases `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`.
++ From the summary of our analysis we see that the expected change in reports is `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in reports"]` with the estimated new confirmed cases `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`.
 
 + The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`. 
 
@@ -466,9 +466,9 @@ As these estimates are based on partial data, they have a wide uncertainty inter
 + The doubling time (the time taken for case numbers to double) is `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
 
 ::::::::::::::::::::::::::::::::::::: callout
-### `Expected change in daily cases` 
+### `Expected change in reports` 
 
-A factor describing expected change in daily cases based on the posterior probability that $R_t < 1$.
+A factor describing the expected change in reports based on the posterior probability that $R_t < 1$.
 
 <center>
 | Probability ($p$)      | Expected change |
