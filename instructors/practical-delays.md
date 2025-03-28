@@ -56,6 +56,8 @@ Instructions, as a group:
 
 <!-- visible for instructors and learners after practical (solutions) -->
 
+#### Ebola (sample)
+
 ``` r
 # Load packages -----------------------------------------------------------
 library(epiparameter)
@@ -63,7 +65,7 @@ library(EpiNow2)
 library(tidyverse)
 
 # Read reported cases -----------------------------------------------------
-dat <- readr::read_rds(
+dat_ebola <- readr::read_rds(
   "https://epiverse-trace.github.io/tutorials-middle/data/ebola_35days.rds"
 ) %>%
   dplyr::select(date, confirm = cases)
@@ -135,31 +137,8 @@ ebola_incubationtime_epinow <- EpiNow2::Gamma(
 
 # collect required input
 ebola_generationtime
-#> - gamma distribution:
-#>   shape:
-#>     2.2
-#>   rate:
-#>     0.15
 ebola_reportdelay
-#> - lognormal distribution (max: 5):
-#>   meanlog:
-#>     - normal distribution:
-#>       mean:
-#>         1.4
-#>       sd:
-#>         0.5
-#>   sdlog:
-#>     - normal distribution:
-#>       mean:
-#>         0.25
-#>       sd:
-#>         0.2
 ebola_incubationtime_epinow
-#> - gamma distribution (max: 38):
-#>   shape:
-#>     1.6
-#>   rate:
-#>     0.15
 
 
 # Set the number of parallel cores for {EpiNow2} --------------------------
@@ -168,57 +147,168 @@ withr::local_options(list(mc.cores = parallel::detectCores() - 1))
 
 # Estimate transmission using EpiNow2::epinow() ---------------------------
 # with EpiNow2::*_opts() functions for generation time, delays, and stan.
-estimates <- EpiNow2::epinow(
-  data = dat,
+ebola_estimates <- EpiNow2::epinow(
+  data = dat_ebola,
   generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
   delays = EpiNow2::delay_opts(ebola_incubationtime_epinow + ebola_reportdelay),
   stan = EpiNow2::stan_opts(samples = 1000, chains = 3)
 )
-#> WARN [2025-03-28 12:25:53] epinow: There were 89 divergent transitions after warmup. See
-#> https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-#> to find out why this is a problem and how to eliminate them. - 
-#> WARN [2025-03-28 12:25:53] epinow: Examine the pairs() plot to diagnose sampling problems
-#>  - 
-#> WARN [2025-03-28 12:25:54] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-#> Running the chains for more iterations may help. See
-#> https://mc-stan.org/misc/warnings.html#bulk-ess - 
-#> WARN [2025-03-28 12:25:54] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-#> Running the chains for more iterations may help. See
-#> https://mc-stan.org/misc/warnings.html#tail-ess -
 
 
 # Print plot and summary table outputs ------------------------------------
-plot(estimates)
+summary(ebola_estimates)
+plot(ebola_estimates)
 ```
 
-![](practical-delays_files/figure-commonmark/unnamed-chunk-2-1.png)
+#### COVID (sample)
 
 ``` r
-summary(estimates)
-#>                         measure               estimate
-#>                          <char>                 <char>
-#> 1:       New infections per day          29 (11 -- 62)
-#> 2:   Expected change in reports             Increasing
-#> 3:   Effective reproduction no.         2.1 (1.1 -- 3)
-#> 4:               Rate of growth 0.059 (-0.0099 -- 0.1)
-#> 5: Doubling/halving time (days)        12 (6.9 -- -70)
+# Load packages -----------------------------------------------------------
+library(epiparameter)
+library(EpiNow2)
+library(tidyverse)
+
+# Read reported cases -----------------------------------------------------
+dat_covid <- read_rds(
+  "https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds"
+) %>%
+  dplyr::select(date, confirm)
+
+# Define a generation time from {epiparameter} to {EpiNow2} ---------------
+
+# access a serial interval
+covid_serialint <- epiparameter::epiparameter_db(
+  disease = "covid",
+  epi_name = "serial",
+  single_epiparameter = TRUE
+)
+
+# extract parameters from {epiparameter} object
+covid_serialint_params <- epiparameter::get_parameters(covid_serialint)
+
+# adapt {epiparameter} to {EpiNow2} distribution inferfase
+# preferred
+covid_generationtime <- EpiNow2::LogNormal(
+  meanlog = covid_serialint_params["meanlog"],
+  sdlog = covid_serialint_params["sdlog"]
+)
+# or
+covid_generationtime <- EpiNow2::LogNormal(
+  mean = covid_serialint$summary_stats$mean,
+  sd = covid_serialint$summary_stats$sd
+)
+
+
+# Define the delays from infection to case report for {EpiNow2} -----------
+
+# define delay from symptom onset to case report
+# or reporting delay
+covid_reportdelay <- EpiNow2::Gamma(
+  mean = EpiNow2::Normal(mean = 2, sd = 0.5),
+  sd = EpiNow2::Normal(mean = 1, sd = 0.5),
+  max = 5
+)
+
+# define a delay from infection to symptom onset
+# or incubation period
+covid_incubationtime <- epiparameter::epiparameter_db(
+  disease = "covid",
+  epi_name = "incubation",
+  single_epiparameter = TRUE
+)
+
+# incubation period: extract distribution parameters
+covid_incubationtime_params <- epiparameter::get_parameters(
+  covid_incubationtime
+)
+
+# incubation period: discretize and extract maximum value (p = 99%)
+# preferred
+covid_incubationtime_max <- covid_incubationtime %>%
+  epiparameter::discretise() %>%
+  quantile(p = 0.99)
+# or
+ebola_incubationtime_max <- covid_incubationtime %>%
+  quantile(p = 0.99) %>%
+  base::round()
+
+# incubation period: adapt to {EpiNow2} distribution interfase
+covid_incubationtime_epinow <- EpiNow2::LogNormal(
+  meanlog = covid_incubationtime_params["meanlog"],
+  sdlog = covid_incubationtime_params["sdlog"],
+  max = covid_incubationtime_max
+)
+
+# collect required input
+covid_generationtime
+covid_reportdelay
+covid_incubationtime_epinow
+
+
+# Set the number of parallel cores for {EpiNow2} --------------------------
+withr::local_options(list(mc.cores = parallel::detectCores() - 1))
+
+
+# Estimate transmission using EpiNow2::epinow() ---------------------------
+# with EpiNow2::*_opts() functions for generation time, delays, and stan.
+covid_estimates <- EpiNow2::epinow(
+  data = dat_covid,
+  generation_time = EpiNow2::generation_time_opts(covid_generationtime),
+  delays = EpiNow2::delay_opts(covid_reportdelay + covid_incubationtime_epinow),
+  stan = EpiNow2::stan_opts(samples = 1000, chains = 3)
+)
+
+
+# Print plot and summary table outputs ------------------------------------
+summary(covid_estimates)
+plot(covid_estimates)
 ```
 
-Interpretation:
+#### Group 1: COVID 30 days
+
+| G1  | Without Incubation time                            | With Incubation time                               |
+|-----|----------------------------------------------------|----------------------------------------------------|
+| -\> | ![image](https://hackmd.io/_uploads/rkkSwKowR.png) | ![image](https://hackmd.io/_uploads/BJl8wYiDC.png) |
+
+Without incubation time:
+
+    > summary(covid30_epinow)
+                                measure              estimate
+                                 <char>                <char>
+    1:           New infections per day  7722 (5556 -- 10954)
+    2: Expected change in daily reports            Increasing
+    3:       Effective reproduction no.      1.5 (1.2 -- 1.9)
+    4:                   Rate of growth 0.095 (0.027 -- 0.17)
+    5:     Doubling/halving time (days)       7.3 (4.2 -- 25)
+
+With incubation time:
+
+    > summary(covid30_epinow_delay)
+                                measure               estimate
+                                 <char>                 <char>
+    1:           New infections per day  13193 (5129 -- 33668)
+    2: Expected change in daily reports      Likely increasing
+    3:       Effective reproduction no.      1.5 (0.92 -- 2.5)
+    4:                   Rate of growth 0.099 (-0.049 -- 0.26)
+    5:     Doubling/halving time (days)         7 (2.7 -- -14)
+
+Interpretation template:
 
 - From the summary of our analysis we see that the expected change in
-  reports is Increasing with the estimated new infections of 29 with 90%
-  credible interval of 11 to 62.
+  reports is `(Increasing/Stable/Decreasing)` with the estimated new
+  infections, on average, of `29` with 90% credible interval of `11` to
+  `62`.
 
 - The effective reproduction number $R_t$ estimate (on the last date of
   the data), or the number of new infections caused by one infectious
-  individual, on average, is 2.1, with a 90% credible interval of 1.1 to
-  3.
+  individual, on average, is `2.1`, with a 90% credible interval of
+  `1.1` to `3.0`.
 
-- The exponential growth rate of case reports is 0.059 (-0.0099 – 0.1).
+- The exponential growth rate of case reports is, on average `0.06`,
+  with a 90% credible interval of `-0.01` to `0.10`.
 
-- The doubling time (the time taken for case reports to double) is 12
-  (6.9 – -70).
+- The doubling time (the time taken for case reports to double) is, on
+  average, `12.0`, with a 90% credible interval of `6.9` to `-70`.
 
 Interpretation Helpers:
 
