@@ -134,16 +134,16 @@ dplyr::as_tibble(incidence2::covidregionaldataUK)
 To use the data, we must format the data to have two columns:
 
 + `date`: the date (as a date object see `?is.Date()`),
-+ `confirm`: number of confirmed cases on that date.
++ `confirm`: number of disease reports (confirm) on that date.
 
 Let's use `{tidyr}` and `{incidence2}` for this:
 
 
 ``` r
 cases <- incidence2::covidregionaldataUK %>%
-  # use {tidyr} to preprocess missing values
+  # Preprocess missing values
   tidyr::replace_na(base::list(cases_new = 0)) %>%
-  # use {incidence2} to compute the daily incidence
+  # Compute the daily incidence
   incidence2::incidence(
     date_index = "date",
     counts = "cases_new",
@@ -151,10 +151,29 @@ cases <- incidence2::covidregionaldataUK %>%
     date_names_to = "date",
     complete_dates = TRUE
   ) %>%
-  # drop one column to adapt {EpiNow2} input
+  # Drop column for {EpiNow2} input format
   dplyr::select(-count_variable) %>%
-  # keep the first 90 dates and visualize epicurve
+  # Keep the first 90 dates
   dplyr::slice_head(n = 90)
+
+cases
+```
+
+``` output
+# A tibble: 90 × 2
+   date       confirm
+   <date>       <dbl>
+ 1 2020-01-30       3
+ 2 2020-01-31       0
+ 3 2020-02-01       0
+ 4 2020-02-02       0
+ 5 2020-02-03       0
+ 6 2020-02-04       0
+ 7 2020-02-05       2
+ 8 2020-02-06       0
+ 9 2020-02-07       0
+10 2020-02-08       8
+# ℹ 80 more rows
 ```
 
 With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`
@@ -516,22 +535,22 @@ summary(estimates)
 ``` output
                         measure               estimate
                          <char>                 <char>
-1:       New infections per day   7980 (4762 -- 13255)
-2:   Expected change in reports                 Stable
-3:   Effective reproduction no.     0.97 (0.74 -- 1.2)
-4:               Rate of growth -0.011 (-0.1 -- 0.083)
-5: Doubling/halving time (days)      -62 (8.4 -- -6.9)
+1:       New infections per day   7864 (4694 -- 13266)
+2:   Expected change in reports      Likely decreasing
+3:   Effective reproduction no.     0.96 (0.73 -- 1.2)
+4:               Rate of growth -0.014 (-0.1 -- 0.076)
+5: Doubling/halving time (days)      -48 (9.1 -- -6.8)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
 + From the summary of our analysis we see that the expected change in daily cases is  with the estimated new confirmed cases .
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.011 (-0.1 -- 0.083).
++ The exponential growth rate of case numbers is -0.014 (-0.1 -- 0.076).
 
-+ The doubling time (the time taken for case numbers to double) is -62 (8.4 -- -6.9).
++ The doubling time (the time taken for case numbers to double) is -48 (9.1 -- -6.8).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in daily cases` 
@@ -574,7 +593,7 @@ The outbreak data of the start of the COVID-19 pandemic from the United Kingdom 
 
 + `date`: the date,
 + `region`: the region, 
-+ `confirm`: number of confirmed cases for a region on a given date.
++ `confirm`: number of disease reports (confirm) for a region on a given date.
 
 Generate regional Rt estimates from the `incidence2::covidregionaldataUK` data frame by:
 
