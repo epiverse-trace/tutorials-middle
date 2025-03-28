@@ -1907,7 +1907,8 @@ Kingdom. The data are available in the R package
 <code>date</code>: the date (as a date object see
 <code>?is.Date()</code>),</li>
 <li>
-<code>confirm</code>: number of confirmed cases on that date.</li>
+<code>confirm</code>: number of disease reports (confirm) on that
+date.</li>
 </ul>
 <p>Let’s use <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> and <a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a> for
 this:</p>
@@ -1916,9 +1917,9 @@ this:</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cases</span> <span class="op">&lt;-</span> <span class="fu">incidence2</span><span class="fu">::</span><span class="va">covidregionaldataUK</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># use {tidyr} to preprocess missing values</span></span>
+<span>  <span class="co"># Preprocess missing values</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu">replace_na</span><span class="op">(</span><span class="fu">base</span><span class="fu">::</span><span class="fu">list</span><span class="op">(</span>cases_new <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># use {incidence2} to compute the daily incidence</span></span>
+<span>  <span class="co"># Compute the daily incidence</span></span>
 <span>  <span class="fu">incidence2</span><span class="fu">::</span><span class="fu">incidence</span><span class="op">(</span></span>
 <span>    date_index <span class="op">=</span> <span class="st">"date"</span>,</span>
 <span>    counts <span class="op">=</span> <span class="st">"cases_new"</span>,</span>
@@ -1926,10 +1927,30 @@ this:</p>
 <span>    date_names_to <span class="op">=</span> <span class="st">"date"</span>,</span>
 <span>    complete_dates <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># drop one column to adapt {EpiNow2} input</span></span>
+<span>  <span class="co"># Drop column for {EpiNow2} input format</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">count_variable</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># keep the first 90 dates and visualize epicurve</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">slice_head</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">90</span><span class="op">)</span></span></code></pre>
+<span>  <span class="co"># Keep the first 90 dates</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">slice_head</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">90</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cases</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code># A tibble: 90 × 2
+   date       confirm
+   &lt;date&gt;       &lt;dbl&gt;
+ 1 2020-01-30       3
+ 2 2020-01-31       0
+ 3 2020-02-01       0
+ 4 2020-02-02       0
+ 5 2020-02-03       0
+ 6 2020-02-04       0
+ 7 2020-02-05       2
+ 8 2020-02-06       0
+ 9 2020-02-07       0
+10 2020-02-08       8
+# ℹ 80 more rows</code></pre>
 </div>
 <p>With <code>incidence2::incidence()</code> we aggregate cases in
 different time <em>intervals</em> (i.e., days, weeks or months) or per
@@ -1947,7 +1968,7 @@ reference manual</a></p>
 <p>We can get an object similar to <code>cases</code> from the
 <code>incidence2::covidregionaldataUK</code> data frame using the
 <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> package.</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2042,7 +2063,7 @@ contains a library of epidemiological parameters for different diseases
 obtained from the literature.</p>
 <p>We specify a (fixed) gamma distribution with mean <span class="math inline">\(\mu = 4\)</span> and standard deviation <span class="math inline">\(\sigma= 2\)</span> (shape = <span class="math inline">\(4\)</span>, scale = <span class="math inline">\(1\)</span>) using the function
 <code>Gamma()</code> as follows:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2101,7 +2122,7 @@ with standard deviation <span class="math inline">\(\sigma_{\sigma}\)</span>:</p
 <p>We specify this using <code>Normal()</code> for each argument: the
 mean (<span class="math inline">\(\mu=4\)</span> with <span class="math inline">\(\sigma_{\mu}=0.5\)</span>) and standard deviation
 (<span class="math inline">\(\sigma=2\)</span> with <span class="math inline">\(\sigma_{\sigma}=0.5\)</span>).</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2145,7 +2166,7 @@ this case we will use a <em>log normal</em> distribution.</p>
 uncertainty of 0.5 days) and a standard deviation of 1 day (with
 uncertainty of 0.5 days), we can specify a variable distribution using
 <code>LogNormal()</code> as before:</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2165,13 +2186,13 @@ uncertainty of 0.5 days), we can specify a variable distribution using
 <p>Using <code>epiparameter::epiparameter()</code> we can create a
 custom distribution. The fixed log normal distribution will look
 like:</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">epiparameter</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2198,7 +2219,7 @@ like:</p>
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> using <code>plot()</code>. Let’s combine in one
 plot the delay from infection to report which includes the incubation
 period and reporting delay:</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2215,7 +2236,7 @@ period and reporting delay:</p>
 we can use the function <code>estimate_delay()</code> to estimate a log
 normal distribution from a vector of delays. The code below illustrates
 how to use <code>estimate_delay()</code> with synthetic delay data.</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2238,7 +2259,7 @@ how to use <code>estimate_delay()</code> with synthetic delay data.</p>
 will use a log normal distribution with mean 3.6 and standard deviation
 3.1 (<a href="https://doi.org/10.2807/1560-7917.ES.2020.25.17.2000257" class="external-link">Ganyani
 et al. 2020</a>).</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2264,7 +2285,7 @@ detail. One optional input is to specify a <em>log normal</em> prior for
 the effective reproduction number <span class="math inline">\(R_t\)</span> at the start of the outbreak. We
 specify a mean of 2 days and standard deviation of 2 days as arguments
 of <code>prior</code> within <code>rt_opts()</code>:</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2287,7 +2308,7 @@ number of samples per chain (see
 this, we must set the number of cores to be used. By default, 4 MCMC
 chains are run (see <code>stan_opts()$chains</code>), so we can set an
 equal number of cores to be used in parallel as follows:</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2310,7 +2331,7 @@ distributions are used instead of <code>_variable</code> (delay
 distributions with uncertainty). This is to speed up computation time.
 It is generally recommended to use variable distributions that account
 for additional uncertainty.</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2332,7 +2353,7 @@ for additional uncertainty.</p>
 </div>
 <p>Now you are ready to run <code>EpiNow2::epinow()</code> to estimate
 the time-varying reproduction number for the first 90 days:</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2372,7 +2393,7 @@ specify a fixed number of <code>samples = 1000</code> and
 <code>EpiNow2::epinow()</code> function. We expect this to take
 approximately 3 minutes.</p>
 <!-- We can optionally set `stan = stan_opts(method = "vb")` to use an approximate sampling method. We expect this to take less than 1 minute. -->
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2394,7 +2415,7 @@ More accurate outputs come at the cost of speed.</p>
 </h3>
 <p>We can extract and visualise estimates of the effective reproduction
 number through time:</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2410,7 +2431,7 @@ not have been observed yet) and therefore have increasingly wider
 intervals towards the date of the last data point. Finally, the
 <strong>Forecast</strong> (purple) is a projection ahead of time.</p>
 <p>We can also visualise the growth rate estimate through time:</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2418,7 +2439,7 @@ intervals towards the date of the last data point. Finally, the
 </div>
 <figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To extract a summary of the key transmission metrics at the
 <em>latest date</em> in the data:</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2427,26 +2448,26 @@ intervals towards the date of the last data point. Finally, the
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                        measure                estimate
-                         &lt;char&gt;                  &lt;char&gt;
-1:       New infections per day    7945 (4616 -- 13387)
-2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.73 -- 1.2)
-4:               Rate of growth -0.011 (-0.11 -- 0.081)
-5: Doubling/halving time (days)       -62 (8.6 -- -6.5)</code></pre>
+<pre class="output" tabindex="0"><code>                        measure               estimate
+                         &lt;char&gt;                 &lt;char&gt;
+1:       New infections per day   7858 (4640 -- 13390)
+2:   Expected change in reports                 Stable
+3:   Effective reproduction no.     0.97 (0.73 -- 1.3)
+4:               Rate of growth -0.012 (-0.11 -- 0.08)
+5: Doubling/halving time (days)      -56 (8.7 -- -6.4)</code></pre>
 </div>
 <p>As these estimates are based on partial data, they have a wide
 uncertainty interval.</p>
 <ul>
 <li><p>From the summary of our analysis we see that the expected change
-in reports is Stable with the estimated new infections 7945 (4616 –
-13387).</p></li>
+in reports is Stable with the estimated new infections 7858 (4640 –
+13390).</p></li>
 <li><p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
-data) is 0.97 (0.73 – 1.2).</p></li>
-<li><p>The exponential growth rate of case numbers is -0.011 (-0.11 –
-0.081).</p></li>
+data) is 0.97 (0.73 – 1.3).</p></li>
+<li><p>The exponential growth rate of case numbers is -0.012 (-0.11 –
+0.08).</p></li>
 <li><p>The doubling time (the time taken for case numbers to double) is
--62 (8.6 – -6.5).</p></li>
+-56 (8.7 – -6.4).</p></li>
 </ul>
 <div id="expected-change-in-reports" class="callout">
 <div class="callout-square">
@@ -2543,8 +2564,8 @@ have three columns:</p>
 <li>
 <code>region</code>: the region,</li>
 <li>
-<code>confirm</code>: number of confirmed cases for a region on a
-given date.</li>
+<code>confirm</code>: number of disease reports (confirm) for a
+region on a given date.</li>
 </ul>
 <p>Generate regional Rt estimates from the
 <code>incidence2::covidregionaldataUK</code> data frame by:</p>
@@ -2555,7 +2576,7 @@ incidence data by the variable <code>region</code>,</li>
 <li>estimate the Rt per region using the defined generation time and
 delays in this episode.</li>
 </ul>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2574,7 +2595,7 @@ delays in this episode.</li>
 <div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>To wrangle data, you can:</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2609,7 +2630,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
 <code>regional_epinow()</code>:</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2624,7 +2645,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>Plot the results with:</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2926,7 +2947,7 @@ days pre-onset?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>In Figure 5 from the <a href="https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc" class="external-link">R
 probability functions for the normal distribution</a>, the shadowed
@@ -2941,7 +2962,7 @@ the quantile value at <code>x = 2</code>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -2987,7 +3008,7 @@ include 76.2% of backward contacts.</p></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> What if </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>If we exchange the question between days and cumulative probability
 to:</p>
@@ -3106,7 +3127,7 @@ COVID-19 symptoms exhibit them after infection?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>What delay distribution measures the time between infection and the
 onset of symptoms?</p>
@@ -3141,7 +3162,7 @@ the <em>continuous</em> ones!</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3190,7 +3211,7 @@ of infection.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> How to create a distribution plot? </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>From a maximum value with <code>quantile()</code>, we can create a
 sequence of quantile values as a numeric vector and calculate
@@ -3369,7 +3390,7 @@ of the <code>example_confirmed</code> data set from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>Use the last <code>epinow()</code> calculation using the
 <code>delays</code> argument and the <code>delay_opts()</code> helper
@@ -3399,7 +3420,7 @@ function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb35">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3565,7 +3586,7 @@ dataset</a>:</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>To calculate the <span class="math inline">\(R_t\)</span> using
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>, we need:</p>
@@ -3593,7 +3614,7 @@ use functions like:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3695,7 +3716,7 @@ delays in <a href="https://github.com/epiverse-trace/epiparameter/" class="exter
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5"> Give me a hint </h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
 <div class="accordion-body">
 <p><code>EpiNow2::NonParametric()</code> accepts Probability Mass
 Functions (PMF) from any distribution family. Read the reference guide
@@ -3710,7 +3731,7 @@ distributions</a>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb40">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5043,7 +5064,7 @@ read it into R.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>Inspect the format of the data input.</p>
 <ul>
@@ -5061,7 +5082,7 @@ read it into R.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>We read the data input using <code>readr::read_csv()</code>. This
 function recognize that the column <code>date</code> is a
@@ -5145,7 +5166,7 @@ estimation of CFR (and their potential solutions):</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> 1. Preferential ascertainment of severe cases </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>For diseases with a <em>spectrum</em> of clinical presentations,
 those cases that come to the attention of public health authorities and
@@ -5165,7 +5186,7 @@ definitions of “case”) asymptomatic presentations.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> 2. Bias due to delayed reporting of death </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>During an <em>ongoing</em> epidemic, there is a delay between the
 time someone dies and the time their death is reported. Therefore, at
@@ -5189,7 +5210,7 @@ with this specific bias using <a href="https://github.com/epiverse-trace/cfr" cl
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Case study: Influenza A (H1N1), Mexico, 2009 </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <p>Improving an <em>early</em> epidemiological assessment of a
 delay-adjusted CFR is crucial for determining virulence, shaping the
@@ -5313,7 +5334,7 @@ delay. Then:</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
 <ul>
 <li>Find the appropriate <code>&lt;epiparameter&gt;</code> object!</li>
@@ -5327,7 +5348,7 @@ delay. Then:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <p>We use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to access a delay distribution for
 the SARS-CoV-2 aggregated incidence data:</p>
@@ -5414,7 +5435,7 @@ estimates.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> When to use discrete distributions? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p>For <code>cfr_static()</code> and all the <code>cfr_*()</code> family
 of functions, the most appropriate choice to pass are
@@ -5441,7 +5462,7 @@ deal with this is to discretise the continuous distribution using
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> How does {cfr} works? </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p>To adjust the CFR, <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
 et al., 2009</a> use the case and death incidence data to estimate the
@@ -5604,7 +5625,7 @@ outbreak in Hong Kong, 2003.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Case study: SARS outbreak, Hong Kong, 2003 </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
 <div class="accordion-body">
 <p>Figures A and B show the cumulative numbers of cases and deaths of
 SARS, and Figure C shows the observed (biased) CFR estimates as a
@@ -5656,7 +5677,7 @@ with the CFR estimated at the end of the outbreak?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
 <div class="accordion-body">
 <p>We can use either visual inspection or analysis of the output data
 frames.</p>
@@ -5669,7 +5690,7 @@ frames.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
 <p>There is almost one month of difference.</p>
 <p>Note that the estimate has considerable uncertainty at the beginning
@@ -5702,7 +5723,7 @@ estimate is higher than the proportion of deaths among the infected.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Why the naive and delay-adjusted differ? </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
 <div class="accordion-body">
 <p><a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> method aims to obtain an unbiased estimator “well
 before” observing the entire course of the outbreak. For this,
@@ -5718,7 +5739,7 @@ et al., 2009</a>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution8" aria-expanded="false" aria-controls="collapseSolution8">
   <h4 class="accordion-header" id="headingSolution8"> What is the sampling process? </h4>
 </button>
-<div id="collapseSolution8" class="accordion-collapse collapse" aria-labelledby="headingSolution8" data-bs-parent="#accordionSolution8">
+<div id="collapseSolution8" class="accordion-collapse collapse" data-bs-parent="#accordionSolution8" aria-labelledby="headingSolution8">
 <div class="accordion-body">
 <figure><img src="fig/cfr-pone.0006852.g001.png" alt="The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. (Nishiura et al., 2009)" class="figure mx-auto d-block"><div class="figcaption">The population of confirmed cases and sampling
 process for estimating the unbiased CFR during the course of an
@@ -5758,7 +5779,7 @@ D_{t} \log{\pi} +
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution9" aria-expanded="false" aria-controls="collapseSolution9">
   <h4 class="accordion-header" id="headingSolution9"> Limitations </h4>
 </button>
-<div id="collapseSolution9" class="accordion-collapse collapse" aria-labelledby="headingSolution9" data-bs-parent="#accordionSolution9">
+<div id="collapseSolution9" class="accordion-collapse collapse" data-bs-parent="#accordionSolution9" aria-labelledby="headingSolution9">
 <div class="accordion-body">
 <ul>
 <li>The delay-adjusted CFR does not address all sources of error in data
@@ -5794,7 +5815,7 @@ Hospitalisation Fatality Risk (HFR). We can follow this analogy:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution10" aria-expanded="false" aria-controls="collapseSolution10">
   <h4 class="accordion-header" id="headingSolution10"> Infection and Hospitalization fatality risk </h4>
 </button>
-<div id="collapseSolution10" class="accordion-collapse collapse" aria-labelledby="headingSolution10" data-bs-parent="#accordionSolution10">
+<div id="collapseSolution10" class="accordion-collapse collapse" data-bs-parent="#accordionSolution10" aria-labelledby="headingSolution10">
 <div class="accordion-body">
 <p>If for a <em>Case</em> fatality risk (CFR), we require:</p>
 <ul>
@@ -5825,7 +5846,7 @@ requires:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution11" aria-expanded="false" aria-controls="collapseSolution11">
   <h4 class="accordion-header" id="headingSolution11"> Data sources for more severity measures </h4>
 </button>
-<div id="collapseSolution11" class="accordion-collapse collapse" aria-labelledby="headingSolution11" data-bs-parent="#accordionSolution11">
+<div id="collapseSolution11" class="accordion-collapse collapse" data-bs-parent="#accordionSolution11" aria-labelledby="headingSolution11">
 <div class="accordion-body">
 <p><a href="https://www.nature.com/articles/s41467-020-19238-2/figures/1" class="external-link">Yang
 et al., 2020</a> summarises different definitions and data sources:</p>
@@ -5906,7 +5927,7 @@ delay.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
 <div class="accordion-body">
 <p><strong>How to rearrange my input data?</strong></p>
 <p>Rearranging the input data for data analysis can take most of the
@@ -5929,7 +5950,7 @@ data from <code>{incidence2}</code></a> on how to use the
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution12" aria-expanded="false" aria-controls="collapseSolution12">
   <h4 class="accordion-header" id="headingSolution12"> Show me the solution </h4>
 </button>
-<div id="collapseSolution12" class="accordion-collapse collapse" aria-labelledby="headingSolution12" data-bs-parent="#accordionSolution12">
+<div id="collapseSolution12" class="accordion-collapse collapse" data-bs-parent="#accordionSolution12" aria-labelledby="headingSolution12">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -6101,7 +6122,7 @@ delay-adjusted CFR stratified by country.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5"> Give me a hint </h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
 <div class="accordion-body">
 <p>One way to do a <em>stratified analysis</em> is to apply a model to
 nested data. This <a href="https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models" class="external-link"><code>{tidyr}</code>
@@ -6117,7 +6138,7 @@ vignette</a> shows you how to apply the <code>group_by()</code> +
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution13" aria-expanded="false" aria-controls="collapseSolution13">
   <h4 class="accordion-header" id="headingSolution13"> Show me the solution </h4>
 </button>
-<div id="collapseSolution13" class="accordion-collapse collapse" aria-labelledby="headingSolution13" data-bs-parent="#accordionSolution13">
+<div id="collapseSolution13" class="accordion-collapse collapse" data-bs-parent="#accordionSolution13" aria-labelledby="headingSolution13">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -6463,7 +6484,7 @@ South Korea (<a href="https://community.appliedepi.org/t/estimating-the-degree-o
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Is contact data tidy? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Contact data from a transmission chain can provide information on
 which infected individuals came into contact with others. We expect to
@@ -6614,7 +6635,7 @@ infected individual.</li>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson, overdispersion, and Negative Binomial </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <!-- distribution stories -->
 <p>For occurrences of associated discrete events we can use
@@ -6660,7 +6681,7 @@ package.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p><strong>Note:</strong> This dataset has 5829 cases. Running
 <code>epicontacts::vis_epicontacts()</code> may overload your
@@ -6674,7 +6695,7 @@ session!</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -6829,7 +6850,7 @@ an individual-level variation in transmission?</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>Review how we fitted a negative binomial distribution using the
 <code>fitdistrplus::fitdist()</code> function.</p>
@@ -6842,7 +6863,7 @@ an individual-level variation in transmission?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -6899,7 +6920,7 @@ challenge: How do you define an SSE threshold for Ebola?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Select the best model </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>We can use the maximum likelihood estimates from
 <a href="https://lbbe-software.github.io/fitdistrplus/" class="external-link">fitdistrplus</a> to compare different models and assess fit
@@ -7061,7 +7082,7 @@ onward cases?</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>Review how we estimated the probability of having clusters of a fixed
 size, given an offspring distribution mean and dispersion parameters,
@@ -7076,7 +7097,7 @@ function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -7141,7 +7162,7 @@ for the <code>ebola_sim_clean</code> object from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>In a Poisson distribution, the <strong>lambda</strong> or
 <strong>rate</strong> parameter are equal to the estimated
@@ -7157,7 +7178,7 @@ zoo</a> shiny app.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <p>To get the quantile value for the 99th-percentile we need to use the
 <a href="https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc" class="external-link">density
@@ -7220,7 +7241,7 @@ the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-li
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5"> Give me a hint </h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
 <div class="accordion-body">
 <p>To use <code>superspreading::proportion_transmission()</code> we
 recommend to read the <a href="https://epiverse-trace.github.io/superspreading/reference/proportion_transmission.html" class="external-link">Estimate
@@ -7258,7 +7279,7 @@ Syndrome, Ebola Virus Disease. Let’s access the offspring distribution
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
