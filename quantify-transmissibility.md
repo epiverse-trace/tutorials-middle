@@ -97,7 +97,7 @@ $Posterior \, probability \propto likelihood \times prior \, probability$
 
 Refer to the prior probability distribution and the [posterior probability](https://en.wikipedia.org/wiki/Posterior_probability) distribution.
 
-In the ["`Expected change in daily cases`" callout](#expected-change-in-daily-cases), by "the posterior probability that $R_t < 1$", we refer specifically to the [area under the posterior probability distribution curve](https://www.nature.com/articles/nmeth.3368/figures/1). 
+In the ["`Expected change in reports`" callout](#expected-change-in-daily-cases), by "the posterior probability that $R_t < 1$", we refer specifically to the [area under the posterior probability distribution curve](https://www.nature.com/articles/nmeth.3368/figures/1). 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -514,29 +514,29 @@ summary(estimates)
 ```
 
 ``` output
-                        measure               estimate
-                         <char>                 <char>
-1:       New infections per day   7980 (4762 -- 13255)
-2:   Expected change in reports                 Stable
-3:   Effective reproduction no.     0.97 (0.74 -- 1.2)
-4:               Rate of growth -0.011 (-0.1 -- 0.083)
-5: Doubling/halving time (days)      -62 (8.4 -- -6.9)
+                        measure                estimate
+                         <char>                  <char>
+1:       New infections per day    7945 (4616 -- 13387)
+2:   Expected change in reports                  Stable
+3:   Effective reproduction no.      0.97 (0.73 -- 1.2)
+4:               Rate of growth -0.011 (-0.11 -- 0.081)
+5: Doubling/halving time (days)       -62 (8.6 -- -6.5)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in daily cases is  with the estimated new confirmed cases .
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7945 (4616 -- 13387).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.73 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.011 (-0.1 -- 0.083).
++ The exponential growth rate of case numbers is -0.011 (-0.11 -- 0.081).
 
-+ The doubling time (the time taken for case numbers to double) is -62 (8.4 -- -6.9).
++ The doubling time (the time taken for case numbers to double) is -62 (8.6 -- -6.5).
 
 ::::::::::::::::::::::::::::::::::::: callout
-### `Expected change in daily cases` 
+### `Expected change in reports` 
 
-A factor describing expected change in daily cases based on the posterior probability that $R_t < 1$.
+A factor describing the expected change in reports based on the posterior probability that $R_t < 1$.
 
 <center>
 | Probability ($p$)      | Expected change |
