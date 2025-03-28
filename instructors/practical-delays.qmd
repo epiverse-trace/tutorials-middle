@@ -1,14 +1,14 @@
 ---
 title: "Week 2: Access delays to estimate transmission and severity"
 format: 
-  html: default # learners solutions
+  pdf: default # learners solutions
   docx: default # learners practical
   gfm: default # instructors
 keep-md: true
 format-links: false
 ---
 
-::: {.content-hidden when-format="html"}
+::: {.content-hidden when-format="pdf"}
 
 <!-- visible for instructors only -->
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
@@ -42,6 +42,7 @@ Instructions, as a group:
   - What phase of the epidemic are you observing? (Exponential growth phase, near peak, or decay end phase)
   - Is the expected change in daily reports consistent with the estimated effective reproductive number, growth rate, and doubling time?
   - Interpret: How would you communicate these results to a decision-maker?
+  - Compare: What differences you identify from other group outputs? (if available)
 - Choose one person from your group to share your results with everyone.
 
 ### Inputs
@@ -66,46 +67,73 @@ Instructions, as a group:
 ### Code chunk
 
 ```r
-# Load packages
+# Load packages -----------------------------------------------------------
 library(epiparameter)
 library(EpiNow2)
 library(tidyverse)
 
 
-# Read reported cases
+# Read reported cases -----------------------------------------------------
+# for covid
 dat <- read_rds("paste/link/url/here/covid") %>%
   dplyr::select(date, confirm)
 # or
+# for ebola
 dat <- read_rds("paste/link/url/here/ebola") %>%
   dplyr::select(date, confirm = cases)
 
-# Access parameters for delay distributions
+
+# Define a generation time from {epiparameter} to {EpiNow2} ---------------
+
+# access a serial interval
+ebola_serialint <- epiparameter::epiparameter_db()
+
+# extract parameters from {epiparameter} object
+ebola_serialint_params <- epiparameter::
+
+# adapt {epiparameter} to {EpiNow2} distribution inferfase
+ebola_generationtime <- EpiNow2::
 
 
+# Define the delays from infection to case report for {EpiNow2} -----------
 
-# Get the maximum value for each distribution
+# define delay from symptom onset to case report
+ebola_reportdelay <- EpiNow2::
+
+# define a delay from infection to symptom onset
+ebola_incubationtime <- epiparameter::epiparameter_db()
+
+# incubation period: extract distribution parameters
+ebola_incubationtime_params <- epiparameter::
+
+# incubation period: discretize and extract maximum value (p = 99%)
+ebola_incubationtime_max <- ebola_incubationtime
+
+# incubation period: adapt to {EpiNow2} distribution interfase
+ebola_incubationtime_epinow <- EpiNow2::
+
+# collect required input
+ebola_generationtime
+ebola_reportdelay
+ebola_incubationtime_epinow
 
 
-
-# Extract parameters
-
-
-
-# Adapt {epiparameter} to {EpiNow2} distribution interfase
-
-
-
-# Set the number of parallel cores
+# Set the number of parallel cores for {EpiNow2} --------------------------
 withr::local_options(list(mc.cores = parallel::detectCores() - 1))
 
 
-# Estimate transmission using EpiNow2::epinow()
-# with EpiNow2::*_opts() functions for delays and stan
+# Estimate transmission using EpiNow2::epinow() ---------------------------
+# with EpiNow2::*_opts() functions for generation time, delays, and stan.
+estimates <- EpiNow2::epinow(
+  data = dat,
+  ...
+  stan = EpiNow2::stan_opts(samples = 1000, chains = 3)
+)
 
 
-
-# Print plot and summary table outputs
-
+# Print plot and summary table outputs ------------------------------------
+plot(estimates)
+summary(estimates)
 
 
 ```
@@ -204,7 +232,16 @@ Write your answer to the questions above:
 
 <!-- visible for instructors and learners after practical (solutions) -->
 
-```r
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+#| warning: false
+
 # Load packages -----------------------------------------------------------
 library(epiparameter)
 library(EpiNow2)
@@ -225,9 +262,10 @@ ebola_serialint <- epiparameter::epiparameter_db(
   single_epiparameter = TRUE
 )
 
-# adapt {epiparameter} to {EpiNow2} distribution inferfase
+# extract parameters from {epiparameter} object
 ebola_serialint_params <- epiparameter::get_parameters(ebola_serialint)
 
+# adapt {epiparameter} to {EpiNow2} distribution inferfase
 # preferred
 ebola_generationtime <- EpiNow2::Gamma(
   shape = ebola_serialint_params["shape"],
@@ -245,8 +283,8 @@ ebola_generationtime <- EpiNow2::Gamma(
 # define delay from symptom onset to case report
 # or reporting delay
 ebola_reportdelay <- EpiNow2::LogNormal(
-  mean = EpiNow2::Normal(mean = 4, sd = 0.5),
-  sd = EpiNow2::Normal(mean = 1, sd = 0.5),
+  meanlog = EpiNow2::Normal(mean = 1.4, sd = 0.5),
+  sdlog = EpiNow2::Normal(mean = 0.25, sd = 0.2),
   max = 5
 )
 
@@ -292,7 +330,7 @@ withr::local_options(list(mc.cores = parallel::detectCores() - 1))
 
 # Estimate transmission using EpiNow2::epinow() ---------------------------
 # with EpiNow2::*_opts() functions for generation time, delays, and stan.
-dat_epinow <- EpiNow2::epinow(
+estimates <- EpiNow2::epinow(
   data = dat,
   generation_time = EpiNow2::generation_time_opts(ebola_generationtime),
   delays = EpiNow2::delay_opts(ebola_incubationtime_epinow + ebola_reportdelay),
@@ -301,14 +339,64 @@ dat_epinow <- EpiNow2::epinow(
 
 
 # Print plot and summary table outputs ------------------------------------
-plot(dat_epinow)
-summary(dat_epinow)
-
+plot(estimates)
+summary(estimates)
 ```
+
+```{r}
+#| echo: false
+estimates_summary <- estimates$summary %>% as_tibble() %>% filter(!stringr::str_detect(measure,"change")) %>% unnest(numeric_estimate)
+```
+
 
 Interpretation:
 
++ From the summary of our analysis we see that the expected change in reports is 
+`r estimates$summary %>% as_tibble() %>% filter(stringr::str_detect(measure,"change")) %>% pull(estimate)` 
+with the estimated new infections of
+`r estimates_summary %>% filter(stringr::str_detect(measure,"infections")) %>% dplyr::select(median) %>% pull()`
+with 90% credible interval of
+`r estimates_summary %>% filter(stringr::str_detect(measure,"infections")) %>% dplyr::select(lower_90) %>% pull()` to `r estimates_summary %>% filter(stringr::str_detect(measure,"infections")) %>% dplyr::select(upper_90) %>% pull()`.
 
++ The effective reproduction number $R_t$ estimate (on the last date of the data),
+or the number of new infections caused by one infectious individual, on average, is
+`r estimates_summary %>% filter(stringr::str_detect(measure,"reproduction")) %>% dplyr::select(median) %>% pull()`,
+with a 90% credible interval of
+`r estimates_summary %>% filter(stringr::str_detect(measure,"reproduction")) %>% dplyr::select(lower_90) %>% pull()` to `r estimates_summary %>% filter(stringr::str_detect(measure,"reproduction")) %>% dplyr::select(upper_90) %>% pull()`.
+
++ The exponential growth rate of case reports is `r summary(estimates)$estimate[summary(estimates)$measure=="Rate of growth"]`.
+
++ The doubling time (the time taken for case reports to double) is `r summary(estimates)$estimate[summary(estimates)$measure=="Doubling/halving time (days)"]`.
+
+Interpretation Helpers:
+
+- About the effective reproduction number:
+    - An Rt greater than 1 implies an increase in cases or an epidemic. 
+    - An Rt less than 1 implies a decrease in cases or extinction.
+- An analysis closest to extinction has a central estimate of:
+    - Rt less than 1
+    - growth rate is negative
+    - doubling or halving time negative
+- However, given the uncertainty in all of these estimates,
+there is no statistical evidence of extintion if the 90% credible intervals of:
+    - Rt include the value 1,
+    - growth rate include the value 0,
+    - doubling or halving time include the value 0.
+- From table:
+    - The results in the tables correspond to the latest available date under analysis.
+    - The `Expected change in reports` categories (e.g., `Stable` or `likely decreasing`)
+    describe the expected change in daily cases based on the posterior probability that Rt < 1.
+    Find the tutorial table at:
+    <https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html#expected-change-in-reports>
+- From figure:
+    - The estimate of Reports fits the input incidence curve.
+    - The forecast of New infections and Reports per day assumes no change in the reproduction number. For that reason,
+    the forecast section of "Effective reproduction no." is constant.
+    - When we include at `delays` both the incubation and reporting delay, 
+        - In Reports, the forecast credible intervals increases.
+        - New infections per day, uncertainty increases in an equivalent size to the delays
+- From comparing COVID and Ebola outputs:
+    - The finite maximum value of the generation time distribution defines de range of the “estimate based on parial data”.
 
 :::
 
@@ -320,11 +408,15 @@ Interpretation:
 
 ::: {.content-visible unless-format="docx"}
 
-# Solutions
+### Solution
 
 <!-- visible for instructors and learners after practical (solutions) -->
 
 solutions
+
+Interpretation:
+
+As of September 13, the time lag-adjusted risk of case death is 73.4% with a 95% confidence interval between 47.3 and 91.4%.
 
 :::
 
