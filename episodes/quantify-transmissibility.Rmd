@@ -116,15 +116,15 @@ dplyr::as_tibble(incidence2::covidregionaldataUK)
 To use the data, we must format the data to have two columns:
 
 + `date`: the date (as a date object see `?is.Date()`),
-+ `confirm`: number of confirmed cases on that date.
++ `confirm`: number of disease reports (confirm) on that date.
 
 Let's use `{tidyr}` and `{incidence2}` for this:
 
 ```{r, warning = FALSE, message = FALSE}
 cases <- incidence2::covidregionaldataUK %>%
-  # use {tidyr} to preprocess missing values
+  # Preprocess missing values
   tidyr::replace_na(base::list(cases_new = 0)) %>%
-  # use {incidence2} to compute the daily incidence
+  # Compute the daily incidence
   incidence2::incidence(
     date_index = "date",
     counts = "cases_new",
@@ -132,10 +132,12 @@ cases <- incidence2::covidregionaldataUK %>%
     date_names_to = "date",
     complete_dates = TRUE
   ) %>%
-  # drop one column to adapt {EpiNow2} input
+  # Drop column for {EpiNow2} input format
   dplyr::select(-count_variable) %>%
-  # keep the first 90 dates and visualize epicurve
+  # Keep the first 90 dates
   dplyr::slice_head(n = 90)
+
+cases
 ```
 
 With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`
@@ -506,7 +508,7 @@ The outbreak data of the start of the COVID-19 pandemic from the United Kingdom 
 
 + `date`: the date,
 + `region`: the region, 
-+ `confirm`: number of confirmed cases for a region on a given date.
++ `confirm`: number of disease reports (confirm) for a region on a given date.
 
 Generate regional Rt estimates from the `incidence2::covidregionaldataUK` data frame by:
 
