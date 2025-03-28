@@ -457,7 +457,7 @@ summary(estimates)
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in reports"]` with the estimated new confirmed cases `r summary(estimates)$estimate[summary(estimates)$measure=="New confirmed cases by infection date"]`.
++ From the summary of our analysis we see that the expected change in reports is `r summary(estimates)$estimate[summary(estimates)$measure=="Expected change in reports"]` with the estimated new infections `r summary(estimates)$estimate[summary(estimates)$measure=="New infections per day"]`.
 
 + The effective reproduction number $R_t$ estimate (on the last date of the data) is `r summary(estimates)$estimate[summary(estimates)$measure=="Effective reproduction no."]`. 
 
