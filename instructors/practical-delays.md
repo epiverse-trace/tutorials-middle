@@ -56,7 +56,9 @@ As a group, Write your answer to these questions:
 
 <!-- visible for instructors and learners after practical (solutions) -->
 
-#### Ebola (sample)
+#### Code
+
+##### Ebola (sample)
 
 ``` r
 # Load packages -----------------------------------------------------------
@@ -160,7 +162,7 @@ summary(ebola_estimates)
 plot(ebola_estimates)
 ```
 
-#### COVID (sample)
+##### COVID (sample)
 
 ``` r
 # Load packages -----------------------------------------------------------
@@ -264,7 +266,9 @@ summary(covid_estimates)
 plot(covid_estimates)
 ```
 
-#### Group 1: COVID 30 days
+#### Outputs
+
+##### Group 1: COVID 30 days
 
 With reporting delay plus Incubation time:
 <img src="https://hackmd.io/_uploads/BJl8wYiDC.png" style="width:50.0%"
@@ -281,7 +285,7 @@ With reporting delay plus Incubation time:
     4:                   Rate of growth 0.099 (-0.049 -- 0.26)
     5:     Doubling/halving time (days)         7 (2.7 -- -14)
 
-### Group 2: Ebola 35 days
+##### Group 2: Ebola 35 days
 
 With reporting delay plus Incubation time:
 <img src="https://hackmd.io/_uploads/H1ZrYYsvR.png" style="width:50.0%"
@@ -298,7 +302,7 @@ With reporting delay plus Incubation time:
     4:                   Rate of growth -0.039 (-0.18 -- 0.12)
     5:     Doubling/halving time (days)      -18 (5.5 -- -3.9)
 
-### Group 3: Ebola 60 days
+##### Group 3: Ebola 60 days
 
 With reporting delay plus Incubation time:
 <img src="https://hackmd.io/_uploads/Byu3FFoDR.png" style="width:50.0%"
@@ -315,7 +319,7 @@ With reporting delay plus Incubation time:
     4:                   Rate of growth -0.16 (-0.32 -- -0.00055)
     5:     Doubling/halving time (days)      -4.4 (-1300 -- -2.2)
 
-### Group 4: COVID 60 days
+##### Group 4: COVID 60 days
 
 With reporting delay plus Incubation time:
 <img src="https://hackmd.io/_uploads/S1q6ItjvC.png" style="width:50.0%"
@@ -337,20 +341,19 @@ With reporting delay plus Incubation time:
 Interpretation template:
 
 - From the summary of our analysis we see that the expected change in
-  reports is `(Increasing/Stable/Decreasing)` with the estimated new
-  infections, on average, of `29` with 90% credible interval of `11` to
-  `62`.
+  reports is `Likely decreasing` with the estimated new infections, on
+  average, of `1987` with 90% credible interval of `760` to `4566`.
 
 - The effective reproduction number $R_t$ estimate (on the last date of
   the data), or the number of new infections caused by one infectious
-  individual, on average, is `2.1`, with a 90% credible interval of
-  `1.1` to `3.0`.
+  individual, on average, is `0.81`, with a 90% credible interval of
+  `0.43` to `1.30`.
 
-- The exponential growth rate of case reports is, on average `0.06`,
-  with a 90% credible interval of `-0.01` to `0.10`.
+- The exponential growth rate of case reports is, on average `-0.047`,
+  with a 90% credible interval of `-0.2` to `0.01`.
 
 - The doubling time (the time taken for case reports to double) is, on
-  average, `12.0`, with a 90% credible interval of `6.9` to `-70`.
+  average, `-15.0`, with a 90% credible interval of `7.5` to `-3.5`.
 
 Interpretation Helpers:
 
@@ -370,7 +373,7 @@ Interpretation Helpers:
   - The results in the tables correspond to the latest available date
     under analysis.
   - The `Expected change in reports` categories (e.g., `Stable` or
-    `likely decreasing`) describe the expected change in daily cases
+    `Likely decreasing`) describe the expected change in daily cases
     based on the posterior probability that Rt \< 1. Find the tutorial
     table at:
     <https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html#expected-change-in-reports>
@@ -419,7 +422,7 @@ As a group, Write your answer to these questions:
 
 <!-- visible for instructors and learners after practical (solutions) -->
 
-#### Ebola (sample)
+#### Code (For Ebola)
 
 ``` r
 # Load packages -----------------------------------------------------------
@@ -429,7 +432,9 @@ library(tidyverse)
 
 
 # Read reported cases -----------------------------------------------------
-ebola_sev <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/ebola_20days.rds")
+ebola_sev <- read_rds(
+  "https://epiverse-trace.github.io/tutorials-middle/data/ebola_20days.rds"
+)
 
 
 # Access delay distribution -----------------------------------------------
@@ -439,6 +444,7 @@ ebola_delay <- epiparameter::epiparameter_db(
   single_epiparameter = TRUE
 )
 
+
 # Estimate Static Naive CFR -----------------------------------------------
 cfr::cfr_static(data = ebola_sev)
 
@@ -447,45 +453,9 @@ cfr::cfr_static(
   data = ebola_sev,
   delay_density = function(x) density(ebola_delay, x)
 )
-
-# Complementary code ------------------------------------------------------
-
-# Read data frame with all cases ------------------------------------------
-ebola_full <- cfr::ebola1976
-
-# Estimate Rolling Naive and Delay-Adjusted CFR ---------------------------
-ebola_rolling_naive <- cfr::cfr_rolling(data = ebola_full)
-
-ebola_rolling_adjusted <- cfr::cfr_rolling(
-  data = ebola_full,
-  delay_density = function(x) density(ebola_delay, x)
-)
-
-# Visualise Rolling Naive and Delay-Adjusted CFR estimates ----------------
-# first, bind two data frames
-# then, visualize
-bind_rows(
-  ebola_rolling_naive %>%
-    mutate(method = "naive"),
-  ebola_rolling_adjusted %>%
-    mutate(method = "adjusted")
-) %>%
-  ggplot() +
-  geom_ribbon(
-    aes(
-      date,
-      ymin = severity_low,
-      ymax = severity_high,
-      fill = method
-    ),
-    alpha = 0.2, show.legend = FALSE
-  ) +
-  geom_line(
-    aes(date, severity_estimate, colour = method)
-  )
 ```
 
-### Group 1/2/3: Ebola
+#### Outputs (For Ebola)
 
 | Analysis            | Outputs                                             |
 |---------------------|-----------------------------------------------------|
