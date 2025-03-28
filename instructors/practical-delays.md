@@ -266,9 +266,9 @@ plot(covid_estimates)
 
 #### Group 1: COVID 30 days
 
-| G1  | With reporting delay plus Incubation time          |
-|-----|----------------------------------------------------|
-|     | ![image](https://hackmd.io/_uploads/BJl8wYiDC.png) |
+With reporting delay plus Incubation time:
+<img src="https://hackmd.io/_uploads/BJl8wYiDC.png" style="width:50.0%"
+alt="image" />
 
 With reporting delay plus Incubation time:
 
@@ -283,9 +283,9 @@ With reporting delay plus Incubation time:
 
 ### Group 2: Ebola 35 days
 
-| G2  | With reporting delay plus Incubation time          |
-|-----|----------------------------------------------------|
-|     | ![image](https://hackmd.io/_uploads/H1ZrYYsvR.png) |
+With reporting delay plus Incubation time:
+<img src="https://hackmd.io/_uploads/H1ZrYYsvR.png" style="width:50.0%"
+alt="image" />
 
 With reporting delay plus Incubation time:
 
@@ -300,9 +300,9 @@ With reporting delay plus Incubation time:
 
 ### Group 3: Ebola 60 days
 
-| G3  | With reporting delay plus Incubation time          |
-|-----|----------------------------------------------------|
-|     | ![image](https://hackmd.io/_uploads/Byu3FFoDR.png) |
+With reporting delay plus Incubation time:
+<img src="https://hackmd.io/_uploads/Byu3FFoDR.png" style="width:50.0%"
+alt="image" />
 
 With reporting delay plus Incubation time:
 
@@ -317,9 +317,9 @@ With reporting delay plus Incubation time:
 
 ### Group 4: COVID 60 days
 
-| G4  | With reporting delay plus Incubation time          |
-|-----|----------------------------------------------------|
-|     | ![image](https://hackmd.io/_uploads/S1q6ItjvC.png) |
+With reporting delay plus Incubation time:
+<img src="https://hackmd.io/_uploads/S1q6ItjvC.png" style="width:50.0%"
+alt="image" />
 
 With reporting delay plus Incubation time:
 
