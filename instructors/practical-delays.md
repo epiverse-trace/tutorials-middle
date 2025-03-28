@@ -13,6 +13,12 @@ A reminder of our Code of Conduct:
 
 <!-- visible for learners and instructors at practical -->
 
+Before your start, as a group: - Create one copy of the Posit Cloud
+project `<paste link>`. - Solve each challenge using the `Code chunk` as
+a guide. - Paste your figure and table outputs. - Write your answer to
+the questions. - Choose one person from your group to share your results
+with everyone.
+
 ## Transmission
 
 Estimate $R_{t}$, *new infections*, *new reports*, *growth rate*, and
@@ -21,22 +27,16 @@ Estimate $R_{t}$, *new infections*, *new reports*, *growth rate*, and
 - Incidence of reported cases per day
 - Reporting delay
 
-Instructions, as a group:
+As a group, Write your answer to these questions:
 
-- Create one copy of the Posit Cloud project `<paste link>`.
-- Solve the challenge using the `Code chunk` as a guide.
-- Paste your figure and table outputs.
-- Write your answer to these questions:
-  - What phase of the epidemic are you observing? (Exponential growth
-    phase, near peak, or decay end phase)
-  - Is the expected change in daily reports consistent with the
-    estimated effective reproductive number, growth rate, and doubling
-    time?
-  - Interpret: How would you communicate these results to a
-    decision-maker?
-  - Compare: What differences you identify from other group outputs? (if
-    available)
-- Choose one person from your group to share your results with everyone.
+- What phase of the epidemic are you observing? (Exponential growth
+  phase, near peak, or decay end phase)
+- Is the expected change in daily reports consistent with the estimated
+  effective reproductive number, growth rate, and doubling time?
+- Interpret: How would you communicate these results to a
+  decision-maker?
+- Compare: What differences you identify from other group outputs? (if
+  available)
 
 ### Inputs
 
@@ -389,15 +389,155 @@ Interpretation Helpers:
 
 ## Severity
 
+Estimate the *naive CFR (nCFR)* and *delay-adjusted CFR (aCFR)* using
+the following inputs:
+
+- reported cases (aggregate incidence by date of onset)
+- onset to death delay
+
+As a group, Write your answer to these questions:
+
+- What phase of the epidemic are you observing? (Exponential growth
+  phase, near peak, or decay end phase)
+- How much difference there is between the aCFR estimate compares with
+  the nCFR days later or before?
+- Interpret: How would you communicate these results to a
+  decision-maker?
+- Compare: What differences you identify from other group outputs? (if
+  available)
+
+### Inputs
+
+| Group | Incidence           | Link                                                                      |
+|-------|---------------------|---------------------------------------------------------------------------|
+| 1     | Ebola 20 days       | <https://epiverse-trace.github.io/tutorials-middle/data/ebola_20days.rds> |
+| 2     | Ebola 35 days       | <https://epiverse-trace.github.io/tutorials-middle/data/ebola_35days.rds> |
+| 3     | Ebola 60 days       | <https://epiverse-trace.github.io/tutorials-middle/data/ebola_60days.rds> |
+| 4     | Diamond Princess XX | <paste link>                                                              |
+
 ### Solution
 
 <!-- visible for instructors and learners after practical (solutions) -->
 
-solutions
+#### Ebola (sample)
 
-Interpretation:
+``` r
+# Load packages -----------------------------------------------------------
+library(cfr)
+library(epiparameter)
+library(tidyverse)
 
-As of September 13, the time lag-adjusted risk of case death is 73.4%
-with a 95% confidence interval between 47.3 and 91.4%.
+
+# Read reported cases -----------------------------------------------------
+ebola_sev <- read_rds("https://epiverse-trace.github.io/tutorials-middle/data/ebola_20days.rds")
+
+
+# Access delay distribution -----------------------------------------------
+ebola_delay <- epiparameter::epiparameter_db(
+  disease = "ebola",
+  epi_name = "onset-to-death",
+  single_epiparameter = TRUE
+)
+
+# Estimate Static Naive CFR -----------------------------------------------
+cfr::cfr_static(data = ebola_sev)
+
+# Estimate Static Delay-Adjusted CFR --------------------------------------
+cfr::cfr_static(
+  data = ebola_sev,
+  delay_density = function(x) density(ebola_delay, x)
+)
+
+# Complementary code ------------------------------------------------------
+
+# Read data frame with all cases ------------------------------------------
+ebola_full <- cfr::ebola1976
+
+# Estimate Rolling Naive and Delay-Adjusted CFR ---------------------------
+ebola_rolling_naive <- cfr::cfr_rolling(data = ebola_full)
+
+ebola_rolling_adjusted <- cfr::cfr_rolling(
+  data = ebola_full,
+  delay_density = function(x) density(ebola_delay, x)
+)
+
+# Visualise Rolling Naive and Delay-Adjusted CFR estimates ----------------
+# first, bind two data frames
+# then, visualize
+bind_rows(
+  ebola_rolling_naive %>%
+    mutate(method = "naive"),
+  ebola_rolling_adjusted %>%
+    mutate(method = "adjusted")
+) %>%
+  ggplot() +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low,
+      ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_estimate, colour = method)
+  )
+```
+
+### Group 1/2/3: Ebola
+
+| Analysis            | Outputs                                             |
+|---------------------|-----------------------------------------------------|
+| Incidence           | ![image](https://hackmd.io/_uploads/Hk2dcUiGyl.png) |
+| CFR static: 20 days | ![image](https://hackmd.io/_uploads/SyK0YIofye.png) |
+| CFR static: 35 days | ![image](https://hackmd.io/_uploads/BJQHhLjzkg.png) |
+| CFR static: 60 days | ![image](https://hackmd.io/_uploads/BySI38oGyg.png) |
+| CFR rolling         | ![image](https://hackmd.io/_uploads/BkyrKYiz1e.png) |
+
+#### Interpretation
+
+Interpretation template:
+
+- As of `September 13`, the delay-adjusted case fatality risk is `73.4%`
+  with a 95% confidence interval between `47.3%` and `91.4%`.
+
+From figure and tables:
+
+- Peak size in cases and deaths are similar. Peak location delayed ~7
+  days.
+- Ebola 20 days
+  - For Ebola, at day 20, we estimate an aCFR of 67.9% with a 95%
+    confidence interval from 42.6% to 87.5%.
+  - The aCFR estimate is higher than the nCFR by ~+50%
+- Ebola 35 days
+  - The aCFR estimate is higher than the nCFR by ~+40%
+  - The nCFR estimate at day 35 lies within the aCFR estimate at day 20.
+  - The observed deaths are higher than the expected deaths, producing
+    aCFR ~100%. Thus, a {cfr} output of missing values.
+- Ebola 60 days
+  - The aCFR estimate is close to the nCFR by ~+6%
+  - The nCFR estimate at day 60 lies within the aCFR estimate at day 35.
+  - The aCFR converge to true CFR at the end of the outbreak.
+- Overall
+  - In Ebola, the delay-adjusted CFR (aCFR) helps us get an earlier
+    estimate of the true CFR, compared to the naive CFR (nCFR).
+
+Complementary notes:
+
+- `cfr::static()` assumption and limitations
+  - One key assumption of `cfr::static()` is that reporting rate and
+    fatality risk is consistent over the time window considered. (This
+    does not hold for COVID)
+  - Early data had limitations (limited testing, changing case
+    definitions, often only most severe being tested -a.k.a.,
+    preferential assessertainment-). So neither method (aCFR nor nCFR)
+    gives the ‘true’ % of fatal symptomatic cases (which is closer to
+    around 2% based on better datasets).
+  - `cfr::static()` it’s therefore most useful over much longer
+    timeseries for COVID for context.
+  - Alternativelly, `{cfr}` can also estimate the proportion of cases
+    that are ascertained during an outbreak using
+    `cfr::estimate_ascertainment()`.
 
 # end
