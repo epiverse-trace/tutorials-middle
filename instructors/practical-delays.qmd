@@ -729,7 +729,9 @@ Write your answer to the questions above:
 
 <!-- visible for instructors and learners after practical (solutions) -->
 
-#### Code (For Ebola)
+#### Code
+
+##### Ebola (sample)
 
 ```{r}
 #| warning: false
@@ -765,7 +767,9 @@ cfr::cfr_static(
 )
 ```
 
-#### Outputs (For Ebola)
+#### Outputs
+
+##### Ebola
 
 
 | Analysis    | Outputs                                             |
