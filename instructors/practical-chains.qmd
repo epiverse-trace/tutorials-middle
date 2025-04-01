@@ -185,18 +185,113 @@ Write your answer to the questions above:
 
 #### Code
 
+##### Set 1 (sample)
+
 ```{r}
 #| warning: false
 #| eval: false
 
 # Load packages -----------------------------------------------------------
-library(epiparameter)
-library(EpiNow2)
+library(epicontacts)
+library(fitdistrplus)
 library(tidyverse)
 
-# Read reported cases -----------------------------------------------------
+# -------------------------------------------------------------------------
 
-# runnable howto-like
+known_basic_reproduction_number <- 0.8
+
+generation_time <- epidist(
+  disease = "disease x",
+  epi_dist = "generation time",
+  prob_distribution = "gamma",
+  summary_stats = list(mean = 3, sd = 1)
+)
+
+# -------------------------------------------------------------------------
+
+# Set seed for random number generator
+set.seed(33)
+
+# Number of simulation runs
+number_chains <- 1000
+
+# Number of initial cases
+initial_cases <- 1
+
+
+# Read linelist and contacts ----------------------------------------------
+dat_contacts <- readr::read_rds(
+  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-contacts.rds"
+)
+
+dat_linelist <- readr::read_rds(
+  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-linelist.rds"
+)
+
+## first, make an epicontacts object
+epi_contacts <-
+  epicontacts::make_epicontacts(
+    linelist = dat_linelist,
+    contacts = dat_contacts
+  )
+
+epi_contacts
+
+contact_network <- epicontacts::vis_epicontacts(epi_contacts)
+
+contact_network
+
+# count secondary cases per infector
+infector_secondary <- epi_contacts %>%
+  purrr::pluck("contacts") %>%
+  dplyr::count(from, name = "secondary_cases")
+
+# get number of secondary cases for each subject in {epicontacts} object
+all_secondary <- epi_contacts %>%
+  # extract ids in contact *and* linelist using "which" argument
+  epicontacts::get_id(which = "all") %>%
+  # transform vector to dataframe to use left_join()
+  tibble::enframe(name = NULL, value = "from") %>%
+  # join count secondary cases per infectee
+  dplyr::left_join(infector_secondary) %>%
+  # infectee with missing secondary cases are replaced with zero
+  tidyr::replace_na(
+    replace = list(secondary_cases = 0)
+  )
+
+## plot the distribution
+individual_reproduction_num <- all_secondary %>%
+  ggplot(aes(secondary_cases)) +
+  geom_histogram(binwidth = 1) +
+  labs(
+    x = "Number of secondary cases",
+    y = "Frequency"
+  )
+
+individual_reproduction_num
+
+## fit distribution
+offspring_fit <- all_secondary %>%
+  dplyr::pull(secondary_cases) %>%
+  fitdistrplus::fitdist(distr = "nbinom")
+
+offspring_fit
+
+# Set seed for random number generator
+set.seed(33)
+
+# Estimate
+# The proportion of new cases originating from 
+# a cluster of at least 5 secondary cases from a primary case
+# given known reproduction number and dispersion parameter.
+proportion_cases_by_cluster_size <-
+  superspreading::proportion_cluster_size(
+    R = known_basic_reproduction_number,
+    k = offspring_fit$estimate["size"],
+    cluster_size = c(5, 10, 25, 125)
+  )
+
+proportion_cases_by_cluster_size
 ```
 
 
