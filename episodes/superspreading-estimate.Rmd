@@ -158,6 +158,7 @@ But this output only contains number of secondary cases for reported infectors, 
 To get this, first, we can use `epicontacts::get_id()` to get the full list of unique identifiers ("id") from the `epicontacts` class object. Second, join it with the count secondary cases per infector stored in the `infector_secondary` object. Third, replace the missing values with `0` to express no report of secondary cases from them.
 
 ```{r,message=FALSE,warning=FALSE}
+# get number of secondary cases for each subject in {epicontacts} object
 all_secondary <- epi_contacts %>%
   # extract ids in contact *and* linelist using "which" argument
   epicontacts::get_id(which = "all") %>%
