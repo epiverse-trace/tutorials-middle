@@ -46,14 +46,14 @@ As a group, Write your answer to these questions:
 
 ### Inputs
 
-| Group | Data                                                                                                                                                       | Parameters        |
-|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
-| A1    | <https://epiverse-trace.github.io/tutorials-middle/data/set-01-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-01-linelist.rds> | R = 0.8, k = 0.01 |
-| A2    | <https://epiverse-trace.github.io/tutorials-middle/data/set-02-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-02-linelist.rds> | R = 0.8, k = 0.1  |
-| A3    | <https://epiverse-trace.github.io/tutorials-middle/data/set-03-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-03-linelist.rds> | R = 0.8, k = 0.5  |
-| B1    | <https://epiverse-trace.github.io/tutorials-middle/data/set-04-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-04-linelist.rds> | R = 1.5, k = 0.01 |
-| B2    | <https://epiverse-trace.github.io/tutorials-middle/data/set-05-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-05-linelist.rds> | R = 1.5, k = 0.1  |
-| B3    | <https://epiverse-trace.github.io/tutorials-middle/data/set-06-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-06-linelist.rds> | R = 1.5, k = 0.5  |
+| Group | Data                                                                                                                                                       |
+|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 1     | <https://epiverse-trace.github.io/tutorials-middle/data/set-01-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-01-linelist.rds> |
+| 2     | <https://epiverse-trace.github.io/tutorials-middle/data/set-02-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-02-linelist.rds> |
+| 3     | <https://epiverse-trace.github.io/tutorials-middle/data/set-03-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-03-linelist.rds> |
+| 4     | <https://epiverse-trace.github.io/tutorials-middle/data/set-04-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-04-linelist.rds> |
+| 5     | <https://epiverse-trace.github.io/tutorials-middle/data/set-05-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-05-linelist.rds> |
+| 6     | <https://epiverse-trace.github.io/tutorials-middle/data/set-06-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-06-linelist.rds> |
 
 ### Solution
 
@@ -115,7 +115,7 @@ all_secondary <- epi_contacts %>%
     replace = list(secondary_cases = 0)
   )
 
-## plot the distribution of the number of secondary cases
+## plot the histogram of secondary cases
 individual_reproduction_num <- all_secondary %>%
   ggplot(aes(secondary_cases)) +
   geom_histogram(binwidth = 1) +
@@ -155,39 +155,70 @@ proportion_cases_by_cluster_size
 
 #### Outputs
 
-##### Group 4: COVID 60 days
+Group 1
 
-With reporting delay plus Incubation time:
-<img src="https://hackmd.io/_uploads/S1q6ItjvC.png" style="width:50.0%"
-alt="image" />
+<img src="https://hackmd.io/_uploads/H1DVLbsTyx.png" style="width:25.0%"
+alt="Untitled-1" />
+<img src="https://hackmd.io/_uploads/BkW48Wo6yg.png" style="width:25.0%"
+alt="Untitled" />
+<img src="https://hackmd.io/_uploads/Sy2QUZiTJl.png" style="width:25.0%"
+alt="Untitled-1" />
 
-With reporting delay plus Incubation time:
+Group 2
 
-    > summary(covid60_epinow_delays)
-                                measure               estimate
-                                 <char>                 <char>
-    1:           New infections per day     1987 (760 -- 4566)
-    2: Expected change in daily reports      Likely decreasing
-    3:       Effective reproduction no.     0.81 (0.43 -- 1.3)
-    4:                   Rate of growth -0.047 (-0.2 -- 0.092)
-    5:     Doubling/halving time (days)      -15 (7.5 -- -3.5)
+<img src="https://hackmd.io/_uploads/Hkhg8WspJg.png" style="width:25.0%"
+alt="Untitled" />
+<img src="https://hackmd.io/_uploads/HyIlUWopJx.png" style="width:25.0%"
+alt="Untitled-1" />
+<img src="https://hackmd.io/_uploads/SkRyUWjp1x.png" style="width:25.0%"
+alt="Untitled" />
+
+Group 3
+
+<img src="https://hackmd.io/_uploads/HkzkUZjpyx.png" style="width:25.0%"
+alt="Untitled" />
+<img src="https://hackmd.io/_uploads/SkjCBZjpJe.png" style="width:25.0%"
+alt="Untitled-1" />
+<img src="https://hackmd.io/_uploads/BkfABZopye.png" style="width:25.0%"
+alt="Untitled" />
+
+Group 1/2/3
+
+``` r
+#>     R    k prop_5 prop_10 prop_25
+#> 1 0.8 0.01  95.1%   89.8%   75.1%
+#> 2 0.8 0.10  66.7%   38.7%    7.6%
+#> 3 0.8 0.50  25.1%    2.8%      0%
+```
 
 #### Interpretation
 
 Interpretation template:
 
-- From the summary of our analysis we see that the expected change in
-  reports is `Likely decreasing` with the estimated new infections, on
-  average, of `1987` with 90% credible interval of `760` to `4566`.
-
-- …
+- For R = 0.8 and k = 0.01:
+  - The proportion of new cases originating from a cluster of at least 5
+    secondary cases from a primary case is 95%
+  - The proportion of all transmission event that were part of secondary
+    case clusters (i.e., from the same primary case) of at least 5 cases
+    is 95%
 
 Interpretation Helpers:
 
-- About the effective reproduction number:
-  - An Rt greater than 1 implies an increase in cases or an epidemic.
-  - An Rt less than 1 implies a decrease in cases or extinction.
-- …
+- From the contact network, set 1 has the highest frequency of
+  infections related with a small proportion of clusters.
+- From the histogram of secondary cases, skewness in set 1 is higher
+  than set 2 and set 3.
+- Set 1 has cases with the highest number of secondary cases (n = 50),
+  compared with set 2 (n = ~25) and set 3 (n = 11).
+- The contact networks and histograms of secondary cases correlate with
+  the estimated dispersion parameters: A small proportion of clusters
+  generating most of new cases produces a more skewed histogram, and a
+  lowest estimate of dispersion parameter.
+- About probabilty of new cases from transmission cluster of size at
+  least 10 cases, and the recommending backward tracing strategy:
+  - set 1: 89%, yes.
+  - set 2: 38%, probably no?
+  - set 3: 3%, no.
 
 ## Simulate transmission chains
 
