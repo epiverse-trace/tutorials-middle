@@ -12,7 +12,7 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Create a short term projection using a branching process with `{epichains}`.
+- Estimate the potential for large outbreaks following the introduction of a new case using a branching process with `{epichains}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
