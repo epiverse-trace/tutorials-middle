@@ -196,9 +196,285 @@ library(epicontacts)
 library(fitdistrplus)
 library(tidyverse)
 
-# -------------------------------------------------------------------------
 
-known_basic_reproduction_number <- 0.8
+# Read linelist and contacts ----------------------------------------------
+dat_contacts <- readr::read_rds(
+  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-contacts.rds"
+)
+
+dat_linelist <- readr::read_rds(
+  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-linelist.rds"
+)
+
+
+# Create an epicontacts object -------------------------------------------
+epi_contacts <-
+  epicontacts::make_epicontacts(
+    linelist = dat_linelist,
+    contacts = dat_contacts
+  )
+
+epi_contacts
+
+# visualize the contact network
+contact_network <- epicontacts::vis_epicontacts(epi_contacts)
+
+contact_network
+
+
+# Count the individual reproduction number for all observed cases --------
+
+# count secondary cases per infector
+infector_secondary <- epi_contacts %>%
+  purrr::pluck("contacts") %>%
+  dplyr::count(from, name = "secondary_cases")
+
+# get number of secondary cases for each subject in {epicontacts} object
+all_secondary <- epi_contacts %>%
+  # extract ids from both contact and linelist using "which" argument
+  epicontacts::get_id(which = "all") %>%
+  # transform vector to dataframe to use left_join()
+  tibble::enframe(name = NULL, value = "from") %>%
+  # join count secondary cases per infectee
+  dplyr::left_join(infector_secondary) %>%
+  # infectee with missing secondary cases are replaced with zero
+  tidyr::replace_na(
+    replace = list(secondary_cases = 0)
+  )
+
+## plot the distribution of the number of secondary cases
+individual_reproduction_num <- all_secondary %>%
+  ggplot(aes(secondary_cases)) +
+  geom_histogram(binwidth = 1) +
+  labs(
+    x = "Number of secondary cases",
+    y = "Frequency"
+  )
+
+individual_reproduction_num
+
+
+# Fit a negative binomial distribution -----------------------------------
+offspring_fit <- all_secondary %>%
+  dplyr::pull(secondary_cases) %>%
+  fitdistrplus::fitdist(distr = "nbinom")
+
+offspring_fit
+
+
+# Estimate proportion of new cases from a cluster of secondary cases -----
+
+# Set seed for random number generator
+set.seed(33)
+
+# Estimate the proportion of new cases originating from 
+# a cluster of at least 5, 10, or 25 secondary cases from a primary case
+# given known reproduction number and dispersion parameter.
+proportion_cases_by_cluster_size <-
+  superspreading::proportion_cluster_size(
+    R = offspring_fit$estimate["mu"],
+    k = offspring_fit$estimate["size"],
+    cluster_size = c(5, 10, 25)
+  )
+
+proportion_cases_by_cluster_size
+```
+
+
+#### Outputs
+
+##### Group 4: COVID 60 days
+
+With reporting delay plus Incubation time:
+![image](https://hackmd.io/_uploads/S1q6ItjvC.png){width=50%}
+
+With reporting delay plus Incubation time:
+```
+> summary(covid60_epinow_delays)
+                            measure               estimate
+                             <char>                 <char>
+1:           New infections per day     1987 (760 -- 4566)
+2: Expected change in daily reports      Likely decreasing
+3:       Effective reproduction no.     0.81 (0.43 -- 1.3)
+4:                   Rate of growth -0.047 (-0.2 -- 0.092)
+5:     Doubling/halving time (days)      -15 (7.5 -- -3.5)
+```
+
+#### Interpretation
+
+Interpretation template:
+
++ From the summary of our analysis we see that the expected change in reports is 
+`Likely decreasing` with the estimated new infections, on average, of
+`1987` with 90% credible interval of `760` to `4566`.
+
++ ...
+
+Interpretation Helpers:
+
+- About the effective reproduction number:
+    - An Rt greater than 1 implies an increase in cases or an epidemic. 
+    - An Rt less than 1 implies a decrease in cases or extinction.
+- ...
+
+:::
+
+
+
+## Theme
+
+Estimate ... using the following available inputs:
+
+- input 1
+- input 2
+
+As a group, Write your answer to these questions:
+
+- ... phase?
+- ... results expected?
+- Interpret: How would you communicate these results to a decision-maker?
+- Compare: What differences you identify from other group outputs? (if available)
+
+### Inputs
+
+| Group | Incidence | Link |
+|---|---|---|
+| 1 | COVID 30 days | <https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds> |
+| 2 | Ebola 35 days |  |
+| 3 | Ebola 60 days |  |
+| 4 | COVID 60 days |  |
+
+
+| Disease | params |
+|---|---|
+| Ebola | ... |
+| COVID | ... |
+
+: {tbl-colwidths="[15,85]"}
+
+::: {.content-visible when-format="docx"}
+
+### Code chunk
+
+```r
+# Load packages -----------------------------------------------------------
+library(epiparameter)
+library(EpiNow2)
+library(tidyverse)
+
+
+# Read reported cases -----------------------------------------------------
+
+# faded code
+
+```
+
+### Your answers
+
+Group 1
+
+| output | paste here |
+|---|---|
+| figure |  |
+| table |  |
+
+Write your answer to the questions above:
+
+```
+
+
+
+
+
+
+
+```
+
+
+------------------------
+
+Group 2
+
+| output | paste here |
+|---|---|
+| figure |  |
+| table |  |
+
+Write your answer to the questions above:
+
+```
+
+
+
+
+
+
+
+```
+
+
+------------------------
+
+Group 3
+
+| output | paste here |
+|---|---|
+| figure |  |
+| table |  |
+
+Write your answer to the questions above:
+
+```
+
+
+
+
+
+
+
+```
+
+
+------------------------
+
+Group 4
+
+| output | paste here |
+|---|---|
+| figure |  |
+| table |  |
+
+Write your answer to the questions above:
+
+```
+
+
+
+
+
+
+
+```
+:::
+
+::: {.content-visible unless-format="docx"}
+
+### Solution
+
+<!-- visible for instructors and learners after practical (solutions) -->
+
+#### Code
+
+```{r}
+#| warning: false
+#| eval: false
+
+# Load packages -----------------------------------------------------------
+library(epiparameter)
+library(EpiNow2)
+library(tidyverse)
+
+# Read reported cases -----------------------------------------------------
 
 generation_time <- epidist(
   disease = "disease x",
@@ -217,81 +493,6 @@ number_chains <- 1000
 
 # Number of initial cases
 initial_cases <- 1
-
-
-# Read linelist and contacts ----------------------------------------------
-dat_contacts <- readr::read_rds(
-  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-contacts.rds"
-)
-
-dat_linelist <- readr::read_rds(
-  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-linelist.rds"
-)
-
-## first, make an epicontacts object
-epi_contacts <-
-  epicontacts::make_epicontacts(
-    linelist = dat_linelist,
-    contacts = dat_contacts
-  )
-
-epi_contacts
-
-contact_network <- epicontacts::vis_epicontacts(epi_contacts)
-
-contact_network
-
-# count secondary cases per infector
-infector_secondary <- epi_contacts %>%
-  purrr::pluck("contacts") %>%
-  dplyr::count(from, name = "secondary_cases")
-
-# get number of secondary cases for each subject in {epicontacts} object
-all_secondary <- epi_contacts %>%
-  # extract ids in contact *and* linelist using "which" argument
-  epicontacts::get_id(which = "all") %>%
-  # transform vector to dataframe to use left_join()
-  tibble::enframe(name = NULL, value = "from") %>%
-  # join count secondary cases per infectee
-  dplyr::left_join(infector_secondary) %>%
-  # infectee with missing secondary cases are replaced with zero
-  tidyr::replace_na(
-    replace = list(secondary_cases = 0)
-  )
-
-## plot the distribution
-individual_reproduction_num <- all_secondary %>%
-  ggplot(aes(secondary_cases)) +
-  geom_histogram(binwidth = 1) +
-  labs(
-    x = "Number of secondary cases",
-    y = "Frequency"
-  )
-
-individual_reproduction_num
-
-## fit distribution
-offspring_fit <- all_secondary %>%
-  dplyr::pull(secondary_cases) %>%
-  fitdistrplus::fitdist(distr = "nbinom")
-
-offspring_fit
-
-# Set seed for random number generator
-set.seed(33)
-
-# Estimate
-# The proportion of new cases originating from 
-# a cluster of at least 5 secondary cases from a primary case
-# given known reproduction number and dispersion parameter.
-proportion_cases_by_cluster_size <-
-  superspreading::proportion_cluster_size(
-    R = known_basic_reproduction_number,
-    k = offspring_fit$estimate["size"],
-    cluster_size = c(5, 10, 25, 125)
-  )
-
-proportion_cases_by_cluster_size
 ```
 
 
