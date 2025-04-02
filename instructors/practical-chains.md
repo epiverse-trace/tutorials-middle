@@ -26,8 +26,8 @@ parameter) of the offspring distribution and the proportion of
 transmission that is linked to ‘superspreading events’ using the
 following available inputs:
 
-- line list of cases
-- contact tracing data
+- Line list of cases
+- Contact tracing data
 
 As a group, Write your answer to these questions:
 
@@ -161,8 +161,6 @@ Group 1
 alt="Untitled-1" />
 <img src="https://hackmd.io/_uploads/BkW48Wo6yg.png" style="width:25.0%"
 alt="Untitled" />
-<img src="https://hackmd.io/_uploads/Sy2QUZiTJl.png" style="width:25.0%"
-alt="Untitled-1" />
 
 Group 2
 
@@ -170,8 +168,6 @@ Group 2
 alt="Untitled" />
 <img src="https://hackmd.io/_uploads/HyIlUWopJx.png" style="width:25.0%"
 alt="Untitled-1" />
-<img src="https://hackmd.io/_uploads/SkRyUWjp1x.png" style="width:25.0%"
-alt="Untitled" />
 
 Group 3
 
@@ -179,8 +175,6 @@ Group 3
 alt="Untitled" />
 <img src="https://hackmd.io/_uploads/SkjCBZjpJe.png" style="width:25.0%"
 alt="Untitled-1" />
-<img src="https://hackmd.io/_uploads/BkfABZopye.png" style="width:25.0%"
-alt="Untitled" />
 
 Group 1/2/3
 
@@ -222,15 +216,21 @@ Interpretation Helpers:
 
 ## Simulate transmission chains
 
-Estimate … using the following available inputs:
+Estimate the potential for large outbreaks using the following available
+inputs:
 
-- input 1
-- input 2
+- Basic reproduction number
+- Dispersion parameter
 
 As a group, Write your answer to these questions:
 
-- … phase?
-- … results expected?
+- Explore the data frame output of the `Simulation ID`: What is the
+  relationship between the following columns `chain`, `infector`,
+  `infectee`, `generation`, `time`, `simulation_id`?
+- Among simulated outbreaks:
+  - How many chains reached a 100 case threshold?
+  - What is the maximum size of chain?
+  - What is the maximum length of chain?
 - Interpret: How would you communicate these results to a
   decision-maker?
 - Compare: What differences you identify from other group outputs? (if
@@ -238,17 +238,14 @@ As a group, Write your answer to these questions:
 
 ### Inputs
 
-| Group | Incidence     | Link                                                                      |
-|-------|---------------|---------------------------------------------------------------------------|
-| 1     | COVID 30 days | <https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds> |
-| 2     | Ebola 35 days |                                                                           |
-| 3     | Ebola 60 days |                                                                           |
-| 4     | COVID 60 days |                                                                           |
-
-| Disease | params |
-|---------|--------|
-| Ebola   | …      |
-| COVID   | …      |
+| Group | Parameters        | Simulation ID |
+|-------|-------------------|---------------|
+| 1     | R = 0.8, k = 0.01 | 683           |
+| 2     | R = 0.8, k = 0.1  | 664           |
+| 3     | R = 0.8, k = 0.5  | 256           |
+| 4     | R = 1.5, k = 0.01 | 129           |
+| 5     | R = 1.5, k = 0.1  | 301           |
+| 6     | R = 1.5, k = 0.5  | 227           |
 
 ### Solution
 
@@ -268,7 +265,7 @@ library(tidyverse)
 # Set input parameters ---------------------------------------------------
 known_basic_reproduction_number <- 0.8
 known_dispersion <- 0.01
-chain_to_explore <- 683
+simulation_to_explore <- 683
 
 
 # Set iteration parameters -----------------------------------------------
@@ -289,16 +286,17 @@ generation_time <- epiparameter::epiparameter(
 
 
 # Simulate multiple chains -----------------------------------------------
+# run all this section together
 
 # Set seed for random number generator
 set.seed(33)
 
 simulated_chains_map <-
-  # iterate one function across multiple numbers (chain IDs)
+  # iterate one function across multiple numbers (simulation IDs)
   map(
-    # vector of numbers (chain IDs)
+    # vector of numbers (simulation IDs)
     .x = seq_len(number_chains),
-    # function to iterate to each chain ID number
+    # function to iterate to each simulation ID number
     .f = function(sim) {
       simulate_chains(
         # simulation controls
@@ -312,11 +310,11 @@ simulated_chains_map <-
         # generation
         generation_time = function(x) generate(x = generation_time, times = x)
       ) %>%
-        # creates a column with the chain ID number
-        mutate(chain_id = sim)
+        # creates a column with the simulation ID number
+        mutate(simulation_id = sim)
     }
   ) %>%
-  # combine list outputs (for each chain ID) into a single data frame
+  # combine list outputs (for each simulation ID) into a single data frame
   list_rbind()
 
 simulated_chains_map
@@ -326,7 +324,7 @@ simulated_chains_map
 simulated_chains_map %>%
   # use data.frame output from <epichains> object
   as_tibble() %>% 
-  filter(chain_id == chain_to_explore) %>% 
+  filter(simulation_id == simulation_to_explore) %>% 
   print(n=Inf)
 
 
@@ -336,14 +334,14 @@ simulated_chains_map %>%
 simulated_chains_day <- simulated_chains_map %>%
   # use data.frame output from <epichains> object
   as_tibble() %>%
-  # transform chain ID column to factor (categorical variable)
-  mutate(chain_id = as_factor(chain_id)) %>%
+  # transform simulation ID column to factor (categorical variable)
+  mutate(simulation_id = as_factor(simulation_id)) %>%
   # get the round number (day) of infection times
   mutate(day = ceiling(time)) %>%
-  # count the daily number of cases in each simulation (chain ID)
-  count(chain_id, day, name = "cases") %>%
-  # calculate the cumulative number of cases for each simulation (chain ID)
-  group_by(chain_id) %>%
+  # count the daily number of cases in each simulation (simulation ID)
+  count(simulation_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (simulation ID)
+  group_by(simulation_id) %>%
   mutate(cases_cumsum = cumsum(cases)) %>%
   ungroup()
 
@@ -355,7 +353,7 @@ ggplot() +
     mapping = aes(
       x = day,
       y = cases_cumsum,
-      group = chain_id
+      group = simulation_id
     ),
     color = "black",
     alpha = 0.25,
@@ -371,38 +369,80 @@ ggplot() +
 
 #### Outputs
 
-##### Group 4: COVID 60 days
+Group 1
 
-With reporting delay plus Incubation time:
-<img src="https://hackmd.io/_uploads/S1q6ItjvC.png" style="width:50.0%"
-alt="image" />
+<img src="https://hackmd.io/_uploads/H1DVLbsTyx.png" style="width:25.0%"
+alt="Untitled-1" />
+<img src="https://hackmd.io/_uploads/BkW48Wo6yg.png" style="width:25.0%"
+alt="Untitled" />
+<img src="https://hackmd.io/_uploads/Sy2QUZiTJl.png" style="width:25.0%"
+alt="Untitled-1" />
 
-With reporting delay plus Incubation time:
+Group 2
 
-    > summary(covid60_epinow_delays)
-                                measure               estimate
-                                 <char>                 <char>
-    1:           New infections per day     1987 (760 -- 4566)
-    2: Expected change in daily reports      Likely decreasing
-    3:       Effective reproduction no.     0.81 (0.43 -- 1.3)
-    4:                   Rate of growth -0.047 (-0.2 -- 0.092)
-    5:     Doubling/halving time (days)      -15 (7.5 -- -3.5)
+<img src="https://hackmd.io/_uploads/Hkhg8WspJg.png" style="width:25.0%"
+alt="Untitled" />
+<img src="https://hackmd.io/_uploads/HyIlUWopJx.png" style="width:25.0%"
+alt="Untitled-1" />
+<img src="https://hackmd.io/_uploads/SkRyUWjp1x.png" style="width:25.0%"
+alt="Untitled" />
+
+Group 3
+
+<img src="https://hackmd.io/_uploads/HkzkUZjpyx.png" style="width:25.0%"
+alt="Untitled" />
+<img src="https://hackmd.io/_uploads/SkjCBZjpJe.png" style="width:25.0%"
+alt="Untitled-1" />
+<img src="https://hackmd.io/_uploads/BkfABZopye.png" style="width:25.0%"
+alt="Untitled" />
+
+Sample
+
+``` r
+# infector-infectee data frame 
+simulated_chains_map %>%
+  dplyr::filter(simulation_id == 806) %>%
+  dplyr::as_tibble()
+```
+
+    # A tibble: 9 × 6
+      chain infector infectee generation  time simulation_id
+      <int>    <dbl>    <dbl>      <int> <dbl>         <int>
+    1     1       NA        1          1   0             806
+    2     1        1        2          2  16.4           806
+    3     1        1        3          2  11.8           806
+    4     1        1        4          2  10.8           806
+    5     1        1        5          2  11.4           806
+    6     1        1        6          2  10.2           806
+    7     1        2        7          3  26.0           806
+    8     1        2        8          3  29.8           806
+    9     1        2        9          3  26.6           806
 
 #### Interpretation
 
 Interpretation template:
 
-- From the summary of our analysis we see that the expected change in
-  reports is `Likely decreasing` with the estimated new infections, on
-  average, of `1987` with 90% credible interval of `760` to `4566`.
-
-- …
+- Simulation `806` have `1` chain with `3` known infectors (`NA`, 1, 2),
+  and `3` generations.
+- In the generation 0, subject `NA` infected subject 1.
+- In the generation 1, subject 1 infected subjects 2, 3, 4, 5, 6. These
+  infections occurred between day 10 and 16 after the “case zero”.
+- In the generation 2, subject 2 infected subjects 7, 8, 9. These
+  infections occurred between day 26 and 29 after the “case zero”.
 
 Interpretation Helpers:
 
-- About the effective reproduction number:
-  - An Rt greater than 1 implies an increase in cases or an epidemic.
-  - An Rt less than 1 implies a decrease in cases or extinction.
-- …
+- Group 1:
+  - 1 chain above 100
+  - size of chain ~130
+  - length of chain ~20 days
+- Group 2:
+  - 6 chains above 100
+  - size of chain of 500
+  - length of chain ~50 days
+- Group 3:
+  - 2 chains above 100
+  - size of chain of 150
+  - length of chain ~60 days
 
 # end
