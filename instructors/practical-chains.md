@@ -21,15 +21,24 @@ with everyone.
 
 ## Account for superspreading
 
-Estimate … using the following available inputs:
+Estimate extent of individual-level variation (i.e. the dispersion
+parameter) of the offspring distribution and the proportion of
+transmission that is linked to ‘superspreading events’ using the
+following available inputs:
 
-- input 1
-- input 2
+- line list of cases
+- contact tracing data
 
 As a group, Write your answer to these questions:
 
-- … phase?
-- … results expected?
+- What set has more infections related to fewer clusters in the contact
+  network?
+- What set has the most skewed histogram of secondary cases?
+- Does the estimated dispersion parameter correlate with the contact
+  network and histogram of secondary cases?
+- What is the proportion of new cases originating from a cluster of at
+  least 10 cases?
+- Would you recommend a backward tracing strategy?
 - Interpret: How would you communicate these results to a
   decision-maker?
 - Compare: What differences you identify from other group outputs? (if
@@ -37,17 +46,14 @@ As a group, Write your answer to these questions:
 
 ### Inputs
 
-| Group | Incidence     | Link                                                                      |
-|-------|---------------|---------------------------------------------------------------------------|
-| 1     | COVID 30 days | <https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds> |
-| 2     | Ebola 35 days |                                                                           |
-| 3     | Ebola 60 days |                                                                           |
-| 4     | COVID 60 days |                                                                           |
-
-| Disease | params |
-|---------|--------|
-| Ebola   | …      |
-| COVID   | …      |
+| Group | Data                                                                                                                                                       | Parameters        |
+|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| A1    | <https://epiverse-trace.github.io/tutorials-middle/data/set-01-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-01-linelist.rds> | R = 0.8, k = 0.01 |
+| A2    | <https://epiverse-trace.github.io/tutorials-middle/data/set-02-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-02-linelist.rds> | R = 0.8, k = 0.1  |
+| A3    | <https://epiverse-trace.github.io/tutorials-middle/data/set-03-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-03-linelist.rds> | R = 0.8, k = 0.5  |
+| B1    | <https://epiverse-trace.github.io/tutorials-middle/data/set-04-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-04-linelist.rds> | R = 1.5, k = 0.01 |
+| B2    | <https://epiverse-trace.github.io/tutorials-middle/data/set-05-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-05-linelist.rds> | R = 1.5, k = 0.1  |
+| B3    | <https://epiverse-trace.github.io/tutorials-middle/data/set-06-contacts.rds>, <https://epiverse-trace.github.io/tutorials-middle/data/set-06-linelist.rds> | R = 1.5, k = 0.5  |
 
 ### Solution
 
