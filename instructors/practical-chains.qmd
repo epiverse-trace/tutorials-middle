@@ -76,15 +76,84 @@ As a group, Write your answer to these questions:
 
 ```r
 # Load packages -----------------------------------------------------------
-library(epiparameter)
-library(EpiNow2)
+library(epicontacts)
+library(fitdistrplus)
 library(tidyverse)
 
 
-# Read reported cases -----------------------------------------------------
+# Read linelist and contacts ----------------------------------------------
+dat_contacts <- readr::read_rds("link/to/contact/data/url")
 
-# faded code
+dat_linelist <- readr::read_rds("link/to/linelist/data/url")
 
+
+# Create an epicontacts object -------------------------------------------
+epi_contacts <- 
+
+# print output
+epi_contacts
+
+# visualize the contact network
+contact_network <- 
+
+# print output
+contact_network
+
+
+# Count the individual reproduction number for all observed cases --------
+
+# count secondary cases per infector
+infector_secondary <- epi_contacts %>%
+  purrr::pluck("contacts") %>%
+  dplyr::count(from, name = "secondary_cases")
+
+# get number of secondary cases for each subject in {epicontacts} object
+all_secondary <- epi_contacts %>%
+  # extract ids from both contact and linelist using "which" argument
+  epicontacts::get_id(which = "all") %>%
+  # transform vector to dataframe to use left_join()
+  tibble::enframe(name = NULL, value = "from") %>%
+  # join count secondary cases per infectee
+  dplyr::left_join(infector_secondary) %>%
+  # infectee with missing secondary cases are replaced with zero
+  tidyr::replace_na(
+    replace = list(secondary_cases = 0)
+  )
+
+## plot the histogram of secondary cases
+individual_reproduction_num <- all_secondary %>%
+  ggplot(aes(secondary_cases)) +
+  geom_histogram(binwidth = 1) +
+  labs(
+    x = "Number of secondary cases",
+    y = "Frequency"
+  )
+
+# print output
+individual_reproduction_num
+
+
+# Fit a negative binomial distribution -----------------------------------
+offspring_fit <- all_secondary %>%
+  dplyr::pull(secondary_cases) %>%
+  ...
+
+# print output
+offspring_fit
+
+
+# Estimate proportion of new cases from a cluster of secondary cases -----
+
+# Set seed for random number generator
+set.seed(33)
+
+# Estimate the proportion of new cases originating from 
+# a cluster of at least 5, 10, or 25 secondary cases from a primary case
+# given known reproduction number and dispersion parameter.
+proportion_cases_by_cluster_size <-
+
+# print output
+proportion_cases_by_cluster_size
 ```
 
 ### Your answers
@@ -424,14 +493,118 @@ As a group, Write your answer to these questions:
 ```r
 # Load packages -----------------------------------------------------------
 library(epiparameter)
-library(EpiNow2)
+library(epichains)
 library(tidyverse)
 
 
-# Read reported cases -----------------------------------------------------
+# Set input parameters ---------------------------------------------------
+known_basic_reproduction_number <- ...
+known_dispersion <- ...
+simulation_to_explore <- ...
 
-# faded code
 
+# Set iteration parameters -----------------------------------------------
+
+# Number of simulation runs
+number_chains <- 1000
+
+# Number of initial cases
+initial_cases <- 1
+
+# Create generation time as <epiparameter> object
+generation_time <- epiparameter::epiparameter(
+  disease = "disease x",
+  epi_name = "generation time",
+  prob_distribution = "gamma",
+  summary_stats = list(mean = 3, sd = 1)
+)
+
+
+# Simulate one chain -----------------------------------------------------
+simulate_chains(
+  # simulation controls
+  n_chains = ,
+  statistic = ,
+  stat_threshold = ,
+  # offspring
+  offspring_dist = ,
+  mu = ,
+  size = ,
+  # generation
+  generation_time = 
+)
+
+# Simulate multiple chains -----------------------------------------------
+# run all this section together
+
+# Set seed for random number generator
+set.seed(33)
+
+simulated_chains_map <-
+  # iterate one function across multiple numbers (simulation IDs)
+  map(
+    # vector of numbers (simulation IDs)
+    .x = seq_len(number_chains),
+    # function to iterate to each simulation ID number
+    .f = function(sim) {
+      simulate_chains(
+        ...
+      ) %>%
+        # creates a column with the simulation ID number
+        mutate(simulation_id = sim)
+    }
+  ) %>%
+  # combine list outputs (for each simulation ID) into a single data frame
+  list_rbind()
+
+simulated_chains_map
+
+
+# Explore suggested chain ------------------------------------------------
+simulated_chains_map %>%
+  # use data.frame output from <epichains> object
+  as_tibble() %>% 
+  filter(simulation_id == simulation_to_explore) %>% 
+  print(n=Inf)
+
+
+# visualize ---------------------------------------------------------------
+
+# daily aggregate of cases
+simulated_chains_day <- simulated_chains_map %>%
+  # use data.frame output from <epichains> object
+  as_tibble() %>%
+  # transform simulation ID column to factor (categorical variable)
+  mutate(simulation_id = as_factor(simulation_id)) %>%
+  # get the round number (day) of infection times
+  mutate(day = ceiling(time)) %>%
+  # count the daily number of cases in each simulation (simulation ID)
+  count(simulation_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (simulation ID)
+  group_by(simulation_id) %>%
+  mutate(cases_cumsum = cumsum(cases)) %>%
+  ungroup()
+
+# Visualize transmission chains by cumulative cases
+ggplot() +
+  # create grouped chain trajectories
+  geom_line(
+    data = simulated_chains_day,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = simulation_id
+    ),
+    color = "black",
+    alpha = 0.25,
+    show.legend = FALSE
+  ) +
+  # define a 100-case threshold
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  labs(
+    x = "Day",
+    y = "Cumulative cases"
+  )
 ```
 
 ### Your answers
