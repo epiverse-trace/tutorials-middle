@@ -19,7 +19,7 @@ a guide. - Paste your figure and table outputs. - Write your answer to
 the questions. - Choose one person from your group to share your results
 with everyone.
 
-## Theme
+## Account for superspreading
 
 Estimate … using the following available inputs:
 
@@ -183,7 +183,7 @@ Interpretation Helpers:
   - An Rt less than 1 implies a decrease in cases or extinction.
 - …
 
-## Theme
+## Simulate transmission chains
 
 Estimate … using the following available inputs:
 
@@ -219,31 +219,117 @@ As a group, Write your answer to these questions:
 
 #### Code
 
+##### Set 1 (sample)
+
 ``` r
 # Load packages -----------------------------------------------------------
 library(epiparameter)
-library(EpiNow2)
+library(epichains)
 library(tidyverse)
 
-# Read reported cases -----------------------------------------------------
 
-generation_time <- epidist(
-  disease = "disease x",
-  epi_dist = "generation time",
-  prob_distribution = "gamma",
-  summary_stats = list(mean = 3, sd = 1)
-)
+# Set input parameters ---------------------------------------------------
+known_basic_reproduction_number <- 0.8
+known_dispersion <- 0.01
+chain_to_explore <- 683
 
-# -------------------------------------------------------------------------
 
-# Set seed for random number generator
-set.seed(33)
+# Set iteration parameters -----------------------------------------------
 
 # Number of simulation runs
 number_chains <- 1000
 
 # Number of initial cases
 initial_cases <- 1
+
+# Create generation time as <epiparameter> object
+generation_time <- epiparameter::epiparameter(
+  disease = "disease x",
+  epi_name = "generation time",
+  prob_distribution = "gamma",
+  summary_stats = list(mean = 3, sd = 1)
+)
+
+
+# Simulate multiple chains -----------------------------------------------
+
+# Set seed for random number generator
+set.seed(33)
+
+simulated_chains_map <-
+  # iterate one function across multiple numbers (chain IDs)
+  map(
+    # vector of numbers (chain IDs)
+    .x = seq_len(number_chains),
+    # function to iterate to each chain ID number
+    .f = function(sim) {
+      simulate_chains(
+        # simulation controls
+        n_chains = initial_cases,
+        statistic = "size",
+        stat_threshold = 500,
+        # offspring
+        offspring_dist = rnbinom,
+        mu = known_basic_reproduction_number,
+        size = known_dispersion,
+        # generation
+        generation_time = function(x) generate(x = generation_time, times = x)
+      ) %>%
+        # creates a column with the chain ID number
+        mutate(chain_id = sim)
+    }
+  ) %>%
+  # combine list outputs (for each chain ID) into a single data frame
+  list_rbind()
+
+simulated_chains_map
+
+
+# Explore suggested chain ------------------------------------------------
+simulated_chains_map %>%
+  # use data.frame output from <epichains> object
+  as_tibble() %>% 
+  filter(chain_id == chain_to_explore) %>% 
+  print(n=Inf)
+
+
+# visualize ---------------------------------------------------------------
+
+# daily aggregate of cases
+simulated_chains_day <- simulated_chains_map %>%
+  # use data.frame output from <epichains> object
+  as_tibble() %>%
+  # transform chain ID column to factor (categorical variable)
+  mutate(chain_id = as_factor(chain_id)) %>%
+  # get the round number (day) of infection times
+  mutate(day = ceiling(time)) %>%
+  # count the daily number of cases in each simulation (chain ID)
+  count(chain_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (chain ID)
+  group_by(chain_id) %>%
+  mutate(cases_cumsum = cumsum(cases)) %>%
+  ungroup()
+
+# Visualize transmission chains by cumulative cases
+ggplot() +
+  # create grouped chain trajectories
+  geom_line(
+    data = simulated_chains_day,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = chain_id
+    ),
+    color = "black",
+    alpha = 0.25,
+    show.legend = FALSE
+  ) +
+  # define a 100-case threshold
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  labs(
+    x = "Day",
+    y = "Cumulative cases"
+  )
 ```
 
 #### Outputs
