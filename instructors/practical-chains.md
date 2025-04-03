@@ -84,7 +84,8 @@ dat_linelist <- readr::read_rds(
 epi_contacts <-
   epicontacts::make_epicontacts(
     linelist = dat_linelist,
-    contacts = dat_contacts
+    contacts = dat_contacts,
+    directed = TRUE
   )
 
 epi_contacts
@@ -95,29 +96,13 @@ contact_network <- epicontacts::vis_epicontacts(epi_contacts)
 contact_network
 
 
-# Count the individual reproduction number for all observed cases --------
+# Get the individual reproduction number for all observed cases --------
+secondary_cases <- epicontacts::get_degree(x = epi_contacts, type = "out")
 
-# count secondary cases per infector
-infector_secondary <- epi_contacts %>%
-  purrr::pluck("contacts") %>%
-  dplyr::count(from, name = "secondary_cases")
-
-# get number of secondary cases for each subject in {epicontacts} object
-all_secondary <- epi_contacts %>%
-  # extract ids from both contact and linelist using "which" argument
-  epicontacts::get_id(which = "all") %>%
-  # transform vector to dataframe to use left_join()
-  tibble::enframe(name = NULL, value = "from") %>%
-  # join count secondary cases per infectee
-  dplyr::left_join(infector_secondary) %>%
-  # infectee with missing secondary cases are replaced with zero
-  tidyr::replace_na(
-    replace = list(secondary_cases = 0)
-  )
-
-## plot the histogram of secondary cases
-individual_reproduction_num <- all_secondary %>%
-  ggplot(aes(secondary_cases)) +
+# plot the histogram of secondary cases
+individual_reproduction_num <- secondary_cases %>%
+  enframe() %>% 
+  ggplot(aes(value)) +
   geom_histogram(binwidth = 1) +
   labs(
     x = "Number of secondary cases",
@@ -128,8 +113,7 @@ individual_reproduction_num
 
 
 # Fit a negative binomial distribution -----------------------------------
-offspring_fit <- all_secondary %>%
-  dplyr::pull(secondary_cases) %>%
+offspring_fit <- secondary_cases %>%
   fitdistrplus::fitdist(distr = "nbinom")
 
 offspring_fit
@@ -140,8 +124,8 @@ offspring_fit
 # Set seed for random number generator
 set.seed(33)
 
-# Estimate the proportion of new cases originating from 
-# a cluster of at least 5, 10, or 25 secondary cases from a primary case
+# Estimate the proportion of new cases originating from a cluster
+# of at least 5, 10, or 25 secondary cases from a primary case
 # given known reproduction number and dispersion parameter.
 proportion_cases_by_cluster_size <-
   superspreading::proportion_cluster_size(
