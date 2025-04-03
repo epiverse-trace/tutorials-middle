@@ -172,10 +172,10 @@ all_secondary_cases <- epicontacts::get_degree(
 ::::::::::::::::::::: caution
 
 At `epicontacts::get_degree()` we use the `only_linelist = TRUE` argument.
-This is to count the number of secondary cases caused by the observed infected individuals,
+This is to count the number of secondary cases caused by all the observed infected individuals,
 which includes individuals in contacts and linelist data frames.
 
-This assumption may not work for your all situations.
+This assumption may not work for all situations.
 If you need to consider only the individuals from the contact data,
 at `epicontacts::get_degree()` we use the `only_linelist = FALSE` argument.
 
