@@ -637,19 +637,19 @@ When there is evidence of individual-level variation (i.e. overdispersion), ofte
 Empirical evidence focused on evaluating the efficiency of backward tracing lead to 42% more cases identified than forward tracing supporting its implementation when rigorous suppression of transmission is justified ([Raymenants et al., 2022](https://www.nature.com/articles/s41467-022-32531-6))
 
 
-## Probability of cases in a given cluster
+## Proportion of new cases in given cluster size
 
-Using `{superspreading}`, we can estimate the probability of having a cluster of secondary infections caused by a primary case identified by backward tracing of size $X$ or larger ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
+Using `{superspreading}`, we can estimate the proportion of new cases originating from a transmission cluster of at least $X$ cases ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3); [Knight et al., 2020](https://assets.publishing.service.gov.uk/media/5eff137ad3bf7f769ba78d25/S0473_SPI-M_Superspreading_and_clusters.pdf)). This estimate can give answer to a question like: how many cases are associated with large clusters? which is usefull to assess backward contact training efforts.
+
+For this we need the mean ($R_0$) and dispersion ($k$) parameters of the offspring distribution, and the cluster size of interest in a numeric vector:
 
 ```{r}
 # Set seed for random number generator
 set.seed(33)
 
-# estimate the probability of
-# having a cluster size of 5, 10, or 25
-# secondary cases from a primary case,
-# given known reproduction number and
-# dispersion parameter.
+# Estimate the proportion of new cases originating from a
+# transmission cluster of at least 5, 10, or 25 cases
+# given known reproduction number and dispersion parameter.
 superspreading::proportion_cluster_size(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
