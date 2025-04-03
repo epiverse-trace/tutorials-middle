@@ -96,12 +96,16 @@ contact_network <- epicontacts::vis_epicontacts(epi_contacts)
 contact_network
 
 
-# Get the individual reproduction number for all observed cases --------
-secondary_cases <- epicontacts::get_degree(x = epi_contacts, type = "out")
+# Count secondary cases per subject in contacts and linelist --------
+secondary_cases <- epicontacts::get_degree(
+  x = epi_contacts,
+  type = "out",
+  only_linelist = TRUE
+)
 
 # plot the histogram of secondary cases
 individual_reproduction_num <- secondary_cases %>%
-  enframe() %>% 
+  enframe() %>%
   ggplot(aes(value)) +
   geom_histogram(binwidth = 1) +
   labs(
@@ -124,9 +128,8 @@ offspring_fit
 # Set seed for random number generator
 set.seed(33)
 
-# Estimate the proportion of new cases originating from a cluster
-# of at least 5, 10, or 25 secondary cases from a primary case
-# given known reproduction number and dispersion parameter.
+# Estimate the proportion of new cases originating from 
+# a transmission cluster of at least 5, 10, or 25 cases
 proportion_cases_by_cluster_size <-
   superspreading::proportion_cluster_size(
     R = offspring_fit$estimate["mu"],
