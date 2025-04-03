@@ -162,7 +162,7 @@ Instead, from `{epicontacts}` we can use the function `epicontacts::get_degree()
 
 ```{r,message=FALSE,warning=FALSE}
 # Count secondary cases per subject in contacts and linelist
-all_secondary <- epicontacts::get_degree(
+all_secondary_cases <- epicontacts::get_degree(
   x = epi_contacts,
   type = "out",
   only_linelist = TRUE
@@ -181,13 +181,13 @@ at `epicontacts::get_degree()` we use the `only_linelist = FALSE` argument.
 
 :::::::::::::::::::::
 
-From a histogram of the `all_secondary` object, we can identify the **individual-level variation** in the number of secondary cases. Three cases were related to more than 20 secondary cases, while the complementary cases with less than five or zero secondary cases.
+From a histogram of the `all_secondary_cases` object, we can identify the **individual-level variation** in the number of secondary cases. Three cases were related to more than 20 secondary cases, while the complementary cases with less than five or zero secondary cases.
 
 <!-- Visualizing the number of secondary cases on a histogram will help us to relate this with the statistical distribution to fit: -->
 
 ```{r}
 ## plot the distribution
-all_secondary %>%
+all_secondary_cases %>%
   tibble::enframe() %>%
   ggplot(aes(value)) +
   geom_histogram(binwidth = 1) +
@@ -339,7 +339,7 @@ library(fitdistrplus)
 
 ```{r}
 ## fit distribution
-offspring_fit <- all_secondary %>%
+offspring_fit <- all_secondary_cases %>%
   fitdistrplus::fitdist(distr = "nbinom")
 
 offspring_fit
@@ -387,7 +387,7 @@ fit_density <-
 # plot offspring distribution with density fit
 ggplot() +
   geom_histogram(
-    data = all_secondary %>% tibble::enframe(),
+    data = all_secondary_cases %>% tibble::enframe(),
     mapping =
       aes(
         x = value,
