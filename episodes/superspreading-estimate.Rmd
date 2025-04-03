@@ -156,9 +156,9 @@ epi_contacts %>%
   dplyr::count(from, name = "secondary_cases")
 ```
 
-But this output only contains the number of secondary cases for reported infectors in the contact data, not for each of the individuals in the whole `<epicontacts>` object.
+But this output only contains the number of secondary cases for reported infectors in the contact data, not for **all** the individuals in the whole `<epicontacts>` object.
 
-Instead, we can use `epicontacts::get_degree()` to get the **out-degree** of each **node** in the contact network from the `<epicontacts>` class object. In a directed network, the out-degree is the number of outgoing edges (infectees) emanating from a node (infector) ([Nykamp DQ, accessed: 2025](https://mathinsight.org/definition/node_degree)). 
+Instead, from `{epicontacts}` we can use the function `epicontacts::get_degree()`. The argument `type = "out"` get the **out-degree** of each **node** in the contact network from the `<epicontacts>` class object. In a directed network, the out-degree is the number of outgoing edges (infectees) emanating from a node (infector) ([Nykamp DQ, accessed: 2025](https://mathinsight.org/definition/node_degree)). Also, the argument `only_linelist = TRUE` include individuals in contacts and linelist data frames.
 
 ```{r,message=FALSE,warning=FALSE}
 # Count secondary cases per subject in contacts and linelist
@@ -173,10 +173,10 @@ all_secondary <- epicontacts::get_degree(
 
 At `epicontacts::get_degree()` we use the `only_linelist = TRUE` argument.
 This is to count the number of secondary cases caused by the observed infected individuals,
-which includes subjects in contacts and linelist data frames.
+which includes individuals in contacts and linelist data frames.
 
 This assumption may not work for your all situations.
-If you need to consider only the subjects from the contact data,
+If you need to consider only the individuals from the contact data,
 at `epicontacts::get_degree()` we use the `only_linelist = FALSE` argument.
 
 :::::::::::::::::::::
