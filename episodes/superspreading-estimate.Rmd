@@ -188,7 +188,7 @@ From a histogram of the `all_secondary` object, we can identify the **individual
 ```{r}
 ## plot the distribution
 all_secondary %>%
-  tibble::enframe() %>% 
+  tibble::enframe() %>%
   ggplot(aes(value)) +
   geom_histogram(binwidth = 1) +
   labs(
@@ -307,12 +307,12 @@ ebola_contacts <-
 ebola_secondary <- epicontacts::get_degree(
   x = ebola_contacts,
   type = "out",
-  only_linelist = TRUE 
+  only_linelist = TRUE
 )
 
 ## plot the distribution
 ebola_secondary %>%
-  tibble::enframe() %>% 
+  tibble::enframe() %>%
   ggplot(aes(value)) +
   geom_histogram(binwidth = 1) +
   labs(
