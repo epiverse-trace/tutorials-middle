@@ -25,24 +25,14 @@ knitr::opts_chunk$set(
 
 :::
 
-::: {.content-hidden unless-format="gfm"}
+::: {.content-hidden when-format="docx"}
 
-<!-- works for instructors text messages -->
+<!-- works for text on PDF and MD only -->
 
 These practical is based in the following tutorial episodes:
 
 - <link/episode>
 - <link/episode>
-
-During the practical, instead of copy-paste, we encourage learners to increase fluency writing R by using:
-
-- Tab key <kbd>↹</kbd> 
-for [code completion feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE) and [possible arguments displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html). 
-- The double-colon `package::function()` notation. This helps us remember package functions and avoid namespace conflicts.
-- [R shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
-    - `Cmd/Ctrl`+`Shift`+`M` to Insert the pipe operator (`|>` or `%>%`)
-    - `Alt`+`-` to Insert the assignment operator (`<-`)
-- The `help()` function or `?` operator to access function reference manual.
 
 
 :::
@@ -71,6 +61,8 @@ Roll call:
 
 <!-- visible for learners and instructors at practical -->
 
+This practical has two activities.
+
 Before your start, as a group:
 
 - Create one copy of the Posit Cloud project `<paste link>`.
@@ -80,7 +72,31 @@ Before your start, as a group:
 - Choose one person from your group to share your results with everyone.
 
 
-## Theme
+During the practical, instead of copy-paste, we encourage learners to increase their fluency writing R by using:
+
+- Tab key <kbd>↹</kbd> 
+for [code completion feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE) and [possible arguments displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html). 
+- The double-colon `package::function()` notation. This helps us remember package functions and avoid namespace conflicts.
+- [R shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
+    - `Cmd/Ctrl`+`Shift`+`M` to Insert the pipe operator (`|>` or `%>%`)
+    - `Alt`+`-` to Insert the assignment operator (`<-`)
+- The `help()` function or `?` operator to access function reference manual.
+
+
+# Paste your !Error messages here
+
+```
+
+
+
+
+
+
+
+```
+
+
+## Activity 1: Theme
 
 Estimate ... using the following available inputs:
 
@@ -284,19 +300,6 @@ Where
 
 - <link> 
 
-
 :::
-
-# Paste your !Error messages here
-
-```
-
-
-
-
-
-
-
-```
 
 # end

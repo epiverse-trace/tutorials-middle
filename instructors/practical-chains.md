@@ -4,6 +4,12 @@
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
 <!-- commit .md and .qmd files together -->
 <!-- does not work for instructors text messages -->
+<!-- works for text on PDF and MD only -->
+
+These practical is based in the following tutorial episodes:
+
+- <https://epiverse-trace.github.io/tutorials-middle/superspreading-estimate.html>
+- <https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html>
 
 Welcome!
 
@@ -39,6 +45,29 @@ Before your start, as a group:
 - Paste your figure and table outputs.
 - Write your answer to the questions.
 - Choose one person from your group to share your results with everyone.
+
+During the practical, instead of copy-paste, we encourage learners to
+increase their fluency writing R by using:
+
+- Tab key <kbd>↹</kbd> for [code completion
+  feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE)
+  and [possible arguments
+  displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html).
+- The double-colon `package::function()` notation. This helps us
+  remember package functions and avoid namespace conflicts.
+- [R
+  shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
+  - `Cmd/Ctrl`+`Shift`+`M` to Insert the pipe operator (`|>` or `%>%`)
+  - `Alt`+`-` to Insert the assignment operator (`<-`)
+- The `help()` function or `?` operator to access function reference
+  manual.
+
+# Paste your !Error messages here
+
+
+
+
+
 
 ## Activity 1: Account for superspreading
 
@@ -469,12 +498,5 @@ Epi R handbook episode on {epicontacts} to visualise transmission chains
 in time
 
 - <https://www.epirhandbook.com/en/transmission-chains.html>
-
-# Paste your !Error messages here
-
-
-
-
-
 
 # end
