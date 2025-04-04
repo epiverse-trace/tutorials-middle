@@ -3,27 +3,7 @@
 <!-- visible for instructors only -->
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
 <!-- commit .md and .qmd files together -->
-
-These practical is based in the following tutorial episodes:
-
-- <https://epiverse-trace.github.io/tutorials-middle/superspreading-estimate.html>
-- <https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html>
-
-During the practical, instead of copy-paste, encourage learners to
-increase their fluency writing R by using:
-
-- Tab key <kbd>↹</kbd> for [code completion
-  feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE)
-  and [possible arguments
-  displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html).
-- The double-colon `package::function()` notation. This helps us
-  remember package functions and avoid namespace conflicts.
-- [R
-  shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
-  - `Cmd/Ctrl`+`Shift`+`M` to Insert the pipe operator (`|>` or `%>%`)
-  - `Alt`+`-` to Insert the assignment operator (`<-`)
-- The `help()` function or `?` operator to access function reference
-  manual.
+<!-- does not work for instructors text messages -->
 
 Welcome!
 

@@ -20,13 +20,20 @@ knitr::opts_chunk$set(
 <!-- visible for instructors only -->
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
 <!-- commit .md and .qmd files together -->
+<!-- does not work for instructors text messages -->
+
+:::
+
+::: {.content-hidden unless-format="gfm"}
+
+<!-- works for instructors text messages -->
 
 These practical is based in the following tutorial episodes:
 
 - <https://epiverse-trace.github.io/tutorials-middle/superspreading-estimate.html>
 - <https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html>
 
-During the practical, instead of copy-paste, encourage learners to increase their fluency writing R by using:
+During the practical, instead of copy-paste, we encourage learners to increase fluency writing R by using:
 
 - Tab key <kbd>↹</kbd> 
 for [code completion feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE) and [possible arguments displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html). 
