@@ -6,7 +6,7 @@
 <!-- does not work for instructors text messages -->
 <!-- works for text on PDF and MD only -->
 
-These practical is based in the following tutorial episodes:
+This practical is based in the following tutorial episodes:
 
 - <https://epiverse-trace.github.io/tutorials-middle/superspreading-estimate.html>
 - <https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html>

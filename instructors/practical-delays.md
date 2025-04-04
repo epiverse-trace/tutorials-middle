@@ -6,7 +6,7 @@
 <!-- does not work for instructors text messages -->
 <!-- works for text on PDF and MD only -->
 
-These practical is based in the following tutorial episodes:
+This practical is based in the following tutorial episodes:
 
 - <https://epiverse-trace.github.io/tutorials-middle/delays-access.html>
 - <https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html>
@@ -576,12 +576,5 @@ Complementary notes:
 outbreak
 
 - <https://epiverse-trace.github.io/cfr/articles/estimate_ascertainment.html>
-
-# Paste your !Error messages here
-
-
-
-
-
 
 # end

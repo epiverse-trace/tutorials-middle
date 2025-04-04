@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 
 <!-- works for text on PDF and MD only -->
 
-These practical is based in the following tutorial episodes:
+This practical is based in the following tutorial episodes:
 
 - <link/episode>
 - <link/episode>
