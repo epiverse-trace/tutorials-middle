@@ -4,22 +4,63 @@
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
 <!-- commit .md and .qmd files together -->
 
+These practical is based in the following tutorial episodes:
+
+- <https://epiverse-trace.github.io/tutorials-middle/superspreading-estimate.html>
+- <https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html>
+
+During the practical, instead of copy-paste, encourage learners to
+increase their fluency writing R by using:
+
+- Tab key <kbd>↹</kbd> for [code completion
+  feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE)
+  and [possible arguments
+  displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html).
+- The double-colon `package::function()` notation. This helps us
+  remember package functions and avoid namespace conflicts.
+- [R
+  shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
+  - `Cmd/Ctrl`+`Shift`+`M` to Insert the pipe operator (`|>` or `%>%`)
+  - `Alt`+`-` to Insert the assignment operator (`<-`)
+- The `help()` function or `?` operator to access function reference
+  manual.
+
 Welcome!
 
-A reminder of our Code of Conduct:
-<https://github.com/epiverse-trace/.github/blob/main/CODE_OF_CONDUCT.md>
+- A reminder of our Code of Conduct:
+- <https://github.com/epiverse-trace/.github/blob/main/CODE_OF_CONDUCT.md>
+- If you experience or witness unacceptable behaviour, or have any other
+  concerns, please report by email or online form available at the “How
+  to report a violation” section.
+- To report an issue involving one of the organisers, please use the
+  LSHTM’s Report and Support tool, where your concern will be triaged by
+  a member of LSHTM’s Equity and Diversity Team.
+- <https://reportandsupport.lshtm.ac.uk/>
+
+Roll call:
+
+- Group 1: …, …
+- Group 2: …, …
+- Group 3: …, …
+- Group 4: …, …
+- Group 5: …, …
+- Group 6: …, …
 
 # Practical
 
 <!-- visible for learners and instructors at practical -->
 
-Before your start, as a group: - Create one copy of the Posit Cloud
-project `<paste link>`. - Solve each challenge using the `Code chunk` as
-a guide. - Paste your figure and table outputs. - Write your answer to
-the questions. - Choose one person from your group to share your results
-with everyone.
+This practical has two activities.
 
-## Account for superspreading
+Before your start, as a group:
+
+- Create one copy of the Posit Cloud project `<paste link>`.
+- Solve each challenge using the `Code chunk` as a guide.
+- Paste your figure and table outputs.
+- Write your answer to the questions.
+- Choose one person from your group to share your results with everyone.
+
+## Activity 1: Account for superspreading
 
 Estimate extent of individual-level variation (i.e. the dispersion
 parameter) of the offspring distribution and the proportion of
@@ -201,7 +242,7 @@ Interpretation Helpers:
   - set 2: 38%, probably no?
   - set 3: 3%, no.
 
-## Simulate transmission chains
+## Activity 2: Simulate transmission chains
 
 Estimate the potential for large outbreaks using the following available
 inputs:
@@ -431,5 +472,29 @@ Interpretation Helpers:
   - 2 chains above 100
   - size of chain of 150
   - length of chain ~60 days
+
+# Continue your learning path
+
+<!-- Suggest learners to Epiverse-TRACE documentation or external resources --->
+
+{superspreading} vignette on epidemic risk
+
+- <https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html>
+
+{epichains} vignette on projecting infectious disease incidence
+
+- <https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html>
+
+Epi R handbook episode on {epicontacts} to visualise transmission chains
+in time
+
+- <https://www.epirhandbook.com/en/transmission-chains.html>
+
+# Paste your !Error messages here
+
+
+
+
+
 
 # end

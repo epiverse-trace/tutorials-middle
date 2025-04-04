@@ -4,22 +4,63 @@
 <!-- practical-week.md is generated from practical-week.qmd. Please edit that file -->
 <!-- commit .md and .qmd files together -->
 
+These practical is based in the following tutorial episodes:
+
+- <https://epiverse-trace.github.io/tutorials-middle/delays-access.html>
+- <https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html>
+- <https://epiverse-trace.github.io/tutorials-middle/delays-functions.html>
+- <https://epiverse-trace.github.io/tutorials-middle/severity-static.html>
+
+During the practical, instead of copy-paste, encourage learners to
+increase their fluency writing R by using:
+
+- Tab key <kbd>↹</kbd> for [code completion
+  feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE)
+  and [possible arguments
+  displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html).
+- The double-colon `package::function()` notation. This helps us
+  remember package functions and avoid namespace conflicts.
+- [R
+  shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
+  - `Cmd/Ctrl`+`Shift`+`M` to Insert the pipe operator (`|>` or `%>%`)
+  - `Alt`+`-` to Insert the assignment operator (`<-`)
+- The `help()` function or `?` operator to access function reference
+  manual.
+
 Welcome!
 
-A reminder of our Code of Conduct:
-<https://github.com/epiverse-trace/.github/blob/main/CODE_OF_CONDUCT.md>
+- A reminder of our Code of Conduct:
+- <https://github.com/epiverse-trace/.github/blob/main/CODE_OF_CONDUCT.md>
+- If you experience or witness unacceptable behaviour, or have any other
+  concerns, please report by email or online form available at the “How
+  to report a violation” section.
+- To report an issue involving one of the organisers, please use the
+  LSHTM’s Report and Support tool, where your concern will be triaged by
+  a member of LSHTM’s Equity and Diversity Team.
+- <https://reportandsupport.lshtm.ac.uk/>
+
+Roll call:
+
+- Group 1: …, …
+- Group 2: …, …
+- Group 3: …, …
+- Group 4: …, …
 
 # Practical
 
 <!-- visible for learners and instructors at practical -->
 
-Before your start, as a group: - Create one copy of the Posit Cloud
-project `<paste link>`. - Solve each challenge using the `Code chunk` as
-a guide. - Paste your figure and table outputs. - Write your answer to
-the questions. - Choose one person from your group to share your results
-with everyone.
+This practical has two activities.
 
-## Transmission
+Before your start, as a group:
+
+- Create one copy of the Posit Cloud project `<paste link>`.
+- Solve each challenge using the `Code chunk` as a guide.
+- Paste your figure and table outputs.
+- Write your answer to the questions.
+- Choose one person from your group to share your results with everyone.
+
+## Activity 1: Transmission
 
 Estimate $R_{t}$, *new infections*, *new reports*, *growth rate*, and
 *doubling/halving time* using the following available inputs:
@@ -271,7 +312,7 @@ plot(covid_estimates)
 ##### Group 1: COVID 30 days
 
 With reporting delay plus Incubation time:
-<img src="https://hackmd.io/_uploads/BJl8wYiDC.png" style="width:50.0%"
+<img src="https://hackmd.io/_uploads/BJl8wYiDC.png" style="width:25.0%"
 alt="image" />
 
 With reporting delay plus Incubation time:
@@ -288,7 +329,7 @@ With reporting delay plus Incubation time:
 ##### Group 2: Ebola 35 days
 
 With reporting delay plus Incubation time:
-<img src="https://hackmd.io/_uploads/H1ZrYYsvR.png" style="width:50.0%"
+<img src="https://hackmd.io/_uploads/H1ZrYYsvR.png" style="width:25.0%"
 alt="image" />
 
 With reporting delay plus Incubation time:
@@ -305,7 +346,7 @@ With reporting delay plus Incubation time:
 ##### Group 3: Ebola 60 days
 
 With reporting delay plus Incubation time:
-<img src="https://hackmd.io/_uploads/Byu3FFoDR.png" style="width:50.0%"
+<img src="https://hackmd.io/_uploads/Byu3FFoDR.png" style="width:25.0%"
 alt="image" />
 
 With reporting delay plus Incubation time:
@@ -322,7 +363,7 @@ With reporting delay plus Incubation time:
 ##### Group 4: COVID 60 days
 
 With reporting delay plus Incubation time:
-<img src="https://hackmd.io/_uploads/S1q6ItjvC.png" style="width:50.0%"
+<img src="https://hackmd.io/_uploads/S1q6ItjvC.png" style="width:25.0%"
 alt="image" />
 
 With reporting delay plus Incubation time:
@@ -390,7 +431,7 @@ Interpretation Helpers:
   - The finite maximum value of the generation time distribution defines
     de range of the “estimate based on parial data”.
 
-## Severity
+## Activity 2: Severity
 
 Estimate the *naive CFR (nCFR)* and *delay-adjusted CFR (aCFR)* using
 the following inputs:
@@ -422,7 +463,9 @@ As a group, Write your answer to these questions:
 
 <!-- visible for instructors and learners after practical (solutions) -->
 
-#### Code (For Ebola)
+#### Code
+
+##### Ebola (sample)
 
 ``` r
 # Load packages -----------------------------------------------------------
@@ -455,7 +498,9 @@ cfr::cfr_static(
 )
 ```
 
-#### Outputs (For Ebola)
+#### Outputs
+
+##### Ebola
 
 | Analysis            | Outputs                                             |
 |---------------------|-----------------------------------------------------|
@@ -509,5 +554,25 @@ Complementary notes:
   - Alternativelly, `{cfr}` can also estimate the proportion of cases
     that are ascertained during an outbreak using
     `cfr::estimate_ascertainment()`.
+
+# Continue your learning path
+
+<!-- Suggest learners to Epiverse-TRACE documentation or external resources --->
+
+{EpiNow2} Case studies and use in the literature
+
+- <https://epiforecasts.io/EpiNow2/articles/case-studies.html>
+
+{cfr} Estimating the proportion of cases that are ascertained during an
+outbreak
+
+- <https://epiverse-trace.github.io/cfr/articles/estimate_ascertainment.html>
+
+# Paste your !Error messages here
+
+
+
+
+
 
 # end
