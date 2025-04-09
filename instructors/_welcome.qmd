@@ -1,0 +1,56 @@
+Welcome!
+
+- A reminder of our Code of Conduct: 
+- <https://github.com/epiverse-trace/.github/blob/main/CODE_OF_CONDUCT.md>
+- If you experience or witness unacceptable behaviour, or have any other concerns, please report by email or online form available at the "How to report a violation" section.
+- To report an issue involving one of the organisers, please use the LSHTM’s Report and Support tool, where your concern will be triaged by a member of LSHTM’s Equity and Diversity Team.
+- <https://reportandsupport.lshtm.ac.uk/>
+
+
+Roll call:
+
+- Group 1: ..., ...
+- Group 2: ..., ...
+- Group 3: ..., ...
+- Group 4: ..., ...
+- Group 5: ..., ...
+- Group 6: ..., ...
+
+
+# Practical
+
+<!-- visible for learners and instructors at practical -->
+
+This practical has two activities.
+
+Before your start, as a group:
+
+- Create one copy of the Posit Cloud project `<paste link>`.
+- Solve each challenge using the `Code chunk` as a guide.
+- Paste your figure and table outputs.
+- Write your answer to the questions.
+- Choose one person from your group to share your results with everyone.
+
+
+During the practical, instead of copy-paste, we encourage learners to increase their fluency writing R by using:
+
+- Tab key <kbd>↹</kbd> 
+for [code completion feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE) and [possible arguments displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html). 
+- The double-colon notation, e.g. `package::function()`. This helps us remember package functions and avoid namespace conflicts.
+- [R shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
+    - `Cmd/Ctrl`+`Shift`+`M` to Insert the pipe operator (`|>` or `%>%`)
+    - `Alt`+`-` to Insert the assignment operator (`<-`)
+- The `help()` function or `?` operator to access function reference manual.
+
+
+## Paste your !Error messages here
+
+```
+
+
+
+
+
+
+
+```

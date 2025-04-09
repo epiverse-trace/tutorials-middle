@@ -31,6 +31,8 @@ Roll call:
 - Group 2: …, …
 - Group 3: …, …
 - Group 4: …, …
+- Group 5: …, …
+- Group 6: …, …
 
 # Practical
 
@@ -62,7 +64,7 @@ increase their fluency writing R by using:
 - The `help()` function or `?` operator to access function reference
   manual.
 
-# Paste your !Error messages here
+## Paste your !Error messages here
 
 
 
