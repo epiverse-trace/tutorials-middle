@@ -122,11 +122,11 @@ library(tidyverse)
 
 # Read linelist and contacts ----------------------------------------------
 dat_contacts <- readr::read_rds(
-  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-contacts.rds"
+  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-contacts.rds"  #<DIFFERENT PER GROUP>
 )
 
 dat_linelist <- readr::read_rds(
-  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-linelist.rds"
+  "https://epiverse-trace.github.io/tutorials-middle/data/set-01-linelist.rds"  #<DIFFERENT PER GROUP>
 )
 
 
@@ -194,24 +194,21 @@ proportion_cases_by_cluster_size
 
 Group 1
 
-<img src="https://hackmd.io/_uploads/H1DVLbsTyx.png" style="width:25.0%"
-alt="Untitled-1" />
-<img src="https://hackmd.io/_uploads/BkW48Wo6yg.png" style="width:25.0%"
-alt="Untitled" />
+| contact network                                          | histogram of secondary cases                           |
+|----------------------------------------------------------|--------------------------------------------------------|
+| ![Untitled-1](https://hackmd.io/_uploads/H1DVLbsTyx.png) | ![Untitled](https://hackmd.io/_uploads/BkW48Wo6yg.png) |
 
 Group 2
 
-<img src="https://hackmd.io/_uploads/Hkhg8WspJg.png" style="width:25.0%"
-alt="Untitled" />
-<img src="https://hackmd.io/_uploads/HyIlUWopJx.png" style="width:25.0%"
-alt="Untitled-1" />
+| contact network                                        | histogram of secondary cases                             |
+|--------------------------------------------------------|----------------------------------------------------------|
+| ![Untitled](https://hackmd.io/_uploads/Hkhg8WspJg.png) | ![Untitled-1](https://hackmd.io/_uploads/HyIlUWopJx.png) |
 
 Group 3
 
-<img src="https://hackmd.io/_uploads/HkzkUZjpyx.png" style="width:25.0%"
-alt="Untitled" />
-<img src="https://hackmd.io/_uploads/SkjCBZjpJe.png" style="width:25.0%"
-alt="Untitled-1" />
+| contact network                                        | histogram of secondary cases                             |
+|--------------------------------------------------------|----------------------------------------------------------|
+| ![Untitled](https://hackmd.io/_uploads/HkzkUZjpyx.png) | ![Untitled-1](https://hackmd.io/_uploads/SkjCBZjpJe.png) |
 
 Group 1/2/3
 
@@ -261,7 +258,7 @@ inputs:
 
 As a group, Write your answer to these questions:
 
-- Explore the data frame output of the `Simulation ID`: What is the
+- Explore the data frame output of the `Chain ID`: What is the
   relationship between the following columns `chain`, `infector`,
   `infectee`, `generation`, `time`, `simulation_id`?
 - Among simulated outbreaks:
@@ -275,14 +272,14 @@ As a group, Write your answer to these questions:
 
 ### Inputs
 
-| Group | Parameters        | Simulation ID |
-|-------|-------------------|---------------|
-| 1     | R = 0.8, k = 0.01 | 683           |
-| 2     | R = 0.8, k = 0.1  | 664           |
-| 3     | R = 0.8, k = 0.5  | 256           |
-| 4     | R = 1.5, k = 0.01 | 129           |
-| 5     | R = 1.5, k = 0.1  | 301           |
-| 6     | R = 1.5, k = 0.5  | 227           |
+| Group | Parameters        | Chain ID |
+|-------|-------------------|----------|
+| 1     | R = 0.8, k = 0.01 | 957      |
+| 2     | R = 0.8, k = 0.1  | 281      |
+| 3     | R = 0.8, k = 0.5  | 38       |
+| 4     | R = 1.5, k = 0.01 | 261      |
+| 5     | R = 1.5, k = 0.1  | 325      |
+| 6     | R = 1.5, k = 0.5  | 591      |
 
 ### Solution
 
@@ -300,18 +297,12 @@ library(tidyverse)
 
 
 # Set input parameters ---------------------------------------------------
-known_basic_reproduction_number <- 0.8
-known_dispersion <- 0.01
-simulation_to_explore <- 683
+known_basic_reproduction_number <- 0.8 #<DIFFERENT PER GROUP>
+known_dispersion <- 0.01 #<DIFFERENT PER GROUP>
+chain_to_observe <- 957
 
 
 # Set iteration parameters -----------------------------------------------
-
-# Number of simulation runs
-number_chains <- 1000
-
-# Number of initial cases
-initial_cases <- 1
 
 # Create generation time as <epiparameter> object
 generation_time <- epiparameter::epiparameter(
@@ -323,115 +314,90 @@ generation_time <- epiparameter::epiparameter(
 
 
 # Simulate multiple chains -----------------------------------------------
-# run all this section together
+# run set.seed() and epichains::simulate_chains() together, in the same run
 
 # Set seed for random number generator
 set.seed(33)
 
-simulated_chains_map <-
-  # iterate one function across multiple numbers (simulation IDs)
-  map(
-    # vector of numbers (simulation IDs)
-    .x = seq_len(number_chains),
-    # function to iterate to each simulation ID number
-    .f = function(sim) {
-      simulate_chains(
-        # simulation controls
-        n_chains = initial_cases,
-        statistic = "size",
-        stat_threshold = 500,
-        # offspring
-        offspring_dist = rnbinom,
-        mu = known_basic_reproduction_number,
-        size = known_dispersion,
-        # generation
-        generation_time = function(x) generate(x = generation_time, times = x)
-      ) %>%
-        # creates a column with the simulation ID number
-        mutate(simulation_id = sim)
-    }
-  ) %>%
-  # combine list outputs (for each simulation ID) into a single data frame
-  list_rbind()
+multiple_chains <- epichains::simulate_chains(
+  # simulation controls
+  n_chains = 1000, # number of chains to simulate
+  statistic = "size",
+  stat_threshold = 500, # stopping criteria
+  # offspring
+  offspring_dist = rnbinom,
+  mu = known_basic_reproduction_number,
+  size = known_dispersion,
+  # generation
+  generation_time = function(x) generate(x = generation_time, times = x)
+)
 
-simulated_chains_map
+multiple_chains
 
 
 # Explore suggested chain ------------------------------------------------
-simulated_chains_map %>%
+multiple_chains %>%
   # use data.frame output from <epichains> object
-  as_tibble() %>% 
-  filter(simulation_id == simulation_to_explore) %>% 
-  print(n=Inf)
+  as_tibble() %>%
+  filter(chain == chain_to_observe) %>%
+  print(n = Inf)
 
 
 # visualize ---------------------------------------------------------------
 
 # daily aggregate of cases
-simulated_chains_day <- simulated_chains_map %>%
-  # use data.frame output from <epichains> object
+aggregate_chains <- multiple_chains %>%
   as_tibble() %>%
-  # transform simulation ID column to factor (categorical variable)
-  mutate(simulation_id = as_factor(simulation_id)) %>%
-  # get the round number (day) of infection times
+  # count the daily number of cases in each chain
   mutate(day = ceiling(time)) %>%
-  # count the daily number of cases in each simulation (simulation ID)
-  count(simulation_id, day, name = "cases") %>%
-  # calculate the cumulative number of cases for each simulation (simulation ID)
-  group_by(simulation_id) %>%
-  mutate(cases_cumsum = cumsum(cases)) %>%
+  count(chain, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each chain
+  group_by(chain) %>%
+  mutate(cumulative_cases = cumsum(cases)) %>%
   ungroup()
 
 # Visualize transmission chains by cumulative cases
-ggplot() +
+aggregate_chains %>%
   # create grouped chain trajectories
-  geom_line(
-    data = simulated_chains_day,
-    mapping = aes(
-      x = day,
-      y = cases_cumsum,
-      group = simulation_id
-    ),
-    color = "black",
-    alpha = 0.25,
-    show.legend = FALSE
-  ) +
+  ggplot(aes(x = day, y = cumulative_cases, group = chain)) +
+  geom_line(color = "black", alpha = 0.25, show.legend = FALSE) +
   # define a 100-case threshold
   geom_hline(aes(yintercept = 100), lty = 2) +
-  labs(
-    x = "Day",
-    y = "Cumulative cases"
-  )
+  labs(x = "Day", y = "Cumulative cases")
+
+# count chains over 100 cases
+aggregate_chains %>%
+  filter(cumulative_cases >= 100) %>%
+  count(chain)
+# distribution of size of chains
+aggregate_chains %>%
+  filter(cumulative_cases >= 100) %>% 
+  skimr::skim(cumulative_cases)
+# distribution of lenght of chains
+aggregate_chains %>%
+  filter(cumulative_cases >= 100) %>% 
+  skimr::skim(day)
 ```
 
 #### Outputs
 
 Group 1
 
-<img src="https://hackmd.io/_uploads/H1DVLbsTyx.png" style="width:25.0%"
-alt="Untitled-1" />
-<img src="https://hackmd.io/_uploads/BkW48Wo6yg.png" style="width:25.0%"
-alt="Untitled" />
-<img src="https://hackmd.io/_uploads/Sy2QUZiTJl.png" style="width:25.0%"
-alt="Untitled-1" />
+| contact network                                          | secondary cases                                        | simulated chains                                    |
+|----------------------------------------------------------|--------------------------------------------------------|-----------------------------------------------------|
+| ![Untitled-1](https://hackmd.io/_uploads/H1DVLbsTyx.png) | ![Untitled](https://hackmd.io/_uploads/BkW48Wo6yg.png) | ![image](https://hackmd.io/_uploads/Sy3x3MNAJe.png) |
 
 Group 2
 
-<img src="https://hackmd.io/_uploads/Hkhg8WspJg.png" style="width:25.0%"
-alt="Untitled" />
-<img src="https://hackmd.io/_uploads/HyIlUWopJx.png" style="width:25.0%"
-alt="Untitled-1" />
-<img src="https://hackmd.io/_uploads/SkRyUWjp1x.png" style="width:25.0%"
-alt="Untitled" />
+| contact network                                        | secondary cases                                          | simulated chains                                    |
+|--------------------------------------------------------|----------------------------------------------------------|-----------------------------------------------------|
+| ![Untitled](https://hackmd.io/_uploads/Hkhg8WspJg.png) | ![Untitled-1](https://hackmd.io/_uploads/HyIlUWopJx.png) | ![image](https://hackmd.io/_uploads/rkw-hGN0kl.png) |
 
 Group 3
 
-<img src="https://hackmd.io/_uploads/HkzkUZjpyx.png" style="width:25.0%"
-alt="Untitled" />
-<img src="https://hackmd.io/_uploads/SkjCBZjpJe.png" style="width:25.0%"
-alt="Untitled-1" />
-<img src="https://hackmd.io/_uploads/BkfABZopye.png" style="width:25.0%"
-alt="Untitled" />
+| contact network                                        | secondary cases                                          | simulated chains                                    |
+|--------------------------------------------------------|----------------------------------------------------------|-----------------------------------------------------|
+| ![Untitled](https://hackmd.io/_uploads/HkzkUZjpyx.png) | ![Untitled-1](https://hackmd.io/_uploads/SkjCBZjpJe.png) | ![image](https://hackmd.io/_uploads/S1p-2MNRJe.png) |
 
 Sample
 
@@ -469,18 +435,16 @@ Interpretation template:
 
 Interpretation Helpers:
 
-- Group 1:
-  - 1 chain above 100
-  - size of chain ~130
-  - length of chain ~20 days
-- Group 2:
-  - 6 chains above 100
-  - size of chain of 500
-  - length of chain ~50 days
-- Group 3:
-  - 2 chains above 100
-  - size of chain of 150
-  - length of chain ~60 days
+From the plot of cumulative cases by day for each simulated chain:
+
+| Group | Parameters        | Number of Chains Above 100 | Max Chain Size | Max Chain Length |
+|-------|-------------------|----------------------------|----------------|------------------|
+| 1     | R = 0.8, k = 0.01 | 10                         | ~200           | ~20 days         |
+| 2     | R = 0.8, k = 0.1  | 8                          | ~420           | ~60 days         |
+| 3     | R = 0.8, k = 0.5  | 3                          | ~180           | ~70 days         |
+| 4     | R = 1.5, k = 0.01 | 16                         | ~840           | ~20 days         |
+| 5     | R = 1.5, k = 0.1  | 65                         | ~890           | ~50 days         |
+| 6     | R = 1.5, k = 0.5  | 216                        | ~850           | ~90 days         |
 
 # Continue your learning path
 

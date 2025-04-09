@@ -53,7 +53,7 @@ increase their fluency writing R by using:
   feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE)
   and [possible arguments
   displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html).
-- The double-colon `package::function()` notation. This helps us
+- The double-colon notation, e.g. `package::function()`. This helps us
   remember package functions and avoid namespace conflicts.
 - [R
   shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
@@ -118,7 +118,7 @@ library(tidyverse)
 
 # Read reported cases -----------------------------------------------------
 dat_ebola <- readr::read_rds(
-  "https://epiverse-trace.github.io/tutorials-middle/data/ebola_35days.rds"
+  "https://epiverse-trace.github.io/tutorials-middle/data/ebola_35days.rds"  #<DIFFERENT PER GROUP>
 ) %>%
   dplyr::select(date, confirm = cases)
 
@@ -222,7 +222,7 @@ library(tidyverse)
 
 # Read reported cases -----------------------------------------------------
 dat_covid <- read_rds(
-  "https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds"
+  "https://epiverse-trace.github.io/tutorials-middle/data/covid_30days.rds"  #<DIFFERENT PER GROUP>
 ) %>%
   dplyr::select(date, confirm)
 
@@ -485,7 +485,7 @@ library(tidyverse)
 
 # Read reported cases -----------------------------------------------------
 ebola_sev <- read_rds(
-  "https://epiverse-trace.github.io/tutorials-middle/data/ebola_20days.rds"
+  "https://epiverse-trace.github.io/tutorials-middle/data/ebola_20days.rds"  #<DIFFERENT PER GROUP>
 )
 
 
