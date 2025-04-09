@@ -704,7 +704,7 @@ From the `{outbreaks}` package, load the MERS linelist of cases from the `mers_k
 
 Rearrange your this linelist to fit into the `{cfr}` package input.
 
-Estimate the delay-adjusted HFR using the corresponding distribution delay.
+Estimate the delay-adjusted CFR using the corresponding distribution delay.
 
 ::::::::::::::::: hint
 
