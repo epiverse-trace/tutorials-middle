@@ -81,14 +81,16 @@ following available inputs:
 
 As a group, Write your answer to these questions:
 
-- What set has more infections related to fewer clusters in the contact
-  network?
-- What set has the most skewed histogram of secondary cases?
-- Does the estimated dispersion parameter correlate with the contact
-  network and histogram of secondary cases?
-- What is the proportion of new cases originating from a cluster of at
-  least 10 cases?
-- Would you recommend a backward tracing strategy?
+- From descriptive and estimation steps:
+  - What set has more infections related to fewer clusters in the
+    contact network?
+  - What set has the most skewed histogram of secondary cases?
+  - Does the estimated dispersion parameter correlate with the contact
+    network and histogram of secondary cases?
+- On decision making:
+  - What is the proportion of new cases originating from a cluster of at
+    least 10 cases?
+  - Would you recommend a backward tracing strategy?
 - Interpret: How would you communicate these results to a
   decision-maker?
 - Compare: What differences you identify from other group outputs? (if
@@ -250,17 +252,19 @@ Interpretation Helpers:
 
 ## Activity 2: Simulate transmission chains
 
-Estimate the potential for large outbreaks using the following available
-inputs:
+Estimate the potential for large outbreaks from 1000 simulated outbreaks
+using the following available inputs:
 
 - Basic reproduction number
 - Dispersion parameter
 
 As a group, Write your answer to these questions:
 
-- Explore the data frame output of the `Chain ID`: What is the
-  relationship between the following columns `chain`, `infector`,
-  `infectee`, `generation`, `time`, `simulation_id`?
+- You have been assigned to explore `Chain ID`. From the output data
+  frame, describe:
+  - How many generations there are.
+  - Who infected whom, and when (with reference to the day of
+    infection).
 - Among simulated outbreaks:
   - How many chains reached a 100 case threshold?
   - What is the maximum size of chain?
@@ -299,7 +303,7 @@ library(tidyverse)
 # Set input parameters ---------------------------------------------------
 known_basic_reproduction_number <- 0.8 #<DIFFERENT PER GROUP>
 known_dispersion <- 0.01 #<DIFFERENT PER GROUP>
-chain_to_observe <- 957
+chain_to_observe <- 957 #<DIFFERENT PER GROUP>
 
 
 # Set iteration parameters -----------------------------------------------
