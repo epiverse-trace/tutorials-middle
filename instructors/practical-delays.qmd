@@ -592,19 +592,20 @@ Estimate the _naive CFR (nCFR)_ and _delay-adjusted CFR (aCFR)_ using the follow
 As a group, Write your answer to these questions:
 
 - What phase of the epidemic are you observing? (Exponential growth phase, near peak, or decay end phase)
-- How much difference there is between the aCFR estimate compares with the nCFR days later or before?
+- How much difference is there between the nCFR and aCFR estimates?
 - Interpret: How would you communicate these results to a decision-maker?
 - Compare: What differences you identify from other group outputs? (if available)
 
 
 ### Inputs
 
-| Group | Incidence | Link |
-|---|---|---|
-| 1 | Ebola 20 days | <https://epiverse-trace.github.io/tutorials-middle/data/ebola_20days.rds> |
-| 2 | Ebola 35 days | <https://epiverse-trace.github.io/tutorials-middle/data/ebola_35days.rds> |
-| 3 | Ebola 60 days | <https://epiverse-trace.github.io/tutorials-middle/data/ebola_60days.rds> |
-| 4 | Diamond Princess XX | <paste link> |
+| Group | Incidence        | Filter         | Link                                                                 |
+|-------|------------------|----------------|----------------------------------------------------------------------|
+| 1     | Diamond Princess | First 35 days  | <https://epiverse-trace.github.io/tutorials-middle/data/diamond_70days.rds> |
+| 2     | Diamond Princess | Complete data  | <https://epiverse-trace.github.io/tutorials-middle/data/diamond_70days.rds> |
+| 3     | MERS 133 cases   | Female         | <https://epiverse-trace.github.io/tutorials-middle/data/mers_35days.rds>   |
+| 4     | MERS 133 cases   | Male           | <https://epiverse-trace.github.io/tutorials-middle/data/mers_35days.rds>   |
+
 
 
 
@@ -614,27 +615,48 @@ As a group, Write your answer to these questions:
 
 ```r
 # Load packages -----------------------------------------------------------
+library(cfr)
 library(epiparameter)
-library(EpiNow2)
 library(tidyverse)
 
 
 # Read reported cases -----------------------------------------------------
-# for ebola
-dat <- read_rds("paste/link/url/here/ebola")
-# or
-# for ...
-
-# Access delay distribution -----------------------------------------------
-ebola_delay <- epiparameter::epiparameter_db(
-  # <COMPLETE>
+disease_dat <- read_rds(
+  #<COMPLETE> 
 )
 
-# Estimate Static Naive CFR -----------------------------------------------
-cfr::# <COMPLETE>
 
-# Estimate Static Delay-Adjusted CFR --------------------------------------
-cfr::# <COMPLETE>
+# Create incidence plot --------------------------------------------------
+disease_dat %>%
+  incidence2::incidence(
+    date_index = "date",
+    counts = c("cases", "deaths"),
+    groups = #<COMPLETE>
+  )
+
+
+# Access delay distribution -----------------------------------------------
+disease_delay <- epiparameter::#<COMPLETE>
+
+
+# CFR estimates in Subset ------------------------------------------------
+
+# Estimate Static Delay-Adjusted CFR
+disease_dat %>%
+  filter(
+    #<COMPLETE>
+  ) %>% 
+  cfr::cfr_static()
+
+# Estimate Static Delay-Adjusted CFR
+disease_dat %>%
+  filter(
+    #<COMPLETE>
+  ) %>% 
+  cfr::cfr_static(
+    delay_density = #<COMPLETE>
+  )
+
 
 
 ```
@@ -736,7 +758,7 @@ Write your answer to the questions above:
 
 #### Code
 
-##### Ebola (sample)
+##### COVID (sample)
 
 ```{r}
 #| warning: false
@@ -749,64 +771,164 @@ library(tidyverse)
 
 
 # Read reported cases -----------------------------------------------------
-ebola_sev <- read_rds(
-  "https://epiverse-trace.github.io/tutorials-middle/data/ebola_20days.rds"  #<DIFFERENT PER GROUP>
+covid_dat <- read_rds(
+  "https://epiverse-trace.github.io/tutorials-middle/data/diamond_70days.rds" 
 )
 
 
+# Create incidence plot --------------------------------------------------
+covid_dat %>%
+  incidence2::incidence(
+    date_index = "date",
+    counts = c("cases", "deaths"),
+    groups = NULL
+  )
+
+
 # Access delay distribution -----------------------------------------------
-ebola_delay <- epiparameter::epiparameter_db(
-  disease = "ebola",
+covid_delay <- epiparameter::epiparameter_db(
+  disease = "covid",
   epi_name = "onset-to-death",
   single_epiparameter = TRUE
 )
 
 
-# Estimate Static Naive CFR -----------------------------------------------
-cfr::cfr_static(data = ebola_sev)
+# CFR estimates before Date ----------------------------------------------
 
-# Estimate Static Delay-Adjusted CFR --------------------------------------
-cfr::cfr_static(
-  data = ebola_sev,
-  delay_density = function(x) density(ebola_delay, x)
+# Estimate Static Delay-Adjusted CFR
+covid_dat %>%
+  filter(
+    date < ymd(20200310)
+  ) %>% 
+  cfr::cfr_static()
+
+# Estimate Static Delay-Adjusted CFR
+covid_dat %>%
+  filter(
+    date < ymd(20200310)
+  ) %>% 
+  cfr::cfr_static(
+    delay_density = function(x) density(covid_delay, x)
+  )
+
+
+# CFR estimates in whole data --------------------------------------------
+
+# Estimate Static Delay-Adjusted CFR
+covid_dat %>% 
+  cfr::cfr_static()
+
+# Estimate Static Delay-Adjusted CFR
+covid_dat %>%
+  cfr::cfr_static(
+    delay_density = function(x) density(covid_delay, x)
+  )
+```
+
+##### MERS (sample)
+
+```{r}
+#| warning: false
+#| eval: false
+
+# Load packages -----------------------------------------------------------
+library(cfr)
+library(epiparameter)
+library(tidyverse)
+
+
+# Read reported cases -----------------------------------------------------
+mers_dat <- read_rds(
+  "https://epiverse-trace.github.io/tutorials-middle/data/mers_35days.rds"
 )
+
+
+# Create incidence plot --------------------------------------------------
+mers_dat %>%
+  incidence2::incidence(
+    date_index = "date",
+    counts = c("cases", "deaths"),
+    groups = "sex"
+  )
+
+
+# Access delay distribution -----------------------------------------------
+mers_delay <- epiparameter::epiparameter_db(
+  disease = "mers",
+  epi_name = "onset-to-death",
+  single_epiparameter = TRUE
+)
+
+
+# CFR estimates in Females -----------------------------------------------
+
+# Estimate Static Delay-Adjusted CFR
+mers_dat %>%
+  filter(
+    sex == "F"
+  ) %>%
+  cfr::cfr_static()
+
+# Estimate Static Delay-Adjusted CFR
+mers_dat %>%
+  filter(
+    sex == "F"
+  ) %>%
+  cfr::cfr_static(
+    delay_density = function(x) density(mers_delay, x)
+  )
+
+
+# CFR estimates in Males -------------------------------------------------
+
+# Estimate Static CFR
+mers_dat %>%
+  filter(
+    sex == "M"
+  ) %>%
+  cfr::cfr_static()
+
+# Estimate Static Delay-Adjusted CFR
+mers_dat %>%
+  filter(
+    sex == "M"
+  ) %>%
+  cfr::cfr_static(
+    delay_density = function(x) density(mers_delay, x)
+  )
 ```
 
 #### Outputs
 
-##### Ebola
+| Data | Plot |
+|---|---|
+| diamond | ![image](https://hackmd.io/_uploads/ryWr0vNRyx.png){width=25%} |
+| mers | ![image](https://hackmd.io/_uploads/BJExy_4A1e.png){width=25%} |
 
+| Data Input | Filter Category                   | estimate | low   | high  |
+|------------|-----------------------------------|----------|-------|-------|
+| diamond    | date < 2020-03-10                 | 0.011    | 0.005 | 0.022 |
+| diamond    | date < 2020-03-10 + delay density | 0.017    | 0.008 | 0.032 |
+| diamond    | no filter                         | 0.020    | 0.011 | 0.033 |
+| diamond    | delay density                     | 0.020    | 0.011 | 0.033 |
+| mers       | sex == "F"                        | 0.054    | 0.011 | 0.149 |
+| mers       | sex == "F" + delay density        | 0.101    | 0.026 | 0.241 |
+| mers       | sex == "M"                        | 0.089    | 0.036 | 0.174 |
+| mers       | sex == "M" + delay density        | 0.163    | 0.074 | 0.291 |
 
-| Analysis    | Outputs                                             |
-| ------------- | --------------------------------------------------- |
-| Incidence     | ![image](https://hackmd.io/_uploads/Hk2dcUiGyl.png) |
-| CFR static: 20 days | ![image](https://hackmd.io/_uploads/SyK0YIofye.png) |
-| CFR static: 35 days | ![image](https://hackmd.io/_uploads/BJQHhLjzkg.png) |
-| CFR static: 60 days | ![image](https://hackmd.io/_uploads/BySI38oGyg.png) |
-| CFR rolling   | ![image](https://hackmd.io/_uploads/BkyrKYiz1e.png) |
 
 #### Interpretation
 
 Interpretation template:
 
-- As of `September 13`, the delay-adjusted case fatality risk is `73.4%` with a 95% confidence interval between `47.3%` and `91.4%`.
+- As of `15th June 2015`, the MERS cases in the analysed population have a delay-adjusted case fatality risk of `16.3%` with a 95% confidence interval between `7.4%` and `29.1%`.
 
-From figure and tables:
+Intepretation helpers:
 
-- Peak size in cases and deaths are similar. Peak location delayed ~7 days.
-- Ebola 20 days
-    - For Ebola, at day 20, we estimate an aCFR of 67.9% with a 95% confidence interval from 42.6% to 87.5%.
-    - The aCFR estimate is higher than the nCFR by ~+50% 
-- Ebola 35 days
-    - The aCFR estimate is higher than the nCFR by ~+40%
-    - The nCFR estimate at day 35 lies within the aCFR estimate at day 20. 
-    - The observed deaths are higher than the expected deaths, producing aCFR ~100%. Thus, a {cfr} output of missing values.
-- Ebola 60 days
-    - The aCFR estimate is close to the nCFR by ~+6%
-    - The nCFR estimate at day 60 lies within the aCFR estimate at day 35. 
-    - The aCFR converge to true CFR at the end of the outbreak.
-- Overall
-    - In Ebola, the delay-adjusted CFR (aCFR) helps us get an earlier estimate of the true CFR, compared to the naive CFR (nCFR). 
+- The MERS incidence curve seems to be in a decay phase. However, it is expected to have death reports in upcoming dates, as in the COVID Diamond Princess data.
+- For COVID, the March 10th aCFR central estimate is closer to the nCFR and aCFR estimates on April 15th.
+- For MERS, in both groups the aCFR estimates almost double the nCFR estimates.
+- Authors report that "are over-represented among cases. (...) The striking overrepresentation of men among cases in the first months balanced over time. This can be partly explained by the higher proportion of female HCW among recently reported nosocomial transmissions." <https://www.eurosurveillance.org/content/10.2807/1560-7917.ES2013.18.39.20596>
 
 Complementary notes:
 
