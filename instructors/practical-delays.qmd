@@ -900,10 +900,10 @@ mers_dat %>%
 
 #### Outputs
 
-| Data | Plot |
-|---|---|
-| diamond | ![image](https://hackmd.io/_uploads/ryWr0vNRyx.png) |
-| mers | ![image](https://hackmd.io/_uploads/BJExy_4A1e.png) |
+| Diamond                                           | Mers                                             |
+|---------------------------------------------------|--------------------------------------------------|
+| ![image](https://hackmd.io/_uploads/ryWr0vNRyx.png) | ![image](https://hackmd.io/_uploads/BJExy_4A1e.png) |
+
 
 | Data Input | Filter Category                   | estimate | low   | high  |
 |------------|-----------------------------------|----------|-------|-------|
