@@ -611,12 +611,10 @@ mers_dat %>%
 
 #### Outputs
 
-| Data    | Plot                                                                     |
-|---------|--------------------------------------------------------------------------|
-| diamond | <img src="https://hackmd.io/_uploads/ryWr0vNRyx.png" style="width:25.0%" 
-           alt="image" />                                                            |
-| mers    | <img src="https://hackmd.io/_uploads/BJExy_4A1e.png" style="width:25.0%" 
-           alt="image" />                                                            |
+| Data    | Plot                                                |
+|---------|-----------------------------------------------------|
+| diamond | ![image](https://hackmd.io/_uploads/ryWr0vNRyx.png) |
+| mers    | ![image](https://hackmd.io/_uploads/BJExy_4A1e.png) |
 
 | Data Input | Filter Category                    | estimate | low   | high  |
 |------------|------------------------------------|----------|-------|-------|
@@ -633,8 +631,8 @@ mers_dat %>%
 
 Interpretation template:
 
-- As of `15th June 2015`, the MERS cases in the analysed population have
-  a delay-adjusted case fatality risk of `16.3%` with a 95% confidence
+- As of `15th June 2015`, the MERS cases in the `Male` population have a
+  delay-adjusted case fatality risk of `16.3%` with a 95% confidence
   interval between `7.4%` and `29.1%`.
 
 Intepretation helpers:
@@ -646,7 +644,7 @@ Intepretation helpers:
   and aCFR estimates on April 15th.
 - For MERS, in both groups the aCFR estimates almost double the nCFR
   estimates.
-- Authors report that “are over-represented among cases. (…) The
+- Authors report that “Males are over-represented among cases. (…) The
   striking overrepresentation of men among cases in the first months
   balanced over time. This can be partly explained by the higher
   proportion of female HCW among recently reported nosocomial
@@ -657,15 +655,12 @@ Complementary notes:
 
 - `cfr::static()` assumption and limitations
   - One key assumption of `cfr::static()` is that reporting rate and
-    fatality risk is consistent over the time window considered. (This
-    does not hold for COVID)
+    fatality risk is consistent over the time window considered.
   - Early data had limitations (limited testing, changing case
     definitions, often only most severe being tested -a.k.a.,
     preferential assessertainment-). So neither method (aCFR nor nCFR)
-    gives the ‘true’ % of fatal symptomatic cases (which is closer to
-    around 2% based on better datasets).
-  - `cfr::static()` it’s therefore most useful over much longer
-    timeseries for COVID for context.
+    gives the ‘true’ % of fatal symptomatic cases.
+  - `cfr::static()` it’s therefore most useful over longer timeseries.
   - Alternativelly, `{cfr}` can also estimate the proportion of cases
     that are ascertained during an outbreak using
     `cfr::estimate_ascertainment()`.

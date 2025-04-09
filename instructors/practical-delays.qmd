@@ -902,8 +902,8 @@ mers_dat %>%
 
 | Data | Plot |
 |---|---|
-| diamond | ![image](https://hackmd.io/_uploads/ryWr0vNRyx.png){width=25%} |
-| mers | ![image](https://hackmd.io/_uploads/BJExy_4A1e.png){width=25%} |
+| diamond | ![image](https://hackmd.io/_uploads/ryWr0vNRyx.png) |
+| mers | ![image](https://hackmd.io/_uploads/BJExy_4A1e.png) |
 
 | Data Input | Filter Category                   | estimate | low   | high  |
 |------------|-----------------------------------|----------|-------|-------|
@@ -921,21 +921,21 @@ mers_dat %>%
 
 Interpretation template:
 
-- As of `15th June 2015`, the MERS cases in the analysed population have a delay-adjusted case fatality risk of `16.3%` with a 95% confidence interval between `7.4%` and `29.1%`.
+- As of `15th June 2015`, the MERS cases in the `Male` population have a delay-adjusted case fatality risk of `16.3%` with a 95% confidence interval between `7.4%` and `29.1%`.
 
 Intepretation helpers:
 
 - The MERS incidence curve seems to be in a decay phase. However, it is expected to have death reports in upcoming dates, as in the COVID Diamond Princess data.
 - For COVID, the March 10th aCFR central estimate is closer to the nCFR and aCFR estimates on April 15th.
 - For MERS, in both groups the aCFR estimates almost double the nCFR estimates.
-- Authors report that "are over-represented among cases. (...) The striking overrepresentation of men among cases in the first months balanced over time. This can be partly explained by the higher proportion of female HCW among recently reported nosocomial transmissions." <https://www.eurosurveillance.org/content/10.2807/1560-7917.ES2013.18.39.20596>
+- Authors report that "Males are over-represented among cases. (...) The striking overrepresentation of men among cases in the first months balanced over time. This can be partly explained by the higher proportion of female HCW among recently reported nosocomial transmissions." <https://www.eurosurveillance.org/content/10.2807/1560-7917.ES2013.18.39.20596>
 
 Complementary notes:
 
 - `cfr::static()` assumption and limitations
-    - One key assumption of `cfr::static()` is that reporting rate and fatality risk is consistent over the time window considered. (This does not hold for COVID)
-    - Early data had limitations (limited testing, changing case definitions, often only most severe being tested -a.k.a., preferential assessertainment-). So neither method (aCFR nor nCFR) gives the ‘true’ % of fatal symptomatic cases (which is closer to around 2% based on better datasets). 
-    - `cfr::static()` it’s therefore most useful over much longer timeseries for COVID for context. 
+    - One key assumption of `cfr::static()` is that reporting rate and fatality risk is consistent over the time window considered.
+    - Early data had limitations (limited testing, changing case definitions, often only most severe being tested -a.k.a., preferential assessertainment-). So neither method (aCFR nor nCFR) gives the ‘true’ % of fatal symptomatic cases. 
+    - `cfr::static()` it’s therefore most useful over longer timeseries. 
     - Alternativelly, `{cfr}` can also estimate the proportion of cases that are ascertained during an outbreak using `cfr::estimate_ascertainment()`.
 
 
