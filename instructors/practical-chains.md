@@ -53,7 +53,7 @@ increase their fluency writing R by using:
   feature](https://support.posit.co/hc/en-us/articles/205273297-Code-Completion-in-the-RStudio-IDE)
   and [possible arguments
   displayed](https://docs.posit.co/ide/user/ide/guide/code/console.html).
-- The double-colon `package::function()` notation. This helps us
+- The double-colon notation, e.g. `package::function()`. This helps us
   remember package functions and avoid namespace conflicts.
 - [R
   shortcuts](https://positron.posit.co/keyboard-shortcuts.html#r-shortcuts):
