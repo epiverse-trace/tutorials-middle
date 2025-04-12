@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1] 3.933426 7.847474 7.855466 4.420870 5.829693 9.721162 3.174917 4.002916
- [9] 2.159129 8.985319
+ [1]  4.805816  2.043938  4.088518 11.253356  2.435096 11.611540  5.878436
+ [8]  3.774404  4.774750  5.831332
 ```
 
 ::::::::: instructor
@@ -470,7 +470,17 @@ epinow_estimates_cg <- epinow(
   # delays
   generation_time = generation_time_opts(serial_interval_covid)
 )
+```
 
+``` output
+WARN [2025-04-12 17:53:48] epinow: There were 1 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2025-04-12 17:53:48] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
+``` r
 base::plot(epinow_estimates_cg)
 ```
 
@@ -588,21 +598,10 @@ epinow_estimates_cgi <- epinow(
 ```
 
 ``` output
-WARN [2025-03-28 11:17:41] epinow: There were 500 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+WARN [2025-04-12 17:55:29] epinow: There were 22 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2025-03-28 11:17:41] epinow: There were 1 chains where the estimated Bayesian Fraction of Missing Information was low. See
-https://mc-stan.org/misc/warnings.html#bfmi-low - 
-WARN [2025-03-28 11:17:41] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-04-12 17:55:29] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
-WARN [2025-03-28 11:17:42] epinow: The largest R-hat is NA, indicating chains have not mixed.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#r-hat - 
-WARN [2025-03-28 11:17:43] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess - 
-WARN [2025-03-28 11:17:44] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
 
 ``` r
