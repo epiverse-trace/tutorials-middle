@@ -141,6 +141,15 @@ Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the f
 # Load the Ebola 1976 data provided with the {cfr} package
 data("ebola1976")
 
+# Plot the incidence of cases and death reports
+ebola1976 %>% 
+  incidence2::incidence(date_index = "date",counts = c("cases","deaths")) %>% 
+  plot()
+```
+
+We'll frame this episode under the context of an **ongoing outbreak** with only the **first 30 days** of data observed.
+
+```{r}
 # Assume we only have the first 30 days of this data
 ebola_30days <- ebola1976 %>%
   dplyr::slice_head(n = 30) %>%
