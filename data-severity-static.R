@@ -7,7 +7,7 @@ library(incidence2)
 library(outbreaks)
 library(tidyverse)
 
-sarscov2_incidence <- sarscov2_who_2019 %>%
+sarscov2_incidence <- outbreaks::sarscov2_who_2019 %>%
   incidence2::incidence(
     date_index = "date",
     counts = c(
