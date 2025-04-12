@@ -143,6 +143,21 @@ Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the f
 # Load the Ebola 1976 data provided with the {cfr} package
 data("ebola1976")
 
+# Plot the incidence of cases and death reports
+ebola1976 %>%
+  incidence2::incidence(
+    date_index = "date",
+    counts = c("cases", "deaths")
+  ) %>%
+  plot()
+```
+
+<img src="fig/severity-static-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+
+We'll frame this episode under the context of an **ongoing outbreak** with only the **first 30 days** of data observed.
+
+
+``` r
 # Assume we only have the first 30 days of this data
 ebola_30days <- ebola1976 %>%
   dplyr::slice_head(n = 30) %>%
@@ -351,7 +366,7 @@ onset_to_death_ebola <-
 plot(onset_to_death_ebola, day_range = 0:40)
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
 
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
@@ -608,7 +623,7 @@ dplyr::bind_rows(
   )
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
 
 The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
 
