@@ -35,3 +35,9 @@ mers_sev <- outbreaks::mers_korea_2015$linelist %>%
 # save data
 mers_sev %>%
   readr::write_rds(file.path("episodes", "data", "mers_byage.rds"))
+
+readr::read_rds(file.path(
+  "episodes",
+  "data",
+  "mers_byage.rds"
+))
