@@ -9,11 +9,11 @@ library(tidyverse)
 
 # Read reported cases -----------------------------------------------------
 mers_sev <- outbreaks::mers_korea_2015$linelist %>%
-  as_tibble() %>%
+  tibble::as_tibble() %>%
   dplyr::mutate(
     age_category = base::cut(
       x = age,
-      breaks = c(0, 70, 90), # replace with max value if known
+      breaks = c(10, 30, 50, 70, 90), # replace with max value if known
       include.lowest = TRUE,
       right = FALSE
     )
@@ -46,16 +46,25 @@ readr::read_rds(file.path(
 # alternative ------------------------------------------------------------
 
 mers_linelist <- outbreaks::mers_korea_2015$linelist %>%
-  as_tibble() %>%
-  dplyr::select(id, age_class, dt_onset, dt_death)
+  tibble::as_tibble() %>%
+  dplyr::mutate(
+    age_category = base::cut(
+      x = age,
+      breaks = c(10, 30, 50, 70, 90), # replace with max value if known
+      include.lowest = TRUE,
+      right = FALSE
+    )
+  ) %>%
+  dplyr::select(id, age_category, dt_onset, dt_death)
 
 mers_linelist %>% 
   # converto to incidence2 object
   incidence2::incidence(
     date_index = c("dt_onset", "dt_death"),
-    # groups = "age_class",
+    groups = "age_category",
     complete_dates = TRUE
   ) %>%
+  # plot()
   # convert to cfr format
   cfr::prepare_data(
     cases_variable = "dt_onset",
