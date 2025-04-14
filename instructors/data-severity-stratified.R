@@ -41,3 +41,33 @@ readr::read_rds(file.path(
   "data",
   "mers_byage.rds"
 ))
+
+
+# alternative ------------------------------------------------------------
+
+mers_linelist <- outbreaks::mers_korea_2015$linelist %>%
+  as_tibble() %>%
+  dplyr::select(id, age_class, dt_onset, dt_death)
+
+mers_linelist %>% 
+  # converto to incidence2 object
+  incidence2::incidence(
+    date_index = c("dt_onset", "dt_death"),
+    # groups = "age_class",
+    complete_dates = TRUE
+  ) %>%
+  # convert to cfr format
+  cfr::prepare_data(
+    cases_variable = "dt_onset",
+    deaths_variable = "dt_death"
+  )
+
+# save data
+mers_linelist %>%
+  readr::write_rds(file.path("episodes", "data", "mers_linelist.rds"))
+
+readr::read_rds(file.path(
+  "episodes",
+  "data",
+  "mers_linelist.rds"
+))
