@@ -50,7 +50,7 @@ We can assess the pandemic potential of an epidemic with two critical measuremen
 
 ![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
 
-One epidemiological approach to estimating the clinical severity is quantifying the Case Fatality Risk (CFR). CFR is the conditional probability of death given confirmed diagnosis, calculated as the cumulative number of deaths from an infectious disease over the number of confirmed diagnosed cases. However, calculating this directly during the course of an epidemic tends to result in a naive or biased CFR given the time [delay](../learners/reference.md#delaydist) from onset to death, varying substantially as the epidemic progresses and stabilising at the later stages of the outbreak ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
+One epidemiological approach to estimating the clinical severity is quantifying the Case Fatality Risk (CFR). CFR is the conditional probability of death given confirmed diagnosis, calculated as the ratio of the cumulative number of deaths from an infectious disease to the number of confirmed diagnosed cases. However, calculating this directly during the course of an epidemic tends to result in a naive or biased CFR given the time [delay](../learners/reference.md#delaydist) from onset to death, varying substantially as the epidemic progresses and stabilising at the later stages of the outbreak ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
 
 ![Observed biased confirmed case fatality risk (CFR) estimates as a function of time (thick line) calculated as the cumulative number 
 of deaths over confirmed cases at time t. The estimate at the end of an outbreak (~May 30) is the realised CFR by the end of the epidemic.
@@ -70,7 +70,7 @@ which could be intrinsic to the infectious agent (e.g., a new, more severe strai
 
 In this tutorial we are going to learn how to use the `{cfr}` package to calculate and adjust a CFR estimation using [delay distributions](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere, based on the methods developed by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852), also, how we can reuse `{cfr}` functions for more severity measurements.
 
-We’ll use the pipe `%>%` operator to connect  functions, so let’s also call to the `{tidyverse}` package:
+We'll use the pipe `%>%` operator to connect  functions, so let's also call to the `{tidyverse}` package:
 
 ```{r,message=FALSE,warning=FALSE}
 library(cfr)
@@ -83,11 +83,11 @@ library(outbreaks)
 
 ### The double-colon
 
-The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
+The double-colon `::` in R lets you call a specific function from a package without loading the entire package into the current environment. 
 
 For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
-This help us remember package functions and avoid namespace conflicts.
+This helps us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
@@ -108,26 +108,22 @@ Answer to these questions:
 
 ## Data sources for clinical severity
 
-What are data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summarises the spectrum of COVID-19 cases:
+What data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summarises the spectrum of COVID-19 cases:
 
-![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic. 
+![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of deaths among confirmed cases in an epidemic. 
 ([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
 
 - At the top of the pyramid, those who met the WHO case criteria for **severe** or critical cases would likely have been identified in the hospital setting, presenting with atypical viral pneumonia. These cases would have been identified in mainland China and among those categorised internationally as local transmission. 
 - Many more cases are likely to be **symptomatic** (i.e., with fever, cough, or myalgia) but might not require hospitalisation. These cases would have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might be identifiable through population surveillance of, for example, influenza-like illness. 
 - The bottom part of the pyramid represents **mild** (and possibly **asymptomatic**) cases. These cases might be identifiable through contact tracing and subsequently via serological testing.
 
-
 ## Naive CFR
 
-We measure disease severity in terms of case fatality risk (CFR). The CFR is interpreted as the conditional probability of death given confirmed diagnosis, calculated as the cumulative number of deaths $D_{t}$ over the cumulative number of confirmed cases $C_{t}$ at a certain time $t$. We can refer to the _naive CFR_ (also crude or biased CFR, $b_{t}$):
+We measure disease severity in terms of case fatality risk (CFR). The CFR is interpreted as the conditional probability of death given confirmed diagnosis, calculated as the ratio of the cumulative number of deaths $D_{t}$ to the cumulative number of confirmed cases $C_{t}$ at a certain time $t$. We can refer to the _naive CFR_ (also crude or biased CFR, $b_{t}$):
 
 $$ b_{t} =  \frac{D_{t}}{C_{t}} $$
 
 This calculation is _naive_ because it tends to yield a biased and mostly underestimated CFR due to the time-delay from onset to death, only stabilising at the later stages of the outbreak.
-
-<!-- add here the callout on ratio or risk?  -->
-<!-- https://github.com/epiverse-trace/cfr/issues/130 -->
 
 To calculate the naive CFR, the `{cfr}` package requires an input data frame with three columns named:
 
@@ -258,7 +254,7 @@ sarscov2_input %>%
 
 ### 1. Preferential ascertainment of severe cases
 
-For diseases with a _spectrum_ of clinical presentations, those cases that come to the attention of public health authorities and registered into surveillance databases will typically be people with the most severe symptoms who seek medical care, are admitted to a hospital, or die. 
+For diseases with a _spectrum_ of clinical presentations, those cases that come to the attention of public health authorities and are registered into surveillance databases will typically be people with the most severe symptoms who seek medical care, are admitted to a hospital, or die. 
 
 Therefore, the CFR will typically be higher among _detected cases_ than among the entire population of cases, given that the latter may include individuals with mild, subclinical, and (under some definitions of “case”) asymptomatic presentations.
 
@@ -302,7 +298,7 @@ We can showcase this last bias using the [concept described in this `{cfr}` vign
 
 [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) developed a method that considers the **time delay** from the onset of symptoms to death.
 
-Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collect them from published scientific literature. For an step-by-step guide, read the tutorial episode on how to [access to epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html).
+Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collect them from published scientific literature. For a step-by-step guide, read the tutorial episode on how to [access epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html).
 
 Let's use `{epiparameter}`:
 
@@ -476,9 +472,7 @@ When we observe the entire course of an epidemic (from $t \rightarrow \infty$), 
 
 ## An early-stage CFR estimate
 
-On the challenge above, we discovered that the _naive_ and _delay-adjusted_ CFR estimates are different.
-
-The **naive** estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has ended or has progressed such that more deaths are reported, the estimated CFR is then _closest to_ the 'true' unbiased CFR.
+The **naive** estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has ended or has progressed such that more deaths are reported, the estimated CFR is then closest to the 'true' unbiased CFR.
 
 On the other hand, the **delay-adjusted** estimate can assess the severity of an emerging infectious disease *earlier* than the biased or naive CFR, during an epidemic.
 
@@ -489,6 +483,8 @@ We can explore the **early** determination of the _delay-adjusted CFR_ using the
 `cfr_rolling()` is a utility function that automatically calculates CFR for each day of the outbreak with the data available up to that day, saving the user time.
 
 ::::::::::::::::::::::
+
+`cfr_rolling()` shows the estimated CFR on each outbreak day, given that future data on cases and deaths is unavailable at the time. The final value of `cfr_rolling()` estimates is identical to `cfr_static()` on the same data.
 
 ```{r}
 # for all the 73 days in the Ebola dataset
@@ -645,7 +641,7 @@ This estimation is performed by the internal function `?cfr:::estimate_severity(
 
 Suppose we need to assess the clinical severity of the epidemic in a context different from surveillance data, like the severity among cases that arrive at hospitals or cases you collected from a representative serological survey. 
 
-Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denominator (`deaths`) to estimate more severity measures like the Infection fatality risk (IFR) or the Hospitalisation Fatality Risk (HFR). We can follow this analogy: 
+Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denominator (`deaths`) to estimate more severity measures like the Infection fatality risk (IFR) or the Hospitalisation Fatality Risk (HFR). We can follow this analogy:
 
 :::::::::::::::::::::::::::::::: 
 
