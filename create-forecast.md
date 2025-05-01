@@ -32,21 +32,21 @@ editor_options:
 
 Learners should familiarise themselves with following concept dependencies before working through this tutorial: 
 
-**Statistics** : probability distributions, principle of Bayesian analysis. 
+**Statistics**: probability distributions, principle of [Bayesian analysis](../learners/reference.md#bayesian). 
 
-**Epidemic theory** : Effective reproduction number.
+**Epidemic theory**: [Effective reproduction number](../learners/reference.md#effectiverepro).
 
 :::::::::::::::::::::::::::::::::
 
 ## Introduction
 
 Given case data of an epidemic, we can create estimates of the current and future number of cases by accounting for both delays 
-in reporting and under reporting. To make statements about the future of th epidemic, we need to make an assumption of how 
+in reporting and under reporting. To make predictions about the future course of the epidemic, we need to make an assumption of how 
 observations up to the present are related to what we expect to happen in the future. The simplest way of doing so is to assume "no change", i.e.,  the reproduction number remains the same in the future as last observed. In this tutorial we will create short-term [forecasts](../learners/reference.md#forecast) by assuming the reproduction number will remain the same as its estimate was on the final date for which data was available.
 
 In this tutorial we are going to learn how to use the `{EpiNow2}` package to forecast cases accounting for incomplete observations and forecast secondary observations like deaths.
 
-We’ll use the pipe `%>%` operator to connect functions, so let’s also call to the `{tidyverse}` package:
+We'll use the pipe `%>%` operator to connect functions, so let's also call to the `{tidyverse}` package:
 
 ```r
 library(EpiNow2)
@@ -63,7 +63,7 @@ The double-colon `::` in R let you call a specific function from a package witho
 
 For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
-This help us remember package functions and avoid namespace conflicts.
+This helps us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
@@ -90,7 +90,7 @@ cases <- incidence2::covidregionaldataUK %>%
     date_names_to = "date",
     complete_dates = TRUE
   ) %>%
-  dplyr::select(-count_variable)
+  dplyr::select(-count_variable)  # Drop count_variable as no longer needed
 
 # Incubation period
 incubation_period_fixed <- EpiNow2::Gamma(
@@ -105,7 +105,7 @@ log_mean <- EpiNow2::convert_to_logmean(mean = 2, sd = 1)
 # Log-transformed std
 log_sd <- EpiNow2::convert_to_logsd(mean = 2, sd = 1)
 
-# Reporting dalay
+# Reporting delay
 reporting_delay_fixed <- EpiNow2::LogNormal(
   mean = log_mean,
   sd = log_sd,
@@ -141,9 +141,12 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2025-04-12 17:59:50] epinow: There were 2 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+WARN [2025-05-01 17:03:03] epinow: There were 1 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2025-05-01 17:03:03] epinow: There were 2 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
 https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2025-04-12 17:59:50] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-05-01 17:03:03] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
@@ -173,10 +176,10 @@ plot(estimates)
 
 ### Forecasting with incomplete observations 
 
-In the [quantifying transmission](../episodes/quantify-transmissibility.md) episode we accounted for delays in reporting.In `EpiNow2` we also can account for incomplete observations as in reality, 100% of cases are not reported.
-We will pass another argument into `epinow()` function  called `obs` to define an observation model. The format of `obs` is defined by the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
+In the [quantifying transmission](../episodes/quantify-transmissibility.md) episode we accounted for delays in reporting. In `EpiNow2` we also can account for incomplete observations as in reality, 100% of cases are not reported.
+We will pass an additional argument called `obs` into the `epinow()` function to define an observation model. The format of `obs` is defined by the `obs_opt()` function (see `?EpiNow2::obs_opts` for more detail). 
 
-Let's say we believe the COVID-19 outbreak data in the `cases` object do not include all reported cases. We believe that we only observe 40% of cases. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are in the case data (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
+Let's say we believe the COVID-19 outbreak data in the `cases` object do not include all reported cases. We estimate that only 40% of actual cases are reported. To specify this in the observation model, we must pass a scaling factor with a mean and standard deviation. If we assume that 40% of cases are reported (with standard deviation 1%), then we specify the `scale` input to `obs_opts()` as follows:
 
 
 ``` r
@@ -203,24 +206,33 @@ estimates <- EpiNow2::epinow(
   # Add observation model
   obs = EpiNow2::obs_opts(scale = obs_scale)
 )
+```
 
+``` output
+WARN [2025-05-01 17:06:41] epinow: There were 2 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
+WARN [2025-05-01 17:06:41] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
+``` r
 base::summary(estimates)
 ```
 
 ``` output
                         measure                 estimate
                          <char>                   <char>
-1:       New infections per day   19996 (13305 -- 30163)
-2:   Expected change in reports                   Stable
+1:       New infections per day   20127 (13239 -- 30002)
+2:   Expected change in reports        Likely decreasing
 3:   Effective reproduction no.       0.97 (0.77 -- 1.2)
-4:               Rate of growth -0.011 (-0.089 -- 0.065)
-5: Doubling/halving time (days)         -63 (11 -- -7.8)
+4:               Rate of growth -0.012 (-0.093 -- 0.066)
+5: Doubling/halving time (days)         -60 (10 -- -7.5)
 ```
 
 
-The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see [quantifying transmission episode](../episodes/quantify-transmissibility.md) in the "Finding estimates" section). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are in the data set.
+The estimates of transmission measures such as the effective reproduction number and rate of growth are similar (or the same in value) compared to when we didn't account for incomplete observations (see [quantifying transmission episode](../episodes/quantify-transmissibility.md) in the "Finding estimates" section). However the number of new confirmed cases by infection date has changed substantially in magnitude to reflect the assumption that only 40% of cases are reported.
 
-We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect and more. See `?EpiNow2::obs_opts` for more details.
+We can also change the default distribution from Negative Binomial to Poisson, remove the default week effect (which accounts for weekly patterns in reporting) and more. See `?EpiNow2::obs_opts` for more details.
 
 ::::::::::::::::::::::::::: discussion
 
@@ -519,21 +531,29 @@ ebola_estimates <- EpiNow2::epinow(
   # horizon needs to be 14 days to create two week forecast (default is 7 days)
   forecast = EpiNow2::forecast_opts(horizon = 14)
 )
+```
 
+``` output
+WARN [2025-05-01 17:07:41] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess - 
+```
+
+``` r
 summary(ebola_estimates)
 ```
 
 ``` output
-                        measure                  estimate
-                         <char>                    <char>
-1:       New infections per day            92 (48 -- 198)
-2:   Expected change in reports                Increasing
-3:   Effective reproduction no.          1.6 (1.1 -- 2.4)
-4:               Rate of growth 0.041 (-0.00011 -- 0.088)
-5: Doubling/halving time (days)         17 (7.9 -- -6500)
+                        measure                 estimate
+                         <char>                   <char>
+1:       New infections per day           91 (48 -- 194)
+2:   Expected change in reports               Increasing
+3:   Effective reproduction no.         1.6 (1.1 -- 2.5)
+4:               Rate of growth 0.041 (-0.0011 -- 0.089)
+5: Doubling/halving time (days)         17 (7.7 -- -650)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.1 -- 2.4). The exponential growth rate of case numbers is 0.041 (-0.00011 -- 0.088).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.1 -- 2.5). The exponential growth rate of case numbers is 0.041 (-0.0011 -- 0.089).
 
 Visualize the estimates:
 

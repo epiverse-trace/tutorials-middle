@@ -91,11 +91,11 @@ withr::local_options(list(mc.cores = 4))
 
 ### The double-colon
 
-The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
+The double-colon `::` in R lets you call a specific function from a package without loading the entire package into the current environment. 
 
 For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
-This help us remember package functions and avoid namespace conflicts.
+This helps us remember package functions and avoid namespace conflicts by explicitly specifying which package's function to use when multiple packages have functions with the same name.
 
 :::::::::::::::::::
 
@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  4.805816  2.043938  4.088518 11.253356  2.435096 11.611540  5.878436
- [8]  3.774404  4.774750  5.831332
+ [1] 3.183948 3.736741 2.400650 7.484054 1.933639 1.240461 1.730411 1.667879
+ [9] 6.483402 5.114072
 ```
 
 ::::::::: instructor
@@ -180,7 +180,7 @@ Access to the reference documentation (Help files) for these functions is access
 
 ### Window for contact tracing and the serial interval
 
-The **serial interval** is important in the optimisation of contact tracing since it provides a time window for the containment of a disease spread ([Fine, 2003](https://academic.oup.com/aje/article/158/11/1039/162725)). Depending on the serial interval, we can evaluate the need to expand the number of days pre-onset to consider in the contact tracing to include more backwards contacts ([Davis et al., 2020](https://assets.publishing.service.gov.uk/media/61e9ab3f8fa8f50597fb3078/S0523_Oxford_-_Backwards_contact_tracing.pdf)).
+The **serial interval** is important in the optimisation of contact tracing since it provides a time window for the containment of a disease spread ([Fine, 2003](https://academic.oup.com/aje/article/158/11/1039/162725)). Depending on the serial interval, we can evaluate the need to increase the number of days considered for contact tracing to include more backwards contacts ([Davis et al., 2020](https://assets.publishing.service.gov.uk/media/61e9ab3f8fa8f50597fb3078/S0523_Oxford_-_Backwards_contact_tracing.pdf)).
 
 With the COVID-19 serial interval (`covid_serialint`) calculate:
 
@@ -255,7 +255,7 @@ One way to do this is to get the quantile value for the distribution's 99th perc
 
 We can use the set of distribution functions for a _continuous_ distribution (as above). However, these values will be _continuous_ numbers. We can **discretise** the continuous distribution stored in our `<epiparameter>` object to get discrete values from a continuous distribution.
 
-When we `epiparameter::discretise()` the continuous distribution we get a **discrete**(-ized) distribution:
+When we `epiparameter::discretise()` the continuous distribution we get a **discrete** distribution:
 
 
 ``` r
@@ -470,17 +470,7 @@ epinow_estimates_cg <- epinow(
   # delays
   generation_time = generation_time_opts(serial_interval_covid)
 )
-```
 
-``` output
-WARN [2025-04-12 17:53:48] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-04-12 17:53:48] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 base::plot(epinow_estimates_cg)
 ```
 
@@ -595,16 +585,7 @@ epinow_estimates_cgi <- epinow(
   generation_time = generation_time_opts(covid_serial_interval),
   delays = delay_opts(covid_incubation_time)
 )
-```
 
-``` output
-WARN [2025-04-12 17:55:29] epinow: There were 22 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
-https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2025-04-12 17:55:29] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 base::plot(epinow_estimates_cgi)
 ```
 

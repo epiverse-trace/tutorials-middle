@@ -37,9 +37,9 @@ Learners should familiarise themselves with following concepts before working th
 ::::::::::::::::::::::::::::::::::::: callout
 ### Reminder: the Effective Reproduction Number, $R_t$ 
 
-The [basic reproduction number](../learners/reference.md#basic), $R_0$, is the average number of cases caused by one infectious individual in a entirely susceptible population. 
+The [basic reproduction number](../learners/reference.md#basic), $R_0$, is the average number of cases caused by one infectious individual in an entirely susceptible population. 
 
-But in an ongoing outbreak, the population does not remain entirely susceptible as those that recover from infection are typically immune. Moreover, there can be changes in behaviour or other factors that affect transmission. When we are interested in monitoring changes in transmission we are therefore more interested in the value of the **effective reproduction number**, $R_t$, the average number of cases caused by one infectious individual in the population at time $t$.
+But in an ongoing outbreak, the population does not remain entirely susceptible as those that recover from infection are typically immune. Moreover, there can be changes in behaviour or other factors that affect transmission. When we are interested in monitoring changes in transmission we are therefore more interested in the value of the **effective reproduction number**, $R_t$, which represents the average number of cases caused by one infectious individual in the population at time $t$, given the current state of the population (including immunity levels and control measures).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -52,7 +52,7 @@ To estimate these key metrics using case data we must account for delays between
 
 In the next tutorials we will focus on how to use the functions in `{EpiNow2}` to estimate transmission metrics of case data. We will not cover the theoretical background of the models or inference framework, for details on these concepts see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
-In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We'll get input data from `{incidence2}`. We’ll use the `{tidyr}` and `{dplyr}` packages to arrange some of its outputs, `{ggplot2}` to visualize case distribution, and the pipe `%>%` to connect some of their functions, so let’s also call to the `{tidyverse}` package:
+In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We'll get input data from `{incidence2}`. We'll use the `{tidyr}` and `{dplyr}` packages to arrange some of its outputs, `{ggplot2}` to visualize case distribution, and the pipe `%>%` to connect some of their functions, so let's also call to the `{tidyverse}` package:
 
 ```r
 library(EpiNow2)
@@ -67,11 +67,11 @@ library(tidyverse)
 
 ### The double-colon
 
-The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
+The double-colon `::` in R lets you call a specific function from a package without loading the entire package into the current environment. 
 
 For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
-This help us remember package functions and avoid namespace conflicts.
+This helps us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
@@ -85,9 +85,9 @@ This tutorial illustrates the usage of `epinow()` to estimate the time-varying r
 ::::::::::::::::::::::::::::::::::::: callout
 ### Bayesian inference
 
-The R package `EpiNow2` uses a [Bayesian inference](../learners/reference.md#bayesian) framework to estimate reproduction numbers and infection times based on reporting dates.
+The R package `EpiNow2` uses a [Bayesian inference](../learners/reference.md#bayesian) framework to estimate reproduction numbers and infection times based on reporting dates. In other words, it estimates transmission based on when people were actually infected (rather than symptom onset), by accounting for delays in observed data. In contrast, the `{EpiEstim}` package allows faster and simpler real-time estimation of the reproduction number using only case data over time, reflecting how transmission changes based on when symptoms appear. 
 
-In Bayesian inference, we use prior knowledge (prior distributions) with data (in a likelihood function) to find the posterior probability.
+In Bayesian inference, we use prior knowledge (prior distributions) with data (in a likelihood function) to find the posterior probability:
 
 $Posterior \, probability \propto likelihood \times prior \, probability$
 
@@ -205,7 +205,7 @@ In an outbreak situation it is likely we would only have access to the beginning
 
 ### Delay distributions 
 
-We assume there are delays from the time of infection until the time a case is reported. We specify these delays as distributions to account for the uncertainty in individual level differences. The delay can consist of multiple types of delays/processes. A typical delay from time of infection to case reporting may consist of:
+We assume there are delays from the time of infection until the time a case is reported. We specify these delays as distributions to account for the uncertainty in individual level differences. The delay may involve multiple types of processes. A typical delay from time of infection to case reporting may consist of:
 
 > **time from infection to symptom onset** (the [incubation period](../learners/reference.md#incubation)) + **time from symptom onset to case notification** (the reporting time)
 .
@@ -236,7 +236,7 @@ The number of delays and type of delay are a flexible input that depend on the d
 
 The distribution of incubation period for many diseases can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
 
-We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma= 2$ (shape = $4$, scale = $1$) using the function `Gamma()` as follows:
+We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma = 2$ (shape = $4$, scale = $1$) using the function `Gamma()` as follows:
 
 
 ``` r
@@ -257,13 +257,13 @@ incubation_period_fixed
     1
 ```
 
-The argument `max` is the maximum value the distribution can take, in this example 20 days. 
+The argument `max` is the maximum value the distribution can take; in this example, 20 days. 
 
 ::::::::::::::::::::::::::::::::::::: callout
 
-### Why a gamma distrubution? 
+### Why a gamma distribution? 
 
-The incubation period has to be positive in value. Therefore we must specific a distribution in `{EpiNow2}` which is for positive values only. 
+The incubation period must be a positive value. Therefore we must specify a distribution in `{EpiNow2}` which is for positive values only. 
 
 `Gamma()` supports Gamma distributions and `LogNormal()` Log-normal distributions, which are distributions for positive values only. 
 
@@ -283,7 +283,7 @@ and a standard deviation ($\sigma$) follows a Normal distribution with standard 
 
 $$\mbox{Normal}(\sigma,\sigma_{\sigma}^2).$$
 
-We specify this using `Normal()` for each argument: the mean ($\mu=4$ with $\sigma_{\mu}=0.5$) and standard deviation ($\sigma=2$ with $\sigma_{\sigma}=0.5$).
+We specify this using `Normal()` for each argument: the mean ($\mu = 4$ with $\sigma_{\mu} = 0.5$) and standard deviation ($\sigma = 2$ with $\sigma_{\sigma} = 0.5$).
 
 
 ``` r
@@ -470,6 +470,13 @@ estimates <- EpiNow2::epinow(
 )
 ```
 
+``` output
+WARN [2025-05-01 16:57:08] epinow: There were 4 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
+WARN [2025-05-01 16:57:08] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
 <!-- estimates <- EpiNow2::epinow( -->
 <!--   # reported cases -->
@@ -533,24 +540,24 @@ summary(estimates)
 ```
 
 ``` output
-                        measure                 estimate
-                         <char>                   <char>
-1:       New infections per day     8081 (4742 -- 13489)
-2:   Expected change in reports                   Stable
-3:   Effective reproduction no.       0.97 (0.73 -- 1.2)
-4:               Rate of growth -0.0094 (-0.11 -- 0.079)
-5: Doubling/halving time (days)        -74 (8.8 -- -6.5)
+                        measure               estimate
+                         <char>                 <char>
+1:       New infections per day   7899 (4653 -- 12991)
+2:   Expected change in reports                 Stable
+3:   Effective reproduction no.     0.96 (0.73 -- 1.2)
+4:               Rate of growth -0.013 (-0.1 -- 0.075)
+5: Doubling/halving time (days)      -55 (9.2 -- -6.7)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 8081 (4742 -- 13489).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7899 (4653 -- 12991).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.73 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.0094 (-0.11 -- 0.079).
++ The exponential growth rate of case numbers is -0.013 (-0.1 -- 0.075).
 
-+ The doubling time (the time taken for case numbers to double) is -74 (8.8 -- -6.5).
++ The doubling time (the time taken for case numbers to double) is -55 (9.2 -- -6.7).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
