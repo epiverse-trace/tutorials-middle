@@ -93,7 +93,7 @@ cases <- incidence2::covidregionaldataUK %>%
     date_names_to = "date",
     complete_dates = TRUE
   ) %>%
-  dplyr::select(-count_variable)  # Remove the count_variable column as it's no longer needed
+  dplyr::select(-count_variable)  # Remove count_variable column as no longer needed
 
 # Incubation period
 incubation_period_fixed <- EpiNow2::Gamma(
