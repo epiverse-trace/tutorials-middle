@@ -177,12 +177,53 @@ At `epicontacts::get_degree()` we use the `only_linelist = TRUE` argument.
 This is to count the number of secondary cases caused by all the observed infected individuals,
 which includes individuals in contacts and linelist data frames.
 
-This assumption may not work for all situations.
+:::::::::::::::::::::
+
+::::::::::::::::::::: spoiler
+
+### When to use 'only_linelist = FALSE'?
+
+The assumption that 
+"the linelist will include all individuals in contacts and linelist"
+may not work for all situations.
+
 For example, if during the registry of observed infections, 
 the contact data included more subjects than the ones available in the linelist data,
 then you need to consider only the individuals from the contact data.
 In that situation,
 at `epicontacts::get_degree()` we use the `only_linelist = FALSE` argument.
+
+Find here a printed [reproducible example](https://reprex.tidyverse.org/):
+
+```r
+# Three subjects on linelist
+sample_linelist <- tibble::tibble(
+  id = c("id1", "id2", "id3")
+)
+
+# Four infector-infectee pairs with Five subjects in contact data
+sample_contact <- tibble::tibble(
+  from = c("id1","id1","id2","id4"),
+  to = c("id2","id3","id4","id5")
+)
+
+# make an epicontacts object
+sample_net <- epicontacts::make_epicontacts(
+  linelist = sample_linelist,
+  contacts = sample_contact,
+  directed = TRUE
+)
+
+# count secondary cases per subject from linelist only
+epicontacts::get_degree(x = sample_net, type = "out", only_linelist = TRUE)
+#> id1 id2 id3 
+#>   2   1   0
+
+# count secondary cases per subject from contact only
+epicontacts::get_degree(x = sample_net, type = "out", only_linelist = FALSE)
+#> id1 id2 id4 id3 id5 
+#>   2   1   1   0   0
+```
 
 :::::::::::::::::::::
 
