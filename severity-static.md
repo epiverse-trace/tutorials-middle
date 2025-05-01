@@ -817,7 +817,7 @@ Rearranging the input data for data analysis can take most of the time. To get r
 
 First, in the [Get started](https://www.reconverse.org/incidence2/articles/incidence2.html) vignette from the `{incidence2}` package, explore how to use the `date_index` argument when reading a linelist with dates in multiple column.
 
-Then, refer to the `{cfr}` vignette on [Handling data from `{incidence2}`](https://epiverse-trace.github.io/cfr/articles/data_from_incidence2.html) on how to use the `cfr::prepare_data()` function from incidence2 objects.
+Then, refer to the `{cfr}` reference manual on [Prepare common epidemiological data formats for CFR estimation](https://epiverse-trace.github.io/cfr/reference/prepare_data.html) on how to use the `cfr::prepare_data()` function from incidence2 objects.
 
 <!-- cite howto entry one lineslist + incidence2 + cfr connection -->
 
