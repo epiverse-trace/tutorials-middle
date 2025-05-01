@@ -344,8 +344,8 @@ Calculate the distribution of secondary cases for Ebola using the `ebola_sim_cle
 ## first, make an epicontacts object
 ebola_contacts <-
   epicontacts::make_epicontacts(
-    linelist = ebola_sim_clean$linelist,
-    contacts = ebola_sim_clean$contacts,
+    linelist = outbreaks::ebola_sim_clean$linelist,
+    contacts = outbreaks::ebola_sim_clean$contacts,
     directed = TRUE
   )
 
