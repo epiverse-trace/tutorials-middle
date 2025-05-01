@@ -87,9 +87,9 @@ This tutorial illustrates the usage of `epinow()` to estimate the time-varying r
 ::::::::::::::::::::::::::::::::::::: callout
 ### Bayesian inference
 
-The R package `EpiNow2` uses a [Bayesian inference](../learners/reference.md#bayesian) framework to estimate reproduction numbers and infection times based on reporting dates.
+The R package `EpiNow2` uses a [Bayesian inference](../learners/reference.md#bayesian) framework to estimate reproduction numbers and infection times based on reporting dates. In other words, it estimates transmission based on when people were actually infected (rather than symptom onset), by accounting for delays in observed data. In contrast, the `{EpiEstim}` package allows faster and simpler real-time estimation of the reproduction number using only case data over time, reflecting how transmission changes based on when symptoms appear. 
 
-In Bayesian inference, we use prior knowledge (prior distributions) with data (in a likelihood function) to find the posterior probability.
+In Bayesian inference, we use prior knowledge (prior distributions) with data (in a likelihood function) to find the posterior probability:
 
 $Posterior \, probability \propto likelihood \times prior \, probability$
 
