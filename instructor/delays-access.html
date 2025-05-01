@@ -347,7 +347,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Access epidemiological delay distributions</h1>
-        <p>Last updated on 2025-04-12 |
+        <p>Last updated on 2025-05-01 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/delays-access.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -422,25 +422,25 @@ of all the time periods of the figure above!</p>
 </div>
 </div>
 </div>
-<p>However, early in an epidemic, modelling efforts can be delayed by
-the lack of a centralised resource that summarises input parameters for
-the disease of interest (<a href="https://mrc-ide.github.io/epireview/" class="external-link">Nash et al., 2023</a>).
+<p>However, early in an epidemic, efforts to understand the epidemic and
+implications for control can be delayed by the lack of an easy way to
+access key parameters for the disease of interest (<a href="https://mrc-ide.github.io/epireview/" class="external-link">Nash et al., 2023</a>).
 Projects like <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> and <code>{epireview}</code>
 are building online catalogues following literature synthesis protocols
-that can help parametrise models by easily accessing a comprenhensive
+that can help inform analysis and parametrise models by providing a
 library of previously estimated epidemiological parameters from past
 outbreaks.</p>
 <!-- Early models for COVID-19 used parameters from other coronaviruses. https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext -->
-<p>To exemplify how to use the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> R package in
+<p>To illustrate how to use the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> R package in
 your analysis pipeline, our goal in this episode will be to access one
 specific set of epidemiological parameters from the literature, instead
-of copying-and-pasting them by hand, to plug them into an
-<a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> analysis workflow.</p>
+of extracting from papers and copying and pasting them by hand. We will
+then plug them into an <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> analysis workflow.</p>
 <!-- In this episode, we'll learn how to access one specific set of epidemiological parameters from the literature and then get their **summary statistics** using `{epiparameter}`.  -->
 <p>Let’s start loading the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> package. We’ll
-use the pipe <code>%&gt;%</code> to connect some of their functions,
-some <a href="https://tibble.tidyverse.org/" class="external-link">tibble</a> and <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions, so let’s
-also call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> package:</p>
+use the pipe <code>%&gt;%</code> to connect some of its functions, some
+<a href="https://tibble.tidyverse.org/" class="external-link">tibble</a> and <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions, so let’s also
+call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> package:</p>
 <div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -455,12 +455,12 @@ also call to the <a href="https://tidyverse.tidyverse.org" class="external-link"
 <div id="the-double-colon" class="callout-inner">
 <h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
-<p>The double-colon <code>::</code> in R let you call a specific
+<p>The double-colon <code>::</code> in R lets you call a specific
 function from a package without loading the entire package into the
 current environment.</p>
 <p>For example, <code>dplyr::filter(data, condition)</code> uses
 <code>filter()</code> from the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> package.</p>
-<p>This help us remember package functions and avoid namespace
+<p>This helps us remember package functions and avoid namespace
 conflicts.</p>
 </div>
 </div>
@@ -468,8 +468,14 @@ conflicts.</p>
 </section><section><h2 class="section-heading" id="the-problem">The problem<a class="anchor" aria-label="anchor" href="#the-problem"></a></h2>
 <hr class="half-width"><p>If we want to estimate the transmissibility of an infection, it’s
 common to use a package such as <a href="https://github.com/mrc-ide/EpiEstim" class="external-link">EpiEstim</a> or
-<a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>. However, both require some epidemiological
-information as an input. For example, in <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> we use
+<a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>. The <a href="https://github.com/mrc-ide/EpiEstim" class="external-link">EpiEstim</a> package allows
+real-time estimation of the reproduction number using case data over
+time, reflecting how transmission changes based on when symptoms appear.
+For estimating transmission based on when people were actually infected
+(rather than symptom onset), the <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> package extends
+this idea by combining it with a model that accounts for delays in
+observed data. Both packages require some epidemiological information as
+an input. For example, in <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> we use
 <code>EpiNow2::Gamma()</code> to specify a <a href="reference.html#generationtime">generation time</a> as a
 probability distribution adding its <code>mean</code>, standard
 deviation (<code>sd</code>), and maximum value (<code>max</code>).</p>
@@ -493,17 +499,18 @@ literature and copy and paste the <strong>summary statistics</strong> or
 the <strong>distribution parameters</strong> from scientific
 publications. A challenge that is often faced is that the reporting of
 different statistical distributions is not consistent across the
-literature. <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>’s objective is to facilitate the
-access to reliable estimates of distribution parameters for a range of
-infectious diseases, so that they can easily be implemented in outbreak
-analytic pipelines.</p>
+literature (e.g. a paper may only report the mean, rather than the full
+underlying distribution). <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>’s objective is to
+facilitate the access to reliable estimates of distribution parameters
+for a range of infectious diseases, so that they can easily be
+implemented in outbreak analytic pipelines.</p>
 <p>In this episode, we will <em>access</em> the summary statistics of
 generation time for COVID-19 from the library of epidemiological
 parameters provided by <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>. These metrics can be
 used to estimate the transmissibility of this disease using
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> in subsequent episodes.</p>
-<p>Let’s start by looking at how many entries are available in the
-<strong>epidemiological distributions database</strong> in
+<p>Let’s start by looking at how many entries are currently available in
+the <strong>epidemiological distributions database</strong> in
 <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> using <code>epiparameter_db()</code> for the
 epidemiological distribution <code>epi_name</code> called generation
 time with the string <code>"generation"</code>:</p>
@@ -576,24 +583,43 @@ Parameters:
 # ℹ Use `parameter_tbl()` to see a summary table of the parameters.
 # ℹ Explore database online at: https://epiverse-trace.github.io/epiparameter/articles/database.html</code></pre>
 </div>
-<p>Currently, in the library of epidemiological parameters, we have one
-<code>"generation"</code> time entry for Influenza. Instead, we can look
-at the <code>serial</code> intervals for <code>COVID</code>-19. Let find
-what we need to consider for this!</p>
+<p>In the library of epidemiological parameters, we may not have a
+<code>"generation"</code> time entry for our disease of interest.
+Instead, we can look at the <code>serial</code> intervals for COVID-19.
+Let’s find what we need to consider for this!</p>
+<div id="systematic-review-data-for-priority-pathogens" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="systematic-review-data-for-priority-pathogens" class="callout-inner">
+<h3 class="callout-title">Systematic review data for priority pathogens</h3>
+<div class="callout-content">
+<p>The <a href="https://mrc-ide.github.io/epireview/" class="external-link"><code>{epireview}</code> R
+package</a> has parameters on Ebola, Marburg and Lassa from recent
+systematic reviews, with more priority pathogens planned for future
+releases. Have a look at <a href="https://epiverse-trace.github.io/epiparameter/articles/data_from_epireview.html" class="external-link">this
+vignette</a> for more information on how to use these parameters with
+<a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>.</p>
+</div>
+</div>
+</div>
 </section><section><h2 class="section-heading" id="generation-time-vs-serial-interval">Generation time vs serial interval<a class="anchor" aria-label="anchor" href="#generation-time-vs-serial-interval"></a></h2>
-<hr class="half-width"><p>The generation time, jointly with the reproduction number (<span class="math inline">\(R\)</span>), provide valuable insights on the
-strength of transmission and inform the implementation of control
-measures. Given a <span class="math inline">\(R&gt;1\)</span>, the
-shorter the generation time, the earlier the incidence of disease cases
-will grow.</p>
+<hr class="half-width"><p>The generation time, jointly with the reproduction number (<span class="math inline">\(R\)</span>), can provide valuable insights into
+the likely growth rate of the epidemic, and hence inform the
+implementation of control measures. The larger the value of <span class="math inline">\(R\)</span> and/or the shorter the generation time,
+the more new infections that we would expect per day, and hence the
+faster the incidence of disease cases will grow.</p>
 <figure><img src="../fig/reproduction-generation-time.png" alt="Video from the MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL" class="figure mx-auto d-block"><div class="figcaption">Video from the MRC Centre for Global Infectious
 Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group
 with Dr Anne Cori (27-07-2023) at <a href="https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL" class="external-link uri">https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL</a>
 </div>
 </figure><p>In calculating the effective reproduction number (<span class="math inline">\(R_{t}\)</span>), the <em>generation time</em>
-distribution is often approximated by the <a href="reference.html#serialinterval">serial interval</a> distribution.
-This frequent approximation is because it is easier to observe and
-measure the onset of symptoms than the onset of infectiousness.</p>
+distribution (i.e. delay from one infection to the next) is often
+approximated by the <a href="reference.html#serialinterval">serial
+interval</a> distribution (i.e. delay from onset of symptoms in the
+infector to onset in the infectee). This approximation is frequently
+used because it is easier to observe and record the onset of symptoms
+than the exact time of infection.</p>
 <figure><img src="../fig/serial-interval-observed.jpeg" alt="A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021)." class="figure mx-auto d-block"><div class="figcaption">A schematic of the relationship of different
 time periods of transmission between an infector and an infectee in a
 transmission pair. Exposure window is defined as the time interval
@@ -601,30 +627,35 @@ having viral exposure, and transmission window is defined as the time
 interval for onward transmission with respect to the infection time (<a href="https://academic.oup.com/jid/article/224/10/1664/6356465" class="external-link">Chung
 Lau et al., 2021</a>).</div>
 </figure><p>However, using the <em>serial interval</em> as an approximation of
-the <em>generation time</em> is primarily valid for diseases in which
+the <em>generation time</em> is most appropriate for diseases in which
 infectiousness starts after symptom onset (<a href="https://academic.oup.com/jid/article/224/10/1664/6356465" class="external-link">Chung
 Lau et al., 2021</a>). In cases where infectiousness starts before
-symptom onset, the serial intervals can have negative values, which is
-the case for diseases with pre-symptomatic transmission (<a href="https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2" class="external-link">Nishiura
+symptom onset, the serial intervals can have negative values, which
+occurs when the infectee develops symptoms before the infector in a
+transmission pair (<a href="https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2" class="external-link">Nishiura
 et al., 2020</a>).</p>
 <!-- Additionally, even if the *generation time* and *serial interval* have the same mean, their variance usually differs, propagating bias to the $R_{t}$ estimation ([Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)). -->
-<div id="from-time-periods-to-probability-distributions." class="callout">
+<div id="from-mean-delays-to-probability-distributions" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="from-time-periods-to-probability-distributions." class="callout-inner">
-<h3 class="callout-title">From time periods to probability distributions.</h3>
+<div id="from-mean-delays-to-probability-distributions" class="callout-inner">
+<h3 class="callout-title">From mean delays to probability distributions</h3>
 <div class="callout-content">
-<p>When we calculate the <em>serial interval</em>, we see that not all
-case pairs have the same time length. We will observe this variability
-for any case pair and individual time period, including the <a href="reference.html#incubation">incubation period</a> and <a href="reference.html#infectiousness">infectious period</a>.</p>
+<p>If we measure the <em>serial interval</em> in real data, we typically
+see that not all case pairs have the same delay from onset-to-onset. We
+can observe this variability for other key epidemiological delays as
+well, including the <a href="reference.html#incubation">incubation
+period</a> and <a href="reference.html#infectiousness">infectious
+period</a>.</p>
 <figure><img src="../fig/serial-interval-pairs.jpg" alt="Serial intervals of possible case pairs in (a) COVID-19 and (b) MERS-CoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset (Althobaity et al., 2022)." class="figure mx-auto d-block"><div class="figcaption">Serial intervals of possible case pairs in (a)
 COVID-19 and (b) MERS-CoV. Pairs represent a presumed infector and their
 presumed infectee plotted by date of symptom onset (<a href="https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6" class="external-link">Althobaity
 et al., 2022</a>).</div>
-</figure><p>To summarise these data from individual and pair time periods, we can
-find the <strong>statistical distributions</strong> that best fit the
-data (<a href="https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806" class="external-link">McFarland
+</figure><p>To summarise these data from individual and pair time periods, it is
+therefore useful to quantify the <strong>statistical
+distribution</strong> of delays that best fits the data, rather than
+just focusing on the mean (<a href="https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806" class="external-link">McFarland
 et al., 2023</a>).</p>
 <!-- add a reference about good practices to estimate distributions -->
 <figure><img src="../fig/seria-interval-fitted-distributions.jpg" alt="Fitted serial interval distribution for (a) COVID-19 and (b) MERS-CoV based on reported transmission pairs in Saudi Arabia. We fitted three commonly used distributions, Log normal, Gamma, and Weibull distributions, respectively (Althobaity et al., 2022)." class="figure mx-auto d-block"><div class="figcaption">Fitted serial interval distribution for (a)
@@ -708,8 +739,8 @@ et al., 2020</a>)</div>
 <div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>The peak of each curve can inform you about the location of the mean
-of each distribution. The larger the mean, the larger the serial
-interval.</p>
+of each distribution. A larger mean indicates a longer expected delay
+between symptom onset in the infector and infectee.</p>
 </div>
 </div>
 </div>
@@ -724,10 +755,12 @@ interval.</p>
 <p><strong>Which one would be harder to control?</strong></p>
 <p>COVID-19</p>
 <p><strong>Why do you conclude that?</strong></p>
-<p>COVID-19 has the lowest mean serial interval. The approximate mean
-value for the serial interval of COVID-19 is around four days, and SARS
-is about seven days. Thus, COVID-19 will likely have newer generations
-in less time than SARS, assuming similar reproduction numbers.</p>
+<p>COVID-19 has a lower mean serial interval. The approximate mean value
+for the serial interval of COVID-19 is around four days, and SARS is
+about seven days. Thus, if there are many infections in the population,
+COVID-19 will on average have more new generations of infection in less
+time than SARS would, assuming similar reproduction numbers. This means
+far more resources would be required to keep up with the epidemic.</p>
 </div>
 </div>
 </div>
@@ -749,9 +782,9 @@ of a larger or shorter generation time.</p>
 <hr class="half-width"><p>In this section, we will use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to obtain
 the serial interval for COVID-19, as an alternative to the generation
 time.</p>
-<p>Let’s ask now how many parameters we have in the epidemiological
+<p>First, let’s see how many parameters we have in the epidemiological
 distributions database (<code>epiparameter_db()</code>) with the
-<code>disease</code> named <code>covid</code>-19. Run this locally!</p>
+<code>disease</code> named <code>covid</code>-19. Run this code:</p>
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -773,8 +806,9 @@ distribution (<code>epi_name</code>). Run this in your console:</p>
 <span>  epi_name <span class="op">=</span> <span class="st">"serial"</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
-<p>With this query combination, we get more than one delay distribution.
-This output is an <code>&lt;epiparameter&gt;</code> class object.</p>
+<p>With this query combination, we get more than one delay distribution
+(because the database has multiple entries). This output is an
+<code>&lt;epiparameter&gt;</code> class object.</p>
 <div id="case-insensitive" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -839,8 +873,9 @@ called <code>lnorm</code>.</p>
 <div class="accordion-body">
 <p>Entries with a missing value (<code>&lt;NA&gt;</code>) in the
 <code>prob_distribution</code> column are <em>non-parameterised</em>
-entries. They have summary statistics but no probability distribution.
-Compare these two outputs:</p>
+entries. They have summary statistics (e.g. a mean and standard
+deviation) but no probability distribution specified. Compare these two
+outputs:</p>
 <div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -892,8 +927,8 @@ with it provided by an <code>inference_method</code> as shown in
 <div class="callout-content">
 <p>Take 2 minutes to explore the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 library.</p>
-<p><strong>Choose</strong> a disease of interest (e.g., Influenza,
-Measles, etc.) and a delay distribution (e.g., the incubation period,
+<p><strong>Choose</strong> a disease of interest (e.g., influenza,
+measles, etc.) and a delay distribution (e.g., the incubation period,
 onset to death, etc.).</p>
 <p>Find:</p>
 <ul><li><p>How many delay distributions are for that disease?</p></li>
@@ -944,7 +979,7 @@ and</li>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># we expect 16 delays distributions for ebola</span></span>
+<code class="sourceCode R"><span><span class="co"># we expect 16 delay distributions for Ebola</span></span>
 <span><span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span></span>
 <span>  disease <span class="op">=</span> <span class="st">"ebola"</span></span>
 <span><span class="op">)</span></span></code></pre>
@@ -1023,7 +1058,7 @@ Parameters:
 <p>Now, from the output of <code>epiparameter::epiparameter_db()</code>,
 What is an <a href="reference.html#offspringdist">offspring
 distribution</a>?</p>
-<p>We choose to find Ebola’s incubation periods. This output list all
+<p>We choose to find Ebola’s incubation periods. This output lists all
 the papers and parameters found. Run this locally if needed:</p>
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1132,12 +1167,12 @@ Parameters:
   meanlog: 1.386
   sdlog: 0.568</code></pre>
 </div>
-<div id="how-does-single_epiparameter-works" class="callout">
+<div id="how-does-single_epiparameter-work" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="how-does-single_epiparameter-works" class="callout-inner">
-<h3 class="callout-title">How does ‘single_epiparameter’ works?</h3>
+<div id="how-does-single_epiparameter-work" class="callout-inner">
+<h3 class="callout-title">How does ‘single_epiparameter’ work?</h3>
 <div class="callout-content">
 <p>Looking at the help documentation for
 <code>?epiparameter::epiparameter_db()</code>:</p>
@@ -1146,7 +1181,7 @@ Parameters:
 <code>&lt;epiparameter&gt;</code> with the <em>largest sample size</em>
 will be returned.</li>
 <li>If multiple entries are equal after this sorting, the <em>first
-entry</em> will be returned.</li>
+entry</em> in the list will be returned.</li>
 </ul><p>What is a <em>parametrised</em> <code>&lt;epiparameter&gt;</code>?
 Look at <code>?is_parameterised</code>.</p>
 </div>
@@ -1721,9 +1756,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/delays-access.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/delays-access.html",
-  "dateCreated": "2025-04-29",
-  "dateModified": "2025-04-12",
-  "datePublished": "2025-04-29"
+  "dateCreated": "2025-05-01",
+  "dateModified": "2025-05-01",
+  "datePublished": "2025-05-01"
 }
 
   </script><script>

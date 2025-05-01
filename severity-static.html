@@ -348,7 +348,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Estimation of outbreak severity</h1>
-        <p>Last updated on 2025-04-12 |
+        <p>Last updated on 2025-05-01 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/severity-static.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -420,13 +420,13 @@ Health and Human Services (<a href="https://www.cdc.gov/flu/pandemic-resources/n
 2016</a>).</div>
 </figure><p>One epidemiological approach to estimating the clinical severity is
 quantifying the Case Fatality Risk (CFR). CFR is the conditional
-probability of death given confirmed diagnosis, calculated as the
-cumulative number of deaths from an infectious disease over the number
-of confirmed diagnosed cases. However, calculating this directly during
-the course of an epidemic tends to result in a naive or biased CFR given
-the time <a href="reference.html#delaydist">delay</a> from onset to
-death, varying substantially as the epidemic progresses and stabilising
-at the later stages of the outbreak (<a href="https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743" class="external-link">Ghani
+probability of death given confirmed diagnosis, calculated as the ratio
+of the cumulative number of deaths from an infectious disease to the
+number of confirmed diagnosed cases. However, calculating this directly
+during the course of an epidemic tends to result in a naive or biased
+CFR given the time <a href="reference.html#delaydist">delay</a> from
+onset to death, varying substantially as the epidemic progresses and
+stabilising at the later stages of the outbreak (<a href="https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743" class="external-link">Ghani
 et al., 2005</a>).</p>
 <figure><img src="fig/cfr-pone.0006852.g003-fig_c.png" alt="The periods are relevant: Period 1 -- 15 days where CFR is zero to indicate this is due to no reported deaths; Period from Mar 15 -- Apr 26 where CFR appears to be rising; Period Apr 30 -- May 30 where the CFR estimate stabilises." class="figure mx-auto d-block"><div class="figcaption">Observed biased confirmed case fatality risk
 (CFR) estimates as a function of time (thick line) calculated as the
@@ -469,12 +469,12 @@ so let’s also call to the <a href="https://tidyverse.tidyverse.org" class="ext
 <div id="the-double-colon" class="callout-inner">
 <h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
-<p>The double-colon <code>::</code> in R let you call a specific
+<p>The double-colon <code>::</code> in R lets you call a specific
 function from a package without loading the entire package into the
 current environment.</p>
 <p>For example, <code>dplyr::filter(data, condition)</code> uses
 <code>filter()</code> from the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> package.</p>
-<p>This help us remember package functions and avoid namespace
+<p>This helps us remember package functions and avoid namespace
 conflicts.</p>
 </div>
 </div>
@@ -498,11 +498,11 @@ response.</li>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="data-sources-for-clinical-severity">Data sources for clinical severity<a class="anchor" aria-label="anchor" href="#data-sources-for-clinical-severity"></a></h2>
-<hr class="half-width"><p>What are data sources can we use to estimate the clinical severity of
-a disease outbreak? <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext" class="external-link">Verity
+<hr class="half-width"><p>What data sources can we use to estimate the clinical severity of a
+disease outbreak? <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext" class="external-link">Verity
 et al., 2020</a> summarises the spectrum of COVID-19 cases:</p>
-<figure><img src="fig/cfr-spectrum-cases-covid19.jpg" alt="Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of Deaths among confirmed cases in an epidemic. (Verity et al., 2020)" class="figure mx-auto d-block"><div class="figcaption">Spectrum of COVID-19 cases. The CFR aims to
-estimate the proportion of Deaths among confirmed cases in an epidemic.
+<figure><img src="fig/cfr-spectrum-cases-covid19.jpg" alt="Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of deaths among confirmed cases in an epidemic. (Verity et al., 2020)" class="figure mx-auto d-block"><div class="figcaption">Spectrum of COVID-19 cases. The CFR aims to
+estimate the proportion of deaths among confirmed cases in an epidemic.
 (<a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1" class="external-link">Verity
 et al., 2020</a>)</div>
 </figure><ul><li>At the top of the pyramid, those who met the WHO case criteria for
@@ -523,17 +523,16 @@ testing.</li>
 </ul></section><section><h2 class="section-heading" id="naive-cfr">Naive CFR<a class="anchor" aria-label="anchor" href="#naive-cfr"></a></h2>
 <hr class="half-width"><p>We measure disease severity in terms of case fatality risk (CFR). The
 CFR is interpreted as the conditional probability of death given
-confirmed diagnosis, calculated as the cumulative number of deaths <span class="math inline">\(D_{t}\)</span> over the cumulative number of
-confirmed cases <span class="math inline">\(C_{t}\)</span> at a certain
-time <span class="math inline">\(t\)</span>. We can refer to the
-<em>naive CFR</em> (also crude or biased CFR, <span class="math inline">\(b_{t}\)</span>):</p>
+confirmed diagnosis, calculated as the ratio of the cumulative number of
+deaths <span class="math inline">\(D_{t}\)</span> to the cumulative
+number of confirmed cases <span class="math inline">\(C_{t}\)</span> at
+a certain time <span class="math inline">\(t\)</span>. We can refer to
+the <em>naive CFR</em> (also crude or biased CFR, <span class="math inline">\(b_{t}\)</span>):</p>
 <p><span class="math display">\[ b_{t} =  \frac{D_{t}}{C_{t}}
 \]</span></p>
 <p>This calculation is <em>naive</em> because it tends to yield a biased
 and mostly underestimated CFR due to the time-delay from onset to death,
 only stabilising at the later stages of the outbreak.</p>
-<!-- add here the callout on ratio or risk?  -->
-<!-- https://github.com/epiverse-trace/cfr/issues/130 -->
 <p>To calculate the naive CFR, the <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> package requires
 an input data frame with three columns named:</p>
 <ul><li><code>date</code></li>
@@ -747,9 +746,9 @@ estimation of CFR (and their potential solutions):</p>
 <div class="accordion-body">
 <p>For diseases with a <em>spectrum</em> of clinical presentations,
 those cases that come to the attention of public health authorities and
-registered into surveillance databases will typically be people with the
-most severe symptoms who seek medical care, are admitted to a hospital,
-or die.</p>
+are registered into surveillance databases will typically be people with
+the most severe symptoms who seek medical care, are admitted to a
+hospital, or die.</p>
 <p>Therefore, the CFR will typically be higher among <em>detected
 cases</em> than among the entire population of cases, given that the
 latter may include individuals with mild, subclinical, and (under some
@@ -822,9 +821,9 @@ to determine the time distribution between onset and death. Therefore,
 we can estimate the <em>distribution delay</em> from historical
 outbreaks or reuse the ones accessible via R packages like
 <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> or <code>{epireview}</code>, which collect
-them from published scientific literature. For an step-by-step guide,
+them from published scientific literature. For a step-by-step guide,
 read the tutorial episode on how to <a href="https://epiverse-trace.github.io/tutorials-early/delays-reuse.html" class="external-link">access
-to epidemiological delays</a>.</p>
+epidemiological delays</a>.</p>
 <p>Let’s use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>:</p>
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1074,12 +1073,10 @@ et al., 2009</a>).</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="an-early-stage-cfr-estimate">An early-stage CFR estimate<a class="anchor" aria-label="anchor" href="#an-early-stage-cfr-estimate"></a></h2>
-<hr class="half-width"><p>On the challenge above, we discovered that the <em>naive</em> and
-<em>delay-adjusted</em> CFR estimates are different.</p>
-<p>The <strong>naive</strong> estimate is useful to get an overall
+<hr class="half-width"><p>The <strong>naive</strong> estimate is useful to get an overall
 severity estimate of the outbreak (so far). Once the outbreak has ended
 or has progressed such that more deaths are reported, the estimated CFR
-is then <em>closest to</em> the ‘true’ unbiased CFR.</p>
+is then closest to the ‘true’ unbiased CFR.</p>
 <p>On the other hand, the <strong>delay-adjusted</strong> estimate can
 assess the severity of an emerging infectious disease <em>earlier</em>
 than the biased or naive CFR, during an epidemic.</p>
@@ -1099,6 +1096,10 @@ to that day, saving the user time.</p>
 </div>
 </div>
 </div>
+<p><code>cfr_rolling()</code> shows the estimated CFR on each outbreak
+day, given that future data on cases and deaths is unavailable at the
+time. The final value of <code>cfr_rolling()</code> estimates is
+identical to <code>cfr_static()</code> on the same data.</p>
 <div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1899,9 +1900,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/severity-static.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/severity-static.html",
-  "dateCreated": "2025-04-29",
-  "dateModified": "2025-04-12",
-  "datePublished": "2025-04-29"
+  "dateCreated": "2025-05-01",
+  "dateModified": "2025-05-01",
+  "datePublished": "2025-05-01"
 }
 
   </script><script>
