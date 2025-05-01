@@ -101,7 +101,7 @@ epiparameter::epiparameter_db(
 )
 ```
 
-In the library of epidemiological parameters, we have one `"generation"` time entry for influenza. Instead, we can look at the `serial` intervals for COVID-19. Let's find what we need to consider for this!
+In the library of epidemiological parameters, we may not have a `"generation"` time entry for our disease of interest. Instead, we can look at the `serial` intervals for COVID-19. Let's find what we need to consider for this!
 
 ::::::::::::::::: callout
 
