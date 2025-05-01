@@ -128,7 +128,7 @@ However, using the *serial interval* as an approximation of the *generation time
 
 ::::::::::::::::: callout
 
-### From delays to probability distributions
+### From mean delays to probability distributions
 
 If we measure the *serial interval* in real data, we typically see that not all case pairs have the same delay from onset-to-onset. We can observe this variability for other key epidemiological delays as well, including the [incubation period](../learners/reference.md#incubation) and [infectious period](../learners/reference.md#infectiousness).
 
