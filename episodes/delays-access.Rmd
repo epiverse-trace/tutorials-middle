@@ -46,11 +46,11 @@ Look at the [glossary](../learners/reference.md) for the definitions of all the 
 
 :::::::::::::::::::::::::
 
-However, early in an epidemic, efforts to understand the epidemic and implications for control can be delayed by the lack of an easy way to access key parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are therefore building online catalogues following literature synthesis protocols that can help inform analysis and parametrise models by providing a library of previously estimated epidemiological parameters from past outbreaks.
+However, early in an epidemic, efforts to understand the epidemic and implications for control can be delayed by the lack of an easy way to access key parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are building online catalogues following literature synthesis protocols that can help inform analysis and parametrise models by providing a library of previously estimated epidemiological parameters from past outbreaks.
 
 <!-- Early models for COVID-19 used parameters from other coronaviruses. https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext -->
 
-To illustrate how to use the `{epiparameter}` R package in your analysis pipeline, our goal in this episode will be to access one specific set of epidemiological parameters from the literature, instead of extracting from papers and copying-and-pasting them by hand. We will then plug them into an `{EpiNow2}` analysis workflow.
+To illustrate how to use the `{epiparameter}` R package in your analysis pipeline, our goal in this episode will be to access one specific set of epidemiological parameters from the literature, instead of extracting from papers and copying and pasting them by hand. We will then plug them into an `{EpiNow2}` analysis workflow.
 
 <!-- In this episode, we'll learn how to access one specific set of epidemiological parameters from the literature and then get their **summary statistics** using `{epiparameter}`.  -->
 
@@ -89,7 +89,7 @@ generation_time <-
   )
 ```
 
-It is a common practice for analysts to manually search the available literature and copy and paste the **summary statistics** or the **distribution parameters** from scientific publications. A challenge that is often faced is that the reporting of different statistical distributions is not consistent across the literature (e.g. a paper may only report the mean, rather than the full underlying distribution). `{epiparameter}`’s objective is to facilitate the access to reliable estimates of distribution parameters for a range of infectious diseases, so that they can easily be implemented in outbreak analytic pipelines.
+It is a common practice for analysts to manually search the available literature and copy and paste the **summary statistics** or the **distribution parameters** from scientific publications. A challenge that is often faced is that the reporting of different statistical distributions is not consistent across the literature (e.g. a paper may only report the mean, rather than the full underlying distribution). `{epiparameter}`'s objective is to facilitate the access to reliable estimates of distribution parameters for a range of infectious diseases, so that they can easily be implemented in outbreak analytic pipelines.
 
 In this episode, we will *access* the summary statistics of generation time for COVID-19 from the library of epidemiological parameters provided by `{epiparameter}`. These metrics can be used to estimate the transmissibility of this disease using `{EpiNow2}` in subsequent episodes.
 
@@ -101,7 +101,7 @@ epiparameter::epiparameter_db(
 )
 ```
 
-In the library of epidemiological parameters, we have one `"generation"` time entry for influenza. Instead, we can look at the `serial` intervals for `COVID`-19. Let's find what we need to consider for this!
+In the library of epidemiological parameters, we have one `"generation"` time entry for influenza. Instead, we can look at the `serial` intervals for COVID-19. Let's find what we need to consider for this!
 
 ::::::::::::::::: callout
 
@@ -122,7 +122,7 @@ This approximation is frequently used because it is easier to observe and record
 
 ![A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
 
-However, using the *serial interval* as an approximation of the *generation time* is most appropriate for diseases in which infectiousness starts after symptom onset ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). In cases where infectiousness starts before symptom onset, the serial intervals can have negative values, which is the case for diseases with pre-symptomatic transmission ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2)).
+However, using the *serial interval* as an approximation of the *generation time* is most appropriate for diseases in which infectiousness starts after symptom onset ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). In cases where infectiousness starts before symptom onset, the serial intervals can have negative values, which occurs when the infectee develops symptoms before the infector in a transmission pair ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext#gr2)).
 
 <!-- Additionally, even if the *generation time* and *serial interval* have the same mean, their variance usually differs, propagating bias to the $R_{t}$ estimation ([Gostic et al., 2020](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409)). -->
 
@@ -176,7 +176,7 @@ Given the serial interval of both infections in the figure below:
 
 ::::::::::::::::: hint
 
-The peak of each curve can inform you about the location of the mean of each distribution. The larger the mean, the larger we would expect the serial interval to be.
+The peak of each curve can inform you about the location of the mean of each distribution. A larger mean indicates a longer expected delay between symptom onset in the infector and infectee.
 
 ::::::::::::::::::::::
 
