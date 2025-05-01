@@ -158,7 +158,9 @@ epi_contacts %>%
 
 But this output only contains the number of secondary cases for reported infectors in the contact data, not for **all** the individuals in the whole `<epicontacts>` object.
 
-Instead, from `{epicontacts}` we can use the function `epicontacts::get_degree()`. The argument `type = "out"` get the **out-degree** of each **node** in the contact network from the `<epicontacts>` class object. In a directed network, the out-degree is the number of outgoing edges (infectees) emanating from a node (infector) ([Nykamp DQ, accessed: 2025](https://mathinsight.org/definition/node_degree)). Also, the argument `only_linelist = TRUE` include individuals in contacts and linelist data frames.
+Instead, from `{epicontacts}` we can use the function `epicontacts::get_degree()`. The argument `type = "out"` gets the **out-degree** of each **node** in the contact network from the `<epicontacts>` class object. In a directed network, the out-degree is the number of outgoing edges (infectees) emanating from a node (infector) ([Nykamp DQ, accessed: 2025](https://mathinsight.org/definition/node_degree)). 
+
+Also, the argument `only_linelist = TRUE` will only include individuals in the linelist data frame. During outbreak investigations, we expect a registry of **all** the observed infected individuals in the linelist data. However, anyone not linked with a potential infector or infectee will not appear in the contact data. Thus, the argument `only_linelist = TRUE` will protect us against missing this later set of individuals when counting the number of secondary cases caused by all the observed infected individuals. They will appear in the `<integer>` vector output as `0` secondary cases. 
 
 ```{r,message=FALSE,warning=FALSE}
 # Count secondary cases per subject in contacts and linelist
@@ -176,7 +178,10 @@ This is to count the number of secondary cases caused by all the observed infect
 which includes individuals in contacts and linelist data frames.
 
 This assumption may not work for all situations.
-If you need to consider only the individuals from the contact data,
+For example, if during the registry of observed infections, 
+the contact data included more subjects than the ones available in the linelist data,
+then you need to consider only the individuals from the contact data.
+In that situation,
 at `epicontacts::get_degree()` we use the `only_linelist = FALSE` argument.
 
 :::::::::::::::::::::
@@ -288,7 +293,7 @@ Calculate the distribution of secondary cases for Ebola using the `ebola_sim_cle
 
 :::::::::::::::::: hint
 
-**Note:** This dataset has `r nrow(ebola_sim_clean$linelist)` cases. Running `epicontacts::vis_epicontacts()` may overload your session! Try to avoid this step.
+⚠️ **Optional step:** This dataset has `r nrow(ebola_sim_clean$linelist)` cases. Running `epicontacts::vis_epicontacts()` may take several minutes and use significant memory for large outbreaks such as the Ebola linelist. If you're on an older or slower computer, you can skip this step.
 
 ::::::::::::::::::
 
