@@ -13,6 +13,6 @@
 "episodes/superspreading-simulate.Rmd" "eafe47479011559c9f2c78e4a0e76425" "site/built/superspreading-simulate.md" "2025-05-01"
 "instructors/instructor-notes.md" "ca3834a1b0f9e70c4702aa7a367a6bb5" "site/built/instructor-notes.md" "2025-05-01"
 "learners/reference.md" "18f9dcee553dc88dba8caf6436f8ca41" "site/built/reference.md" "2025-05-01"
-"learners/setup.md" "d542d9bfe855a1d74b7a380961213325" "site/built/setup.md" "2025-05-01"
+"learners/setup.md" "a77b68b0ee7202c63a7fb50fd98de12c" "site/built/setup.md" "2025-05-01"
 "profiles/learner-profiles.md" "31b503c4b5bd1f0960ada730eca4a25e" "site/built/learner-profiles.md" "2025-05-01"
 "renv/profiles/lesson-requirements/renv.lock" "5ab06267a77fd96d707f26c36d99b879" "site/built/renv.lock" "2025-05-01"
