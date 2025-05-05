@@ -1,0 +1,1042 @@
+---
+title: Simuler des chaînes de transmission
+teaching: 30
+exercises: 2
+---
+
+:::::::::::::::::::::::::::::::::::::: questions
+
+- Comment simuler des chaînes de transmission basées sur les caractéristiques de l'infection ?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Estimez le potentiel de grandes épidémies suite à l'introduction d'un nouveau cas à l'aide d'un processus de ramification avec `{epichains}`.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Conditions préalables
+
+Les apprenants doivent se familiariser avec les concepts suivants avant de suivre ce tutoriel :
+
+**Statistiques** Les distributions de probabilités courantes, y compris les distributions de Poisson et binomiale négative.
+
+**Théorie des épidémies**: Le nombre de reproductions, $R$.
+
+:::::::::::::::::::::::::::::::::
+
+## Introduction
+
+<!-- ce que nous savons -->
+
+La variation individuelle de la transmission peut affecter à la fois le potentiel d'établissement d'une épidémie dans une population et la facilité de contrôle ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+
+- Une plus grande variation réduit la probabilité globale qu'un nouveau cas unique soit à l'origine d'une épidémie locale de grande ampleur, car la plupart des cas infectent peu d'autres personnes et les individus qui génèrent un grand nombre de cas secondaires sont relativement rares.
+
+- Toutefois, si un "événement de super propagation" se produit et que l'épidémie s'installe, cette variation peut rendre l'épidémie plus difficile à contrôler à l'aide d'un système d'information sur les maladies infectieuses. *des interventions de masse* (c'est-à-dire des interventions générales qui supposent implicitement que tout le monde contribue de manière égale à la transmission), car certains cas contribuent de manière disproportionnée : un seul cas non contrôlé peut générer un grand nombre de cas secondaires.
+
+- Inversement, la variation de la transmission peut offrir des possibilités de *des interventions ciblées* si les individus qui contribuent le plus à la transmission (en raison de facteurs biologiques ou comportementaux), ou les environnements dans lesquels se produisent les "événements de super propagation", partagent des caractéristiques sociodémographiques, environnementales ou géographiques qui peuvent être définies.
+
+<Ce que nous ne savons pas
+
+Comment pouvons-nous quantifier le potentiel d'une nouvelle infection à provoquer une épidémie de grande ampleur sur la base de son nombre de reproduction ? $R$ et de la dispersion $k$ de la distribution de sa descendance ?
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea, 2015, alongside with simulated transmission chains assuming an offspring distribution with $R=0.6$ and $k=0.02$."}
+
+library(epiparameter)
+library(tidyverse)
+library(outbreaks)
+
+mers_cumcases <- mers_korea_2015$linelist %>%
+  # incidence2 workflow
+  incidence2::incidence(date_index = "dt_onset") %>%
+  incidence2::complete_dates() %>%
+  # wrangling using {dplyr}
+  mutate(count_cumsum = cumsum(count)) %>%
+  rownames_to_column(var = "day") %>%
+  mutate(day = as.numeric(day))
+
+# offspring distribution
+mers_offspring <- c(mean = 0.60, dispersion = 0.02)
+
+# generation time
+serial_interval <- epiparameter_db(
+  disease = "mers",
+  epi_name = "serial",
+  single_epiparameter = TRUE
+)
+
+# Set seed for random number generator
+set.seed(33)
+# Number of simulation runs
+number_simulations <- 1000
+# Number of initial cases
+initial_cases <- 1
+
+simulated_chains_map <-
+  # iterate one function across multiple numbers (simulation IDs)
+  purrr::map(
+    # vector of numbers (simulation IDs)
+    .x = seq_len(number_simulations),
+    # function to iterate to each simulation ID number
+    .f = function(sim) {
+      epichains::simulate_chains(
+        # simulation controls
+        n_chains = initial_cases,
+        statistic = "size",
+        # offspring
+        offspring_dist = rnbinom,
+        mu = mers_offspring["mean"],
+        size = mers_offspring["dispersion"],
+        # generation
+        generation_time = function(x) generate(x = serial_interval, times = x)
+      ) %>%
+        # creates a column with the simulation ID number
+        dplyr::mutate(simulation_id = sim)
+    }
+  ) %>%
+  # combine list outputs (for each simulation ID) into a single data frame
+  purrr::list_rbind()
+
+# daily aggregate of cases
+simulated_chains_day <- simulated_chains_map %>%
+  # use data.frame output from <epichains> object
+  as_tibble() %>%
+  # transform simulation ID column to factor (categorical variable)
+  mutate(simulation_id = as_factor(simulation_id)) %>%
+  # get the round number (day) of infection times
+  mutate(day = ceiling(time)) %>%
+  # count the daily number of cases each simulation (simulation ID)
+  count(simulation_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (simulation ID)
+  group_by(simulation_id) %>%
+  mutate(cases_cumsum = cumsum(cases)) %>%
+  ungroup()
+
+# Summarise the chain duration and size
+sim_chains_max <-
+  simulated_chains_day %>%
+  group_by(simulation_id) %>%
+  summarise(
+    # duration
+    day_max = max(day),
+    # size
+    cases_total = max(cases_cumsum)
+  ) %>%
+  ungroup()
+
+# Observed cases vs Simulated transmission chains
+mers_cumcases_type <-
+  mers_cumcases %>%
+  mutate(type = "Observed")
+simulated_chains_day_type <-
+  simulated_chains_day %>%
+  mutate(type = "Simulated")
+
+ggplot() +
+  geom_line(
+    data = simulated_chains_day_type,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = simulation_id,
+      color = type
+    )
+  ) +
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  geom_line(
+    data = mers_cumcases_type,
+    mapping = aes(
+      x = day,
+      y = count_cumsum,
+      color = type
+    ),
+    linewidth = 1.5
+  ) +
+  labs(
+    x = "Day since first report",
+    y = "Cumulative cases",
+    color = "Type"
+  )
+```
+
+<!-- ce que nous allons faire -->
+
+Dans cet épisode, nous utiliserons la fonction `{epichains}` pour simuler des chaînes de transmission et estimer le potentiel d'épidémies importantes suite à l'introduction d'un nouveau cas. Nous allons l'utiliser avec les fonctions de `{epiparameter}`, `{dplyr}` et `{purrr}` de sorte qu'il faut également charger le `{tidyverse}` paquet :
+
+```r
+library(epichains)
+library(epiparameter)
+library(tidyverse)
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE}
+library(epiparameter)
+library(tidyverse)
+```
+
+::::::::::::::::::: checklist
+
+### Le double point-virgule
+
+Le double point-virgule `::` en R vous permettent d'appeler une fonction spécifique d'un paquetage sans charger le paquetage entier dans l'environnement courant.
+
+Par exemple, vous pouvez appeler une fonction spécifique d'un package sans charger le package entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir de l'outil `{dplyr}` paquet.
+
+Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les conflits d'espace de noms.
+
+:::::::::::::::::::
+
+## Simulation de foyers incontrôlés
+
+Les épidémies de maladies infectieuses se propagent dans les populations lorsqu'une chaîne d'individus infectés transmet l'infection à d'autres. [Processus de ramification](https://epiverse-trace.github.io/epichains/articles/theoretical_background.html) peuvent être utilisés pour modéliser cette transmission. Un processus de ramification est un processus stochastique (c'est-à-dire un processus aléatoire qui peut être décrit par une distribution de probabilité connue), dans lequel chaque individu infectieux donne naissance à un nombre aléatoire d'individus dans la génération suivante d'infection, en commençant par le cas index dans la génération 1. La distribution du nombre de cas secondaires générés par chaque individu est appelée distribution de la descendance ([Azam \& Funk, 2024](https://epiverse-trace.github.io/epichains/articles/epichains.html)).
+
+`{epichains}` fournit des méthodes d'analyse et de simulation de la *taille* et *longueur* des processus de ramification pour une distribution donnée de la descendance. `{epichains}` met en œuvre un modèle simple et rapide pour simuler les chaînes de transmission afin d'évaluer le risque épidémique, de projeter les cas dans l'avenir et d'évaluer les interventions qui modifient la distribution de la descendance. $R$.
+
+::::::::::::::::::: discussion
+
+### taille et longueur de la chaîne
+
+- La **taille** de la chaîne de transmission est définie comme le nombre total d'individus infectés sur toutes les générations d'infection, et
+
+- la **longueur** de la chaîne de transmission est le nombre de générations entre le premier et le dernier cas du foyer avant que la chaîne ne se termine.
+
+La longueur de la chaîne de transmission *taille* inclut le premier cas, et le calcul de la *longueur* contient la première génération lorsque le premier cas commence la chaîne (voir figure ci-dessous).
+
+![**Exemple d'une chaîne de transmission commençant par un seul cas C1.** Les cas sont représentés par des cercles bleus et des flèches indiquant qui a infecté qui. La chaîne se développe à travers les générations Gen 1, Gen 2 et Gen 3, produisant les cas C2, C3, C4, C5 et C6. La chaîne se termine à la génération Gen 3 avec les cas C4, C5 et C6. La taille de la chaîne de C1 est de 6, y compris C1 (c'est-à-dire la somme de tous les cercles bleus), et sa longueur est de 3, ce qui inclut la génération 1 (nombre maximal de générations atteint par la chaîne de C1) ([Azam \& Funk, 2024](https://epiverse-trace.github.io/epichains/articles/epichains.html)).](https://raw.githubusercontent.com/epiverse-trace/epichains/main/vignettes/img/transmission_chain_example.png)
+
+::::::::::::::::::::
+
+Pour utiliser `{epichains}` nous devons connaître (ou supposer) deux valeurs épidémiologiques clés : la distribution de la descendance et le temps de génération.
+
+## Obtenez la distribution de la descendance
+
+Nous supposons ici que la distribution de la descendance du MERS suit une distribution binomiale négative, avec une moyenne (nombre de reproduction $R$) et une dispersion $k$ estimées à partir de la liste et des données de contact de `mers_korea_2015` dans la `{outbreaks}` R dans l'épisode précédent.
+
+```{r}
+mers_offspring <- c(mean = 0.60, dispersion = 0.02)
+```
+
+:::::::::::::::::::::::::::: callout
+
+### distribution de la descendance pour les épichains
+
+Nous entrons une distribution de descendance dans `{epichains}` en faisant référence à la fonction R qui génère des valeurs aléatoires à partir de la distribution souhaitée. Pour une distribution binomiale négative, nous utilisons `rnbinom` avec la fonction `mu` et `size` arguments :
+
+```r
+  offspring_dist = rnbinom,
+  mu = mers_offspring["mean"],
+  size = mers_offspring["dispersion"],
+```
+
+Le manuel de référence en `?rnbinom` nous indique les arguments spécifiques requis.
+
+::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: spoiler
+
+### Poisson et autres distributions
+
+`{epichains}` peut accepter n'importe quelle fonction R qui génère des nombres aléatoires, de sorte que les arguments spécifiés changeront en fonction de la fonction R utilisée. Pour plus de détails sur les options possibles, consultez le manuel de référence de la fonction.
+
+Par exemple, disons que nous voulons utiliser une distribution de Poisson pour la distribution de la descendance. Tout d'abord, lisez l'argument requis dans le champ `?rpois` dans le manuel de référence. Ensuite, spécifiez l'argument `lambda` également connu sous le nom de taux ou de moyenne dans la littérature. En `{epichains}` cela peut ressembler à ceci :
+
+```r
+  offspring_dist = rpois,
+  lambda = mers_offspring["mean"],
+```
+
+Dans cet exemple, nous pouvons spécifier `lambda = mers_offspring["mean"]` car le nombre moyen de cas secondaires générés (c'est-à-dire $R$) devrait être le même quelle que soit la distribution que nous supposons. Ce qui change, c'est la variance de la distribution, et donc le niveau de variation de la transmission au niveau individuel. Lorsque le paramètre de dispersion $k$ s'approche de l'infini ($k \rightarrow \infty$) dans une distribution binomiale négative, la variance est égale à la moyenne. Cela fait de la distribution de Poisson classique un cas particulier de la distribution binomiale négative.
+
+::::::::::::::::::::::::::
+
+## Obtenir le temps de génération
+
+Les [intervalle de série](../learners/reference.md#serialinterval) est souvent utilisée pour approximer la distribution du temps de génération. Cette approximation est couramment utilisée parce qu'il est plus facile d'observer et de mesurer l'apparition des symptômes dans chaque cas que le moment précis de l'infection.
+
+:::::::::::::::::::::::::::::::: spoiler
+
+### temps de génération vs intervalle sériel
+
+![Schéma de la relation entre les différentes périodes de transmission entre un infecteur et un infecté dans une paire de transmission. La fenêtre d'exposition est définie comme l'intervalle de temps au cours duquel se produit l'exposition virale, et la fenêtre de transmission est définie comme l'intervalle de temps pour la transmission ultérieure par rapport à la durée de l'infection ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
+
+Cependant, l'utilisation de l'option *intervalle sériel* comme approximation de l'intervalle *temps de génération* est principalement valable pour les maladies dans lesquelles l'infectiosité commence après l'apparition des symptômes ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). Dans les cas où l'infectiosité commence avant l'apparition des symptômes, les intervalles sériels peuvent avoir des valeurs négatives, ce qui est le cas pour les maladies à transmission pré-symptomatique ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712\(20\)30119-3/fulltext#gr2)).
+
+::::::::::::::::::::::::::::::::
+
+Utilisons le `{epiparameter}` pour accéder à l'intervalle de série disponible pour la maladie MERS et l'utiliser :
+
+```{r, message=FALSE, warning=FALSE}
+serial_interval <- epiparameter_db(
+  disease = "mers",
+  epi_name = "serial",
+  single_epiparameter = TRUE
+)
+
+plot(serial_interval, day_range = 0:25)
+```
+
+```{r, echo=FALSE}
+serial_summary <- serial_interval$summary_stats %>%
+  dplyr::as_tibble() %>%
+  dplyr::select(mean, sd) %>%
+  dplyr::distinct(.keep_all = TRUE)
+```
+
+L'intervalle de série pour le MERS a une moyenne de `r serial_summary$mean` jours et un écart-type de `r serial_summary$sd` jours.
+
+:::::::::::::::::::::::::::: callout
+
+### temps de génération pour les épichaïnes
+
+En `{epichains}` nous devons spécifier le temps de génération comme une fonction qui génère des nombres aléatoires. En utilisant `{epiparameter}` présente l'avantage d'utiliser la fonction de distribution `epiparameter::generate()` pour cette entrée. Le résultat sera le suivant :
+
+```r
+function(x) generate(x = serial_interval, times = x)
+```
+
+Cette interface est similaire à celle de `{cfr}` pour établir un lien avec `{epiparameter}`. Lisez le [travailler avec des distributions de retard](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html) pour plus de détails.
+
+::::::::::::::::::::::::::::
+
+## Simuler une chaîne unique
+
+Nous sommes maintenant prêts à utiliser la fonction `simulate_chains()` de `{epichains}` pour créer **un** chaîne de transmission :
+
+```{r, message=FALSE, warning=FALSE, eval=FALSE}
+epichains::simulate_chains(
+  # simulation controls
+  n_chains = 5,
+  statistic = "size",
+  # offspring
+  offspring_dist = rnbinom,
+  mu = mers_offspring["mean"],
+  size = mers_offspring["dispersion"],
+  # generation
+  generation_time = function(x) generate(x = serial_interval, times = x)
+)
+```
+
+`simulate_chains()` nécessite au minimum trois séries d'arguments :
+
+- les contrôles de simulation,
+- la distribution de la progéniture, et
+- la durée de la génération.
+
+Dans les lignes ci-dessus, nous avons décrit comment spécifier la distribution des descendants et le temps de génération. Les **contrôle la simulation** comprennent au moins deux arguments :
+
+- `index_case`, qui définit le nombre de cas d'index pour simuler les chaînes de transmission pour et
+- `statistic` qui définit une statistique de chaîne à suivre (soit `"size"` ou `"length"`) comme critère d'arrêt pour chaque chaîne simulée.
+
+::::::::::::::::::::::::::: callout
+
+### Critères d'arrêt
+
+Il s'agit d'une fonction personnalisable de `{epichains}`. Par défaut, les simulations de processus de ramification se terminent lorsqu'elles se sont éteintes. Pour les chaînes de transmission de longue durée, en `simulate_chains()` vous pouvez ajouter le paramètre `stat_threshold` vous pouvez ajouter l'argument
+
+Par exemple, si nous définissons un critère d'arrêt pour `statistic = "size"` de `stat_threshold = 500` il n'y aura plus de descendance après une chaîne de taille 500.
+
+:::::::::::::::::::::::::::
+
+Les `simulate_chains()` crée un `<epichains>` que nous pouvons ensuite analyser dans R.
+
+## Simuler plusieurs chaînes
+
+Nous pouvons utiliser `simulate_chains()` pour créer plusieurs chaînes et augmenter la probabilité de simuler des projections de foyers incontrôlés en cas de distribution trop dispersée de la descendance.
+
+Nous devons spécifier trois éléments supplémentaires :
+
+- `set.seed(<integer>)`, qui est une fonction de générateur de nombres aléatoires avec une valeur de semence spécifiée, la fonction `<integer>` afin de garantir des résultats cohérents entre les différentes exécutions du code.
+- `number_simulations` qui définit le nombre de simulations à effectuer.
+- `initial_cases` définit le nombre de cas initiaux à introduire dans le programme `n_chains` expliqué dans les lignes ci-dessus.
+
+```{r}
+# Set seed for random number generator
+set.seed(33)
+# Number of simulation runs
+number_simulations <- 1000
+# Number of initial cases
+initial_cases <- 1
+```
+
+`number_simulations` et `initial_cases` sont commodément stockés dans des objets pour faciliter leur réutilisation en aval dans le flux de travail.
+
+:::::::::::::::::::::::::::::: checklist
+
+### Itération à l'aide de purrr
+
+[Itération](https://r4ds.hadley.nz/iteration.html) vise à effectuer la même action sur différents objets de manière répétée.
+
+Apprenez à utiliser le noyau `{purrr}` comme `map()` à partir du tutoriel YouTube sur [Comment ronronner](https://www.youtube.com/watch?v=nd-Y8b22YaQ) par Equitable Equations.
+
+Ou, si vous avez déjà utilisé la fonction `*apply` visitez la vignette du paquet sur la famille de fonctions [purrr base R](https://purrr.tidyverse.org/articles/base.html) qui présente les principales différences, des traductions directes et des exemples.
+
+::::::::::::::::::::::::::::::
+
+Pour obtenir plusieurs chaînes, nous devons appliquer la méthode `simulate_chains()` à chaque chaîne définie par une séquence de nombres allant de 1 à `r number_simulations`.
+
+::::::::::::::::::::::::::::::: callout
+
+### purrr et epichains
+
+Tout d'abord, décrivons comment nous utilisons `purrr::map()` avec `epichains::simulate_chains()`. Les `map()` nécessite deux arguments :
+
+- `.x`, un vecteur de nombres, et
+- `.f` une fonction permettant d'itérer sur chaque valeur du vecteur.
+
+```r
+map(
+  # vector of numbers (simulation IDs)
+  .x = seq_len(number_simulations),
+  # function to iterate to each simulation ID number
+  .f = function(sim) {
+    simulate_chains(...) %>%
+      # creates a column with the simulation ID number
+      mutate(simulation_id = sim)
+  }
+) %>%
+  # combine list outputs (for each simulation ID) into a single data frame
+  list_rbind()
+```
+
+Les `sim` est placé pour enregistrer le numéro d'itération (**ID de simulation**) en tant que nouvelle colonne dans la base de données `<epichains>` dans le fichier de sortie. Les `purrr::list_rbind()` a pour but de combiner toutes les sorties de liste de `map()`.
+
+**Pourquoi un point (`.`) comme préfixe ?** Dans le [principes de conception ordonnée](https://design.tidyverse.org/dots-prefix.html) nous avons un chapitre sur le préfixe point !
+
+:::::::::::::::::::::::::::::::
+
+Nous sommes maintenant prêts à utiliser `map()` pour simuler de manière répétée de `simulate_chains()` et de stocker dans un vecteur de 1 à `r number_simulations`:
+
+```{r}
+simulated_chains_map <-
+  # iterate one function across multiple numbers (simulation IDs)
+  purrr::map(
+    # vector of numbers (simulation IDs)
+    .x = seq_len(number_simulations),
+    # function to iterate to each simulation ID number
+    .f = function(sim) {
+      epichains::simulate_chains(
+        # simulation controls
+        n_chains = initial_cases,
+        statistic = "size",
+        # offspring
+        offspring_dist = rnbinom,
+        mu = mers_offspring["mean"],
+        size = mers_offspring["dispersion"],
+        # generation
+        generation_time = function(x) generate(x = serial_interval, times = x)
+      ) %>%
+        # creates a column with the simulation ID number
+        dplyr::mutate(simulation_id = sim)
+    }
+  ) %>%
+  # combine list outputs (for each simulation ID) into a single data frame
+  purrr::list_rbind()
+```
+
+```{r, echo=FALSE, eval=FALSE}
+# view infectee number per simulation
+simulated_chains_map %>%
+  dplyr::as_tibble() %>%
+  dplyr::count(simulation_id, sort = TRUE)
+```
+
+::::::::::::::::::::::::::::::::: discussion
+
+### Lire la sortie des épichains
+
+```{r, echo=FALSE}
+#### get simulated chain with more infections --------------------------------
+
+chains_subgroup <- simulated_chains_map %>%
+  as_tibble() %>%
+  group_by(simulation_id) %>%
+  distinct(infector) %>%
+  count(simulation_id) %>%
+  filter(n < 5, n >= 3) %>%
+  pull(simulation_id)
+
+chain_to_observe <- simulated_chains_map %>%
+  as_tibble() %>%
+  count(simulation_id, sort = TRUE) %>%
+  filter(
+    magrittr::is_in(
+      simulation_id, chains_subgroup
+    )
+  ) %>%
+  filter(n < 10) %>%
+  filter(n == max(n)) %>%
+  slice_min(simulation_id) %>%
+  pull(simulation_id)
+```
+
+Pour explorer le format de sortie de l'outil `<epichains>` objet de classe de nom `simulated_chains_map` examinons l'objet simulé `simulation_id` nombre `r chain_to_observe`.
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### L'objet épichaïnes
+
+Utilisons `dplyr::filter()` pour cela :
+
+```r
+chain_to_observe <- 806
+```
+
+```{r}
+#### get epichain summary ----------------------------------------------------
+
+simulated_chains_map %>%
+  dplyr::filter(simulation_id == chain_to_observe)
+```
+
+Les éléments clés de ce résultat se trouvent dans le pied de page, le texte qui apparaît en bas de page :
+
+```output
+Number of infectors (known): 3
+Number of generations: 3
+```
+
+La simulation `simulation_id` nombre `r chain_to_observe` comporte trois infecteurs connus et trois générations. Ces chiffres sont plus visibles lorsque vous lisez le `<epichains>` sous la forme d'un cadre de données.
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### Le cadre de données epichains
+
+```{r}
+#### infector-infectee data frame --------------------------------------------
+
+simulated_chains_map %>%
+  dplyr::filter(simulation_id == chain_to_observe) %>%
+  dplyr::as_tibble()
+```
+
+Chaîne `r chain_to_observe` nous indique une **histoire** Dans la première génération de transmission à `time = 0` un cas index a infecté le premier cas avec `sim_id = 1`. Ensuite, lors de la deuxième génération de transmission (entre `time` 10 à 16), `sim_id = 1` a infecté cinq cas. Plus tard, dans la troisième génération de transmission (entre `time` 26 à 30), `sim_id = 2` a infecté trois nouveaux cas".
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### Une base de données d'infectés
+
+Le cadre de données de sortie rassemble **les infectés** comme unité d'observation :
+
+- Chaque personne infectée a une `sim_id`.
+- Chaque *infecté* qui se comporte comme un *infecteur* est enregistré dans la base de données `infector` à l'aide de `sim_id` de cet infecté.
+- Chaque personne infectée l'a été dans une `generation` et (continu) `time`.
+- Le numéro de simulation est enregistré sous la rubrique `simulation_id` colonne.
+
+**Remarque :** Le `Number of infectors (known)` comprend le `NA` observation dans le cadre de la `infector` colonne. Il s'agit du vecteur spécifié comme cas index (dans la colonne `n_chains` ), qui a déclenché la chaîne de transmission à l'infecté de `sim_id = 1` à `generation = 1` et `time = 0`.
+
+:::::::::::::::::::::::::
+
+## Visualiser plusieurs chaînes
+
+Pour visualiser les chaînes simulées, nous avons besoin d'un traitement préalable :
+
+1. Utilisons `{dplyr}` pour obtenir des nombres de temps ronds qui ressemblent à des journées de surveillance.
+2. Comptez les cas quotidiens dans chaque simulation (par `simulation_id`).
+3. Calculez le nombre cumulé de cas dans une simulation.
+
+```{r}
+# daily aggregate of cases
+simulated_chains_day <- simulated_chains_map %>%
+  # use data.frame output from <epichains> object
+  dplyr::as_tibble() %>%
+  # transform simulation ID column to factor (categorical variable)
+  dplyr::mutate(simulation_id = as_factor(simulation_id)) %>%
+  # get the round number (day) of infection times
+  dplyr::mutate(day = ceiling(time)) %>%
+  # count the daily number of cases in each simulation (simulation ID)
+  dplyr::count(simulation_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (simulation ID)
+  dplyr::group_by(simulation_id) %>%
+  dplyr::mutate(cases_cumsum = cumsum(cases)) %>%
+  dplyr::ungroup()
+```
+
+Avant le tracé, créons un tableau récapitulatif avec la durée totale et la taille de chaque chaîne. Nous pouvons utiliser la fonction `{dplyr}` "combo" de `group_by()`, `summarise()` et `ungroup()`:
+
+```{r}
+# Summarise the chain duration and size
+sim_chains_max <-
+  simulated_chains_day %>%
+  dplyr::group_by(simulation_id) %>%
+  dplyr::summarise(
+    # duration
+    day_max = max(day),
+    # size
+    cases_total = max(cases_cumsum)
+  ) %>%
+  dplyr::ungroup()
+
+sim_chains_max
+```
+
+Nous sommes maintenant prêts à utiliser le `{ggplot2}` paquet :
+
+```{r}
+# Visualize transmission chains by cumulative cases
+ggplot() +
+  # create grouped chain trajectories
+  geom_line(
+    data = simulated_chains_day,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = simulation_id
+    ),
+    color = "black",
+    alpha = 0.25,
+    show.legend = FALSE
+  ) +
+  # create points to visualize the chain endpoint
+  geom_point(
+    data = sim_chains_max,
+    mapping = aes(
+      x = day_max,
+      y = cases_total,
+      group = simulation_id,
+      color = simulation_id
+    ),
+    show.legend = FALSE
+  ) +
+  # define a 100-case threshold
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  labs(
+    x = "Day",
+    y = "Cumulative cases"
+  )
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# proportion that reached the 100-case threshold
+threshhold_summary <- sim_chains_max %>%
+  dplyr::arrange(dplyr::desc(day_max)) %>%
+  dplyr::filter(cases_total > 100) %>%
+  dplyr::count(name = "chains_theshold") %>%
+  dplyr::mutate(chains_number = number_simulations) %>%
+  dplyr::mutate(chains_percentage = chains_theshold / chains_number * 100)
+
+chains_extinct <- sim_chains_max %>%
+  dplyr::arrange(dplyr::desc(day_max)) %>%
+  dplyr::filter(day_max > 0) %>%
+  dplyr::summarise(
+    extinct_duration_median = stats::median(day_max),
+    extinct_size_median = stats::median(cases_total)
+  )
+
+chains_null <- sim_chains_max %>%
+  dplyr::arrange(desc(cases_total)) %>%
+  dplyr::filter(day_max < 1) %>%
+  base::nrow()
+```
+
+Bien que la plupart des introductions de `r initial_cases` ne génèrent pas de cas secondaires (N = `r chains_null`) ou que la plupart des foyers s'éteignent rapidement (durée médiane de `r chains_extinct$extinct_duration_median` et taille médiane de `r chains_extinct$extinct_size_median`), seuls les `r threshhold_summary$chains_theshold` trajectoires épidémiques parmi les `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) peuvent atteindre plus de 100 cas infectés. Ce résultat est d'autant plus remarquable que le nombre de reproduction $R$ est inférieur à 1 (moyenne de la distribution des descendants de `r mers_offspring[["mean"]]`), mais, compte tenu d'un paramètre de dispersion de la distribution des descendants de `r mers_offspring[["dispersion"]]` il montre le potentiel de flambées explosives de la maladie MERS.
+
+Nous pouvons compter combien de chaînes ont atteint le seuil de 100 cas en utilisant la fonction `{dplyr}` fonctions :
+
+```{r}
+# number of chains that reached the 100-case threshold
+sim_chains_max %>%
+  dplyr::arrange(desc(day_max)) %>%
+  dplyr::filter(cases_total > 100)
+```
+
+::::::::::::::::::::::::::::::::::: spoiler
+
+### Cas observés vs chaînes simulées
+
+Recouvrons le nombre cumulé de cas observés à l'aide de l'objet linelist de l'application `mers_korea_2015` du jeu de données `{outbreaks}` R. Pour préparer l'ensemble de données afin de pouvoir tracer le nombre total de cas quotidiens au fil du temps, nous utilisons l'objet `{incidence2}` pour convertir la liste de lignes en un fichier `<incidence2>` compléter les dates manquantes de la série temporelle à l'aide de l'objet `complete_dates()`
+
+```{r, warning=FALSE, message=FALSE}
+library(outbreaks)
+
+mers_cumcases <- mers_korea_2015$linelist %>%
+  # incidence2 workflow
+  incidence2::incidence(date_index = "dt_onset") %>%
+  incidence2::complete_dates() %>%
+  # wrangling using {dplyr}
+  dplyr::mutate(count_cumsum = cumsum(count)) %>%
+  tibble::rownames_to_column(var = "day") %>%
+  dplyr::mutate(day = as.numeric(day))
+```
+
+Utiliser `plot()` pour réaliser un diagramme d'incidence :
+
+```{r}
+# plot the incidence2 object
+plot(mers_cumcases)
+```
+
+:::::::::::::::::::::::::::::::::::
+
+Si l'on compare le nombre de cas cumulés observés lors de l'épidémie de syndrome respiratoire du Moyen-Orient (MERS) en Corée du Sud en 2015 avec les chaînes simulées précédemment, on constate que les cas observés ont suivi une trajectoire cohérente avec la dynamique de l'épidémie explosive simulée (ce qui est logique, étant donné que la simulation utilise des paramètres basés sur cette épidémie spécifique).
+
+```{r, echo=FALSE}
+# Observed cases vs Simulated transmission chains
+mers_cumcases_type <-
+  mers_cumcases %>%
+  mutate(type = "Observed")
+simulated_chains_day_type <-
+  simulated_chains_day %>%
+  mutate(type = "Simulated")
+
+ggplot() +
+  geom_line(
+    data = simulated_chains_day_type,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = simulation_id,
+      color = type
+    )
+  ) +
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  geom_line(
+    data = mers_cumcases_type,
+    mapping = aes(
+      x = day,
+      y = count_cumsum,
+      color = type
+    ),
+    linewidth = 1.5
+  ) +
+  labs(
+    x = "Day since first report",
+    y = "Cumulative cases",
+    color = "Type"
+  )
+```
+
+Lorsque nous augmentons le paramètre de dispersion de $k = 0.01$ à $k = \infty$ - et donc de réduire la variation de la transmission au niveau individuel - et que nous supposons un nombre de reproduction fixe $R = 1.5$ la proportion de foyers simulés atteignant le seuil de 100 cas augmente. Cela s'explique par le fait que les foyers simulés présentent désormais une dynamique plus cohérente, dans le sens des aiguilles d'une montre, plutôt que le niveau élevé de variabilité observé précédemment.
+
+![**Croissance des épidémies simulées avec R = 1,5 et un cas initial, sous réserve de non-extinction.** Les encadrés indiquent la médiane et l'intervalle interquartile (IQR) de la première génération de la maladie avec 100 cas ; les moustaches indiquent les valeurs les plus extrêmes dans un rayon de 1,5 × IQR des encadrés, et les croix indiquent les valeurs aberrantes. Les pourcentages indiquent la proportion de 10 000 foyers simulés qui ont atteint le seuil de 100 cas ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).](fig/see-nature04153_Fig2-c.jpg)
+
+:::::::::::::::::::::: testimonial
+
+### Projections préliminaires de la propagation
+
+Dans la phase initiale de l'épidémie, vous pouvez utiliser `{epichains}` pour appliquer un modèle de processus de ramification afin de prévoir le nombre de cas futurs. Même si le modèle tient compte du caractère aléatoire de la transmission et de la variation du nombre de cas secondaires, il peut exister d'autres caractéristiques locales que nous n'avons pas prises en compte. L'analyse des premières prévisions faites pour le COVID dans différents pays à l'aide de cette structure de modèle a révélé que les prévisions étaient souvent trop confiantes ([Pearson et al., 2020](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.18.2000543#validationofthemodel-1)). Cela est probablement dû au fait que le modèle en temps réel n'incluait pas tous les changements dans la distribution de la progéniture qui se produisaient au niveau local à la suite des changements de comportement et des mesures de contrôle. Pour en savoir plus sur l'importance du contexte local dans les modèles COVID-19, consultez le document suivant [Eggo et al. (2020)](https://www.nature.com/articles/s43588-020-00014-7).
+
+Nous vous invitons à lire la vignette sur [Prévision de l'incidence des maladies infectieuses : l'exemple de COVID-19](https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html)! pour en savoir plus sur l'élaboration de prévisions à l'aide de `{epichains}`.
+
+::::::::::::::::::::::
+
+## Défis
+
+:::::::::::::::::::::::::: challenge
+
+### Potentiel d'épidémie de variole du singe
+
+Évaluez le potentiel d'un nouveau cas de variole du singe (Mpox) à générer une épidémie explosive de grande ampleur.
+
+- Simulez 1000 chaînes de transmission avec 1 cas initial chacune.
+- Utilisez le logiciel approprié pour accéder aux données sur les délais des épidémies précédentes.
+- Combien de trajectoires simulées atteignent plus de 100 cas infectés ?
+
+:::::::::::::: hint
+
+Avec `{epiparameter}` vous pouvez accéder et utiliser les distributions de descendants et de retards des épidémies d'Ebola précédentes.
+
+```{r, warning=FALSE, message=FALSE}
+library(epiparameter)
+library(tidyverse)
+
+epiparameter::epiparameter_db(epi_name = "offspring") %>%
+  epiparameter::parameter_tbl() %>%
+  dplyr::count(disease, epi_name)
+
+epiparameter::epiparameter_db(epi_name = "serial interval") %>%
+  epiparameter::parameter_tbl() %>%
+  dplyr::count(disease, epi_name)
+```
+
+::::::::::::::
+
+:::::::::::::: solution
+
+```{r, message=FALSE, warning=FALSE}
+# load packages -----------------------------------------------------------
+
+library(epiparameter)
+library(tidyverse)
+
+# delays ------------------------------------------------------------------
+
+mpox_offspring_epiparam <- epiparameter::epiparameter_db(
+  disease = "mpox",
+  epi_name = "offspring",
+  single_epiparameter = TRUE
+)
+
+mpox_offspring <- epiparameter::get_parameters(mpox_offspring_epiparam)
+
+mpox_serialint <- epiparameter::epiparameter_db(
+  disease = "mpox",
+  epi_name = "serial interval",
+  single_epiparameter = TRUE
+)
+
+# iterate -----------------------------------------------------------------
+
+# Set seed for random number generator
+set.seed(33)
+# Number of simulation runs
+number_simulations <- 1000
+# Number of initial cases
+initial_cases <- 1
+
+simulated_chains_mpox <-
+  # iterate one function across multiple numbers (simulation IDs)
+  purrr::map(
+    # vector of numbers (simulation IDs)
+    .x = seq_len(number_simulations),
+    # function to iterate to each simulation ID number
+    .f = function(sim) {
+      epichains::simulate_chains(
+        # simulation controls
+        n_chains = initial_cases,
+        statistic = "size",
+        # offspring
+        offspring_dist = rnbinom,
+        mu = mpox_offspring["mean"],
+        size = mpox_offspring["dispersion"],
+        # generation
+        generation_time = function(x) generate(x = mpox_serialint, times = x)
+      ) %>%
+        # creates a column with the simulation ID number
+        dplyr::mutate(simulation_id = sim)
+    }
+  ) %>%
+  # combine list outputs (for each simulation ID) into a single data frame
+  purrr::list_rbind()
+
+# visualize ---------------------------------------------------------------
+
+# daily aggregate of cases
+simulated_chains_mpox_day <- simulated_chains_mpox %>%
+  # use data.frame output from <epichains> object
+  dplyr::as_tibble() %>%
+  # transform simulation ID column to factor (categorical variable)
+  dplyr::mutate(simulation_id = as_factor(simulation_id)) %>%
+  # get the round number (day) of infection times
+  dplyr::mutate(day = ceiling(time)) %>%
+  # count the daily number of cases in each simulation (simulation ID)
+  dplyr::count(simulation_id, day, name = "cases") %>%
+  # calculate the cumulative number of cases for each simulation (simulation ID)
+  dplyr::group_by(simulation_id) %>%
+  dplyr::mutate(cases_cumsum = cumsum(cases)) %>%
+  dplyr::ungroup()
+
+# Visualize transmission chains by cumulative cases
+ggplot() +
+  # create grouped chain trajectories
+  geom_line(
+    data = simulated_chains_mpox_day,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = simulation_id
+    ),
+    color = "black",
+    alpha = 0.25,
+    show.legend = FALSE
+  ) +
+  # define a 100-case threshold
+  geom_hline(aes(yintercept = 100), lty = 2) +
+  labs(
+    x = "Day",
+    y = "Cumulative cases"
+  )
+```
+
+Dans l'hypothèse d'une épidémie de variole du singe avec $R$ = 0,32 et $k$ = 0,58, il n'y a pas de trajectoire parmi 1000 simulations qui atteignent plus de 100 cas d'infection. Par rapport au MERS ($R$ = 0,6 et $k$ = 0.02).
+
+::::::::::::::
+
+::::::::::::::::::: hint
+
+### Épidémie Évaluation du risque tenant compte de la superspreading
+
+Avec `{superspreading}` vous pouvez obtenir des solutions numériques à des processus qui `{epichains}` résoudre à l'aide de processus de branchement. Nous vous invitons à lire le `{superspreading}` vignette sur [Le risque épidémique](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html) et répondez aux questions suivantes :
+
+- Quelle est la probabilité qu'un agent pathogène nouvellement introduit provoque une épidémie de grande ampleur ?
+- Quelle est la probabilité qu'une infection ne s'établisse pas, par hasard, après une ou plusieurs introductions initiales ?
+- Quelle est la probabilité que l'épidémie soit endiguée ?
+
+Vérifiez que ces estimations varient de manière non linéaire en fonction du nombre moyen de reproduction. $R$ et de la dispersion $k$ d'une maladie donnée.
+
+<!-- -- projet de défi -->
+
+<Calculez la probabilité qu'un nouveau cas de Mpox conduise à une épidémie de grande ampleur en l'absence de mesures de contrôle. Utilisez le logiciel approprié pour accéder aux données sur les délais des épidémies précédentes. -->
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, eval=FALSE}
+# estimate probability to contain
+superspreading::probability_contain(
+  R = mers_offspring["mean"],
+  k = mers_offspring["dispersion"],
+  num_init_infect = 1,
+  case_threshold = 100
+)
+
+# Estimate the probability of a large outbreak
+# with 5 independent imported cases
+superspreading::probability_epidemic(
+  R = mers_offspring["mean"],
+  k = mers_offspring["dispersion"],
+  num_init_infect = 5
+)
+```
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, eval=FALSE}
+# estimate probability to contain
+superspreading::probability_contain(
+  R = mpox_offspring["mean"],
+  k = mpox_offspring["dispersion"],
+  num_init_infect = 1,
+  case_threshold = 100
+)
+
+# Estimate the probability of a large outbreak
+# with 5 independent imported cases
+superspreading::probability_epidemic(
+  R = mpox_offspring["mean"],
+  k = mpox_offspring["dispersion"],
+  num_init_infect = 5
+)
+```
+
+::::::::::::::::::
+
+:::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: challenge
+
+### À partir d'une distribution de cas secondaires
+
+[Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(15\)70135-0/fulltext) données réutilisées publiées par [Faye et al, 2015 (Figure 2)](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(14\)71075-8/fulltext#gr2) sur l'arbre de transmission de la maladie à virus Ebola à Conakry, en Guinée, en 2014.
+
+En utilisant les données de l'étude **indice** estimez la distribution des descendants à partir de la distribution des cas secondaires. Estimez ensuite le potentiel d'apparition d'un foyer important à partir de ces données.
+
+::::::::::: hint
+
+Code avec les données de l'arbre de transmission écrites par [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(15\)70135-0/fulltext):
+
+```{r, message=FALSE, warning=FALSE}
+# Number of individuals in the trees
+n <- 152
+# Number of secondary cases for all individuals
+c1 <- c(1, 2, 2, 5, 14, 1, 4, 4, 1, 3, 3, 8, 2, 1, 1,
+        4, 9, 9, 1, 1, 17, 2, 1, 1, 1, 4, 3, 3, 4, 2,
+        5, 1, 2, 2, 1, 9, 1, 3, 1, 2, 1, 1, 2)
+c0 <- c(c1, rep(0, n - length(c1)))
+
+c0 %>%
+  enframe() %>%
+  ggplot(aes(value)) +
+  geom_histogram()
+```
+
+:::::::::::
+
+::::::::::: solution
+
+```r
+# load packages ---------------------------
+library(epichains)
+library(epiparameter)
+library(fitdistrplus)
+library(tidyverse)
+```
+
+```{r, message=FALSE, warning=FALSE}
+# fit a negative binomial distribution ------------------------------------
+
+# Fitting a negative binomial distribution to the number of secondary cases
+fit.cases <- fitdistrplus::fitdist(c0, "nbinom")
+fit.cases
+
+# serial interval parameters ----------------------------------------------
+
+ebola_serialinter <- epiparameter::epiparameter_db(
+  disease = "ebola",
+  epi_name = "serial interval",
+  single_epiparameter = TRUE
+)
+
+# simulate outbreak trajectories ------------------------------------------
+
+# Set seed for random number generator
+set.seed(645)
+# Number of simulation runs
+number_simulations <- 1e2
+# Number of initial cases
+initial_cases <- 1
+
+sim_multiple_chains <-
+  purrr::map(
+    .x = seq_len(number_simulations),
+    .f = function(sim) {
+      epichains::simulate_chains(
+        n_chains = initial_cases,
+        # stopping
+        statistic = "size",
+        # offspring
+        offspring_dist = rnbinom,
+        mu = fit.cases$estimate["mu"],
+        size = fit.cases$estimate["size"],
+        # generation
+        generation_time = function(x) generate(x = ebola_serialinter, times = x)
+      ) %>%
+        dplyr::mutate(simulation_n = sim)
+    }
+  ) %>%
+  # combine list outputs (for each simulation ID) into a single data frame
+  purrr::list_rbind()
+
+# visualize ----------------------------------------
+
+sim_chains_aggregate <-
+  sim_multiple_chains %>%
+  dplyr::as_tibble() %>%
+  dplyr::mutate(simulation_n = as_factor(simulation_n)) %>%
+  dplyr::mutate(day = ceiling(time)) %>%
+  dplyr::count(simulation_n, day, name = "cases") %>%
+  dplyr::group_by(simulation_n) %>%
+  dplyr::mutate(cases_cumsum = cumsum(cases)) %>%
+  dplyr::ungroup()
+
+ggplot() +
+  geom_line(
+    data = sim_chains_aggregate,
+    mapping = aes(
+      x = day,
+      y = cases_cumsum,
+      group = simulation_n
+    ),
+    show.legend = FALSE
+  ) +
+  # define a 100-case threshold
+  geom_hline(aes(yintercept = 100), lty = 2)
+```
+
+Il est remarquable que même avec un R0 inférieur à 1 (R = 0,95), nous puissions avoir des épidémies potentiellement explosives. La variation observée de la contagiosité individuelle dans le cas d'Ebola signifie que, bien que la probabilité d'extinction soit élevée, les nouveaux cas index ont également le potentiel d'une repousse explosive de l'épidémie.
+
+:::::::::::
+
+:::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: keypoints
+
+- Utiliser `{epichains}` pour simuler le potentiel d'épidémies importantes de maladies dont la distribution des descendants est trop dispersée.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
