@@ -50,7 +50,7 @@ jobs:
           cache-version: ${{ secrets.CACHE_VERSION }}
 
       - name: "Setup Package Cache"
-        uses: Bisaloo/actions/setup-lesson-deps@patch-1
+        uses: carpentries/actions/setup-lesson-deps@main
         with:
           cache-version: ${{ secrets.CACHE_VERSION }}
 
