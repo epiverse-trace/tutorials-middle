@@ -521,7 +521,7 @@
     },
     "V8": {
       "Package": "V8",
-      "Version": "6.0.3",
+      "Version": "6.0.4",
       "Source": "Repository",
       "Type": "Package",
       "Title": "Embedded JavaScript and WebAssembly Engine for R",
@@ -551,7 +551,7 @@
       "Language": "en-US",
       "Encoding": "UTF-8",
       "Biarch": "true",
-      "Author": "Jeroen Ooms [aut, cre] (<https://orcid.org/0000-0002-4035-0289>), Jan Marvin Garbuszus [ctb]",
+      "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>), Jan Marvin Garbuszus [ctb]",
       "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
       "Repository": "CRAN"
     },
@@ -3036,7 +3036,7 @@
     },
     "incidence2": {
       "Package": "incidence2",
-      "Version": "2.6.2",
+      "Version": "2.6.3",
       "Source": "Repository",
       "Type": "Package",
       "Title": "Compute, Handle and Plot Incidence of Dated Events",
@@ -3075,10 +3075,13 @@
         "withr"
       ],
       "VignetteBuilder": "litedown",
+      "Config/testthat/load-all": "list(export_all = FALSE, helpers = FALSE)",
       "Config/testthat/edition": "3",
+      "Config/testthat/parallel": "true",
+      "Config/testthat/start-first": "plot, incidence, bootstrap",
       "LazyData": "true",
       "NeedsCompilation": "no",
-      "Author": "Tim Taylor [aut, cre] (<https://orcid.org/0000-0002-8587-7113>), Thibaut Jombart [ctb]",
+      "Author": "Tim Taylor [aut, cre] (ORCID: <https://orcid.org/0000-0002-8587-7113>), Thibaut Jombart [ctb]",
       "Maintainer": "Tim Taylor <tim.taylor@hiddenelephants.co.uk>",
       "Repository": "CRAN"
     },
