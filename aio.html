@@ -386,7 +386,7 @@
         
 <section id="aio-delays-access"><p>Content from <a href="delays-access.html">Access epidemiological delay distributions</a></p>
 <hr>
-<p>Last updated on 2025-06-05 |
+<p>Last updated on 2025-06-17 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/delays-access.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -1749,7 +1749,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-quantify-transmissibility"><p>Content from <a href="quantify-transmissibility.html">Quantifying transmission</a></p>
 <hr>
-<p>Last updated on 2025-06-05 |
+<p>Last updated on 2025-06-17 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/quantify-transmissibility.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2005,7 +2005,7 @@ reference manual</a></p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Can we replicate {incidence2} with {dplyr}? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>We can get an object similar to <code>cases</code> from the
 <code>incidence2::covidregionaldataUK</code> data frame using the
@@ -2223,7 +2223,7 @@ uncertainty of 0.5 days), we can specify a variable distribution using
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Visualize a log Normal distribution using {epiparameter} </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>Using <code>epiparameter::epiparameter()</code> we can create a
 custom distribution. The fixed log normal distribution will look
@@ -2409,6 +2409,17 @@ the time-varying reproduction number for the first 90 days:</p>
 <span>  rt <span class="op">=</span> <span class="va">rt_prior</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>WARN [2025-06-17 02:17:20] epinow: There were 4 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. -
+WARN [2025-06-17 02:17:20] epinow: There were 321 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded -
+WARN [2025-06-17 02:17:20] epinow: Examine the pairs() plot to diagnose sampling problems
+ - </code></pre>
+</div>
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
 <!-- estimates <- EpiNow2::epinow( -->
 <!--   # reported cases -->
@@ -2435,7 +2446,7 @@ specify a fixed number of <code>samples = 1000</code> and
 <code>EpiNow2::epinow()</code> function. We expect this to take
 approximately 3 minutes.</p>
 <!-- We can optionally set `stan = stan_opts(method = "vb")` to use an approximate sampling method. We expect this to take less than 1 minute. -->
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2457,7 +2468,7 @@ More accurate outputs come at the cost of speed.</p>
 </h3>
 <p>We can extract and visualise estimates of the effective reproduction
 number through time:</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2473,7 +2484,7 @@ not have been observed yet) and therefore have increasingly wider
 intervals towards the date of the last data point. Finally, the
 <strong>Forecast</strong> (purple) is a projection ahead of time.</p>
 <p>We can also visualise the growth rate estimate through time:</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2481,7 +2492,7 @@ intervals towards the date of the last data point. Finally, the
 </div>
 <figure><img src="fig/quantify-transmissibility-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To extract a summary of the key transmission metrics at the
 <em>latest date</em> in the data:</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2492,24 +2503,24 @@ intervals towards the date of the last data point. Finally, the
 </h3>
 <pre class="output" tabindex="0"><code>                        measure                estimate
                          &lt;char&gt;                  &lt;char&gt;
-1:       New infections per day    7938 (4681 -- 13018)
+1:       New infections per day    8101 (4785 -- 13390)
 2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.72 -- 1.2)
-4:               Rate of growth -0.012 (-0.11 -- 0.077)
-5: Doubling/halving time (days)         -57 (9 -- -6.4)</code></pre>
+3:   Effective reproduction no.      0.97 (0.74 -- 1.2)
+4:               Rate of growth -0.0097 (-0.1 -- 0.078)
+5: Doubling/halving time (days)       -71 (8.9 -- -6.9)</code></pre>
 </div>
 <p>As these estimates are based on partial data, they have a wide
 uncertainty interval.</p>
 <ul>
 <li><p>From the summary of our analysis we see that the expected change
-in reports is Stable with the estimated new infections 7938 (4681 –
-13018).</p></li>
+in reports is Stable with the estimated new infections 8101 (4785 –
+13390).</p></li>
 <li><p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
-data) is 0.97 (0.72 – 1.2).</p></li>
-<li><p>The exponential growth rate of case numbers is -0.012 (-0.11 –
-0.077).</p></li>
+data) is 0.97 (0.74 – 1.2).</p></li>
+<li><p>The exponential growth rate of case numbers is -0.0097 (-0.1 –
+0.078).</p></li>
 <li><p>The doubling time (the time taken for case numbers to double) is
--57 (9 – -6.4).</p></li>
+-71 (8.9 – -6.9).</p></li>
 </ul>
 <div id="expected-change-in-reports" class="callout">
 <div class="callout-square">
@@ -2618,7 +2629,7 @@ incidence data by the variable <code>region</code>,</li>
 <li>estimate the Rt per region using the defined generation time and
 delays in this episode.</li>
 </ul>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2634,10 +2645,10 @@ delays in this episode.</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>To wrangle data, you can:</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2667,12 +2678,12 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
 <code>regional_epinow()</code>:</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2687,7 +2698,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>Plot the results with:</p>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2725,7 +2736,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-delays-functions"><p>Content from <a href="delays-functions.html">Use delay distributions in analysis</a></p>
 <hr>
-<p>Last updated on 2025-06-05 |
+<p>Last updated on 2025-06-17 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/delays-functions.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -2957,8 +2968,8 @@ object you want!</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code> [1] 2.249917 5.295778 4.926316 2.107721 1.246307 3.064102 7.866809 4.351900
- [9] 2.099250 5.902396</code></pre>
+<pre class="output" tabindex="0"><code> [1] 3.756675 2.353420 2.675375 3.047172 3.611178 4.031858 1.807294 6.278103
+ [9] 3.412789 1.792092</code></pre>
 </div>
 
 <div id="window-for-contact-tracing-and-the-serial-interval" class="callout challenge">
@@ -3364,9 +3375,22 @@ time-varying reproduction number using
 <span>  data <span class="op">=</span> <span class="va">example_confirmed</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">60</span><span class="op">]</span>,</span>
 <span>  <span class="co"># delays</span></span>
 <span>  generation_time <span class="op">=</span> <span class="fu">generation_time_opts</span><span class="op">(</span><span class="va">serial_interval_covid</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">base</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_cg</span><span class="op">)</span></span></code></pre>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>WARN [2025-06-17 02:18:16] epinow: There were 1 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. -
+WARN [2025-06-17 02:18:16] epinow: Examine the pairs() plot to diagnose sampling problems
+ - </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb35">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">base</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_cg</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/delays-functions-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The <code>plot()</code> output includes the estimated cases by date
 of infection, which are reconstructed from the reported cases and
@@ -3442,7 +3466,7 @@ function.</p>
 helper function are analogous to the <code>generation_time</code>
 argument and the <code>generation_time_opts()</code> helper
 function.</p>
-<div class="codewrapper sourceCode" id="cb34">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3465,7 +3489,7 @@ function.</p>
 </button>
 <div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb35">
+<div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3529,9 +3553,32 @@ function.</p>
 <span>  <span class="co"># delays</span></span>
 <span>  generation_time <span class="op">=</span> <span class="fu">generation_time_opts</span><span class="op">(</span><span class="va">covid_serial_interval</span><span class="op">)</span>,</span>
 <span>  delays <span class="op">=</span> <span class="fu">delay_opts</span><span class="op">(</span><span class="va">covid_incubation_time</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">base</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_cgi</span><span class="op">)</span></span></code></pre>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>WARN [2025-06-17 02:19:08] epinow: There were 140 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded -
+WARN [2025-06-17 02:19:08] epinow: There were 1 chains where the estimated Bayesian Fraction of Missing Information was low. See
+https://mc-stan.org/misc/warnings.html#bfmi-low -
+WARN [2025-06-17 02:19:08] epinow: Examine the pairs() plot to diagnose sampling problems
+ -
+WARN [2025-06-17 02:19:08] epinow: The largest R-hat is NA, indicating chains have not mixed.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#r-hat -
+WARN [2025-06-17 02:19:09] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess -
+WARN [2025-06-17 02:19:11] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess - </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb39">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">base</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_cgi</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/delays-functions-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Try to complement the <code>delays</code> argument with a reporting
 delay like the <code>reporting_delay_fixed</code> object of the previous
@@ -3636,7 +3683,7 @@ use functions like:</p>
 </button>
 <div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb36">
+<div class="codewrapper sourceCode" id="cb40">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3657,7 +3704,7 @@ use functions like:</p>
 <span><span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span>disease <span class="op">=</span> <span class="st">"ebola"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">parameter_tbl</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb37">
+<div class="codewrapper sourceCode" id="cb41">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3708,9 +3755,22 @@ use functions like:</p>
 <span>  <span class="co"># delays</span></span>
 <span>  generation_time <span class="op">=</span> <span class="fu">generation_time_opts</span><span class="op">(</span><span class="va">serial_interval_ebola</span><span class="op">)</span>,</span>
 <span>  delays <span class="op">=</span> <span class="fu">delay_opts</span><span class="op">(</span><span class="va">incubation_period_ebola</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_egi</span><span class="op">)</span></span></code></pre>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>WARN [2025-06-17 02:19:48] epinow: There were 1 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. -
+WARN [2025-06-17 02:19:48] epinow: Examine the pairs() plot to diagnose sampling problems
+ - </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb43">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_egi</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="fig/delays-functions-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure>
 </div>
@@ -3753,7 +3813,7 @@ distributions</a>.</p>
 </button>
 <div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb38">
+<div class="codewrapper sourceCode" id="cb44">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3773,7 +3833,7 @@ distributions</a>.</p>
 2 incubation period    15
 3 serial interval       1</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb40">
+<div class="codewrapper sourceCode" id="cb46">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3804,7 +3864,7 @@ Parameters:
   shape: 2.360
   scale: 3.180</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb42">
+<div class="codewrapper sourceCode" id="cb48">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3830,7 +3890,7 @@ Parameters:
 </h3>
 <pre class="output" tabindex="0"><code>[1] 0.00000000 0.06312336 0.22134988 0.29721220 0.23896828 0.12485164 0.04309454</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb44">
+<div class="codewrapper sourceCode" id="cb50">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3871,7 +3931,7 @@ Parameters:
 <pre class="output" tabindex="0"><code>[1] 0.00000000 0.05749151 0.16687705 0.22443092 0.21507632 0.16104546 0.09746609
 [8] 0.04841928</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb46">
+<div class="codewrapper sourceCode" id="cb52">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3984,7 +4044,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-create-forecast"><p>Content from <a href="create-forecast.html">Create a short-term forecast</a></p>
 <hr>
-<p>Last updated on 2025-06-05 |
+<p>Last updated on 2025-06-17 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/create-forecast.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -4240,20 +4300,44 @@ standard deviation 1%), then we specify the <code>scale</code> input to
 <span>  rt <span class="op">=</span> <span class="va">rt_prior</span>,</span>
 <span>  <span class="co"># Add observation model</span></span>
 <span>  obs <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">obs_opts</span><span class="op">(</span>scale <span class="op">=</span> <span class="va">obs_scale</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">base</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">estimates</span><span class="op">)</span></span></code></pre>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>WARN [2025-06-17 02:27:38] epinow: There were 1 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. -
+WARN [2025-06-17 02:27:38] epinow: There were 497 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded -
+WARN [2025-06-17 02:27:38] epinow: Examine the pairs() plot to diagnose sampling problems
+ -
+WARN [2025-06-17 02:27:39] epinow: The largest R-hat is NA, indicating chains have not mixed.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#r-hat -
+WARN [2025-06-17 02:27:40] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess -
+WARN [2025-06-17 02:27:41] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess - </code></pre>
+</div>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">base</span><span class="fu">::</span><span class="fu">summary</span><span class="op">(</span><span class="va">estimates</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>                        measure                 estimate
                          &lt;char&gt;                   &lt;char&gt;
-1:       New infections per day   20088 (13470 -- 29612)
+1:       New infections per day   20215 (13335 -- 30549)
 2:   Expected change in reports                   Stable
-3:   Effective reproduction no.       0.97 (0.78 -- 1.2)
-4:               Rate of growth -0.011 (-0.087 -- 0.063)
-5: Doubling/halving time (days)           -64 (11 -- -8)</code></pre>
+3:   Effective reproduction no.       0.97 (0.77 -- 1.2)
+4:               Rate of growth -0.011 (-0.092 -- 0.065)
+5: Doubling/halving time (days)         -62 (11 -- -7.5)</code></pre>
 </div>
 <p>The estimates of transmission measures such as the effective
 reproduction number and rate of growth are similar (or the same in
@@ -4303,7 +4387,7 @@ in this example <strong>cases</strong>,</li>
 <code>secondary</code>: number of secondary observations date, in
 this example <strong>deaths</strong>.</li>
 </ul>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4357,7 +4441,7 @@ adding an observation process, see
 <code>?EpiNow2::estimate_secondary</code> for detail on these
 options.</p>
 <p>To find the model fit between cases and deaths:</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4379,6 +4463,13 @@ options.</p>
 <span>  delays <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">delay_opts</span><span class="op">(</span><span class="va">delay_report_to_death</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>WARN [2025-06-17 02:27:46] estimate_secondary (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess - </code></pre>
+</div>
 <div id="be-cautious-of-time-scale" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -4397,7 +4488,7 @@ forecast.</p>
 <p>We plot the model fit (shaded ribbons) with the secondary
 observations (bar plot) and primary observations (dotted line) as
 follows:</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4410,7 +4501,7 @@ model fit.</p>
 and cases, so we create a data frame by extracting the cases. But in
 practice, this would be a different data set consisting of cases
 only.</em></p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4421,7 +4512,7 @@ only.</em></p>
 </div>
 <p>To forecast, we use the model fit
 <code>estimate_cases_to_deaths</code>:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4526,7 +4617,7 @@ generation time.</p>
 <p>We specify the distributions with some uncertainty around the mean
 and standard deviation of the log normal distribution for the incubation
 period and the Gamma distribution for the generation time.</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4549,7 +4640,7 @@ period and the Gamma distribution for the generation time.</p>
 4 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015         957
 5 Ebola Virus Dise… Ebola V… incubat… gamma             WHO E…  2015         792</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4582,7 +4673,7 @@ period and the Gamma distribution for the generation time.</p>
 <p>We read the data input using <code>readr::read_csv()</code>. This
 function recognize that the column <code>date</code> is a
 <code>&lt;date&gt;</code> class vector.</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4593,7 +4684,7 @@ function recognize that the column <code>date</code> is a
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p>Preprocess and adapt the raw data for <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>:</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4632,7 +4723,7 @@ function recognize that the column <code>date</code> is a
 </div>
 <p>We define an observation model to scale the estimated and forecast
 number of new infections:</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4643,7 +4734,7 @@ number of new infections:</p>
 <p>As we want to also create a two week forecast, we specify
 <code>horizon = 14</code> to forecast 14 days instead of the default 7
 days.</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4660,13 +4751,13 @@ days.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>WARN [2025-06-05 12:34:48] epinow: There were 1 divergent transitions after warmup. See
+<pre class="output" tabindex="0"><code>WARN [2025-06-17 02:28:33] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. -
-WARN [2025-06-05 12:34:48] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-06-17 02:28:33] epinow: Examine the pairs() plot to diagnose sampling problems
  - </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4675,19 +4766,19 @@ WARN [2025-06-05 12:34:48] epinow: Examine the pairs() plot to diagnose sampling
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                        measure                estimate
-                         &lt;char&gt;                  &lt;char&gt;
-1:       New infections per day          91 (49 -- 191)
-2:   Expected change in reports              Increasing
-3:   Effective reproduction no.        1.6 (1.2 -- 2.4)
-4:               Rate of growth 0.041 (0.0037 -- 0.088)
-5: Doubling/halving time (days)         17 (7.9 -- 190)</code></pre>
+<pre class="output" tabindex="0"><code>                        measure                 estimate
+                         &lt;char&gt;                   &lt;char&gt;
+1:       New infections per day           91 (49 -- 187)
+2:   Expected change in reports               Increasing
+3:   Effective reproduction no.         1.6 (1.2 -- 2.4)
+4:               Rate of growth 0.041 (0.00015 -- 0.088)
+5: Doubling/halving time (days)         17 (7.9 -- 4700)</code></pre>
 </div>
 <p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
 data) is 1.6 (1.2 – 2.4). The exponential growth rate of case numbers is
-0.041 (0.0037 – 0.088).</p>
+0.041 (0.00015 – 0.088).</p>
 <p>Visualize the estimates:</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4711,7 +4802,7 @@ data, it has considerable uncertainty.</p>
 <p>The reproduction number that is projected into the future can be
 changed to a less recent estimate based on more data using
 <code>rt_opts()</code>:</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4762,7 +4853,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-severity-static"><p>Content from <a href="severity-static.html">Estimation of outbreak severity</a></p>
 <hr>
-<p>Last updated on 2025-06-05 |
+<p>Last updated on 2025-06-17 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/severity-static.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -6311,7 +6402,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-superspreading-estimate"><p>Content from <a href="superspreading-estimate.html">Account for superspreading</a></p>
 <hr>
-<p>Last updated on 2025-06-05 |
+<p>Last updated on 2025-06-17 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-estimate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -7558,7 +7649,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-superspreading-simulate"><p>Content from <a href="superspreading-simulate.html">Simulate transmission chains</a></p>
 <hr>
-<p>Last updated on 2025-06-05 |
+<p>Last updated on 2025-06-17 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-simulate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -8879,8 +8970,8 @@ any links that you are not going to use.
   "url": "https://epiverse-trace.github.io/tutorials-middle/aio.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/aio.html",
   "dateCreated": "2025-06-05",
-  "dateModified": "2025-06-10",
-  "datePublished": "2025-06-10"
+  "dateModified": "2025-06-17",
+  "datePublished": "2025-06-17"
 }
 
   </script><script>
