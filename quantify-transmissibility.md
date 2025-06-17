@@ -470,6 +470,16 @@ estimates <- EpiNow2::epinow(
 )
 ```
 
+``` output
+WARN [2025-06-17 02:17:20] epinow: There were 4 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2025-06-17 02:17:20] epinow: There were 321 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
+WARN [2025-06-17 02:17:20] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
 <!-- estimates <- EpiNow2::epinow( -->
 <!--   # reported cases -->
@@ -535,22 +545,22 @@ summary(estimates)
 ``` output
                         measure                estimate
                          <char>                  <char>
-1:       New infections per day    7938 (4681 -- 13018)
+1:       New infections per day    8101 (4785 -- 13390)
 2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.72 -- 1.2)
-4:               Rate of growth -0.012 (-0.11 -- 0.077)
-5: Doubling/halving time (days)         -57 (9 -- -6.4)
+3:   Effective reproduction no.      0.97 (0.74 -- 1.2)
+4:               Rate of growth -0.0097 (-0.1 -- 0.078)
+5: Doubling/halving time (days)       -71 (8.9 -- -6.9)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7938 (4681 -- 13018).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 8101 (4785 -- 13390).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.72 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.012 (-0.11 -- 0.077).
++ The exponential growth rate of case numbers is -0.0097 (-0.1 -- 0.078).
 
-+ The doubling time (the time taken for case numbers to double) is -57 (9 -- -6.4).
++ The doubling time (the time taken for case numbers to double) is -71 (8.9 -- -6.9).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
