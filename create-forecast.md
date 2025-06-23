@@ -199,22 +199,11 @@ estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2025-06-17 02:27:38] epinow: There were 1 divergent transitions after warmup. See
+WARN [2025-06-23 14:13:25] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-06-17 02:27:38] epinow: There were 497 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
-https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2025-06-17 02:27:38] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-06-23 14:13:25] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
-WARN [2025-06-17 02:27:39] epinow: The largest R-hat is NA, indicating chains have not mixed.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#r-hat - 
-WARN [2025-06-17 02:27:40] epinow: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess - 
-WARN [2025-06-17 02:27:41] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
 
 ``` r
@@ -222,13 +211,13 @@ base::summary(estimates)
 ```
 
 ``` output
-                        measure                 estimate
-                         <char>                   <char>
-1:       New infections per day   20215 (13335 -- 30549)
-2:   Expected change in reports                   Stable
-3:   Effective reproduction no.       0.97 (0.77 -- 1.2)
-4:               Rate of growth -0.011 (-0.092 -- 0.065)
-5: Doubling/halving time (days)         -62 (11 -- -7.5)
+                        measure                  estimate
+                         <char>                    <char>
+1:       New infections per day    20271 (13176 -- 30254)
+2:   Expected change in reports                    Stable
+3:   Effective reproduction no.        0.97 (0.77 -- 1.2)
+4:               Rate of growth -0.0098 (-0.092 -- 0.067)
+5: Doubling/halving time (days)          -71 (10 -- -7.5)
 ```
 
 
@@ -313,9 +302,9 @@ estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
 ```
 
 ``` output
-WARN [2025-06-17 02:27:46] estimate_secondary (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+WARN [2025-06-23 14:13:32] estimate_secondary (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess - 
+https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
 
 
@@ -539,31 +528,21 @@ ebola_estimates <- EpiNow2::epinow(
   # horizon needs to be 14 days to create two week forecast (default is 7 days)
   forecast = EpiNow2::forecast_opts(horizon = 14)
 )
-```
 
-``` output
-WARN [2025-06-17 02:28:33] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-06-17 02:28:33] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 summary(ebola_estimates)
 ```
 
 ``` output
-                        measure                 estimate
-                         <char>                   <char>
-1:       New infections per day           91 (49 -- 187)
-2:   Expected change in reports               Increasing
-3:   Effective reproduction no.         1.6 (1.2 -- 2.4)
-4:               Rate of growth 0.041 (0.00015 -- 0.088)
-5: Doubling/halving time (days)         17 (7.9 -- 4700)
+                        measure                estimate
+                         <char>                  <char>
+1:       New infections per day          92 (49 -- 191)
+2:   Expected change in reports              Increasing
+3:   Effective reproduction no.        1.6 (1.1 -- 2.4)
+4:               Rate of growth 0.041 (0.0034 -- 0.087)
+5: Doubling/halving time (days)           17 (8 -- 200)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.2 -- 2.4). The exponential growth rate of case numbers is 0.041 (0.00015 -- 0.088).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.1 -- 2.4). The exponential growth rate of case numbers is 0.041 (0.0034 -- 0.087).
 
 Visualize the estimates:
 
