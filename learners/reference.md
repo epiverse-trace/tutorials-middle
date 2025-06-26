@@ -122,7 +122,7 @@ It is a type of sampling bias. It affects backward-looking data and is related t
 : Equivalent to forecast (except in a statistical sense when predictions can be any unobserved, including past, data).
 
 [Projection]{#projection}
-: The same as "simulation", i.e. a model run forward; often, but not necessarily always, assuming things may stay the same. A projection may be used as a forecast.
+: The same as "simulation", i.e., a model run forward; often, but not necessarily always, assuming things may stay the same. A projection may be used as a forecast.
 
 <!-- ## Q -->
 
