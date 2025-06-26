@@ -48,7 +48,7 @@ Different sampling approaches can generate biases given left and right censoring
 ## F
 
 [Forecast]{#forecast}
-:  A statement about the future i.e. giving predicted probabilities for future outcomes (if a deterministic forecast then that probability == 1).
+:  A statement about the future i.e. giving predicted probabilities for future outcomes (if a deterministic forecast then that probability = 1).
 
 ## G
 [Generation time]{#generationtime}
