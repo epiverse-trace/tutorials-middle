@@ -23,6 +23,7 @@ title: 'Glossary of Terms: Epiverse-TRACE'
 
 [C++]{#cplusplus}
 : C++ is a high-level programming language that can be used within R to speed up sections of code. To learn more about C++ check out these [tutorials](https://cplusplus.com/doc/tutorial/) and learn more about the integration of C++ and R [here](https://www.rcpp.org/).
+
 [Censoring]{#censoring}
 : 
 Means that we know an event happened, but we do not know exactly when it happened. Most epidemiological data are “doubly censored” because there is uncertainty surrounding both primary and secondary event times. Not accounting for censoring can lead to biased estimates of the delay’s standard deviation ([Park et al., in progress](https://github.com/parksw3/epidist-paper)).
@@ -31,7 +32,7 @@ Different sampling approaches can generate biases given left and right censoring
 ## D
 
 [Delay distribution]{#delaydist}
-: Probability distribution ([Althobaity et al., 2022, Figure 5](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)) of a key epidemiological time period ([Althobait et al., 2022, Figure 6](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)). For a full summary of key epidemiological periods refer to [Xiang et al., 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038/#fig4). [Early task tutorials](https://epiverse-trace.github.io/tutorials-early/) contain episodes on this topic.
+: Probability distribution ([Althobaity et al., 2022, Figure 5](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig5)) of a key epidemiological time period ([Althobait et al., 2022, Figure 6](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)). For a full summary of key epidemiological periods refer to [Xiang et al., 2021](https://www.sciencedirect.com/science/article/pii/S2468042721000038/#fig4). [Middle task tutorials](https://epiverse-trace.github.io/tutorials-middle/delays-access.html) contain episodes on this topic.
 
 [Deterministic model]{#deterministic}
 : Models that will always have the same trajectory for given initial conditions and parameter values. Examples include ordinary differential equations and difference equations. 
@@ -42,12 +43,12 @@ Different sampling approaches can generate biases given left and right censoring
 ## E
 
 [Effective reproduction number]{#effectiverepro}
-: The time-varying or effective reproduction number ($Rt$) is similar to the [Basic reproductive number](#basic) ($R0$), but $Rt$ measures the number of persons infected by infectious person when some portion of the population has already been infected. Read more about the [etymology of Reproduction number by Sharma et al, 2023](https://wwwnc.cdc.gov/eid/article/29/8/22-1445_article).
+: The time-varying or effective reproduction number ($R_t$) is similar to the [Basic reproductive number](#basic) ($R_0$), but $R_t$ measures the number of persons infected by infectious person when some portion of the population has already been infected. Read more about the [etymology of Reproduction number by Sharma et al, 2023](https://wwwnc.cdc.gov/eid/article/29/8/22-1445_article).
 
 ## F
 
 [Forecast]{#forecast}
-:  A statement about the future i.e. giving predicted probabilities for future outcomes (if a deterministic forecast then that probability == 1).
+:  A statement about the future i.e. giving predicted probabilities for future outcomes (if a deterministic forecast then that probability = 1).
 
 ## G
 [Generation time]{#generationtime}
@@ -121,7 +122,7 @@ It is a type of sampling bias. It affects backward-looking data and is related t
 : Equivalent to forecast (except in a statistical sense when predictions can be any unobserved, including past, data).
 
 [Projection]{#projection}
-: The same as "simulation", i.e. a model run forward; often, but not necessarily always, assuming things may stay the same. A projection may be used as a forecast.
+: The same as "simulation", i.e., a model run forward; often, but not necessarily always, assuming things may stay the same. A projection may be used as a forecast.
 
 <!-- ## Q -->
 

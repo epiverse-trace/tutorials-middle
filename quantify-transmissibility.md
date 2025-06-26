@@ -470,6 +470,13 @@ estimates <- EpiNow2::epinow(
 )
 ```
 
+``` output
+WARN [2025-06-26 16:28:16] epinow: There were 40 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
+WARN [2025-06-26 16:28:16] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
 <!-- estimates <- EpiNow2::epinow( -->
 <!--   # reported cases -->
@@ -535,22 +542,22 @@ summary(estimates)
 ``` output
                         measure               estimate
                          <char>                 <char>
-1:       New infections per day   7866 (4651 -- 13046)
-2:   Expected change in reports      Likely decreasing
-3:   Effective reproduction no.     0.96 (0.73 -- 1.2)
-4:               Rate of growth -0.014 (-0.1 -- 0.074)
-5: Doubling/halving time (days)      -50 (9.4 -- -6.6)
+1:       New infections per day   8018 (4815 -- 13266)
+2:   Expected change in reports                 Stable
+3:   Effective reproduction no.     0.97 (0.74 -- 1.2)
+4:               Rate of growth -0.011 (-0.1 -- 0.079)
+5: Doubling/halving time (days)      -61 (8.8 -- -6.9)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7866 (4651 -- 13046).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 8018 (4815 -- 13266).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.014 (-0.1 -- 0.074).
++ The exponential growth rate of case numbers is -0.011 (-0.1 -- 0.079).
 
-+ The doubling time (the time taken for case numbers to double) is -50 (9.4 -- -6.6).
++ The doubling time (the time taken for case numbers to double) is -61 (8.8 -- -6.9).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
