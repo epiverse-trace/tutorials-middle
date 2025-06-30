@@ -659,7 +659,7 @@ We can use either visual inspection or analysis of the output data frames.
 
 ::::::::::::::::::::::
 
-:::::::::::::::::::::: solution
+:::::::::::::::::::::: instructor
 
 There is almost one month of difference.
 
