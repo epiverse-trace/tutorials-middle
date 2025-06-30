@@ -1343,101 +1343,7 @@ distribution?</p></li>
 </div>
 </div>
 </div>
-<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
-  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
-</button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
-<div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb33">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># ebola serial interval</span></span>
-<span><span class="va">ebola_serial</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span></span>
-<span>    disease <span class="op">=</span> <span class="st">"ebola"</span>,</span>
-<span>    epi_name <span class="op">=</span> <span class="st">"serial"</span>,</span>
-<span>    single_epiparameter <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span>  <span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>Using WHO Ebola Response Team, Agua-Agum J, Ariyarajah A, Aylward B, Blake I,
-Brennan R, Cori A, Donnelly C, Dorigatti I, Dye C, Eckmanns T, Ferguson
-N, Formenty P, Fraser C, Garcia E, Garske T, Hinsley W, Holmes D,
-Hugonnet S, Iyengar S, Jombart T, Krishnan R, Meijers S, Mills H,
-Mohamed Y, Nedjati-Gilani G, Newton E, Nouvellet P, Pelletier L,
-Perkins D, Riley S, Sagrado M, Schnitzler J, Schumacher D, Shah A, Van
-Kerkhove M, Varsaneux O, Kannangarage N (2015). "West African Ebola
-Epidemic after One Year — Slowing but Not Yet under Control." _The New
-England Journal of Medicine_. doi:10.1056/NEJMc1414992
-&lt;https://doi.org/10.1056/NEJMc1414992&gt;..
-To retrieve the citation use the 'get_citation' function</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb35">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ebola_serial</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>Disease: Ebola Virus Disease
-Pathogen: Ebola Virus
-Epi Parameter: serial interval
-Study: WHO Ebola Response Team, Agua-Agum J, Ariyarajah A, Aylward B, Blake I,
-Brennan R, Cori A, Donnelly C, Dorigatti I, Dye C, Eckmanns T, Ferguson
-N, Formenty P, Fraser C, Garcia E, Garske T, Hinsley W, Holmes D,
-Hugonnet S, Iyengar S, Jombart T, Krishnan R, Meijers S, Mills H,
-Mohamed Y, Nedjati-Gilani G, Newton E, Nouvellet P, Pelletier L,
-Perkins D, Riley S, Sagrado M, Schnitzler J, Schumacher D, Shah A, Van
-Kerkhove M, Varsaneux O, Kannangarage N (2015). "West African Ebola
-Epidemic after One Year — Slowing but Not Yet under Control." _The New
-England Journal of Medicine_. doi:10.1056/NEJMc1414992
-&lt;https://doi.org/10.1056/NEJMc1414992&gt;.
-Distribution: gamma (days)
-Parameters:
-  shape: 2.188
-  scale: 6.490</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb37">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># get the sd</span></span>
-<span><span class="va">ebola_serial</span><span class="op">$</span><span class="va">summary_stats</span><span class="op">$</span><span class="va">sd</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>[1] 9.6</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb39">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># get the sample_size</span></span>
-<span><span class="va">ebola_serial</span><span class="op">$</span><span class="va">metadata</span><span class="op">$</span><span class="va">sample_size</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>[1] 305</code></pre>
-</div>
-<p>Try to visualise this distribution using <code>plot()</code>.</p>
-<p>Also, explore all the other nested elements within the
-<code>&lt;epiparameter&gt;</code> object.</p>
-<p>Share about:</p>
-<ul><li>What elements do you find useful for your analysis?</li>
-<li>What other elements would you like to see in this object? How?</li>
-</ul></div>
-</div>
-</div>
-</div>
+
 
 <div id="ebolas-severity-parameter" class="callout challenge">
 <div class="callout-square">
@@ -1473,12 +1379,12 @@ output is a dataframe.</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
+<div id="accordionSolution3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
-  <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
+<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
+  <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
