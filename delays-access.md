@@ -747,7 +747,9 @@ Use the `str()` to display the structure of the `<epiparameter>` R object.
 
 ::::::::::::::::::
 
-:::::::::: solution
+::::::::::::::::::::::::::::::::
+
+:::::::::: instructor
 
 
 ``` r
@@ -827,8 +829,6 @@ Share about:
 - What other elements would you like to see in this object? How?
 
 ::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::: instructor
 
