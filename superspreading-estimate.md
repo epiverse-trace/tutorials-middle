@@ -554,7 +554,9 @@ Review how we estimated the probability of having clusters of a fixed size, give
 
 ::::::::::::::::
 
-:::::::::::::::: solution
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::: instructor
 
 
 ``` r
@@ -578,8 +580,6 @@ superspreading::proportion_cluster_size(
 The probability of having clusters of five people is 1.8%. At this stage, given this offspring distribution parameters, a backward strategy may not increase the probability of contain and quarantine more onward cases.
 
 ::::::::::::::::
-
-:::::::::::::::::::::::::::::::::
 
 ## Challenges
 
