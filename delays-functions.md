@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  3.778501  1.371712  2.989096  3.956009  3.535480 13.181157  1.695853
- [8]  9.427779  5.340617  6.935263
+ [1]  2.138982  5.300177  4.713444 11.746768  3.253313  2.686995 10.102512
+ [8]  3.082944  6.712965  3.765955
 ```
 
 ::::::::: instructor
@@ -470,17 +470,7 @@ epinow_estimates_cg <- epinow(
   # delays
   generation_time = generation_time_opts(serial_interval_covid)
 )
-```
 
-``` output
-WARN [2025-06-30 09:59:43] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-06-30 09:59:43] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 base::plot(epinow_estimates_cg)
 ```
 

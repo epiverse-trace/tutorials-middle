@@ -533,24 +533,24 @@ summary(estimates)
 ```
 
 ``` output
-                        measure               estimate
-                         <char>                 <char>
-1:       New infections per day   7900 (4687 -- 12879)
-2:   Expected change in reports      Likely decreasing
-3:   Effective reproduction no.     0.96 (0.73 -- 1.2)
-4:               Rate of growth -0.013 (-0.1 -- 0.072)
-5: Doubling/halving time (days)      -52 (9.6 -- -6.8)
+                        measure                estimate
+                         <char>                  <char>
+1:       New infections per day    8034 (4844 -- 13928)
+2:   Expected change in reports                  Stable
+3:   Effective reproduction no.      0.97 (0.74 -- 1.3)
+4:               Rate of growth -0.0094 (-0.1 -- 0.087)
+5: Doubling/halving time (days)       -74 (7.9 -- -6.8)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7900 (4687 -- 12879).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 8034 (4844 -- 13928).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.3). 
 
-+ The exponential growth rate of case numbers is -0.013 (-0.1 -- 0.072).
++ The exponential growth rate of case numbers is -0.0094 (-0.1 -- 0.087).
 
-+ The doubling time (the time taken for case numbers to double) is -52 (9.6 -- -6.8).
++ The doubling time (the time taken for case numbers to double) is -74 (7.9 -- -6.8).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
