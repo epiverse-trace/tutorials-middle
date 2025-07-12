@@ -328,7 +328,7 @@ In 2009, during the swine-flu virus, Influenza A (H1N1), Mexico had an early bia
 
 In the USA and Canada, no deaths were attributed to the virus in the first ten days following the World Health Organization's declaration of a public health emergency. Even under similar circumstances at the early stage of the global pandemic, public health officials, policymakers and the general public want to know the virulence of an emerging infectious agent.
 
-[Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062) reinterpreted the data assessing the biases and getting a clinical severity lower than the 1918 influenza pandemic but comparable with that seen in the 1957 pandemic.
+[Garske et al., 2009](https://www.bmj.com/content/339/bmj.b2840) assess the challenges to estimate the severity of this pandemic, emphasising that accurately capturing the cases for the denominator can improve the capacity to obtain informative CFR estimates.
 
 ::::::::::::::::::::
 
