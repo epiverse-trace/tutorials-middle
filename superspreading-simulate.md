@@ -203,22 +203,19 @@ Now we are prepared to use the `simulate_chains()` function from `{epichains}` t
 
 ``` r
 epichains::simulate_chains(
-  # simulation controls
   n_chains = 1,
   statistic = "size",
-  # offspring
   offspring_dist = rnbinom,
   mu = mers_offspring["mean"],
   size = mers_offspring["dispersion"],
-  # generation
   generation_time = function(x) generate(x = serial_interval, times = x)
 )
 ```
 
 `simulate_chains()` requires three sets of arguments as a minimum:
 
-- simulation controls (`n_chains` and `statistic`),
-- offspring distribution (`offspring_dist` and required distribution parameters), and
+- **simulation controls** (`n_chains` and `statistic`),
+- **offspring distribution** (`offspring_dist` and required distribution parameters), and
 - generation time (`generation_time`).
 
 In the lines above, we described how to specify the offspring distribution and generation time. The **simulation controls** include at least two arguments:
@@ -272,8 +269,20 @@ You can inspect the total **size** of each simulated chain, equivalent to the cu
 summary(multiple_epichains)
 ```
 
-``` error
-Error: object 'multiple_epichains' not found
+``` output
+`epichains_summary` object 
+
+  [1]   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+ [19]   7   1   1   1   1   1   1   1   1   1   1  14   1   2   1   1   2   1
+ [37]   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+ [55]   1   1   1   1 512   1   1   1   1   1 104   1   1   1   1   1   1   1
+ [73]   1   1   1   1   1   1   1   1   1   4   1   1   1   1   1   1   1   1
+ [91]   1   1   1   1   1   1   1   1   1   1
+
+ Simulated sizes: 
+
+Max: 512
+Min: 1
 ```
 
 We can visually count how many chains reach to more than 100 infected cases, with the maximum and minimun counts too.
@@ -292,9 +301,11 @@ If you need help, return to the "Chain size and length" callout box from the beg
 
 :::::::::::::::::::
 
-## Simulate multiple chains using iteration
+## Iterate simulations 
 
-We can configure the simulation of multiple chains by simply increasing the number of chains, as before, or iterate over one specific chain simulation.
+We can configure the simulation of multiple chains by simply increasing the number of chains (`n_chains`), as before. 
+If we assume that each initial case start in a different time, we need to iterate over one specific chain simulation.
+This table compare the alternatives:
 
 | Number of chains | Replicates | Start time (`t0`) | Use |
 |---|---|---|---|
@@ -302,29 +313,43 @@ We can configure the simulation of multiple chains by simply increasing the numb
 | Multiple | 1000, e.g. | Same | `epichains::simulate_chains(n_chains = 1000)` |
 | Multiple | 1000, e.g. | Different | Iterate using `purrr::map()` over `epichains::simulate()` |
 
-:::::::::::: callout
-
 The key difference of the third configuration is the `t0` argument from `epichains::simulate_chains()`. 
+The argument `t0` defines the start time of each initial case per chain.
+
+:::::::::::: callout
 
 One example of using iteration is available in the `{epichains}` vignette on [Projecting infectious disease incidence: a COVID-19 example](https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html). The aim is to simulate the importation of 13 cases during different moments in time. 
 
 
 ``` r
-epichains::covid19_sa[1:5, ]
+epichains::covid19_sa[1:5, ] %>%
+  dplyr::mutate(start_time = date - min(date))
 ```
 
 ``` output
-# A tibble: 5 × 2
-  date       cases
-  <date>     <int>
-1 2020-03-05     1
-2 2020-03-07     1
-3 2020-03-08     1
-4 2020-03-09     4
-5 2020-03-11     6
+# A tibble: 5 × 3
+  date       cases start_time
+  <date>     <int> <drtn>    
+1 2020-03-05     1 0 days    
+2 2020-03-07     1 2 days    
+3 2020-03-08     1 3 days    
+4 2020-03-09     4 4 days    
+5 2020-03-11     6 6 days    
 ```
 
-Instead of having 100 chains starting on the same Day 0 (`t0 = 0`, as default), each simulation will create chains that start at a different moment in time. It will consider day `2020-03-05` as Day `0`. The first chain starts on day 0, one in day 2, one in day 3, four in day 4, and six in day 6. 
+Instead of having 100 chains starting on the same Day 0 (`t0 = 0`, as default), each simulation will create chains that start at a different moment in time. 
+It will consider day `2020-03-05` as Day `0`. The first chain starts on day 0, one in day 2, one in day 3, four in day 4, and six in day 6.
+The argument `t0` will have this structure:
+
+
+``` r
+t0 <- c(0, 2, 3, rep(4, 4), rep(6, 6))
+t0
+```
+
+``` output
+ [1] 0 2 3 4 4 4 4 6 6 6 6 6 6
+```
 
 To increase the probability of simulating uncontrolled outbreak projections, this same scenario need to be iterated 100 times. This will help us to provide a projection with uncertainty.
 
@@ -507,7 +532,10 @@ simulated_chains_map %>%
 9     1        2        9          3  26.6           806
 ```
 
-Chain 806 tells us a **story**: "In the first transmission generation at `time = 0`, one index case infected the first case with `sim_id = 1`. Then, in the second transmission generation (between `time` 10 to 16), `sim_id = 1` infected five cases. Later, in the third transmission generation (between `time` 26 to 30), `sim_id = 2` infected three new cases."
+Chain 806 tells us a **story**: 
+"In the first transmission generation at `time = 0`, one index case (`infector = NA`) infected the first case with `infectee = 1`.
+Then, in the second transmission generation (between `time` 10 to 16), `infector = 1` infected five cases. 
+Later, in the third transmission generation (between `time` 26 to 30), `infector = 2` infected three new cases."
 
 :::::::::::::::::::::::::
 
@@ -517,8 +545,8 @@ Chain 806 tells us a **story**: "In the first transmission generation at `time =
 
 The output data frame collects **infectees** as the observation unit: 
 
-- Each infectee has a `sim_id`. 
-- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `sim_id` of that infectee. 
+- Each infectee has a `infectee` "id". 
+- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `infectee` "id". 
 - Each infectee got infected in a specific `generation` and (continuous) `time`. 
 - The simulation number is registered under the `simulation_id` column.
 
@@ -627,14 +655,15 @@ ggplot() +
   )
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 
 
 
 Although most introductions of 1 index case do not generate secondary cases (N = 934) or most outbreaks rapidly become extinct (median duration of 17 and median size of 5.5), only 1 epidemic trajectories among 1000 simulations (0.1%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of 0.6), but, given an offspring distribution dispersion parameter of 0.02, it shows the potential for explosive outbreaks of MERS disease.
 
-We can count how many chains reached the 100-case threshold using `{dplyr}` functions:
+We can count how many chains reached the 100-case threshold using `{dplyr}` functions.
+This output should give us equivalent results to `summary(multiple_epichains)`:
 
 
 ``` r
@@ -650,8 +679,6 @@ summary_chains %>%
   <int>   <dbl>       <int>
 1    65      34         103
 ```
-
-This output should give us equivalent results to `summary(multiple_epichains)`.
 
 ::::::::::::::::::::::::::::::::::: spoiler
 
@@ -681,13 +708,13 @@ Use `plot()` to make an incidence plot:
 plot(mers_cumcases)
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::::
 
 When plotting the observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea in 2015 alongside the previously simulated chains, we see that the observed cases followed a trajectory that is consistent with the simulated explosive outbreak dynamics (which makes sense, given the simulation uses parameters based on this specific outbreak).
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
 
 When we increase the dispersion parameter from $k = 0.01$ to $k = \infty$ - and hence reduce individual-level variation in transmission - and assume a fixed reproduction number $R = 1.5$, the proportion of simulated outbreaks that reached the 100-case threshold increases. This is because the simulated outbreaks now have more of a consistent, clockwise dynamic, rather than the high level of variability seen previously.
 
@@ -796,14 +823,11 @@ mpox_serialint <- epiparameter::epiparameter_db(
 set.seed(33)
 
 simulated_chains_mpox <- epichains::simulate_chains(
-  # simulation controls
   n_chains = 1000,
   statistic = "size",
-  # offspring
   offspring_dist = rnbinom,
   mu = mpox_offspring["mean"],
   size = mpox_offspring["dispersion"],
-  # generation
   generation_time = function(x) generate(x = mpox_serialint, times = x)
 )
 
@@ -831,7 +855,7 @@ simulated_chains_mpox_day %>%
   labs(x = "Day", y = "Cumulative cases")
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
 
 Assuming a Monkey pox outbreak with $R$ = 0.32 and $k$ = 0.58, there is no trajectory among 1000 simulations that reach more than 100 infected cases. Compared to MERS ($R$ = 0.6 and $k$ = 0.02).
 
@@ -889,7 +913,7 @@ c0 %>%
   geom_histogram()
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-29-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-30-1.png" style="display: block; margin: auto;" />
 
 :::::::::::
 
@@ -967,7 +991,7 @@ sim_chains_aggregate %>%
   labs(x = "Day", y = "Cumulative cases")
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-30-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
 
 
 Remarkably, even with R0 less than 1 (R = 0.95) we can have potentially explosive outbreaks. The observed variation in individual infectiousness in Ebola means that although the probability of extinction is high, new index cases also have the potential for explosive regrowth of the epidemic.
