@@ -299,26 +299,19 @@ Now we are prepared to use the `simulate_chains()` function from `{epichains}` t
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 epichains::simulate_chains(
-  
-  # simulation controls
   n_chains = 1,
   statistic = "size",
-  
-  # offspring
   offspring_dist = rnbinom,
   mu = mers_offspring["mean"],
   size = mers_offspring["dispersion"],
-  
-  # generation
   generation_time = function(x) generate(x = serial_interval, times = x)
-
 )
 ```
 
 `simulate_chains()` requires three sets of arguments as a minimum:
 
-- simulation controls (`n_chains` and `statistic`),
-- offspring distribution (`offspring_dist` and required distribution parameters), and
+- **simulation controls** (`n_chains` and `statistic`),
+- **offspring distribution** (`offspring_dist` and required distribution parameters), and
 - generation time (`generation_time`).
 
 In the lines above, we described how to specify the offspring distribution and generation time. The **simulation controls** include at least two arguments:
@@ -406,7 +399,7 @@ The argument `t0` defines the start time of each initial case per chain.
 One example of using iteration is available in the `{epichains}` vignette on [Projecting infectious disease incidence: a COVID-19 example](https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html). The aim is to simulate the importation of 13 cases during different moments in time. 
 
 ```{r}
-epichains::covid19_sa[1:5, ] %>% 
+epichains::covid19_sa[1:5, ] %>%
   dplyr::mutate(start_time = date - min(date))
 ```
 
