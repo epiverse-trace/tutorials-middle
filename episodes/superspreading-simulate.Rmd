@@ -66,8 +66,7 @@ serial_interval <- epiparameter_db(
   disease = "mers",
   epi_name = "serial",
   single_epiparameter = TRUE
-) #%>%
-  #epiparameter::discretise()
+)
 
 # Set seed for random number generator
 set.seed(33)
@@ -711,11 +710,9 @@ We can count how many chains reached the 100-case threshold using `{dplyr}` func
 summary_chains %>%
   dplyr::arrange(desc(cases_total)) %>%
   dplyr::filter(cases_total > 100)
-
-# similar to printing the summary of <epichains>
-# the printed vector have the size of each chain
-#summary(multiple_epichains)
 ```
+
+This output should give us equivalent results to `summary(multiple_epichains)`.
 
 ::::::::::::::::::::::::::::::::::: spoiler
 
@@ -871,10 +868,6 @@ simulated_chains_mpox <- epichains::simulate_chains(
   # generation
   generation_time = function(x) generate(x = mpox_serialint, times = x)
 )
-
-# Print the summary of <epichains>
-# the printed vector have the size of each chain
-#summary(simulated_chains_mpox)
 
 # visualize ---------------------------------------------------------------
 
