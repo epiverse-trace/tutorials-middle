@@ -282,6 +282,7 @@
 <li><a href="#get-generation-time">Get generation time</a></li>
 <li><a href="#simulate-a-single-chain">Simulate a single chain</a></li>
 <li><a href="#simulate-multiple-chains">Simulate multiple chains</a></li>
+<li><a href="#simulate-multiple-chains-using-iteration">Simulate multiple chains using iteration</a></li>
 <li><a href="#visualize-multiple-chains">Visualize multiple chains</a></li>
 <li><a href="#challenges">Challenges</a></li>
         </ul></div><!--/div.accordion-body-->
@@ -348,7 +349,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Simulate transmission chains</h1>
-        <p>Last updated on 2025-07-07 |
+        <p>Last updated on 2025-07-15 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-simulate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -545,7 +546,7 @@ specific arguments.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson and other distributions </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p><a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> can accept any R function that generates
 random numbers, so the specified arguments will change depending on the
@@ -589,7 +590,7 @@ precise time of infection.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> generation time vs serial interval </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <figure><img src="fig/serial-interval-observed.jpeg" alt="A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021)." class="figure mx-auto d-block"><div class="figcaption">A schematic of the relationship of different
 time periods of transmission between an infector and an infectee in a
@@ -609,7 +610,8 @@ et al., 2020</a>).</p>
 </div>
 </div>
 <p>Let’s use the <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> package to access and use
-the available serial interval for MERS disease:</p>
+the available serial interval for MERS disease.
+<!-- For `{epichains}` we need a **discretised** input distribution, se we use `epiparameter::discretise()`: --></p>
 <div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -648,17 +650,18 @@ with delay distributions</a> vignette for further context.</p>
 </div>
 </div>
 </div>
+
 </section><section><h2 class="section-heading" id="simulate-a-single-chain">Simulate a single chain<a class="anchor" aria-label="anchor" href="#simulate-a-single-chain"></a></h2>
 <hr class="half-width"><p>Now we are prepared to use the <code>simulate_chains()</code>
 function from <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> to create <strong>one</strong>
 transmission chain:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span></span>
 <span>  <span class="co"># simulation controls</span></span>
-<span>  n_chains <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  n_chains <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  statistic <span class="op">=</span> <span class="st">"size"</span>,</span>
 <span>  <span class="co"># offspring</span></span>
 <span>  offspring_dist <span class="op">=</span> <span class="va">rnbinom</span>,</span>
@@ -670,15 +673,17 @@ transmission chain:</p>
 </div>
 <p><code>simulate_chains()</code> requires three sets of arguments as a
 minimum:</p>
-<ul><li>simulation controls,</li>
-<li>offspring distribution, and</li>
-<li>generation time.</li>
+<ul><li>simulation controls (<code>n_chains</code> and
+<code>statistic</code>),</li>
+<li>offspring distribution (<code>offspring_dist</code> and required
+distribution parameters), and</li>
+<li>generation time (<code>generation_time</code>).</li>
 </ul><p>In the lines above, we described how to specify the offspring
 distribution and generation time. The <strong>simulation
 controls</strong> include at least two arguments:</p>
 <ul><li>
-<code>index_case</code>, which defines the number of index cases to
-simulate transmission chains for and</li>
+<code>n_chains</code>, which defines the number of transmission
+chains to simulate for and</li>
 <li>
 <code>statistic</code>, which defines a chain statistic to track
 (either <code>"size"</code> or <code>"length"</code>) as the stopping
@@ -707,26 +712,162 @@ further in R.</p>
 <hr class="half-width"><p>We can use <code>simulate_chains()</code> to create multiple chains
 and increase the probability of simulating uncontrolled outbreak
 projections given an overdispersed offspring distribution.</p>
-<p>We need to specify three additional elements:</p>
+<p>We need to one additional element:</p>
 <ul><li>
 <code>set.seed(&lt;integer&gt;)</code>, which is a random number
 generator function with a specified seed value, the
 <code>&lt;integer&gt;</code> number, to ensure consistent results across
 different runs of the code.</li>
-<li>
+</ul><p>With this configuration, each <strong>chain</strong> will represent
+<strong>one initial case</strong>. These cases per chain are
+independent, isolated, and without interactions. This means that each
+chain will have their own pool of susceptibles, which you can configure
+by using the <code>pop</code> or <code>percent_immune</code>
+arguments.</p>
+<p>Now, let’s simulate <strong>100</strong> transmission chains:</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Run all this chunk together for the set.seed</span></span>
+<span><span class="co"># Set seed for random number generator</span></span>
+<span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
+<span><span class="va">multiple_epichains</span> <span class="op">&lt;-</span> <span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span></span>
+<span>  n_chains <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="st">"size"</span>,</span>
+<span>  offspring_dist <span class="op">=</span> <span class="va">rnbinom</span>,</span>
+<span>  mu <span class="op">=</span> <span class="va">mers_offspring</span><span class="op">[</span><span class="st">"mean"</span><span class="op">]</span>,</span>
+<span>  size <span class="op">=</span> <span class="va">mers_offspring</span><span class="op">[</span><span class="st">"dispersion"</span><span class="op">]</span>,</span>
+<span>  generation_time <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">serial_interval</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>You can inspect the total <strong>size</strong> of each simulated
+chain, equivalent to the cumulative number of cases per chain, using the
+<code>summary()</code> to the <code>&lt;epichains&gt;</code> class
+object:</p>
+<div class="codewrapper sourceCode" id="cb10">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">summary</span><span class="op">(</span><span class="va">multiple_epichains</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error: object 'multiple_epichains' not found</code></pre>
+</div>
+<p>We can visually count how many chains reach to more than 100 infected
+cases, with the maximum and minimun counts too.</p>
+<div id="challenge1" class="callout challenge">
+<div class="callout-square">
+<i class="callout-icon" data-feather="zap"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Challenge</h3>
+<div class="callout-content">
+<p>Use the last run of <code>epichains::simulate_chains()</code> for
+simulating multiple chains. Change the <code>statistic</code> from
+<code>"size"</code> to <code>"length"</code>. Run the
+<code>summary()</code> function.</p>
+<ul><li>What chain feature this output count for?</li>
+</ul></div>
+</div>
+</div>
+<div id="accordionHint1" class="accordion challenge-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
+  <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
+</button>
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div class="accordion-body">
+<p>If you need help, return to the “Chain size and length” callout box
+from the beginning.</p>
+</div>
+</div>
+</div>
+</div>
+</section><section><h2 class="section-heading" id="simulate-multiple-chains-using-iteration">Simulate multiple chains using iteration<a class="anchor" aria-label="anchor" href="#simulate-multiple-chains-using-iteration"></a></h2>
+<hr class="half-width"><p>We can configure the simulation of multiple chains by simply
+increasing the number of chains, as before, or iterate over one specific
+chain simulation.</p>
+<table class="table"><colgroup><col width="25%"><col width="25%"><col width="25%"><col width="25%"></colgroup><thead><tr class="header"><th>Number of chains</th>
+<th>Replicates</th>
+<th>Start time (<code>t0</code>)</th>
+<th>Use</th>
+</tr></thead><tbody><tr class="odd"><td>Single</td>
+<td>1</td>
+<td>Same</td>
+<td><code>epichains::simulate_chains(n_chains = 1)</code></td>
+</tr><tr class="even"><td>Multiple</td>
+<td>1000, e.g.</td>
+<td>Same</td>
+<td><code>epichains::simulate_chains(n_chains = 1000)</code></td>
+</tr><tr class="odd"><td>Multiple</td>
+<td>1000, e.g.</td>
+<td>Different</td>
+<td>Iterate using <code>purrr::map()</code> over
+<code>epichains::simulate()</code>
+</td>
+</tr></tbody></table><div id="callout4" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Callout</h3>
+<div class="callout-content">
+<p>The key difference of the third configuration is the <code>t0</code>
+argument from <code>epichains::simulate_chains()</code>.</p>
+<p>One example of using iteration is available in the
+<a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> vignette on <a href="https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html" class="external-link">Projecting
+infectious disease incidence: a COVID-19 example</a>. The aim is to
+simulate the importation of 13 cases during different moments in
+time.</p>
+<div class="codewrapper sourceCode" id="cb12">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">epichains</span><span class="fu">::</span><span class="va">covid19_sa</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="op">]</span></span></code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code># A tibble: 5 × 2
+  date       cases
+  &lt;date&gt;     &lt;int&gt;
+1 2020-03-05     1
+2 2020-03-07     1
+3 2020-03-08     1
+4 2020-03-09     4
+5 2020-03-11     6</code></pre>
+</div>
+<p>Instead of having 100 chains starting on the same Day 0
+(<code>t0 = 0</code>, as default), each simulation will create chains
+that start at a different moment in time. It will consider day
+<code>2020-03-05</code> as Day <code>0</code>. The first chain starts on
+day 0, one in day 2, one in day 3, four in day 4, and six in day 6.</p>
+<p>To increase the probability of simulating uncontrolled outbreak
+projections, this same scenario need to be iterated 100 times. This will
+help us to provide a projection with uncertainty.</p>
+</div>
+</div>
+</div>
+<p>In this section we’ll conviniently replicate the same simulation of
+one chain with the same starting time (<code>t0 = 0</code>), <strong>but
+with 1000 replicates</strong>, to showcase how to build up the iteration
+over <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> step by step.</p>
+<p>We need to specify two additional elements:</p>
+<ul><li>
 <code>number_simulations</code>, which defines the number of
 simulations to run.</li>
 <li>
 <code>initial_cases</code> defines the number of initial cases to
 input to the <code>n_chains</code> argument explained in the lines
 above.</li>
-</ul><div class="codewrapper sourceCode" id="cb8">
+</ul><div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Set seed for random number generator</span></span>
-<span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
-<span><span class="co"># Number of simulation runs</span></span>
+<code class="sourceCode R"><span><span class="co"># Number of simulation runs</span></span>
 <span><span class="va">number_simulations</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
 <span><span class="co"># Number of initial cases</span></span>
 <span><span class="va">initial_cases</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></code></pre>
@@ -769,7 +910,7 @@ function requires two arguments:</p>
 <code>.x</code>, with a vector of numbers, and</li>
 <li>
 <code>.f</code>, a function to iterate to each vector value.</li>
-</ul><div class="codewrapper sourceCode" id="cb9">
+</ul><div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -799,11 +940,12 @@ principles</a> book we have a chapter on the dot prefix!</p>
 <p>Now, we are prepared to use <code>map()</code> to repeatedly simulate
 from <code>simulate_chains()</code> and store in a vector from 1 to
 1000:</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">simulated_chains_map</span> <span class="op">&lt;-</span></span>
+<code class="sourceCode R"><span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
+<span><span class="va">simulated_chains_map</span> <span class="op">&lt;-</span></span>
 <span>  <span class="co"># iterate one function across multiple numbers (simulation IDs)</span></span>
 <span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">map</span><span class="op">(</span></span>
 <span>    <span class="co"># vector of numbers (simulation IDs)</span></span>
@@ -811,14 +953,11 @@ from <code>simulate_chains()</code> and store in a vector from 1 to
 <span>    <span class="co"># function to iterate to each simulation ID number</span></span>
 <span>    .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">sim</span><span class="op">)</span> <span class="op">{</span></span>
 <span>      <span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span></span>
-<span>        <span class="co"># simulation controls</span></span>
 <span>        n_chains <span class="op">=</span> <span class="va">initial_cases</span>,</span>
 <span>        statistic <span class="op">=</span> <span class="st">"size"</span>,</span>
-<span>        <span class="co"># offspring</span></span>
 <span>        offspring_dist <span class="op">=</span> <span class="va">rnbinom</span>,</span>
 <span>        mu <span class="op">=</span> <span class="va">mers_offspring</span><span class="op">[</span><span class="st">"mean"</span><span class="op">]</span>,</span>
 <span>        size <span class="op">=</span> <span class="va">mers_offspring</span><span class="op">[</span><span class="st">"dispersion"</span><span class="op">]</span>,</span>
-<span>        <span class="co"># generation</span></span>
 <span>        generation_time <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">serial_interval</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
 <span>      <span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>        <span class="co"># creates a column with the simulation ID number</span></span>
@@ -846,16 +985,16 @@ the simulated <code>simulation_id</code> number 806.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> The epichains object </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Let’s use <code>dplyr::filter()</code> for this:</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">chain_to_observe</span> <span class="op">&lt;-</span> <span class="fl">806</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -904,9 +1043,9 @@ reading the <code>&lt;epichains&gt;</code> objects as a data frame.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> The epichains data frame </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -948,7 +1087,7 @@ transmission generation (between <code>time</code> 26 to 30),
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> An infectee data frame </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>The output data frame collects <strong>infectees</strong> as the
 observation unit:</p>
@@ -971,28 +1110,42 @@ and <code>time = 0</code>.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="visualize-multiple-chains">Visualize multiple chains<a class="anchor" aria-label="anchor" href="#visualize-multiple-chains"></a></h2>
-<hr class="half-width"><p>To visualize the simulated chains, we need some pre-processing:</p>
+<hr class="half-width"><p>We will use a multiple simulation <strong>without</strong> iteration
+for this section:</p>
+<div class="codewrapper sourceCode" id="cb23">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
+<span><span class="va">multiple_epichains</span> <span class="op">&lt;-</span> <span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span></span>
+<span>  n_chains <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="st">"size"</span>,</span>
+<span>  offspring_dist <span class="op">=</span> <span class="va">rnbinom</span>,</span>
+<span>  mu <span class="op">=</span> <span class="va">mers_offspring</span><span class="op">[</span><span class="st">"mean"</span><span class="op">]</span>,</span>
+<span>  size <span class="op">=</span> <span class="va">mers_offspring</span><span class="op">[</span><span class="st">"dispersion"</span><span class="op">]</span>,</span>
+<span>  generation_time <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">serial_interval</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre>
+</div>
+<p>To visualize the simulated chains, we need some pre-processing:</p>
 <ol style="list-style-type: decimal"><li>Let’s use <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> to get round time numbers to resemble
 surveillance days.</li>
 <li>Count the daily cases in each simulation (by
-<code>simulation_id</code>).</li>
+<code>chain</code>).</li>
 <li>Calculate the cumulative number of cases within a simulation.</li>
-</ol><div class="codewrapper sourceCode" id="cb17">
+</ol><div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># daily aggregate of cases</span></span>
-<span><span class="va">simulated_chains_day</span> <span class="op">&lt;-</span> <span class="va">simulated_chains_map</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">aggregate_chains</span> <span class="op">&lt;-</span> <span class="va">multiple_epichains</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># use data.frame output from &lt;epichains&gt; object</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># transform simulation ID column to factor (categorical variable)</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>simulation_id <span class="op">=</span> <span class="fu">as_factor</span><span class="op">(</span><span class="va">simulation_id</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># get the round number (day) of infection times</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>day <span class="op">=</span> <span class="fu">ceiling</span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># count the daily number of cases in each simulation (simulation ID)</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">simulation_id</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"cases"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># calculate the cumulative number of cases for each simulation (simulation ID)</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">simulation_id</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># count the daily number of cases in each chain</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">chain</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"cases"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># calculate the cumulative number of cases for each chain</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>cases_cumsum <span class="op">=</span> <span class="fu">cumsum</span><span class="op">(</span><span class="va">cases</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
@@ -1000,14 +1153,14 @@ surveillance days.</li>
 duration and size of each chain. We can use the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>
 “combo” of <code>group_by()</code>, <code>summarise()</code> and
 <code>ungroup()</code>:</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Summarise the chain duration and size</span></span>
-<span><span class="va">sim_chains_max</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va">simulated_chains_day</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">simulation_id</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">summary_chains</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">aggregate_chains</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">summarise</span><span class="op">(</span></span>
 <span>    <span class="co"># duration</span></span>
 <span>    day_max <span class="op">=</span> <span class="fu">max</span><span class="op">(</span><span class="va">day</span><span class="op">)</span>,</span>
@@ -1016,29 +1169,29 @@ duration and size of each chain. We can use the <a href="https://dplyr.tidyverse
 <span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">sim_chains_max</span></span></code></pre>
+<span><span class="va">summary_chains</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code># A tibble: 1,000 × 3
-   simulation_id day_max cases_total
-   &lt;fct&gt;           &lt;dbl&gt;       &lt;int&gt;
- 1 1                   0           1
- 2 2                   0           1
- 3 3                   0           1
- 4 4                   0           1
- 5 5                   0           1
- 6 6                   0           1
- 7 7                   0           1
- 8 8                   0           1
- 9 9                   0           1
-10 10                  0           1
+   chain day_max cases_total
+   &lt;int&gt;   &lt;dbl&gt;       &lt;int&gt;
+ 1     1       0           1
+ 2     2       0           1
+ 3     3       0           1
+ 4     4       0           1
+ 5     5       0           1
+ 6     6       0           1
+ 7     7       0           1
+ 8     8       0           1
+ 9     9       0           1
+10    10       0           1
 # ℹ 990 more rows</code></pre>
 </div>
 <p>Now, we are prepared for using the <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a>
 package:</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1046,25 +1199,14 @@ package:</p>
 <span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># create grouped chain trajectories</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">simulated_chains_day</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">aggregate_chains</span>,</span>
 <span>    mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span></span>
 <span>      x <span class="op">=</span> <span class="va">day</span>,</span>
 <span>      y <span class="op">=</span> <span class="va">cases_cumsum</span>,</span>
-<span>      group <span class="op">=</span> <span class="va">simulation_id</span></span>
+<span>      group <span class="op">=</span> <span class="va">chain</span></span>
 <span>    <span class="op">)</span>,</span>
 <span>    color <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>    alpha <span class="op">=</span> <span class="fl">0.25</span>,</span>
-<span>    show.legend <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># create points to visualize the chain endpoint</span></span>
-<span>  <span class="fu">geom_point</span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">sim_chains_max</span>,</span>
-<span>    mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">day_max</span>,</span>
-<span>      y <span class="op">=</span> <span class="va">cases_total</span>,</span>
-<span>      group <span class="op">=</span> <span class="va">simulation_id</span>,</span>
-<span>      color <span class="op">=</span> <span class="va">simulation_id</span></span>
-<span>    <span class="op">)</span>,</span>
 <span>    show.legend <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># define a 100-case threshold</span></span>
@@ -1074,10 +1216,10 @@ package:</p>
 <span>    y <span class="op">=</span> <span class="st">"Cumulative cases"</span></span>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Although most introductions of 1 index case do not generate secondary
-cases (N = 940) or most outbreaks rapidly become extinct (median
-duration of 17.5 and median size of 9), only 2 epidemic trajectories
-among 1000 simulations (0.2%) can reach to more than 100 infected cases.
+<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Although most introductions of 1 index case do not generate secondary
+cases (N = 934) or most outbreaks rapidly become extinct (median
+duration of 17 and median size of 5.5), only 1 epidemic trajectories
+among 1000 simulations (0.1%) can reach to more than 100 infected cases.
 This finding is particularly remarkable because the reproduction number
 <span class="math inline">\(R\)</span> is less than 1 (offspring
 distribution mean of 0.6), but, given an offspring distribution
@@ -1085,30 +1227,31 @@ dispersion parameter of 0.02, it shows the potential for explosive
 outbreaks of MERS disease.</p>
 <p>We can count how many chains reached the 100-case threshold using
 <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions:</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># number of chains that reached the 100-case threshold</span></span>
-<span><span class="va">sim_chains_max</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">day_max</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">summary_chains</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">cases_total</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">cases_total</span> <span class="op">&gt;</span> <span class="fl">100</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code># A tibble: 2 × 3
-  simulation_id day_max cases_total
-  &lt;fct&gt;           &lt;dbl&gt;       &lt;int&gt;
-1 666                88         110
-2 23                 45         113</code></pre>
+<pre class="output" tabindex="0"><code># A tibble: 1 × 3
+  chain day_max cases_total
+  &lt;int&gt;   &lt;dbl&gt;       &lt;int&gt;
+1    65      34         103</code></pre>
 </div>
+<p>This output should give us equivalent results to
+<code>summary(multiple_epichains)</code>.</p>
 <div id="accordionSpoiler3" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Observed cases vs simulated chains </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
 <div class="accordion-body">
 <p>Let’s overlap the cumulative number of observed cases using the
 linelist object from the <code>mers_korea_2015</code> dataset of the
@@ -1117,7 +1260,7 @@ plot daily total cases over time, we use <a href="https://www.reconverse.org/inc
 convert the linelist to an <code>&lt;incidence2&gt;</code> object,
 complete the missing dates of the time series with
 <code>complete_dates()</code></p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1133,14 +1276,14 @@ complete the missing dates of the time series with
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>day <span class="op">=</span> <span class="fu">as.numeric</span><span class="op">(</span><span class="va">day</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Use <code>plot()</code> to make an incidence plot:</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot the incidence2 object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">mers_cumcases</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 </div>
 </div>
 </div>
@@ -1150,7 +1293,7 @@ alongside the previously simulated chains, we see that the observed
 cases followed a trajectory that is consistent with the simulated
 explosive outbreak dynamics (which makes sense, given the simulation
 uses parameters based on this specific outbreak).</p>
-<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>When we increase the dispersion parameter from <span class="math inline">\(k = 0.01\)</span> to <span class="math inline">\(k
+<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>When we increase the dispersion parameter from <span class="math inline">\(k = 0.01\)</span> to <span class="math inline">\(k
 = \infty\)</span> - and hence reduce individual-level variation in
 transmission - and assume a fixed reproduction number <span class="math inline">\(R = 1.5\)</span>, the proportion of simulated
 outbreaks that reached the 100-case threshold increases. This is because
@@ -1201,7 +1344,8 @@ predictions using <a href="https://github.com/epiverse-trace/epichains" class="e
 <div class="callout-content">
 <p>Evaluate the potential for a new Monkey pox (Mpox) case to generate
 an explosive large outbreak.</p>
-<ul><li>Simulate 1000 transmission chains with 1 initial case each.</li>
+<ul><li>Simulate 1000 transmission chains with 1 initial case each starting
+at day 0.</li>
 <li>Use the appropriate package to access delay data from previous
 outbreaks.</li>
 <li>How many simulated trajectories reach more than 100 infected
@@ -1209,16 +1353,16 @@ cases?</li>
 </ul></div>
 </div>
 </div>
-<div id="accordionHint1" class="accordion challenge-accordion accordion-flush">
+<div id="accordionHint2" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
-  <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
+<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
+  <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>With <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, you can access and use offspring
 and delay distributions from previous Ebola outbreaks.</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb32">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1243,7 +1387,7 @@ and delay distributions from previous Ebola outbreaks.</p>
 5 SARS                          offspring distribution     2
 6 Smallpox                      offspring distribution     4</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1265,6 +1409,8 @@ and delay distributions from previous Ebola outbreaks.</p>
 5 Marburg Virus Disease serial interval     2
 6 Mpox                  serial interval     5</code></pre>
 </div>
+<p>Also, given that you only need one chain per iteration starting the
+same day, it may not be necessary to use iteration for this one.</p>
 </div>
 </div>
 </div>
@@ -1274,9 +1420,9 @@ and delay distributions from previous Ebola outbreaks.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1305,87 +1451,55 @@ and delay distributions from previous Ebola outbreaks.</p>
 <span></span>
 <span><span class="co"># Set seed for random number generator</span></span>
 <span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
-<span><span class="co"># Number of simulation runs</span></span>
-<span><span class="va">number_simulations</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
-<span><span class="co"># Number of initial cases</span></span>
-<span><span class="va">initial_cases</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span></span>
-<span><span class="va">simulated_chains_mpox</span> <span class="op">&lt;-</span></span>
-<span>  <span class="co"># iterate one function across multiple numbers (simulation IDs)</span></span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">map</span><span class="op">(</span></span>
-<span>    <span class="co"># vector of numbers (simulation IDs)</span></span>
-<span>    .x <span class="op">=</span> <span class="fu">seq_len</span><span class="op">(</span><span class="va">number_simulations</span><span class="op">)</span>,</span>
-<span>    <span class="co"># function to iterate to each simulation ID number</span></span>
-<span>    .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">sim</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span></span>
-<span>        <span class="co"># simulation controls</span></span>
-<span>        n_chains <span class="op">=</span> <span class="va">initial_cases</span>,</span>
-<span>        statistic <span class="op">=</span> <span class="st">"size"</span>,</span>
-<span>        <span class="co"># offspring</span></span>
-<span>        offspring_dist <span class="op">=</span> <span class="va">rnbinom</span>,</span>
-<span>        mu <span class="op">=</span> <span class="va">mpox_offspring</span><span class="op">[</span><span class="st">"mean"</span><span class="op">]</span>,</span>
-<span>        size <span class="op">=</span> <span class="va">mpox_offspring</span><span class="op">[</span><span class="st">"dispersion"</span><span class="op">]</span>,</span>
-<span>        <span class="co"># generation</span></span>
-<span>        generation_time <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mpox_serialint</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
-<span>      <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>        <span class="co"># creates a column with the simulation ID number</span></span>
-<span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>simulation_id <span class="op">=</span> <span class="va">sim</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># combine list outputs (for each simulation ID) into a single data frame</span></span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">list_rbind</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">simulated_chains_mpox</span> <span class="op">&lt;-</span> <span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span></span>
+<span>  <span class="co"># simulation controls</span></span>
+<span>  n_chains <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  statistic <span class="op">=</span> <span class="st">"size"</span>,</span>
+<span>  <span class="co"># offspring</span></span>
+<span>  offspring_dist <span class="op">=</span> <span class="va">rnbinom</span>,</span>
+<span>  mu <span class="op">=</span> <span class="va">mpox_offspring</span><span class="op">[</span><span class="st">"mean"</span><span class="op">]</span>,</span>
+<span>  size <span class="op">=</span> <span class="va">mpox_offspring</span><span class="op">[</span><span class="st">"dispersion"</span><span class="op">]</span>,</span>
+<span>  <span class="co"># generation</span></span>
+<span>  generation_time <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mpox_serialint</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># visualize ---------------------------------------------------------------</span></span>
 <span></span>
 <span><span class="co"># daily aggregate of cases</span></span>
 <span><span class="va">simulated_chains_mpox_day</span> <span class="op">&lt;-</span> <span class="va">simulated_chains_mpox</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># use data.frame output from &lt;epichains&gt; object</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># transform simulation ID column to factor (categorical variable)</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>simulation_id <span class="op">=</span> <span class="fu">as_factor</span><span class="op">(</span><span class="va">simulation_id</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># get the round number (day) of infection times</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>day <span class="op">=</span> <span class="fu">ceiling</span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># count the daily number of cases in each simulation (simulation ID)</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">simulation_id</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"cases"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># calculate the cumulative number of cases for each simulation (simulation ID)</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">simulation_id</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>cases_cumsum <span class="op">=</span> <span class="fu">cumsum</span><span class="op">(</span><span class="va">cases</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># Count the daily number of cases in each chain</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>day <span class="op">=</span> <span class="fu">ceiling</span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">count</span><span class="op">(</span><span class="va">chain</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"cases"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># Calculate the cumulative number of cases for each chain</span></span>
+<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>cumulative_cases <span class="op">=</span> <span class="fu">cumsum</span><span class="op">(</span><span class="va">cases</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Visualize transmission chains by cumulative cases</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># create grouped chain trajectories</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">simulated_chains_mpox_day</span>,</span>
-<span>    mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">day</span>,</span>
-<span>      y <span class="op">=</span> <span class="va">cases_cumsum</span>,</span>
-<span>      group <span class="op">=</span> <span class="va">simulation_id</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    color <span class="op">=</span> <span class="st">"black"</span>,</span>
-<span>    alpha <span class="op">=</span> <span class="fl">0.25</span>,</span>
-<span>    show.legend <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># define a 100-case threshold</span></span>
+<span><span class="va">simulated_chains_mpox_day</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># Create grouped chain trajectories</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">day</span>, y <span class="op">=</span> <span class="va">cumulative_cases</span>, group <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>, alpha <span class="op">=</span> <span class="fl">0.25</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="co"># Define a 100-case threshold</span></span>
 <span>  <span class="fu">geom_hline</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="st">"Day"</span>,</span>
-<span>    y <span class="op">=</span> <span class="st">"Cumulative cases"</span></span>
-<span>  <span class="op">)</span></span></code></pre>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Day"</span>, y <span class="op">=</span> <span class="st">"Cumulative cases"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Assuming a Monkey pox outbreak with <span class="math inline">\(R\)</span> = 0.32 and <span class="math inline">\(k\)</span> = 0.58, there is no trajectory among
+<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Assuming a Monkey pox outbreak with <span class="math inline">\(R\)</span> = 0.32 and <span class="math inline">\(k\)</span> = 0.58, there is no trajectory among
 1000 simulations that reach more than 100 infected cases. Compared to
 MERS (<span class="math inline">\(R\)</span> = 0.6 and <span class="math inline">\(k\)</span> = 0.02).</p>
 </div>
 </div>
 </div>
 </div>
-<div id="accordionHint2" class="accordion challenge-accordion accordion-flush">
+<div id="accordionHint3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
-  <h4 class="accordion-header" id="headingHint2"> Epidemic Risk assessment accounting for superspreading </h4>
+<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
+  <h4 class="accordion-header" id="headingHint3"> Epidemic Risk assessment accounting for superspreading </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>With <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a>, you can get numerical solutions
 to processes that <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> solve using branching
@@ -1420,20 +1534,21 @@ et al., 2015 (Figure 2)</a> on the transmission tree on Ebola virus
 disease in Conakry, Guinea, 2014.</p>
 <p>Using the data under the <strong>hint</strong> tab, estimate the
 offspring distribution from the distribution of secondary cases. Then
-estimate the large outbreak potential from this data.</p>
+estimate the large outbreak potential from this data, simulating 100
+runs with a seed of one initial case.</p>
 </div>
 </div>
 </div>
-<div id="accordionHint3" class="accordion challenge-accordion accordion-flush">
+<div id="accordionHint4" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
-  <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
+<button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
+  <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>Code with the transmission tree data written by <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext" class="external-link">Christian
 Althaus, 2015</a>:</p>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1450,122 +1565,11 @@ Althaus, 2015</a>:</p>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_histogram</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-29-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 </div>
 </div>
 </div>
-<div id="accordionSolution5" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
-  <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
-</button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
-<div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb31">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># load packages ---------------------------</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">epichains</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">epiparameter</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">fitdistrplus</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb32">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># fit a negative binomial distribution ------------------------------------</span></span>
-<span></span>
-<span><span class="co"># Fitting a negative binomial distribution to the number of secondary cases</span></span>
-<span><span class="va">fit.cases</span> <span class="op">&lt;-</span> <span class="fu">fitdistrplus</span><span class="fu">::</span><span class="fu">fitdist</span><span class="op">(</span><span class="va">c0</span>, <span class="st">"nbinom"</span><span class="op">)</span></span>
-<span><span class="va">fit.cases</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>Fitting of the distribution ' nbinom ' by maximum likelihood
-Parameters:
-      estimate Std. Error
-size 0.1814260 0.03990278
-mu   0.9537995 0.19812301</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb34">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># serial interval parameters ----------------------------------------------</span></span>
-<span></span>
-<span><span class="va">ebola_serialinter</span> <span class="op">&lt;-</span> <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span></span>
-<span>  disease <span class="op">=</span> <span class="st">"ebola"</span>,</span>
-<span>  epi_name <span class="op">=</span> <span class="st">"serial interval"</span>,</span>
-<span>  single_epiparameter <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># simulate outbreak trajectories ------------------------------------------</span></span>
-<span></span>
-<span><span class="co"># Set seed for random number generator</span></span>
-<span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">645</span><span class="op">)</span></span>
-<span><span class="co"># Number of simulation runs</span></span>
-<span><span class="va">number_simulations</span> <span class="op">&lt;-</span> <span class="fl">1e2</span></span>
-<span><span class="co"># Number of initial cases</span></span>
-<span><span class="va">initial_cases</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span></span>
-<span><span class="va">sim_multiple_chains</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">map</span><span class="op">(</span></span>
-<span>    .x <span class="op">=</span> <span class="fu">seq_len</span><span class="op">(</span><span class="va">number_simulations</span><span class="op">)</span>,</span>
-<span>    .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">sim</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span></span>
-<span>        n_chains <span class="op">=</span> <span class="va">initial_cases</span>,</span>
-<span>        <span class="co"># stopping</span></span>
-<span>        statistic <span class="op">=</span> <span class="st">"size"</span>,</span>
-<span>        <span class="co"># offspring</span></span>
-<span>        offspring_dist <span class="op">=</span> <span class="va">rnbinom</span>,</span>
-<span>        mu <span class="op">=</span> <span class="va">fit.cases</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="st">"mu"</span><span class="op">]</span>,</span>
-<span>        size <span class="op">=</span> <span class="va">fit.cases</span><span class="op">$</span><span class="va">estimate</span><span class="op">[</span><span class="st">"size"</span><span class="op">]</span>,</span>
-<span>        <span class="co"># generation</span></span>
-<span>        generation_time <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">ebola_serialinter</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
-<span>      <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>        <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>simulation_n <span class="op">=</span> <span class="va">sim</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># combine list outputs (for each simulation ID) into a single data frame</span></span>
-<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">list_rbind</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># visualize ----------------------------------------</span></span>
-<span></span>
-<span><span class="va">sim_chains_aggregate</span> <span class="op">&lt;-</span></span>
-<span>  <span class="va">sim_multiple_chains</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>simulation_n <span class="op">=</span> <span class="fu">as_factor</span><span class="op">(</span><span class="va">simulation_n</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>day <span class="op">=</span> <span class="fu">ceiling</span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">simulation_n</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"cases"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">simulation_n</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>cases_cumsum <span class="op">=</span> <span class="fu">cumsum</span><span class="op">(</span><span class="va">cases</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span></span>
-<span>    data <span class="op">=</span> <span class="va">sim_chains_aggregate</span>,</span>
-<span>    mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span></span>
-<span>      x <span class="op">=</span> <span class="va">day</span>,</span>
-<span>      y <span class="op">=</span> <span class="va">cases_cumsum</span>,</span>
-<span>      group <span class="op">=</span> <span class="va">simulation_n</span></span>
-<span>    <span class="op">)</span>,</span>
-<span>    show.legend <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>  <span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># define a 100-case threshold</span></span>
-<span>  <span class="fu">geom_hline</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre>
-</div>
-<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Remarkably, even with R0 less than 1 (R = 0.95) we can have
-potentially explosive outbreaks. The observed variation in individual
-infectiousness in Ebola means that although the probability of
-extinction is high, new index cases also have the potential for
-explosive regrowth of the epidemic.</p>
-</div>
-</div>
-</div>
-</div>
+
 <div id="keypoints1" class="callout keypoints">
 <div class="callout-square">
 <i class="callout-icon" data-feather="key"></i>
@@ -1640,7 +1644,7 @@ any links that you are not going to use.
   "url": "https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html",
   "dateCreated": "2025-07-15",
-  "dateModified": "2025-07-07",
+  "dateModified": "2025-07-15",
   "datePublished": "2025-07-15"
 }
 
