@@ -72,14 +72,11 @@ serial_interval <- epiparameter_db(
 set.seed(33)
 
 simulated_chains_map <- epichains::simulate_chains(
-  # simulation controls
   n_chains = 1000,
   statistic = "size",
-  # offspring
   offspring_dist = rnbinom,
   mu = mers_offspring["mean"],
   size = mers_offspring["dispersion"],
-  # generation
   generation_time = function(x) generate(x = serial_interval, times = x)
 )
 
@@ -302,15 +299,19 @@ Now we are prepared to use the `simulate_chains()` function from `{epichains}` t
 
 ```{r,message=FALSE,warning=FALSE,eval=FALSE}
 epichains::simulate_chains(
+  
   # simulation controls
   n_chains = 1,
   statistic = "size",
+  
   # offspring
   offspring_dist = rnbinom,
   mu = mers_offspring["mean"],
   size = mers_offspring["dispersion"],
+  
   # generation
   generation_time = function(x) generate(x = serial_interval, times = x)
+
 )
 ```
 
@@ -349,7 +350,7 @@ With this configuration, each **chain** will represent **one initial case**. The
 
 Now, let's simulate **100** transmission chains:
 
-```{r,message=FALSE,warning=FALSE,eval=FALSE}
+```{r,message=FALSE,warning=FALSE,eval=TRUE}
 # Run all this chunk together for the set.seed
 # Set seed for random number generator
 set.seed(33)
@@ -385,9 +386,11 @@ If you need help, return to the "Chain size and length" callout box from the beg
 
 :::::::::::::::::::
 
-## Simulate multiple chains using iteration
+## Iterate simulations 
 
-We can configure the simulation of multiple chains by simply increasing the number of chains, as before, or iterate over one specific chain simulation.
+We can configure the simulation of multiple chains by simply increasing the number of chains (`n_chains`), as before. 
+If we assume that each initial case start in a different time, we need to iterate over one specific chain simulation.
+This table compare the alternatives:
 
 | Number of chains | Replicates | Start time (`t0`) | Use |
 |---|---|---|---|
@@ -395,17 +398,26 @@ We can configure the simulation of multiple chains by simply increasing the numb
 | Multiple | 1000, e.g. | Same | `epichains::simulate_chains(n_chains = 1000)` |
 | Multiple | 1000, e.g. | Different | Iterate using `purrr::map()` over `epichains::simulate()` |
 
-:::::::::::: callout
-
 The key difference of the third configuration is the `t0` argument from `epichains::simulate_chains()`. 
+The argument `t0` defines the start time of each initial case per chain.
+
+:::::::::::: callout
 
 One example of using iteration is available in the `{epichains}` vignette on [Projecting infectious disease incidence: a COVID-19 example](https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html). The aim is to simulate the importation of 13 cases during different moments in time. 
 
 ```{r}
-epichains::covid19_sa[1:5, ]
+epichains::covid19_sa[1:5, ] %>% 
+  dplyr::mutate(start_time = date - min(date))
 ```
 
-Instead of having 100 chains starting on the same Day 0 (`t0 = 0`, as default), each simulation will create chains that start at a different moment in time. It will consider day `2020-03-05` as Day `0`. The first chain starts on day 0, one in day 2, one in day 3, four in day 4, and six in day 6. 
+Instead of having 100 chains starting on the same Day 0 (`t0 = 0`, as default), each simulation will create chains that start at a different moment in time. 
+It will consider day `2020-03-05` as Day `0`. The first chain starts on day 0, one in day 2, one in day 3, four in day 4, and six in day 6.
+The argument `t0` will have this structure:
+
+```{r}
+t0 <- c(0, 2, 3, rep(4, 4), rep(6, 6))
+t0
+```
 
 To increase the probability of simulating uncontrolled outbreak projections, this same scenario need to be iterated 100 times. This will help us to provide a projection with uncertainty.
 
@@ -578,7 +590,10 @@ simulated_chains_map %>%
   dplyr::as_tibble()
 ```
 
-Chain `r chain_to_observe` tells us a **story**: "In the first transmission generation at `time = 0`, one index case infected the first case with `sim_id = 1`. Then, in the second transmission generation (between `time` 10 to 16), `sim_id = 1` infected five cases. Later, in the third transmission generation (between `time` 26 to 30), `sim_id = 2` infected three new cases."
+Chain `r chain_to_observe` tells us a **story**: 
+"In the first transmission generation at `time = 0`, one index case (`infector = NA`) infected the first case with `infectee = 1`.
+Then, in the second transmission generation (between `time` 10 to 16), `infector = 1` infected five cases. 
+Later, in the third transmission generation (between `time` 26 to 30), `infector = 2` infected three new cases."
 
 :::::::::::::::::::::::::
 
@@ -588,8 +603,8 @@ Chain `r chain_to_observe` tells us a **story**: "In the first transmission gene
 
 The output data frame collects **infectees** as the observation unit: 
 
-- Each infectee has a `sim_id`. 
-- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `sim_id` of that infectee. 
+- Each infectee has a `infectee` "id". 
+- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `infectee` "id". 
 - Each infectee got infected in a specific `generation` and (continuous) `time`. 
 - The simulation number is registered under the `simulation_id` column.
 
@@ -703,7 +718,8 @@ chains_null <- summary_chains %>%
 
 Although most introductions of `r initial_cases` index case do not generate secondary cases (N = `r chains_null`) or most outbreaks rapidly become extinct (median duration of `r chains_extinct$extinct_duration_median` and median size of `r chains_extinct$extinct_size_median`), only `r threshhold_summary$chains_theshold` epidemic trajectories among `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of `r mers_offspring[["mean"]]`), but, given an offspring distribution dispersion parameter of `r mers_offspring[["dispersion"]]`, it shows the potential for explosive outbreaks of MERS disease.
 
-We can count how many chains reached the 100-case threshold using `{dplyr}` functions:
+We can count how many chains reached the 100-case threshold using `{dplyr}` functions.
+This output should give us equivalent results to `summary(multiple_epichains)`:
 
 ```{r}
 # number of chains that reached the 100-case threshold
@@ -711,8 +727,6 @@ summary_chains %>%
   dplyr::arrange(desc(cases_total)) %>%
   dplyr::filter(cases_total > 100)
 ```
-
-This output should give us equivalent results to `summary(multiple_epichains)`.
 
 ::::::::::::::::::::::::::::::::::: spoiler
 
@@ -858,14 +872,11 @@ mpox_serialint <- epiparameter::epiparameter_db(
 set.seed(33)
 
 simulated_chains_mpox <- epichains::simulate_chains(
-  # simulation controls
   n_chains = 1000,
   statistic = "size",
-  # offspring
   offspring_dist = rnbinom,
   mu = mpox_offspring["mean"],
   size = mpox_offspring["dispersion"],
-  # generation
   generation_time = function(x) generate(x = mpox_serialint, times = x)
 )
 
