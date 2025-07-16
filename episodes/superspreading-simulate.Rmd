@@ -963,7 +963,13 @@ superspreading::probability_epidemic(
 
 [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) reused data published by [Faye et al., 2015 (Figure 2)](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2) on the transmission tree on Ebola virus disease in Conakry, Guinea, 2014.
 
-Using the data under the **hint** tab, estimate the offspring distribution from the distribution of secondary cases. Then estimate the large outbreak potential from this data, simulating 100 runs with one initial case.
+Using the data under the **hint** tab: 
+
+- Estimate the offspring distribution from the distribution of secondary cases.
+- Then estimate the large outbreak potential from this data, simulating 100 runs with one initial case.
+- Reproduce Figure (B) from [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) from the simulation output.
+
+For reproducible results use `set.seed(645)`.
 
 ::::::::::: hint
 
@@ -981,7 +987,7 @@ c0 <- c(c1, rep(0, n - length(c1)))
 c0 %>%
   enframe() %>%
   ggplot(aes(value)) +
-  geom_histogram()
+  geom_histogram(binwidth = 1)  
 ```
 
 :::::::::::
@@ -1046,6 +1052,8 @@ sim_chains_aggregate %>%
   geom_line() +
   # Define a 100-case threshold
   geom_hline(aes(yintercept = 100), lty = 2) +
+  ylim(0,100) +
+  xlim(0,100) +
   labs(x = "Day", y = "Cumulative cases")
 ```
 
