@@ -249,7 +249,7 @@ Now, let's simulate **100** transmission chains:
 
 
 ``` r
-# Run all this chunk together for the set.seed
+# Run all this chunk together to let set.seed() work!
 # Set seed for random number generator
 set.seed(33)
 multiple_epichains <- epichains::simulate_chains(
@@ -307,11 +307,11 @@ We can configure the simulation of multiple chains by simply increasing the numb
 If we assume that each initial case start in a different time, we need to iterate over one specific chain simulation.
 This table compare the alternatives:
 
-| Number of chains | Replicates | Start time (`t0`) | Use |
+| Simulation runs | Initial cases | Start time (`t0`) | Use |
 |---|---|---|---|
-| Single | 1 | Same | `epichains::simulate_chains(n_chains = 1)` |
-| Multiple | 1000, e.g. | Same | `epichains::simulate_chains(n_chains = 1000)` |
-| Multiple | 1000, e.g. | Different | Iterate using `purrr::map()` over `epichains::simulate()` |
+| One | 1 | Same | `epichains::simulate_chains()` with `n_chains = 1` |
+| Multiple (1000, e.g.) | 1 | Same | `epichains::simulate_chains()` with `n_chains = 1000` |
+| Multiple (1000, e.g.) | More than one | Different | Iterate 1000 times using `purrr::map()` over `epichains::simulate()` |
 
 The key difference of the third configuration is the `t0` argument from `epichains::simulate_chains()`. 
 The argument `t0` defines the start time of each initial case per chain.
@@ -891,7 +891,13 @@ Check how these estimates vary non-linearly with respect to the mean reproductio
 
 [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) reused data published by [Faye et al., 2015 (Figure 2)](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2) on the transmission tree on Ebola virus disease in Conakry, Guinea, 2014.
 
-Using the data under the **hint** tab, estimate the offspring distribution from the distribution of secondary cases. Then estimate the large outbreak potential from this data, simulating 100 runs with a seed of one initial case.
+Using the data under the **hint** tab: 
+
+- Estimate the offspring distribution from the distribution of secondary cases.
+- Then estimate the large outbreak potential from this data, simulating 100 runs with one initial case.
+- Print the summary of the `<epichains>` class object. This should help us count how many chains reach a `size` of more than 100 infected cases.
+
+For reproducible results use `set.seed(645)`.
 
 ::::::::::: hint
 
@@ -910,10 +916,14 @@ c0 <- c(c1, rep(0, n - length(c1)))
 c0 %>%
   enframe() %>%
   ggplot(aes(value)) +
-  geom_histogram()
+  geom_histogram(binwidth = 1)
 ```
 
 <img src="fig/superspreading-simulate-rendered-unnamed-chunk-30-1.png" style="display: block; margin: auto;" />
+
+Optional challenge: 
+
+- Reproduce Figure (B) from [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) with the simulation output.
 
 :::::::::::
 
@@ -968,6 +978,29 @@ sim_multiple_chains <- epichains::simulate_chains(
   generation_time = function(x) generate(x = ebola_serialinter, times = x)
 )
 
+# summarise ----------------------------------------
+
+summary(sim_multiple_chains)
+```
+
+``` output
+`epichains_summary` object 
+
+  [1]    9    1    2    1    1    4    1   20   14    1    1  131    1    2    1
+ [16]    1    7    1    2 2889    1    1    1   13    3    1    1    1    1    1
+ [31]    5    6    1    1    1    1    1    1    1    1    2    1    1    2    1
+ [46]    1    1    1    1    1    1    1    1    1  335    1   11    3   24    6
+ [61]    1    1    1    1    1    1    1    1    1    1    1    1    1    1  111
+ [76]    1    1    1    1    1    1    2    1  544    1    1    1    3    1    2
+ [91]    6    1    1    1    1    1    1    1 2091    1
+
+ Simulated sizes: 
+
+Max: 2889
+Min: 1
+```
+
+``` r
 # visualize ----------------------------------------
 
 sim_chains_aggregate <-
@@ -988,6 +1021,8 @@ sim_chains_aggregate %>%
   geom_line() +
   # Define a 100-case threshold
   geom_hline(aes(yintercept = 100), lty = 2) +
+  ylim(0, 100) +
+  xlim(0, 100) +
   labs(x = "Day", y = "Cumulative cases")
 ```
 
