@@ -967,7 +967,8 @@ Using the data under the **hint** tab:
 
 - Estimate the offspring distribution from the distribution of secondary cases.
 - Then estimate the large outbreak potential from this data, simulating 100 runs with one initial case.
-- Reproduce Figure (B) from [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) from the simulation output.
+- Print the summary of the simulation to count the number of chains of size that reach to more than 100 infected cases.
+- Optional: Reproduce Figure (B) from [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) from the simulation output.
 
 For reproducible results use `set.seed(645)`.
 
@@ -1031,6 +1032,10 @@ sim_multiple_chains <- epichains::simulate_chains(
   size = fit.cases$estimate["size"],
   generation_time = function(x) generate(x = ebola_serialinter, times = x)
 )
+
+# summarise ----------------------------------------
+
+summary(sim_multiple_chains)
 
 # visualize ----------------------------------------
 
