@@ -344,7 +344,7 @@ With this configuration, each **chain** will represent **one initial case**. The
 Now, let's simulate **100** transmission chains:
 
 ```{r,message=FALSE,warning=FALSE,eval=TRUE}
-# Run all this chunk together for the set.seed
+# Run all this chunk together to let set.seed() work!
 # Set seed for random number generator
 set.seed(33)
 multiple_epichains <- epichains::simulate_chains(
@@ -385,11 +385,11 @@ We can configure the simulation of multiple chains by simply increasing the numb
 If we assume that each initial case start in a different time, we need to iterate over one specific chain simulation.
 This table compare the alternatives:
 
-| Number of chains | Replicates | Start time (`t0`) | Use |
+| Simulation runs | Initial cases | Start time (`t0`) | Use |
 |---|---|---|---|
-| Single | 1 | Same | `epichains::simulate_chains(n_chains = 1)` |
-| Multiple | 1000, e.g. | Same | `epichains::simulate_chains(n_chains = 1000)` |
-| Multiple | 1000, e.g. | Different | Iterate using `purrr::map()` over `epichains::simulate()` |
+| One | 1 | Same | `epichains::simulate_chains()` with `n_chains = 1` |
+| Multiple (1000, e.g.) | 1 | Same | `epichains::simulate_chains()` with `n_chains = 1000` |
+| Multiple (1000, e.g.) | More than one | Different | Iterate 1000 times using `purrr::map()` over `epichains::simulate()` |
 
 The key difference of the third configuration is the `t0` argument from `epichains::simulate_chains()`. 
 The argument `t0` defines the start time of each initial case per chain.
@@ -963,7 +963,7 @@ superspreading::probability_epidemic(
 
 [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) reused data published by [Faye et al., 2015 (Figure 2)](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(14)71075-8/fulltext#gr2) on the transmission tree on Ebola virus disease in Conakry, Guinea, 2014.
 
-Using the data under the **hint** tab, estimate the offspring distribution from the distribution of secondary cases. Then estimate the large outbreak potential from this data, simulating 100 runs with a seed of one initial case.
+Using the data under the **hint** tab, estimate the offspring distribution from the distribution of secondary cases. Then estimate the large outbreak potential from this data, simulating 100 runs with one initial case.
 
 ::::::::::: hint
 
