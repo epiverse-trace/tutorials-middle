@@ -967,7 +967,7 @@ Using the data under the **hint** tab:
 
 - Estimate the offspring distribution from the distribution of secondary cases.
 - Then estimate the large outbreak potential from this data, simulating 100 runs with one initial case.
-- Print the summary of the simulation to count the number of chains of size that reach to more than 100 infected cases.
+- Print the summary of the `<epichains>` class object. This should help us count how many chains reach a `size` of more than 100 infected cases.
 
 For reproducible results use `set.seed(645)`.
 
