@@ -968,7 +968,6 @@ Using the data under the **hint** tab:
 - Estimate the offspring distribution from the distribution of secondary cases.
 - Then estimate the large outbreak potential from this data, simulating 100 runs with one initial case.
 - Print the summary of the simulation to count the number of chains of size that reach to more than 100 infected cases.
-- Optional: Reproduce Figure (B) from [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) from the simulation output.
 
 For reproducible results use `set.seed(645)`.
 
@@ -990,6 +989,10 @@ c0 %>%
   ggplot(aes(value)) +
   geom_histogram(binwidth = 1)  
 ```
+
+Optional challenge: 
+
+- Reproduce Figure (B) from [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext) with the simulation output.
 
 :::::::::::
 
