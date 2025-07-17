@@ -303,9 +303,10 @@ If you need help, return to the "Chain size and length" callout box from the beg
 
 ## Iterate simulations 
 
-We can configure the simulation of multiple chains by simply increasing the number of chains (`n_chains`), as before. 
-If we assume that each initial case start in a different time, we need to iterate over one specific chain simulation.
-This table compare the alternatives:
+As before, we can configure the simulation of multiple chains by simply increasing the number of chains (e.g., from `n_chains = 1` to `n_chains = 1000`). 
+However, if we need to assume that each initial case starts (being infectious) at a different time, this can only be configured in one simulation function. 
+Thus, we need to **iterate** multiple times over one specific chain simulation configuration to increase the probability of simulating uncontrolled outbreak projections. 
+The following table compares the alternatives:
 
 | Simulation runs | Initial cases | Start time (`t0`) | Use |
 |---|---|---|---|
