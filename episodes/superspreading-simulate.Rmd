@@ -460,13 +460,16 @@ The code chunk below
 
 ```r
 # steps:
-# seq_len() creates a vector with sequence of numbers (simulation IDs from 1 to 1000) and
-# function(sim) iterates {epichains} to each simulation ID number, then
-# dplyr::mutate() adds a column to the <epichains> output with the simulation ID number.
-# purrr::list_rbind() combines all the list class outputs (for each simulation ID) into a single data frame.
-purrr::map(.x = seq_len(number_simulations), .f = function(sim) {
-  epichains::simulate_chains(...) %>% dplyr::mutate(simulation_id = sim)
-}) %>%
+# - seq_len() creates a vector with sequence of numbers (simulation IDs from 1 to 1000) and
+# - function(sim) iterates {epichains} to each simulation ID number, then
+# - dplyr::mutate() adds a column to the <epichains> output with the simulation ID number.
+# - purrr::list_rbind() combines all the list class outputs (for each simulation ID) into a single data frame.
+purrr::map(
+  .x = seq_len(number_simulations),
+  .f = function(sim) {
+    epichains::simulate_chains(...) %>% dplyr::mutate(simulation_id = sim)
+  }
+) %>%
   purrr::list_rbind()
 # pseudo code: do not run.
 ```
