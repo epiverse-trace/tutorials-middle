@@ -1,0 +1,869 @@
+---
+title: Estimation de la gravité de l'épidémie
+teaching: 10
+exercises: 2
+editor_options:
+  chunk_output_type: inline
+---
+
+:::::::::::::::::::::::::::::::::::::: questions
+
+- Pourquoi estime-t-on la gravité clinique d'une épidémie ?
+
+- Comment peut-on estimer le risque de létalité (CFR) au début d'une épidémie en cours ?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Estimez le risque de létalité à partir de données agrégées sur les cas en utilisant les éléments suivants `{cfr}`.
+
+- Estimez un CFR ajusté aux délais en utilisant `{epiparameter}` et `{cfr}`.
+
+- Estimez une sévérité ajustée au retard pour une série temporelle en expansion en utilisant `{cfr}`.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: prereq
+
+## Conditions préalables
+
+Cet épisode nécessite que vous soyez familier avec :
+
+**la science des données** Programmation de base avec R.
+
+**Théorie des épidémies**: [Distributions de délais](../learners/reference.md#delaydist).
+
+:::::::::::::::::::::::::::::::::
+
+## Introduction
+
+Au début d'une épidémie, les questions les plus fréquentes sont les suivantes :
+
+- Quel est l'impact probable de l'épidémie sur la santé publique en termes de gravité clinique ?
+- Quels sont les groupes les plus gravement touchés ?
+- L'épidémie risque-t-elle de provoquer une pandémie très grave ?
+
+Nous pouvons évaluer le potentiel pandémique d'une épidémie à l'aide de deux mesures essentielles : la transmissibilité et la gravité clinique.
+([Fraser et al. 2009](https://www.science.org/doi/full/10.1126/science.1176062),
+[CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).
+
+![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
+
+Une approche épidémiologique pour estimer la gravité clinique consiste à quantifier le risque de létalité (CFR). Le risque de létalité est la probabilité conditionnelle de décès en cas de diagnostic confirmé, calculée comme le rapport entre le nombre cumulé de décès dus à une maladie infectieuse et le nombre de cas diagnostiqués confirmés. Toutefois, le calcul de ce risque directement au cours d'une épidémie tend à aboutir à un CFR naïf ou biaisé, compte tenu de la durée de l'épidémie et de l'évolution de l'épidémie. [délai](../learners/reference.md#delaydist) entre l'apparition de la maladie et le décès, qui varie considérablement au fur et à mesure que l'épidémie progresse et se stabilise aux derniers stades de l'épidémie ([Ghani et al. 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
+
+![Estimations du risque de létalité (CFR) observé et confirmé biaisé en fonction du temps (ligne épaisse), calculé comme le nombre cumulé de cas de létalité confirmés.
+L'estimation à la fin d'une épidémie (~30 mai) est le risque de létalité réalisé à la fin de l'épidémie.
+La ligne horizontale continue et les lignes pointillées indiquent la valeur attendue et les intervalles de confiance à 95 % ($95%$ IC) de la valeur prédite du taux de mortalité ajusté au délai.
+en utilisant uniquement les données observées jusqu'au 27 mars 2003.
+([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_c.png){fig-alt="Les périodes sont pertinentes : Période 1 -- 15 jours où le CFR est nul, ce qui indique qu'aucun décès n'a été signalé ; Période du 15 mars au 26 avril où le CFR semble augmenter ; Période du 30 avril au 30 mai où l'estimation du CFR se stabilise."}
+
+::::::::::::::::::::::: instructor
+
+Les périodes sont pertinentes : Période 1 -- 15 jours où le CFR est nul, ce qui indique qu'aucun décès n'a été signalé ; Période du 15 mars au 26 avril où le CFR semble augmenter ; Période du 30 avril au 30 mai où l'estimation du CFR se stabilise.
+
+:::::::::::::::::::::::
+
+Plus généralement, l'estimation de la gravité peut être utile même en dehors d'un scénario de planification d'une pandémie et dans le contexte de la santé publique courante.
+Le fait de savoir si une épidémie a ou a eu une gravité différente de celle observée dans le passé peut motiver des recherches de causes,
+qui pourraient être intrinsèques à l'agent infectieux (par exemple, une nouvelle souche plus grave) ou dues à des facteurs sous-jacents dans la population (par exemple, une immunité réduite ou des facteurs de morbidité) ([Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846)).
+
+Dans ce tutoriel, nous allons apprendre à utiliser la fonction `{cfr}` pour calculer et ajuster l'estimation d'un CFR à l'aide de l'outil [des distributions de retard](../learners/reference.md#delaydist) de `{epiparameter}` ou d'ailleurs, sur la base des méthodes développées par [Nishiura et al. 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) En outre, comment nous pouvons réutiliser les `{cfr}` pour des mesures plus sévères.
+
+Nous utiliserons le tuyau `%>%` pour connecter les fonctions, donc appelons aussi l'opérateur `{tidyverse}` au paquetage :
+
+```{r, message=FALSE, warning=FALSE}
+library(cfr)
+library(epiparameter)
+library(tidyverse)
+library(outbreaks)
+```
+
+::::::::::::::::::: checklist
+
+### Le double point-virgule
+
+Le double point-virgule `::` dans R vous permet d'appeler une fonction spécifique d'un paquetage sans charger l'ensemble du paquetage dans l'environnement actuel.
+
+Par exemple, vous pouvez appeler une fonction spécifique d'un package sans charger le package entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir de l'outil `{dplyr}` paquet.
+
+Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les conflits d'espace de noms.
+
+:::::::::::::::::::
+
+:::::::::::::::::::: discussion
+
+Sur la base de votre expérience :
+
+- Faites part de toute épidémie antérieure à laquelle vous avez participé.
+
+Répondez à ces questions :
+
+- Comment avez-vous évalué la gravité clinique de l'épidémie ?
+- Quelles ont été les principales sources de biais ?
+- Qu'avez-vous fait pour prendre en compte les biais identifiés ?
+- Quelle analyse complémentaire feriez-vous pour résoudre le biais ?
+
+::::::::::::::::::::
+
+## Sources de données pour la gravité clinique
+
+Quelles sources de données pouvons-nous utiliser pour estimer la gravité clinique d'un foyer de maladie ? [Verity et al, 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(20\)30243-7/fulltext) résume le spectre des cas de COVID-19 :
+
+![Spectre des cas de COVID-19. Le CFR vise à estimer la proportion de décès parmi les cas confirmés d'une épidémie.
+([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(20\)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
+
+- Au sommet de la pyramide, les personnes qui répondent aux critères de l'OMS en matière de **grave** ou critiques auraient probablement été identifiés en milieu hospitalier, présentant une pneumonie virale atypique. Ces cas auraient été identifiés en Chine continentale et parmi ceux classés au niveau international comme relevant d'une transmission locale.
+- Il est probable que de nombreux autres cas aient été identifiés en Chine continentale. **symptomatiques** (c'est-à-dire avec de la fièvre, de la toux ou des myalgies), mais ne nécessiteront peut-être pas d'hospitalisation. Ces cas auraient été identifiés grâce à des liens avec des voyages internationaux dans des zones à haut risque et grâce à la recherche des contacts des cas confirmés. Ils pourraient être identifiés grâce à la surveillance de la population, par exemple en cas de syndrome grippal.
+- La partie inférieure de la pyramide représente **les maladies bénignes** (et éventuellement **asymptomatique**). Ces cas pourraient être identifiés par la recherche des contacts et, par la suite, par des tests sérologiques.
+
+## CFR naïf
+
+Nous mesurons la gravité de la maladie en termes de risque de létalité (CFR). Le RCF est interprété comme la probabilité conditionnelle de décès en cas de diagnostic confirmé, calculée comme le ratio du nombre cumulé de décès $D_{t}$ sur le nombre cumulé de cas confirmés $C_{t}$ à un moment donné $t$. On peut se référer au *CFR naïf* (également CFR brut ou biaisé, $b_{t}$) :
+
+$$ b_{t} =  \frac{D_{t}}{C_{t}} $$
+
+Ce calcul est *naïf* car il tend à produire un TFC biaisé et largement sous-estimé en raison du délai entre l'apparition de la maladie et le décès, qui ne se stabilise qu'aux derniers stades de l'épidémie.
+
+Pour calculer le TFC naïf, le `{cfr}` a besoin d'un cadre de données d'entrée comportant trois colonnes nommées :
+
+- `date`
+- `cases`
+- `deaths`
+
+Explorons la base de données `ebola1976` inclus dans le paquet {cfr} qui provient de la première épidémie d'Ebola dans ce qui s'appelait alors le Zaïre (aujourd'hui la République démocratique du Congo) en 1976, comme l'ont analysé Camacho et al. (2014).
+
+```{r}
+# Load the Ebola 1976 data provided with the {cfr} package
+data("ebola1976")
+
+# Plot the incidence of cases and death reports
+ebola1976 %>%
+  incidence2::incidence(
+    date_index = "date",
+    counts = c("cases", "deaths")
+  ) %>%
+  plot()
+```
+
+Nous replacerons cet épisode dans le contexte d'une épidémie d'Ebola. **épidémie en cours** avec seulement le **30 premiers jours** de données observées.
+
+```{r}
+# Assume we only have the first 30 days of this data
+ebola_30days <- ebola1976 %>%
+  dplyr::slice_head(n = 30) %>%
+  dplyr::as_tibble()
+
+ebola_30days
+```
+
+:::::::::::::::::: callout
+
+### Nous avons besoin de données agrégées sur l'incidence
+
+`{cfr}` lit **agrégé** données d'incidence.
+
+<Semblable à `{EpiNow2}` avec la différence que pour `{cfr}` nous avons besoin d'une colonne supplémentaire nommée `deaths`. -->
+
+```{r, eval=FALSE, echo=FALSE}
+EpiNow2::example_confirmed %>%
+  dplyr::as_tibble()
+```
+
+Cette entrée de données devrait être **agrégées** par jour, ce qui signifie qu'une observation *par jour* contenant les *quotidien* nombre quotidien de cas et de décès déclarés. Les observations comportant des valeurs nulles ou manquantes doivent également être incluses, comme pour les données de séries chronologiques.
+
+En outre, `{cfr}` fonctionne actuellement pour *tous les jours* mais pas pour d'autres unités temporelles d'agrégation de données, par exemple les semaines.
+
+<!-- Proposez des moyens de traiter les données hebdomadaires brutes -->
+
+<!-- https://github.com/epiverse-trace/cfr/issues/117 -->
+
+::::::::::::::::::
+
+Lorsque nous appliquons `cfr_static()` à `data` directement, nous calculons le CFR naïf :
+
+```{r}
+# Calculate the naive CFR for the first 30 days
+cfr::cfr_static(data = ebola_30days)
+```
+
+:::::::::::::::::::::::::::::::::::::::: challenge
+
+Téléchargez le fichier [sarscov2\_cases\_deaths.csv](data/sarscov2_cases_deaths.csv) et lisez-le dans R.
+
+Estimez le CFR naïf.
+
+:::::::::::::::::::: hint
+
+Contrôlez le format des données saisies.
+
+- Contient-il des données quotidiennes ?
+- Les noms des colonnes sont-ils conformes aux exigences de la `cfr_static()`?
+- Comment renommer les noms de colonnes d'une base de données ?
+
+::::::::::::::::::::
+
+:::::::::::::::::::: solution
+
+Nous lisons les données saisies à l'aide de `readr::read_csv()`. Cette fonction reconnaît que la colonne `date` est une `<date>` vecteur de classe.
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+# read data from the tutorial repository R project
+sarscov2_input <-
+  readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r, eval=FALSE, echo=TRUE, warning=FALSE, message=FALSE}
+# read data
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+sarscov2_input <-
+  readr::read_csv(here::here("data", "raw-data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r}
+# Inspect data
+sarscov2_input
+```
+
+Nous pouvons utiliser `dplyr::rename()` pour adapter les données externes aux données d'entrée de l'application `cfr_static()`.
+
+```{r}
+# Rename before Estimate naive CFR
+sarscov2_input %>%
+  dplyr::rename(
+    cases = cases_jpn,
+    deaths = deaths_jpn
+  ) %>%
+  cfr::cfr_static()
+```
+
+::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::
+
+## Biais affectant l'estimation du CFR
+
+::::::::::::::::::::::::::::: discussion
+
+### Deux biais qui affectent l'estimation du CFR
+
+[Lipsitch et al, 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846) décrivent deux biais potentiels qui peuvent affecter l'estimation de la CFR (et leurs solutions potentielles) :
+
+:::::::::::::::::::::::::::::
+
+::::::::::::: solution
+
+### 1\. Vérification préférentielle des cas graves
+
+Pour les maladies ayant un *spectre* de présentations cliniques, les cas qui sont portés à l'attention des autorités de santé publique et enregistrés dans les bases de données de surveillance sont généralement des personnes présentant les symptômes les plus graves, qui consultent un médecin, sont admises à l'hôpital ou décèdent.
+
+Par conséquent, le TFC est généralement plus élevé chez les personnes qui présentent les symptômes les plus graves. *cas détectés* que dans l'ensemble de la population des cas, étant donné que cette dernière peut inclure des personnes présentant des symptômes légers, subcliniques et (selon certaines définitions de "cas") asymptomatiques.
+
+:::::::::::::
+
+:::::::::::: solution
+
+### 2\. Biais dû à une déclaration tardive du décès
+
+Au cours d'une *en cours* Il y a un délai entre le moment où une personne décède et le moment où son décès est signalé. Par conséquent, à tout moment, la liste des cas comprend des personnes qui vont mourir et dont le décès n'est pas encore survenu ou qui est survenu mais n'a pas encore été signalé. Par conséquent, la division du nombre cumulé de décès déclarés par le nombre cumulé de cas déclarés à un moment précis d'une épidémie sous-estimera le véritable TFC.
+
+Les principaux facteurs déterminants de l'ampleur du biais sont l'épidémie, le nombre de décès et le nombre de cas. *taux de croissance de l'* et le *distribution des retards* entre la déclaration des cas et la déclaration des décès ; plus les délais sont longs et plus le taux de croissance est rapide, plus le biais est important.
+
+Dans cet épisode du tutoriel, nous allons nous concentrer sur les solutions pour traiter ce biais spécifique en utilisant `{cfr}`!
+
+::::::::::::
+
+:::::::::::::::::::: solution
+
+### Étude de cas : Grippe A (H1N1), Mexique, 2009
+
+Amélioration d'une *précoce* L'amélioration de l'évaluation épidémiologique précoce d'un TFC ajusté au retard est cruciale pour déterminer la virulence, déterminer le niveau et les choix de l'intervention de santé publique et fournir des conseils au grand public.
+
+En 2009, lors de l'épidémie de grippe porcine A (H1N1), le Mexique a bénéficié d'une estimation précoce biaisée du RCF. Les premiers rapports du gouvernement mexicain faisaient état d'une infection virulente, alors que dans d'autres pays, le même virus était perçu comme bénin ([TIME, 2009](https://content.time.com/time/health/article/0,8599,1894534,00.html)).
+
+Aux États-Unis et au Canada, aucun décès n'a été attribué au virus dans les dix jours qui ont suivi la déclaration d'urgence de santé publique par l'Organisation mondiale de la santé. Même dans des circonstances similaires, au début de la pandémie mondiale, les responsables de la santé publique, les décideurs et le grand public veulent connaître la virulence d'un agent infectieux émergent.
+
+[Fraser et al, 2009](https://www.science.org/doi/full/10.1126/science.1176062) a réinterprété les données en évaluant les biais et en obtenant une gravité clinique inférieure à celle de la pandémie de grippe de 1918, mais comparable à celle observée lors de la pandémie de 1957.
+
+::::::::::::::::::::
+
+:::::::::::::::::::: instructor
+
+Nous pouvons mettre en évidence ce dernier biais à l'aide de l'outil [concept décrit dans ce `{cfr}` vignette](https://epiverse-trace.github.io/cfr/articles/cfr.html#concept-how-reporting-delays-bias-cfr-estimates).
+
+<!-- créez un code et ensuite un .gif ? -->
+
+::::::::::::::::::::
+
+## CFR ajusté au retard
+
+[Nishiura et al, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) a développé une méthode qui prend en compte les **délai** entre l'apparition des symptômes et le décès.
+
+Les épidémies en temps réel peuvent avoir un nombre de décès insuffisant pour déterminer la distribution du temps entre l'apparition des symptômes et le décès. Par conséquent, nous pouvons estimer la distribution du temps entre l'apparition des symptômes et le décès. *délai de distribution* à partir d'épidémies historiques ou réutiliser celles qui sont accessibles via des packages R tels que `{epiparameter}` ou `{epireview}` qui les collectent à partir de la littérature scientifique publiée. Pour un guide étape par étape, lisez l'épisode du tutoriel sur la façon de [accéder aux retards épidémiologiques](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html).
+
+Utilisons `{epiparameter}`:
+
+```{r, message=FALSE, warning=FALSE}
+# Get delay distribution
+onset_to_death_ebola <-
+  epiparameter::epiparameter_db(
+    disease = "Ebola",
+    epi_name = "onset_to_death",
+    single_epiparameter = TRUE
+  )
+
+# Plot <epiparameter> object
+plot(onset_to_death_ebola, day_range = 0:40)
+```
+
+Pour calculer le CFR corrigé des retards, nous pouvons utiliser l'équation suivante `cfr_static()` avec la fonction `data` et `delay_density` arguments.
+
+```{r}
+# Calculate the delay-adjusted CFR
+# for the first 30 days
+cfr::cfr_static(
+  data = ebola_30days,
+  delay_density = function(x) density(onset_to_death_ebola, x)
+)
+```
+
+```{r, echo=FALSE}
+out_delay_adjusted <-
+  cfr::cfr_static(
+    data = ebola_30days,
+    delay_density = function(x) density(onset_to_death_ebola, x)
+  )
+
+out_estimate <- out_delay_adjusted %>% pull(severity_estimate)
+out_low <- out_delay_adjusted %>% pull(severity_low)
+out_high <- out_delay_adjusted %>% pull(severity_high)
+```
+
+Le CFR ajusté en fonction des délais a indiqué que la gravité globale de la maladie *à la fin de l'épidémie* ou avec le *dernières données disponibles à ce moment-là* est `r out_estimate` avec un intervalle de confiance de 95 % entre `r out_low` et `r out_high` soit une valeur légèrement supérieure à la valeur naïve.
+
+:::::::::::::::::: callout
+
+### Utilisez la classe d'épiparamètres
+
+Lorsque vous utilisez un `<epiparameter>` nous pouvons utiliser cette expression comme modèle :
+
+`function(x) density(<EPIPARAMETER_OBJECT>, x)`
+
+Pour les fonctions de distribution dont les paramètres ne sont pas disponibles dans `{epiparameter}` nous vous proposons deux alternatives :
+
+- Créez un `<epiparameter>` pour l'intégrer dans d'autres paquets R du pipeline d'analyse de l'épidémie. Lisez l'article [documentation de référence de `epiparameter::epiparameter()`](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html) ou
+
+- Lisez `{cfr}` vignette pour [une introduction à l'utilisation des distributions de retard](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html).
+
+::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: challenge
+
+Utilisez le même fichier que celui du défi précédent ([sarscov2\_cases\_deaths.csv](data/sarscov2_cases_deaths.csv)).
+
+Estimez le TFC ajusté au délai en utilisant le délai de distribution approprié. Dans ce cas :
+
+- Comparez les solutions du CFR naïf et du CFR ajusté au retard !
+
+:::::::::::::::::::: hint
+
+- Trouvez la solution `<epiparameter>` approprié !
+
+::::::::::::::::::::
+
+:::::::::::::::::::: solution
+
+Nous utilisons `{epiparameter}` pour accéder à une distribution des retards pour les données d'incidence agrégées du SRAS-CoV-2 :
+
+```{r, message=FALSE, warning=FALSE}
+library(epiparameter)
+
+sarscov2_delay <-
+  epiparameter::epiparameter_db(
+    disease = "covid",
+    epi_name = "onset to death",
+    single_epiparameter = TRUE
+  )
+```
+
+Nous lisons les données en utilisant `readr::read_csv()`. Cette fonction reconnaît que la colonne `date` est une `<date>` vecteur de classe.
+
+```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
+# read data from the tutorial repository R project
+sarscov2_input <-
+  readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r, eval=FALSE, echo=TRUE}
+# read data
+# e.g.: if path to file is data/raw-data/ebola_cases.csv then:
+sarscov2_input <-
+  readr::read_csv(here::here("data", "raw-data", "sarscov2_cases_deaths.csv"))
+```
+
+```{r}
+# Inspect data
+sarscov2_input
+```
+
+Nous pouvons utiliser `dplyr::rename()` pour adapter les données externes aux données d'entrée de l'application `cfr_static()`.
+
+```{r}
+# Rename before Estimate naive CFR
+sarscov2_input %>%
+  dplyr::rename(
+    cases = cases_jpn,
+    deaths = deaths_jpn
+  ) %>%
+  cfr::cfr_static(
+    delay_density = function(x) density(sarscov2_delay, x)
+  )
+```
+
+Interprétez la comparaison entre les estimations naïves et les estimations corrigées des retards.
+
+::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::: spoiler
+
+### Quand utiliser les distributions discrètes ?
+
+Pour les `cfr_static()` et toutes les `cfr_*()` les choix les plus appropriés à faire sont les suivants **discrets** discrètes. En effet, nous travaillerons avec des données quotidiennes sur les cas et les décès.
+
+Nous pouvons supposer que l'évaluation de la fonction de distribution de probabilité (PDF) d'un *continue* est équivalente à la fonction de masse de probabilité (FMP) de la distribution continue équivalente. *discrète* discrète équivalente.
+
+Toutefois, cette hypothèse peut ne pas être appropriée pour les distributions présentant des pics plus importants. C'est le cas, par exemple, des maladies dont la distribution de l'apparition à la mort présente un pic important et une faible variance. Dans ce cas, la disparité moyenne entre la PDF et la PMF devrait être plus prononcée que pour les distributions dont les écarts sont plus importants. Une façon d'y remédier est de discrétiser la distribution continue en utilisant la méthode `epiparameter::discretise()` à une `<epiparameter>` objet.
+
+::::::::::::::::::
+
+::::::::::::::::::::::::::: spoiler
+
+### Comment le {cfr} fonctionne ?
+
+Pour ajuster le CFR, [Nishiura et al. 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) utilisent les données d'incidence des cas et des décès pour estimer le nombre de cas dont les résultats sont connus :
+
+$$
+u_t = \dfrac{\sum_{i = 0}^t
+\sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
+$$
+
+où :
+
+- $c_{t}$ est l'incidence quotidienne des cas au moment $t$,
+- $f_{t}$ est la valeur de la fonction de masse de probabilité (FMP) de l'échantillon. **distribution des retards** entre l'apparition et le décès, et
+- $u_{t}$ représente le facteur de sous-estimation des résultats connus.
+
+$u_{t}$ est utilisé pour **mettre à l'échelle** la valeur du nombre cumulé de cas au dénominateur dans le calcul du CFR. Ce calcul est effectué en interne à l'aide de l'outil [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) fonction.
+
+L'estimateur de la CFR peut être écrit comme suit :
+
+$$p_{t} = \frac{b_{t}}{u_{t}}$$
+
+où $p_{t}$ est la proportion réalisée de cas confirmés qui meurent de l'infection (ou le TFC non biaisé), et $b_{t}$ est l'estimation brute et biaisée du RCF (ou RCF naïf).
+
+D'après cette dernière équation, nous observons que le TFC non biaisé $p_{t}$ est plus important que le CFR biaisé $b_{t}$ biaisé, car en $u_{t}$ le numérateur est plus petit que le dénominateur (notez que $f_{t}$ est la distribution de probabilité de la *distribution des retards* entre l'apparition et le décès). Par conséquent, nous nous référons à $b_{t}$ comme l'estimateur biaisé du CFR.
+
+Lorsque nous observons l'ensemble de l'évolution d'une épidémie (de $t \rightarrow \infty$), $u_{t}$ tend vers 1, ce qui fait que $b_{t}$ tend à $p_{t}$ et devient un estimateur sans biais ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
+
+:::::::::::::::::::::::::::
+
+## Estimation du CFR à un stade précoce
+
+L'estimation **naïf** est utile pour obtenir une estimation globale de la gravité de l'épidémie (jusqu'à présent). Une fois que l'épidémie est terminée ou qu'elle a progressé de telle sorte que davantage de décès sont signalés, le TFC estimé est alors le plus proche du "véritable" TFC non biaisé.
+
+Par ailleurs, le **corrigé des délais** peut évaluer la gravité d'une maladie infectieuse émergente. *plus tôt* que le RCF biaisé ou naïf, au cours d'une épidémie.
+
+Nous pouvons explorer les **précoce** détermination de la *CFR corrigé des retards* à l'aide de la méthode `cfr_rolling()` fonction.
+
+:::::::::::::::::::::: callout
+
+`cfr_rolling()` est une fonction utilitaire qui calcule automatiquement le CFR pour chaque jour de l'épidémie à l'aide des données disponibles jusqu'à ce jour, ce qui permet à l'utilisateur de gagner du temps.
+
+::::::::::::::::::::::
+
+`cfr_rolling()` montre le CFR estimé pour chaque jour de l'épidémie, étant donné que les données futures sur les cas et les décès ne sont pas disponibles à ce moment-là. La valeur finale de `cfr_rolling()` est identique à celle de `cfr_static()` pour les mêmes données.
+
+```{r}
+# for all the 73 days in the Ebola dataset
+# Calculate the rolling daily naive CFR
+rolling_cfr_naive <- cfr::cfr_rolling(data = ebola1976)
+```
+
+```{r}
+# for all the 73 days in the Ebola dataset
+# Calculate the rolling daily delay-adjusted CFR
+rolling_cfr_adjusted <- cfr::cfr_rolling(
+  data = ebola1976,
+  delay_density = function(x) density(onset_to_death_ebola, x)
+)
+```
+
+Avec `utils::tail()` nous montrons que les dernières estimations du CFR. Les intervalles de confiance à 95 % des estimations naïves et corrigées des retards se chevauchent.
+
+```{r, eval=FALSE, echo=TRUE}
+# Print the tail of the data frame
+utils::tail(rolling_cfr_naive)
+utils::tail(rolling_cfr_adjusted)
+```
+
+Visualisons maintenant les deux résultats dans une série chronologique. Quelle serait la performance en temps réel des estimations naïves et des estimations corrigées des retards ?
+
+```{r, echo=TRUE, warning=FALSE, message=FALSE}
+# bind by rows both output data frames
+dplyr::bind_rows(
+  list(
+    naive = rolling_cfr_naive,
+    adjusted = rolling_cfr_adjusted
+  ),
+  .id = "method"
+) %>%
+  # visualise both adjusted and unadjusted rolling estimates
+  ggplot() +
+  geom_ribbon(
+    aes(
+      date,
+      ymin = severity_low,
+      ymax = severity_high,
+      fill = method
+    ),
+    alpha = 0.2, show.legend = FALSE
+  ) +
+  geom_line(
+    aes(date, severity_estimate, colour = method)
+  )
+```
+
+La ligne horizontale représente le TFC ajusté au retard estimé à la fin de l'épidémie. La ligne en pointillé signifie que l'estimation a un intervalle de confiance de 95 % (IC 95 %).
+
+**Avis** Notez que ce calcul ajusté en fonction du délai est particulièrement utile lorsqu'une *courbe épidémique de cas confirmés* est la seule donnée disponible (c'est-à-dire lorsque les données individuelles depuis l'apparition jusqu'au décès ne sont pas disponibles, en particulier au début de l'épidémie). Lorsqu'il y a peu ou pas de décès, une hypothèse doit être faite pour la courbe épidémique des cas confirmés. *distribution des délais* entre l'apparition et le décès, par exemple à partir de la littérature basée sur les épidémies précédentes. [Nishiura et al. 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) illustrent ce phénomène dans les figures à l'aide de données relatives à l'épidémie de SRAS survenue à Hong Kong en 2003.
+
+:::::::::::::::::::::::::::::::::: spoiler
+
+### Étude de cas : Épidémie de SRAS, Hong Kong, 2003
+
+Les figures A et B montrent les nombres cumulés de cas et de décès dus au SRAS, et la figure C montre les estimations observées (biaisées) du CFR en fonction du temps, c'est-à-dire le nombre cumulé de décès par rapport au nombre de cas à l'heure $t$. En raison du délai entre l'apparition des symptômes et le décès, l'estimation biaisée du RCF au temps $t$ sous-estime le TFC réalisé à la fin d'une épidémie (302/1755 = 17,2 %).
+
+![Risque observé (biaisé) de létalité des cas confirmés du syndrome respiratoire aigu sévère (SRAS) à Hong Kong, 2003. ([Nishiura et al, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_abc.png)
+
+Néanmoins, même en n'utilisant que les données observées pour la période du 19 mars au 2 avril, `cfr_static()` peut produire une prédiction appropriée (figure D), par exemple le TFC ajusté au retard au 27 mars est de 18,1 % (IC 95 % : 10,5, 28,1). Une surestimation est observée au tout début de l'épidémie, mais les limites de confiance à 95 % pour les phases ultérieures incluent le TFC réalisé (c'est-à-dire 17,2 %).
+
+![Détermination précoce du risque de létalité confirmé, ajusté au délai, du syndrome respiratoire aigu sévère (SRAS) à Hong Kong, 2003. ([Nishiura et al, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_d.png)
+
+::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::: discussion
+
+### Interpréter l'estimation de la CFR à un stade précoce
+
+Sur la base de la figure ci-dessus :
+
+- Quelle est la différence en jours entre la date à laquelle l'IC à 95 % de la valeur estimée du *estimé ajusté aux retards* estimé corrigé des retards par rapport à l'IC 95 % de l'IC 95 %. *CFR naïf* avec le CFR estimé à la fin de l'épidémie ?
+
+Discutez-en :
+
+- Quelles sont les implications en matière de politique de santé publique d'une *CFR ajusté au retard* corrigée des retards ?
+
+::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::: hint
+
+Nous pouvons utiliser l'inspection visuelle ou l'analyse des trames de données de sortie.
+
+::::::::::::::::::::::
+
+:::::::::::::::::::::: solution
+
+Il y a presque un mois de différence.
+
+Notez que l'estimation présente une incertitude considérable au début de la série chronologique. Après deux semaines, le CFR corrigé des retards se rapproche de l'estimation globale du CFR à la fin de l'épidémie.
+
+Ce schéma est-il similaire à celui d'autres épidémies ? Nous pouvons utiliser les ensembles de données dans les défis de cet épisode. Nous vous invitons à le découvrir !
+
+::::::::::::::::::::::
+
+:::::::::::::::::::::: discussion
+
+### Liste de contrôle
+
+Avec `{cfr}` nous estimons le CFR comme la proportion de décès parmi les **confirmés** confirmés.
+
+En n'utilisant que des **confirmé** il est clair que tous les cas qui ne cherchent pas de traitement médical ou qui ne sont pas notifiés ne sont pas pris en compte, de même que tous les cas asymptomatiques. Cela signifie que l'estimation du CFR est plus élevée que la proportion de décès parmi les personnes infectées.
+
+::::::::::::::::::::::
+
+::::::::::::::::::::::::::: solution
+
+### Pourquoi les estimations naïves et ajustées aux délais diffèrent-elles ?
+
+`{cfr}` La méthode naïve vise à obtenir un estimateur non biaisé "bien avant" d'observer l'ensemble de l'évolution de l'épidémie. Pour ce faire, `{cfr}` utilise le facteur de sous-estimation $u_{t}$ pour estimer le CFR non biaisé $p_{t}$ à l'aide de la méthode du maximum de vraisemblance, étant donné que le *processus d'échantillonnage* défini par [Nishiura et al, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852).
+
+:::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: solution
+
+### Qu'est-ce que le processus d'échantillonnage ?
+
+![La population des cas confirmés et le processus d'échantillonnage pour l'estimation du TFC non biaisé au cours d'une épidémie. ([Nishiura et al. 2009](https://doi.org/10.1371/journal.pone.0006852.g001))](fig/cfr-pone.0006852.g001.png)
+
+De *données d'incidence agrégées* au moment $t$ nous connaissons le nombre cumulé de cas confirmés et de décès, $C_{t}$ et $D_{t}$ et souhaitons estimer le CFR non biaisé $\pi$ sans biais, au moyen du facteur de sous-estimation $u_{t}$.
+
+Si nous connaissions le facteur de sous-estimation $u_{t}$ nous pourrions préciser la taille de la population des cas confirmés qui ne sont plus à risque ($u_{t}C_{t}$, **ombré**), bien que nous ne sachions pas quels individus survivants appartiennent à ce groupe. Une proportion $\pi$ de ceux qui font partie du groupe de cas encore à risque (taille $(1- u_{t})C_{t}$, **non ombré**) devrait mourir.
+
+Parce que chaque cas qui n'est plus à risque a une probabilité indépendante de mourir, $\pi$ le nombre de décès, $D_{t}$ est un échantillon d'une distribution binomiale avec une taille d'échantillon de $u_{t}C_{t}$ et la probabilité de décès $p_{t}$ = $\pi$.
+
+Ceci est représenté par la fonction de vraisemblance suivante pour obtenir l'estimation du maximum de vraisemblance de la CRF non biaisée $p_{t}$ = $\pi$:
+
+$$
+{\sf L}(\pi | C_{t},D_{t},u_{t}) = \log{\dbinom{u_{t}C_{t}}{D_{t}}} + D_{t} \log{\pi} +
+(u_{t}C_{t} - D_{t})\log{(1 - \pi)},
+$$
+
+Cette estimation est réalisée par la fonction interne `?cfr:::estimate_severity()`.
+
+::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: solution
+
+### Limitations
+
+- Le TFC ajusté aux délais ne tient pas compte de toutes les sources d'erreur dans les données, comme le sous-diagnostic des personnes infectées.
+
+::::::::::::::::::::::::::
+
+## Défis
+
+:::::::::::::::::::::::::::::::: discussion
+
+### Plus de mesures de sévérité
+
+Supposons que nous ayons besoin d'évaluer la gravité clinique de l'épidémie dans un contexte différent des données de surveillance, comme la gravité parmi les cas qui arrivent à l'hôpital ou les cas que vous avez recueillis lors d'une enquête sérologique représentative.
+
+En utilisant `{cfr}` nous pouvons modifier les entrées du numérateur (`cases`) et du dénominateur (`deaths`) pour estimer des mesures plus sévères comme le risque d'infection mortelle (IFR) ou le risque d'hospitalisation mortelle (HFR). Nous pouvons suivre cette analogie :
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::: solution
+
+### Risque de létalité lié à l'infection et à l'hospitalisation
+
+Si pour une *cas* risque de décès (CFR), nous exigeons :
+
+- *cas* les données sur l'incidence des cas et des décès, avec une
+- distribution des délais entre les cas et les décès (ou une approximation proche, comme le délai entre l'apparition des symptômes et le décès).
+
+Dans ce cas, le *d'infection* risque de létalité (IFR) :
+
+- *l'infection* les données sur l'incidence des infections et des décès, avec une
+- distribution des délais entre l'exposition et le décès (ou une approximation proche).
+
+De la même manière, la distribution des délais d'exposition au décès (ou une approximation proche). *Hospitalisation* Fatality Risk (HFR) exige :
+
+- *une hospitalisation* d'hospitalisation et de décès, ainsi qu'une
+- distribution des délais entre l'hospitalisation et le décès.
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::: solution
+
+### Sources de données pour d'autres mesures de la gravité
+
+[Yang et al, 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) résume les différentes définitions et sources de données :
+
+![Niveaux de gravité des infections par le SRAS-CoV-2 et paramètres d'intérêt. Chaque niveau est supposé être un sous-ensemble du niveau inférieur.](fig/cfr-s41467-020-19238-2-fig_a.png)
+
+- sCFR risque de létalité symptomatique,
+- sCHR risque d'hospitalisation symptomatique,
+- mCFR risque de létalité des cas médicalement assistés,
+- mCHR risque d'hospitalisation d'un cas médicalement pris en charge,
+- HFR risque d'hospitalisation et de mortalité.
+
+![Schéma des analyses de base. Les flèches rouges, bleues et vertes indiquent le flux de données provenant des cas confirmés en laboratoire dans le cadre de la surveillance passive, des cas diagnostiqués cliniquement et des cas confirmés en laboratoire dans le cadre des dépistages actifs.](fig/cfr-s41467-020-19238-2-fig_b.png){fig-alt="Source des données sur les cas de COVID-19 à Wuhan : D1) 32 583 cas de COVID-19 confirmés en laboratoire en mars 84, D2) 17 365 cas de COVID-19 diagnostiqués cliniquement entre le 9 février et le 24 avril, D3) nombre quotidien de cas confirmés en laboratoire entre le 9 mars et le 24 avril, D4) nombre total de décès dus au COVID-19 en date du 24 avril, obtenus auprès de la Commission de la santé du Hubei3, D5) 325 cas confirmés en laboratoire et D6) 1 290 décès ont été ajoutés au 16 avril grâce à une vérification complète et systématique effectuée par les autorités de Wuhan3, et D7) 16 781 cas confirmés en laboratoire identifiés par le biais d'un dépistage universel10,11. Pse : sensibilité de la RT-PCR12. Pmed.care : proportion de patients souffrant d'infections respiratoires aiguës qui demandent une assistance médicale13."}
+
+::::::::::::::::::::::::::::
+
+::::::::::::::::: callout
+
+### Les données agrégées diffèrent des listes de diffusion
+
+*Données agrégées* Les données sur l'incidence diffèrent des **liste de référence** où chaque observation contient des données au niveau individuel.
+
+```{r}
+outbreaks::ebola_sierraleone_2014 %>% as_tibble()
+```
+
+:::::::::::::::::
+
+:::::::::::::::::::::::::::::::::: challenge
+
+### Utilisez incidence2 pour réorganiser vos données
+
+A partir de la `{outbreaks}` chargez la liste des cas de MERS à partir de la base de données du `mers_korea_2015` l'objet.
+
+Réorganisez cette liste pour qu'elle s'insère dans l'espace de travail de l'objet. `{cfr}` l'entrée du paquet.
+
+Estimez le CFR ajusté au délai en utilisant le délai de distribution correspondant.
+
+::::::::::::::::: hint
+
+**Comment réorganiser mes données d'entrée ?**
+
+Le réarrangement des données d'entrée pour l'analyse des données peut prendre beaucoup de temps. Pour être prêt à analyser *données d'incidence agrégées* nous vous encourageons à utiliser `{incidence2}`!
+
+Tout d'abord, dans le [Commencez](https://www.reconverse.org/incidence2/articles/incidence2.html) de la rubrique `{incidence2}` explore l'utilisation de l'outil `date_index` lors de la lecture d'une liste de lignes contenant des dates dans plusieurs colonnes.
+
+Ensuite, référez-vous à l'outil `{cfr}` manuel de référence sur les [Préparer des formats de données épidémiologiques communs pour l'estimation du CFR](https://epiverse-trace.github.io/cfr/reference/prepare_data.html) sur la façon d'utiliser le `cfr::prepare_data()` à partir des objets incidence2.
+
+<!-- cite howto entry one lineslist + incidence2 + cfr connection -->
+
+:::::::::::::::::
+
+::::::::::::::::: solution
+
+```{r, message=FALSE, warning=FALSE}
+# Load packages
+library(cfr)
+library(epiparameter)
+library(incidence2)
+library(outbreaks)
+library(tidyverse)
+
+# Access delay distribution
+mers_delay <-
+  epiparameter::epiparameter_db(
+    disease = "mers",
+    epi_name = "onset to death",
+    single_epiparameter = TRUE
+  )
+
+# Read linelist
+mers_korea_2015$linelist %>%
+  as_tibble() %>%
+  select(starts_with("dt_"))
+
+# Use {incidence2} to count daily incidence
+mers_incidence <- mers_korea_2015$linelist %>%
+  # converto to incidence2 object
+  incidence(date_index = c("dt_onset", "dt_death")) %>%
+  # complete dates from first to last
+  incidence2::complete_dates()
+
+# Inspect incidence2 output
+mers_incidence
+
+# Prepare data from {incidence2} to {cfr}
+mers_incidence %>%
+  prepare_data(
+    cases_variable = "dt_onset",
+    deaths_variable = "dt_death"
+  )
+
+# Estimate delay-adjusted CFR
+mers_incidence %>%
+  cfr::prepare_data(
+    cases_variable = "dt_onset",
+    deaths_variable = "dt_death"
+  ) %>%
+  cfr::cfr_static(delay_density = function(x) density(mers_delay, x))
+```
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::::::::::: challenge
+
+### Hétérogénéité de la gravité
+
+Le RCF peut différer d'une population à l'autre (par exemple, âge, espace, traitement) ; la quantification de ces hétérogénéités peut aider à cibler les ressources de manière appropriée et à comparer différents régimes de soins ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
+
+Utilisez le `cfr::covid_data` pour estimer un TFC ajusté aux retards, stratifié par pays.
+
+::::::::::::::::::::::::: hint
+
+Une façon d'effectuer une *analyse stratifiée* consiste à appliquer un modèle à des données imbriquées. Cette analyse stratifiée est une méthode qui consiste à appliquer un modèle à des données imbriquées. [`{tidyr}` vignette](https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models) vous montre comment appliquer la méthode `group_by()` + `nest()` aux données de nidification, puis `mutate()` + `map()` pour appliquer le modèle.
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+```{r, message=FALSE, warning=FALSE}
+library(cfr)
+library(epiparameter)
+library(tidyverse)
+
+covid_data %>% glimpse()
+
+delay_onset_death <-
+  epiparameter::epiparameter_db(
+    disease = "covid",
+    epi_name = "onset to death",
+    single_epiparameter = TRUE
+  )
+
+covid_data %>%
+  group_by(country) %>%
+  nest() %>%
+  mutate(
+    temp =
+      map(
+        .x = data,
+        .f = cfr::cfr_static,
+        delay_density = function(x) density(delay_onset_death, x)
+      )
+  ) %>%
+  unnest(cols = temp)
+```
+
+C'est génial ! Vous pouvez maintenant utiliser un code similaire pour toute autre analyse stratifiée comme l'âge, les régions ou autres !
+
+Mais comment pouvons-nous interpréter qu'il existe une variabilité nationale de la gravité pour un même agent pathogène diagnostiqué ?
+
+Des facteurs locaux tels que la capacité de test, la définition de cas et le régime d'échantillonnage peuvent influer sur la déclaration des cas et des décès, et donc sur la détermination des cas. Jetez un coup d'œil à la base de données de l'OMS sur les maladies infectieuses. `{cfr}` vignette sur [Estimation de la proportion de cas confirmés au cours d'une épidémie](https://epiverse-trace.github.io/cfr/articles/estimate_ascertainment.html)!
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Annexe
+
+L'annexe `{cfr}` possède une fonction appelée `cfr_time_varying()` dont la fonctionnalité diffère de celle de `cfr_rolling()`.
+
+::::::::::::::::: callout
+
+### Quand utiliser cfr\_rolling() ?
+
+`cfr_rolling()` montre le CFR estimé pour chaque jour d'épidémie, étant donné que les données futures sur les cas et les décès ne sont pas disponibles à ce moment-là. La valeur finale de `cfr_rolling()` est identique à celle de `cfr_static()` pour les mêmes données.
+
+Rappelez-vous, comme indiqué ci-dessus, `cfr_rolling()` est utile pour obtenir des estimations du CFR à un stade précoce et vérifier si l'estimation du CFR d'un foyer s'est stabilisée. C'est pourquoi, `cfr_rolling()` n'est pas sensible à la durée ou à la taille de l'épidémie.
+
+:::::::::::::::::
+
+::::::::::::::::: callout
+
+### Quand utiliser `cfr_time_varying()`?
+
+D'autre part, `cfr_time_varying()` calcule le CFR sur une fenêtre mobile et aide à comprendre les variations du CFR dues à des changements dans l'épidémie, par exemple en raison d'une nouvelle variante ou d'une immunité accrue due à la vaccination.
+
+Cependant, `cfr_time_varying()` est sensible à l'incertitude de l'échantillonnage. Il est donc sensible à la taille de l'épidémie. Plus le nombre de cas avec des résultats attendus un jour donné est élevé, plus nous obtiendrons des estimations raisonnables du TFC variable dans le temps.
+
+Par exemple, avec 100 cas, l'estimation du risque de décès aura, grosso modo, un intervalle de confiance de 95 % ± 10 % de l'estimation moyenne (IC binomial). Donc, si nous avons >100 cas avec des résultats attendus *un jour donné* nous pouvons obtenir des estimations raisonnables du RCF variable dans le temps. Mais si nous n'avons que >100 cas *sur toute la durée de l'épidémie* nous devrons probablement nous appuyer sur les `cfr_rolling()` qui utilise les données cumulées.
+
+Nous vous invitons à lire ce document [vignette sur la `cfr_time_varying()` fonction](https://epiverse-trace.github.io/cfr/articles/estimate_time_varying_severity.html).
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: keypoints
+
+- Utiliser `{cfr}` pour estimer la gravité
+
+- Utilisation `cfr_static()` pour estimer le CFR global à l'aide des dernières données disponibles.
+
+- Utiliser `cfr_rolling()` pour montrer quel serait le CFR estimé pour chaque jour de l'épidémie.
+
+- Utilisez le `delay_density` pour ajuster le CFR en fonction de la distribution des retards correspondante.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
