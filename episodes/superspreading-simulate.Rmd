@@ -456,28 +456,28 @@ First, let's sketch how we use `purrr::map()` with `epichains::simulate_chains()
 - `.x`, with a vector of numbers, and
 - `.f`, a function to iterate to each vector value.
 
+The code chunk below 
+
 ```r
-map(
-  # vector of numbers (simulation IDs)
-  .x = seq_len(number_simulations),
-  # function to iterate to each simulation ID number
-  .f = function(sim) {
-    simulate_chains(...) %>%
-      # creates a column with the simulation ID number
-      mutate(simulation_id = sim)
-  }
-) %>%
-  # combine list outputs (for each simulation ID) into a single data frame
-  list_rbind()
+# steps:
+# seq_len() creates a vector with sequence of numbers (simulation IDs from 1 to 1000) and
+# function(sim) iterates {epichains} to each simulation ID number, then
+# dplyr::mutate() adds a column to the <epichains> output with the simulation ID number.
+# purrr::list_rbind() combines all the list class outputs (for each simulation ID) into a single data frame.
+purrr::map(.x = seq_len(number_simulations), .f = function(sim) {
+  epichains::simulate_chains(...) %>% dplyr::mutate(simulation_id = sim)
+}) %>%
+  purrr::list_rbind()
+# pseudo code: do not run.
 ```
 
 The `sim` element is placed to register the iteration number (**simulation ID**) as a new column in the `<epichains>` output. The `purrr::list_rbind()` function aims to combine all the list outputs from `map()`.
 
-**Why a dot (`.`) as a prefix?** In the [tidy design principles](https://design.tidyverse.org/dots-prefix.html) book we have a chapter on the dot prefix!
+**Why a dot (`.`) as a prefix before x and f arguments?** In the [tidy design principles](https://design.tidyverse.org/dots-prefix.html) book we have a chapter on the dot prefix!
 
 :::::::::::::::::::::::::::::::
 
-Now, we are prepared to use `map()` to repeatedly simulate from `simulate_chains()` and store in a vector from 1 to `r number_simulations`:
+Now, we are prepared to use `purrr::map()` to repeatedly simulate from `simulate_chains()` and store in a vector from 1 to `r number_simulations`:
 
 ```{r}
 set.seed(33)
