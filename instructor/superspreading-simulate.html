@@ -349,7 +349,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Simulate transmission chains</h1>
-        <p>Last updated on 2025-07-17 |
+        <p>Last updated on 2025-07-23 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-simulate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -970,36 +970,36 @@ function requires two arguments:</p>
 <code>.x</code>, with a vector of numbers, and</li>
 <li>
 <code>.f</code>, a function to iterate to each vector value.</li>
-</ul><div class="codewrapper sourceCode" id="cb17">
+</ul><p>The code chunk below</p>
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">map</span><span class="op">(</span></span>
-<span>  <span class="co"># vector of numbers (simulation IDs)</span></span>
-<span>  .x <span class="op">=</span> <span class="fu">seq_len</span><span class="op">(</span><span class="va">number_simulations</span><span class="op">)</span>,</span>
-<span>  <span class="co"># function to iterate to each simulation ID number</span></span>
-<span>  .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">sim</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="fu">simulate_chains</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>      <span class="co"># creates a column with the simulation ID number</span></span>
-<span>      <span class="fu">mutate</span><span class="op">(</span>simulation_id <span class="op">=</span> <span class="va">sim</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># combine list outputs (for each simulation ID) into a single data frame</span></span>
-<span>  <span class="fu">list_rbind</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># steps:</span></span>
+<span><span class="co"># seq_len() creates a vector with sequence of numbers (simulation IDs from 1 to 1000) and</span></span>
+<span><span class="co"># function(sim) iterates {epichains} to each simulation ID number, then</span></span>
+<span><span class="co"># dplyr::mutate() adds a column to the &lt;epichains&gt; output with the simulation ID number.</span></span>
+<span><span class="co"># purrr::list_rbind() combines all the list class outputs (for each simulation ID) into a single data frame.</span></span>
+<span><span class="fu">purrr</span><span class="fu">::</span><span class="fu">map</span><span class="op">(</span>.x <span class="op">=</span> <span class="fu">seq_len</span><span class="op">(</span><span class="va">number_simulations</span><span class="op">)</span>, .f <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">sim</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span><span class="va">...</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>simulation_id <span class="op">=</span> <span class="va">sim</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu">list_rbind</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># pseudo code: do not run.</span></span></code></pre>
 </div>
 <p>The <code>sim</code> element is placed to register the iteration
 number (<strong>simulation ID</strong>) as a new column in the
 <code>&lt;epichains&gt;</code> output. The
 <code>purrr::list_rbind()</code> function aims to combine all the list
 outputs from <code>map()</code>.</p>
-<p><strong>Why a dot (<code>.</code>) as a prefix?</strong> In the <a href="https://design.tidyverse.org/dots-prefix.html" class="external-link">tidy design
+<p><strong>Why a dot (<code>.</code>) as a prefix before x and f
+arguments?</strong> In the <a href="https://design.tidyverse.org/dots-prefix.html" class="external-link">tidy design
 principles</a> book we have a chapter on the dot prefix!</p>
 </div>
 </div>
 </div>
-<p>Now, we are prepared to use <code>map()</code> to repeatedly simulate
-from <code>simulate_chains()</code> and store in a vector from 1 to
-1000:</p>
+<p>Now, we are prepared to use <code>purrr::map()</code> to repeatedly
+simulate from <code>simulate_chains()</code> and store in a vector from
+1 to 1000:</p>
 <div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1827,9 +1827,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/superspreading-simulate.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/superspreading-simulate.html",
-  "dateCreated": "2025-07-17",
-  "dateModified": "2025-07-17",
-  "datePublished": "2025-07-22"
+  "dateCreated": "2025-07-23",
+  "dateModified": "2025-07-23",
+  "datePublished": "2025-07-23"
 }
 
   </script><script>
