@@ -785,7 +785,7 @@ Refer to this excellent tutorial on estimating the serial interval and incubatio
 
 **Then,** after you get your estimated values, you can manually create your own` <epiparameter>` class objects with `epiparameter::epiparameter()`! Take a look at its [reference guide on "Create an `<epiparameter>` object"](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html#ref-examples)!
 
-Lastly, take a look at the latest [`{epidist}` R package](https://epidist.epinowcast.org/) which provide methods to address key challenges in estimating distributions, including truncation, interval censoring, and dynamical biases.
+Lastly, take a look at the latest R packages [{epidist}](https://epidist.epinowcast.org/) and [{primarycensored}](https://primarycensored.epinowcast.org/), which provide methods to address key challenges in estimating distributions, including truncation, interval censoring, and dynamical biases.
 
 :::::::::::::::::::::::::::::
 
