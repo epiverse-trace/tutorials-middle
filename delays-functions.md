@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  2.138982  5.300177  4.713444 11.746768  3.253313  2.686995 10.102512
- [8]  3.082944  6.712965  3.765955
+ [1] 6.8258110 4.5517386 0.8547937 5.6761309 8.2103831 3.3425527 4.9806545
+ [8] 2.3242565 7.5587081 3.5264643
 ```
 
 ::::::::: instructor
@@ -728,7 +728,17 @@ epinow_estimates_egi <- epinow(
   generation_time = generation_time_opts(serial_interval_ebola),
   delays = delay_opts(incubation_period_ebola)
 )
+```
 
+``` output
+WARN [2025-07-30 15:44:03] epinow: There were 2 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2025-07-30 15:44:03] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
+``` r
 plot(epinow_estimates_egi)
 ```
 
@@ -915,7 +925,7 @@ Refer to this excellent tutorial on estimating the serial interval and incubatio
 
 **Then,** after you get your estimated values, you can manually create your own` <epiparameter>` class objects with `epiparameter::epiparameter()`! Take a look at its [reference guide on "Create an `<epiparameter>` object"](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html#ref-examples)!
 
-Lastly, take a look at the latest [`{epidist}` R package](https://epidist.epinowcast.org/) which provide methods to address key challenges in estimating distributions, including truncation, interval censoring, and dynamical biases.
+Lastly, take a look at the latest R packages [{epidist}](https://epidist.epinowcast.org/) and [{primarycensored}](https://primarycensored.epinowcast.org/), which provide methods to address key challenges in estimating distributions, including truncation, interval censoring, and dynamical biases.
 
 :::::::::::::::::::::::::::::
 
