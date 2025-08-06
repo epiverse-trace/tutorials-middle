@@ -691,7 +691,7 @@ ebola_params
 superspreading::proportion_transmission(
   R = ebola_params[["mean"]],
   k = ebola_params[["dispersion"]],
-  percent_transmission = 0.8
+  prop_transmission = 0.8
 )
 ```
 
@@ -709,7 +709,7 @@ superspreading::proportion_transmission(
 superspreading::proportion_transmission(
   R = sars_params[["mean"]],
   k = sars_params[["dispersion"]],
-  percent_transmission = 0.8
+  prop_transmission = 0.8
 )
 ```
 
@@ -727,7 +727,7 @@ superspreading::proportion_transmission(
 superspreading::proportion_transmission(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
-  percent_transmission = 0.8
+  prop_transmission = 0.8
 )
 ```
 
