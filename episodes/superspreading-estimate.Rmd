@@ -589,12 +589,12 @@ across_offspring <- epidist_string %>%
   # unnest parameters
   unnest_wider(col = epidist_params) %>%
   # to each disease, add sequence from 0.01 to 1 (proportion of transmission)
-  expand_grid(percent_transmission = seq(from = 0.01, to = 1, by = 0.01)) %>%
+  expand_grid(prop_transmission = seq(from = 0.01, to = 1, by = 0.01)) %>%
   # estimate proportion of cases responsible of proportion of transmission (row)
   mutate(
     transmission_output =
       pmap(
-        .l = dplyr::select(., R = mean, k = dispersion, percent_transmission),
+        .l = dplyr::select(., R = mean, k = dispersion, prop_transmission),
         .f = superspreading::proportion_transmission,
         format_prop = FALSE,
         simulate = TRUE # use a numerical simulation
@@ -617,8 +617,8 @@ across_offspring <- epidist_string %>%
 # get a position to the ggplot text annotation
 across_offspring_tip <- across_offspring %>%
   group_by(disease) %>%
-  filter(percent_transmission < 0.98, percent_transmission > 0.85) %>%
-  slice_max(percent_transmission) %>%
+  filter(prop_transmission < 0.98, prop_transmission > 0.85) %>%
+  slice_max(prop_transmission) %>%
   ungroup() %>%
   mutate(disease = case_when(
     str_detect(disease, stringr::fixed("Hantavirus")) ~ "Hantavirus",
@@ -632,7 +632,7 @@ across_offspring %>%
   geom_line(
     aes(
       x = percent_cases,
-      y = percent_transmission,
+      y = prop_transmission,
       color = dispersion,
       group = disease
     )
@@ -641,7 +641,7 @@ across_offspring %>%
     data = across_offspring_tip,
     aes(
       x = percent_cases,
-      y = percent_transmission,
+      y = prop_transmission,
       label = disease
     ),
     hjust = 0.0,
@@ -859,7 +859,7 @@ ebola_params
 superspreading::proportion_transmission(
   R = ebola_params[["mean"]],
   k = ebola_params[["dispersion"]],
-  percent_transmission = 0.8
+  prop_transmission = 0.8
 )
 
 #' estimate for sars --------------
@@ -870,7 +870,7 @@ superspreading::proportion_transmission(
 superspreading::proportion_transmission(
   R = sars_params[["mean"]],
   k = sars_params[["dispersion"]],
-  percent_transmission = 0.8
+  prop_transmission = 0.8
 )
 
 
@@ -882,7 +882,7 @@ superspreading::proportion_transmission(
 superspreading::proportion_transmission(
   R = offspring_fit$estimate["mu"],
   k = offspring_fit$estimate["size"],
-  percent_transmission = 0.8
+  prop_transmission = 0.8
 )
 ```
 
