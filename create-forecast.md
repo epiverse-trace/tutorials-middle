@@ -196,27 +196,18 @@ estimates <- EpiNow2::epinow(
   # Add observation model
   obs = EpiNow2::obs_opts(scale = obs_scale)
 )
-```
 
-``` output
-WARN [2025-08-06 15:29:30] epinow: There were 21 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
-https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
-WARN [2025-08-06 15:29:30] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 base::summary(estimates)
 ```
 
 ``` output
-                        measure                 estimate
-                         <char>                   <char>
-1:       New infections per day   20322 (13518 -- 30261)
-2:   Expected change in reports                   Stable
-3:   Effective reproduction no.       0.98 (0.78 -- 1.2)
-4:               Rate of growth -0.0088 (-0.086 -- 0.07)
-5: Doubling/halving time (days)        -78 (9.8 -- -8.1)
+                        measure                estimate
+                         <char>                  <char>
+1:       New infections per day  20091 (13574 -- 30897)
+2:   Expected change in reports       Likely decreasing
+3:   Effective reproduction no.      0.97 (0.77 -- 1.2)
+4:               Rate of growth -0.012 (-0.09 -- 0.071)
+5: Doubling/halving time (days)       -58 (9.7 -- -7.7)
 ```
 
 
@@ -298,14 +289,6 @@ estimate_cases_to_deaths <- EpiNow2::estimate_secondary(
   secondary = EpiNow2::secondary_opts(type = "incidence"),
   delays = EpiNow2::delay_opts(delay_report_to_death)
 )
-```
-
-``` output
-WARN [2025-08-06 15:29:37] estimate_secondary (chain: 1): There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-08-06 15:29:37] estimate_secondary (chain: 1): Examine the pairs() plot to diagnose sampling problems
- - 
 ```
 
 
@@ -532,11 +515,14 @@ ebola_estimates <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2025-08-06 15:30:32] epinow: There were 1 divergent transitions after warmup. See
+WARN [2025-08-26 01:46:34] epinow: There were 6 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-08-06 15:30:32] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-08-26 01:46:34] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
+WARN [2025-08-26 01:46:38] epinow: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess - 
 ```
 
 ``` r
@@ -544,16 +530,16 @@ summary(ebola_estimates)
 ```
 
 ``` output
-                        measure                estimate
-                         <char>                  <char>
-1:       New infections per day          93 (50 -- 198)
-2:   Expected change in reports              Increasing
-3:   Effective reproduction no.        1.7 (1.2 -- 2.5)
-4:               Rate of growth 0.041 (0.0068 -- 0.091)
-5: Doubling/halving time (days)         17 (7.6 -- 100)
+                        measure               estimate
+                         <char>                 <char>
+1:       New infections per day         92 (49 -- 185)
+2:   Expected change in reports             Increasing
+3:   Effective reproduction no.       1.6 (1.2 -- 2.4)
+4:               Rate of growth 0.04 (0.0038 -- 0.083)
+5: Doubling/halving time (days)        17 (8.3 -- 180)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.7 (1.2 -- 2.5). The exponential growth rate of case numbers is 0.041 (0.0068 -- 0.091).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.2 -- 2.4). The exponential growth rate of case numbers is 0.04 (0.0038 -- 0.083).
 
 Visualize the estimates:
 

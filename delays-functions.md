@@ -161,8 +161,8 @@ generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  2.168742  2.682071  4.625865  9.735481  3.889932  5.664011  2.021979
- [8]  1.845522 19.846181  2.188206
+ [1]  3.133504  6.369584  2.651628 10.017361  1.305227  2.536725  2.996175
+ [8]  7.880128  6.562764  5.961404
 ```
 
 ::::::::: instructor
@@ -585,7 +585,19 @@ epinow_estimates_cgi <- epinow(
   generation_time = generation_time_opts(covid_serial_interval),
   delays = delay_opts(covid_incubation_time)
 )
+```
 
+``` output
+WARN [2025-08-26 01:35:59] epinow: There were 1 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2025-08-26 01:35:59] epinow: There were 375 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
+https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded - 
+WARN [2025-08-26 01:35:59] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
+``` r
 base::plot(epinow_estimates_cgi)
 ```
 
@@ -728,17 +740,7 @@ epinow_estimates_egi <- epinow(
   generation_time = generation_time_opts(serial_interval_ebola),
   delays = delay_opts(incubation_period_ebola)
 )
-```
 
-``` output
-WARN [2025-08-06 15:20:39] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-08-06 15:20:39] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 plot(epinow_estimates_egi)
 ```
 
