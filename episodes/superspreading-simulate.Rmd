@@ -487,7 +487,7 @@ The output data frame collects **infectees** as the observation unit:
 
 ## Iterate simulations 
 
-As before, we can configure the simulation of multiple chains by simply increasing the number of chains (e.g., from `n_chains = 1` to `n_chains = 1000`). 
+As before, we can configure the simulation of multiple chains by simply increasing the number of chains (e.g., from `n_chains = 1` to `n_chains = 100`). 
 However, if we need to assume that each initial case starts (being infectious) at a different time, this can only be configured in one simulation function. 
 Thus, we need to **iterate** multiple times over one specific chain simulation configuration to increase the probability of simulating uncontrolled outbreak projections. 
 The following table compares the alternatives:
@@ -495,8 +495,8 @@ The following table compares the alternatives:
 | Simulation runs | Initial cases | Start time (`t0`) | Use |
 |---|---|---|---|
 | One | 1 | Same | `epichains::simulate_chains()` with `n_chains = 1` |
-| Multiple (1000, e.g.) | 1 | Same | `epichains::simulate_chains()` with `n_chains = 1000` |
-| Multiple (1000, e.g.) | More than one | Different | Iterate 1000 times using `purrr::map()` over `epichains::simulate()` |
+| Multiple (100, e.g.) | 1 | Same | `epichains::simulate_chains()` with `n_chains = 100` |
+| Multiple (100, e.g.) | More than one | Different | Iterate 100 times using `purrr::map()` over `epichains::simulate()` |
 
 The key difference of the third configuration is the `t0` argument from `epichains::simulate_chains()`. 
 The argument `t0` defines the start time of each initial case per chain.
@@ -523,7 +523,9 @@ To increase the probability of simulating uncontrolled outbreak projections, thi
 
 ::::::::::::
 
-In this section we'll conviniently replicate the same simulation of one chain with the same starting time (`t0 = 0`), **but with 1000 replicates**, to showcase how to build up the iteration over `{epichains}` step by step.
+In this section we'll showcase how to build up the **iteration** over `{epichains}` step by step. 
+We'll conviniently replicate the same simulation as before: 100 transmission chains with 1 initial case each starting at day 0 (`t0 = 0`).
+But, instead of using `n_chains = 100`, we'll iterate 100 times over the simulation of 1 transmission chain with 1 initial case each starting at day 0 (`n_chains = 1`).
 
 We need to specify two additional elements:
 
@@ -532,7 +534,7 @@ We need to specify two additional elements:
 
 ```{r}
 # Number of simulation runs
-number_simulations <- 1000
+number_simulations <- 100
 # Number of initial cases
 initial_cases <- 1
 ```
@@ -566,14 +568,16 @@ The code chunk below
 
 ```r
 # steps:
-# - seq_len() creates a vector with sequence of numbers (simulation IDs from 1 to 1000) and
+# - purrr::map() will run 100 times function(sim).
+# - seq_len() creates a vector with sequence of numbers (simulation IDs from 1 to 100) and
 # - function(sim) iterates {epichains} to each simulation ID number, then
 # - dplyr::mutate() adds a column to the <epichains> output with the simulation ID number.
 # - purrr::list_rbind() combines all the list class outputs (for each simulation ID) into a single data frame.
 purrr::map(
   .x = seq_len(number_simulations),
   .f = function(sim) {
-    epichains::simulate_chains(...) %>% dplyr::mutate(simulation_id = sim)
+    epichains::simulate_chains(...) %>% # <-- {epichains}
+      dplyr::mutate(simulation_id = sim)
   }
 ) %>%
   purrr::list_rbind()
@@ -591,11 +595,8 @@ Now, we are prepared to use `purrr::map()` to repeatedly simulate from `simulate
 ```{r}
 set.seed(33)
 simulated_chains_map <-
-  # iterate one function across multiple numbers (simulation IDs)
   purrr::map(
-    # vector of numbers (simulation IDs)
     .x = seq_len(number_simulations),
-    # function to iterate to each simulation ID number
     .f = function(sim) {
       epichains::simulate_chains(
         n_chains = initial_cases,
@@ -605,12 +606,18 @@ simulated_chains_map <-
         size = mers_offspring["dispersion"],
         generation_time = function(x) generate(x = serial_interval, times = x)
       ) %>%
-        # creates a column with the simulation ID number
         dplyr::mutate(simulation_id = sim)
     }
   ) %>%
-  # combine list outputs (for each simulation ID) into a single data frame
   purrr::list_rbind()
+```
+
+One limitation with the iteration output is that, in order to summarize the output, we need can not use the `summary(<epichains>)`.
+
+```{r}
+simulated_chains_map %>%  
+  dplyr::count(simulation_id) %>% 
+  dplyr::pull(n)
 ```
 
 ```{r,echo=FALSE,eval=FALSE}
@@ -623,7 +630,9 @@ simulated_chains_map %>%
 
 ## Visualize multiple chains
 
-We will use a multiple simulation **without** iteration for this section:
+To increase the probability of simulating uncontrolled outbreak projections given an overdispersed offspring distribution, let's simulate **1000 transmission chains** with 1 initial case each starting at day 0.
+
+We will create a multiple simulation **without** iteration for this section:
 
 ```{r}
 set.seed(33)
