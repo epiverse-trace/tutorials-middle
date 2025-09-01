@@ -796,7 +796,7 @@ Also, given that you only need one chain per iteration starting the same day, it
 
 ::::::::::::::
 
-:::::::::::::: solution
+:::::::::::::: instructor
 
 
 ``` r
