@@ -379,6 +379,101 @@ If you need help, return to the "Chain size and length" callout box from the beg
 
 :::::::::::::::::::
 
+::::::::::::::::::::::::::::::::: discussion
+
+### Read the epichains output
+
+```{r,echo=FALSE}
+#### get simulated chain with more infections --------------------------------
+
+chains_subgroup <- simulated_chains_map %>%
+  as_tibble() %>%
+  group_by(simulation_id) %>%
+  distinct(infector) %>%
+  count(simulation_id) %>%
+  filter(n < 5, n >= 3) %>%
+  pull(simulation_id)
+
+chain_to_observe <- simulated_chains_map %>%
+  as_tibble() %>%
+  count(simulation_id, sort = TRUE) %>%
+  filter(
+    magrittr::is_in(
+      simulation_id, chains_subgroup
+    )
+  ) %>%
+  filter(n < 10) %>%
+  filter(n == max(n)) %>%
+  slice_min(simulation_id) %>%
+  pull(simulation_id)
+```
+
+To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's look at the simulated `simulation_id` number `r chain_to_observe`. 
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### The epichains object
+
+Let's use `dplyr::filter()` for this:
+
+```r
+chain_to_observe <- 806
+```
+
+```{r}
+#### get epichain summary ----------------------------------------------------
+
+simulated_chains_map %>%
+  dplyr::filter(simulation_id == chain_to_observe)
+```
+
+Key elements from this output are in the footer, the piece of text that appears at the bottom:
+
+```output
+Number of infectors (known): 3
+Number of generations: 3
+```
+
+The simulated `simulation_id` number `r chain_to_observe` has three known infectors and three generations. These numbers are more visible when reading the `<epichains>` objects as a data frame.
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### The epichains data frame
+
+```{r}
+#### infector-infectee data frame --------------------------------------------
+
+simulated_chains_map %>%
+  dplyr::filter(simulation_id == chain_to_observe) %>%
+  dplyr::as_tibble()
+```
+
+Chain `r chain_to_observe` tells us a **story**: 
+"In the first transmission generation at `time = 0`, one index case (`infector = NA`) infected the first case with `infectee = 1`.
+Then, in the second transmission generation (between `time` 10 to 16), `infector = 1` infected five cases. 
+Later, in the third transmission generation (between `time` 26 to 30), `infector = 2` infected three new cases."
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### An infectee data frame
+
+The output data frame collects **infectees** as the observation unit: 
+
+- Each infectee has a `infectee` "id". 
+- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `infectee` "id". 
+- Each infectee got infected in a specific `generation` and (continuous) `time`. 
+- The simulation number is registered under the `simulation_id` column.
+
+**Note:** The `Number of infectors (known)` includes the `NA` observation under the `infector` column. This refers to the infector specified as index case (in the `n_chains` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
+
+:::::::::::::::::::::::::
+
 ## Iterate simulations 
 
 As before, we can configure the simulation of multiple chains by simply increasing the number of chains (e.g., from `n_chains = 1` to `n_chains = 1000`). 
@@ -514,100 +609,6 @@ simulated_chains_map %>%
   dplyr::count(simulation_id, sort = TRUE)
 ```
 
-::::::::::::::::::::::::::::::::: discussion
-
-### Read the epichains output
-
-```{r,echo=FALSE}
-#### get simulated chain with more infections --------------------------------
-
-chains_subgroup <- simulated_chains_map %>%
-  as_tibble() %>%
-  group_by(simulation_id) %>%
-  distinct(infector) %>%
-  count(simulation_id) %>%
-  filter(n < 5, n >= 3) %>%
-  pull(simulation_id)
-
-chain_to_observe <- simulated_chains_map %>%
-  as_tibble() %>%
-  count(simulation_id, sort = TRUE) %>%
-  filter(
-    magrittr::is_in(
-      simulation_id, chains_subgroup
-    )
-  ) %>%
-  filter(n < 10) %>%
-  filter(n == max(n)) %>%
-  slice_min(simulation_id) %>%
-  pull(simulation_id)
-```
-
-To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's look at the simulated `simulation_id` number `r chain_to_observe`. 
-
-:::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::: solution
-
-### The epichains object
-
-Let's use `dplyr::filter()` for this:
-
-```r
-chain_to_observe <- 806
-```
-
-```{r}
-#### get epichain summary ----------------------------------------------------
-
-simulated_chains_map %>%
-  dplyr::filter(simulation_id == chain_to_observe)
-```
-
-Key elements from this output are in the footer, the piece of text that appears at the bottom:
-
-```output
-Number of infectors (known): 3
-Number of generations: 3
-```
-
-The simulated `simulation_id` number `r chain_to_observe` has three known infectors and three generations. These numbers are more visible when reading the `<epichains>` objects as a data frame.
-
-:::::::::::::::::::::::::
-
-::::::::::::::::::::::::: solution
-
-### The epichains data frame
-
-```{r}
-#### infector-infectee data frame --------------------------------------------
-
-simulated_chains_map %>%
-  dplyr::filter(simulation_id == chain_to_observe) %>%
-  dplyr::as_tibble()
-```
-
-Chain `r chain_to_observe` tells us a **story**: 
-"In the first transmission generation at `time = 0`, one index case (`infector = NA`) infected the first case with `infectee = 1`.
-Then, in the second transmission generation (between `time` 10 to 16), `infector = 1` infected five cases. 
-Later, in the third transmission generation (between `time` 26 to 30), `infector = 2` infected three new cases."
-
-:::::::::::::::::::::::::
-
-::::::::::::::::::::::::: solution
-
-### An infectee data frame
-
-The output data frame collects **infectees** as the observation unit: 
-
-- Each infectee has a `infectee` "id". 
-- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `infectee` "id". 
-- Each infectee got infected in a specific `generation` and (continuous) `time`. 
-- The simulation number is registered under the `simulation_id` column.
-
-**Note:** The `Number of infectors (known)` includes the `NA` observation under the `infector` column. This refers to the infector specified as index case (in the `n_chains` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
-
-:::::::::::::::::::::::::
 
 ## Visualize multiple chains
 
