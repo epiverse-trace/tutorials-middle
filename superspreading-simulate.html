@@ -349,7 +349,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Simulate transmission chains</h1>
-        <p>Last updated on 2025-08-26 |
+        <p>Last updated on 2025-09-01 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-simulate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -546,7 +546,7 @@ specific arguments.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson and other distributions </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p><a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> can accept any R function that generates
 random numbers, so the specified arguments will change depending on the
@@ -590,7 +590,7 @@ precise time of infection.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> generation time vs serial interval </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <figure><img src="fig/serial-interval-observed.jpeg" alt="A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021)." class="figure mx-auto d-block"><div class="figcaption">A schematic of the relationship of different
 time periods of transmission between an infector and an infectee in a
@@ -789,7 +789,7 @@ simulating multiple chains. Change the <code>statistic</code> from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>If you need help, return to the “Chain size and length” callout box
 from the beginning.</p>
@@ -1027,7 +1027,7 @@ the simulated <code>simulation_id</code> number 806.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> The epichains object </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Let’s use <code>dplyr::filter()</code> for this:</p>
 <div class="codewrapper sourceCode" id="cb19">
@@ -1085,7 +1085,7 @@ reading the <code>&lt;epichains&gt;</code> objects as a data frame.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> The epichains data frame </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1130,7 +1130,7 @@ new cases.”</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> An infectee data frame </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>The output data frame collects <strong>infectees</strong> as the
 observation unit:</p>
@@ -1293,7 +1293,7 @@ results to <code>summary(multiple_epichains)</code>:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Observed cases vs simulated chains </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
 <div class="accordion-body">
 <p>Let’s overlap the cumulative number of observed cases using the
 linelist object from the <code>mers_korea_2015</code> dataset of the
@@ -1400,7 +1400,7 @@ cases?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>With <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, you can access and use offspring
 and delay distributions from previous Ebola outbreaks.</p>
@@ -1457,88 +1457,13 @@ same day, it may not be necessary to use iteration for this one.</p>
 </div>
 </div>
 </div>
-<div id="accordionSolution4" class="accordion challenge-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
-  <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
-</button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
-<div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb38">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># load packages -----------------------------------------------------------</span></span>
-<span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">epiparameter</span><span class="op">)</span></span>
-<span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># delays ------------------------------------------------------------------</span></span>
-<span></span>
-<span><span class="va">mpox_offspring_epiparam</span> <span class="op">&lt;-</span> <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span></span>
-<span>  disease <span class="op">=</span> <span class="st">"mpox"</span>,</span>
-<span>  epi_name <span class="op">=</span> <span class="st">"offspring"</span>,</span>
-<span>  single_epiparameter <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">mpox_offspring</span> <span class="op">&lt;-</span> <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">get_parameters</span><span class="op">(</span><span class="va">mpox_offspring_epiparam</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">mpox_serialint</span> <span class="op">&lt;-</span> <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">epiparameter_db</span><span class="op">(</span></span>
-<span>  disease <span class="op">=</span> <span class="st">"mpox"</span>,</span>
-<span>  epi_name <span class="op">=</span> <span class="st">"serial interval"</span>,</span>
-<span>  single_epiparameter <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># iterate -----------------------------------------------------------------</span></span>
-<span></span>
-<span><span class="co"># Set seed for random number generator</span></span>
-<span><span class="fu">set.seed</span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">simulated_chains_mpox</span> <span class="op">&lt;-</span> <span class="fu">epichains</span><span class="fu">::</span><span class="fu">simulate_chains</span><span class="op">(</span></span>
-<span>  n_chains <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  statistic <span class="op">=</span> <span class="st">"size"</span>,</span>
-<span>  offspring_dist <span class="op">=</span> <span class="va">rnbinom</span>,</span>
-<span>  mu <span class="op">=</span> <span class="va">mpox_offspring</span><span class="op">[</span><span class="st">"mean"</span><span class="op">]</span>,</span>
-<span>  size <span class="op">=</span> <span class="va">mpox_offspring</span><span class="op">[</span><span class="st">"dispersion"</span><span class="op">]</span>,</span>
-<span>  generation_time <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">generate</span><span class="op">(</span>x <span class="op">=</span> <span class="va">mpox_serialint</span>, times <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># visualize ---------------------------------------------------------------</span></span>
-<span></span>
-<span><span class="co"># daily aggregate of cases</span></span>
-<span><span class="va">simulated_chains_mpox_day</span> <span class="op">&lt;-</span> <span class="va">simulated_chains_mpox</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># use data.frame output from &lt;epichains&gt; object</span></span>
-<span>  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># Count the daily number of cases in each chain</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>day <span class="op">=</span> <span class="fu">ceiling</span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">count</span><span class="op">(</span><span class="va">chain</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"cases"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># Calculate the cumulative number of cases for each chain</span></span>
-<span>  <span class="fu">group_by</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span>cumulative_cases <span class="op">=</span> <span class="fu">cumsum</span><span class="op">(</span><span class="va">cases</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Visualize transmission chains by cumulative cases</span></span>
-<span><span class="va">simulated_chains_mpox_day</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># Create grouped chain trajectories</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">day</span>, y <span class="op">=</span> <span class="va">cumulative_cases</span>, group <span class="op">=</span> <span class="va">chain</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_line</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>, alpha <span class="op">=</span> <span class="fl">0.25</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="co"># Define a 100-case threshold</span></span>
-<span>  <span class="fu">geom_hline</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Day"</span>, y <span class="op">=</span> <span class="st">"Cumulative cases"</span><span class="op">)</span></span></code></pre>
-</div>
-<figure><img src="fig/superspreading-simulate-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Assuming a Monkey pox outbreak with <span class="math inline">\(R\)</span> = 0.32 and <span class="math inline">\(k\)</span> = 0.58, there is no trajectory among
-1000 simulations that reach more than 100 infected cases. Compared to
-MERS (<span class="math inline">\(R\)</span> = 0.6 and <span class="math inline">\(k\)</span> = 0.02).</p>
-</div>
-</div>
-</div>
-</div>
+
 <div id="accordionHint3" class="accordion challenge-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Epidemic Risk assessment accounting for superspreading </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>With <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a>, you can get numerical solutions
 to processes that <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> solve using branching
@@ -1588,7 +1513,7 @@ object. This should help us count how many chains reach a
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>Code with the transmission tree data written by <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext" class="external-link">Christian
 Althaus, 2015</a>:</p>
@@ -1690,9 +1615,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/superspreading-simulate.html",
-  "dateCreated": "2025-08-06",
-  "dateModified": "2025-08-26",
-  "datePublished": "2025-08-26"
+  "dateCreated": "2025-09-01",
+  "dateModified": "2025-09-01",
+  "datePublished": "2025-09-01"
 }
 
   </script><script>
