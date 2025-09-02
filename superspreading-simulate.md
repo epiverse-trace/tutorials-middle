@@ -117,6 +117,15 @@ We input an offspring distribution to `{epichains}` by referring to the R functi
   size = mers_offspring["dispersion"],
 ```
 
+Internally, `{epichains}` will draw one random value, given the parameters,
+to simulate the number of new infections from an infected individual (onward transmission).
+
+```r
+# generate one random number given the distribution family and its parameters
+# (run this line many times to get different values)
+rnbinom(n = 1, mu = mers_offspring["mean"], size = mers_offspring["dispersion"])
+```
+
 The reference manual in `?rnbinom` tells us our required specific arguments.
 
 ::::::::::::::::::::::::::::
@@ -157,7 +166,7 @@ Let's use the `{epiparameter}` package to access and use the available serial in
 
 
 ``` r
-serial_interval <- epiparameter_db(
+serial_interval <- epiparameter::epiparameter_db(
   disease = "mers",
   epi_name = "serial",
   single_epiparameter = TRUE
@@ -176,7 +185,34 @@ The serial interval for MERS has a mean of 12.6 days and a standard deviation of
 
 ### generation time for epichains
 
-In `{epichains}`, we need to specify the generation time as a function that generates random numbers. Using `{epiparameter}` has the advantage of using the distribution function `epiparameter::generate()` for this input. This will look like this:
+In each simulation step, `{epichains}` will draw generation time values for each new infection generated from the offspring distribution. 
+With `<epiparameter>` class objects we can use the distribution function `epiparameter::generate()` for this input. 
+
+
+``` r
+# In step one, the number of new infections is 2, then:
+# generate 2 random values given the serial interval distribution
+generate(x = serial_interval, times = 2)
+```
+
+``` output
+[1] 14.60507 15.06471
+```
+
+``` r
+# In step two, the number of new infections is 6, then:
+# generate 6 random values given the serial interval distribution
+generate(x = serial_interval, times = 6)
+```
+
+``` output
+[1] 12.522027 16.109812 14.195049  6.875113 15.432142 12.349850
+```
+
+Given that the input value in `times` will vary each step,
+we need to embed `generate()` within a function.
+`{epichains}` will draw as many random values from the generation time as number of new infections in that step.
+This will look like this:
 
 ```r
 function(x) generate(x = serial_interval, times = x)
@@ -301,9 +337,132 @@ If you need help, return to the "Chain size and length" callout box from the beg
 
 :::::::::::::::::::
 
+::::::::::::::::::::::::::::::::: discussion
+
+### Read the epichains output
+
+
+
+To explore the output format of the `<epichains>` class object of name `multiple_epichains`, let's look at the simulated `chain` number 30. 
+
+:::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### The epichains object
+
+Let's use `dplyr::filter()` for this:
+
+```r
+chain_to_observe <- 30
+```
+
+
+``` r
+#### get epichain summary ----------------------------------------------------
+
+multiple_epichains %>%
+  dplyr::filter(chain == chain_to_observe)
+```
+
+``` output
+`<epichains>` object
+
+< epichains head (from first known infector) >
+
+  chain infector infectee generation      time
+2    30        1        2          2 14.100967
+3    30        1        3          2 10.640301
+4    30        1        4          2 15.608764
+5    30        1        5          2 13.515424
+6    30        1        6          2  9.967474
+7    30        1        7          2  9.376222
+
+
+Number of chains: 100
+Number of infectors (known): 3
+Number of generations: 3
+Use `as.data.frame(<object_name>)` to view the full output in the console.
+```
+
+This output contains two parts:
+
+- A `head()` print of the infector-infectee pairs __starting from the first known infector__.
+- A summary footer, the piece of text that appears at the bottom:
+
+```output
+Number of infectors (known): 3
+Number of generations: 3
+```
+
+The simulated `chain` number 30 has three known infectors and three generations. These numbers are more visible when printing the `<epichains>` objects as a data frame (or `<tibble>`).
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### The epichains data frame
+
+
+``` r
+#### infector-infectee data frame --------------------------------------------
+
+multiple_epichains %>%
+  dplyr::filter(chain == chain_to_observe) %>%
+  dplyr::as_tibble()
+```
+
+``` output
+# A tibble: 14 × 5
+   chain infector infectee generation  time
+   <int>    <dbl>    <dbl>      <int> <dbl>
+ 1    30       NA        1          1  0   
+ 2    30        1        2          2 14.1 
+ 3    30        1        3          2 10.6 
+ 4    30        1        4          2 15.6 
+ 5    30        1        5          2 13.5 
+ 6    30        1        6          2  9.97
+ 7    30        1        7          2  9.38
+ 8    30        1        8          2 11.5 
+ 9    30        4        9          3 31.0 
+10    30        4       10          3 25.3 
+11    30        4       11          3 28.5 
+12    30        4       12          3 29.6 
+13    30        4       13          3 25.9 
+14    30        4       14          3 24.6 
+```
+
+Chain 30 tells us a **story**: 
+
+"In the first transmission generation at `time = 0`, one subject (`ID = NA`) infected the subject with `ID = 1`.
+Subject `ID = 1` is the first known infector.
+
+"Then, in the second transmission generation, subject `ID = 1` infected seven subjects, from `ID = 2` to `ID = 8`. 
+These infections ocurred in `time` between day 9 and day 15, after the first known infection.
+
+"Later, in the third transmission generation, subject `ID = 4` infected six new subjects, from `ID = 9` to `ID = 14`.
+These infections ocurred in `time` between day 24 and day 31, after the first known infection."
+
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::: solution
+
+### An infectee data frame
+
+The output data frame collects **infectees** as the observation unit: 
+
+- Each infectee has a `infectee` "ID". 
+- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `infectee` "id". 
+- Each infectee got infected in a specific `generation` and (continuous) `time`. 
+- The simulation number is registered under the `chain` column.
+
+**Note:** The `Number of infectors (known)` includes the subject `ID = NA` under the `infector` column. This refers to the infector specified as index case (in the `n_chains` argument), which started the transmission chain to the infectee of `ID = 1`, at `generation = 1`, and `time = 0`.
+
+:::::::::::::::::::::::::
+
 ## Iterate simulations 
 
-As before, we can configure the simulation of multiple chains by simply increasing the number of chains (e.g., from `n_chains = 1` to `n_chains = 1000`). 
+As before, we can configure the simulation of multiple chains by simply increasing the number of chains (e.g., from `n_chains = 1` to `n_chains = 100`). 
 However, if we need to assume that each initial case starts (being infectious) at a different time, this can only be configured in one simulation function. 
 Thus, we need to **iterate** multiple times over one specific chain simulation configuration to increase the probability of simulating uncontrolled outbreak projections. 
 The following table compares the alternatives:
@@ -311,8 +470,8 @@ The following table compares the alternatives:
 | Simulation runs | Initial cases | Start time (`t0`) | Use |
 |---|---|---|---|
 | One | 1 | Same | `epichains::simulate_chains()` with `n_chains = 1` |
-| Multiple (1000, e.g.) | 1 | Same | `epichains::simulate_chains()` with `n_chains = 1000` |
-| Multiple (1000, e.g.) | More than one | Different | Iterate 1000 times using `purrr::map()` over `epichains::simulate()` |
+| Multiple (100, e.g.) | 1 | Same | `epichains::simulate_chains()` with `n_chains = 100` |
+| Multiple (100, e.g.) | More than one | Different | Iterate 100 times using `purrr::map()` over `epichains::simulate()` |
 
 The key difference of the third configuration is the `t0` argument from `epichains::simulate_chains()`. 
 The argument `t0` defines the start time of each initial case per chain.
@@ -356,7 +515,9 @@ To increase the probability of simulating uncontrolled outbreak projections, thi
 
 ::::::::::::
 
-In this section we'll conviniently replicate the same simulation of one chain with the same starting time (`t0 = 0`), **but with 1000 replicates**, to showcase how to build up the iteration over `{epichains}` step by step.
+In this section we'll showcase how to build up the **iteration** over `{epichains}` step by step. 
+We'll conviniently replicate the same simulation as before: 100 transmission chains with 1 initial case each starting at day 0 (`t0 = 0`).
+But, instead of using `n_chains = 100`, we'll iterate 100 times over the simulation of 1 transmission chain with 1 initial case each starting at day 0 (`n_chains = 1`).
 
 We need to specify two additional elements:
 
@@ -366,7 +527,7 @@ We need to specify two additional elements:
 
 ``` r
 # Number of simulation runs
-number_simulations <- 1000
+number_simulations <- 100
 # Number of initial cases
 initial_cases <- 1
 ```
@@ -385,7 +546,7 @@ Or, if you previously used the `*apply` family of functions, visit the package v
 
 ::::::::::::::::::::::::::::::
 
-To get multiple chains, we must apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to 1000.
+To get multiple chains, we must apply the `simulate_chains()` function to each chain defined by a sequence of numbers from 1 to 100.
 
 ::::::::::::::::::::::::::::::: callout
 
@@ -400,14 +561,16 @@ The code chunk below
 
 ```r
 # steps:
-# - seq_len() creates a vector with sequence of numbers (simulation IDs from 1 to 1000) and
+# - purrr::map() will run 100 times function(sim).
+# - seq_len() creates a vector with sequence of numbers (simulation IDs from 1 to 100) and
 # - function(sim) iterates {epichains} to each simulation ID number, then
 # - dplyr::mutate() adds a column to the <epichains> output with the simulation ID number.
 # - purrr::list_rbind() combines all the list class outputs (for each simulation ID) into a single data frame.
 purrr::map(
   .x = seq_len(number_simulations),
   .f = function(sim) {
-    epichains::simulate_chains(...) %>% dplyr::mutate(simulation_id = sim)
+    epichains::simulate_chains(...) %>% # <-- {epichains}
+      dplyr::mutate(simulation_id = sim)
   }
 ) %>%
   purrr::list_rbind()
@@ -420,17 +583,14 @@ The `sim` element is placed to register the iteration number (**simulation ID**)
 
 :::::::::::::::::::::::::::::::
 
-Now, we are prepared to use `purrr::map()` to repeatedly simulate from `simulate_chains()` and store in a vector from 1 to 1000:
+Now, we are prepared to use `purrr::map()` to repeatedly simulate from `simulate_chains()` and store in a vector from 1 to 100:
 
 
 ``` r
 set.seed(33)
 simulated_chains_map <-
-  # iterate one function across multiple numbers (simulation IDs)
   purrr::map(
-    # vector of numbers (simulation IDs)
     .x = seq_len(number_simulations),
-    # function to iterate to each simulation ID number
     .f = function(sim) {
       epichains::simulate_chains(
         n_chains = initial_cases,
@@ -440,127 +600,38 @@ simulated_chains_map <-
         size = mers_offspring["dispersion"],
         generation_time = function(x) generate(x = serial_interval, times = x)
       ) %>%
-        # creates a column with the simulation ID number
         dplyr::mutate(simulation_id = sim)
     }
   ) %>%
-  # combine list outputs (for each simulation ID) into a single data frame
   purrr::list_rbind()
 ```
 
-
-
-::::::::::::::::::::::::::::::::: discussion
-
-### Read the epichains output
-
-
-
-To explore the output format of the `<epichains>` class object of name `simulated_chains_map`, let's look at the simulated `simulation_id` number 806. 
-
-:::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::: solution
-
-### The epichains object
-
-Let's use `dplyr::filter()` for this:
-
-```r
-chain_to_observe <- 806
-```
+One limitation with the iteration output is that, in order to summarize the output, we need can not use the `summary(<epichains>)`.
 
 
 ``` r
-#### get epichain summary ----------------------------------------------------
-
 simulated_chains_map %>%
-  dplyr::filter(simulation_id == chain_to_observe)
+  dplyr::count(simulation_id) %>%
+  dplyr::pull(n)
 ```
 
 ``` output
-`<epichains>` object
-
-< epichains head (from first known infector) >
-
-  chain infector infectee generation     time simulation_id
-2     1        1        2          2 16.38623           806
-3     1        1        3          2 11.79430           806
-4     1        1        4          2 10.77252           806
-5     1        1        5          2 11.39945           806
-6     1        1        6          2 10.23130           806
-7     1        2        7          3 26.01046           806
-
-
-Number of infectors (known): 3
-Number of generations: 3
-Use `as.data.frame(<object_name>)` to view the full output in the console.
+  [1]   1   1   1   1   1   1   1   1   1   1   1   1   1   1   9   1   1   1
+ [19]   1   1   1   1 113   1   1   1   1   1   1   1   1   1  19   1   1   1
+ [37]   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+ [55]   1   1   1   1   1   1   1   1   1   1   1   1   1   1  22   1   1   1
+ [73]   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1
+ [91]   1   1   1   1   1   1   1   1   1   1
 ```
 
-Key elements from this output are in the footer, the piece of text that appears at the bottom:
-
-```output
-Number of infectors (known): 3
-Number of generations: 3
-```
-
-The simulated `simulation_id` number 806 has three known infectors and three generations. These numbers are more visible when reading the `<epichains>` objects as a data frame.
-
-:::::::::::::::::::::::::
-
-::::::::::::::::::::::::: solution
-
-### The epichains data frame
 
 
-``` r
-#### infector-infectee data frame --------------------------------------------
-
-simulated_chains_map %>%
-  dplyr::filter(simulation_id == chain_to_observe) %>%
-  dplyr::as_tibble()
-```
-
-``` output
-# A tibble: 9 × 6
-  chain infector infectee generation  time simulation_id
-  <int>    <dbl>    <dbl>      <int> <dbl>         <int>
-1     1       NA        1          1   0             806
-2     1        1        2          2  16.4           806
-3     1        1        3          2  11.8           806
-4     1        1        4          2  10.8           806
-5     1        1        5          2  11.4           806
-6     1        1        6          2  10.2           806
-7     1        2        7          3  26.0           806
-8     1        2        8          3  29.8           806
-9     1        2        9          3  26.6           806
-```
-
-Chain 806 tells us a **story**: 
-"In the first transmission generation at `time = 0`, one index case (`infector = NA`) infected the first case with `infectee = 1`.
-Then, in the second transmission generation (between `time` 10 to 16), `infector = 1` infected five cases. 
-Later, in the third transmission generation (between `time` 26 to 30), `infector = 2` infected three new cases."
-
-:::::::::::::::::::::::::
-
-::::::::::::::::::::::::: solution
-
-### An infectee data frame
-
-The output data frame collects **infectees** as the observation unit: 
-
-- Each infectee has a `infectee` "id". 
-- Each _infectee_ that behaved as an _infector_ is registered in the `infector` column using `infectee` "id". 
-- Each infectee got infected in a specific `generation` and (continuous) `time`. 
-- The simulation number is registered under the `simulation_id` column.
-
-**Note:** The `Number of infectors (known)` includes the `NA` observation under the `infector` column. This refers to the infector specified as index case (in the `n_chains` argument), which started the transmission chain to the infectee of `sim_id = 1`, at `generation = 1`, and `time = 0`.
-
-:::::::::::::::::::::::::
 
 ## Visualize multiple chains
 
-We will use a multiple simulation **without** iteration for this section:
+To increase the probability of simulating uncontrolled outbreak projections given an overdispersed offspring distribution, let's simulate **1000 transmission chains** with 1 initial case each starting at day 0.
+
+We will create a multiple simulation **without** iteration for this section:
 
 
 ``` r
@@ -659,12 +730,12 @@ ggplot() +
   )
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 
 
 
 
-Although most introductions of 1 index case do not generate secondary cases (N = 934) or most outbreaks rapidly become extinct (median duration of 17 and median size of 5.5), only 1 epidemic trajectories among 1000 simulations (0.1%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of 0.6), but, given an offspring distribution dispersion parameter of 0.02, it shows the potential for explosive outbreaks of MERS disease.
+Although most introductions of 1 index case do not generate secondary cases (N = 934) or most outbreaks rapidly become extinct (median duration of 17 and median size of 5.5), only 1 epidemic trajectories among 100 simulations (1%) can reach to more than 100 infected cases. This finding is particularly remarkable because the reproduction number $R$ is less than 1 (offspring distribution mean of 0.6), but, given an offspring distribution dispersion parameter of 0.02, it shows the potential for explosive outbreaks of MERS disease.
 
 We can count how many chains reached the 100-case threshold using `{dplyr}` functions.
 This output should give us equivalent results to `summary(multiple_epichains)`:
@@ -712,13 +783,13 @@ Use `plot()` to make an incidence plot:
 plot(mers_cumcases)
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-24-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::::
 
 When plotting the observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea in 2015 alongside the previously simulated chains, we see that the observed cases followed a trajectory that is consistent with the simulated explosive outbreak dynamics (which makes sense, given the simulation uses parameters based on this specific outbreak).
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-25-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
 
 When we increase the dispersion parameter from $k = 0.01$ to $k = \infty$ - and hence reduce individual-level variation in transmission - and assume a fixed reproduction number $R = 1.5$, the proportion of simulated outbreaks that reached the 100-case threshold increases. This is because the simulated outbreaks now have more of a consistent, clockwise dynamic, rather than the high level of variability seen previously.
 
@@ -859,7 +930,7 @@ simulated_chains_mpox_day %>%
   labs(x = "Day", y = "Cumulative cases")
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-29-1.png" style="display: block; margin: auto;" />
 
 Assuming a Monkey pox outbreak with $R$ = 0.32 and $k$ = 0.58, there is no trajectory among 1000 simulations that reach more than 100 infected cases. Compared to MERS ($R$ = 0.6 and $k$ = 0.02).
 
@@ -923,7 +994,7 @@ c0 %>%
   geom_histogram(binwidth = 1)
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-30-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-32-1.png" style="display: block; margin: auto;" />
 
 Optional challenge: 
 
@@ -1030,7 +1101,7 @@ sim_chains_aggregate %>%
   labs(x = "Day", y = "Cumulative cases")
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-31-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
 
 
 Remarkably, even with R0 less than 1 (R = 0.95) we can have potentially explosive outbreaks. The observed variation in individual infectiousness in Ebola means that although the probability of extinction is high, new index cases also have the potential for explosive regrowth of the epidemic.
