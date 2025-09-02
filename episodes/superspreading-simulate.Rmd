@@ -637,7 +637,7 @@ simulated_chains_map <-
   purrr::list_rbind()
 ```
 
-One limitation with the iteration output is that, in order to summarize the output, we need can not use the `summary(<epichains>)`.
+One limitation of the iteration output is that, to summarize the output, we can not use the `summary(<epichains>)`.
 
 ```{r}
 simulated_chains_map %>%
