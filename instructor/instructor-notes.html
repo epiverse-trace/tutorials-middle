@@ -630,7 +630,7 @@ cases.</p>
 <p>The function to generate random number from an
 <code>&lt;epiparameter&gt;</code> class object can also accept this
 notation:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -640,7 +640,7 @@ notation:</p>
 <br><h3 id="superspreading-simulate-headingInstructor2">
 <a href="superspreading-simulate.html#headingInstructor2">Instructor Note</a><a class="anchor" aria-label="anchor" href="#superspreading-simulate-headingInstructor2"></a>
 </h3>
-<div class="codewrapper sourceCode" id="cb38">
+<div class="codewrapper sourceCode" id="cb45">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -702,14 +702,14 @@ notation:</p>
 <span>  <span class="fu">geom_hline</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Day"</span>, y <span class="op">=</span> <span class="st">"Cumulative cases"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/superspreading-simulate-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Assuming a Monkey pox outbreak with <span class="math inline">\(R\)</span> = 0.32 and <span class="math inline">\(k\)</span> = 0.58, there is no trajectory among
+<figure><img src="../fig/superspreading-simulate-rendered-unnamed-chunk-29-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Assuming a Monkey pox outbreak with <span class="math inline">\(R\)</span> = 0.32 and <span class="math inline">\(k\)</span> = 0.58, there is no trajectory among
 1000 simulations that reach more than 100 infected cases. Compared to
 MERS (<span class="math inline">\(R\)</span> = 0.6 and <span class="math inline">\(k\)</span> = 0.02).</p>
 <hr>
 <br><h3 id="superspreading-simulate-headingInstructor3">
 <a href="superspreading-simulate.html#headingInstructor3">Instructor Note</a><a class="anchor" aria-label="anchor" href="#superspreading-simulate-headingInstructor3"></a>
 </h3>
-<div class="codewrapper sourceCode" id="cb40">
+<div class="codewrapper sourceCode" id="cb47">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -719,7 +719,7 @@ MERS (<span class="math inline">\(R\)</span> = 0.6 and <span class="math inline"
 <span><span class="kw">library</span><span class="op">(</span><span class="va">fitdistrplus</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb41">
+<div class="codewrapper sourceCode" id="cb48">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -738,7 +738,7 @@ Parameters:
 size 0.1814260 0.03990278
 mu   0.9537995 0.19812301</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb43">
+<div class="codewrapper sourceCode" id="cb50">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -785,7 +785,7 @@ mu   0.9537995 0.19812301</code></pre>
 Max: 2889
 Min: 1</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb45">
+<div class="codewrapper sourceCode" id="cb52">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -813,7 +813,7 @@ Min: 1</code></pre>
 <span>  <span class="fu">xlim</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Day"</span>, y <span class="op">=</span> <span class="st">"Cumulative cases"</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/superspreading-simulate-rendered-unnamed-chunk-31-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Remarkably, even with R0 less than 1 (R = 0.95) we can have
+<figure><img src="../fig/superspreading-simulate-rendered-unnamed-chunk-33-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Remarkably, even with R0 less than 1 (R = 0.95) we can have
 potentially explosive outbreaks. The observed variation in individual
 infectiousness in Ebola means that although the probability of
 extinction is high, new index cases also have the potential for
@@ -866,9 +866,9 @@ explosive regrowth of the epidemic.</p>
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/instructor-notes.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/instructor-notes.html",
-  "dateCreated": "2025-09-01",
-  "dateModified": "2025-09-01",
-  "datePublished": "2025-09-01"
+  "dateCreated": "2025-09-02",
+  "dateModified": "2025-09-02",
+  "datePublished": "2025-09-02"
 }
 
   </script><script>
