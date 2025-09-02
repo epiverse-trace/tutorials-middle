@@ -429,7 +429,7 @@ chain_to_observe <- epichain_output %>%
       chain, chains_subgroup
     )
   ) %>%
-  # filter(n < 10) %>%
+  filter(n < 15) %>%
   filter(n == max(n)) %>%
   slice_min(chain) %>%
   pull(chain)
@@ -640,8 +640,8 @@ simulated_chains_map <-
 One limitation with the iteration output is that, in order to summarize the output, we need can not use the `summary(<epichains>)`.
 
 ```{r}
-simulated_chains_map %>%  
-  dplyr::count(simulation_id) %>% 
+simulated_chains_map %>%
+  dplyr::count(simulation_id) %>%
   dplyr::pull(n)
 ```
 
