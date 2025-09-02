@@ -215,10 +215,10 @@ We input an offspring distribution to `{epichains}` by referring to the R functi
 Internally, `{epichains}` will draw one random value, given the parameters,
 to simulate the number of new infections from an infected individual (onward transmission).
 
-```{r}
+```r
 # generate one random number given the distribution family and its parameters
+# (run this line many times to get different values)
 rnbinom(n = 1, mu = mers_offspring["mean"], size = mers_offspring["dispersion"])
-# run this line many times to get different values
 ```
 
 The reference manual in `?rnbinom` tells us our required specific arguments.
