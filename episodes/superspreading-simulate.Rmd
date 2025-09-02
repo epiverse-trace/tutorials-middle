@@ -212,6 +212,15 @@ We input an offspring distribution to `{epichains}` by referring to the R functi
   size = mers_offspring["dispersion"],
 ```
 
+Internally, `{epichains}` will draw one random value, given the parameters,
+to simulate the number of new infections from an infected individual (onward transmission).
+
+```{r}
+# generate one random number given the distribution family and its parameters
+rnbinom(n = 1, mu = mers_offspring["mean"], size = mers_offspring["dispersion"])
+# run this line many times to get different values
+```
+
 The reference manual in `?rnbinom` tells us our required specific arguments.
 
 ::::::::::::::::::::::::::::
@@ -251,7 +260,7 @@ Let's use the `{epiparameter}` package to access and use the available serial in
 <!-- For `{epichains}` we need a **discretised** input distribution, se we use `epiparameter::discretise()`: -->
 
 ```{r,message=FALSE,warning=FALSE}
-serial_interval <- epiparameter_db(
+serial_interval <- epiparameter::epiparameter_db(
   disease = "mers",
   epi_name = "serial",
   single_epiparameter = TRUE
@@ -273,7 +282,23 @@ The serial interval for MERS has a mean of `r serial_summary$mean` days and a st
 
 ### generation time for epichains
 
-In `{epichains}`, we need to specify the generation time as a function that generates random numbers. Using `{epiparameter}` has the advantage of using the distribution function `epiparameter::generate()` for this input. This will look like this:
+In each simulation step, `{epichains}` will draw generation time values for each new infection generated from the offspring distribution. 
+With `<epiparameter>` class objects we can use the distribution function `epiparameter::generate()` for this input. 
+
+```{r}
+# In step one, the number of new infections is 2, then:
+# generate 2 random values given the serial interval distribution
+generate(x = serial_interval, times = 2)
+
+# In step two, the number of new infections is 6, then:
+# generate 6 random values given the serial interval distribution
+generate(x = serial_interval, times = 6)
+```
+
+Given that the input value in `times` will vary each step,
+we need to embed `generate()` within a function.
+`{epichains}` will draw as many random values from the generation time as number of new infections in that step.
+This will look like this:
 
 ```r
 function(x) generate(x = serial_interval, times = x)
