@@ -580,7 +580,99 @@ regularly use is a good practice.</p>
 </div>
 </div>
 <div class="section level3">
-<h3 id="install-the-required-r-packages">2. Install the required R packages<a class="anchor" aria-label="anchor" href="#install-the-required-r-packages"></a></h3>
+<h3 id="check-and-install-build-tools">2. Check and Install Build Tools<a class="anchor" aria-label="anchor" href="#check-and-install-build-tools"></a></h3>
+<p>Some packages require a complementary set of tools to build them.
+Open RStudio and <strong>copy and paste</strong> the following code
+chunk into the <a href="https://docs.posit.co/ide/user/ide/guide/code/console.html" class="external-link">console
+window</a>, then press the <kbd>Enter</kbd> (Windows and Linux) or
+<kbd>Return</kbd> (MacOS) to execute the command:</p>
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"pkgbuild"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"pkgbuild"</span><span class="op">)</span></span>
+<span><span class="fu">pkgbuild</span><span class="fu">::</span><span class="fu">check_build_tools</span><span class="op">(</span>debug <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+</div>
+<p>We expect a message like the one below:</p>
+<div class="codewrapper">
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="output" tabindex="0"><code>Your system is ready to build packages!</code></pre>
+</div>
+<p>If the build tools are not available, this will trigger an automated
+install.</p>
+<ol style="list-style-type: decimal"><li>Run the command in the console.</li>
+<li>Don’t interrupt it—wait until R prints the confirmation
+message.</li>
+<li>Once that’s done, restart your R session (or just restart RStudio)
+to ensure the changes take effect.</li>
+</ol><p>If the automatic installation <strong>does not</strong> work, you can
+manually install them according to your operating system.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-1" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-1" type="button" role="tab" aria-controls="nav-tabpanel-1-1" aria-selected="true">
+  <h3 class="tab-header" id="nav-tab-heading-1-1">
+  Windows
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-1-2" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-2" type="button" role="tab" aria-controls="nav-tabpanel-1-2" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-1-2">
+  Mac
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-1-3" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-3" type="button" role="tab" aria-controls="nav-tabpanel-1-3" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-1-3">
+  Linux
+  </h3>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-1" class="tab-pane show active" aria-labelledby="nav-tab-1-1" role="tabpanel">
+<p>Windows users will need a working installation of <code>Rtools</code>
+in order to build the package from source.<br><code>Rtools</code> is not an R package, but a software you need to
+download and install. We suggest you to follow:</p>
+<ul><li>
+<strong>Install <code>Rtools</code></strong>. Download the
+<code>Rtools</code> installer from <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link uri">https://cran.r-project.org/bin/windows/Rtools/</a>. Install
+with default selections.</li>
+<li>Close and reopen RStudio so it can recognize the new
+installation.</li>
+</ul></div>
+<div id="nav-tabpanel-1-2" class="tab-pane" aria-labelledby="nav-tab-1-2" role="tabpanel">
+<p>Mac users require two additional steps as detailed in this <a href="https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Mac" class="external-link">guide
+to Configuring C Toolchain for Mac</a>:</p>
+<ul><li>Install and use <a href="https://mac.thecoatlessprofessor.com/macrtools/" class="external-link"><code>macrtools</code></a>
+to setup the C++ toolchain</li>
+<li>Enable some compiler optimizations.</li>
+</ul></div>
+<div id="nav-tabpanel-1-3" class="tab-pane" aria-labelledby="nav-tab-1-3" role="tabpanel">
+<p>Linux users require specific details per distribution. Find them in
+this <a href="https://github.com/stan-dev/rstan/wiki/Configuring-C-Toolchain-for-Linux" class="external-link">guide
+to Configuring C Toolchain for Linux</a>.</p>
+</div>
+</div>
+</div>
+<div id="environment-check" class="callout">
+<div class="callout-square">
+<i class="callout-icon" data-feather="bell"></i>
+</div>
+<div id="environment-check" class="callout-inner">
+<h3 class="callout-title">Environment Check</h3>
+<div class="callout-content">
+<p>This step requires administrator privileges to install software.</p>
+<p>If you do not have admin rights in your current environment:</p>
+<ul><li>Try running the tutorial on your <strong>personal machine</strong>
+where you have full access.<br></li>
+<li>Use a <strong>preconfigured development environment</strong>
+(e.g. <a href="https://posit.cloud/" class="external-link">Posit Cloud</a>).<br></li>
+<li>Ask your <strong>system administrator</strong> to install the
+required software for you.</li>
+</ul></div>
+</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="install-the-required-r-packages">3. Install the required R packages<a class="anchor" aria-label="anchor" href="#install-the-required-r-packages"></a></h3>
 <!--
 During the tutorial, we will need a number of R packages. Packages contain useful R code written by other people. We will use packages from the [Epiverse-TRACE](https://epiverse-trace.github.io/).
 -->
@@ -588,7 +680,7 @@ During the tutorial, we will need a number of R packages. Packages contain usefu
 chunk into the <a href="https://docs.posit.co/ide/user/ide/guide/code/console.html" class="external-link">console
 window</a>, then press the <kbd>Enter</kbd> (Windows and Linux) or
 <kbd>Return</kbd> (MacOS) to execute the command:</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -605,7 +697,7 @@ window</a>, then press the <kbd>Enter</kbd> (Windows and Linux) or
 <span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="va">new_packages</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -624,7 +716,7 @@ window</a>, then press the <kbd>Enter</kbd> (Windows and Linux) or
 <span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="va">new_packages</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -632,7 +724,7 @@ window</a>, then press the <kbd>Enter</kbd> (Windows and Linux) or
 <span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">superspreading_packages</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span></span>
+<span><span class="va">new_packages</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span></span>
 <span>  <span class="st">"epicontacts"</span>,</span>
 <span>  <span class="st">"fitdistrplus"</span>,</span>
 <span>  <span class="st">"superspreading"</span>,</span>
@@ -643,7 +735,7 @@ window</a>, then press the <kbd>Enter</kbd> (Windows and Linux) or
 <span>  <span class="st">"tidyverse"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="va">superspreading_packages</span><span class="op">)</span></span></code></pre>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pkg_install</span><span class="op">(</span><span class="va">new_packages</span><span class="op">)</span></span></code></pre>
 </div>
 <p>These installation steps could ask you
 <code>? Do you want to continue (Y/n)</code> write <code>Y</code> and
@@ -653,40 +745,73 @@ press <kbd>Enter</kbd>.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">
   <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>
-  do you get an error with EpiNow2?
+  do you get an error with pak?
   </h3>
 </button>
 <div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
-<p>Windows users will need a working installation of <code>Rtools</code>
-in order to build the package from source. <code>Rtools</code> is not an
-R package, but a software you need to download and install. We suggest
-you to follow:</p>
-<!-- reference [these steps](http://jtleek.com/modules/01_DataScientistToolbox/02_10_rtools/#1) -->
-<ol style="list-style-type: decimal"><li>
-<strong>Verify <code>Rtools</code> installation</strong>. You can do
-so by using Windows search across your system. Optionally, you can use
-<a href="https://devtools.r-lib.org/" class="external-link">devtools</a> running:</li>
-</ol><div class="codewrapper sourceCode" id="cb4">
+<p>Try using the classical code function to install one package, for
+example, to install <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> run:</p>
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">find_rtools</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu">install.packages</span><span class="op">(</span><span class="st">"cfr"</span><span class="op">)</span></span></code></pre>
 </div>
-<p>If the result is <code>FALSE</code>, then you should do step 2.</p>
-<ol start="2" style="list-style-type: decimal"><li><p><strong>Install <code>Rtools</code></strong>. Download the
-<code>Rtools</code> installer from <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link uri">https://cran.r-project.org/bin/windows/Rtools/</a>. Install
-with default selections.</p></li>
-<li><p><strong>Verify <code>Rtools</code> installation</strong>. Again,
-we can use <a href="https://devtools.r-lib.org/" class="external-link">devtools</a>:</p></li>
-</ol><div class="codewrapper sourceCode" id="cb5">
+</div>
+</div>
+</div>
+</div>
+<div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
+  <h3 class="accordion-header" id="headingSpoiler2">
+  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div>
+  Do you need a GitHub Personal access token (PAT)?
+  </h3>
+</button>
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div class="accordion-body">
+<p>If the error message keyword include an string like
+<code>Personal access token (PAT)</code>, you may need to <a href="https://epiverse-trace.github.io/git-rstudio-basics/02-setup.html#set-up-your-github-token" class="external-link">set
+up your GitHub token</a>.</p>
+<p>First, install these R packages:</p>
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">find_rtools</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span><span class="st">"gh"</span>,</span>
+<span>         <span class="st">"gitcreds"</span>,</span>
+<span>         <span class="st">"usethis"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="va">new</span><span class="op">)</span></span></code></pre>
 </div>
+<p>Then, follow these three steps to <a href="https://epiverse-trace.github.io/git-rstudio-basics/02-setup.html#set-up-your-github-token" class="external-link">set
+up your GitHub token (read this step-by-step guide)</a>:</p>
+<div class="codewrapper sourceCode" id="cb8">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Generate a token</span></span>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">create_github_token</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Configure your token </span></span>
+<span><span class="fu">gitcreds</span><span class="fu">::</span><span class="fu">gitcreds_set</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Get a situational report</span></span>
+<span><span class="fu">usethis</span><span class="fu">::</span><span class="fu">git_sitrep</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<p>Try again installing {epiparameter}:</p>
+<div class="codewrapper sourceCode" id="cb9">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw">require</span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"epiverse-trace/epiparameter"</span><span class="op">)</span></span></code></pre>
+</div>
+<p>If the error persist, <a href="#your-questions">contact us</a>!</p>
 </div>
 </div>
 </div>
@@ -696,7 +821,7 @@ the tutorial, even if you installed them relatively recently. New
 versions bring improvements and important bug fixes.</p>
 <p>When the installation has finished, you can try to load the packages
 by pasting the following code into the console:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -707,7 +832,7 @@ by pasting the following code into the console:</p>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">incidence2</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -720,7 +845,7 @@ by pasting the following code into the console:</p>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">outbreaks</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -738,6 +863,71 @@ by pasting the following code into the console:</p>
 <p>If you do NOT see an error like
 <code>there is no package called ‘...’</code> you are good to go! If you
 do, <a href="#your-questions">contact us</a>!</p>
+</div>
+<div class="section level3">
+<h3 id="watch-and-read-the-pre-training-material">4. Watch and Read the pre-training material<a class="anchor" aria-label="anchor" href="#watch-and-read-the-pre-training-material"></a></h3>
+<div id="prereq2" class="callout prereq">
+<div class="callout-square">
+<i class="callout-icon" data-feather="check"></i>
+</div>
+<div class="callout-inner">
+<h3 class="callout-title">Prerequisite</h3>
+<div class="callout-content">
+<!--
+One paper introduction to Outbreak analytics:
+
+- Polonsky JA, Baidjoe A, Kamvar ZN, Cori A, Durski K, Edmunds WJ, Eggo RM,
+Funk S, Kaiser L, Keating P, de Waroux OLP, Marks M, Moraga P, Morgan O,
+Nouvellet P, Ratnayake R, Roberts CH, Whitworth J, Jombart T.
+**Outbreak analytics: a developing data science for informing the response to emerging pathogens.**
+Philos Trans R Soc Lond B Biol Sci. 2019 Jul 8;374(1776):20180276.
+doi: 10.1098/rstb.2018.0276. PMID: 31104603; PMCID: PMC6558557.
+-->
+<p><strong>Watch</strong> three 5-minute video refreshers on statistical
+distributions:</p>
+<ul><li>StatQuest with Josh Starmer (2017) <strong>The Main Ideas behind
+Probability Distributions</strong>, YouTube. Available at: <a href="https://www.youtube.com/watch?v=oI3hZJqXJuc&amp;t" class="external-link uri">https://www.youtube.com/watch?v=oI3hZJqXJuc&amp;t</a>
+<!--(Accessed: 30 October 2024).-->
+</li>
+</ul><!--
+- StatQuest with Josh Starmer (2015)
+**Confidence Intervals, Clearly Explained!!!**, YouTube.
+Available at: <https://www.youtube.com/watch?v=TqOeMYtOc1w>
+(Accessed: 04 November 2024).
+--><ul><li><p>StatQuest with Josh Starmer (2018) <strong>Probability is not
+Likelihood. Find out why!!!</strong>, YouTube. Available at: <a href="https://www.youtube.com/watch?v=pYxNSUDSFH4" class="external-link uri">https://www.youtube.com/watch?v=pYxNSUDSFH4</a>
+<!--(Accessed: 30 October 2024).--></p></li>
+<li><p>StatQuest with Josh Starmer (2017) <strong>Maximum Likelihood,
+clearly explained!!!</strong>, YouTube. Available at: <a href="https://www.youtube.com/watch?v=XepXtl9YKwc" class="external-link uri">https://www.youtube.com/watch?v=XepXtl9YKwc</a>
+<!--(Accessed: 30 October 2024).--></p></li>
+</ul><!--
+- Weiss, J. (2012)
+**R probability functions for the normal distribution**,
+Lecture 13-Monday, October 8, 2012.
+Available at: <https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc>
+(Accessed: 30 October 2024).
+--><!--
+**Read** a two-page paper introduction to Infectious Disease Modelling:
+
+- Bjørnstad ON, Shea K, Krzywinski M, Altman N.
+**Modeling infectious epidemics.**
+Nat Methods. 2020 May;17(5):455-456.
+doi: 10.1038/s41592-020-0822-z. PMID: 32313223.
+<https://www.nature.com/articles/s41592-020-0822-z>
+--><!--
+- Bjørnstad ON, Shea K, Krzywinski M, Altman N.
+**The SEIRS model for infectious disease dynamics.**
+Nat Methods. 2020 Jun;17(6):557-558. doi: 10.1038/s41592-020-0856-2.
+<https://www.nature.com/articles/s41592-020-0856-2>
+Erratum in: Nat Methods. 2021 Mar;18(3):321. PMID: 32499633.
+
+- McVernon, J. et al. (2016)
+**A user’s Guide to Infectious Disease Modelling**, Prism.
+Available at: http://prism.edu.au/publications/prism-modeling-guideline/
+(Accessed: 14 March 2024).
+--></div>
+</div>
+</div>
 </div>
 </section><section><h2 class="section-heading" id="data-sets">Data sets<a class="anchor" aria-label="anchor" href="#data-sets"></a></h2>
 <hr class="half-width"><div class="section level3">
@@ -804,9 +994,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/index.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/index.html",
-  "dateCreated": "2025-09-02",
-  "dateModified": "2025-09-16",
-  "datePublished": "2025-09-16"
+  "dateCreated": "2025-09-22",
+  "dateModified": "2025-09-22",
+  "datePublished": "2025-09-22"
 }
 
   </script><script>
