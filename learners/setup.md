@@ -96,7 +96,71 @@ While this may sound scary, it is **far more common** to run into issues due to 
 
 :::::::::::::::::::::::::::::
 
-### 2. Install the required R packages
+### 2. Check and Install Build Tools
+
+Some packages require a complementary set of tools to build them.
+Open RStudio and **copy and paste** the following code chunk into the 
+[console window](https://docs.posit.co/ide/user/ide/guide/code/console.html),
+then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command:
+
+```r
+if(!require("pkgbuild")) install.packages("pkgbuild")
+pkgbuild::check_build_tools(debug = TRUE)
+```
+
+We expect a message like the one below:
+
+```output
+Your system is ready to build packages!
+```
+
+If the build tools are not available, this will trigger an automated install.
+
+1. Run the command in the console.
+2. Don’t interrupt it—wait until R prints the confirmation message.
+3. Once that’s done, restart your R session (or just restart RStudio) to ensure the changes take effect.
+
+If the automatic installation **does not** work, you can manually install them according to your operating system.
+
+::::::::::::::::::::::::::::: tab
+
+### Windows
+
+Windows users will need a working installation of `Rtools` in order to build the package from source.  
+`Rtools` is not an R package, but a software you need to download and install.
+We suggest you to follow:
+
+- **Install `Rtools`**. Download the `Rtools` installer from <https://cran.r-project.org/bin/windows/Rtools/>. Install with default selections.
+- Close and reopen RStudio so it can recognize the new installation.
+
+### Mac
+
+Mac users require two additional steps as detailed in this [guide to Configuring C Toolchain for Mac](https://github.com/stan-dev/rstan/wiki/Configuring-C---Toolchain-for-Mac):
+
+- Install and use [`macrtools`](https://mac.thecoatlessprofessor.com/macrtools/) to setup the C++ toolchain
+- Enable some compiler optimizations.
+
+### Linux
+
+Linux users require specific details per distribution. Find them in this [guide to Configuring C Toolchain for Linux](https://github.com/stan-dev/rstan/wiki/Configuring-C-Toolchain-for-Linux).
+
+:::::::::::::::::::::::::::::
+
+::::::::::::: callout
+
+### Environment Check
+
+This step requires administrator privileges to install software.
+
+If you do not have admin rights in your current environment:  
+
+- Try running the tutorial on your **personal machine** where you have full access.  
+- Use a **preconfigured development environment** (e.g. [Posit Cloud](https://posit.cloud/)).  
+- Ask your **system administrator** to install the required software for you.  
+
+:::::::::::::
+
+### 3. Install the required R packages
 
 <!--
 During the tutorial, we will need a number of R packages. Packages contain useful R code written by other people. We will use packages from the [Epiverse-TRACE](https://epiverse-trace.github.io/).
@@ -223,6 +287,78 @@ library(tidyverse)
 ```
 
 If you do NOT see an error like `there is no package called ‘...’` you are good to go! If you do, [contact us](#your-questions)!
+
+### 4. Watch and Read the pre-training material
+
+:::::::::::::::::::::::::::: prereq
+
+<!--
+One paper introduction to Outbreak analytics:
+
+- Polonsky JA, Baidjoe A, Kamvar ZN, Cori A, Durski K, Edmunds WJ, Eggo RM, 
+Funk S, Kaiser L, Keating P, de Waroux OLP, Marks M, Moraga P, Morgan O, 
+Nouvellet P, Ratnayake R, Roberts CH, Whitworth J, Jombart T. 
+**Outbreak analytics: a developing data science for informing the response to emerging pathogens.** 
+Philos Trans R Soc Lond B Biol Sci. 2019 Jul 8;374(1776):20180276. 
+doi: 10.1098/rstb.2018.0276. PMID: 31104603; PMCID: PMC6558557.
+-->
+
+**Watch** three 5-minute video refreshers on statistical distributions:
+
+- StatQuest with Josh Starmer (2017) 
+**The Main Ideas behind Probability Distributions**, YouTube. 
+Available at: <https://www.youtube.com/watch?v=oI3hZJqXJuc&t> 
+<!--(Accessed: 30 October 2024).-->
+
+<!--
+- StatQuest with Josh Starmer (2015)
+**Confidence Intervals, Clearly Explained!!!**, YouTube.
+Available at: <https://www.youtube.com/watch?v=TqOeMYtOc1w>
+(Accessed: 04 November 2024).
+-->
+
+- StatQuest with Josh Starmer (2018) 
+**Probability is not Likelihood. Find out why!!!**, YouTube. 
+Available at: <https://www.youtube.com/watch?v=pYxNSUDSFH4> 
+<!--(Accessed: 30 October 2024).-->
+
+- StatQuest with Josh Starmer (2017) 
+**Maximum Likelihood, clearly explained!!!**, YouTube. 
+Available at: <https://www.youtube.com/watch?v=XepXtl9YKwc>
+<!--(Accessed: 30 October 2024).-->
+
+<!--
+- Weiss, J. (2012) 
+**R probability functions for the normal distribution**, 
+Lecture 13-Monday, October 8, 2012. 
+Available at: <https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc>
+(Accessed: 30 October 2024). 
+-->
+
+<!--
+**Read** a two-page paper introduction to Infectious Disease Modelling:
+
+- Bjørnstad ON, Shea K, Krzywinski M, Altman N. 
+**Modeling infectious epidemics.** 
+Nat Methods. 2020 May;17(5):455-456. 
+doi: 10.1038/s41592-020-0822-z. PMID: 32313223.
+<https://www.nature.com/articles/s41592-020-0822-z>
+-->
+
+<!--
+- Bjørnstad ON, Shea K, Krzywinski M, Altman N. 
+**The SEIRS model for infectious disease dynamics.** 
+Nat Methods. 2020 Jun;17(6):557-558. doi: 10.1038/s41592-020-0856-2.
+<https://www.nature.com/articles/s41592-020-0856-2>
+Erratum in: Nat Methods. 2021 Mar;18(3):321. PMID: 32499633.
+
+- McVernon, J. et al. (2016) 
+**A user’s Guide to Infectious Disease Modelling**, Prism. 
+Available at: http://prism.edu.au/publications/prism-modeling-guideline/ 
+(Accessed: 14 March 2024).
+-->
+
+::::::::::::::::::::::::::
 
 ## Data sets
 
