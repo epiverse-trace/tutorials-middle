@@ -47,11 +47,15 @@ Regardez le [glossaire](../learners/reference.md) pour connaître les définitio
 
 Toutefois, au début d'une épidémie, les efforts visant à comprendre l'épidémie et les implications pour la lutte peuvent être retardés par l'absence d'un moyen facile d'accéder aux paramètres clés de la maladie en question ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Des projets tels que `{epiparameter}` et `{epireview}` construisent des catalogues en ligne en suivant des protocoles de synthèse de la littérature qui peuvent aider à informer l'analyse et à paramétrer les modèles en fournissant une bibliothèque de paramètres épidémiologiques précédemment estimés à partir d'épidémies passées.
 
-<Les premiers modèles pour COVID-19 utilisaient des paramètres d'autres coronavirus. https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext -->
+:::::::::::::::::: instructor
+
+Les premiers modèles pour COVID-19 utilisaient des paramètres d'autres coronavirus. <https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext>
+
+::::::::::::::::::
 
 Pour illustrer l'utilisation de l'outil `{epiparameter}` R dans votre pipeline d'analyse, notre objectif dans cet épisode sera d'accéder à un ensemble spécifique de paramètres épidémiologiques de la littérature, au lieu d'extraire des articles et de les copier-coller à la main. Nous les insérerons ensuite dans un `{EpiNow2}` flux de travail d'analyse.
 
-<Dans cet épisode, nous allons apprendre comment accéder à un ensemble spécifique de paramètres épidémiologiques à partir de la littérature et ensuite obtenir leurs **statistiques sommaires** en utilisant `{epiparameter}`.  -->
+<!-- cet épisode, nous allons apprendre comment accéder à un ensemble spécifique de paramètres épidémiologiques à partir de la littérature et ensuite obtenir leurs **statistiques sommaires** en utilisant `{epiparameter}`.  -->
 
 Commençons par charger le fichier `{epiparameter}` paquetage. Nous utiliserons le tube `%>%` pour connecter certaines de ses fonctions, certaines `{tibble}` et `{dplyr}` donc appelons aussi à la fonction `{tidyverse}` paquetage :
 
@@ -388,7 +392,7 @@ epiparameter::epiparameter_db(
 
 ::::::::::::::::: callout
 
-### Comment fonctionne "single\_epiparameter" ?
+### Comment fonctionne "single_epiparameter" ?
 
 En regardant la documentation d'aide pour `?epiparameter::epiparameter_db()`:
 
@@ -550,8 +554,6 @@ Nous explorerons ces concepts au fil des épisodes !
 
 Un paramètre de gravité tel que la durée de l'hospitalisation pourrait compléter les informations nécessaires sur la capacité d'accueil en cas d'épidémie ([Cori et al.](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
-<De plus, `{EpiNow2}` peut également inclure l'incertitude autour de chaque statistique sommaire, comme l'écart-type de l'écart-type. -->
-
 Pour Ebola :
 
 - Qu'est-ce qui est rapporté ? *estimation ponctuelle* de la durée moyenne des soins de santé et de l'isolement des cas ?
@@ -637,6 +639,3 @@ la mettre à jour à partir du dernier test d'épiparamètre
 - Réutiliser les estimations connues pour une maladie inconnue au début d'une épidémie lorsqu'il n'y a pas de données sur la recherche des contacts.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-
