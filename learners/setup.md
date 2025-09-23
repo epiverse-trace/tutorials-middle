@@ -371,7 +371,8 @@ prêt à commencer ! Si c'est le cas, [contactez-nous](#your-questions)!
 
 :::::::::::::::::::::::::: prereq
 
-**Regardez** deux vidéos de 5 minutes pour rafraîchir vos connaissances sur les distributions statistiques :
+<!-- de 5 minutes -->
+**Regardez** deux vidéos pour rafraîchir vos connaissances sur les distributions statistiques :
 
 - 365 Data Science (2019)
 **Probabilité : types de distributions**, YouTube (Sous-titres en français, 7 min).
