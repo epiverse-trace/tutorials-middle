@@ -48,7 +48,11 @@ Look at the [glossary](../learners/reference.md) for the definitions of all the 
 
 However, early in an epidemic, efforts to understand the epidemic and implications for control can be delayed by the lack of an easy way to access key parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are building online catalogues following literature synthesis protocols that can help inform analysis and parametrise models by providing a library of previously estimated epidemiological parameters from past outbreaks.
 
-<!-- Early models for COVID-19 used parameters from other coronaviruses. https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext -->
+:::::::::::::::::: instructor
+
+Early models for COVID-19 used parameters from other coronaviruses. <https://www.thelancet.com/article/S1473-3099(20)30144-4/fulltext>
+
+::::::::::::::::::
 
 To illustrate how to use the `{epiparameter}` R package in your analysis pipeline, our goal in this episode will be to access one specific set of epidemiological parameters from the literature, instead of extracting from papers and copying and pasting them by hand. We will then plug them into an `{EpiNow2}` analysis workflow.
 
