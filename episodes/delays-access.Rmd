@@ -501,7 +501,7 @@ Utilisez la touche `str()` pour afficher la structure du `<epiparameter>` R.
 
 ::::::::::::::::::
 
-:::::::::: solution
+:::::::::: instructor
 
 ```{r, eval=TRUE}
 # ebola serial interval
