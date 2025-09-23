@@ -371,22 +371,29 @@ prêt à commencer ! Si c'est le cas, [contactez-nous](#your-questions)!
 
 :::::::::::::::::::::::::: prereq
 
-**Regardez** trois vidéos de 5 minutes pour rafraîchir vos connaissances sur les distributions statistiques :
+**Regardez** deux vidéos de 5 minutes pour rafraîchir vos connaissances sur les distributions statistiques :
 
+- 365 Data Science (2019)
+**Probabilité : types de distributions**, YouTube (Sous-titres en français, 7 min).
+Disponible à l'adresse : <https://www.youtube.com/watch?v=b9a27XN_6tg>
+
+- Samuel Rey-Mermet (2020)
+**Statistiques et distributions de probabilités**, YouTube (En français, 30 min)
+Disponible à l'adresse : <https://www.youtube.com/watch?v=qnRR466YMew>
+
+<!--
 - StatQuest avec Josh Starmer (2017) 
 **Les principales idées derrière les distributions de probabilité**, YouTube.
 Disponible à l'adresse : <https://www.youtube.com/watch?v=oI3hZJqXJuc&t>
-<!--(Consulté le 30 octobre 2024).-->
 
 - StatQuest avec Josh Starmer (2018) 
 **La probabilité n'est pas la vraisemblance. Découvrez pourquoi !!!**, YouTube.
 Disponible à l'adresse : <https://www.youtube.com/watch?v=pYxNSUDSFH4>
-<!--(Consulté le 30 octobre 2024).-->
 
 - StatQuest avec Josh Starmer (2017) 
 **La vraisemblance maximale, expliquée clairement !!!**, YouTube. 
 Disponible à l'adresse : <https://www.youtube.com/watch?v=XepXtl9YKwc>
-<!--(Consulté le 30 octobre 2024).-->
+-->
 
 ::::::::::::::::::::::::::
 
