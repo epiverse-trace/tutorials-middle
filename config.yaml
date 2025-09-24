@@ -61,7 +61,7 @@ contact: 'andree.valle-campos@lshtm.ac.uk'
 episodes:
 - delays-access.Rmd
 - quantify-transmissibility.Rmd
-#- delays-functions.Rmd
+- delays-functions.Rmd
 #- create-forecast.Rmd
 #- severity-static.Rmd
 #- superspreading-estimate.Rmd
