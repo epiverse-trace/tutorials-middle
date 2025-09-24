@@ -13,7 +13,7 @@ exercises: 0
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Apprenez à estimer les paramètres de transmission à partir d'une série chronologique de données sur les cas à l'aide du paquet `EpiNow2`.
+- Apprenez à estimer les paramètres de transmission à partir d'une série chronologique de données sur les cas à l'aide du package `EpiNow2`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -49,7 +49,7 @@ Pour estimer ces paramètres clés à l'aide des données relatives aux cas, nou
 
 Dans les prochains tutoriels, nous nous concentrerons sur la manière d'utiliser les fonctions de `{EpiNow2}` pour estimer les paramètres de transmission des données de cas. Nous ne couvrirons pas le contexte théorique des modèles ou du cadre d'inférence, pour plus de détails sur ces concepts, consultez la [vignette.](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
-Dans ce tutoriel, nous allons apprendre à utiliser le paquet `{EpiNow2}` pour estimer le nombre de reproduction variable dans le temps. Nous obtiendrons les données d'entrée de `{incidence2}`. Nous utiliserons le paquet `{tidyr}` et `{dplyr}` pour organiser certains de ses résultats, `{ggplot2}` pour visualiser la distribution des cas, et le tuyau `%>%` pour relier certaines de leurs fonctions, alors appelons aussi la fonction `{tidyverse}` paquet :
+Dans ce tutoriel, nous allons apprendre à utiliser le package `{EpiNow2}` pour estimer le nombre de reproduction variable dans le temps. Nous obtiendrons les données d'entrée de `{incidence2}`. Nous utiliserons le package `{tidyr}` et `{dplyr}` pour organiser certains de ses résultats, `{ggplot2}` pour visualiser la distribution des cas, et le tuyau `%>%` pour relier certaines de leurs fonctions, alors appelons aussi la fonction `{tidyverse}` package :
 
 ```r
 library(EpiNow2)
@@ -65,11 +65,11 @@ library(tidyverse)
 
 ### Le double point-virgule
 
-Le double deux-points `::` dans R vous permet d'appeler une fonction spécifique d'un paquet sans charger l'ensemble du paquet dans l'environnement actuel.
+Le double deux-points `::` dans R vous permet d'appeler une fonction spécifique d'un package sans charger l'ensemble du package dans l'environnement actuel.
 
-Par exemple, vous pouvez appeler une fonction spécifique d'un paquet sans charger le paquet entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir du paquet `{dplyr}`.
+Par exemple, vous pouvez appeler une fonction spécifique d'un package sans charger le package entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir du package `{dplyr}`.
 
-Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les conflits d'espace de noms.
+Cela nous permet de nous souvenir des fonctions du package et d'éviter les conflits d'espace de noms.
 
 :::::::::::::::::::
 
@@ -83,7 +83,7 @@ Ce tutoriel illustre l'utilisation de `epinow()` pour estimer le nombre de repro
 
 ### Inférence bayésienne
 
-Le paquet R `EpiNow2` utilise une méthode d'inférence bayésienne [inférence bayésienne](../learners/reference.md#bayesian) pour estimer les nombres de reproduction et les durées d'infection sur la base des dates déclarées. En d'autres termes, il estime la transmission en fonction de la date à laquelle les personnes ont été effectivement infectées (plutôt que de l'apparition des symptômes), en tenant compte des retards dans les données observées. En revanche, l'approche `{EpiEstim}` permet une estimation en temps réel plus rapide et plus simple du nombre de reproductions en utilisant uniquement les données de cas au fil du temps, reflétant la façon dont la transmission change en fonction du moment où les symptômes apparaissent.
+Le package R `EpiNow2` utilise une méthode d'inférence bayésienne [inférence bayésienne](../learners/reference.md#bayesian) pour estimer les nombres de reproduction et les durées d'infection sur la base des dates déclarées. En d'autres termes, il estime la transmission en fonction de la date à laquelle les personnes ont été effectivement infectées (plutôt que de l'apparition des symptômes), en tenant compte des retards dans les données observées. En revanche, l'approche `{EpiEstim}` permet une estimation en temps réel plus rapide et plus simple du nombre de reproductions en utilisant uniquement les données de cas au fil du temps, reflétant la façon dont la transmission change en fonction du moment où les symptômes apparaissent.
 
 Dans l'inférence bayésienne, nous utilisons les connaissances a priori (distributions a priori) et les données (via une fonction de vraisemblance) pour obtenir la probabilité a posteriori :
 
@@ -103,7 +103,7 @@ Dans la ["`Expected change in reports`", l'appel](#expected-change-in-daily-case
 
 ### Données de cas
 
-Pour illustrer les fonctions des `EpiNow2` nous utiliserons les données relatives au début de la pandémie de COVID-19 au Royaume-Uni. Les données sont disponibles dans le paquet R `{incidence2}`.
+Pour illustrer les fonctions des `EpiNow2` nous utiliserons les données relatives au début de la pandémie de COVID-19 au Royaume-Uni. Les données sont disponibles dans le package R `{incidence2}`.
 
 ```{r}
 dplyr::as_tibble(incidence2::covidregionaldataUK)
@@ -144,7 +144,7 @@ Explorez plus tard les [`incidence2::incidence()` manuel de référence](https:/
 
 ### Pouvons-nous reproduire {incidence2} avec {dplyr}?
 
-Nous pouvons obtenir un objet similaire à `cases` à partir de l'objet `incidence2::covidregionaldataUK` à l'aide du paquet `{dplyr}`.
+Nous pouvons obtenir un objet similaire à `cases` à partir de l'objet `incidence2::covidregionaldataUK` à l'aide du package `{dplyr}`.
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE}
 incidence2::covidregionaldataUK %>%
@@ -155,7 +155,7 @@ incidence2::covidregionaldataUK %>%
   dplyr::slice_head(n = 90)
 ```
 
-Cependant, `incidence2::incidence()` contient des arguments pratiques comme `complete_dates` qui facilitent l'obtention d'un objet d'incidence avec le même intervalle de dates pour chaque groupe sans nécessiter de lignes de code supplémentaires ou un paquet de séries temporelles.
+Cependant, `incidence2::incidence()` contient des arguments pratiques comme `complete_dates` qui facilitent l'obtention d'un objet d'incidence avec le même intervalle de dates pour chaque groupe sans nécessiter de lignes de code supplémentaires ou un package de séries temporelles.
 
 :::::::::::::::::::::::::
 
@@ -505,7 +505,7 @@ En tout `{EpiNow2}` les régions ombrées reflètent les intervalles de crédibi
 
 **Quantifier l'hétérogénéité géographique**
 
-Les données relatives au début de la pandémie de COVID-19 au Royaume-Uni proviennent du paquet R `{incidence2}` comprennent la région dans laquelle les cas ont été enregistrés. Pour obtenir des estimations régionales du nombre effectif de reproductions et de cas, nous devons formater les données de manière à ce qu'elles comportent trois colonnes :
+Les données relatives au début de la pandémie de COVID-19 au Royaume-Uni proviennent du package R `{incidence2}` comprennent la région dans laquelle les cas ont été enregistrés. Pour obtenir des estimations régionales du nombre effectif de reproductions et de cas, nous devons formater les données de manière à ce qu'elles comportent trois colonnes :
 
 - `date` la date,
 - `region`: la région,
@@ -580,7 +580,7 @@ estimates_regional$summary$plots$R
 
 <!-- ::::::::::::::::::::::::: : testimonial -->
 
-<!-- ### le paquet i2extras -->
+<!-- ### le package i2extras -->
 
 <!-- ::::::::::::::::::::::::: : -->
 
