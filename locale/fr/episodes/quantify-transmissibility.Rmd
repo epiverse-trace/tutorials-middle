@@ -21,11 +21,11 @@ exercises: 0
 
 ## Conditions préalables
 
-Les apprenants doivent se familiariser avec les concepts suivants avant de suivre ce tutoriel :
+Les étudiants doivent se familiariser avec les concepts suivants avant de suivre ce tutoriel :
 
 **Statistiques**: distributions de probabilités, principe de l'analyse bayésienne.
 
-**Théorie des épidémies**: Nombre de reproductions effectives.
+**Théorie des épidémies**: Nombre de reproduction effectif.
 
 **Science des données**: la transformation et la visualisation des données. Vous pouvez revoir l'épisode sur [Agréger et visualiser](https://epiverse-trace.github.io/tutorials-early/describe-cases.html) les données d'incidence.
 
@@ -33,21 +33,21 @@ Les apprenants doivent se familiariser avec les concepts suivants avant de suivr
 
 ::::::::::::::::::::::::::::::::::::: callout
 
-### Rappel : l'indice de reproduction effectif, $R_t$
+### Rappel : le nombre de reproduction effectif, $R_t$
 
-Le [numéro de reproduction de base](../learners/reference.md#basic), $R_0$ est le nombre moyen de cas causés par un individu infectieux dans une population entièrement sensible.
+Le [nombre de reproduction de base](../learners/reference.md#basic), $R_0$ est le nombre moyen de cas causés par un individu infectieux dans une population entièrement susceptible.
 
-Mais dans une épidémie en cours, la population ne reste pas entièrement sensible, car les personnes qui se remettent de l'infection sont généralement immunisées. En outre, il peut y avoir des changements de comportement ou d'autres facteurs qui affectent la transmission. Lorsque nous voulons surveiller les changements dans la transmission, nous nous intéressons donc davantage à la valeur de la **nombre de reproduction efficace**, $R_t$ qui représente le nombre moyen de cas causés par un individu infectieux dans la population au temps $t$ compte tenu de l'état actuel de la population (y compris les niveaux d'immunité et les mesures de contrôle).
+Mais dans une épidémie en cours, la population ne reste pas entièrement susceptible, car les personnes qui se remettent de l'infection sont généralement immunisées. En outre, il peut y avoir des changements de comportement ou d'autres facteurs qui affectent la transmission. Lorsque nous voulons surveiller les changements dans la transmission, nous nous intéressons donc davantage à la valeur du **nombre de reproduction effectif**, $R_t$ qui représente le nombre moyen de cas causés par un individu infectieux dans la population au temps $t$ compte tenu de l'état actuel de la population (y compris les niveaux d'immunité et les mesures de contrôle).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Introduction
 
-L'intensité de la transmission d'un foyer est quantifiée à l'aide de deux paramètres clés : le nombre de reproduction, qui renseigne sur la force de la transmission en indiquant le nombre de nouveaux cas attendus pour chaque cas existant, et le nombre de décès. [taux de croissance](../learners/reference.md#growth) qui renseigne sur la vitesse de transmission en indiquant la rapidité avec laquelle le foyer se propage ou décline (temps de doublement/halving) au sein d'une population. Pour plus de détails sur la distinction entre la vitesse et la force de la transmission et les implications pour la lutte, consultez le site [Dushoff \& Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
+L'intensité de la transmission d'une épidémie est quantifiée à l'aide de deux paramètres clés : le nombre de reproduction, qui renseigne sur la force de la transmission en indiquant le nombre de nouveaux cas attendus pour chaque cas existant, et le nombre de décès. [taux de croissance](../learners/reference.md#growth) qui renseigne sur la vitesse de transmission en indiquant la rapidité avec laquelle l'épidémie se propage ou décline (temps de doublement/dédoublement) au sein d'une population. Pour plus de détails sur la distinction entre la vitesse et la force de la transmission et les implications pour la lutte, consultez le site [Dushoff \& Park, 2021](https://royalsocietypublishing.org/doi/full/10.1098/rspb.2020.1556).
 
-Pour estimer ces paramètres clés à l'aide des données relatives aux cas, nous devons tenir compte des délais entre la date des infections et la date des cas déclarés. Dans une situation d'épidémie, les données ne sont généralement disponibles qu'à partir des dates déclarées. Nous devons donc utiliser des méthodes d'estimation pour tenir compte de ces retards lorsque nous essayons de comprendre les changements dans la transmission au fil du temps.
+Pour estimer ces paramètres clés à l'aide des données relatives aux cas, nous devons tenir compte des délais entre les dates d'infections et les dates de cas déclarés. Lors d'une épidémie, les données ne sont généralement disponibles qu'à partir des dates déclarées. Nous devons donc utiliser des méthodes d'estimation pour tenir compte de ces retards lorsque nous essayons de comprendre les changements dans la transmission au fil du temps.
 
-Dans les prochains tutoriels, nous nous concentrerons sur la manière d'utiliser les fonctions de `{EpiNow2}` pour estimer les paramètres de transmission des données de cas. Nous ne couvrirons pas le contexte théorique des modèles ou du cadre d'inférence, pour plus de détails sur ces concepts, consultez le site Web de la Commission européenne. [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
+Dans les prochains tutoriels, nous nous concentrerons sur la manière d'utiliser les fonctions de `{EpiNow2}` pour estimer les paramètres de transmission des données de cas. Nous ne couvrirons pas le contexte théorique des modèles ou du cadre d'inférence, pour plus de détails sur ces concepts, consultez la [vignette.](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
 Dans ce tutoriel, nous allons apprendre à utiliser la fonction `{EpiNow2}` pour estimer le nombre de reproduction variable dans le temps. Nous obtiendrons les données d'entrée de `{incidence2}`. Nous utiliserons le paquet `{tidyr}` et `{dplyr}` pour organiser certains de ses résultats, `{ggplot2}` pour visualiser la distribution des cas, et le tuyau `%>%` pour relier certaines de leurs fonctions, alors appelons aussi la fonction `{tidyverse}` paquet :
 
@@ -65,9 +65,9 @@ library(tidyverse)
 
 ### Le double point-virgule
 
-Le double point-virgule `::` dans R vous permet d'appeler une fonction spécifique d'un paquetage sans charger l'ensemble du paquetage dans l'environnement actuel.
+Le double deux-points `::` dans R vous permet d'appeler une fonction spécifique d'un paquet sans charger l'ensemble du paquet dans l'environnement actuel.
 
-Par exemple, vous pouvez appeler une fonction spécifique d'un package sans charger le package entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir de l'outil `{dplyr}` paquet.
+Par exemple, vous pouvez appeler une fonction spécifique d'un paquet sans charger le paquet entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir du paquet `{dplyr}`.
 
 Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les conflits d'espace de noms.
 
@@ -75,7 +75,7 @@ Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les confl
 
 :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-Ce tutoriel illustre l'utilisation de `epinow()` pour estimer le nombre de reproduction et les durées d'infection variables dans le temps. Les apprenants doivent comprendre les données d'entrée nécessaires au modèle et les limites des résultats du modèle.
+Ce tutoriel illustre l'utilisation de `epinow()` pour estimer le nombre de reproduction et les durées d'infection variables dans le temps. Les étudiants doivent comprendre les données d'entrée nécessaires au modèle et les limites des résultats du modèle.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -83,19 +83,19 @@ Ce tutoriel illustre l'utilisation de `epinow()` pour estimer le nombre de repro
 
 ### Inférence bayésienne
 
-Le paquetage R `EpiNow2` utilise une méthode d'inférence bayésienne [inférence bayésienne](../learners/reference.md#bayesian) pour estimer les nombres de reproduction et les durées d'infection sur la base des dates de déclaration. En d'autres termes, il estime la transmission en fonction de la date à laquelle les personnes ont été effectivement infectées (plutôt que de l'apparition des symptômes), en tenant compte des retards dans les données observées. En revanche, l'approche `{EpiEstim}` permet une estimation en temps réel plus rapide et plus simple du nombre de reproductions en utilisant uniquement les données de cas au fil du temps, reflétant la façon dont la transmission change en fonction du moment où les symptômes apparaissent.
+Le paquet R `EpiNow2` utilise une méthode d'inférence bayésienne [inférence bayésienne](../learners/reference.md#bayesian) pour estimer les nombres de reproduction et les durées d'infection sur la base des dates déclarées. En d'autres termes, il estime la transmission en fonction de la date à laquelle les personnes ont été effectivement infectées (plutôt que de l'apparition des symptômes), en tenant compte des retards dans les données observées. En revanche, l'approche `{EpiEstim}` permet une estimation en temps réel plus rapide et plus simple du nombre de reproductions en utilisant uniquement les données de cas au fil du temps, reflétant la façon dont la transmission change en fonction du moment où les symptômes apparaissent.
 
-Dans l'inférence bayésienne, nous utilisons les connaissances antérieures (distributions antérieures) avec les données (dans une fonction de vraisemblance) pour trouver la probabilité postérieure :
+Dans l'inférence bayésienne, nous utilisons les connaissances a priori (distributions a priori) et les données (via une fonction de vraisemblance) pour obtenir la probabilité a posteriori :
 
-$Posterior , probability \propto likelihood \times prior , probability$
+$\text{Probabilité a posteriori} \propto \text{vraisemblance} \times \text{probabilité a priori}$
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-Faites référence à la distribution de probabilité préalable et à la [probabilité postérieure](https://en.wikipedia.org/wiki/Posterior_probability) postérieure.
+Faites référence à la distribution de probabilité a priori et à la [probabilité a posteriori](https://en.wikipedia.org/wiki/Posterior_probability) a posteriori.
 
-Dans la ["`Expected change in reports`", l'appel](#expected-change-in-daily-cases) par "la probabilité postérieure que $R_t < 1$"nous nous référons spécifiquement à la [aire sous la courbe de distribution de la probabilité postérieure](https://www.nature.com/articles/nmeth.3368/figures/1).
+Dans la ["`Expected change in reports`", l'appel](#expected-change-in-daily-cases) par "la probabilité a posteriori que $R_t < 1$"nous nous référons spécifiquement à la [aire sous la courbe de distribution de la probabilité a posteriori](https://www.nature.com/articles/nmeth.3368/figures/1).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -103,7 +103,7 @@ Dans la ["`Expected change in reports`", l'appel](#expected-change-in-daily-case
 
 ### Données de cas
 
-Pour illustrer les fonctions des `EpiNow2` nous utiliserons les données relatives au début de la pandémie de COVID-19 au Royaume-Uni. Les données sont disponibles dans le paquetage R `{incidence2}`.
+Pour illustrer les fonctions des `EpiNow2` nous utiliserons les données relatives au début de la pandémie de COVID-19 au Royaume-Uni. Les données sont disponibles dans le paquet R `{incidence2}`.
 
 ```{r}
 dplyr::as_tibble(incidence2::covidregionaldataUK)
@@ -112,7 +112,7 @@ dplyr::as_tibble(incidence2::covidregionaldataUK)
 Pour utiliser les données, nous devons les formater de manière à ce qu'elles comportent deux colonnes :
 
 - `date` la date (en tant qu'objet date, voir `?is.Date()`),
-- `confirm`: nombre de déclarations de maladie (confirmer) à cette date.
+- `confirm`: nombre de cas déclarés (confirmés) à cette date.
 
 Utilisons `{tidyr}` et `{incidence2}` pour cela :
 
@@ -136,14 +136,15 @@ cases <- incidence2::covidregionaldataUK %>%
 cases
 ```
 
-Avec `incidence2::incidence()` nous agrégeons des cas dans différentes périodes de temps *intervalles* (c'est-à-dire des jours, des semaines ou des mois) ou par *groupe* par groupe. Nous pouvons également obtenir des dates complètes pour tous les intervalles de dates par catégorie de groupe à l'aide de la fonction `complete_dates = TRUE`
+Avec `incidence2::incidence()` nous agrégeons des cas sur différentes périodes de temps (*intervalles*, c'est-à-dire des jours, des semaines ou des mois) ou par groupe. Nous pouvons également obtenir les dates complètes pour tous les intervalles de dates par catégorie de groupe à l'aide de la fonction
+`complete_dates = TRUE`
 Explorez plus tard les [`incidence2::incidence()` manuel de référence](https://www.reconverse.org/incidence2/reference/incidence.html)
 
 ::::::::::::::::::::::::: spoiler
 
 ### Pouvons-nous reproduire {incidence2} avec {dplyr}?
 
-Nous pouvons obtenir un objet similaire à `cases` à partir de l'objet `incidence2::covidregionaldataUK` à l'aide de la fonction `{dplyr}` paquet.
+Nous pouvons obtenir un objet similaire à `cases` à partir de l'objet `incidence2::covidregionaldataUK` à l'aide du paquet `{dplyr}`.
 
 ```{r, warning=FALSE, message=FALSE, eval=FALSE}
 incidence2::covidregionaldataUK %>%
@@ -154,7 +155,7 @@ incidence2::covidregionaldataUK %>%
   dplyr::slice_head(n = 90)
 ```
 
-Cependant, le `incidence2::incidence()` contient des arguments pratiques comme `complete_dates` qui facilitent l'obtention d'un objet d'incidence avec le même intervalle de dates pour chaque groupe sans nécessiter de lignes de code supplémentaires ou un paquetage de séries temporelles.
+Cependant, `incidence2::incidence()` contient des arguments pratiques comme `complete_dates` qui facilitent l'obtention d'un objet d'incidence avec le même intervalle de dates pour chaque groupe sans nécessiter de lignes de code supplémentaires ou un paquet de séries temporelles.
 
 :::::::::::::::::::::::::
 
@@ -229,7 +230,7 @@ Pour tous les types de retard, nous devrons utiliser des distributions pour les 
 
 #### Prise en compte de l'incertitude de la distribution
 
-Pour spécifier une **variable** nous incluons l'incertitude autour de la moyenne $\mu$ et de l'écart-type $\sigma$ de notre distribution gamma. Si notre distribution de la période d'incubation a une moyenne $\mu$ et un écart-type $\sigma$ nous supposons que la moyenne ($\mu$) suit une distribution normale avec un écart type $\sigma_{\mu}$:
+Pour spécifier une distribution **variable** nous incluons l'incertitude autour de la moyenne $\mu$ et de l'écart-type $\sigma$ de notre distribution gamma. Si notre distribution de la période d'incubation a une moyenne $\mu$ et un écart-type $\sigma$ nous supposons que la moyenne ($\mu$) suit une distribution normale avec un écart type $\sigma_{\mu}$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
@@ -253,7 +254,7 @@ incubation_period_variable
 
 Après la période d'incubation, il s'écoule un délai supplémentaire entre l'apparition des symptômes et la notification du cas : le délai de déclaration. Nous pouvons le spécifier comme une distribution fixe ou variable, ou estimer une distribution à partir de données.
 
-Lorsque vous spécifiez une distribution, il est utile de visualiser la densité de probabilité pour voir le pic et l'étendue de la distribution. *log normale* normale.
+Lorsque vous spécifiez une distribution, il est utile de visualiser la densité de probabilité pour voir le pic et l'étendue de la distribution. Dans cet example, nous allons utiliser une distribution *log normale*.
 
 Si nous voulons supposer que le délai de déclaration moyen est de 2 jours (avec une incertitude de 0,5 jour) et que l'écart type est de 1 jour (avec une incertitude de 0,5 jour), nous pouvons spécifier une distribution variable à l'aide de la commande `LogNormal()` comme précédemment :
 
@@ -329,10 +330,10 @@ generation_time_variable <- EpiNow2::LogNormal(
 
 ## Trouver des estimations
 
-La fonction `epinow()` est une enveloppe pour la fonction `estimate_infections()` utilisée pour estimer les cas par date d'infection. La distribution du temps de génération et la distribution des délais doivent être transmises à l'aide des fonctions ` generation_time_opts()` et `delay_opts()` respectivement.
+La fonction `epinow()` est une "enveloppe" pour la fonction `estimate_infections()` utilisée pour estimer les cas par date d'infection. La distribution du temps de génération et la distribution des délais doivent être transmises à l'aide des fonctions ` generation_time_opts()` et `delay_opts()` respectivement.
 
 Il existe de nombreuses autres entrées qui peuvent être transmises à `epinow()` voir `?EpiNow2::epinow()` pour plus de détails.
-Une entrée optionnelle consiste à spécifier un *normale du journal* pour le nombre de reproduction effectif $R_t$ au début de l'épidémie. Nous spécifions une moyenne de 2 jours et un écart-type de 2 jours comme arguments de la commande `prior` dans `rt_opts()`:
+Une entrée optionnelle consiste à spécifier un a priori *log-normal* pour le nombre de reproduction effectif $R_t$ au début de l'épidémie. Nous spécifions une moyenne de 2 jours et un écart-type de 2 jours comme arguments de la commande `prior` dans `rt_opts()`:
 
 ```{r, eval=TRUE}
 # define Rt prior distribution
@@ -430,7 +431,7 @@ EpiNow2::epinow(
 )
 ```
 
-**Rappelez-vous :** En utilisant un nombre approprié de *échantillons* et *chaînes* est cruciale pour garantir la convergence et obtenir des estimations fiables dans les calculs bayésiens utilisant Stan. L'obtention de résultats plus précis se fait au détriment de la vitesse.
+**Rappelez-vous :** En utilisant un nombre approprié d' *échantillons* et de *chaînes* est cruciale pour garantir la convergence et obtenir des estimations fiables dans les calculs bayésiens utilisant Stan. L'obtention de résultats plus précis se fait au détriment de la vitesse.
 
 :::::::::::::::::::::::::::::::::
 
@@ -450,7 +451,7 @@ Nous pouvons également visualiser l'estimation du taux de croissance dans le te
 estimates$plots$growth_rate
 ```
 
-Pour extraire un résumé des principaux paramètres de transmission à l'échelle de l'Union européenne, il est possible d'utiliser les données de la base de données de l'Union européenne. *dernière date* dans les données :
+Pour extraire un résumé des principaux paramètres de transmission à dernière date* dans les données :
 
 ```{r}
 summary(estimates)
@@ -504,7 +505,7 @@ En tout `{EpiNow2}` les régions ombrées reflètent les intervalles de crédibi
 
 **Quantifier l'hétérogénéité géographique**
 
-Les données relatives au début de la pandémie de COVID-19 au Royaume-Uni proviennent du paquetage R `{incidence2}` comprennent la région dans laquelle les cas ont été enregistrés. Pour obtenir des estimations régionales du nombre effectif de reproductions et de cas, nous devons formater les données de manière à ce qu'elles comportent trois colonnes :
+Les données relatives au début de la pandémie de COVID-19 au Royaume-Uni proviennent du paquet R `{incidence2}` comprennent la région dans laquelle les cas ont été enregistrés. Pour obtenir des estimations régionales du nombre effectif de reproductions et de cas, nous devons formater les données de manière à ce qu'elles comportent trois colonnes :
 
 - `date` la date,
 - `region`: la région,
@@ -549,7 +550,7 @@ Pour apprendre à faire l'estimation régionale de Rt, lisez la section de la vi
 
 :::::::::::: solution
 
-Pour obtenir des estimations régionales, nous utilisons les mêmes données que celles utilisées pour l'estimation de l'indice des prix à la consommation (IPC). `epinow()` à la fonction `regional_epinow()`:
+Pour obtenir des estimations régionales, nous utilisons les mêmes arguments de `epinow()` dans la fonction `regional_epinow()`:
 
 ```{r, message=FALSE, eval=FALSE}
 estimates_regional <- EpiNow2::regional_epinow(
@@ -563,7 +564,7 @@ estimates_regional <- EpiNow2::regional_epinow(
 )
 ```
 
-Tracez les résultats avec :
+Visualisez les résultats avec :
 
 ```{r, message=FALSE, eval=FALSE}
 estimates_regional$summary$summarised_results$table
