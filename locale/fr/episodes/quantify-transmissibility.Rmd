@@ -13,7 +13,7 @@ exercises: 0
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Apprenez à estimer les paramètres de transmission à partir d'une série chronologique de données sur les cas à l'aide du progiciel R. `EpiNow2`
+- Apprenez à estimer les paramètres de transmission à partir d'une série chronologique de données sur les cas à l'aide du paquet `EpiNow2`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -49,7 +49,7 @@ Pour estimer ces paramètres clés à l'aide des données relatives aux cas, nou
 
 Dans les prochains tutoriels, nous nous concentrerons sur la manière d'utiliser les fonctions de `{EpiNow2}` pour estimer les paramètres de transmission des données de cas. Nous ne couvrirons pas le contexte théorique des modèles ou du cadre d'inférence, pour plus de détails sur ces concepts, consultez la [vignette.](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
-Dans ce tutoriel, nous allons apprendre à utiliser la fonction `{EpiNow2}` pour estimer le nombre de reproduction variable dans le temps. Nous obtiendrons les données d'entrée de `{incidence2}`. Nous utiliserons le paquet `{tidyr}` et `{dplyr}` pour organiser certains de ses résultats, `{ggplot2}` pour visualiser la distribution des cas, et le tuyau `%>%` pour relier certaines de leurs fonctions, alors appelons aussi la fonction `{tidyverse}` paquet :
+Dans ce tutoriel, nous allons apprendre à utiliser le paquet `{EpiNow2}` pour estimer le nombre de reproduction variable dans le temps. Nous obtiendrons les données d'entrée de `{incidence2}`. Nous utiliserons le paquet `{tidyr}` et `{dplyr}` pour organiser certains de ses résultats, `{ggplot2}` pour visualiser la distribution des cas, et le tuyau `%>%` pour relier certaines de leurs fonctions, alors appelons aussi la fonction `{tidyverse}` paquet :
 
 ```r
 library(EpiNow2)
