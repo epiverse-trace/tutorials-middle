@@ -27,21 +27,21 @@ Imagine we have a series of daily incidence cases, as shown in the figure below,
 
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 library(tidyverse)
-cases <- c(rep(1, 5), rep(2, 7), rep(3, 6), rep(4, 4), rep(5, 3), 
+cases <- c(rep(1, 5), rep(2, 7), rep(3, 6), rep(4, 4), rep(5, 3),
            rep(6, 4), rep(7, 2))
 cases_df <- as.data.frame(table(cases))
 names(cases_df) <- c("time", "cases")
 cases_df$time <- as.numeric(as.character(cases_df$time))
 
 
-g <- cases_df %>% 
+g <- cases_df %>%
   ggplot(aes(x = time, y = cases)) +
-  geom_bar(stat = "identity", fill = "gray", 
-           color = "white", 
+  geom_bar(stat = "identity", fill = "gray",
+           color = "white",
            width = 0.95) +
-  geom_text(aes(label = cases), 
+  geom_text(aes(label = cases),
             vjust = -0.5,   # moves labels above bars
-            size = 3.5)+
+            size = 3.5) +
   scale_x_continuous(breaks = seq(1, 8, 1)) +
   labs(
     x = "Time (in days)",
@@ -50,7 +50,7 @@ g <- cases_df %>%
   ) +
   theme_classic() +
   theme(
-    plot.title = element_text(hjust = 0.5, size =11)
+    plot.title = element_text(hjust = 0.5, size = 11)
   )
 g
 ```
@@ -79,39 +79,35 @@ cases_df$cases_prev_sum <- c(NA, cumsum(cases_df$cases)[-nrow(cases_df)])
 # compute new column: cases_i / sum of previous cases
 cases_df$R <- cases_df$cases / cases_df$cases_prev_sum
 cases_df$r <- cases_df$cases / dplyr::lag(cases_df$cases)
-fg <- cases_df %>% 
+fg <- cases_df %>%
   ggplot(aes(x = time, y = R)) +
   geom_point() +
-  geom_line(color = "blue") + 
+  geom_line(color = "blue") +
   scale_y_continuous(breaks = seq(0, 1.6, 0.2)) +
   scale_x_continuous(breaks = seq(1, 8, 1)) +
-labs(
-x = "Time (in days)",
-y = TeX(r"(Naive $R_t^n$)"),
-title= TeX(r"($R_t = \frac{I_t}{\sum_{i=1}^{t-1}I_i}$)")
-) +
+  labs(
+    x = "Time (in days)",
+    y = TeX(r"(Naive $R_t^n$)"),
+    title = TeX(r"($R_t = \frac{I_t}{\sum_{i=1}^{t-1}I_i}$)") #nolint
+  ) +
   theme_classic() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 11)
-  )
+  theme(plot.title = element_text(hjust = 0.5, size = 11))
 
-f <- cases_df %>% 
+f <- cases_df %>%
   ggplot(aes(x = time, y = r)) +
   geom_point() +
-  geom_line(color = "red") + 
+  geom_line(color = "red") +
   scale_y_continuous(breaks = seq(0, 1.6, 0.2)) +
   scale_x_continuous(breaks = seq(1, 8, 1)) +
-labs(
-x = "Time (in days)",
-y = TeX(r"(Naive $R_t^n$)"),
-title= TeX(r"($R_t = \frac{I_t}{I_{t-1}}$)")
-) +
+  labs(
+    x = "Time (in days)",
+    y = TeX(r"(Naive $R_t^n$)"),
+    title = TeX(r"($R_t = \frac{I_t}{I_{t-1}}$)") #nolint
+  ) +
   theme_classic() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 11)
-  )
+  theme(plot.title = element_text(hjust = 0.5, size = 11))
 
-f+ fg
+f + fg
 ```
 
 
@@ -132,12 +128,12 @@ Now, suppose we have access to a probability distribution for the generation tim
 ```{r, warning=FALSE, fig.width=10, fig.height=6, echo=FALSE}
 cases_df$prop <- c(0.15, 0.30, 0.24, 0.15, 0.10, 0.05, 0.01)
 
-gf <- cases_df %>% 
+gf <- cases_df %>%
   ggplot(aes(x = time, y = prop)) +
-  geom_bar(stat = "identity", fill = "brown", 
-           color = "white", 
+  geom_bar(stat = "identity", fill = "brown",
+           color = "white",
            width = 0.95) +
-  geom_text(aes(label = prop), 
+  geom_text(aes(label = prop),
             vjust = -0.5,   # moves labels above bars
             size = 3.5) +
   scale_x_continuous(breaks = seq(1, 8, 1)) +
@@ -148,7 +144,7 @@ gf <- cases_df %>%
   ) +
   theme_classic() +
   theme(
-    plot.title = element_text(hjust = 0.5, size =11)
+    plot.title = element_text(hjust = 0.5, size = 11)
   )
 
 gf
@@ -221,24 +217,25 @@ Once we calculate the delay-adjusted   $R_t$ for $t = 2,3,..., 7$, we can draw i
 ```{r, warning=FALSE, echo=FALSE}
 cases_df$rt <- c(NA, 9.33, 2.35, 0.96, 0.62, 0.86, 0.46)
 
-cases_df %>% 
+cases_df %>%
   ggplot(aes(x = time, y = rt)) +
   geom_point() +
-  geom_line(color = "blue3") + 
-  geom_text(aes(label = rt), 
-            vjust = -0.5,   # moves labels above bars
-            size = 3.5)+
+  geom_line(color = "blue3") +
+  geom_text(
+    aes(label = rt),
+    vjust = -0.5,
+    # moves labels above bars
+    size = 3.5
+  ) +
   scale_y_continuous(breaks = seq(0, 10, 1.5)) +
   scale_x_continuous(breaks = seq(1, 8, 1)) +
-labs(
-x = "Time (in days)",
-y = TeX(r"($R_t$)"),
-title= TeX(r"(Delay-adjusted $R_t$)")
-) +
+  labs(
+    x = "Time (in days)",
+    y = TeX(r"($R_t$)"),
+    title = TeX(r"(Delay-adjusted $R_t$)")
+  ) +
   theme_classic() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 11)
-  )
+  theme(plot.title = element_text(hjust = 0.5, size = 11))
 
 ```
 
@@ -252,28 +249,28 @@ title= TeX(r"(Delay-adjusted $R_t$)")
 This figure may give you a clue
 
 ```{r, warning=FALSE, echo=FALSE}
-all_g <- cases_df %>% 
-  ggplot(aes(x= time)) + 
-  geom_line(aes(y = r, color = "Naive-1"), linewidth = 1.5) + 
-  geom_line(aes(y= R, color = "Naive-2"), linewidth = 1.5) + 
-  geom_line(aes(y= rt, color = "Delay-adjusted"), linewidth = 1.5) + 
+all_g <- cases_df %>%
+  ggplot(aes(x = time)) +
+  geom_line(aes(y = r, color = "Naive-1"), linewidth = 1.5) +
+  geom_line(aes(y = R, color = "Naive-2"), linewidth = 1.5) +
+  geom_line(aes(y = rt, color = "Delay-adjusted"), linewidth = 1.5) +
   scale_color_manual(
     name = "Legend",
-    values = c("Naive-1" = "#E69F00", 
-               "Naive-2" = "#56B4E9", 
-               "Delay-adjusted" = "#009E73")
+    values = c(
+      "Naive-1" = "#E69F00",
+      "Naive-2" = "#56B4E9",
+      "Delay-adjusted" = "#009E73"
+    )
   ) +
   scale_y_continuous(breaks = seq(0, 10, 1.5)) +
   scale_x_continuous(breaks = seq(1, 8, 1)) +
-labs(
-x = "Time (in days)",
-y = TeX(r"($R_t$)"),
-title= TeX(r"(Comparison of different  $R_t$, curves)")
-) +
+  labs(
+    x = "Time (in days)",
+    y = TeX(r"($R_t$)"),
+    title = TeX(r"(Comparison of different  $R_t$, curves)")
+  ) +
   theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5, size = 11)
-  )
+  theme(plot.title = element_text(hjust = 0.5, size = 11))
 all_g
 ```
 
