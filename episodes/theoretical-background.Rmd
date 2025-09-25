@@ -244,7 +244,7 @@ cases_df %>%
 
 - What differences do you notice between the delay-adjusted $R_t$ and the naive $R_t^n$?
 
-::: solution
+::: hint
 
 This figure may give you a clue
 
