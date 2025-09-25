@@ -470,14 +470,6 @@ estimates <- EpiNow2::epinow(
 )
 ```
 
-``` output
-WARN [2025-08-26 01:31:55] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-08-26 01:31:55] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
 <!-- estimates <- EpiNow2::epinow( -->
 <!--   # reported cases -->
@@ -541,24 +533,24 @@ summary(estimates)
 ```
 
 ``` output
-                        measure                estimate
-                         <char>                  <char>
-1:       New infections per day    7923 (4678 -- 13709)
-2:   Expected change in reports       Likely decreasing
-3:   Effective reproduction no.      0.96 (0.73 -- 1.2)
-4:               Rate of growth -0.013 (-0.11 -- 0.082)
-5: Doubling/halving time (days)       -52 (8.5 -- -6.4)
+                        measure               estimate
+                         <char>                 <char>
+1:       New infections per day   7897 (4742 -- 13404)
+2:   Expected change in reports                 Stable
+3:   Effective reproduction no.     0.96 (0.73 -- 1.2)
+4:               Rate of growth -0.014 (-0.1 -- 0.078)
+5: Doubling/halving time (days)      -49 (8.9 -- -6.7)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7923 (4678 -- 13709).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7897 (4742 -- 13404).
 
 + The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.013 (-0.11 -- 0.082).
++ The exponential growth rate of case numbers is -0.014 (-0.1 -- 0.078).
 
-+ The doubling time (the time taken for case numbers to double) is -52 (8.5 -- -6.4).
++ The doubling time (the time taken for case numbers to double) is -49 (8.9 -- -6.7).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
@@ -590,6 +582,19 @@ In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% cred
 `EpiNow2` can be used to estimate transmission metrics from case data at any time in the course of an outbreak. The reliability of these estimates depends on the quality of the data and appropriate choice of delay distributions. In the next tutorial we will learn how to make forecasts and investigate some of the additional inference options available in `EpiNow2`.
 
 :::::::::::
+
+:::::::::::::::::: discussion
+
+### How does {EpiNow2} work?
+
+{EpiNow2} contains different models for how infections arise.
+One of the main models that is used in the default configuration is the **Renewal equation model**.
+If you want to gain familiarity with it and learn how delays are accounted for when estimating $R_t$, 
+you can read the episode on
+[Introduction to the Renewal equation](../learners/intro-renewal-equation.md)
+in the "More Resources" section of this tutorial's website.
+
+::::::::::::::::::
 
 ## Challenge
 
