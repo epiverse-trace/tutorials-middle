@@ -498,6 +498,19 @@ In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% cred
 
 :::::::::::
 
+:::::::::::::::::: discussion
+
+### How does {EpiNow2} work?
+
+{EpiNow2} contains different models for how infections arise.
+One of the main models that is used in the default configuration is the **Renewal equation model**.
+If you want to gain familiarity with it and learn how delays are accounted for when estimating $R_t$, 
+you can read the episode on
+[Introduction to the Renewal equation](../learners/intro-renewal-equation.md)
+in the "More Resources" section of this tutorial's website.
+
+::::::::::::::::::
+
 ## Challenge
 
 ::::::::::::::::::: challenge
