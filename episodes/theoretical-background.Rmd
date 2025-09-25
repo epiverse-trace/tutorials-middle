@@ -280,7 +280,7 @@ all_g
 
 ## Projection  for future cases
 
-After estimating$R_t$ values up to the current time $t$, we can rearrange the renewal equation to predict the incidence at time $t+1$ as follows:
+After estimating $R_t$ values up to the current time $t$, we can rearrange the renewal equation to predict the incidence at time $t+1$ as follows:
 
 $$ \bar{I}_{t+1} = R_t*\sum\limits_{s=1}^\tau I_{t-s}*\omega(S)$$
 Applying this into our example, we get 
