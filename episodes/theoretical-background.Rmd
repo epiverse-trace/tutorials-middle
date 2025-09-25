@@ -1,5 +1,5 @@
 ---
-title: 'Theoretical background'
+title: 'Introduction to the Renewal equation'
 teaching: 15
 exercises: 5
 editor_options: 
