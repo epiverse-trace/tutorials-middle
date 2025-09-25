@@ -277,7 +277,7 @@ all_g
 :::
 ::: solution
 
-Both naive estimates can underestimate the Rt value at the early stages of the epidemic. Also, the Naive-1 is more sensitive to sudden increases in the report of new incident cases, as reported for day 6.
+Both naive estimates can underestimate the $Rt$ value at the early stages of the epidemic. Also, the Naive-1 is more sensitive to sudden increases in the report of new incident cases, as reported for day 6.
 
 :::
 :::::
