@@ -63,7 +63,6 @@ episodes:
 - quantify-transmissibility.Rmd
 - delays-functions.Rmd
 - create-forecast.Rmd
-- theoretical-background.Rmd
 - severity-static.Rmd
 - superspreading-estimate.Rmd
 - superspreading-simulate.Rmd
