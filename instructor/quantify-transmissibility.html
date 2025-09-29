@@ -484,7 +484,7 @@ conflicts.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
   <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
 <div class="accordion-body">
 <p>This tutorial illustrates the usage of <code>epinow()</code> to
 estimate the time-varying reproduction number and infection times.
@@ -522,7 +522,7 @@ likelihood \times prior \, probability\)</span></p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
   <h3 class="accordion-header" id="headingInstructor2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor2" class="accordion-collapse collapse" aria-labelledby="headingInstructor2" data-bs-parent="#accordionInstructor2">
+<div id="collapseInstructor2" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor2" aria-labelledby="headingInstructor2">
 <div class="accordion-body">
 <p>Refer to the prior probability distribution and the <a href="https://en.wikipedia.org/wiki/Posterior_probability" class="external-link">posterior
 probability</a> distribution.</p>
@@ -580,7 +580,7 @@ this:</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cases_filter</span> <span class="op">&lt;-</span> <span class="fu">incidence2</span><span class="fu">::</span><span class="va">covidregionaldataUK</span> <span class="op">%&gt;%</span></span>
+<code class="sourceCode R"><span><span class="va">cases_slided</span> <span class="op">&lt;-</span> <span class="fu">incidence2</span><span class="fu">::</span><span class="va">covidregionaldataUK</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># Preprocess missing values</span></span>
 <span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu">replace_na</span><span class="op">(</span><span class="fu">base</span><span class="fu">::</span><span class="fu">list</span><span class="op">(</span>cases_new <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
@@ -606,7 +606,7 @@ reference manual</a></p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p><strong>Can we replicate {incidence2} with {dplyr}?</strong></p>
 <p>We can get an object similar to <code>cases</code> from the
@@ -639,17 +639,17 @@ the first 90 days of this data.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">plot</span><span class="op">(</span><span class="va">cases_filter</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu">plot</span><span class="op">(</span><span class="va">cases_slided</span><span class="op">)</span></span></code></pre>
 </div>
 <figure><img src="../fig/quantify-transmissibility-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To pass the outputs from <a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a> to
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> we need to drop one column from the
-<code>cases_filter</code> object:</p>
+<code>cases_slided</code> object:</p>
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Drop column for {EpiNow2} input format</span></span>
-<span><span class="va">cases</span> <span class="op">&lt;-</span> <span class="va">cases_filter</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">cases</span> <span class="op">&lt;-</span> <span class="va">cases_slided</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">count_variable</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">cases</span></span></code></pre>
@@ -856,7 +856,7 @@ uncertainty of 0.5 days), we can specify a variable distribution using
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p><strong>Visualize a log Normal distribution using
 {epiparameter}</strong></p>
@@ -896,7 +896,7 @@ like:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
 <div class="accordion-body">
 <p><strong>How to get the reporting delay from data?</strong></p>
 <p>If data is available on the time between symptom onset and reporting,
@@ -933,79 +933,76 @@ hospitalization (date when case was reported).</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>WARN [2025-09-29 17:35:31] dist_fit (chain: 1): The largest R-hat is 1.05, indicating chains have not mixed.
+<pre class="output" tabindex="0"><code>WARN [2025-09-29 18:07:03] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess -
+WARN [2025-09-29 18:07:03] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess -
+WARN [2025-09-29 18:07:05] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess -
+WARN [2025-09-29 18:07:05] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess -
+WARN [2025-09-29 18:07:07] dist_fit (chain: 1): The largest R-hat is 1.06, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat -
-WARN [2025-09-29 17:35:31] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+WARN [2025-09-29 18:07:07] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:31] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+WARN [2025-09-29 18:07:07] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:34] dist_fit (chain: 1): The largest R-hat is 1.08, indicating chains have not mixed.
+WARN [2025-09-29 18:07:10] dist_fit (chain: 1): The largest R-hat is 1.06, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat -
-WARN [2025-09-29 17:35:34] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+WARN [2025-09-29 18:07:10] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:34] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+WARN [2025-09-29 18:07:10] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:36] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:36] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:38] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:38] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:40] dist_fit (chain: 1): The largest R-hat is 1.05, indicating chains have not mixed.
+WARN [2025-09-29 18:07:12] dist_fit (chain: 1): The largest R-hat is 1.07, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat -
-WARN [2025-09-29 17:35:40] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+WARN [2025-09-29 18:07:12] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:40] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+WARN [2025-09-29 18:07:12] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:43] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:43] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:45] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:45] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:47] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:47] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:49] dist_fit (chain: 1): The largest R-hat is 1.06, indicating chains have not mixed.
+WARN [2025-09-29 18:07:14] dist_fit (chain: 1): The largest R-hat is 1.07, indicating chains have not mixed.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#r-hat -
-WARN [2025-09-29 17:35:49] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+WARN [2025-09-29 18:07:14] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:49] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+WARN [2025-09-29 18:07:14] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#tail-ess -
-WARN [2025-09-29 17:35:51] dist_fit (chain: 1): The largest R-hat is 1.05, indicating chains have not mixed.
-Running the chains for more iterations may help. See
-https://mc-stan.org/misc/warnings.html#r-hat -
-WARN [2025-09-29 17:35:51] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+WARN [2025-09-29 18:07:16] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#bulk-ess -
-WARN [2025-09-29 17:35:51] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+WARN [2025-09-29 18:07:16] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess -
+WARN [2025-09-29 18:07:18] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess -
+WARN [2025-09-29 18:07:18] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess -
+WARN [2025-09-29 18:07:20] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess -
+WARN [2025-09-29 18:07:20] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#tail-ess -
+WARN [2025-09-29 18:07:22] dist_fit (chain: 1): Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.
+Running the chains for more iterations may help. See
+https://mc-stan.org/misc/warnings.html#bulk-ess -
+WARN [2025-09-29 18:07:22] dist_fit (chain: 1): Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.
 Running the chains for more iterations may help. See
 https://mc-stan.org/misc/warnings.html#tail-ess - </code></pre>
 </div>
@@ -1016,15 +1013,15 @@ https://mc-stan.org/misc/warnings.html#tail-ess - </code></pre>
   meanlog:
     - normal distribution:
       mean:
-        0.26
+        0.24
       sd:
-        0.12
+        0.1
   sdlog:
     - normal distribution:
       mean:
-        1
+        0.99
       sd:
-        0.095</code></pre>
+        0.1</code></pre>
 </div>
 </div>
 </div>
@@ -1146,12 +1143,10 @@ the time-varying reproduction number for the first 90 days:</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>WARN [2025-09-29 17:39:51] epinow: There were 3 divergent transitions after warmup. See
+<pre class="output" tabindex="0"><code>WARN [2025-09-29 18:11:12] epinow: There were 1 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. -
-WARN [2025-09-29 17:39:51] epinow: There were 4 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 12. See
-https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded -
-WARN [2025-09-29 17:39:51] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-09-29 18:11:12] epinow: Examine the pairs() plot to diagnose sampling problems
  - </code></pre>
 </div>
 <!-- ```{r, message = FALSE,warning=FALSE, eval = TRUE, echo=FALSE} -->
@@ -1234,25 +1229,25 @@ intervals towards the date of the last data point. Finally, the
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                        measure                estimate
-                         &lt;char&gt;                  &lt;char&gt;
-1:       New infections per day    8008 (4765 -- 13411)
-2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.73 -- 1.3)
-4:               Rate of growth -0.0098 (-0.1 -- 0.081)
-5: Doubling/halving time (days)       -71 (8.5 -- -6.8)</code></pre>
+<pre class="output" tabindex="0"><code>                        measure               estimate
+                         &lt;char&gt;                 &lt;char&gt;
+1:       New infections per day   7911 (4793 -- 13365)
+2:   Expected change in reports                 Stable
+3:   Effective reproduction no.     0.97 (0.74 -- 1.2)
+4:               Rate of growth -0.011 (-0.1 -- 0.078)
+5: Doubling/halving time (days)      -60 (8.9 -- -6.8)</code></pre>
 </div>
 <p>As these estimates are based on partial data, they have a wide
 uncertainty interval.</p>
 <ul><li><p>From the summary of our analysis we see that the expected change
-in reports is Stable with the estimated new infections 8008 (4765 –
-13411).</p></li>
+in reports is Stable with the estimated new infections 7911 (4793 –
+13365).</p></li>
 <li><p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
-data) is 0.97 (0.73 – 1.3).</p></li>
-<li><p>The exponential growth rate of case numbers is -0.0098 (-0.1 –
-0.081).</p></li>
+data) is 0.97 (0.74 – 1.2).</p></li>
+<li><p>The exponential growth rate of case numbers is -0.011 (-0.1 –
+0.078).</p></li>
 <li><p>The doubling time (the time taken for case numbers to double) is
--71 (8.5 – -6.8).</p></li>
+-60 (8.9 – -6.8).</p></li>
 </ul><div id="expected-change-in-reports" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -1370,7 +1365,7 @@ delays in this episode.</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>To wrangle data, you can:</p>
 <div class="codewrapper sourceCode" id="cb33">
@@ -1403,7 +1398,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
