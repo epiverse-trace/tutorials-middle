@@ -145,7 +145,7 @@ Explore later the [`incidence2::incidence()` reference manual](https://www.recon
 
 ::::::::::::::::::::::::: spoiler
 
-### Can we replicate {incidence2} with {dplyr}?
+**Can we replicate {incidence2} with {dplyr}?**
 
 We can get an object similar to `cases` from the `incidence2::covidregionaldataUK` data frame using the `{dplyr}` package.
 
@@ -276,7 +276,7 @@ reporting_delay_variable <- EpiNow2::LogNormal(
 
 :::::::::::::::::::::: spoiler
 
-### Visualize a log Normal distribution using {epiparameter}
+**Visualize a log Normal distribution using {epiparameter}**
 
 Using `epiparameter::epiparameter()` we can create a custom distribution. The fixed log normal distribution will look like:
 
@@ -309,18 +309,31 @@ plot(incubation_period_variable + reporting_delay_variable)
 ```
 
 
-:::::::::::::::::: callout
+:::::::::::::::::: spoiler
 
-If data is available on the time between symptom onset and reporting, we can use the function `estimate_delay()` to estimate a log normal distribution from a vector of delays. The code below illustrates how to use `estimate_delay()` with synthetic delay data. 
+**How to get the reporting delay from data?**
 
-```{r, eval = FALSE }
-delay_data <- rlnorm(500, log(5), 1) # synthetic delay data
+If data is available on the time between symptom onset and reporting, we can use the function `EpiNow2::estimate_delay()` to estimate a log normal distribution from a vector of delays. 
 
-reporting_delay <- EpiNow2::estimate_delay(
-  delay_data,
-  samples = 1000,
-  bootstraps = 10
-)
+The code below illustrates how to use `EpiNow2::estimate_delay()` with synthetic Ebola data. We calculate the reporting delay for each case the time difference **from** date of onset **to** date of hospitalization (date when case was reported).
+
+```{r, eval = TRUE, message = FALSE, warning = FALSE}
+library(tidyverse)
+
+# get Ebola data from package {outbreaks}
+outbreaks::ebola_sim_clean$linelist %>% 
+  tibble::as_tibble() %>% 
+  # keep a subset of columns for this example only
+  dplyr::select(case_id, date_of_onset, date_of_hospitalisation) %>% 
+  # calculate the time difference between two dates in linelist
+  dplyr::mutate(reporting_delay = date_of_hospitalisation - date_of_onset) %>% 
+  # extract the time difference as a vector class object
+  dplyr::pull(reporting_delay) %>% 
+  # estimate the delay parameters using {EpiNow2}
+  EpiNow2::estimate_delay(
+    samples = 1000,
+    bootstraps = 10
+  )
 ```
 
 ::::::::::::::::::
