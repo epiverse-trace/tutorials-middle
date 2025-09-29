@@ -118,7 +118,7 @@ Utilisons `{tidyr}` et `{incidence2}` pour cela :
 
 ```{r, warning=FALSE, message=FALSE}
 cases_sliced <- incidence2::covidregionaldataUK %>%
-  dplyr::as_tibble() %>% 
+  dplyr::as_tibble() %>%
   # Preprocess missing values
   tidyr::replace_na(base::list(cases_new = 0)) %>%
   # Compute the daily incidence
