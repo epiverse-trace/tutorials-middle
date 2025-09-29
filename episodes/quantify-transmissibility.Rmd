@@ -107,7 +107,7 @@ In the ["`Expected change in reports`" callout](#expected-change-in-daily-cases)
 ## Delay distributions and case data 
 ### Case data
 
-To illustrate the functions of `EpiNow2` we will use outbreak data of the start of the COVID-19 pandemic from the United Kingdom. The data are available in the R package `{incidence2}`. 
+To illustrate the functions of `EpiNow2` we will use outbreak data of the start of the COVID-19 pandemic from the United Kingdom, but only with the first 90 days observed. The data are available in the R package `{incidence2}`. 
 
 ```{r}
 dplyr::as_tibble(incidence2::covidregionaldataUK)
@@ -121,7 +121,8 @@ To use the data, we must format the data to have two columns:
 Let's use `{tidyr}` and `{incidence2}` for this:
 
 ```{r, warning = FALSE, message = FALSE}
-cases <- incidence2::covidregionaldataUK %>%
+cases_filter <- incidence2::covidregionaldataUK %>%
+  tibble::as_tibble() %>% 
   # Preprocess missing values
   tidyr::replace_na(base::list(cases_new = 0)) %>%
   # Compute the daily incidence
@@ -131,13 +132,9 @@ cases <- incidence2::covidregionaldataUK %>%
     count_values_to = "confirm",
     date_names_to = "date",
     complete_dates = TRUE
-  ) %>%
-  # Drop column for {EpiNow2} input format
-  dplyr::select(-count_variable) %>%
+  ) %>% 
   # Keep the first 90 dates
   dplyr::slice_head(n = 90)
-
-cases
 ```
 
 With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`
@@ -164,14 +161,18 @@ However, the `incidence2::incidence()` function contains convenient arguments li
 
 In an outbreak situation it is likely we would only have access to the beginning of the input data set. Therefore we assume we only have the first 90 days of this data. 
 
-```{r echo = FALSE}
-cases %>%
-  # use ggplot2
-  ggplot(aes(x = date, y = confirm)) +
-  geom_col() +
-  theme_grey(
-    base_size = 15
-  )
+```{r}
+plot(cases_filter)
+```
+
+To pass the outputs from `{incidence2}` to `{EpiNow2}` we need to drop one column from the `cases_filter` object:
+
+```{r}
+# Drop column for {EpiNow2} input format
+cases <- cases_filter %>%
+  dplyr::select(-count_variable)
+
+cases
 ```
 
 ### Delay distributions 
