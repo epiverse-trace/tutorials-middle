@@ -121,7 +121,7 @@ To use the data, we must format the data to have two columns:
 Let's use `{tidyr}` and `{incidence2}` for this:
 
 ```{r, warning = FALSE, message = FALSE}
-cases_filter <- incidence2::covidregionaldataUK %>%
+cases_slided <- incidence2::covidregionaldataUK %>%
   tibble::as_tibble() %>%
   # Preprocess missing values
   tidyr::replace_na(base::list(cases_new = 0)) %>%
@@ -162,14 +162,14 @@ However, the `incidence2::incidence()` function contains convenient arguments li
 In an outbreak situation it is likely we would only have access to the beginning of the input data set. Therefore we assume we only have the first 90 days of this data. 
 
 ```{r}
-plot(cases_filter)
+plot(cases_slided)
 ```
 
-To pass the outputs from `{incidence2}` to `{EpiNow2}` we need to drop one column from the `cases_filter` object:
+To pass the outputs from `{incidence2}` to `{EpiNow2}` we need to drop one column from the `cases_slided` object:
 
 ```{r}
 # Drop column for {EpiNow2} input format
-cases <- cases_filter %>%
+cases <- cases_slided %>%
   dplyr::select(-count_variable)
 
 cases
