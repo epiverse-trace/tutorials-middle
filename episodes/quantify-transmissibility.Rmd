@@ -158,7 +158,7 @@ Cependant, `incidence2::incidence()` contient des arguments pratiques comme `com
 
 Dans une situation d'épidémie, il est probable que nous n'ayons accès qu'au début de l'ensemble des données d'entrée. Nous supposons donc que nous ne disposons que des 90 premiers jours de ces données.
 
-```{r, echo=FALSE}
+```{r}
 plot(cases_sliced)
 ```
 
@@ -313,7 +313,7 @@ epiparameter::epiparameter(
 
 Si l'on dispose de données sur le délai entre l'apparition des symptômes et la déclaration, on peut utiliser la fonction `estimate_delay()` pour estimer une distribution log-normale à partir d'un vecteur de délais. Le code ci-dessous illustre comment utiliser la fonction `estimate_delay()` avec des données synthétiques sur les délais.
 
-```{r, eval=FALSE}
+```{r}
 library(tidyverse)
 
 # Steps:
