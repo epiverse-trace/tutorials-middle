@@ -277,6 +277,8 @@ If the error persist, [contact us](#your-questions)!
 
 You should update **all of the packages** required for the tutorial, even if you installed them relatively recently. New versions bring improvements and important bug fixes.
 
+### 4. Verify the installation
+
 When the installation has finished, you can try to load the packages by pasting the following code into the console:
 
 ```r
@@ -314,7 +316,7 @@ library(tidyverse)
 
 If you do NOT see an error like `there is no package called ‘...’` you are good to go! If you do, [contact us](#your-questions)!
 
-### 4. Watch and Read the pre-training material
+### 5. Watch and Read the pre-training material
 
 :::::::::::::::::::::::::::: prereq
 
