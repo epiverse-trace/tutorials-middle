@@ -328,6 +328,8 @@ Vous devez mettre à jour **toutes les librairies** nécessaires à ce tutoriel,
 même si vous les avez installés récemment. Les nouvelles versions contiennent
 des améliorations et d'importantes corrections de bugs.
 
+### 4. Vérifiez l'installation
+
 Lorsque l'installation est terminée, vous pouvez essayer de charger les packages
 en copiant et collant le code suivant dans la console :
 
@@ -367,7 +369,7 @@ library(tidyverse)
 Si vous ne voyez PAS d'erreur comme `there is no package called '...'` vous êtes
 prêt à commencer ! Si c'est le cas, [contactez-nous](#your-questions)!
 
-### 4. Regardez et lisez le matériel de préformation
+### 5. Regardez et lisez le matériel de préformation
 
 :::::::::::::::::::::::::: prereq
 
