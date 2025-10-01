@@ -14,6 +14,6 @@
 "instructors/instructor-notes.md" "ca3834a1b0f9e70c4702aa7a367a6bb5" "site/built/instructor-notes.md" "2025-09-25"
 "learners/intro-renewal-equation.Rmd" "f2ba72e6816c4ab50c439b35cc33754c" "site/built/intro-renewal-equation.md" "2025-09-25"
 "learners/reference.md" "9aada1c331ee11f38e078457ba343c62" "site/built/reference.md" "2025-09-25"
-"learners/setup.md" "1bc7c44f8ddecb31fd1c37348500d642" "site/built/setup.md" "2025-09-25"
+"learners/setup.md" "a00660a03a31a0874dd358b63934cd1a" "site/built/setup.md" "2025-10-01"
 "profiles/learner-profiles.md" "31b503c4b5bd1f0960ada730eca4a25e" "site/built/learner-profiles.md" "2025-09-25"
 "renv/profiles/lesson-requirements/renv.lock" "1a8eb440c0ce11b30c6d28f7272cc5d3" "site/built/renv.lock" "2025-09-25"
