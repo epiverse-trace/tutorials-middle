@@ -51,14 +51,12 @@ to use the [code completion feature](https://support.posit.co/hc/en-us/articles/
 
 -->
 
-This episode will integrate the content of the two previous episodes. Let's start by loading the `{epiparameter}` and `{EpiNow2}` package. For `{EpiNow2}`, we'll set 4 cores to be used in parallel computations. We'll use the pipe `%>%`, some `{dplyr}` verbs and `{ggplot2}`, so let's also call to the `{tidyverse}` package:
+This episode will integrate the content of the two previous episodes. Let's start by loading the `{epiparameter}` and `{EpiNow2}` package. We'll use the pipe `%>%`, some `{dplyr}` verbs and `{ggplot2}`, so let's also call to the `{tidyverse}` package:
 
 ```{r,warning=FALSE,message=FALSE}
 library(epiparameter)
 library(EpiNow2)
 library(tidyverse)
-
-withr::local_options(list(mc.cores = 4))
 ```
 
 To recap, we learned that `{epiparameter}` help us to *choose* one specific set of epidemiological parameters from the literature, instead of copy/pasting them *by hand*:
@@ -375,11 +373,14 @@ serial_interval_covid
 Assuming a COVID-19 scenario, let's use the first 60 days of the `example_confirmed` data set from the `{EpiNow2}` package as `reported_cases` and the recently created `serial_interval_covid` object as inputs to estimate the time-varying reproduction number using `EpiNow2::epinow()`.
 
 ```{r,message=FALSE}
-epinow_estimates_cg <- epinow(
+# Set 4 cores to be used in parallel computations
+withr::local_options(list(mc.cores = 4))
+
+epinow_estimates_cg <- EpiNow2::epinow(
   # cases
   data = example_confirmed[1:60],
   # delays
-  generation_time = generation_time_opts(serial_interval_covid)
+  generation_time = EpiNow2::generation_time_opts(serial_interval_covid)
 )
 
 base::plot(epinow_estimates_cg)
@@ -418,12 +419,12 @@ Use the last `epinow()` calculation using the `delays` argument and the `delay_o
 The `delays` argument and the `delay_opts()` helper function are analogous to the `generation_time` argument and the `generation_time_opts()` helper function.
 
 ```r
-epinow_estimates <- epinow(
+epinow_estimates <- EpiNow2::epinow(
   # cases
   reported_cases = example_confirmed[1:60],
   # delays
-  generation_time = generation_time_opts(covid_serial_interval),
-  delays = delay_opts(covid_incubation_time)
+  generation_time = EpiNow2::generation_time_opts(covid_serial_interval),
+  delays = EpiNow2::delay_opts(covid_incubation_time)
 )
 ```
 
@@ -485,13 +486,16 @@ covid_incubation_time <-
 
 # epinow ------------------------------------------------------------------
 
+# Set 4 cores to be used in parallel computations
+withr::local_options(list(mc.cores = 4))
+
 # run epinow
-epinow_estimates_cgi <- epinow(
+epinow_estimates_cgi <- EpiNow2::epinow(
   # cases
   data = example_confirmed[1:60],
   # delays
-  generation_time = generation_time_opts(covid_serial_interval),
-  delays = delay_opts(covid_incubation_time)
+  generation_time = EpiNow2::generation_time_opts(covid_serial_interval),
+  delays = EpiNow2::delay_opts(covid_incubation_time)
 )
 
 base::plot(epinow_estimates_cgi)
@@ -638,12 +642,12 @@ incubation_period_ebola <-
 # epinow ------------------------------------------------------------------
 
 # run epinow
-epinow_estimates_egi <- epinow(
+epinow_estimates_egi <- EpiNow2::epinow(
   # cases
   data = ebola_confirmed,
   # delays
-  generation_time = generation_time_opts(serial_interval_ebola),
-  delays = delay_opts(incubation_period_ebola)
+  generation_time = EpiNow2::generation_time_opts(serial_interval_ebola),
+  delays = EpiNow2::delay_opts(incubation_period_ebola)
 )
 
 plot(epinow_estimates_egi)
@@ -747,12 +751,12 @@ influenza_cleaned <-
   select(date, confirm = in_bed)
 
 # Run epinow()
-epinow_estimates_igi <- epinow(
+epinow_estimates_igi <- EpiNow2::epinow(
   # cases
   data = influenza_cleaned,
   # delays
-  generation_time = generation_time_opts(generation_time_influenza),
-  delays = delay_opts(incubation_time_influenza)
+  generation_time = EpiNow2::generation_time_opts(generation_time_influenza),
+  delays = EpiNow2::delay_opts(incubation_time_influenza)
 )
 
 plot(epinow_estimates_igi)
