@@ -72,7 +72,7 @@ covid_serialint <-
   )
 ```
 
-Now, we have an epidemiological parameter we can use in our analysis! For example, to quantify transmission, in the chunk below we replaced one of the **summary statistics** inputs into `EpiNow2::LogNormal()`:
+Now, we have an epidemiological parameter we can use in our analysis! For example, to quantify transmission we can use the serial interval as an approximation of the generation. In the chunk below we replaced the **summary statistics** output values of `covid_serialint` as inputs for `EpiNow2::LogNormal()`:
 
 ```r
 generation_time <- 
@@ -121,7 +121,7 @@ If you look at `?stats::Distributions`, each type of distribution has a unique s
 
 ```{r,eval=FALSE}
 # plot this to have a visual reference
-plot(covid_serialint, day_range = 0:20)
+plot(covid_serialint, xlim = c(0,20))
 ```
 
 ```{r}
@@ -265,7 +265,7 @@ The probability functions for `<epiparameter>` **discrete** distributions are th
 
 ```{r,eval=FALSE}
 # plot to have a visual reference
-plot(covid_serialint_discrete, day_range = 0:20)
+plot(covid_serialint_discrete, xlim = c(0,20))
 
 # density value at quantile value 10 (day)
 density(covid_serialint_discrete, at = 10)
