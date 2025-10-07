@@ -24,7 +24,8 @@ editor_options:
 
 ## Prerequisites
 
-- Complete tutorial [Quantifying transmission](https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html)
+- Complete tutorial [Access epidemiological delay distributions](../episodes/delays-functions.md)
+- Complete tutorial [Quantifying transmission](../episodes/quantify-transmissibility.md)
 
 This episode requires you to be familiar with:
 
@@ -50,7 +51,17 @@ to use the [code completion feature](https://support.posit.co/hc/en-us/articles/
 
 -->
 
-`{epiparameter}` help us to *choose* one specific set of epidemiological parameters from the literature, instead of copy/pasting them *by hand*:
+This episode will integrate the content of the two previous episodes. Let's start by loading the `{epiparameter}` and `{EpiNow2}` package. For `{EpiNow2}`, we'll set 4 cores to be used in parallel computations. We'll use the pipe `%>%`, some `{dplyr}` verbs and `{ggplot2}`, so let's also call to the `{tidyverse}` package:
+
+```{r,warning=FALSE,message=FALSE}
+library(epiparameter)
+library(EpiNow2)
+library(tidyverse)
+
+withr::local_options(list(mc.cores = 4))
+```
+
+To recap, we learned that `{epiparameter}` help us to *choose* one specific set of epidemiological parameters from the literature, instead of copy/pasting them *by hand*:
 
 ```{r,message=FALSE}
 covid_serialint <-
@@ -61,7 +72,7 @@ covid_serialint <-
   )
 ```
 
-Now, we have an epidemiological parameter we can use in our analysis! In the chunk below we replaced one of the **summary statistics** inputs into `EpiNow2::LogNormal()`
+Now, we have an epidemiological parameter we can use in our analysis! For example, to quantify transmission, in the chunk below we replaced one of the **summary statistics** inputs into `EpiNow2::LogNormal()`:
 
 ```r
 generation_time <- 
@@ -72,17 +83,8 @@ generation_time <-
   )
 ```
 
-In this episode, we will use the **distribution functions** that `{epiparameter}` provides to get a maximum value (`max`) for this and any other package downstream in your analysis pipeline!
+In this episode, we will use the **distribution functions** that `{epiparameter}` provides to get descriptive values like the median, maximum value (`max`), percentiles, or quantiles for from any `<epiparameter>` class object. These will be useful downstream in your analysis pipeline!
 
-Let's load the `{epiparameter}` and `{EpiNow2}` package. For `{EpiNow2}`, we'll set 4 cores to be used in parallel computations. We'll use the pipe `%>%`, some `{dplyr}` verbs and `{ggplot2}`, so let's also call to the `{tidyverse}` package:
-
-```{r,warning=FALSE,message=FALSE}
-library(epiparameter)
-library(EpiNow2)
-library(tidyverse)
-
-withr::local_options(list(mc.cores = 4))
-```
 
 ::::::::::::::::::: checklist
 
