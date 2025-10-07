@@ -117,8 +117,10 @@ If you need it, read in detail about the [R probability functions for the normal
 
 If you look at `?stats::Distributions`, each type of distribution has a unique set of functions. However, `{epiparameter}` gives you the same four functions to access each of the values above for any `<epiparameter>` object you want! 
 
-```{r,eval=FALSE}
+```{r}
 # plot this to have a visual reference
+
+# continuous distribution
 plot(covid_serialint, xlim = c(0,20))
 ```
 
@@ -127,14 +129,14 @@ plot(covid_serialint, xlim = c(0,20))
 density(covid_serialint, at = 10)
 
 # the cumulative probability at quantile value of 10 (days)
-cdf(covid_serialint, q = 10)
+epiparameter::cdf(covid_serialint, q = 10)
 
 # the quantile value (day) at a cumulative probability of 60%
 quantile(covid_serialint, p = 0.6)
 
 # generate 10 random values (days) given
 # the distribution family and its parameters
-generate(covid_serialint, times = 10)
+epiparameter::generate(covid_serialint, times = 10)
 ```
 
 ::::::::: instructor
@@ -171,8 +173,8 @@ plot(covid_serialint)
 ```
 
 ```{r,eval=TRUE}
-cdf(covid_serialint, q = 2)
-cdf(covid_serialint, q = 6)
+epiparameter::cdf(covid_serialint, q = 2)
+epiparameter::cdf(covid_serialint, q = 6)
 ```
 
 Given the COVID-19 serial interval:
@@ -230,11 +232,8 @@ Distribution: discrete lnorm
 
 While for a **continuous** distribution, we plot the *Probability Density Function (PDF)*, for a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
 
-```{r,eval=FALSE}
-# continuous
-plot(covid_serialint)
-
-# discrete
+```{r}
+# discrete distribution
 plot(covid_serialint_discrete)
 ```
 
@@ -269,13 +268,13 @@ plot(covid_serialint_discrete, xlim = c(0,20))
 density(covid_serialint_discrete, at = 10)
 
 # cumulative probability at quantile value 10 (day)
-cdf(covid_serialint_discrete, q = 10)
+epiparameter::cdf(covid_serialint_discrete, q = 10)
 
 # In what quantile value (days) do we have the 60% cumulative probability?
 quantile(covid_serialint_discrete, p = 0.6)
 
 # generate random values
-generate(covid_serialint_discrete, times = 10)
+epiparameter::generate(covid_serialint_discrete, times = 10)
 ```
 
 ::::::::::::::::::::::
