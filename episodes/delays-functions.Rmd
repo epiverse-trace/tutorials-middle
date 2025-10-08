@@ -121,7 +121,7 @@ If you look at `?stats::Distributions`, each type of distribution has a unique s
 # plot this to have a visual reference
 
 # continuous distribution
-plot(covid_serialint, xlim = c(0,20))
+plot(covid_serialint, xlim = c(0, 20))
 ```
 
 ```{r}
@@ -262,7 +262,7 @@ The probability functions for `<epiparameter>` **discrete** distributions are th
 
 ```{r,eval=FALSE}
 # plot to have a visual reference
-plot(covid_serialint_discrete, xlim = c(0,20))
+plot(covid_serialint_discrete, xlim = c(0, 20))
 
 # density value at quantile value 10 (day)
 density(covid_serialint_discrete, at = 10)
