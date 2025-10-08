@@ -1,5 +1,5 @@
 ---
-title: Accéder aux distributions des retards épidémiologiques
+title: Accéder aux distribution des délais épidémiologiques
 teaching: 20
 exercises: 10
 editor_options:
@@ -15,7 +15,7 @@ editor_options:
 ::::::::::::::::::::::::::::::::::::: objectives
 
 - Obtenez les délais à partir d'une base de données de recherche documentaire avec `{epiparameter}`.
-- Obtenez les paramètres de distribution et les statistiques sommaires des distributions de retards.
+- Obtenez les paramètres de distribution et les statistiques sommaires des distributions de délais.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -78,7 +78,7 @@ Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les confl
 
 ## Le problème
 
-Si nous voulons estimer la transmissibilité d'une infection, il est courant d'utiliser un package tel que `{EpiEstim}` ou `{EpiNow2}`. Le paquet `{EpiEstim}` permet d'estimer en temps réel le nombre de reproductions à l'aide des données relatives aux cas dans le temps, reflétant ainsi l'évolution de la transmission en fonction de la date d'apparition des symptômes. Pour estimer la transmission en fonction du moment où les personnes ont été effectivement infectées (plutôt que de l'apparition des symptômes), le logiciel `{EpiNow2}` étend cette idée en la combinant avec un modèle qui tient compte des retards dans les données observées. Les deux logiciels requièrent certaines informations épidémiologiques en entrée. Par exemple, dans `{EpiNow2}` nous utilisons `EpiNow2::Gamma()` pour spécifier un [temps de génération](../learners/reference.md#generationtime) sous la forme d'une distribution de probabilité ajoutant son `mean` l'écart-type (`sd`) et sa valeur maximale (`max`).
+Si nous voulons estimer la transmissibilité d'une infection, il est courant d'utiliser un package tel que `{EpiEstim}` ou `{EpiNow2}`. Le paquet `{EpiEstim}` permet d'estimer en temps réel le nombre de reproductions à l'aide des données relatives aux cas dans le temps, reflétant ainsi l'évolution de la transmission en fonction de la date d'apparition des symptômes. Pour estimer la transmission en fonction du moment où les personnes ont été effectivement infectées (plutôt que de l'apparition des symptômes), le logiciel `{EpiNow2}` étend cette idée en la combinant avec un modèle qui tient compte des délais dans les données observées. Les deux logiciels requièrent certaines informations épidémiologiques en entrée. Par exemple, dans `{EpiNow2}` nous utilisons `EpiNow2::Gamma()` pour spécifier un [temps de génération](../learners/reference.md#generationtime) sous la forme d'une distribution de probabilité ajoutant son `mean` l'écart-type (`sd`) et sa valeur maximale (`max`).
 
 Pour spécifier une valeur `generation_time` qui suit un *Gamma* avec une moyenne $\mu = 4$ écart-type $\sigma = 2$ et une valeur maximale de 20, nous écrivons :
 
@@ -134,7 +134,7 @@ Si nous mesurons les *intervalle sériel* dans des données réelles, nous const
 
 ![Intervalles sériels des paires de cas possibles dans (a) COVID-19 et (b) MERS-CoV. Les paires représentent un infecteur présumé et son contaminé présumé en fonction de la date d'apparition des symptômes ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/serial-interval-pairs.jpg)
 
-Pour résumer ces données relatives aux périodes individuelles et aux paires, il est donc utile de quantifier les **distribution statistique** des retards qui correspondent le mieux aux données, plutôt que de se concentrer sur la moyenne ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
+Pour résumer ces données relatives aux périodes individuelles et aux paires, il est donc utile de quantifier les **distribution statistique** des délais qui correspondent le mieux aux données, plutôt que de se concentrer sur la moyenne ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
 
 <!-- ajouter une référence sur les bonnes pratiques pour estimer les distributions -->
 
@@ -286,7 +286,7 @@ distribution[[4]]$metadata$inference_method
 
 ::::::::::::::::::::::::::::::::: challenge
 
-### Trouvez vos distributions de retard !
+### Trouvez vos distributions de délais !
 
 Prenez 2 minutes pour explorer les `{epiparameter}` bibliothèque.
 
@@ -309,7 +309,7 @@ Posez la question :
 L'analyse `epiparameter_db()` fonction avec `disease` compte à elle seule le nombre d'entrées comme :
 
 - études, et
-- les répartitions des retards.
+- les répartitions des délais.
 
 Les `epiparameter_db()` avec `disease` et `epi_name` obtient une liste de toutes les entrées avec :
 
@@ -326,7 +326,7 @@ La combinaison de `epiparameter_db()` plus `parameter_tbl()` permet d'obtenir un
 
 ::::::::::::::::: solution
 
-Nous avons choisi d'explorer les distributions des retards d'Ebola :
+Nous avons choisi d'explorer les distributions des délais d'Ebola :
 
 ```{r}
 # we expect 16 delay distributions for Ebola
@@ -633,9 +633,9 @@ la mettre à jour à partir du dernier test d'épiparamètre
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- Utilisez `{epiparameter}` pour accéder au catalogue des distributions de retards épidémiologiques.
+- Utilisez `{epiparameter}` pour accéder au catalogue des distributions de délais épidémiologiques.
 - Utilisez cette fonction pour accéder au catalogue de la littérature sur les distributions de délais épidémiologiques. `epiparameter_db()` pour sélectionner une seule distribution de délais.
-- Utilisez cette option pour sélectionner les distributions à retard unique. `parameter_tbl()` pour obtenir une vue d'ensemble des distributions de délais multiples.
+- Utilisez cette option pour sélectionner les distributions à délais unique. `parameter_tbl()` pour obtenir une vue d'ensemble des distributions de délais multiples.
 - Réutiliser les estimations connues pour une maladie inconnue au début d'une épidémie lorsqu'il n'y a pas de données sur la recherche des contacts.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
