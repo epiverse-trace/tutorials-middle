@@ -395,6 +395,12 @@ Using the serial interval instead of the generation time is an alternative that 
 
 ::::::::::::::::::
 
+::::::::::::::::::: instructor
+
+We can stop the livecoding at this stage and move on with the practical.
+
+:::::::::::::::::::
+
 ## Adjusting for reporting delays
 
 Estimating $R_t$ requires data on the daily number of new infections. Due to lags in the development of detectable viral loads, symptom onset, seeking care, and reporting, these numbers are not readily available. All observations reflect transmission events from some time in the past. In other words, if $d$ is the delay from infection to observation, then observations at time $t$ inform $R_{t−d}$, not $R_t$. [(Gostic et al., 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1008409#sec007)
