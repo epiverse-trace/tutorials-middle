@@ -164,8 +164,8 @@ epiparameter::generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  4.437311  4.484586  2.125663  3.435418 13.134601  2.711017  5.791308
- [8]  2.691934  5.022156  3.251429
+ [1] 3.365875 2.441190 7.294705 7.812407 7.069455 8.665308 2.615325 2.033748
+ [9] 4.857128 2.732509
 ```
 
 ::::::::: instructor
@@ -475,17 +475,7 @@ epinow_estimates_cg <- EpiNow2::epinow(
   # delays
   generation_time = EpiNow2::generation_time_opts(serial_interval_covid)
 )
-```
 
-``` output
-WARN [2025-10-08 01:28:16] epinow: There were 4 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-10-08 01:28:16] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 base::plot(epinow_estimates_cg)
 ```
 
@@ -576,7 +566,6 @@ covid_serial_interval <-
 covid_incubation <- epiparameter::epiparameter_db(
   disease = "covid",
   epi_name = "incubation",
-  author = "Natalie",
   single_epiparameter = TRUE
 )
 
@@ -751,7 +740,17 @@ epinow_estimates_egi <- EpiNow2::epinow(
   generation_time = EpiNow2::generation_time_opts(serial_interval_ebola),
   delays = EpiNow2::delay_opts(incubation_period_ebola)
 )
+```
 
+``` output
+WARN [2025-10-09 18:37:50] epinow: There were 1 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2025-10-09 18:37:50] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
+``` r
 plot(epinow_estimates_egi)
 ```
 
