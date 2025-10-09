@@ -1,0 +1,172 @@
+---
+title: 'How CFR adjusts delays'
+teaching: 15
+exercises: 5
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+::: questions
+-   How are delays adjust for when estimating CFR?
+:::
+
+::: objectives
+-   Understand how delays are incorporated into severity estimation
+-   Understand the under-ascertainment factor
+-   Understand the mechanisms behind `{cfr}`
+:::
+
+## Introduction
+
+The `{cfr}` package accounts for onset-to-outcome delays to produce more
+accurate estimates of case fatality risk (CFR). This document outlines
+how these delays are incorporated and explains the underlying
+mathematical framework that enables this adjustment.
+
+## Naive estimation of $CFR$
+
+Consider a dataset containing daily incidence cases and deaths. When examining their cumulative distributions (as illustrated in the figure below), we may wish to estimate the case fatality rate (CFR).
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+library(tidyverse)
+library(cowplot)
+cases <- c(rep(1, 3), rep(2, 1), rep(3, 3), rep(4, 2))
+df <- as.data.frame(table(cases))
+names(df) <- c("time", "cases")
+df$time <- as.numeric(as.character(df$time))
+df$deaths <- c(1,0,0,0)
+
+gc <- df %>%
+  ggplot(aes(x = time, y = cumsum(cases))) +
+  geom_bar(stat = "identity", fill = "gray10",
+           color = "white",
+           width = 0.95) +
+  geom_text(aes(label = cumsum(cases)),
+            vjust = -0.5,   # moves labels above bars
+            size = 3.5) +
+  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  labs(
+    x = "Time (in days)",
+    y = "Cases",
+    title = "Cumulative  cases"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 11)
+  )
+
+gd <- df %>%
+  ggplot(aes(x = time, y = cumsum(deaths))) +
+  geom_bar(stat = "identity", fill = "gray10",
+           color = "white",
+           width = 0.95) +
+  geom_text(aes(label = cumsum(deaths)),
+            vjust = -0.5,   # moves labels above bars
+            size = 3.5) +
+  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  labs(
+    x = "Time (in days)",
+    y = "deaths",
+    title = "Cumulative  deaths"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 11)
+  )
+
+cowplot::plot_grid(gc, gd, labels = "AUTO")
+```
+
+
+The naive estimate of CFR, denoted as $b_t$, is calculated as the ratio of cumulative deaths $D_t$ to cumulative cases $C_t$ at time $t$
+$$b_t = \frac{D_t}{C_t} $$. 
+
+Applying this formula directly to our dataset yields the $b_t$ values shown in the figure below.
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+df = df %>% 
+  mutate(naive_cfr = cumsum(deaths)/cumsum(cases)) 
+
+df %>% ggplot(aes(x = time, y = naive_cfr)) +
+  geom_point() +
+  geom_line(linewidth = 1.4, color = "#008080") +
+  geom_text(aes(label = naive_cfr),
+            vjust = -0.5,   # moves labels above bars
+            size = 3.5) +
+  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  labs(
+    x = "Time (in days)",
+    y = "naive CFR",
+    title = "Naive CFR"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 11)
+  )
+```
+This approach, while straightforward, does not account for the temporal lag between case reporting and death occurrence, which can lead to biased estimates (underestimates), particularly during the early stages of an outbreak or when case numbers are changing rapidly and many of them with unknown outcome.
+
+## Unbiased CFR
+To understand how delays affect the naive CFR estimate, we can express $C_t$ and $D_t$ as function of the incidences $c_t$.
+
+The cumulative number of cases is simply the sum of all confirmed cases up to time $t$:
+$$C_t = \sum\limits_{i=0}^{t}c_i.$$
+However, the cumulative number of deaths represents a proportion of confirmed cases with known outcomes up to time $t$. This must account for the delay distribution between case confirmation and death
+
+$$ D_t = p_t\times \sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}$$
+
+where:
+
+- $c_i=$ number of cases confirmed on day $i$
+- $f_j$ = probability density function for the delay of $j$ days from case confirmation outcome
+- $p_t$ = proportion of cases that result in death (true CFR) at time $t$
+
+Therefore, the true  proportion of confirmed cases to die from the infection is then given by:
+
+$$ p_t = b_t\frac{\sum\limits_{i=0}^{t}c_i}{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}.$$
+
+In practice, the delay distribution $f_j$ is estimated from samples of onset-to-outcome data. However, when deaths are few or absent during the early stages of an outbreak, assumptions about $f_j$ must be made based on literature from previous outbreaks of the same or similar diseases.
+
+For example, suppose we have obtained the onset-to-outcome distribution for the dataset in our example. This distribution, shown in the figure below, characterizes the probability of death occurring $j$ days after case confirmation.
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+df$delay <- c(0.2, 0.4, 0.3, 0.1)
+gf <- df %>%
+  ggplot(aes(x = time, y = delay)) +
+  geom_bar(stat = "identity", fill = "brown",
+           color = "white",
+           width = 0.95) +
+  geom_text(aes(label = delay),
+            vjust = -0.5,   # moves labels above bars
+            size = 3.5) +
+  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  labs(
+    y = "Probability",
+    x = "Time (in days)",
+    title = "Generation time distribution"
+  ) +
+  theme_classic() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 11)
+  )
+gf
+```
+
+Then we can use to produce estimated for $p_t$ as follows:
+
+- At $t = 1$: we observe $C_1 = 3, D_1 = 1$, giving a naive estimate $b_1 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 1 is
+
+ $$ D_1 = p_1*\sum\limits_{i=0}^{1}\sum\limits_{j=0}^{i}c_{1}f_{1-j} = p_1*c_1*f_1= p_1*3*0.2 = 0.6*p_1 $$
+ 
+ where $p_1$ represents the true CFR. The factor $3\times0.2=0.6$  represents the expected proportion of cases with known outcomes by day 1, given the delay distribution. Hence 
+ $$ b_1 = \frac{D_1}{C_1} = \frac{p_1*0.6}{3}$$
+
+Solving for $p_1$, using the fact that $b_1 = = \frac{1}{3}$, gives
+$$\Rightarrow p_1 = \frac{b_1*3}{0.6} = \frac{1}{0.6} = 1.67 $$
+- At $t = 2$: we observe $C_2 = 4, D_1 = 1$, giving a naive estimate $b_2 = \frac{1}{4}$. 
+
+Accounting for delays, the expected number of deaths by day 2 is
+ $$ D_1 = p_2*\sum\limits_{i=1}^{2}\sum\limits_{j=0}^{i}c_{i}f_{i-j} = p_2\times [c_2*f_1 + c_1*(f_1+f_2)] = p_2 [1*0.2 + 3*(0.4+0.2)] = p_2*2 $$
+Solving for $p_2$, gives
+$$\Rightarrow p_2 = \frac{b_2*4}{2} = \frac{1}{2} = 0.5 $$
