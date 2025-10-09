@@ -470,7 +470,6 @@ covid_serial_interval <-
 covid_incubation <- epiparameter::epiparameter_db(
   disease = "covid",
   epi_name = "incubation",
-  author = "Natalie",
   single_epiparameter = TRUE
 )
 
