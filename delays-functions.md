@@ -167,8 +167,8 @@ epiparameter::generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  2.558096  7.177417  1.605997 15.868883  2.293384  4.738138  2.465176
- [8]  8.925711  4.342779  4.841204
+ [1]  7.490212  2.867394  6.042125  2.732953  2.407026  4.988515 15.659911
+ [8]  5.026879  4.072554  2.295251
 ```
 
 ::::::::: instructor
@@ -465,45 +465,6 @@ serial_interval_covid
     0.57
 ```
 
-Assuming a COVID-19 scenario, let's use the first 60 days of the `example_confirmed` data set from the `{EpiNow2}` package as `reported_cases` and the recently created `serial_interval_covid` object as inputs to estimate the time-varying reproduction number using `EpiNow2::epinow()`.
-
-
-``` r
-# Set 4 cores to be used in parallel computations
-withr::local_options(list(mc.cores = 4))
-
-epinow_estimates_cg <- EpiNow2::epinow(
-  # cases
-  data = example_confirmed[1:60],
-  # delays
-  generation_time = EpiNow2::generation_time_opts(serial_interval_covid)
-)
-```
-
-``` output
-WARN [2025-10-10 12:21:00] epinow: There were 1 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-10-10 12:21:00] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
-base::plot(epinow_estimates_cg)
-```
-
-<img src="fig/delays-functions-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
-
-The `plot()` output includes the estimated cases by date of infection, which are reconstructed from the reported cases and delays.
-
-:::::::::: callout
-
-### Warning
-
-Using the serial interval instead of the generation time is an alternative that can propagate bias in your estimates, even more so in diseases with reported pre-symptomatic transmission. ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465))
-
-::::::::::::::::::
-
 ::::::::::::::::::: instructor
 
 We can stop the livecoding at this stage and move on with the practical.
@@ -614,7 +575,7 @@ epinow_estimates_cgi <- EpiNow2::epinow(
 base::plot(epinow_estimates_cgi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
 
 Try to complement the `delays` argument with a reporting delay like the `reporting_delay_fixed` object of the previous episode.
 
@@ -626,13 +587,19 @@ Try to complement the `delays` argument with a reporting delay like the `reporti
 
 ### How much has it changed?
 
-After adding the incubation period, discuss:
+Compare three runs of `EpiNow2::epinow()`:
+
+- Use only the generation time
+- Add the incubation time
+- Add the incubation time and reporting delay
+
+After adding all delays, discuss:
 
 - Does the trend of the model fit in the "Estimate" section change?
 - Has the uncertainty changed?
 - How would you explain or interpret any of these changes?
 
-Compare all the `{EpiNow2}` figures generated previously.
+Compare all the `{EpiNow2}` figures generated in the three runs.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -753,21 +720,11 @@ epinow_estimates_egi <- EpiNow2::epinow(
   generation_time = EpiNow2::generation_time_opts(serial_interval_ebola),
   delays = EpiNow2::delay_opts(incubation_period_ebola)
 )
-```
 
-``` output
-WARN [2025-10-10 12:22:48] epinow: There were 2 divergent transitions after warmup. See
-https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
-to find out why this is a problem and how to eliminate them. - 
-WARN [2025-10-10 12:22:48] epinow: Examine the pairs() plot to diagnose sampling problems
- - 
-```
-
-``` r
 plot(epinow_estimates_egi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 
 ::::::::::::::::::::::::::
 
@@ -921,7 +878,7 @@ epinow_estimates_igi <- EpiNow2::epinow(
 plot(epinow_estimates_igi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
 
 ::::::::::::::::::::::::::
 
