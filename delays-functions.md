@@ -72,18 +72,21 @@ covid_serialint <-
   )
 ```
 
-Now, we have an epidemiological parameter we can use in our analysis! For example, to quantify transmission we can use the serial interval as an approximation of the generation. In the chunk below we replaced the **summary statistics** output values of `covid_serialint` as inputs for `EpiNow2::LogNormal()`:
+Now, we have an epidemiological parameter that we can use in our analysis! 
+However, we can't use this object _directly_ for analysis.
+For example, to quantify transmission, we often use the serial interval distribution as an approximation of the generation. 
+To do this we need to apply additional functions to an `<epiparameter>` object to 
+extract its **summary statistics** or **distribution parameters**. 
+These outputs can then be used as inputs for `EpiNow2::LogNormal()` or `EpiNow2::Gamma()`,
+just as we did in the previous episode.
 
-```r
-generation_time <- 
-  EpiNow2::LogNormal(
-    mean = covid_serialint$summary_stats$mean, # replaced!
-    sd = covid_serialint$summary_stats$sd, # replaced!
-    max = 20
-  )
-```
+In this episode, we will use the **distribution functions** that `{epiparameter}` provides to get 
+descriptive values like the median, maximum value (`max`), percentiles, or quantiles.
+This set of functions can operate on **any distribution** that can be included in an `<epiparameter>` object: 
+Gamma, Weibull, Lognormal, Negative Binomial, Geometric, and Poisson,
+which are mostly used in outbreak analytics.
 
-In this episode, we will use the **distribution functions** that `{epiparameter}` provides to get descriptive values like the median, maximum value (`max`), percentiles, or quantiles for from any `<epiparameter>` class object. These will be useful downstream in your analysis pipeline!
+You'll need these outputs in the next episodes to power your analysis pipelines — so let's make sure you're comfortable working with them before moving on!
 
 
 ::::::::::::::::::: checklist
@@ -164,8 +167,8 @@ epiparameter::generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1] 3.365875 2.441190 7.294705 7.812407 7.069455 8.665308 2.615325 2.033748
- [9] 4.857128 2.732509
+ [1]  2.558096  7.177417  1.605997 15.868883  2.293384  4.738138  2.465176
+ [8]  8.925711  4.342779  4.841204
 ```
 
 ::::::::: instructor
@@ -475,7 +478,17 @@ epinow_estimates_cg <- EpiNow2::epinow(
   # delays
   generation_time = EpiNow2::generation_time_opts(serial_interval_covid)
 )
+```
 
+``` output
+WARN [2025-10-10 12:21:00] epinow: There were 1 divergent transitions after warmup. See
+https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
+to find out why this is a problem and how to eliminate them. - 
+WARN [2025-10-10 12:21:00] epinow: Examine the pairs() plot to diagnose sampling problems
+ - 
+```
+
+``` r
 base::plot(epinow_estimates_cg)
 ```
 
@@ -743,10 +756,10 @@ epinow_estimates_egi <- EpiNow2::epinow(
 ```
 
 ``` output
-WARN [2025-10-09 18:37:50] epinow: There were 1 divergent transitions after warmup. See
+WARN [2025-10-10 12:22:48] epinow: There were 2 divergent transitions after warmup. See
 https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup
 to find out why this is a problem and how to eliminate them. - 
-WARN [2025-10-09 18:37:50] epinow: Examine the pairs() plot to diagnose sampling problems
+WARN [2025-10-10 12:22:48] epinow: Examine the pairs() plot to diagnose sampling problems
  - 
 ```
 
