@@ -38,4 +38,3 @@ sarscov2_input <- readr::read_csv(file.path(
   "data",
   "sarscov2_cases_deaths.csv"
 ))
-
