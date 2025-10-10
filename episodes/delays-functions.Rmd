@@ -400,7 +400,7 @@ We can stop the livecoding at this stage and move on with the practical.
 
 Let's say that you need to quantify the transmission of an Ebola outbreak. 
 You will use the serial interval as an approximation of the generation time for `{EpiNow2}`.
-The `{epiparameter}` will help you to get access to the parameter estimated from historical outbreaks.
+The `{epiparameter}` will give you access to the parameter estimated from historical outbreaks.
 
 Follow these steps:
 
@@ -419,7 +419,7 @@ When connecting `{epiparameter}` and `{EpiNow2}`, there is one step that is susc
 
 In `<epiparameter>`, the output line `Distribution:` determines the function to use from `{EpiNow2}`:
 
-We choose `EpiNow2::Gamma()` if we get:
+We choose `EpiNow2::Gamma()` if in `<epiparameter>` we get:
 
 ```
 Distribution: gamma (days)
@@ -428,7 +428,7 @@ Parameters:
   scale: 6.490
 ```
 
-We choose `EpiNow2::LogNormal()` if we get:
+We choose `EpiNow2::LogNormal()` if in `<epiparameter>` we get:
 
 ```
 Distribution: lnorm (days)
