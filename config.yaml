@@ -20,7 +20,7 @@ carpentry: 'epiverse-trace'
 title: 'Real-time analysis and forecasting for outbreak analytics with R'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: 
+created:
 
 # Comma-separated list of keywords for the lesson
 keywords: 'forecasts, epidemic models, interventions'
@@ -64,7 +64,7 @@ contact: 'andree.valle-campos@lshtm.ac.uk'
 # - another-learner.md
 
 # Order of episodes in your lesson
-episodes: 
+episodes:
 - delays-access.Rmd
 - quantify-transmissibility.Rmd
 - delays-functions.Rmd
@@ -72,16 +72,15 @@ episodes:
 - severity-static.Rmd
 - superspreading-estimate.Rmd
 - superspreading-simulate.Rmd
-- how-cfr-adjust-delays.Rmd
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
