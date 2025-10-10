@@ -72,7 +72,7 @@ covid_serialint <-
 
 Now, we have an epidemiological parameter that we can use in our analysis! 
 However, we can't use this object _directly_ for analysis.
-For example, to quantify transmission, we often use the serial interval distribution as an approximation of the generation. 
+For example, to quantify transmission, we often use the serial interval distribution as an approximation of the generation time. 
 To do this we need to apply additional functions to an `<epiparameter>` object to 
 extract its **summary statistics** or **distribution parameters**. 
 These outputs can then be used as inputs for `EpiNow2::LogNormal()` or `EpiNow2::Gamma()`,
@@ -230,7 +230,7 @@ covid_serialint_discrete
 We identify this change in the `Distribution:` output line of the `<epiparameter>` object. Double check this line:
 
 ```
-Distribution: discrete lnorm
+Distribution: discrete lnorm (days)
 ```
 
 While for a **continuous** distribution, we plot the *Probability Density Function (PDF)*, for a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
@@ -255,30 +255,14 @@ The **incubation period** distribution is a useful delay to assess the length of
 
 Calculate:
 
-- Within what exact time frame do 99% of individuals exhibiting COVID-19 symptoms exhibit them after infection?
+- Within what exact time frame do 99% of individuals exhibiting COVID-19 symptoms exhibit them after infection? Get an integer as a response.
 
 ::::::::::::::::: hint
 
 What delay distribution measures the time between infection and the onset of symptoms?
+For a refresher, you can read the tutorial [Glossary](../learners/reference.md).
 
 The probability functions for `<epiparameter>` **discrete** distributions are the same that we used for the *continuous* ones!
-
-```{r,eval=FALSE}
-# plot to have a visual reference
-plot(covid_serialint_discrete, xlim = c(0, 20))
-
-# density value at quantile value 10 (day)
-density(covid_serialint_discrete, at = 10)
-
-# cumulative probability at quantile value 10 (day)
-epiparameter::cdf(covid_serialint_discrete, q = 10)
-
-# In what quantile value (days) do we have the 60% cumulative probability?
-quantile(covid_serialint_discrete, p = 0.6)
-
-# generate random values
-epiparameter::generate(covid_serialint_discrete, times = 10)
-```
 
 ::::::::::::::::::::::
 
@@ -303,9 +287,12 @@ Now, _Is this result expected in epidemiological terms?_
 
 ::::::::::::::::::::::::::
 
-::::::::::::::::: solution
+:::::::::::::::::::::::::::::::::::::::::::
 
-### How to create a distribution plot?
+
+::::::::::::::::: instructor
+
+**How to create a distribution plot?**
 
 From a maximum value with `quantile()`, we can create a sequence of quantile values as a numeric vector and calculate `density()` values for each:
 
@@ -341,8 +328,6 @@ quantile(covid_serialint_discrete, p = 0.99) %>%
 
 ::::::::::::::::::::::::::
 
-:::::::::::::::::::::::::::::::::::::::::::
-
 
 ## Plug-in `{epiparameter}` to `{EpiNow2}`
 
@@ -377,6 +362,109 @@ serial_interval_covid
 We can stop the livecoding at this stage and move on with the practical.
 
 :::::::::::::::::::
+
+::::::::::::::::::::::: challenge
+
+## LogNormal or Gamma?
+
+Let's say that you need to quantify the transmission of an Ebola outbreak. 
+You will use the serial interval as an approximation of the generation time for `{EpiNow2}`.
+The `{epiparameter}` will help you to get access to the parameter estimated from historical outbreaks.
+
+Follow these steps:
+
+- Get access to the `serial interval` distribution of `Ebola` using `{epiparameter}`.
+- Access to one entry from the study with the highest sample size.
+- Print the output and read the description.
+- Identify which probability distribution (e.g., Gamma, Lognormal, etc.) was used by authors to model the delay.
+- Extract the distribution parameters for the corresponding probability distribution.
+- Calculate an exact maximum value for the delay distribution (e.g., the  99th percentile). 
+- Plug-in the distribution parameters from the `<epiparameter>` to the corresponding probability distribution function in `{EpiNow2}`
+(e.g., `EpiNow2::Gamma()`, `EpiNow2::LogNormal()`, etc.).
+
+:::::::::::::::: hint
+
+When connecting `{epiparameter}` and `{EpiNow2}`, there is one step that is susceptible to mistakes. 
+
+In `<epiparameter>`, the output line `Distribution:` determines the function to use from `{EpiNow2}`:
+
+We choose `EpiNow2::Gamma()` if we get:
+
+```
+Distribution: gamma (days)
+Parameters:
+  shape: 2.188
+  scale: 6.490
+```
+
+We choose `EpiNow2::LogNormal()` if we get:
+
+```
+Distribution: lnorm (days)
+Parameters:
+  meanlog: 1.386
+  sdlog: 0.568
+```
+
+::::::::::::::::
+
+:::::::::::::::::::: solution
+
+```{r}
+library(tidyverse)
+
+# 1. access a serial interval
+ebola_serialint <- epiparameter::epiparameter_db(
+  disease = "ebola",
+  epi_name = "serial",
+  single_epiparameter = TRUE
+)
+
+ebola_serialint
+
+
+# 2. extract parameters from {epiparameter} object
+ebola_serialint_params <- epiparameter::get_parameters(ebola_serialint)
+
+ebola_serialint_params
+
+
+# 3. get a maximum value
+ebola_serialint_max <- ebola_serialint %>% 
+  epiparameter::discretise() %>% 
+  quantile(p = 0.99)
+
+ebola_serialint_max
+
+
+# 4. adapt {epiparameter} to {EpiNow2} distribution inferfase
+ebola_generationtime <- EpiNow2::Gamma(
+  shape = ebola_serialint_params["shape"],
+  scale = ebola_serialint_params["scale"],
+  max = ebola_serialint_max
+)
+
+ebola_generationtime
+```
+
+```{r}
+# plot the `epiparameter` class object
+class(ebola_serialint)
+plot(ebola_serialint)
+```
+
+```{r}
+# plot the `EpiNow2` class object
+class(ebola_generationtime)
+plot(ebola_generationtime)
+```
+
+Plotting distributions from the `{EpiNow2}` interface always gives a discretized output.
+From the legend: `PMF` stants for Probability Mass Function and `CMF` stants for Cummulative Mass Function.
+
+::::::::::::::::::::
+
+:::::::::::::::::::::::
 
 ## Adjusting for reporting delays
 
