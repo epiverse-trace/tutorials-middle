@@ -180,11 +180,53 @@ Accounting for delays, the expected number of deaths by day 3 is
  $$ \Rightarrow D_3 =  p_3\times[3*0.2 + 1*(0.4+0.2)+3*(0.2+0.4+0.3)] = p_3*3.9$$
 Solving for $p_3$, gives
 $$\Rightarrow p_3 = \frac{b_3*7}{3.9} = \frac{1}{3.9} = 0.26 $$
+
+:::: challenge
+## Can you do this?
+
+- Calculate $p_t$ at time $t$.
+
+::: solution
+
+Apply the formula to get: 
+
 - $t = 4$: we observe $C_4 = 9, D_4 = 1$, giving a naive estimate $b_4 = \frac{1}{9}$. 
 
 Accounting for delays, the expected number of deaths by day 3 is
- $$ D_1 = p_4*\sum\limits_{i=1}^{4}\sum\limits_{j=0}^{i}c_{i}f_{i-j} = $$
- $$ \Rightarrow D_4 = p_4\times [c_4*f_1 +c_3*(f_1 +f_2) + c_2*(f_1+f_2+f_3) + c_1*(f_1+f_2+f_3+f_4)] $$
- $$ \Rightarrow D_4 =  p_4\times[2*0.2 + 3*(0.2+0.4)+1*(0.2+0.4+0.3) +3*(0.2+0.4+0.3+0.1)] = p_4*6.1$$
+ $$ D_4 = p_4*\sum\limits_{i=1}^{4}\sum\limits_{j=0}^{i}c_{i}f_{i-j} = $$
+ $$  = p_4\times [c_4*f_1 +c_3*(f_1 +f_2) + c_2*(f_1+f_2+f_3) + c_1*(f_1+f_2+f_3+f_4)] $$
+ $$ =  p_4\times[2*0.2 + 3*(0.2+0.4)+1*(0.2+0.4+0.3) +3*(0.2+0.4+0.3+0.1)] = p_4*6.1$$
 Solving for $p_4$, gives
 $$\Rightarrow p_3 = \frac{b_4*9}{6.1} = \frac{1}{6.1} = 0.16 $$
+
+:::
+
+:::::
+
+
+Once we calculate the delay-adjusted   $CFR$ for $t = 1,2,..., 4$, we can draw its curve, as shown in the figure below.
+
+```{r, warning=FALSE, echo=FALSE}
+df$cfr <- c(1.67, 0.5, 0.26, 0.16)
+
+df %>%
+  ggplot(aes(x = time, y = cfr)) +
+  geom_point() +
+  geom_line(color = "blue3") +
+  geom_text(
+    aes(label = cfr),
+    vjust = -0.5,
+    # moves labels above bars
+    size = 3.5
+  ) +
+  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  labs(
+    x = "Time (in days)",
+    y = "Delay-adjusted CFR",
+    title = "Delay-adjusted CFR"
+  ) +
+  theme_classic() +
+  theme(plot.title = element_text(hjust = 0.5, size = 11))
+
+```
+
