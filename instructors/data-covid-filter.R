@@ -19,7 +19,7 @@ incidence_class <- incidence2::covidregionaldataUK %>%
   # compute the daily incidence
   incidence2::incidence(
     date_index = "date",
-    counts = c("cases_new","deaths_new"),
+    counts = c("cases_new", "deaths_new"),
     date_names_to = "date",
     complete_dates = TRUE
   ) %>%
@@ -58,8 +58,8 @@ incidence_class %>%
 
 covid_incidence2 <- incidence_class %>%
   cfr::prepare_data(
-    cases_variable = "cases_new",
-    deaths_variable = "deaths_new") %>%
+                    cases_variable = "cases_new",
+                    deaths_variable = "deaths_new") %>%
   as_tibble()
 
 covid_incidence2
