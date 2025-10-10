@@ -430,8 +430,8 @@ ebola_serialint_params
 
 
 # 3. get a maximum value
-ebola_serialint_max <- ebola_serialint %>% 
-  epiparameter::discretise() %>% 
+ebola_serialint_max <- ebola_serialint %>%
+  epiparameter::discretise() %>%
   quantile(p = 0.99)
 
 ebola_serialint_max
