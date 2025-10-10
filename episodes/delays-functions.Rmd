@@ -24,7 +24,7 @@ editor_options:
 
 ## Prerequisites
 
-- Complete tutorial [Access epidemiological delay distributions](../episodes/delays-functions.md)
+- Complete tutorial [Access epidemiological delay distributions](../episodes/delays-access.md)
 - Complete tutorial [Quantifying transmission](../episodes/quantify-transmissibility.md)
 
 This episode requires you to be familiar with:
