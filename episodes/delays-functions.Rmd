@@ -161,11 +161,17 @@ The **serial interval** is important in the optimisation of contact tracing sinc
 
 With the COVID-19 serial interval (`covid_serialint`) calculate:
 
-- How much more of the backward cases could be captured if the contact tracing method considered contacts up to 6 days pre-onset compared to 2 days pre-onset?
+- How much would expanding the contact tracing window from 2 to 6 days before symptom onset improve the detection of potential infectors?
 
 ::::::::::::::::: hint
 
-In Figure 5 from the [R probability functions for the normal distribution](https://web.archive.org/web/20240210121034/https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), the shadowed section represents a cumulative probability of `0.997` for the quantile value at `x = 2`.
+The serial interval is the time between symptom onset in an infector and symptom onset in their infectee.
+
+We can use the **serial interval distribution** to quantify the probability of detecting an infector from a new case. 
+This probability can be calculated directly from the assumed distribution. 
+Refer to Figure 2 in [Davis et al., 2020](https://assets.publishing.service.gov.uk/media/61e9ab3f8fa8f50597fb3078/S0523_Oxford_-_Backwards_contact_tracing.pdf).
+
+For an object class `<epiparameter>`, the cumulative probability can be computed using `epiparameter::cdf()`.
 
 ::::::::::::::::::::::
 
@@ -176,15 +182,27 @@ plot(covid_serialint)
 ```
 
 ```{r,eval=TRUE}
-epiparameter::cdf(covid_serialint, q = 2)
-epiparameter::cdf(covid_serialint, q = 6)
+# calculate probability of finding backward cases with contact traicing window of 2 days
+window_2 <- epiparameter::cdf(covid_serialint, q = 2)
+
+window_2
+
+# calculate probability of finding backward cases with contact traicing window of 6 days
+window_6 <- epiparameter::cdf(covid_serialint, q = 6)
+
+window_6
+
+# calculate the difference
+window_6 - window_2
 ```
 
 Given the COVID-19 serial interval:
 
-- A contact tracing method considering contacts up to 2 days pre-onset will capture around 11.1% of backward cases.
+- A contact tracing method considering contacts up to 2 days pre-onset will capture around `r round(window_2*100, 1)`% of backward cases.
 
-- If this period is extended to 6 days pre-onset, this could include 76.2% of backward contacts.
+- If this period is extended to 6 days pre-onset, this could include `r round(window_6*100, 1)`% of backward contacts.
+
+- About `r round((window_6 - window_2)*100, 1)`% more backward cases could be captured when extending tracing from 2 to 6 days.
 
 ::::::::::::::::::::::::::
 
@@ -253,9 +271,11 @@ covid_serialint_discrete_max <-
 
 The **incubation period** distribution is a useful delay to assess the length of active monitoring or quarantine ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)). Similarly, delays from symptom onset to recovery (or death) will determine the required duration of health care and case isolation ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
+The library of parameters in the package `{epiparameter}` contains the parameters reported by [Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504).
+
 Calculate:
 
-- Within what exact time frame do 99% of individuals exhibiting COVID-19 symptoms exhibit them after infection? Get an integer as a response.
+- How many days after infection do 99% of people who will develop COVID-19 symptoms actually show symptoms? Get an integer as a response.
 
 ::::::::::::::::: hint
 
@@ -269,21 +289,26 @@ The probability functions for `<epiparameter>` **discrete** distributions are th
 ::::::::::::::::: solution
 
 ```{r,eval=TRUE}
+# the delay from infection to onset is called incubation period
+# access the incubation period for covid
 covid_incubation <-
   epiparameter::epiparameter_db(
     disease = "covid",
     epi_name = "incubation",
+    author = "lauer",
     single_epiparameter = TRUE
   )
 
+# to get an integer as a response, discretize the distribution
 covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
 
+# calculate the quantile or value at the percertile 99th from the distribution
 quantile(covid_incubation_discrete, p = 0.99)
 ```
 
-99% of those who develop COVID-19 symptoms will do so within 16 days of infection.
+99% of those who develop COVID-19 symptoms will do so within `r quantile(covid_incubation_discrete, p = 0.99)` days of infection.
 
-Now, _Is this result expected in epidemiological terms?_
+Now, Is this result consistent with the duration of quarantine currently recommended in practice?
 
 ::::::::::::::::::::::::::
 
@@ -410,16 +435,16 @@ Parameters:
 
 :::::::::::::::::::: solution
 
-```{r}
-library(tidyverse)
-
+```{r, message=FALSE}
 # 1. access a serial interval
 ebola_serialint <- epiparameter::epiparameter_db(
   disease = "ebola",
   epi_name = "serial",
   single_epiparameter = TRUE
 )
+```
 
+```{r}
 ebola_serialint
 
 
@@ -449,13 +474,13 @@ ebola_generationtime
 
 ```{r}
 # plot the `epiparameter` class object
-class(ebola_serialint)
+# class(ebola_serialint)
 plot(ebola_serialint)
 ```
 
 ```{r}
 # plot the `EpiNow2` class object
-class(ebola_generationtime)
+# class(ebola_generationtime)
 plot(ebola_generationtime)
 ```
 
