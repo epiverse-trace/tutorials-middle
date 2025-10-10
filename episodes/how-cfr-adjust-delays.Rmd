@@ -230,3 +230,42 @@ df %>%
 
 ```
 
+::::: challenge
+## Naive vs adjusted $R_t$
+
+- What differences do you notice between the delay-adjusted CFR and the naive CFR$?
+
+::: hint
+
+This figure may give you a clue
+
+```{r, warning=FALSE, echo=FALSE}
+all_g <- df %>%
+  ggplot(aes(x = time)) +
+  geom_line(aes(y = naive_cfr, color = "Naive"), linewidth = 1.5) +
+  geom_line(aes(y = cfr, color = "Delay-adjusted"), linewidth = 1.5) +
+  scale_color_manual(
+    name = "Legend",
+    values = c(
+      "Naive" = "#E69F00",
+      "Delay-adjusted" = "#009E73"
+    )
+  ) +
+  scale_x_continuous(breaks = seq(1, 8, 1)) +
+  labs(
+    x = "Time (in days)",
+    y = "CFR",
+    title = "Comparison of different  CFR  curves"
+  ) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5, size = 11))
+all_g
+```
+
+:::
+::: solution
+
+The naive estimate can underestimate the CFR value at the early stages of the epidemic. 
+
+:::
+:::::
