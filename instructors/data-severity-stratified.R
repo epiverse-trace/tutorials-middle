@@ -49,7 +49,7 @@ readr::read_rds(file.path(
 
 # alternative ------------------------------------------------------------
 
-mers_linelist %>% 
+mers_linelist %>%
   # converto to incidence2 object
   incidence2::incidence(
     date_index = c("dt_onset", "dt_death"),
