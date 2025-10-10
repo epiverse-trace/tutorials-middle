@@ -575,6 +575,49 @@ functions is accessible with the three double-colon notation:
 <br><h3 id="delays-functions-headingInstructor2">
 <a href="delays-functions.html#headingInstructor2">Instructor Note</a><a class="anchor" aria-label="anchor" href="#delays-functions-headingInstructor2"></a>
 </h3>
+<p><strong>How to create a distribution plot?</strong></p>
+<p>From a maximum value with <code>quantile()</code>, we can create a
+sequence of quantile values as a numeric vector and calculate
+<code>density()</code> values for each:</p>
+<div class="codewrapper sourceCode" id="cb31">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># create a discrete distribution visualisation</span></span>
+<span><span class="co"># from a maximum value from the distribution</span></span>
+<span><span class="fu">quantile</span><span class="op">(</span><span class="va">covid_serialint_discrete</span>, p <span class="op">=</span> <span class="fl">0.99</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># generate quantile values</span></span>
+<span>  <span class="co"># as a sequence for each natural number</span></span>
+<span>  <span class="fu">seq</span><span class="op">(</span><span class="fl">1L</span>, to <span class="op">=</span> <span class="va">.</span>, by <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># coerce numeric vector to data frame</span></span>
+<span>  <span class="fu">as_tibble_col</span><span class="op">(</span>column_name <span class="op">=</span> <span class="st">"quantile_values"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span></span>
+<span>    <span class="co"># calculate density values</span></span>
+<span>    <span class="co"># for each quantile in the density function</span></span>
+<span>    density_values <span class="op">=</span></span>
+<span>      <span class="fu">density</span><span class="op">(</span></span>
+<span>        x <span class="op">=</span> <span class="va">covid_serialint_discrete</span>,</span>
+<span>        at <span class="op">=</span> <span class="va">quantile_values</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># create plot</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span></span>
+<span>    <span class="fu">aes</span><span class="op">(</span></span>
+<span>      x <span class="op">=</span> <span class="va">quantile_values</span>,</span>
+<span>      y <span class="op">=</span> <span class="va">density_values</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_col</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><strong>Remember:</strong> In infections with pre-symptomatic
+transmission, serial intervals can have negative values (<a href="https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext" class="external-link">Nishiura
+et al., 2020</a>). When we use the <em>serial interval</em> to
+approximate the <em>generation time</em> we need to make this
+distribution with positive values only!</p>
+<hr>
+<br><h3 id="delays-functions-headingInstructor3">
+<a href="delays-functions.html#headingInstructor3">Instructor Note</a><a class="anchor" aria-label="anchor" href="#delays-functions-headingInstructor3"></a>
+</h3>
 <p>We can stop the livecoding at this stage and move on with the
 practical.</p>
 <hr>
