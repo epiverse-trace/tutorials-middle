@@ -74,7 +74,7 @@ covid_serialint <-
 
 Now, we have an epidemiological parameter that we can use in our analysis! 
 However, we can't use this object _directly_ for analysis.
-For example, to quantify transmission, we often use the serial interval distribution as an approximation of the generation. 
+For example, to quantify transmission, we often use the serial interval distribution as an approximation of the generation time. 
 To do this we need to apply additional functions to an `<epiparameter>` object to 
 extract its **summary statistics** or **distribution parameters**. 
 These outputs can then be used as inputs for `EpiNow2::LogNormal()` or `EpiNow2::Gamma()`,
@@ -167,8 +167,8 @@ epiparameter::generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  7.490212  2.867394  6.042125  2.732953  2.407026  4.988515 15.659911
- [8]  5.026879  4.072554  2.295251
+ [1] 7.950370 3.040222 2.430624 1.845850 6.523290 3.281676 1.669116 2.631555
+ [9] 5.252048 2.594544
 ```
 
 ::::::::: instructor
@@ -190,11 +190,17 @@ The **serial interval** is important in the optimisation of contact tracing sinc
 
 With the COVID-19 serial interval (`covid_serialint`) calculate:
 
-- How much more of the backward cases could be captured if the contact tracing method considered contacts up to 6 days pre-onset compared to 2 days pre-onset?
+- How much would expanding the contact tracing window from 2 to 6 days before symptom onset improve the detection of potential infectors?
 
 ::::::::::::::::: hint
 
-In Figure 5 from the [R probability functions for the normal distribution](https://web.archive.org/web/20240210121034/https://sakai.unc.edu/access/content/group/3d1eb92e-7848-4f55-90c3-7c72a54e7e43/public/docs/lectures/lecture13.htm#probfunc), the shadowed section represents a cumulative probability of `0.997` for the quantile value at `x = 2`.
+The serial interval is the time between symptom onset in an infector and symptom onset in their infectee.
+
+We can use the **serial interval distribution** to quantify the probability of detecting an infector from a new case. 
+This probability can be calculated directly from the assumed distribution. 
+Refer to Figure 2 in [Davis et al., 2020](https://assets.publishing.service.gov.uk/media/61e9ab3f8fa8f50597fb3078/S0523_Oxford_-_Backwards_contact_tracing.pdf).
+
+For an object class `<epiparameter>`, the cumulative probability can be computed using `epiparameter::cdf()`.
 
 ::::::::::::::::::::::
 
@@ -207,7 +213,11 @@ plot(covid_serialint)
 
 
 ``` r
-epiparameter::cdf(covid_serialint, q = 2)
+# calculate probability of finding backward cases
+# with contact traicing window of 2 days
+window_2 <- epiparameter::cdf(covid_serialint, q = 2)
+
+window_2
 ```
 
 ``` output
@@ -215,11 +225,24 @@ epiparameter::cdf(covid_serialint, q = 2)
 ```
 
 ``` r
-epiparameter::cdf(covid_serialint, q = 6)
+# calculate probability of finding backward cases
+# with contact traicing window of 6 days
+window_6 <- epiparameter::cdf(covid_serialint, q = 6)
+
+window_6
 ```
 
 ``` output
 [1] 0.7623645
+```
+
+``` r
+# calculate the difference
+window_6 - window_2
+```
+
+``` output
+[1] 0.6511917
 ```
 
 Given the COVID-19 serial interval:
@@ -227,6 +250,8 @@ Given the COVID-19 serial interval:
 - A contact tracing method considering contacts up to 2 days pre-onset will capture around 11.1% of backward cases.
 
 - If this period is extended to 6 days pre-onset, this could include 76.2% of backward contacts.
+
+- About 65.1% more backward cases could be captured when extending tracing from 2 to 6 days.
 
 ::::::::::::::::::::::::::
 
@@ -288,7 +313,7 @@ Parameters:
 We identify this change in the `Distribution:` output line of the `<epiparameter>` object. Double check this line:
 
 ```
-Distribution: discrete lnorm
+Distribution: discrete lnorm (days)
 ```
 
 While for a **continuous** distribution, we plot the *Probability Density Function (PDF)*, for a **discrete** distribution, we plot the *Probability Mass Function (PMF)*:
@@ -315,33 +340,18 @@ covid_serialint_discrete_max <-
 
 The **incubation period** distribution is a useful delay to assess the length of active monitoring or quarantine ([Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504)). Similarly, delays from symptom onset to recovery (or death) will determine the required duration of health care and case isolation ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
+The library of parameters in the package `{epiparameter}` contains the parameters reported by [Lauer et al., 2020](https://www.acpjournals.org/doi/10.7326/M20-0504).
+
 Calculate:
 
-- Within what exact time frame do 99% of individuals exhibiting COVID-19 symptoms exhibit them after infection?
+- How many days after infection do 99% of people who will develop COVID-19 symptoms actually show symptoms? Get an integer as a response.
 
 ::::::::::::::::: hint
 
 What delay distribution measures the time between infection and the onset of symptoms?
+For a refresher, you can read the tutorial [Glossary](../learners/reference.md).
 
 The probability functions for `<epiparameter>` **discrete** distributions are the same that we used for the *continuous* ones!
-
-
-``` r
-# plot to have a visual reference
-plot(covid_serialint_discrete, xlim = c(0, 20))
-
-# density value at quantile value 10 (day)
-density(covid_serialint_discrete, at = 10)
-
-# cumulative probability at quantile value 10 (day)
-epiparameter::cdf(covid_serialint_discrete, q = 10)
-
-# In what quantile value (days) do we have the 60% cumulative probability?
-quantile(covid_serialint_discrete, p = 0.6)
-
-# generate random values
-epiparameter::generate(covid_serialint_discrete, times = 10)
-```
 
 ::::::::::::::::::::::
 
@@ -349,43 +359,77 @@ epiparameter::generate(covid_serialint_discrete, times = 10)
 
 
 ``` r
+# the delay from infection to onset is called incubation period
+# access the incubation period for covid
 covid_incubation <-
   epiparameter::epiparameter_db(
     disease = "covid",
     epi_name = "incubation",
+    author = "lauer",
     single_epiparameter = TRUE
   )
+
+covid_incubation
 ```
 
 ``` output
-Using Linton N, Kobayashi T, Yang Y, Hayashi K, Akhmetzhanov A, Jung S, Yuan
-B, Kinoshita R, Nishiura H (2020). "Incubation Period and Other
-Epidemiological Characteristics of 2019 Novel Coronavirus Infections
-with Right Truncation: A Statistical Analysis of Publicly Available
-Case Data." _Journal of Clinical Medicine_. doi:10.3390/jcm9020538
-<https://doi.org/10.3390/jcm9020538>.. 
-To retrieve the citation use the 'get_citation' function
+Disease: COVID-19
+Pathogen: SARS-CoV-2
+Epi Parameter: incubation period
+Study: Lauer S, Grantz K, Bi Q, Jones F, Zheng Q, Meredith H, Azman A, Reich
+N, Lessler J (2020). "The Incubation Period of Coronavirus Disease 2019
+(COVID-19) From Publicly Reported Confirmed Cases: Estimation and
+Application." _Annals of Internal Medicine_. doi:10.7326/M20-0504
+<https://doi.org/10.7326/M20-0504>.
+Distribution: lnorm (days)
+Parameters:
+  meanlog: 1.629
+  sdlog: 0.419
 ```
 
 ``` r
+# to get an integer as a response, discretize the distribution
 covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
 
+covid_incubation_discrete
+```
+
+``` output
+Disease: COVID-19
+Pathogen: SARS-CoV-2
+Epi Parameter: incubation period
+Study: Lauer S, Grantz K, Bi Q, Jones F, Zheng Q, Meredith H, Azman A, Reich
+N, Lessler J (2020). "The Incubation Period of Coronavirus Disease 2019
+(COVID-19) From Publicly Reported Confirmed Cases: Estimation and
+Application." _Annals of Internal Medicine_. doi:10.7326/M20-0504
+<https://doi.org/10.7326/M20-0504>.
+Distribution: discrete lnorm (days)
+Parameters:
+  meanlog: 1.629
+  sdlog: 0.419
+```
+
+``` r
+# calculate the quantile or value at the percertile 99th from the distribution
 quantile(covid_incubation_discrete, p = 0.99)
 ```
 
 ``` output
-[1] 19
+[1] 13
 ```
 
-99% of those who develop COVID-19 symptoms will do so within 16 days of infection.
+99% of those who develop COVID-19 symptoms will do so within 13 days of infection.
 
-Now, _Is this result expected in epidemiological terms?_
+Now, Is this result consistent with the duration of quarantine recommended in practice during the COVID-19 pandemic?
 
 ::::::::::::::::::::::::::
 
-::::::::::::::::: solution
+:::::::::::::::::::::::::::::::::::::::::::
 
-### How to create a distribution plot?
+
+::::::::::::::::: instructor
+
+**How to create a distribution plot?**
 
 From a maximum value with `quantile()`, we can create a sequence of quantile values as a numeric vector and calculate `density()` values for each:
 
@@ -418,13 +462,11 @@ quantile(covid_serialint_discrete, p = 0.99) %>%
   geom_col()
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-13-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
 
 **Remember:** In infections with pre-symptomatic transmission, serial intervals can have negative values ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)). When we use the _serial interval_ to approximate the _generation time_ we need to make this distribution with positive values only!
 
 ::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::::::
 
 
 ## Plug-in `{epiparameter}` to `{EpiNow2}`
@@ -470,6 +512,155 @@ serial_interval_covid
 We can stop the livecoding at this stage and move on with the practical.
 
 :::::::::::::::::::
+
+::::::::::::::::::::::: challenge
+
+## LogNormal or Gamma?
+
+Let's say that you need to quantify the transmission of an Ebola outbreak. 
+You will use the serial interval as an approximation of the generation time for `{EpiNow2}`.
+The `{epiparameter}` will help you to get access to the parameter estimated from historical outbreaks.
+
+Follow these steps:
+
+- Get access to the `serial interval` distribution of `Ebola` using `{epiparameter}`.
+- Access to one entry from the study with the highest sample size.
+- Print the output and read the description.
+- Identify which probability distribution (e.g., Gamma, Lognormal, etc.) was used by authors to model the delay.
+- Extract the distribution parameters for the corresponding probability distribution.
+- Calculate an exact maximum value for the delay distribution (e.g., the  99th percentile). 
+- Plug-in the distribution parameters from the `<epiparameter>` to the corresponding probability distribution function in `{EpiNow2}`
+(e.g., `EpiNow2::Gamma()`, `EpiNow2::LogNormal()`, etc.).
+
+:::::::::::::::: hint
+
+When connecting `{epiparameter}` and `{EpiNow2}`, there is one step that is susceptible to mistakes. 
+
+In `<epiparameter>`, the output line `Distribution:` determines the function to use from `{EpiNow2}`:
+
+We choose `EpiNow2::Gamma()` if we get:
+
+```
+Distribution: gamma (days)
+Parameters:
+  shape: 2.188
+  scale: 6.490
+```
+
+We choose `EpiNow2::LogNormal()` if we get:
+
+```
+Distribution: lnorm (days)
+Parameters:
+  meanlog: 1.386
+  sdlog: 0.568
+```
+
+::::::::::::::::
+
+:::::::::::::::::::: solution
+
+
+``` r
+# 1. access a serial interval
+ebola_serialint <- epiparameter::epiparameter_db(
+  disease = "ebola",
+  epi_name = "serial",
+  single_epiparameter = TRUE
+)
+```
+
+
+``` r
+ebola_serialint
+```
+
+``` output
+Disease: Ebola Virus Disease
+Pathogen: Ebola Virus
+Epi Parameter: serial interval
+Study: WHO Ebola Response Team, Agua-Agum J, Ariyarajah A, Aylward B, Blake I,
+Brennan R, Cori A, Donnelly C, Dorigatti I, Dye C, Eckmanns T, Ferguson
+N, Formenty P, Fraser C, Garcia E, Garske T, Hinsley W, Holmes D,
+Hugonnet S, Iyengar S, Jombart T, Krishnan R, Meijers S, Mills H,
+Mohamed Y, Nedjati-Gilani G, Newton E, Nouvellet P, Pelletier L,
+Perkins D, Riley S, Sagrado M, Schnitzler J, Schumacher D, Shah A, Van
+Kerkhove M, Varsaneux O, Kannangarage N (2015). "West African Ebola
+Epidemic after One Year — Slowing but Not Yet under Control." _The New
+England Journal of Medicine_. doi:10.1056/NEJMc1414992
+<https://doi.org/10.1056/NEJMc1414992>.
+Distribution: gamma (days)
+Parameters:
+  shape: 2.188
+  scale: 6.490
+```
+
+``` r
+# 2. extract parameters from {epiparameter} object
+ebola_serialint_params <- epiparameter::get_parameters(ebola_serialint)
+
+ebola_serialint_params
+```
+
+``` output
+   shape    scale 
+2.187934 6.490141 
+```
+
+``` r
+# 3. get a maximum value
+ebola_serialint_max <- ebola_serialint %>%
+  epiparameter::discretise() %>%
+  quantile(p = 0.99)
+
+ebola_serialint_max
+```
+
+``` output
+[1] 45
+```
+
+``` r
+# 4. adapt {epiparameter} to {EpiNow2} distribution inferfase
+ebola_generationtime <- EpiNow2::Gamma(
+  shape = ebola_serialint_params["shape"],
+  scale = ebola_serialint_params["scale"],
+  max = ebola_serialint_max
+)
+
+ebola_generationtime
+```
+
+``` output
+- gamma distribution (max: 45):
+  shape:
+    2.2
+  rate:
+    0.15
+```
+
+
+``` r
+# plot the `epiparameter` class object
+plot(ebola_serialint)
+```
+
+<img src="fig/delays-functions-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
+
+
+``` r
+# plot the `EpiNow2` class object
+plot(ebola_generationtime)
+```
+
+<img src="fig/delays-functions-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+
+Plotting distributions from the `{EpiNow2}` interface always gives a discretized output.
+From the legend: `PMF` stants for Probability Mass Function and `CMF` stants for Cummulative Mass Function.
+
+::::::::::::::::::::
+
+:::::::::::::::::::::::
 
 ## Adjusting for reporting delays
 
@@ -575,7 +766,7 @@ epinow_estimates_cgi <- EpiNow2::epinow(
 base::plot(epinow_estimates_cgi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-16-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
 
 Try to complement the `delays` argument with a reporting delay like the `reporting_delay_fixed` object of the previous episode.
 
@@ -724,7 +915,7 @@ epinow_estimates_egi <- EpiNow2::epinow(
 plot(epinow_estimates_egi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 
 ::::::::::::::::::::::::::
 
@@ -878,7 +1069,7 @@ epinow_estimates_igi <- EpiNow2::epinow(
 plot(epinow_estimates_igi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-20-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
 
 ::::::::::::::::::::::::::
 
