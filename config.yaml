@@ -72,6 +72,7 @@ episodes:
 - severity-static.Rmd
 - superspreading-estimate.Rmd
 - superspreading-simulate.Rmd
+- how-cfr-adjust-delays.Rmd
 
 # Information for Learners
 learners:
