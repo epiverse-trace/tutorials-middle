@@ -182,12 +182,14 @@ plot(covid_serialint)
 ```
 
 ```{r,eval=TRUE}
-# calculate probability of finding backward cases with contact traicing window of 2 days
+# calculate probability of finding backward cases
+# with contact traicing window of 2 days
 window_2 <- epiparameter::cdf(covid_serialint, q = 2)
 
 window_2
 
-# calculate probability of finding backward cases with contact traicing window of 6 days
+# calculate probability of finding backward cases
+# with contact traicing window of 6 days
 window_6 <- epiparameter::cdf(covid_serialint, q = 6)
 
 window_6
@@ -474,13 +476,11 @@ ebola_generationtime
 
 ```{r}
 # plot the `epiparameter` class object
-# class(ebola_serialint)
 plot(ebola_serialint)
 ```
 
 ```{r}
 # plot the `EpiNow2` class object
-# class(ebola_generationtime)
 plot(ebola_generationtime)
 ```
 
