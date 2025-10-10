@@ -290,7 +290,7 @@ The probability functions for `<epiparameter>` **discrete** distributions are th
 
 ::::::::::::::::: solution
 
-```{r,eval=TRUE}
+```{r,message = FALSE}
 # the delay from infection to onset is called incubation period
 # access the incubation period for covid
 covid_incubation <-
@@ -301,8 +301,12 @@ covid_incubation <-
     single_epiparameter = TRUE
   )
 
+covid_incubation
+
 # to get an integer as a response, discretize the distribution
 covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
+
+covid_incubation_discrete
 
 # calculate the quantile or value at the percertile 99th from the distribution
 quantile(covid_incubation_discrete, p = 0.99)
@@ -310,7 +314,7 @@ quantile(covid_incubation_discrete, p = 0.99)
 
 99% of those who develop COVID-19 symptoms will do so within `r quantile(covid_incubation_discrete, p = 0.99)` days of infection.
 
-Now, Is this result consistent with the duration of quarantine currently recommended in practice?
+Now, Is this result consistent with the duration of quarantine recommended in practice during the COVID-19 pandemic?
 
 ::::::::::::::::::::::::::
 
