@@ -489,7 +489,7 @@ rolling_cfr_adjusted_end <-
 # bind by rows both output data frames
 bind_rows(
   rolling_cfr_naive %>%
-    mutate(method = "naive"),
+  mutate(method = "naive"),
   rolling_cfr_adjusted %>%
     mutate(method = "adjusted")
 ) %>%
