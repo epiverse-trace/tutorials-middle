@@ -90,13 +90,6 @@ In this tutorial we are going to learn how to use the `{cfr}` package to calcula
 We'll use the pipe `%>%` operator from the `{magrittr}` package to connect  functions from {cfr}, including others from the package `{dplyr}`. Hence, we will load the `{tidyverse}` package which contains both `{magrittr}` and `{dplyr}`.
 
 ```{r message=FALSE, warning=FALSE}
-# install packages if their are not already installed
-if (!require("pak")) install.packages("pak")
-if (!require("cfr")) pak::pak("cfr")
-if (!require("epiparameter")) pak::pak("epiparameter")
-if (!require("tidyverse")) pak::pak("tidyverse")
-if (!require("outbreaks")) pak::pak("outbreaks")
-
 # load packages
 library(cfr)
 library(epiparameter)
