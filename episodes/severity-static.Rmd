@@ -14,14 +14,13 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::: objectifs
+::::::::::::::::::::::::::::::::::::: objectives
 
 - Estimer le risque de létalité (RL) à partir de données épidémiologiques agrégées en utilisant la librairie `{cfr}`.
 
 - Estimer le RL ajusté au délai épidémiologique à l'aide des librairies `{epiparameter}` et `{cfr}`.
 
-- Estimer la sévérité ajustée au délai épidémiologique pour une série 
-chronologique en expansion en utilisant le package `{cfr}`.
+- Estimer la sévérité ajustée au délai épidémiologique pour une série chronologique en expansion en utilisant le package `{cfr}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -65,14 +64,14 @@ Nous pouvons évaluer le potentiel pandémique d'une épidémie à l'aide de deu
 ([Fraser et al. 2009](https://www.science.org/doi/full/10.1126/science.1176062),
 [CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).
 
-![Scénarios de planification pandémique du HHS basés sur le cadre d'évaluation de la gravité de la pandémie. Ce cadre utilise une mesure combinant la gravité clinique et la transmissibilité pour caractériser les scénarios de pandémie de grippe. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html))](../../../episodes/fig/cfr-hhs-scenarios-psaf.png){alt='L'axe horizontal représente la mesure de la gravité clinique, échelonnée de 1 à 7, où 1 correspond à faible, 4 à modérée et 7 à très grave. L'axe vertical représente la mesure de la transmissibilité, échelonnée de 1 à 5, où 1 correspond à faible, 3 à modérée et 5 à forte transmissibilité. Sur le graphique, les scénarios de planification d'une pandémie sont présentés en quatre quadrants (A, B, C et D). De gauche à droite, les scénarios sont: “variation saisonnière”, “pandémie modérée”, “pandémie grave” et “pandémie très grave”. À mesure que la gravité clinique augmente sur l'axe horizontal, ou que la transmissibilité augmente sur l'axe vertical, la gravité du scénario de planification de la pandémie augmente également.'}
+![Scénarios de planification pandémique du HHS basés sur le cadre d'évaluation de la gravité de la pandémie. Ce cadre utilise une mesure combinant la gravité clinique et la transmissibilité pour caractériser les scénarios de pandémie de grippe. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html))](fig/cfr-hhs-scenarios-psaf.png){alt='L'axe horizontal représente la mesure de la gravité clinique, échelonnée de 1 à 7, où 1 correspond à faible, 4 à modérée et 7 à très grave. L'axe vertical représente la mesure de la transmissibilité, échelonnée de 1 à 5, où 1 correspond à faible, 3 à modérée et 5 à forte transmissibilité. Sur le graphique, les scénarios de planification d'une pandémie sont présentés en quatre quadrants (A, B, C et D). De gauche à droite, les scénarios sont: “variation saisonnière”, “pandémie modérée”, “pandémie grave” et “pandémie très grave”. À mesure que la gravité clinique augmente sur l'axe horizontal, ou que la transmissibilité augmente sur l'axe vertical, la gravité du scénario de planification de la pandémie augmente également.'}
 
 Une approche épidémiologique pour estimer la gravité clinique consiste à quantifier le risque de létalité (RL). Le risque de létalité est la probabilité conditionnelle de décès en cas de diagnostic confirmé, calculée comme le rapport entre le nombre cumulé de décès dus à une maladie infectieuse et le nombre de
 cas diagnostiqués confirmés. Toutefois, le calcule de ce paramètre de cette façon au cours d'une épidémie tend à aboutir à un RL naïf ou biaisé, compte tenu du [délai](../../../learners/reference.md#delaydist) entre l'apparition de la maladie et le décès, qui varie considérablement au fur et à mesure que l'épidémie progresse et se stabilise aux derniers stades de l'épidémie ([Ghani et al. 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
 
-![Estimations du risque de létalité (RL) observé biaisé confirmé en fonction du temps (ligne épaisse), calculé comme le rapport entre le nombre cumulé de décès et de cas confirmés à un instant $t$. La valeur atteinte à la fin d'une épidémie (~30 mai) est le risque de létalité observé à la fin de l'épidémie. La ligne horizontale continue et les lignes pointillées indiquent la valeur du RL prédit et leurs intervalles de confiance à 95% (IC $95%$) des valeurs prédites du taux de mortalité ajusté au délai en utilisant uniquement les données observées jusqu'au 27 mars 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](../../../episodes/fig/cfr-pone.0006852.g003-fig_c.png){fig-alt="Les périodes sont pertinentes : Période 1 -- 15 jours où le RL est nul, ce qui indique qu'aucun décès n'a été signalé ; Période du 15 mars au 26 avril où le RL semble augmenter ; Période du 30 avril au 30 mai où l'estimation du RL se stabilise."}
+![Estimations du risque de létalité (RL) observé biaisé confirmé en fonction du temps (ligne épaisse), calculé comme le rapport entre le nombre cumulé de décès et de cas confirmés à un instant $t$. La valeur atteinte à la fin d'une épidémie (~30 mai) est le risque de létalité observé à la fin de l'épidémie. La ligne horizontale continue et les lignes pointillées indiquent la valeur du RL prédit et leurs intervalles de confiance à 95% (IC $95%$) des valeurs prédites du taux de mortalité ajusté au délai en utilisant uniquement les données observées jusqu'au 27 mars 2003. ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_c.png){fig-alt="Les périodes sont pertinentes : Période 1 -- 15 jours où le RL est nul, ce qui indique qu'aucun décès n'a été signalé ; Période du 15 mars au 26 avril où le RL semble augmenter ; Période du 30 avril au 30 mai où l'estimation du RL se stabilise."}
 
-::::::::::::::::::::::: instructeur
+::::::::::::::::::::::: instructor
 
 Les périodes sont pertinentes : Période 1 -- 15 jours où le RL est nul, ce qui indique qu'aucun décès n'a été signalé ; Période du 15 mars au 26 avril où le RL semble augmenter ; Période du 30 avril au 30 mai où l'estimation du RL se stabilise.
 
@@ -122,7 +121,7 @@ Quelles sont les sources de données qu'on peut utiliser pour estimer la gravit�
 [Verity et al, 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(20\)30243-7/fulltext) résume le spectre des cas de COVID-19 :
 
 ![Spectre des cas de COVID-19. Le CFR vise à estimer la proportion de décès parmi les cas confirmés d'une épidémie.
-([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(20\)30243-7/fulltext#gr1))](../../../episodes/fig/cfr-spectrum-cases-covid19.jpg)
+([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099\(20\)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
 
 - Au sommet de la pyramide, les cas définis comme **grave** ou **critiques** selon les critères établis par l'OMS. Ces cas auraient probablement été identifiés en milieu hospitalier, présentant une pneumonie virale atypique. Ils auraient été identifiés en Chine continentale et parmi ceux classés au niveau international comme émanants d'une transmission locale.
 - Beaucoup d'autres sont probablement **symptomatiques** (c'est-à-dire avec de la fièvre, de la toux ou des myalgies), mais ne nécessiteront peut-être pas d'hospitalisation. Ces cas auraient été identifiés grâce à leurs liens avec des voyageurs internationaux dans des zones à haut risque et grâce à la recherche des personnes en contact avec les cas confirmés. Ils pourraient être identifiés grâce à la surveillance de la population, par exemple en cas de syndrome grippal.
@@ -200,9 +199,7 @@ cfr::cfr_static(data = ebola_30days)
 
 :::::::::::::::::::::::::::::::::::::::: challenge
 
-Téléchargez le fichier [sarscov2_cases_deaths.csv](../../../episodes/data/sarscov2_cases_deaths.csv) et importez-le dans R. Puis estimez le RL naïf.
-
-::::::::::::::::::::
+Téléchargez le fichier [sarscov2_cases_deaths.csv](data/sarscov2_cases_deaths.csv) et importez-le dans R. Puis estimez le RL naïf.
 
 :::::::::::::::::::: hint
 
@@ -556,11 +553,11 @@ Les lignes rouges et bleues représentent respectivement le RL journalier ajust�
 
 Les figures A et B montrent les nombres cumulés de cas et de décès dus au SARS, et la figure C montre les estimations observées (biaisées) du RL en fonction du temps, c'est-à-dire le nombre cumulé de décès par rapport au nombre de cas à l'instant $t$. En raison du délai entre l'apparition des symptômes et le décès, l'estimation biaisée du RL au temps $t$ est inférieure au RL obtenu à la fin de l'épidémie (302/1755 = 17,2 %).
 
-![Risque observé (biaisé) de létalité des cas confirmés du syndrome respiratoire aigu sévère (SARS) à Hong Kong, 2003. ([Nishiura et al, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](../../../episodes/fig/cfr-pone.0006852.g003-fig_abc.png)
+![Risque observé (biaisé) de létalité des cas confirmés du syndrome respiratoire aigu sévère (SARS) à Hong Kong, 2003. ([Nishiura et al, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_abc.png)
 
 Néanmoins, même en n'utilisant que les données observées sur la période du 19 mars au 2 avril, `cfr::cfr_static()` peut produire une prédiction appropriée (figure D), par exemple le RL ajusté au délai au 27 mars est de 18,1% (IC 95% : 10,5 - 28,1). Une surestimation est notée au tout début de l'épidémie, mais les limites de l'intervalle de confiance à 95% pour les phases ultérieures incluent le RL réel (c'est-à-dire 17,2 %).
 
-![Détermination précoce du risque de létalité confirmé, ajusté au délai, du syndrome respiratoire aigu sévère (SARS) à Hong Kong, 2003. ([Nishiura et al, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](../../../episodes/fig/cfr-pone.0006852.g003-fig_d.png)
+![Détermination précoce du risque de létalité confirmé, ajusté au délai, du syndrome respiratoire aigu sévère (SARS) à Hong Kong, 2003. ([Nishiura et al, 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_d.png)
 
 ::::::::::::::::::::::::::::::::::
 
@@ -616,7 +613,7 @@ La méthode de la librairie `{cfr}` vise à obtenir un estimateur non biaisé "b
 
 ### Quel est le processus d'échantillonnage ?
 
-![La population des cas confirmés et le processus d'échantillonnage pour l'estimation du RL non biaisé au cours d'une épidémie selon [Nishiura et al. 2009](https://doi.org/10.1371/journal.pone.0006852.g001)](../../../episodes/fig/cfr-pone.0006852.g001.png)
+![La population des cas confirmés et le processus d'échantillonnage pour l'estimation du RL non biaisé au cours d'une épidémie selon [Nishiura et al. 2009](https://doi.org/10.1371/journal.pone.0006852.g001)](fig/cfr-pone.0006852.g001.png)
 
 Nous connaissons le nombre cumulé de cas confirmés et de décès $C_{t}$ et $D_{t}$ à l'instant $t$ à partir des *données d'incidence agrégées* et souhaitons estimer le RL non biaisé $\pi$ au moyen du facteur de sous-estimation $u_{t}$.
 
@@ -682,7 +679,7 @@ De la même manière, le *risque d'hospitalisation mortelle* requière :
 
 [Yang et al, 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) résume les différentes définitions et sources de données :
 
-![Niveaux de gravité des infections par le SARS-CoV-2 et les paramètres d'intérêt. Chaque niveau est supposé être un sous-ensemble du niveau inférieur.](../../../episodes/fig/cfr-s41467-020-19238-2-fig_a.png)
+![Niveaux de gravité des infections par le SARS-CoV-2 et les paramètres d'intérêt. Chaque niveau est supposé être un sous-ensemble du niveau inférieur.](fig/cfr-s41467-020-19238-2-fig_a.png)
 
 - sCFR risque de létalité des cas symptomatiques (sRL),
 - sCHR risque d'hospitalisation des cas symptomatiques (sRH),
@@ -690,7 +687,7 @@ De la même manière, le *risque d'hospitalisation mortelle* requière :
 - mCHR risque d'hospitalisation d'un cas médicalement pris en charge (mRH),
 - HFR risque d'hospitalisation mortelle (RHM).
 
-![Schéma des analyses de base. Les flèches rouges, bleues et vertes indiquent le flux de données provenant des cas confirmés en laboratoire dans le cadre de la surveillance passive, des cas diagnostiqués cliniquement et des cas confirmés en laboratoire dans le cadre des dépistages actifs.](../../../episodes/fig/cfr-s41467-020-19238-2-fig_b.png){fig-alt="Source des données sur les cas de COVID-19 à Wuhan : D1) 32 583 cas de COVID-19 confirmés en laboratoire en mars 84, D2) 17 365 cas de COVID-19 diagnostiqués cliniquement entre le 9 février et le 24 avril, D3) nombre quotidien de cas confirmés en laboratoire entre le 9 mars et le 24 avril, D4) nombre total de décès dus au COVID-19 en date du 24 avril, obtenus auprès de la Commission de la santé du Hubei3, D5) 325 cas confirmés en laboratoire et D6) 1 290 décès ont été ajoutés au 16 avril grâce à une vérification complète et systématique effectuée par les autorités de Wuhan3, et D7) 16 781 cas confirmés en laboratoire identifiés par le biais d'un dépistage universel10,11. Pse : sensibilité de la RT-PCR12. Pmed.care : proportion de patients souffrant d'infections respiratoires aiguës qui demandent une assistance médicale13."}
+![Schéma des analyses de base. Les flèches rouges, bleues et vertes indiquent le flux de données provenant des cas confirmés en laboratoire dans le cadre de la surveillance passive, des cas diagnostiqués cliniquement et des cas confirmés en laboratoire dans le cadre des dépistages actifs.](fig/cfr-s41467-020-19238-2-fig_b.png){fig-alt="Source des données sur les cas de COVID-19 à Wuhan : D1) 32 583 cas de COVID-19 confirmés en laboratoire en mars 84, D2) 17 365 cas de COVID-19 diagnostiqués cliniquement entre le 9 février et le 24 avril, D3) nombre quotidien de cas confirmés en laboratoire entre le 9 mars et le 24 avril, D4) nombre total de décès dus au COVID-19 en date du 24 avril, obtenus auprès de la Commission de la santé du Hubei3, D5) 325 cas confirmés en laboratoire et D6) 1 290 décès ont été ajoutés au 16 avril grâce à une vérification complète et systématique effectuée par les autorités de Wuhan3, et D7) 16 781 cas confirmés en laboratoire identifiés par le biais d'un dépistage universel10,11. Pse : sensibilité de la RT-PCR12. Pmed.care : proportion de patients souffrant d'infections respiratoires aiguës qui demandent une assistance médicale13."}
 
 ::::::::::::::::::::::::::::
 
@@ -873,3 +870,4 @@ Nous vous invitons à lire la [vignette sur la fonction `cfr_time_varying()`](ht
 - Utiliser l'argument `delay_density` pour ajuster les valeurs du RL au délai épidémiologique en fonction de la distribution des délais correspondants.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
+
