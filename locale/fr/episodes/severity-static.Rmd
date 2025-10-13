@@ -27,15 +27,31 @@ chronologique en expansion en utilisant le package `{cfr}`.
 
 ::::::::::::::::::::::::::::::::::::: prereq
 
-## Conditions préalables
-
 Les concepts abordés dans cet épisode supposent que vous êtes familiers avec :
 
 **Science des données**: Programmation de base avec R.
 
 **Théorie des épidémies**: [Distributions des délais](../learners/reference.md#delaydist).
 
+**R packages**: `{cfr}`, `{epiparameter}`, `{outbreaks}`, `{tidyverse}`.
+
 :::::::::::::::::::::::::::::::::
+
+:::::::::::::: spoiler
+
+Installer les packages si elles ne le sont pas déjà:
+
+```{r}
+# si {pak} n'est pas disponible, exécutez : install.packages("pak")
+pak::pak("cfr")
+pak::pak("epiparameter")
+pak::pak("tidyverse")
+pak::pak("outbreaks")
+```
+
+Si vous recevez un message d'erreur, rendez-vous sur la [page principale de configuration](../learners/setup#configuration-des-logiciels).
+
+::::::::::::::
 
 ## Introduction
 
@@ -69,13 +85,6 @@ Dans ce tutoriel, nous allons apprendre à utiliser la librairie `{cfr}` pour ca
 Nous utiliserons l'opérateur pipe (`%>%`) de la librairie `{magrittr}` pour relier facilement certaines fonctions de la librairie `{cfr}`, y compris les fonctions de la librairie de formatage de données `{dplyr}`. Nous chargerons donc la librairie `{tidyverse}`, qui comprend à la fois les librairies `{magrittr}` et `{dplyr}`.
 
 ```{r message=FALSE, warning=FALSE}
-# installer les packages si elles ne le sont pas déjà
-if (!require("pak")) install.packages("pak")
-if (!require("cfr")) pak::pak("cfr")
-if (!require("epiparameter")) pak::pak("epiparameter")
-if (!require("tidyverse")) pak::pak("tidyverse")
-if (!require("outbreaks")) pak::pak("outbreaks")
-
 # charger les packages
 library(cfr)
 library(epiparameter)
