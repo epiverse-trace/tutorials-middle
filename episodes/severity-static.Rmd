@@ -40,7 +40,7 @@ Les concepts abordés dans cet épisode supposent que vous êtes familiers avec 
 
 Installer les packages si elles ne le sont pas déjà:
 
-```{r}
+```{r, eval = FALSE}
 # si {pak} n'est pas disponible, exécutez : install.packages("pak")
 pak::pak("cfr")
 pak::pak("epiparameter")
@@ -48,7 +48,7 @@ pak::pak("tidyverse")
 pak::pak("outbreaks")
 ```
 
-Si vous recevez un message d'erreur, rendez-vous sur la [page principale de configuration](../learners/setup#configuration-des-logiciels).
+Si vous recevez un message d'erreur, rendez-vous sur la [page principale de configuration](../learners/setup.md#configuration-des-logiciels).
 
 ::::::::::::::
 
@@ -294,7 +294,7 @@ En 2009, lors de l'épidémie de grippe porcine A (H1N1), le Mexique a effectué
 
 Aux États-Unis et au Canada, aucun décès n'a été attribué au virus durant les dix jours qui ont suivi la déclaration d'urgence de santé publique par l'OMS. Même dans des circonstances similaires, au début d'une pandémie mondiale, les responsables de la santé publique, les décideurs et le grand public veulent connaître la virulence d'un agent infectieux émergent.
 
-[Fraser et al, 2009](https://www.science.org/doi/full/10.1126/science.1176062) ont réinterprété les données en évaluant les biais et ont obtenu une gravité clinique inférieure à celle de la pandémie de grippe de 1918, mais comparable à celle observée lors de la pandémie de 1957.
+[Garske et al, 2009](https://www.bmj.com/content/339/bmj.b2840) évaluer les défis afin d'estimer la gravité de cette pandémie, en soulignant que le fait de recenser avec précision les cas pour le dénominateur peut améliorer la capacité à obtenir des estimations informatives du taux de létalité.
 
 ::::::::::::::::::::
 
