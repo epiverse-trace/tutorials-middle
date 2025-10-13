@@ -41,7 +41,7 @@ Les concepts abordés dans cet épisode supposent que vous êtes familiers avec 
 
 Installer les packages si elles ne le sont pas déjà:
 
-```{r}
+```{r, eval = FALSE}
 # si {pak} n'est pas disponible, exécutez : install.packages("pak")
 pak::pak("cfr")
 pak::pak("epiparameter")
@@ -49,7 +49,7 @@ pak::pak("tidyverse")
 pak::pak("outbreaks")
 ```
 
-Si vous recevez un message d'erreur, rendez-vous sur la [page principale de configuration](../learners/setup#configuration-des-logiciels).
+Si vous recevez un message d'erreur, rendez-vous sur la [page principale de configuration](../learners/setup.md#configuration-des-logiciels).
 
 ::::::::::::::
 
