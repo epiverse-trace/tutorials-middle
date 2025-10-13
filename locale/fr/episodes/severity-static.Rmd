@@ -145,7 +145,7 @@ Pour calculer le RL naïf à l'aide de la librairie `{cfr}`, on a besoin d'un ta
 Explorons le tableau de données `ebola1976` inclus dans le package `{cfr}`, et qui contient les données provenant de la première épidémie d'Ebola au Zaïre (actuelle la République Démocratique du Congo) en 1976, comme l'ont analysé Camacho et al. (2014).
 
 ```{r}
-# charger le tableau de donnees ebola1976 du package {cfr} 
+# charger le tableau de donnees ebola1976 du package {cfr}
 data("ebola1976")
 
 # Visualiser l'incidence du nombre de cas et de deces repertorie
@@ -160,7 +160,7 @@ ebola1976 %>%
 Nous supposerons que nous sommes dans le contexte d'une **épidémie d'Ebola en cours** où nous disposons que des données collectées durant les **30 premiers jours** de l'épidémie.
 
 ```{r}
-# supposons que nous disposons des donnees des 30 premiers jours de l'epidemie 
+# supposons que nous disposons des donnees des 30 premiers jours de l'epidemie
 ebola_30days <- ebola1976 %>%
   dplyr::slice_head(n = 30) %>%
   dplyr::as_tibble()
@@ -221,7 +221,7 @@ Importez les données téléchargées à l'aide de la fonction `readr::read_csv(
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 # importer les données dans R
 sarscov2_input <- readr::read_csv(
-  file = file.path("../../../episodes", "data", "sarscov2_cases_deaths.csv")
+  file = file.path("data", "sarscov2_cases_deaths.csv")
 )
 ```
 
@@ -401,7 +401,7 @@ Les données seront importées dans R à l'aide de la fonction `readr::read_csv(
 ```{r, eval=TRUE, echo=FALSE, warning=FALSE, message=FALSE}
 # importer les donnees
 sarscov2_input <- readr::read_csv(
-  file = file.path("../../../episodes", "data", "sarscov2_cases_deaths.csv")
+  file = file.path("data", "sarscov2_cases_deaths.csv")
 )
 ```
 
@@ -754,7 +754,7 @@ mers_korea_2015$linelist %>%
 
 # utiliser {incidence2} pour determiner les incidences journalieres
 mers_incidence <- mers_korea_2015$linelist %>%
-  # convertir en objet incidence2 
+  # convertir en objet incidence2
   incidence2::incidence(date_index = c("dt_onset", "dt_death")) %>%
   # completer les dates du début a la fin
   incidence2::complete_dates()
