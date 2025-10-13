@@ -35,7 +35,26 @@ This episode requires you to be familiar with:
 
 **Epidemic theory**: [Delay distributions](../learners/reference.md#delaydist).
 
+**R packages installed**: `{cfr}`, `{epiparameter}`, `{outbreaks}`, `{tidyverse}`.
+
 :::::::::::::::::::::::::::::::::
+
+:::::::::: spoiler
+
+Install packages if their are not already installed
+
+```{r, eval = FALSE}
+# if {pak} is not installed, run: install.packages("pak")
+pak::pak("cfr")
+pak::pak("epiparameter")
+pak::pak("tidyverse")
+pak::pak("outbreaks")
+```
+
+If you have any error message,
+go to the [main setup page](../learners/setup.md#software-setup).
+
+::::::::::
 
 ## Introduction
 
@@ -71,13 +90,6 @@ In this tutorial we are going to learn how to use the `{cfr}` package to calcula
 We'll use the pipe `%>%` operator from the `{magrittr}` package to connect  functions from {cfr}, including others from the package `{dplyr}`. Hence, we will load the `{tidyverse}` package which contains both `{magrittr}` and `{dplyr}`.
 
 ```{r message=FALSE, warning=FALSE}
-# install packages if their are not already installed
-if (!require("pak")) install.packages("pak")
-if (!require("cfr")) pak::pak("cfr")
-if (!require("epiparameter")) pak::pak("epiparameter")
-if (!require("tidyverse")) pak::pak("tidyverse")
-if (!require("outbreaks")) pak::pak("outbreaks")
-
 # load packages
 library(cfr)
 library(epiparameter)
