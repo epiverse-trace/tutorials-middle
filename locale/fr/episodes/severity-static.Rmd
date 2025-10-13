@@ -33,7 +33,7 @@ Les concepts abordés dans cet épisode supposent que vous êtes familiers avec 
 
 **Théorie des épidémies**: [Distributions des délais](../learners/reference.md#delaydist).
 
-**R packages**: `{cfr}`, `{epiparameter}`, `{outbreaks}`, `{tidyverse}`.
+**R packages installés**: `{cfr}`, `{epiparameter}`, `{outbreaks}`, `{tidyverse}`.
 
 :::::::::::::::::::::::::::::::::
 
