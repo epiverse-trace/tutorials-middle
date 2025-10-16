@@ -331,7 +331,7 @@ onset_to_death_ebola <-
   )
 
 # Plot <epiparameter> object
-plot(onset_to_death_ebola, day_range = 0:40)
+plot(onset_to_death_ebola, xlim = c(0, 40))
 ```
 
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
@@ -358,6 +358,77 @@ out_high <- out_delay_adjusted %>% pull(severity_high)
 ```
 
 The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_estimate` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
+
+:::::::::::::::::: spoiler
+
+### why density as a function?
+
+To correct the bias from cases whose outcomes are not yet known at the time of estimation, `{cfr}` calculates the probability that a case’s outcome becomes known after a certain delay.
+
+In each analysis day, `{cfr}` will calculate the **total expected number of outcomes by time `t`** by summing all incident cases $c_i$ weighted by the probability mass function $f_{j−i}$ that their outcomes are known after a delay of $j−i$ days.
+
+With <epiparameter> class objects we can use the distribution function `density()` to calculate the probability mass function (PMF). We calculate the PMF because `{cfr}` works in discrete time: daily case and death data.
+
+For example: By day 1, the expected outcomes are equal to:
+
+- the number of observed cases on day 1 times the density at day 0.
+
+```{r}
+# By Day 1, the expected outcomes are:
+ebola_30days$cases[1] *
+  density(onset_to_death_ebola, at = 0)
+```
+
+By day 2, the expected outcomes are equal to:
+
+- the number of observed cases on day 1 times the density at day 1, plus
+- the number of observed cases on day 2 times the density at day 0
+
+```{r}
+# By Day 2, the expected outcomes are:
+ebola_30days$cases[1] * 
+  density(onset_to_death_ebola, at = 1) +
+  ebola_30days$cases[2] *
+    density(onset_to_death_ebola, at = 0)
+```
+
+By day 3, the expected outcomes are equal to:
+
+- the number of observed cases on day 1 times the density at day 2, plus
+- the number of observed cases on day 2 times the density at day 1, plus
+- the number of observed cases on day 3 times the density at day 0.
+
+```{r}
+# By Day 3, the expected outcomes are:
+ebola_30days$cases[1] *
+  density(onset_to_death_ebola, at = 2) +
+  ebola_30days$cases[2] *
+    density(onset_to_death_ebola, at = 1) +
+  ebola_30days$cases[3] *
+    density(onset_to_death_ebola, at = 0)
+```
+
+Notice that the most recently observe cases start the delay distribution from `0` the others continue with the following day.
+
+Given that the input value in `at` will vary by day for each case, we need to embed `density()` within a function. `{cfr}` will draw values according to the number of days under analysis. This will look like this:
+
+```r
+# {cfr} calculates density at different values of x 
+function(x) density(onset_to_death_ebola, at = x)
+```
+
+Internally, the function `cfr::estimate_outcomes()` performs this calculation:
+
+```{r}
+cfr::estimate_outcomes(
+  data = ebola_30days,
+  delay_density = function(x) density(onset_to_death_ebola, at = x)
+) %>%
+  slice_head(n = 3) %>% 
+  pull(estimated_outcomes)
+```
+
+::::::::::::::::::
 
 :::::::::::::::::: callout
 
@@ -408,7 +479,7 @@ We read the data input using `readr::read_csv()`. This function recognize that t
 
 ```{r, eval=TRUE,echo=FALSE,warning=FALSE,message=FALSE}
 # read data from the tutorial repository R project
-sarscov2_input <-
+sarscov2_input <- 
   readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
 ```
 
@@ -453,6 +524,12 @@ For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropri
 We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
 
 However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epiparameter>` object.
+
+```{r}
+onset_to_death_ebola %>% 
+  epiparameter::discretise() %>% 
+  plot(xlim = c(0, 40))
+```
 
 ::::::::::::::::::
 
@@ -774,7 +851,7 @@ mers_incidence
 
 # Prepare data from {incidence2} to {cfr}
 mers_incidence %>%
-  prepare_data(
+  cfr::prepare_data(
     cases_variable = "dt_onset",
     deaths_variable = "dt_death"
   )
