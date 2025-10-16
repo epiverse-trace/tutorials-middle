@@ -386,7 +386,7 @@ By day 2, the expected outcomes are equal to:
 
 ```{r}
 # By Day 2, the expected outcomes are:
-ebola_30days$cases[1] * 
+ebola_30days$cases[1] *
   density(onset_to_death_ebola, at = 1) +
   ebola_30days$cases[2] *
     density(onset_to_death_ebola, at = 0)
@@ -424,7 +424,7 @@ cfr::estimate_outcomes(
   data = ebola_30days,
   delay_density = function(x) density(onset_to_death_ebola, at = x)
 ) %>%
-  slice_head(n = 3) %>% 
+  slice_head(n = 3) %>%
   pull(estimated_outcomes)
 ```
 
@@ -479,7 +479,7 @@ We read the data input using `readr::read_csv()`. This function recognize that t
 
 ```{r, eval=TRUE,echo=FALSE,warning=FALSE,message=FALSE}
 # read data from the tutorial repository R project
-sarscov2_input <- 
+sarscov2_input <-
   readr::read_csv(file.path("data", "sarscov2_cases_deaths.csv"))
 ```
 
@@ -526,8 +526,8 @@ We can assume that evaluating the Probability Distribution Function (PDF) of a *
 However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epiparameter>` object.
 
 ```{r}
-onset_to_death_ebola %>% 
-  epiparameter::discretise() %>% 
+onset_to_death_ebola %>%
+  epiparameter::discretise() %>%
   plot(xlim = c(0, 40))
 ```
 
