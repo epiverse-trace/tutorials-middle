@@ -34,7 +34,26 @@ This episode requires you to be familiar with:
 
 **Epidemic theory**: [Delay distributions](../learners/reference.md#delaydist).
 
+**R packages installed**: `{cfr}`, `{epiparameter}`, `{outbreaks}`, `{tidyverse}`.
+
 :::::::::::::::::::::::::::::::::
+
+:::::::::: spoiler
+
+Install packages if their are not already installed
+
+```{r, eval = FALSE}
+# if {pak} is not installed, run: install.packages("pak")
+pak::pak("cfr")
+pak::pak("epiparameter")
+pak::pak("tidyverse")
+pak::pak("outbreaks")
+```
+
+If you have any error message,
+go to the [main setup page](../learners/setup.md#software-setup).
+
+::::::::::
 
 ## Introduction
 
