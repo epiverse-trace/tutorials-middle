@@ -379,7 +379,7 @@ onset_to_death_ebola <-
   )
 
 # Plot <epiparameter> object
-plot(onset_to_death_ebola, day_range = 0:40)
+plot(onset_to_death_ebola, xlim = c(0, 40))
 ```
 
 <img src="fig/severity-static-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
@@ -404,6 +404,97 @@ cfr::cfr_static(
 
 
 The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is 0.9502 with a 95% confidence interval between 0.881 and 0.9861, slightly higher than the naive one.
+
+:::::::::::::::::: spoiler
+
+### why density as a function?
+
+To correct the bias from cases whose outcomes are not yet known at the time of estimation, `{cfr}` calculates the probability that a case’s outcome becomes known after a certain delay.
+
+In each analysis day, `{cfr}` will calculate the **total expected number of outcomes by time `t`** by summing all incident cases $c_i$ weighted by the probability mass function $f_{j−i}$ that their outcomes are known after a delay of $j−i$ days.
+
+With <epiparameter> class objects we can use the distribution function `density()` to calculate the probability mass function (PMF). We calculate the PMF because `{cfr}` works in discrete time: daily case and death data.
+
+For example: By day 1, the expected outcomes are equal to:
+
+- the number of observed cases on day 1 times the density at day 0.
+
+
+``` r
+# By Day 1, the expected outcomes are:
+ebola_30days$cases[1] *
+  density(onset_to_death_ebola, at = 0)
+```
+
+``` output
+[1] 0
+```
+
+By day 2, the expected outcomes are equal to:
+
+- the number of observed cases on day 1 times the density at day 1, plus
+- the number of observed cases on day 2 times the density at day 0
+
+
+``` r
+# By Day 2, the expected outcomes are:
+ebola_30days$cases[1] *
+  density(onset_to_death_ebola, at = 1) +
+  ebola_30days$cases[2] *
+    density(onset_to_death_ebola, at = 0)
+```
+
+``` output
+[1] 0.06495664
+```
+
+By day 3, the expected outcomes are equal to:
+
+- the number of observed cases on day 1 times the density at day 2, plus
+- the number of observed cases on day 2 times the density at day 1, plus
+- the number of observed cases on day 3 times the density at day 0.
+
+
+``` r
+# By Day 3, the expected outcomes are:
+ebola_30days$cases[1] *
+  density(onset_to_death_ebola, at = 2) +
+  ebola_30days$cases[2] *
+    density(onset_to_death_ebola, at = 1) +
+  ebola_30days$cases[3] *
+    density(onset_to_death_ebola, at = 0)
+```
+
+``` output
+[1] 0.08295091
+```
+
+Notice that the most recently observe cases start the delay distribution from `0` the others continue with the following day.
+
+Given that the input value in `at` will vary by day for each case, we need to embed `density()` within a function. `{cfr}` will draw values according to the number of days under analysis. This will look like this:
+
+```r
+# {cfr} calculates density at different values of x 
+function(x) density(onset_to_death_ebola, at = x)
+```
+
+Internally, the function `cfr::estimate_outcomes()` performs this calculation:
+
+
+``` r
+cfr::estimate_outcomes(
+  data = ebola_30days,
+  delay_density = function(x) density(onset_to_death_ebola, at = x)
+) %>%
+  slice_head(n = 3) %>%
+  pull(estimated_outcomes)
+```
+
+``` output
+[1] 0.00000000 0.06495664 0.08295091
+```
+
+::::::::::::::::::
 
 :::::::::::::::::: callout
 
@@ -522,6 +613,15 @@ We can assume that evaluating the Probability Distribution Function (PDF) of a *
 
 However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epiparameter>` object.
 
+
+``` r
+onset_to_death_ebola %>%
+  epiparameter::discretise() %>%
+  plot(xlim = c(0, 40))
+```
+
+<img src="fig/severity-static-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+
 ::::::::::::::::::
 
 
@@ -639,7 +739,7 @@ dplyr::bind_rows(
   )
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
 
 The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
 
@@ -918,7 +1018,7 @@ mers_incidence
 ``` r
 # Prepare data from {incidence2} to {cfr}
 mers_incidence %>%
-  prepare_data(
+  cfr::prepare_data(
     cases_variable = "dt_onset",
     deaths_variable = "dt_death"
   )
