@@ -34,7 +34,27 @@ This episode requires you to be familiar with:
 
 **Epidemic theory**: [Delay distributions](../learners/reference.md#delaydist).
 
+**R packages installed**: `{cfr}`, `{epiparameter}`, `{outbreaks}`, `{tidyverse}`.
+
 :::::::::::::::::::::::::::::::::
+
+:::::::::: spoiler
+
+Install packages if their are not already installed
+
+
+``` r
+# if {pak} is not installed, run: install.packages("pak")
+pak::pak("cfr")
+pak::pak("epiparameter")
+pak::pak("tidyverse")
+pak::pak("outbreaks")
+```
+
+If you have any error message,
+go to the [main setup page](../learners/setup.md#software-setup).
+
+::::::::::
 
 ## Introduction
 
@@ -148,7 +168,7 @@ ebola1976 %>%
   plot()
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-2-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
 
 We'll frame this episode under the context of an **ongoing outbreak** with only the **first 30 days** of data observed.
 
@@ -362,7 +382,7 @@ onset_to_death_ebola <-
 plot(onset_to_death_ebola, day_range = 0:40)
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
 
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
@@ -619,7 +639,7 @@ dplyr::bind_rows(
   )
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-21-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
 
 The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
 
