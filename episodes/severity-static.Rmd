@@ -546,30 +546,10 @@ onset_to_death_ebola %>%
 
 ### How does {cfr} works?
 
-To adjust the CFR, [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) use the case and death incidence data to estimate the number of cases with known outcomes:
-
-$$
-  u_t = \dfrac{\sum_{i = 0}^t
-        \sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
-$$
-
-where:
-
-- $c_{t}$ is the daily case incidence at time $t$, 
-- $f_{t}$ is the value of the Probability Mass Function (PMF) of the **delay distribution** between onset and death, and
-- $u_{t}$ represents the underestimation factor of the known outcomes.
-
-$u_{t}$ is used to **scale** the value of the cumulative number of cases in the denominator in the calculation of the CFR. This is calculated internally with the [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) function.
-
-The estimator for CFR can be written as: 
-
-$$p_{t} = \frac{b_{t}}{u_{t}}$$
-
-where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
-
-From this last equation, we observe that the unbiased CFR $p_{t}$ is larger than biased CFR $b_{t}$ because in $u_{t}$ the numerator is smaller than the denominator (note that $f_{t}$ is the probability distribution of the *delay distribution* between onset and death). Therefore, we refer to $b_{t}$ as the biased estimator of CFR.
-
-When we observe the entire course of an epidemic (from $t \rightarrow \infty$), $u_{t}$ tends to 1, making $b_{t}$ tends to $p_{t}$ and become an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
+If you want to gain familiarity and learn how delays are accounted for when estimating CFR, 
+you can read the episode on
+[How to adjust the CFR for delays](../learners/intro-cfr-adjust-delays.md)
+in the "More Resources" section of this tutorial's website.
 
 :::::::::::::::::::::::::::
 
