@@ -64,7 +64,7 @@ gc <- df %>%
             vjust = -0.5,   # moves labels above bars
             size = 3.5) +
   scale_x_continuous(breaks = seq(0, 5, 1)) +
-  ylim(0,10) +
+  ylim(0, 10) +
   labs(
     x = "Time (in days)",
     y = "Cases",
@@ -84,7 +84,7 @@ gd <- df %>%
             vjust = -0.5,   # moves labels above bars
             size = 3.5) +
   scale_x_continuous(breaks = seq(0, 5, 1)) +
-  ylim(0,10) +
+  ylim(0, 10) +
   labs(
     x = "Time (in days)",
     y = "deaths",
@@ -107,7 +107,7 @@ Applying this formula directly to our dataset yields the $b_t$ values shown in t
 
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 df <- df %>%
-  mutate(naive_cfr = cumsum(deaths) / cumsum(cases)) %>% 
+  mutate(naive_cfr = cumsum(deaths) / cumsum(cases)) %>%
   dplyr::mutate(naive_cfr = round(naive_cfr, 2))
 
 df %>% ggplot(aes(x = time, y = naive_cfr)) +
@@ -345,7 +345,7 @@ all_g <- df %>%
   scale_color_manual(
     name = "Legend",
     values = c(
-      "Naive" = "#E69F00",
+      Naive = "#E69F00",
       "Delay-adjusted" = "#009E73"
     )
   ) +
@@ -357,6 +357,7 @@ all_g <- df %>%
   ) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5, size = 11))
+
 all_g
 ```
 
