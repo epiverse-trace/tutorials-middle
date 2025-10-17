@@ -26,16 +26,30 @@ mathematical framework that enables this adjustment.
 
 ## Naive estimation of $CFR$
 
-Consider a dataset containing daily incidence cases and deaths. When examining their cumulative distributions (as illustrated in the figure below), we may wish to estimate the case fatality rate (CFR).
+Consider a dataset containing daily incidence cases and deaths. 
 
-```{r, echo=FALSE,message=FALSE, warning=FALSE}
+```{r, echo = FALSE}
 library(tidyverse)
-library(cowplot)
-cases <- c(rep(1, 3), rep(2, 1), rep(3, 3), rep(4, 2))
+
+cases <- c(rep(0, 3), rep(1, 1), rep(2, 3), rep(3, 2))
 df <- as.data.frame(table(cases))
 names(df) <- c("time", "cases")
 df$time <- as.numeric(as.character(df$time))
 df$deaths <- c(1, 0, 0, 0)
+
+df %>%
+  gt::gt() %>%
+  gt::cols_label(
+    time = "Time",
+    cases = "Cases",
+    deaths = "Deaths"
+  )
+```
+
+When examining their cumulative distributions (as illustrated in the figure below), we may wish to estimate the case fatality rate (CFR).
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+library(cowplot)
 
 gc <- df %>%
   ggplot(aes(x = time, y = cumsum(cases))) +
@@ -45,7 +59,8 @@ gc <- df %>%
   geom_text(aes(label = cumsum(cases)),
             vjust = -0.5,   # moves labels above bars
             size = 3.5) +
-  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  scale_x_continuous(breaks = seq(0, 5, 1)) +
+  ylim(0,10) +
   labs(
     x = "Time (in days)",
     y = "Cases",
@@ -64,7 +79,8 @@ gd <- df %>%
   geom_text(aes(label = cumsum(deaths)),
             vjust = -0.5,   # moves labels above bars
             size = 3.5) +
-  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  scale_x_continuous(breaks = seq(0, 5, 1)) +
+  ylim(0,10) +
   labs(
     x = "Time (in days)",
     y = "deaths",
@@ -79,14 +95,16 @@ cowplot::plot_grid(gc, gd, labels = "AUTO")
 ```
 
 
-The naive estimate of CFR, denoted as $b_t$, is calculated as the ratio of cumulative deaths $D_t$ to cumulative cases $C_t$ at time $t$
-$$b_t = \frac{D_t}{C_t} $$. 
+The naive estimate of CFR, denoted as $b_t$, is calculated as the ratio of cumulative deaths $D_t$ to cumulative cases $C_t$ at time $t$:
+
+$$b_t = \frac{D_t}{C_t} $$
 
 Applying this formula directly to our dataset yields the $b_t$ values shown in the figure below.
 
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 df <- df %>%
-  mutate(naive_cfr = cumsum(deaths) / cumsum(cases))
+  mutate(naive_cfr = cumsum(deaths) / cumsum(cases)) %>% 
+  dplyr::mutate(naive_cfr = round(naive_cfr, 2))
 
 df %>% ggplot(aes(x = time, y = naive_cfr)) +
   geom_point() +
@@ -94,7 +112,7 @@ df %>% ggplot(aes(x = time, y = naive_cfr)) +
   geom_text(aes(label = naive_cfr),
             vjust = -0.5,   # moves labels above bars
             size = 3.5) +
-  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  scale_x_continuous(breaks = seq(0, 5, 1)) +
   labs(
     x = "Time (in days)",
     y = "naive CFR",
@@ -105,13 +123,16 @@ df %>% ggplot(aes(x = time, y = naive_cfr)) +
     plot.title = element_text(hjust = 0.5, size = 11)
   )
 ```
+
 This approach, while straightforward, does not account for the temporal lag between case reporting and death occurrence, which can lead to biased estimates (underestimates), particularly during the early stages of an outbreak or when case numbers are changing rapidly and many of them with unknown outcome.
 
 ## Unbiased CFR
+
 To understand how delays affect the naive CFR estimate, we can express $C_t$ and $D_t$ as function of the incidences $c_t$.
 
 The cumulative number of cases is simply the sum of all confirmed cases up to time $t$:
 $$C_t = \sum\limits_{i=0}^{t}c_i.$$
+
 However, the cumulative number of deaths represents a proportion of confirmed cases with known outcomes up to time $t$. This must account for the delay distribution between case confirmation and death
 
 $$ D_t = p_t\times \sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}$$
@@ -123,15 +144,17 @@ where:
 - $p_t$ = proportion of cases that result in death (true CFR) at time $t$
 
 
-Then the un-biased CFR would be
-$$ b_t = p_t*u_t, \text{where} \;\; u_t = \frac{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}{\sum\limits_{i=0}^{t}c_i}$$
+Then the unbiased CFR would be
+
+$$ b_t = p_t \times u_t, \text{where} \;\; u_t = \frac{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}{\sum\limits_{i=0}^{t}c_i}$$
+
 If fact $u_t$ is called the **underestimation factor**, and the true  proportion of confirmed cases to die from the infection is then given by:
 
 $$ p_t = b_t\frac{\sum\limits_{i=0}^{t}c_i}{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}.$$
 
-In practice, the delay distribution $f_j$ is estimated from samples of onset-to-outcome data. However, when deaths are few or absent during the early stages of an outbreak, assumptions about $f_j$ must be made based on literature from previous outbreaks of the same or similar diseases.
+In practice, the delay distribution $f_s$ is estimated from samples of onset-to-outcome data. However, when deaths are few or absent during the early stages of an outbreak, assumptions about $f_s$ must be made based on literature from previous outbreaks of the same or similar diseases.
 
-For example, suppose we have obtained the onset-to-outcome distribution for the dataset in our example. This distribution, shown in the figure below, characterizes the probability of death occurring $j$ days after case confirmation.
+For example, suppose we have obtained the onset-to-outcome distribution for the dataset in our example. This distribution, shown in the figure below, characterizes the probability of death occurring $s$ days after case confirmation.
 
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
 df$delay <- c(0.2, 0.4, 0.3, 0.1)
@@ -143,7 +166,7 @@ gf <- df %>%
   geom_text(aes(label = delay),
             vjust = -0.5,   # moves labels above bars
             size = 3.5) +
-  scale_x_continuous(breaks = seq(1, 5, 1)) +
+  scale_x_continuous(breaks = seq(0, 5, 1)) +
   labs(
     y = "Probability",
     x = "Time (days since symptoms onset)",
@@ -158,53 +181,109 @@ gf
 
 Then we can use to produce estimated for $p_t$ as follows:
 
-- $t = 1$: we observe $C_1 = 3, D_1 = 1$, giving a naive estimate $b_1 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 1 is
+- $t = 0$: we observe $C_0 = 3, D_0 = 1$, giving a naive estimate $b_0 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 1 is
 
- $$ D_1 = p_1*\sum\limits_{i=0}^{1}\sum\limits_{j=0}^{i}c_{i}f_{j-j} = p_1*c_1*f_1= p_1*3*0.2 = 0.6*p_1 $$
- 
- where $p_1$ represents the true CFR. The factor $3\times0.2=0.6$  represents the expected proportion of cases with known outcomes by day 1, given the delay distribution. Hence 
- $$ b_1 = \frac{D_1}{C_1} = \frac{p_1*0.6}{3}$$
+$$
+\begin{equation}
+\begin{split}
+D_0 & = p_0 \times \sum_{i=0}^{1} \sum_{j=0}^{i} c_i f_{j-j} \\ 
+& = p_0 \times \left( c_0 \times f_0 \right) \\ 
+& = p_0 \times 3 \times 0.2 \\ 
+& = p_0 \times 0.6 
+\end{split}
+\end{equation}
+$$ 
 
-Solving for $p_1$, using the fact that $b_1 =  \frac{1}{3}$, gives
-$$\Rightarrow p_1 = \frac{b_1*3}{0.6} = \frac{1}{0.6} = 1.67 $$
-- $t = 2$: we observe $C_2 = 4, D_2 = 1$, giving a naive estimate $b_2 = \frac{1}{4}$. 
+where $p_0$ represents the true CFR. The factor $3 \times 0.2 = 0.6$ represents the expected proportion of cases with known outcomes by day 0, given the delay distribution. Hence
+
+$$
+b_0 = \frac{D_0}{C_0} = \frac{p_0 \times 0.6}{3}
+$$
+
+Solving for $p_0$, using the fact that $b_0 = \frac{1}{3}$, gives
+
+$$
+\Rightarrow p_0 = \frac{b_0 \times 3}{0.6} = \frac{1}{0.6} = 1.67
+$$
+
+- $t = 1$: we observe $C_1 = 4, D_1 = 1$, giving a naive estimate $b_1 = \frac{1}{4}$. 
 
 Accounting for delays, the expected number of deaths by day 2 is
- $$ D_2 = p_2*\sum\limits_{i=1}^{2}\sum\limits_{j=0}^{i}c_{i}f_{i-j} = p_2\times [c_2*f_1 + c_1*(f_1+f_2)] = p_2 [1*0.2 + 3*(0.4+0.2)] = p_2*2 $$
-Solving for $p_2$, gives
-$$\Rightarrow p_2 = \frac{b_2*4}{2} = \frac{1}{2} = 0.5 $$
-- $t = 3$: we observe $C_3 = 7, D_3 = 1$, giving a naive estimate $b_3 = \frac{1}{7}$. 
+
+$$
+\begin{equation}
+\begin{split}
+D_1 & = p_1 \times \sum_{i=1}^{2} \sum_{j=0}^{i} c_i f_{i-j} \\ 
+& = p_1 \times \left[ c_1 \times f_0 + c_0 \times (f_0 + f_1) \right] \\ 
+& = p_1 \times \left[ 1 \times 0.2 + 3 \times (0.4 + 0.2) \right] \\ 
+& = p_1 \times 2
+\end{split}
+\end{equation}
+$$
+
+Solving for $p_1$, gives
+
+$$
+\Rightarrow p_1 = \frac{b_1*4}{2} = \frac{1}{2} = 0.5
+$$
+
+- $t = 2$: we observe $C_2 = 7, D_2 = 1$, giving a naive estimate $b_2 = \frac{1}{7}$. 
 
 Accounting for delays, the expected number of deaths by day 3 is
- $$ D_3 = p_3*\sum\limits_{i=1}^{3}\sum\limits_{j=0}^{i}c_{i}f_{i-j} = p_3\times [c_3*f_1 + c_2*(f_1+f_2) + c_1*(f_1+f_2+f_3)] $$
- $$ \Rightarrow D_3 =  p_3\times[3*0.2 + 1*(0.4+0.2)+3*(0.2+0.4+0.3)] = p_3*3.9$$
-Solving for $p_3$, gives
-$$\Rightarrow p_3 = \frac{b_3*7}{3.9} = \frac{1}{3.9} = 0.26 $$
+
+$$
+\begin{equation}
+\begin{split}
+D_2 & = p_2 \times \sum_{i=1}^{3} \sum_{j=0}^{i} c_i f_{i-j} \\ 
+& = p_2 \times \Big[ c_2 \times f_0 + c_1 \times (f_0 + f_1) + c_0 \times (f_0 + f_1 + f_2) \Big] \\ 
+& = p_2 \times \Big[ 3 \times 0.2 + 1 \times (0.4 + 0.2) + 3 \times (0.2 + 0.4 + 0.3) \Big] \\ 
+& = p_2 \times 3.9
+\end{split}
+\end{equation}
+$$
+
+Solving for $p_2$, gives
+
+$$
+\Rightarrow p_2 = \frac{b_2*7}{3.9} = \frac{1}{3.9} = 0.26
+$$
 
 :::: challenge
 ## Can you do this?
 
-- Calculate $p_t$ at time $t$.
+- Calculate $p_t$ at time $t = 3$.
 
 ::: solution
 
 Apply the formula to get: 
 
-- $t = 4$: we observe $C_4 = 9, D_4 = 1$, giving a naive estimate $b_4 = \frac{1}{9}$. 
+- $t = 3$: we observe $C_3 = 9, D_3 = 1$, giving a naive estimate $b_3 = \frac{1}{9}$. 
 
 Accounting for delays, the expected number of deaths by day 3 is
- $$ D_4 = p_4*\sum\limits_{i=1}^{4}\sum\limits_{j=0}^{i}c_{i}f_{i-j} = $$
- $$  = p_4\times [c_4*f_1 +c_3*(f_1 +f_2) + c_2*(f_1+f_2+f_3) + c_1*(f_1+f_2+f_3+f_4)] $$
- $$ =  p_4\times[2*0.2 + 3*(0.2+0.4)+1*(0.2+0.4+0.3) +3*(0.2+0.4+0.3+0.1)] = p_4*6.1$$
-Solving for $p_4$, gives
-$$\Rightarrow p_3 = \frac{b_4*9}{6.1} = \frac{1}{6.1} = 0.16 $$
+
+$$
+\begin{equation}
+\begin{split}
+D_3 & = p_3 \times \sum_{i=1}^{4} \sum_{j=0}^{i} c_i f_{i-j} \\ 
+& = p_3 \times \Big[ c_3 \times f_0 + c_2 \times (f_0 + f_1) + c_1 \times (f_0 + f_1 + f_2) + c_0 \times (f_0 + f_1 + f_2 + f_3) \Big] \\ 
+& = p_3 \times \Big[ 2 \times 0.2 + 3 \times (0.2 + 0.4) + 1 \times (0.2 + 0.4 + 0.3) + 3 \times (0.2 + 0.4 + 0.3 + 0.1) \Big] \\ 
+& = p_3 \times 6.1
+\end{split}
+\end{equation}
+$$
+
+Solving for $p_3$, gives
+
+$$
+\Rightarrow p_2 = \frac{b_3*9}{6.1} = \frac{1}{6.1} = 0.16
+$$
 
 :::
 
 :::::
 
 
-Once we calculate the delay-adjusted   $CFR$ for $t = 1,2,..., 4$, we can draw its curve, as shown in the figure below.
+Once we calculate the delay-adjusted   $CFR$ for $t = 0,2,..., 3$, we can draw its curve, as shown in the figure below.
 
 ```{r, warning=FALSE, echo=FALSE}
 df$cfr <- c(1.67, 0.5, 0.26, 0.16)
@@ -227,7 +306,6 @@ df %>%
   ) +
   theme_classic() +
   theme(plot.title = element_text(hjust = 0.5, size = 11))
-
 ```
 
 ::::: challenge
