@@ -1,5 +1,5 @@
 ---
-title: 'How CFR adjusts delays'
+title: 'How to adjust the CFR for delays'
 teaching: 15
 exercises: 5
 editor_options: 
@@ -8,13 +8,17 @@ editor_options:
 ---
 
 ::: questions
+
 -   How are delays adjust for when estimating CFR?
+
 :::
 
 ::: objectives
+
 -   Understand how delays are incorporated into severity estimation
 -   Understand the underestimation factor
 -   Understand the mechanisms behind `{cfr}`
+
 :::
 
 ## Introduction
@@ -349,3 +353,9 @@ The naive estimate can underestimate the CFR value at the early stages of the ep
 
 :::
 :::::
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Understand how delays are accounted for {cfr}
+
+::::::::::::::::::::::::::::::::::::::::::::::::
