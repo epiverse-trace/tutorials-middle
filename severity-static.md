@@ -405,9 +405,20 @@ cfr::cfr_static(
 
 The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is 0.9502 with a 95% confidence interval between 0.881 and 0.9861, slightly higher than the naive one.
 
+::::::::::::::::::::::::::: discussion
+
+### How does {cfr} work?
+
+If you want to gain familiarity and learn how delays are accounted for when estimating CFR, 
+you can read the episode on
+[How to adjust the CFR for delays](../learners/intro-cfr-adjust-delays.md)
+in the "More Resources" section of this tutorial's website.
+
+:::::::::::::::::::::::::::
+
 :::::::::::::::::: spoiler
 
-### why density as a function?
+### Why is density() expressed as a function of x?
 
 To correct the bias arising from cases whose outcomes are not yet known at the time of estimation, `{cfr}` accounts for the probability that a case’s outcome becomes known after a certain delay.
 
@@ -479,7 +490,7 @@ ebola_30days$cases[1] *
 
 Notice that the most recently observe cases start the delay distribution from `0` the others continue with the following day.
 
-Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), `density()` needs to be embedded in a function. `{cfr}` will then draw values accordingly, as shown below:
+Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of x. `{cfr}` will then draw values accordingly, as shown below:
 
 ```r
 # {cfr} uses the density of the distribution at different values of x
@@ -517,6 +528,27 @@ For distribution functions with parameters not available in `{epiparameter}`, we
 - Create an `<epiparameter>` class object, to plug into other R packages of the outbreak analytics pipeline. Read the [reference documentation of `epiparameter::epiparameter()`](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html), or
 
 - Read `{cfr}` vignette for [a primer on working with delay distributions](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html).
+
+::::::::::::::::::
+
+:::::::::::::::::: spoiler
+
+### When to use discrete distributions?
+
+For  `cfr_static()` and all functions in the `cfr_*()` family, the most appropriate choice to use are **discrete** distributions. This is because `{cfr}` operates on count data in discrete time: daily case and death counts.
+
+We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
+
+However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epiparameter>` object.
+
+
+``` r
+onset_to_death_ebola %>%
+  epiparameter::discretise() %>%
+  plot(xlim = c(0, 40))
+```
+
+<img src="fig/severity-static-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
 
 ::::::::::::::::::
 
@@ -610,59 +642,6 @@ Interpret the comparison between the naive and delay-adjusted CFR estimates.
 ::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::: spoiler
-
-### When to use discrete distributions?
-
-For  `cfr_static()` and all functions in the `cfr_*()` family, the most appropriate choice to use are **discrete** distributions. This is because `{cfr}` operates on count data in discrete time: daily case and death counts.
-
-We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
-
-However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epiparameter>` object.
-
-
-``` r
-onset_to_death_ebola %>%
-  epiparameter::discretise() %>%
-  plot(xlim = c(0, 40))
-```
-
-<img src="fig/severity-static-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
-
-::::::::::::::::::
-
-
-::::::::::::::::::::::::::: spoiler
-
-### How does {cfr} works?
-
-To adjust the CFR, [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) use the case and death incidence data to estimate the number of cases with known outcomes:
-
-$$
-  u_t = \dfrac{\sum_{i = 0}^t
-        \sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
-$$
-
-where:
-
-- $c_{t}$ is the daily case incidence at time $t$, 
-- $f_{t}$ is the value of the Probability Mass Function (PMF) of the **delay distribution** between onset and death, and
-- $u_{t}$ represents the underestimation factor of the known outcomes.
-
-$u_{t}$ is used to **scale** the value of the cumulative number of cases in the denominator in the calculation of the CFR. This is calculated internally with the [`estimate_outcomes()`](https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html) function.
-
-The estimator for CFR can be written as: 
-
-$$p_{t} = \frac{b_{t}}{u_{t}}$$
-
-where $p_{t}$ is the realized proportion of confirmed cases to die from the infection (or the unbiased CFR), and $b_{t}$, the crude and biased estimate of CFR (also naive CFR).
-
-From this last equation, we observe that the unbiased CFR $p_{t}$ is larger than biased CFR $b_{t}$ because in $u_{t}$ the numerator is smaller than the denominator (note that $f_{t}$ is the probability distribution of the *delay distribution* between onset and death). Therefore, we refer to $b_{t}$ as the biased estimator of CFR.
-
-When we observe the entire course of an epidemic (from $t \rightarrow \infty$), $u_{t}$ tends to 1, making $b_{t}$ tends to $p_{t}$ and become an unbiased estimator ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852)).
-
-:::::::::::::::::::::::::::
 
 
 ## An early-stage CFR estimate
