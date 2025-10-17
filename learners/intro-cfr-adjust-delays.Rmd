@@ -187,9 +187,9 @@ Given that the equations are applied to discrete count data, such as daily case 
 
 Then we can use to produce estimated for $p_t$ as follows:
 
-### t = 0
+### Day 0
 
-$t = 0$: we observe $C_0 = 3, D_0 = 1$, giving a naive estimate $b_0 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 1 is
+At $t = 0$ we observe $C_0 = 3, D_0 = 1$, giving a naive estimate $b_0 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 1 is
 
 $$
 \begin{equation}
@@ -216,9 +216,9 @@ $$
 \Rightarrow p_0 = \frac{b_0 \times 3}{0.6} = \frac{1}{0.6} = 1.67
 $$
 
-### t = 1
+### Day 1
 
-$t = 1$: we observe $C_1 = 4, D_1 = 1$, giving a naive estimate $b_1 = \frac{1}{4}$. 
+At $t = 1$ we observe $C_1 = 4, D_1 = 1$, giving a naive estimate $b_1 = \frac{1}{4}$. 
 
 Accounting for delays, the expected number of deaths by day 2 is
 
@@ -241,9 +241,9 @@ $$
 \Rightarrow p_1 = \frac{b_1 \times 4}{2} = \frac{1}{2} = 0.5
 $$
 
-### t = 2
+### Day 2
 
-$t = 2$: we observe $C_2 = 7, D_2 = 1$, giving a naive estimate $b_2 = \frac{1}{7}$. 
+At $t = 2$ we observe $C_2 = 7, D_2 = 1$, giving a naive estimate $b_2 = \frac{1}{7}$. 
 
 Accounting for delays, the expected number of deaths by day 3 is
 
