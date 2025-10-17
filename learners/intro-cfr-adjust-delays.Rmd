@@ -189,7 +189,7 @@ Then we can use to produce estimated for $p_t$ as follows:
 
 ### Day 0
 
-At $t = 0$ we observe $C_0 = 3, D_0 = 1$, giving a naive estimate $b_0 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 1 is
+At $t = 0$ we observe $C_0 = 3, D_0 = 1$, giving a naive estimate $b_0 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 0 is
 
 $$
 \begin{equation}
@@ -220,7 +220,7 @@ $$
 
 At $t = 1$ we observe $C_1 = 4, D_1 = 1$, giving a naive estimate $b_1 = \frac{1}{4}$. 
 
-Accounting for delays, the expected number of deaths by day 2 is
+Accounting for delays, the expected number of deaths by day 1 is
 
 $$
 \begin{equation}
@@ -245,7 +245,7 @@ $$
 
 At $t = 2$ we observe $C_2 = 7, D_2 = 1$, giving a naive estimate $b_2 = \frac{1}{7}$. 
 
-Accounting for delays, the expected number of deaths by day 3 is
+Accounting for delays, the expected number of deaths by day 2 is
 
 $$
 \begin{equation}
