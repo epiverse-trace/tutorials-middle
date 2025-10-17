@@ -414,14 +414,14 @@ To correct the bias arising from cases whose outcomes are not yet known at the t
 It does so by relating $C_t$ and $D_t$ to the incidence function $c_t$ (i.e., the number of new confirmed cases on day t) and the conditional probability density function $f_s$ of the time from onset to death, given death. 
 
 $$
-D_t & = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
+D_t = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
 $$
 
 Here, $D_t$ is the cumulative number of deaths up to time t, and $p_t$ is the realized proportion of confirmed cases that die from the infection (i.e., the unbiased case fatality risk, or CFR).
 
 The term $\sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}$ represents the **total expected number of cases with known outcomes by time `t`**. It sums all incident cases $c_i$, each weighted by the probability density function $f_{j−i}$ that their outcomes become known after a delay of $j−i$ days.
 
-On each analysis day, `{cfr}` computes, for each case, the **expected number of outcomes by time `t`**. When using <epiparameter> class objects, the function `density()` can be applied to obtain the corresponding probability density function for each case on each day.
+On each analysis day, `{cfr}` computes, for each case, the **expected number of outcomes by time `t`**. When using `<epiparameter>` class objects, the function `density()` can be applied to obtain the corresponding probability density function for each case on each day.
 
 For example, by day 1, the expected outcomes are equal to:
 
