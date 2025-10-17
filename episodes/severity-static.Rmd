@@ -542,7 +542,7 @@ onset_to_death_ebola %>%
 ::::::::::::::::::
 
 
-::::::::::::::::::::::::::: spoiler
+::::::::::::::::::::::::::: discussion
 
 ### How does {cfr} works?
 
