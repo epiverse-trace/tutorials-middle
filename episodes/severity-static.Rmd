@@ -372,7 +372,7 @@ in the "More Resources" section of this tutorial's website.
 
 :::::::::::::::::: spoiler
 
-### why density as a function?
+### Why is density() expressed as a function of x?
 
 To correct the bias arising from cases whose outcomes are not yet known at the time of estimation, `{cfr}` accounts for the probability that a case’s outcome becomes known after a certain delay.
 
@@ -429,7 +429,7 @@ ebola_30days$cases[1] *
 
 Notice that the most recently observe cases start the delay distribution from `0` the others continue with the following day.
 
-Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), `density()` needs to be embedded in a function. `{cfr}` will then draw values accordingly, as shown below:
+Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of x. `{cfr}` will then draw values accordingly, as shown below:
 
 ```r
 # {cfr} uses the density of the distribution at different values of x
