@@ -359,6 +359,18 @@ out_high <- out_delay_adjusted %>% pull(severity_high)
 
 The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is `r out_estimate` with a 95% confidence interval between `r out_low` and `r out_high`, slightly higher than the naive one.
 
+::::::::::::::::::::::::::: discussion
+
+### How does {cfr} works?
+
+If you want to gain familiarity and learn how delays are accounted for when estimating CFR, 
+you can read the episode on
+[How to adjust the CFR for delays](../learners/intro-cfr-adjust-delays.md)
+in the "More Resources" section of this tutorial's website.
+
+:::::::::::::::::::::::::::
+
+
 :::::::::::::::::: spoiler
 
 ### why density as a function?
@@ -542,16 +554,6 @@ onset_to_death_ebola %>%
 ::::::::::::::::::
 
 
-::::::::::::::::::::::::::: discussion
-
-### How does {cfr} works?
-
-If you want to gain familiarity and learn how delays are accounted for when estimating CFR, 
-you can read the episode on
-[How to adjust the CFR for delays](../learners/intro-cfr-adjust-delays.md)
-in the "More Resources" section of this tutorial's website.
-
-:::::::::::::::::::::::::::
 
 
 ## An early-stage CFR estimate
