@@ -105,7 +105,7 @@
           <button class="nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
             More <i data-feather="chevron-down"></i>
           </button>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown"><hr><li><a class="dropdown-item" href="intro-renewal-equation.html">Introduction to the Renewal equation</a></li><li><a class="dropdown-item" href="reference.html">Glossary of Terms: Epiverse-TRACE</a></li>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown"><hr><li><a class="dropdown-item" href="intro-cfr-adjust-delays.html">How to adjust the CFR for delays</a></li><li><a class="dropdown-item" href="intro-renewal-equation.html">Introduction to the Renewal equation</a></li><li><a class="dropdown-item" href="reference.html">Glossary of Terms: Epiverse-TRACE</a></li>
           </ul></li>
       </ul></div>
     <!--
@@ -312,7 +312,7 @@
                       <li>
                         <a href="../instructor/images.html">Extract All Images</a>
                       </li>
-                      <hr><li><a class="dropdown-item" href="intro-renewal-equation.html">Introduction to the Renewal equation</a></li><li><a class="dropdown-item" href="reference.html">Glossary of Terms: Epiverse-TRACE</a></li>
+                      <hr><li><a class="dropdown-item" href="intro-cfr-adjust-delays.html">How to adjust the CFR for delays</a></li><li><a class="dropdown-item" href="intro-renewal-equation.html">Introduction to the Renewal equation</a></li><li><a class="dropdown-item" href="reference.html">Glossary of Terms: Epiverse-TRACE</a></li>
                     </ul></div>
                 </div>
               </div>
@@ -411,7 +411,7 @@ using <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr<
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Install packages if their are not already installed</p>
 <div class="codewrapper sourceCode" id="cb1">
@@ -469,7 +469,7 @@ et al., 2009</a>)</div>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
   <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
 <div class="accordion-body">
 <p>The periods are relevant: Period 1 – 15 days where CFR is zero to
 indicate this is due to no reported deaths; Period from Mar 15 – Apr 26
@@ -687,7 +687,7 @@ read it into R.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>Inspect the format of the data input.</p>
 <ul><li>Does it contain daily data?</li>
@@ -703,7 +703,7 @@ read it into R.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>We read the data input using <code>readr::read_csv()</code>. This
 function recognize that the column <code>date</code> is a
@@ -785,7 +785,7 @@ estimation of CFR (and their potential solutions):</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> 1. Preferential ascertainment of severe cases </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>For diseases with a <em>spectrum</em> of clinical presentations,
 those cases that come to the attention of public health authorities and
@@ -805,7 +805,7 @@ definitions of “case”) asymptomatic presentations.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> 2. Bias due to delayed reporting of death </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>During an <em>ongoing</em> epidemic, there is a delay between the
 time someone dies and the time their death is reported. Therefore, at
@@ -829,7 +829,7 @@ with this specific bias using <a href="https://github.com/epiverse-trace/cfr" cl
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Case study: Influenza A (H1N1), Mexico, 2009 </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>Improving an <em>early</em> epidemiological assessment of a
 delay-adjusted CFR is crucial for determining virulence, shaping the
@@ -860,7 +860,7 @@ estimates.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
   <h3 class="accordion-header" id="headingInstructor2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor2" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor2" aria-labelledby="headingInstructor2">
+<div id="collapseInstructor2" class="accordion-collapse collapse" aria-labelledby="headingInstructor2" data-bs-parent="#accordionInstructor2">
 <div class="accordion-body">
 <p>We can showcase this last bias using the <a href="https://epiverse-trace.github.io/cfr/articles/cfr.html#concept-how-reporting-delays-bias-cfr-estimates" class="external-link">concept
 described in this <code>{cfr}</code> vignette</a>.</p>
@@ -921,12 +921,25 @@ epidemiological delays</a>.</p>
 <em>at the end of the outbreak</em> or with the <em>latest data
 available at the moment</em> is 0.9502 with a 95% confidence interval
 between 0.881 and 0.9861, slightly higher than the naive one.</p>
+<div id="how-does-cfr-work" class="callout discussion">
+<div class="callout-square">
+<i class="callout-icon" data-feather="message-circle"></i>
+</div>
+<div id="how-does-cfr-work" class="callout-inner">
+<h3 class="callout-title">How does {cfr} work?</h3>
+<div class="callout-content">
+<p>If you want to gain familiarity and learn how delays are accounted
+for when estimating CFR, you can read the episode on <a href="intro-cfr-adjust-delays.html">How to adjust the CFR for delays</a>
+in the “More Resources” section of this tutorial’s website.</p>
+</div>
+</div>
+</div>
 <div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
-  <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> why density as a function? </h3>
+  <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Why is density() expressed as a function of x? </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p>To correct the bias arising from cases whose outcomes are not yet
 known at the time of estimation, <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> accounts for the
@@ -1019,8 +1032,8 @@ plus</li>
 distribution from <code>0</code> the others continue with the following
 day.</p>
 <p>Since the input value in <code>at</code> varies by day for each case
-(<code>at = 0</code>, <code>at = 1</code>, <code>at = 2</code>, …),
-<code>density()</code> needs to be embedded in a function.
+(<code>at = 0</code>, <code>at = 1</code>, <code>at = 2</code>, …), the
+<code>density()</code> needs to be expressed as a function of x.
 <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> will then draw values accordingly, as shown
 below:</p>
 <div class="codewrapper sourceCode" id="cb22">
@@ -1073,6 +1086,42 @@ primer on working with delay distributions</a>.</p></li>
 </ul></div>
 </div>
 </div>
+<div id="accordionSpoiler3" class="accordion spoiler-accordion accordion-flush">
+<div class="accordion-item">
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
+  <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> When to use discrete distributions? </h3>
+</button>
+<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div class="accordion-body">
+<p>For <code>cfr_static()</code> and all functions in the
+<code>cfr_*()</code> family, the most appropriate choice to use are
+<strong>discrete</strong> distributions. This is because
+<a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> operates on count data in discrete time: daily case
+and death counts.</p>
+<p>We can assume that evaluating the Probability Distribution Function
+(PDF) of a <em>continuous</em> distribution is equivalent to the
+Probability Mass Function (PMF) of the equivalent <em>discrete</em>
+distribution.</p>
+<p>However, this assumption may not be appropriate for distributions
+with larger peaks. For instance, diseases with an onset-to-death
+distribution that is strongly peaked with a low variance. In such cases,
+the average disparity between the PDF and PMF is expected to be more
+pronounced compared to distributions with broader spreads. One way to
+deal with this is to discretise the continuous distribution using
+<code>epiparameter::discretise()</code> to an
+<code>&lt;epiparameter&gt;</code> object.</p>
+<div class="codewrapper sourceCode" id="cb25">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">onset_to_death_ebola</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">discretise</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">plot</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></code></pre>
+</div>
+<figure><img src="../fig/severity-static-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+</div>
+</div>
+</div>
 <div id="challenge2" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -1092,7 +1141,7 @@ delay. Then:</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <ul><li>Find the appropriate <code>&lt;epiparameter&gt;</code> object!</li>
 </ul></div>
@@ -1104,11 +1153,11 @@ delay. Then:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
 <div class="accordion-body">
 <p>We use <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> to access a delay distribution for
 the SARS-CoV-2 aggregated incidence data:</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1124,7 +1173,7 @@ the SARS-CoV-2 aggregated incidence data:</p>
 <p>We read the data input using <code>readr::read_csv()</code>. This
 function recognize that the column <code>date</code> is a
 <code>&lt;date&gt;</code> class vector.</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1133,7 +1182,7 @@ function recognize that the column <code>date</code> is a
 <span><span class="va">sarscov2_input</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu">here</span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"raw-data"</span>, <span class="st">"sarscov2_cases_deaths.csv"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1160,7 +1209,7 @@ function recognize that the column <code>date</code> is a
 </div>
 <p>We can use <code>dplyr::rename()</code> to adapt the external data to
 fit the data input for <code>cfr_static()</code>.</p>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1182,89 +1231,6 @@ fit the data input for <code>cfr_static()</code>.</p>
 </div>
 <p>Interpret the comparison between the naive and delay-adjusted CFR
 estimates.</p>
-</div>
-</div>
-</div>
-</div>
-<div id="accordionSpoiler3" class="accordion spoiler-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
-  <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> When to use discrete distributions? </h3>
-</button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
-<div class="accordion-body">
-<p>For <code>cfr_static()</code> and all functions in the
-<code>cfr_*()</code> family, the most appropriate choice to use are
-<strong>discrete</strong> distributions. This is because
-<a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> operates on count data in discrete time: daily case
-and death counts.</p>
-<p>We can assume that evaluating the Probability Distribution Function
-(PDF) of a <em>continuous</em> distribution is equivalent to the
-Probability Mass Function (PMF) of the equivalent <em>discrete</em>
-distribution.</p>
-<p>However, this assumption may not be appropriate for distributions
-with larger peaks. For instance, diseases with an onset-to-death
-distribution that is strongly peaked with a low variance. In such cases,
-the average disparity between the PDF and PMF is expected to be more
-pronounced compared to distributions with broader spreads. One way to
-deal with this is to discretise the continuous distribution using
-<code>epiparameter::discretise()</code> to an
-<code>&lt;epiparameter&gt;</code> object.</p>
-<div class="codewrapper sourceCode" id="cb31">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">onset_to_death_ebola</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">discretise</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">plot</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></code></pre>
-</div>
-<figure><img src="../fig/severity-static-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
-</div>
-</div>
-</div>
-<div id="accordionSpoiler4" class="accordion spoiler-accordion accordion-flush">
-<div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
-  <h3 class="accordion-header" id="headingSpoiler4">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> How does {cfr} works? </h3>
-</button>
-<div id="collapseSpoiler4" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler4" aria-labelledby="headingSpoiler4">
-<div class="accordion-body">
-<p>To adjust the CFR, <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
-et al., 2009</a> use the case and death incidence data to estimate the
-number of cases with known outcomes:</p>
-<p><span class="math display">\[
-  u_t = \dfrac{\sum_{i = 0}^t
-        \sum_{j = 0}^\infty c_{i - j} f_{j}}{\sum_{i = 0} c_i},
-\]</span></p>
-<p>where:</p>
-<ul><li>
-<span class="math inline">\(c_{t}\)</span> is the daily case
-incidence at time <span class="math inline">\(t\)</span>,</li>
-<li>
-<span class="math inline">\(f_{t}\)</span> is the value of the
-Probability Mass Function (PMF) of the <strong>delay
-distribution</strong> between onset and death, and</li>
-<li>
-<span class="math inline">\(u_{t}\)</span> represents the
-underestimation factor of the known outcomes.</li>
-</ul><p><span class="math inline">\(u_{t}\)</span> is used to
-<strong>scale</strong> the value of the cumulative number of cases in
-the denominator in the calculation of the CFR. This is calculated
-internally with the <a href="https://epiverse-trace.github.io/cfr/reference/estimate_outcomes.html" class="external-link"><code>estimate_outcomes()</code></a>
-function.</p>
-<p>The estimator for CFR can be written as:</p>
-<p><span class="math display">\[p_{t} = \frac{b_{t}}{u_{t}}\]</span></p>
-<p>where <span class="math inline">\(p_{t}\)</span> is the realized
-proportion of confirmed cases to die from the infection (or the unbiased
-CFR), and <span class="math inline">\(b_{t}\)</span>, the crude and
-biased estimate of CFR (also naive CFR).</p>
-<p>From this last equation, we observe that the unbiased CFR <span class="math inline">\(p_{t}\)</span> is larger than biased CFR <span class="math inline">\(b_{t}\)</span> because in <span class="math inline">\(u_{t}\)</span> the numerator is smaller than the
-denominator (note that <span class="math inline">\(f_{t}\)</span> is the
-probability distribution of the <em>delay distribution</em> between
-onset and death). Therefore, we refer to <span class="math inline">\(b_{t}\)</span> as the biased estimator of CFR.</p>
-<p>When we observe the entire course of an epidemic (from <span class="math inline">\(t \rightarrow \infty\)</span>), <span class="math inline">\(u_{t}\)</span> tends to 1, making <span class="math inline">\(b_{t}\)</span> tends to <span class="math inline">\(p_{t}\)</span> and become an unbiased estimator
-(<a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
-et al., 2009</a>).</p>
 </div>
 </div>
 </div>
@@ -1383,12 +1349,12 @@ to be made for the <em>delay distribution</em> from onset to death,
 e.g. from literature based on previous outbreaks. <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852" class="external-link">Nishiura
 et al., 2009</a> depict this in the figures with data from the SARS
 outbreak in Hong Kong, 2003.</p>
-<div id="accordionSpoiler5" class="accordion spoiler-accordion accordion-flush">
+<div id="accordionSpoiler4" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
-<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler5" aria-expanded="false" aria-controls="collapseSpoiler5">
-  <h3 class="accordion-header" id="headingSpoiler5">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Case study: SARS outbreak, Hong Kong, 2003 </h3>
+<button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
+  <h3 class="accordion-header" id="headingSpoiler4">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Case study: SARS outbreak, Hong Kong, 2003 </h3>
 </button>
-<div id="collapseSpoiler5" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler5" aria-labelledby="headingSpoiler5">
+<div id="collapseSpoiler4" class="accordion-collapse collapse" aria-labelledby="headingSpoiler4" data-bs-parent="#accordionSpoiler4">
 <div class="accordion-body">
 <p>Figures A and B show the cumulative numbers of cases and deaths of
 SARS, and Figure C shows the observed (biased) CFR estimates as a
@@ -1435,7 +1401,7 @@ with the CFR estimated at the end of the outbreak?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>We can use either visual inspection or analysis of the output data
 frames.</p>
@@ -1448,7 +1414,7 @@ frames.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor3" aria-expanded="false" aria-controls="collapseInstructor3">
   <h3 class="accordion-header" id="headingInstructor3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor3" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor3" aria-labelledby="headingInstructor3">
+<div id="collapseInstructor3" class="accordion-collapse collapse" aria-labelledby="headingInstructor3" data-bs-parent="#accordionInstructor3">
 <div class="accordion-body">
 <p>There is almost one month of difference.</p>
 <p>Note that the estimate has considerable uncertainty at the beginning
@@ -1481,7 +1447,7 @@ estimate is higher than the proportion of deaths among the infected.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Why the naive and delay-adjusted differ? </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
 <div class="accordion-body">
 <p><a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> method aims to obtain an unbiased estimator “well
 before” observing the entire course of the outbreak. For this,
@@ -1497,7 +1463,7 @@ et al., 2009</a>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> What is the sampling process? </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
 <div class="accordion-body">
 <figure><img src="../fig/cfr-pone.0006852.g001.png" alt="The population of confirmed cases and sampling process for estimating the unbiased CFR during the course of an outbreak. (Nishiura et al., 2009)" class="figure mx-auto d-block"><div class="figcaption">The population of confirmed cases and sampling
 process for estimating the unbiased CFR during the course of an
@@ -1537,7 +1503,7 @@ D_{t} \log{\pi} +
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution8" aria-expanded="false" aria-controls="collapseSolution8">
   <h4 class="accordion-header" id="headingSolution8"> Limitations </h4>
 </button>
-<div id="collapseSolution8" class="accordion-collapse collapse" data-bs-parent="#accordionSolution8" aria-labelledby="headingSolution8">
+<div id="collapseSolution8" class="accordion-collapse collapse" aria-labelledby="headingSolution8" data-bs-parent="#accordionSolution8">
 <div class="accordion-body">
 <ul><li>The delay-adjusted CFR does not address all sources of error in data
 like the underdiagnosis of infected individuals.</li>
@@ -1569,7 +1535,7 @@ Hospitalisation Fatality Risk (HFR). We can follow this analogy:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution9" aria-expanded="false" aria-controls="collapseSolution9">
   <h4 class="accordion-header" id="headingSolution9"> Infection and Hospitalization fatality risk </h4>
 </button>
-<div id="collapseSolution9" class="accordion-collapse collapse" data-bs-parent="#accordionSolution9" aria-labelledby="headingSolution9">
+<div id="collapseSolution9" class="accordion-collapse collapse" aria-labelledby="headingSolution9" data-bs-parent="#accordionSolution9">
 <div class="accordion-body">
 <p>If for a <em>Case</em> fatality risk (CFR), we require:</p>
 <ul><li>
@@ -1594,7 +1560,7 @@ requires:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution10" aria-expanded="false" aria-controls="collapseSolution10">
   <h4 class="accordion-header" id="headingSolution10"> Data sources for more severity measures </h4>
 </button>
-<div id="collapseSolution10" class="accordion-collapse collapse" data-bs-parent="#accordionSolution10" aria-labelledby="headingSolution10">
+<div id="collapseSolution10" class="accordion-collapse collapse" aria-labelledby="headingSolution10" data-bs-parent="#accordionSolution10">
 <div class="accordion-body">
 <p><a href="https://www.nature.com/articles/s41467-020-19238-2/figures/1" class="external-link">Yang
 et al., 2020</a> summarises different definitions and data sources:</p>
@@ -1672,7 +1638,7 @@ delay.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p><strong>How to rearrange my input data?</strong></p>
 <p>Rearranging the input data for data analysis can take most of the
@@ -1696,7 +1662,7 @@ objects.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution11" aria-expanded="false" aria-controls="collapseSolution11">
   <h4 class="accordion-header" id="headingSolution11"> Show me the solution </h4>
 </button>
-<div id="collapseSolution11" class="accordion-collapse collapse" data-bs-parent="#accordionSolution11" aria-labelledby="headingSolution11">
+<div id="collapseSolution11" class="accordion-collapse collapse" aria-labelledby="headingSolution11" data-bs-parent="#accordionSolution11">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb41">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1868,7 +1834,7 @@ delay-adjusted CFR stratified by country.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5"> Give me a hint </h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
 <div class="accordion-body">
 <p>One way to do a <em>stratified analysis</em> is to apply a model to
 nested data. This <a href="https://tidyr.tidyverse.org/articles/nest.html#nested-data-and-models" class="external-link"><code>{tidyr}</code>
@@ -1884,7 +1850,7 @@ vignette</a> shows you how to apply the <code>group_by()</code> +
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution12" aria-expanded="false" aria-controls="collapseSolution12">
   <h4 class="accordion-header" id="headingSolution12"> Show me the solution </h4>
 </button>
-<div id="collapseSolution12" class="accordion-collapse collapse" data-bs-parent="#accordionSolution12" aria-labelledby="headingSolution12">
+<div id="collapseSolution12" class="accordion-collapse collapse" aria-labelledby="headingSolution12" data-bs-parent="#accordionSolution12">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb49">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
