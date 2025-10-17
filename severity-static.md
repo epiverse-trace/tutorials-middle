@@ -364,7 +364,7 @@ We can showcase this last bias using the [concept described in this `{cfr}` vign
 
 [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) developed a method that considers the **time delay** from the onset of symptoms to death.
 
-Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collect them from published scientific literature. For a step-by-step guide, read the tutorial episode on how to [access epidemiological delays](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html).
+Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collect them from published scientific literature. For a step-by-step guide, read the tutorial episode on how to [access epidemiological delays](../episodes/delays-reuse.md).
 
 Let's use `{epiparameter}`:
 
