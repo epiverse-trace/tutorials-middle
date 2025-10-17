@@ -368,7 +368,7 @@ To correct the bias arising from cases whose outcomes are not yet known at the t
 It does so by relating $C_t$ and $D_t$ to the incidence function $c_t$ (i.e., the number of new confirmed cases on day t) and the conditional probability density function $f_s$ of the time from onset to death, given death. 
 
 $$
-D_t & = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
+D_t = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
 $$
 
 Here, $D_t$ is the cumulative number of deaths up to time t, and $p_t$ is the realized proportion of confirmed cases that die from the infection (i.e., the unbiased case fatality risk, or CFR).
