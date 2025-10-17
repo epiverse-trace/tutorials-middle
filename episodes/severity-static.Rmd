@@ -365,7 +365,7 @@ The delay-adjusted CFR indicated that the overall disease severity _at the end o
 
 To correct the bias arising from cases whose outcomes are not yet known at the time of estimation, `{cfr}` accounts for the probability that a case’s outcome becomes known after a certain delay.
 
-It does so by relating $C_t$ and $D_t$ to the incidence function $c_t$ (i.e., the number of new confirmed cases on day t) and the conditional probability density function $f_s$ of the time from onset to death, given death. 
+It does so by relating $D_t$ to the incidence function $c_t$ (i.e., the number of new confirmed cases on day t) and the conditional probability density function $f_s$ of the time from onset to death, given death. 
 
 $$
 D_t = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
@@ -418,10 +418,10 @@ ebola_30days$cases[1] *
 
 Notice that the most recently observe cases start the delay distribution from `0` the others continue with the following day.
 
-Because the input value in `at` varies by day for each case, we need to embed `density()` within a function. `{cfr}` will then draw values according to the number of days included in the analysis. This will look as follows:
+Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), `density()` needs to be embedded in a function. `{cfr}` will then draw values accordingly, as shown below:
 
 ```r
-# {cfr} calculates density at different values of x 
+# {cfr} uses the density of the distribution at different values of x
 function(x) density(onset_to_death_ebola, at = x)
 ```
 
