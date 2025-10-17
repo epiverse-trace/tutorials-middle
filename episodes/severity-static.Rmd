@@ -363,13 +363,21 @@ The delay-adjusted CFR indicated that the overall disease severity _at the end o
 
 ### why density as a function?
 
-To correct the bias from cases whose outcomes are not yet known at the time of estimation, `{cfr}` calculates the probability that a case’s outcome becomes known after a certain delay.
+To correct the bias arising from cases whose outcomes are not yet known at the time of estimation, `{cfr}` accounts for the probability that a case’s outcome becomes known after a certain delay.
 
-In each analysis day, `{cfr}` will calculate the **total expected number of outcomes by time `t`** by summing all incident cases $c_i$ weighted by the probability mass function $f_{j−i}$ that their outcomes are known after a delay of $j−i$ days.
+It does so by relating $C_t$ and $D_t$ to the incidence function $c_t$ (i.e., the number of new confirmed cases on day t) and the conditional probability density function $f_s$ of the time from onset to death, given death. 
 
-With <epiparameter> class objects we can use the distribution function `density()` to calculate the probability mass function (PMF). We calculate the PMF because `{cfr}` works in discrete time: daily case and death data.
+$$
+D_t & = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
+$$
 
-For example: By day 1, the expected outcomes are equal to:
+Here, $D_t$ is the cumulative number of deaths up to time t, and $p_t$ is the realized proportion of confirmed cases that die from the infection (i.e., the unbiased case fatality risk, or CFR).
+
+The term $\sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}$ represents the **total expected number of cases with known outcomes by time `t`**. It sums all incident cases $c_i$, each weighted by the probability density function $f_{j−i}$ that their outcomes become known after a delay of $j−i$ days.
+
+On each analysis day, `{cfr}` computes, for each case, the **expected number of outcomes by time `t`**. When using <epiparameter> class objects, the function `density()` can be applied to obtain the corresponding probability density function for each case on each day.
+
+For example, by day 1, the expected outcomes are equal to:
 
 - the number of observed cases on day 1 times the density at day 0.
 
@@ -410,7 +418,7 @@ ebola_30days$cases[1] *
 
 Notice that the most recently observe cases start the delay distribution from `0` the others continue with the following day.
 
-Given that the input value in `at` will vary by day for each case, we need to embed `density()` within a function. `{cfr}` will draw values according to the number of days under analysis. This will look like this:
+Because the input value in `at` varies by day for each case, we need to embed `density()` within a function. `{cfr}` will then draw values according to the number of days included in the analysis. This will look as follows:
 
 ```r
 # {cfr} calculates density at different values of x 
@@ -519,7 +527,7 @@ Interpret the comparison between the naive and delay-adjusted CFR estimates.
 
 ### When to use discrete distributions?
 
-For  `cfr_static()` and all the `cfr_*()` family of functions, the most appropriate choice to pass are **discrete** distributions. This is because we will work with daily case and death data.
+For  `cfr_static()` and all functions in the `cfr_*()` family, the most appropriate choice to use are **discrete** distributions. This is because `{cfr}` operates on count data in discrete time: daily case and death counts.
 
 We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
 
