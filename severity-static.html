@@ -907,7 +907,7 @@ delay.</p>
 cases on day t) and the conditional probability density function <span class="math inline">\(f_s\)</span> of the time from onset to death,
 given death.</p>
 <p><span class="math display">\[
-D_t &amp; = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
+D_t = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
 \]</span></p>
 <p>Here, <span class="math inline">\(D_t\)</span> is the cumulative
 number of deaths up to time t, and <span class="math inline">\(p_t\)</span> is the realized proportion of
@@ -921,9 +921,9 @@ weighted by the probability density function <span class="math inline">\(f_{j−
 after a delay of <span class="math inline">\(j−i\)</span> days.</p>
 <p>On each analysis day, <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> computes, for each case, the
 <strong>expected number of outcomes by time <code>t</code></strong>.
-When using <epiparameter> class objects, the function
+When using <code>&lt;epiparameter&gt;</code> class objects, the function
 <code>density()</code> can be applied to obtain the corresponding
-probability density function for each case on each day.</epiparameter></p>
+probability density function for each case on each day.</p>
 <p>For example, by day 1, the expected outcomes are equal to:</p>
 <ul><li>the number of observed cases on day 1 times the density at day
 0.</li>
