@@ -58,8 +58,9 @@ incidence_class %>%
 
 covid_incidence2 <- incidence_class %>%
   cfr::prepare_data(
-                    cases_variable = "cases_new",
-                    deaths_variable = "deaths_new") %>%
+    cases_variable = "cases_new",
+    deaths_variable = "deaths_new"
+  ) %>%
   as_tibble()
 
 covid_incidence2
