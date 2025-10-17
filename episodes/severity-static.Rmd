@@ -10,7 +10,8 @@ editor_options:
 
 - Why do we estimate the clinical severity of an epidemic?
 
-- How can the Case Fatality Risk (CFR) be estimated early in an ongoing epidemic?
+- How can the Case Fatality Risk (CFR) be estimated early in an ongoing
+epidemic?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -67,15 +68,12 @@ We can assess the pandemic potential of an epidemic with two critical measuremen
 ([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062), 
 [CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).
 
-![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range,” “moderate pandemic,” “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
+![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled
+measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range”, “moderate pandemic”, “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
 
 One epidemiological approach to estimating the clinical severity is quantifying the Case Fatality Risk (CFR). CFR is the conditional probability of death given confirmed diagnosis, calculated as the ratio of the cumulative number of deaths from an infectious disease to the number of confirmed diagnosed cases. However, calculating this directly during the course of an epidemic tends to result in a naive or biased CFR given the time [delay](../learners/reference.md#delaydist) from onset to death, varying substantially as the epidemic progresses and stabilising at the later stages of the outbreak ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
 
-![Observed biased confirmed case fatality risk (CFR) estimates as a function of time (thick line) calculated as the cumulative number 
-of deaths over confirmed cases at time t. The estimate at the end of an outbreak (~May 30) is the realised CFR by the end of the epidemic.
- The horizontal continuous line and dotted lines show the expected value and the 95% confidence intervals ($95\%$ CI) of the predicted delay-adjusted 
- CFR estimate only by using the observed data until 27 Mar 2003
-  ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_c.png){alt='The periods are relevant: Period 1 -- 15 days where CFR is zero to indicate this is due to no reported deaths; Period from Mar 15 -- Apr 26 where CFR appears to be rising; Period Apr 30 -- May 30 where the CFR estimate stabilises.'}
+![Observed biased confirmed case fatality risk (CFR) estimates as a function of time (thick line) calculated as the cumulative number of deaths over confirmed cases at time t. The estimate at the end of an outbreak (~May 30) is the realised CFR by the end of the epidemic. The horizontal continuous line and dotted lines show the expected value and the 95% confidence intervals ($95\%$ CI) of the predicted delay-adjusted CFR estimate only by using the observed data until 27 Mar 2003 ([Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852))](fig/cfr-pone.0006852.g003-fig_c.png){alt='The periods are relevant: Period 1 -- 15 days where CFR is zero to indicate this is due to no reported deaths; Period from Mar 15 -- Apr 26 where CFR appears to be rising; Period Apr 30 -- May 30 where the CFR estimate stabilises.'}
 
 ::::::::::::::::::::::: instructor
 
@@ -87,11 +85,12 @@ More generally, estimating severity can be helpful even outside of a pandemic pl
 Knowing whether an outbreak has or had a different severity from the historical record can motivate causal investigations, 
 which could be intrinsic to the infectious agent (e.g., a new, more severe strain) or due to underlying factors in the population (e.g. reduced immunity or morbidity factors) ([Lipsitch et al., 2015](https://journals.plos.org/plosntds/article?id=10.1371/journal.pntd.0003846)).
 
-In this tutorial we are going to learn how to use the `{cfr}` package to calculate and adjust a CFR estimation using [delay distributions](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere, based on the methods developed by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852), also, how we can reuse `{cfr}` functions for more severity measurements.
+In this tutorial we are going to learn how to use the `{cfr}` package to calculate and adjust a CFR estimation using [delay distributions](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere, based on the methods developed by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852). We will also explore how we can reuse `{cfr}` functions for more severity measurements.
 
-We'll use the pipe `%>%` operator to connect  functions, so let's also call to the `{tidyverse}` package:
+We'll use the pipe `%>%` operator from the `{magrittr}` package to connect  functions from {cfr}, including others from the package `{dplyr}`. Hence, we will load the `{tidyverse}` package which contains both `{magrittr}` and `{dplyr}`.
 
-```{r,message=FALSE,warning=FALSE}
+```{r message=FALSE, warning=FALSE}
+# load packages
 library(cfr)
 library(epiparameter)
 library(tidyverse)
@@ -104,7 +103,7 @@ library(outbreaks)
 
 The double-colon `::` in R lets you call a specific function from a package without loading the entire package into the current environment. 
 
-For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
+For example, `dplyr::filter(data, condition)` uses the `filter()` function from the `{dplyr}` package.
 
 This helps us remember package functions and avoid namespace conflicts.
 
@@ -112,11 +111,7 @@ This helps us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::: discussion
 
-Based on your experience:
-
-- Share any previous outbreak in which you participated in its response.
-
-Answer to these questions:
+Have you been a member of an epidemic response team? If yes:
 
 - How did you assess the clinical severity of the outbreak?
 - What were the primary sources of bias?
@@ -132,13 +127,13 @@ What data sources can we use to estimate the clinical severity of a disease outb
 ![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of deaths among confirmed cases in an epidemic. 
 ([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
 
-- At the top of the pyramid, those who met the WHO case criteria for **severe** or critical cases would likely have been identified in the hospital setting, presenting with atypical viral pneumonia. These cases would have been identified in mainland China and among those categorised internationally as local transmission. 
+- At the top of the pyramid, those who met the WHO case criteria for **severe** or **critical** cases would likely have been identified in the hospital setting, presenting with atypical viral pneumonia. These cases would have been identified in mainland China and among those categorised internationally as local transmission. 
 - Many more cases are likely to be **symptomatic** (i.e., with fever, cough, or myalgia) but might not require hospitalisation. These cases would have been identified through links to international travel to high-risk areas and through contact-tracing of contacts of confirmed cases. They might be identifiable through population surveillance of, for example, influenza-like illness. 
 - The bottom part of the pyramid represents **mild** (and possibly **asymptomatic**) cases. These cases might be identifiable through contact tracing and subsequently via serological testing.
 
 ## Naive CFR
 
-We measure disease severity in terms of case fatality risk (CFR). The CFR is interpreted as the conditional probability of death given confirmed diagnosis, calculated as the ratio of the cumulative number of deaths $D_{t}$ to the cumulative number of confirmed cases $C_{t}$ at a certain time $t$. We can refer to the _naive CFR_ (also crude or biased CFR, $b_{t}$):
+We measure disease severity in terms of case fatality risk (CFR). The CFR is interpreted as the conditional probability of death given confirmed diagnosis, calculated as the ratio of the cumulative number of deaths $D_{t}$ to the cumulative number of confirmed cases $C_{t}$ at a certain time $t$. We can refer it to the _naive CFR_ (also crude or biased CFR, $b_{t}$):
 
 $$ b_{t} =  \frac{D_{t}}{C_{t}} $$
 
@@ -150,7 +145,7 @@ To calculate the naive CFR, the `{cfr}` package requires an input data frame wit
 - `cases`
 - `deaths`
 
-Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the first Ebola outbreak in what was then called Zaire (now the Democratic Republic of the Congo) in 1976, as analysed by Camacho et al. (2014).
+Let's explore the `ebola1976` dataset, included in {cfr}, which comes from the first Ebola outbreak in Zaire (now the Democratic Republic of the Congo) in 1976, as analysed by Camacho et al. (2014).
 
 ```{r}
 # Load the Ebola 1976 data provided with the {cfr} package
@@ -193,12 +188,12 @@ This data input should be **aggregated** by day, which means one observation *pe
 
 Also, `{cfr}` currently works for *daily* data only, but not for other temporal units of data aggregation, e.g., weeks.
 
-<!-- suggest ways to deal with raw input weekly data -->
+<!-- suggest ways to deal with weekly incidence data -->
 <!-- https://github.com/epiverse-trace/cfr/issues/117 -->
 
 ::::::::::::::::::
 
-When we apply `cfr_static()` to `data` directly, we are calculating the naive CFR:
+When we apply the `cfr_static()` function to the input `data` directly, we are calculating the naive CFR:
 
 ```{r}
 # Calculate the naive CFR for the first 30 days
@@ -243,14 +238,13 @@ sarscov2_input <-
 sarscov2_input
 ```
 
-We can use `dplyr::rename()` to adapt the external data to fit the data input for `cfr_static()`.
+We can use `cleanepi::standardize_column_names()` to adapt the external data to fit the data input for `cfr::cfr_static()`.
 
 ```{r}
 # Rename before Estimate naive CFR
 sarscov2_input %>%
-  dplyr::rename(
-    cases = cases_jpn,
-    deaths = deaths_jpn
+  cleanepi::standardize_column_names(
+    rename = c(cases = "cases_jpn", deaths = "deaths_jpn")
   ) %>%
   cfr::cfr_static()
 ```
@@ -459,7 +453,7 @@ When using an `<epiparameter>` class object we can use this expression as a temp
 
 For distribution functions with parameters not available in `{epiparameter}`, we suggest you two alternatives: 
 
-- Create an `<epiparameter>` class object, to plug into other R packages of the outbreak analytics pipeline. Read the [reference documentation of `epiparameter::epiparameter()`](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html), or
+- Create an `<epiparameter>` class object, to plug into other R packages of the outbreak analytics pipeline. Read the [reference documentation of `epiparameter::epiparameter()`](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html)
 
 - Read `{cfr}` vignette for [a primer on working with delay distributions](https://epiverse-trace.github.io/cfr/articles/delay_distributions.html).
 
@@ -532,14 +526,13 @@ sarscov2_input <-
 sarscov2_input
 ```
 
-We can use `dplyr::rename()` to adapt the external data to fit the data input for `cfr_static()`.
+We can use the `cleanepi::standardize_column_names()` to adapt the external data to fit the data input for `cfr_static()`.
 
 ```{r}
 # Rename before Estimate naive CFR
 sarscov2_input %>%
-  dplyr::rename(
-    cases = cases_jpn,
-    deaths = deaths_jpn
+  cleanepi::standardize_column_names(
+    rename = c(cases = "cases_jpn", deaths = "deaths_jpn")
   ) %>%
   cfr::cfr_static(
     delay_density = function(x) density(sarscov2_delay, x)
@@ -584,7 +577,7 @@ rolling_cfr_adjusted <- cfr::cfr_rolling(
 )
 ```
 
-With `utils::tail()`, we show that the latest CFR estimates. The naive and delay-adjusted estimates have overlapping ranges of 95% confidence intervals.
+With `utils::tail()`, we view the latest CFR estimates. The naive and delay-adjusted estimates have overlapping ranges of 95% confidence intervals.
 
 ```{r,eval=FALSE,echo=TRUE}
 # Print the tail of the data frame
@@ -619,7 +612,7 @@ dplyr::bind_rows(
   )
 ```
 
-The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
+The red and blue lines represent the delay-adjusted and naive CFR, respectively, throughout the outbreak. The bands around them represent the 95% confidence intervals (95% CI).
 
 **Notice** that this delay-adjusted calculation is particularly useful when an _epidemic curve of confirmed cases_ is the only data available (i.e. when individual data from onset to death are unavailable, especially during the early stage of the epidemic). When there are few deaths or none at all, an assumption has to be made for the *delay distribution* from onset to death, e.g. from literature based on previous outbreaks. [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) depict this in the figures with data from the SARS outbreak in Hong Kong, 2003.
 
@@ -653,7 +646,7 @@ Discuss:
 
 :::::::::::::::::::::: hint
 
-We can use either visual inspection or analysis of the output data frames.
+We can either use a visual inspection or analyse the output data frames.
 
 ::::::::::::::::::::::
 
@@ -814,12 +807,11 @@ library(outbreaks)
 library(tidyverse)
 
 # Access delay distribution
-mers_delay <-
-  epiparameter::epiparameter_db(
-    disease = "mers",
-    epi_name = "onset to death",
-    single_epiparameter = TRUE
-  )
+mers_delay <- epiparameter::epiparameter_db(
+  disease = "mers",
+  epi_name = "onset to death",
+  single_epiparameter = TRUE
+)
 
 # Read linelist
 mers_korea_2015$linelist %>%
