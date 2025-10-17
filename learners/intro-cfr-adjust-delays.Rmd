@@ -285,9 +285,7 @@ $$
 
 ::: solution
 
-Apply the formula to get: 
-
-- $t = 3$: we observe $C_3 = 9, D_3 = 1$, giving a naive estimate $b_3 = \frac{1}{9}$. 
+At $t = 3$ we observe $C_3 = 9, D_3 = 1$, giving a naive estimate $b_3 = \frac{1}{9}$. 
 
 Accounting for delays, the expected number of deaths by day 3 is
 
