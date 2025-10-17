@@ -932,10 +932,11 @@ between 0.881 and 0.9861, slightly higher than the naive one.</p>
 known at the time of estimation, <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> accounts for the
 probability that a case’s outcome becomes known after a certain
 delay.</p>
-<p>It does so by relating <span class="math inline">\(C_t\)</span> and
-<span class="math inline">\(D_t\)</span> to the incidence function <span class="math inline">\(c_t\)</span> (i.e., the number of new confirmed
-cases on day t) and the conditional probability density function <span class="math inline">\(f_s\)</span> of the time from onset to death,
-given death.</p>
+<p>It does so by relating <span class="math inline">\(D_t\)</span> to
+the incidence function <span class="math inline">\(c_t\)</span> (i.e.,
+the number of new confirmed cases on day t) and the conditional
+probability density function <span class="math inline">\(f_s\)</span> of
+the time from onset to death, given death.</p>
 <p><span class="math display">\[
 D_t = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
 \]</span></p>
@@ -1017,15 +1018,16 @@ plus</li>
 <p>Notice that the most recently observe cases start the delay
 distribution from <code>0</code> the others continue with the following
 day.</p>
-<p>Because the input value in <code>at</code> varies by day for each
-case, we need to embed <code>density()</code> within a function.
-<a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> will then draw values according to the number of days
-included in the analysis. This will look as follows:</p>
+<p>Since the input value in <code>at</code> varies by day for each case
+(<code>at = 0</code>, <code>at = 1</code>, <code>at = 2</code>, …),
+<code>density()</code> needs to be embedded in a function.
+<a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> will then draw values accordingly, as shown
+below:</p>
 <div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># {cfr} calculates density at different values of x </span></span>
+<code class="sourceCode R"><span><span class="co"># {cfr} uses the density of the distribution at different values of x</span></span>
 <span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, at <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Internally, the function <code>cfr::estimate_outcomes()</code>
