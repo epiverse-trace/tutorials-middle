@@ -158,8 +158,6 @@ $$ p_t = b_t\frac{\sum\limits_{i=0}^{t}c_i}{\sum\limits_{i=0}^{t}\sum\limits_{j=
 
 In practice, the delay distribution $f_s$ is estimated from samples of onset-to-outcome data. However, when deaths are few or absent during the early stages of an outbreak, assumptions about $f_s$ must be made based on literature from previous outbreaks of the same or similar diseases.
 
-Given that the equations are applied to discrete count data, such as daily case and death counts, $f_s$ denotes the associated Probability Mass Function (PMF).
-
 For example, suppose we have obtained the onset-to-outcome distribution for the dataset in our example. This distribution, shown in the figure below, characterizes the probability of death occurring $s$ days after case confirmation.
 
 ```{r, echo=FALSE,message=FALSE, warning=FALSE}
@@ -185,9 +183,13 @@ gf <- df %>%
 gf
 ```
 
+Given that the equations are applied to discrete count data, such as daily case and death counts, $f_s$ denotes the associated Probability Mass Function (PMF).
+
 Then we can use to produce estimated for $p_t$ as follows:
 
-- $t = 0$: we observe $C_0 = 3, D_0 = 1$, giving a naive estimate $b_0 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 1 is
+### t = 0
+
+$t = 0$: we observe $C_0 = 3, D_0 = 1$, giving a naive estimate $b_0 = \frac{1}{3}$. However, accounting for delays, the expected number of deaths by day 1 is
 
 $$
 \begin{equation}
@@ -206,13 +208,17 @@ $$
 b_0 = \frac{D_0}{C_0} = \frac{p_0 \times 0.6}{3}
 $$
 
+The understimation factor $u_0 = \frac{0.6}{3} = 0.2$ indicates that $b_0$ is only 20% of the true value $p_0$.
+
 Solving for $p_0$, using the fact that $b_0 = \frac{1}{3}$, gives
 
 $$
 \Rightarrow p_0 = \frac{b_0 \times 3}{0.6} = \frac{1}{0.6} = 1.67
 $$
 
-- $t = 1$: we observe $C_1 = 4, D_1 = 1$, giving a naive estimate $b_1 = \frac{1}{4}$. 
+### t = 1
+
+$t = 1$: we observe $C_1 = 4, D_1 = 1$, giving a naive estimate $b_1 = \frac{1}{4}$. 
 
 Accounting for delays, the expected number of deaths by day 2 is
 
@@ -227,13 +233,17 @@ D_1 & = p_1 \times \sum_{i=1}^{1} \sum_{j=0}^{i} c_i f_{i-j} \\
 \end{equation}
 $$
 
+The understimation factor $u_1 = \frac{2}{4} = 0.5$ indicates that $b_1$ is only 50% of the true value $p_1$.
+
 Solving for $p_1$, gives
 
 $$
-\Rightarrow p_1 = \frac{b_1*4}{2} = \frac{1}{2} = 0.5
+\Rightarrow p_1 = \frac{b_1 \times 4}{2} = \frac{1}{2} = 0.5
 $$
 
-- $t = 2$: we observe $C_2 = 7, D_2 = 1$, giving a naive estimate $b_2 = \frac{1}{7}$. 
+### t = 2
+
+$t = 2$: we observe $C_2 = 7, D_2 = 1$, giving a naive estimate $b_2 = \frac{1}{7}$. 
 
 Accounting for delays, the expected number of deaths by day 3 is
 
@@ -248,10 +258,12 @@ D_2 & = p_2 \times \sum_{i=1}^{2} \sum_{j=0}^{i} c_i f_{i-j} \\
 \end{equation}
 $$
 
+The understimation factor $u_2 = \frac{3.9}{7} = 0.56$ indicates that $b_2$ is only 56% of the true value $p_2$.
+
 Solving for $p_2$, gives
 
 $$
-\Rightarrow p_2 = \frac{b_2*7}{3.9} = \frac{1}{3.9} = 0.26
+\Rightarrow p_2 = \frac{b_2 \times 7}{3.9} = \frac{1}{3.9} = 0.26
 $$
 
 :::: challenge
@@ -278,10 +290,12 @@ D_3 & = p_3 \times \sum_{i=1}^{3} \sum_{j=0}^{i} c_i f_{i-j} \\
 \end{equation}
 $$
 
+The understimation factor $u_3 = \frac{6.1}{9} = 0.68$ indicates that $b_3$ is only 68% of the true value $p_3$.
+
 Solving for $p_3$, gives
 
 $$
-\Rightarrow p_2 = \frac{b_3*9}{6.1} = \frac{1}{6.1} = 0.16
+\Rightarrow p_2 = \frac{b_3 \times 9}{6.1} = \frac{1}{6.1} = 0.16
 $$
 
 :::
