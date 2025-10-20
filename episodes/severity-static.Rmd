@@ -198,6 +198,12 @@ Also, `{cfr}` currently works for *daily* data only, but not for other temporal 
 
 ::::::::::::::::::
 
+:::::::::::: checklist
+
+When aggregating cases by day with `{incidence2}`, you can adapt the data for `{cfr}` using `cfr::prepare_data()` on `<incidence2>` objects. For details and an example, read the `{cfr}` reference manual: [Prepare common epidemiological data formats for CFR estimation](https://epiverse-trace.github.io/cfr/reference/prepare_data.html).
+
+::::::::::::
+
 When we apply `cfr_static()` to `data` directly, we are calculating the naive CFR:
 
 ```{r}
@@ -795,7 +801,7 @@ Estimate the delay-adjusted CFR using the corresponding distribution delay.
 
 Rearranging the input data for data analysis can take most of the time. To get ready-to-analyse _aggregated incidence data_, we encourage you to use `{incidence2}`!
 
-First, in the [Get started](https://www.reconverse.org/incidence2/articles/incidence2.html) vignette from the `{incidence2}` package, explore how to use the `date_index` argument when reading a linelist with dates in multiple column.
+First, in the [Get started](https://www.reconverse.org/incidence2/doc/incidence2.html) vignette from the `{incidence2}` package, explore how to use the `date_index` argument when reading a linelist with dates in multiple column.
 
 Then, refer to the `{cfr}` reference manual on [Prepare common epidemiological data formats for CFR estimation](https://epiverse-trace.github.io/cfr/reference/prepare_data.html) on how to use the `cfr::prepare_data()` function from incidence2 objects.
 
