@@ -200,7 +200,7 @@ Also, `{cfr}` currently works for *daily* data only, but not for other temporal 
 
 :::::::::::: checklist
 
-When aggregating cases by day with `{incidence2}`, you can adapt the data for `{cfr}` using `cfr::prepare_data()` on `<incidence2>` objects. For details and an example, read the `{cfr}` reference manual: [Prepare common epidemiological data formats for CFR estimation](https://epiverse-trace.github.io/cfr/reference/prepare_data.html).
+When aggregating cases by day with `{incidence2}`, you can adapt the data for `{cfr}` using `cfr::prepare_data()` on `<incidence2>` objects. For details and an example, consult the `{cfr}` reference manual on [preparing common epidemiological data formats for CFR estimation](https://epiverse-trace.github.io/cfr/reference/prepare_data.html).
 
 ::::::::::::
 
