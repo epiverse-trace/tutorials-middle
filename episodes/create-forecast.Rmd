@@ -19,8 +19,8 @@ withr::local_options(base::list(mc.cores = 4))
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Apprenez à faire des prévisions de cas à l'aide du progiciel R `EpiNow2`
-- Apprenez à inclure un processus d'observation dans l'estimation
+- Apprendre à faire des prévisions de cas à l'aide du logiciel R `EpiNow2`
+- Apprendre à inclure un processus d'observation dans l'estimation
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -32,7 +32,7 @@ withr::local_options(base::list(mc.cores = 4))
 
 Les apprenants doivent se familiariser avec les dépendances conceptuelles suivantes avant de suivre ce tutoriel :
 
-**Statistiques**: distributions de probabilités, principe de [Analyse bayésienne](../learners/reference.md#bayesian).
+**Statistiques**: distributions de probabilités, principe d’ [Analyse bayésienne](../learners/reference.md#bayesian).
 
 **Théorie des épidémies**: [Nombre de reproduction effectif](../learners/reference.md#effectiverepro).
 
@@ -40,9 +40,7 @@ Les apprenants doivent se familiariser avec les dépendances conceptuelles suiva
 
 ## Introduction
 
-À partir des données relatives aux cas d'une épidémie, il est possible d'estimer le nombre actuel et futur de cas en tenant compte à la fois des retards et de l'évolution de l'épidémie.
-de la déclaration et de la sous-déclaration. Pour faire des prévisions sur l'évolution future de l'épidémie, nous devons faire une hypothèse sur la façon dont les cas sont déclarés.
-observations faites jusqu'à présent sont liées à ce que nous attendons à l'avenir. La façon la plus simple de procéder est de supposer qu'il n'y a pas de changement, c'est-à-dire que le nombre de reproduction reste le même à l'avenir que celui qui a été observé en dernier lieu. Dans ce tutoriel, nous créerons des [prévisions](../learners/reference.md#forecast) en supposant que le nombre de reproductions restera le même que son estimation à la dernière date pour laquelle des données étaient disponibles.
+À partir des données relatives aux cas d' épidémie, il est possible d'estimer le nombre actuel et futur de cas en tenant compte à la fois des délais de la déclaration et de la sous-déclaration. Pour faire des prévisions sur l'évolution future de l'épidémie, nous devons émettre une hypothèse sur la façon dont les observations faites jusqu'à présent sont liées à ce que nous attendons à l'avenir. La façon la plus simple de procéder est de supposer qu'il n'y a pas de changement, c'est-à-dire que le nombre de reproduction restera le même à l’avenir qu'au moment de la dernière observation. Dans ce tutoriel, nous établirons  des [prévisions](../learners/reference.md#forecast) en supposant que le nombre de reproductions restera le même que son estimation à la dernière date pour laquelle des données étaient disponibles.
 
 Dans ce tutoriel, nous allons apprendre à utiliser la fonction `{EpiNow2}` pour prévoir les cas en tenant compte des observations incomplètes et pour prévoir les observations secondaires telles que les décès.
 
@@ -61,7 +59,7 @@ library(tidyverse)
 
 ### Le double point-virgule
 
-Le double point-virgule `::` dans R vous permettent d'appeler une fonction spécifique d'un paquetage sans charger le paquetage entier dans l'environnement actuel.
+Le double point-virgule `::` dans R vous permet d'appeler une fonction spécifique d'un paquet sans charger  l'intégralité du paquet  dans l'environnement actuel.
 
 Par exemple, vous pouvez appeler une fonction spécifique d'un paquet sans charger le paquet entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir de l'outil `{dplyr}` paquet.
 
@@ -71,12 +69,12 @@ Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les confl
 
 ## Créez une prévision à court terme
 
-La fonction `epinow()` décrite dans le [quantifier la transmission](../episodes/quantify-transmissibility.md) est une enveloppe pour les fonctions :
+La fonction `epinow()` décrite dans  l’épisode [quantifier la transmission](../episodes/quantify-transmissibility.md) est une enveloppe pour les fonctions :
 
-- `estimate_infections()` utilisées pour estimer le nombre de cas par date d'infection.
-- `forecast_infections()` utilisé pour simuler des infections à l'aide d'un ajustement existant (estimation) aux cas observés.
+- `estimate_infections()` utilisée pour estimer le nombre de cas par date d'infection.
+- `forecast_infections()` utilisée pour simuler des infections à l'aide d'un ajustement existant (estimation) aux cas observés.
 
-Utilisons le même code que celui utilisé dans [quantifier la transmission](../episodes/quantify-transmissibility.md) pour obtenir les données d'entrée, les délais et les priorités :
+Utilisons le même code que celui utilisé dans l’épisode [quantifier la transmission](../episodes/quantify-transmissibility.md) pour obtenir les données d'entrée, les délais et les priorités :
 
 ```{r, echo=TRUE}
 # Read cases dataset
@@ -144,7 +142,7 @@ estimates <- EpiNow2::epinow(
 
 ### N'attendez pas que cela se termine !
 
-Ce dernier morceau peut prendre 10 minutes à s'exécuter. Continuez à lire cet épisode du tutoriel pendant qu'il s'exécute en arrière-plan. Pour plus d'informations sur le temps de calcul, lisez la section "Inférence bayésienne à l'aide de Stan" dans la section [quantifier la transmission](../episodes/quantify-transmissibility.md) de quantification de la transmission.
+Ce dernier morceau peut prendre 10 minutes à s'exécuter. Continuez à lire cet épisode du tutoriel pendant qu'il s'exécute en arrière-plan. Pour plus d'informations sur le temps de calcul, lisez la section "Inférence bayésienne à l'aide de Stan" dans la section [quantification de la transmission](../episodes/quantify-transmissibility.md).
 
 :::::::::::::::::::::::::::::::::
 
@@ -162,10 +160,10 @@ plot(estimates)
 
 ### Prévision avec des observations incomplètes
 
-Dans le cadre de la [quantifier la transmission](../episodes/quantify-transmissibility.md) nous avons tenu compte des délais de déclaration. Dans l'épisode de quantification de la transmission, nous avons tenu compte des retards de déclaration. `EpiNow2` nous pouvons également tenir compte des observations incomplètes, car dans la réalité, 100 % des cas ne sont pas déclarés.
+Dans  l’épisode de la [quantification de la transmission](../episodes/quantify-transmissibility.md) nous avons tenu compte des délais de déclaration. Dans `EpiNow2`,  nous pouvons également tenir compte des observations incomplètes, car dans la réalité, 100 % des cas ne sont pas déclarés.
 Nous passerons un argument supplémentaire appelé `obs` dans le `epinow()` pour définir un modèle d'observation. Le format de `obs` est défini par la fonction `obs_opt()` (voir `?EpiNow2::obs_opts` pour plus de détails).
 
-Supposons que nous croyons que les données de l'épidémie COVID-19 dans l'article `cases` n'incluent pas tous les cas déclarés. Nous estimons que seuls 40 % des cas réels sont déclarés. Pour spécifier cela dans le modèle d'observation, nous devons passer un facteur d'échelle avec une moyenne et un écart type. Si nous supposons que 40 % des cas sont déclarés (avec un écart-type de 1 %), nous spécifions alors le facteur d'échelle `scale` à `obs_opts()` comme suit :
+Supposons que nous estimions  que les données de l'épidémie COVID-19 dans l'objet  `cases` n'incluent pas tous les cas déclarés. Nous estimons que seuls 40 % des cas réels sont déclarés. Pour spécifier cela dans le modèle d'observation, nous devons passer un facteur d'échelle avec une moyenne et un écart type. Si nous supposons que 40 % des cas sont déclarés (avec un écart-type de 1 %), nous spécifions alors le facteur d'échelle `scale` à `obs_opts()` comme suit :
 
 ```{r}
 obs_scale <- EpiNow2::Normal(mean = 0.4, sd = 0.01)
@@ -194,7 +192,7 @@ estimates <- EpiNow2::epinow(
 base::summary(estimates)
 ```
 
-Les estimations des mesures de transmission telles que le nombre de reproduction efficace et le taux de croissance sont similaires (ou de même valeur) par rapport à la situation où nous n'avons pas tenu compte des observations incomplètes (voir [quantifier l'épisode de transmission](../episodes/quantify-transmissibility.md) dans la section "Recherche d'estimations"). Cependant, le nombre de nouveaux cas confirmés par date d'infection a considérablement changé d'ampleur pour refléter l'hypothèse selon laquelle seuls 40 % des cas sont déclarés.
+Les estimations des mesures de transmission telles que le nombre de reproduction efficace et le taux de croissance sont similaires (ou de même valeur) par rapport à la situation où nous n'avons pas tenu compte des observations incomplètes (voir [l'épisode de quantification de la  transmission](../episodes/quantify-transmissibility.md) dans la section "Recherche d'estimations"). Cependant, le nombre de nouveaux cas confirmés par date d'infection a considérablement changé d'ampleur pour refléter l'hypothèse selon laquelle seuls 40 % des cas sont déclarés.
 
 Nous pouvons également changer la distribution par défaut de Binomiale négative à Poisson, supprimer l'effet de semaine par défaut (qui tient compte des schémas hebdomadaires de déclaration) et bien d'autres choses encore. Voir `?EpiNow2::obs_opts` pour plus de détails.
 
@@ -210,11 +208,11 @@ Nous pouvons également changer la distribution par défaut de Binomiale négati
 
 ## Prévision des observations secondaires
 
-`EpiNow2` L'outil de prévision de l'épidémie de COVID-19 permet également d'estimer et de prévoir les observations secondaires, par exemple les décès et les hospitalisations, à partir d'une observation primaire, par exemple le nombre de cas. Nous illustrerons ici comment prévoir le nombre de décès découlant des cas observés de COVID-19 dans les premiers stades de l'épidémie au Royaume-Uni.
+L’outil `EpiNow2` permet également d'estimer et de prévoir les observations secondaires, par exemple les décès et les hospitalisations, à partir d'une observation primaire, par exemple le nombre de cas. Nous illustrerons ici comment prévoir le nombre de décès découlant des cas observés de COVID-19 dans les premiers stades de l'épidémie au Royaume-Uni.
 
 Tout d'abord, nous devons formater nos données de manière à ce qu'elles comportent les colonnes suivantes :
 
-- `date` la date (en tant qu'objet date, voir `?is.Date()`),
+- `date`: la date (en tant qu'objet date, voir `?is.Date()`),
 - `primary`: nombre d'observations primaires à cette date, dans cet exemple **cas**,
 - `secondary`: nombre de dates d'observations secondaires, dans cet exemple **décès**.
 
@@ -288,7 +286,7 @@ Nous devons spécifier le type d'observation en utilisant `type` en `secondary_o
 
 Dans cet exemple, nous spécifions `secondary_opts(type = "incidence")`. Voir `?EpiNow2::secondary_opts` pour plus de détails.
 
-La dernière donnée clé est la distribution des délais entre les observations primaires et secondaires. Il s'agit ici du délai entre le signalement du cas et le décès. Nous supposons que ce délai suit une distribution gamma avec une moyenne de 14 jours et un écart-type de 5 jours. `{epiparameter}` pour [accéder aux délais épidémiologiques](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html)). L'utilisation de `Gamma()` nous spécifions une distribution gamma fixe.
+La dernière donnée clé est la distribution des délais entre les observations primaires et secondaires. Il s'agit ici du délai entre le signalement du cas et le décès. Nous supposons que ce délai suit une distribution gamma avec une moyenne de 14 jours et un écart-type de 5 jours. Nous pouvons également utiser `{epiparameter}`, comme alternative,  pour [accéder aux délais épidémiologiques](https://epiverse-trace.github.io/tutorials-early/delays-reuse.html)).  Nous utilisons `Gamma()`  pour spécifier une distribution gamma fixe.
 
 Il existe d'autres fonctions d'entrée pour `estimate_secondary()` qui peuvent être spécifiées, y compris l'ajout d'un processus d'observation, voir `?EpiNow2::estimate_secondary` pour plus de détails sur ces options.
 
@@ -400,7 +398,7 @@ Assurez-vous que les données sont au bon format :
 
 Pour estimer le nombre de reproductions effectives et le taux de croissance, nous utiliserons la fonction `epinow()`.
 
-Les données étant constituées de la date d'apparition des symptômes, il nous suffit de spécifier une distribution des retards pour la période d'incubation et le temps de génération.
+Les données étant constituées de la date d'apparition des symptômes, il nous suffit de spécifier une distribution des délais pour la période d'incubation et le temps de génération.
 
 Nous spécifions les distributions avec une certaine incertitude autour de la moyenne et de l'écart-type de la distribution log-normale pour la période d'incubation et de la distribution Gamma pour le temps de génération.
 
