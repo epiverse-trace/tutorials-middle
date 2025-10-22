@@ -360,7 +360,7 @@ The `simulate_chains()` output creates a `<epichains>` class object, which we ca
 
 We can use `simulate_chains()` to create multiple chains and increase the probability of simulating uncontrolled outbreak projections given an overdispersed offspring distribution.
 
-We need to one additional element:
+We need to specify one additional element:
 
 - `set.seed(<integer>)`, which is a random number generator function with a specified seed value, the `<integer>` number, to ensure consistent results across different runs of the code.
 
