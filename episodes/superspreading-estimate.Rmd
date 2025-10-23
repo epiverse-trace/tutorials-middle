@@ -1,5 +1,5 @@
 ---
-title: Tenir compte de l'hypercontagion
+title: 'Tenir compte du phénomène hypercontagieux'
 teaching: 30
 exercises: 2
 ---
