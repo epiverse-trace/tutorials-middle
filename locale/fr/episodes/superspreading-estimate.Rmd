@@ -732,7 +732,9 @@ Examinez comment nous avons estimé la probabilité d'avoir des grappes de taill
 
 ::::::::::::::::
 
-:::::::::::::::: solution
+:::::::::::::::::::::::::::::::::
+
+:::::::::::::::: instructor
 
 ```{r}
 # estimate the probability of
@@ -750,8 +752,6 @@ superspreading::proportion_cluster_size(
 La probabilité d'avoir des grappes de cinq personnes est de 1,8 %. À ce stade, compte tenu des paramètres de distribution de la descendance, une stratégie rétrospective n'augmentera peut-être pas la probabilité de contenir et de mettre en quarantaine davantage de cas en amont.
 
 ::::::::::::::::
-
-:::::::::::::::::::::::::::::::::
 
 ## Défis
 
