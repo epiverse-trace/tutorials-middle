@@ -56,7 +56,7 @@ Dans ce tutoriel, nous allons quantifier la variation individuelle de la transmi
 
 Nous allons utiliser les données de l'étude `{outbreaks}` et gérer la liste des lignes et les données sur les contacts à l'aide de l'outil `{epicontacts}` et estimer les paramètres de distribution avec `{fitdistrplus}`. Enfin, nous allons utiliser `{superspreading}` pour explorer les implications de la variation de la transmission sur la prise de décision.
 
-Nous utiliserons le tuyau `%>%` pour relier certaines des fonctions de ces paquets, donc appelons aussi le paquet `{tidyverse}` .
+Nous utiliserons le tuyau `%>%` pour relier certaines des fonctions de ces packages, donc appelons aussi le package `{tidyverse}` .
 
 ```r
 library(outbreaks)
@@ -77,11 +77,11 @@ library(tidyverse)
 
 ### Le double point-virgule
 
-Le double point-virgule `::` dans R vous permettent d'appeler une fonction spécifique d'un paquetage sans charger le paquet entier dans l'environnement actuel.
+Le double point-virgule `::` dans R vous permettent d'appeler une fonction spécifique d'un package sans charger le package entier dans l'environnement actuel.
 
-Par exemple, vous pouvez appeler une fonction spécifique d'un paquet sans charger le paquet entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir de l'outil `{dplyr}` paquet.
+Par exemple, vous pouvez appeler une fonction spécifique d'un package sans charger le package entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir de l'outil `{dplyr}` package.
 
-Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les conflits d'espace de noms.
+Cela nous permet de nous souvenir des fonctions du package et d'éviter les conflits d'espace de noms.
 
 :::::::::::::::::::
 
@@ -327,7 +327,7 @@ En épidémiologie, [binôme négatif](https://en.wikipedia.org/wiki/Negative_bi
 
 :::::::::::::::::::::::::::::::::: challenge
 
-Calculez la distribution des cas secondaires d'Ebola à l'aide de la méthode des `ebola_sim_clean` objet de `{outbreaks}` paquet.
+Calculez la distribution des cas secondaires d'Ebola à l'aide de la méthode des `ebola_sim_clean` objet de `{outbreaks}` package.
 
 - La distribution de la descendance d'Ebola est-elle asymétrique ou surdispersée ?
 
@@ -482,7 +482,7 @@ Lorsque $k$ s'approche de l'infini ($k \rightarrow \infty$), la variance est ég
 
 ::::::::::::::::::::::: challenge
 
-À partir de l'épreuve précédente, utilisez la distribution des cas secondaires de l'épreuve de la `ebola_sim_clean` de l'objet de `{outbreaks}` paquet.
+À partir de l'épreuve précédente, utilisez la distribution des cas secondaires de l'épreuve de la `ebola_sim_clean` de l'objet de `{outbreaks}` package.
 
 Ajustez une distribution binomiale négative pour estimer la moyenne et le paramètre de dispersion de la distribution de la descendance. Essayez d'estimer l'incertitude du paramètre de dispersion à partir de l'erreur standard et des intervalles de confiance à 95 %.
 
@@ -720,7 +720,7 @@ Nous pouvons également utiliser ce nombre pour empêcher les rassemblements de 
 
 ### Recherche rétrospective des contacts pour Ebola
 
-Utilisez les paramètres estimés pour Ebola pour `ebola_sim_clean` à partir de `{outbreaks}` paquet.
+Utilisez les paramètres estimés pour Ebola pour `ebola_sim_clean` à partir de `{outbreaks}` package.
 
 Calculez la probabilité d'avoir un groupe d'infections secondaires causées par un cas primaire identifié par traçage rétrospectif de taille 5, 10, 15 ou plus.
 
@@ -764,7 +764,7 @@ La probabilité d'avoir des grappes de cinq personnes est de 1,8 %. À ce stade,
 - Nous définissons une ESS comme tout individu infecté qui infecte plus de $Z(n)$ autres, où $Z(n)$ est le nième percentile de l'échantillon de $Poisson(R)$ distribution.
 - Un SSE du 99e centile est donc tout cas causant plus d'infections qu'il n'en surviendrait dans 99 % des histoires infectieuses d'une population homogène.
 
-À l'aide de la fonction de distribution correspondante, estimez le seuil d'ESS pour définir un ESS pour les estimations de la distribution de la descendance d'Ebola pour l'ensemble de la population. `ebola_sim_clean` objet de `{outbreaks}` paquet.
+À l'aide de la fonction de distribution correspondante, estimez le seuil d'ESS pour définir un ESS pour les estimations de la distribution de la descendance d'Ebola pour l'ensemble de la population. `ebola_sim_clean` objet de `{outbreaks}` package.
 
 ::::::::::::::::: hint
 
@@ -905,7 +905,7 @@ Le paramètre de dispersion $k$ peut être exprimé différemment dans la litté
 
 ### hétérogénéité ?
 
-La variation de la transmission au niveau individuel est également appelée hétérogénéité de la transmission ou degré d'hétérogénéité de la transmission. [Lloyd-Smith et al, 2005](https://wellcomeopenresearch.org/articles/5-83) l'infectiosité hétérogène dans les [Campbell et al, 2018](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2330-z) lors de l'introduction de la `{outbreaker2}` paquet. De même, un réseau de contacts peut stocker des contacts épidémiologiques hétérogènes, comme dans la documentation de l'étude `{epicontacts}` paquet ([Nagraj et al., 2018](https://www.repidemicsconsortium.org/epicontacts/articles/epicontacts.html)).
+La variation de la transmission au niveau individuel est également appelée hétérogénéité de la transmission ou degré d'hétérogénéité de la transmission. [Lloyd-Smith et al, 2005](https://wellcomeopenresearch.org/articles/5-83) l'infectiosité hétérogène dans les [Campbell et al, 2018](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-018-2330-z) lors de l'introduction de la `{outbreaker2}` package. De même, un réseau de contacts peut stocker des contacts épidémiologiques hétérogènes, comme dans la documentation de l'étude `{epicontacts}` package ([Nagraj et al., 2018](https://www.repidemicsconsortium.org/epicontacts/articles/epicontacts.html)).
 
 ::::::::::::::::::::::::::::
 
