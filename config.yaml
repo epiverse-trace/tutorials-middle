@@ -64,7 +64,7 @@ episodes:
 - delays-functions.Rmd
 - create-forecast.Rmd
 - severity-static.Rmd
-#- superspreading-estimate.Rmd
+- superspreading-estimate.Rmd
 #- superspreading-simulate.Rmd
 
 # Information for Learners
