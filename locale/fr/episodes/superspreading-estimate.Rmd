@@ -1,5 +1,5 @@
 ---
-title: Tenir compte de la superposition des couches
+title: Tenir compte de l'hypercontagion
 teaching: 30
 exercises: 2
 ---
@@ -18,8 +18,8 @@ webshot::install_phantomjs(force = TRUE)
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Estimez la distribution de la transmission ultérieure des individus infectés (c'est-à-dire la distribution de la descendance) à partir des données de l'épidémie à l'aide de `{epicontacts}`.
-- Estimez l'ampleur de la variation au niveau individuel (c'est-à-dire le paramètre de dispersion) de la distribution de la descendance à l'aide de . `{fitdistrplus}`.
+- Estimez la distribution de descendance (c'est-à-dire le nombre de cas secondaires) à partir des données de l'épidémie à l'aide de `{epicontacts}`.
+- Estimez l'ampleur de la variation au niveau individuel (c'est-à-dire le paramètre de dispersion) de la distribution de la descendance à l'aide de `{fitdistrplus}`.
 - Estimez la proportion de la transmission liée à des "événements de super propagation" à l'aide de `{superspreading}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -46,13 +46,13 @@ De la variole au coronavirus du syndrome respiratoire aigu sévère 2 (SRAS-CoV-
 
 <!-- nous ne savons pas -->
 
-Les [numéro de reproduction de base](../learners/reference.md#basic), $R_{0}$ mesure le nombre moyen de cas causés par un individu infectieux dans une population entièrement sensible. Les estimations de $R_{0}$ sont utiles pour comprendre la dynamique moyenne d'une épidémie au niveau de la population, mais elles peuvent masquer des variations individuelles considérables dans la contagiosité. Cela a été mis en évidence lors de l'émergence mondiale du SRAS-CoV-2 par de nombreux "événements de super propagation" au cours desquels certains individus infectieux ont généré un nombre anormalement élevé de cas secondaires ([LeClerc et al, 2020](https://wellcomeopenresearch.org/articles/5-83)).
+Le [nombre de reproduction de base](../learners/reference.md#basic), $R_{0}$ mesure le nombre moyen de cas causés par un individu infectieux dans une population entièrement susceptible. Les estimations de $R_{0}$ sont utiles pour comprendre la dynamique moyenne d'une épidémie au niveau de la population, mais elles peuvent masquer des variations individuelles considérables dans la contagiosité. Cela a été mis en évidence lors de l'émergence mondiale du SRAS-CoV-2 par de nombreux "événements de super propagation" au cours desquels certains individus infectieux ont généré un nombre anormalement élevé de cas secondaires ([LeClerc et al, 2020](https://wellcomeopenresearch.org/articles/5-83)).
 
-![**Distribution de la transmission du SRAS-CoV-2 par la descendance observée à Hong Kong.** N = 91 infectés par le SRAS-CoV-2, N = 153 infectés en phase terminale et N = 46 cas locaux sporadiques. Les barres de l'histogramme indiquent la proportion de transmission ultérieure par rapport au nombre de cas secondaires. La ligne correspond à une distribution binomiale négative ajustée ([Adam et al., 2020](https://www.nature.com/articles/s41591-020-1092-0)).](fig/see-intro-secondary-cases-fig-b.png){fig-alt="R = 0,58 et k = 0,43."}
+![**Distribution du nombre de cas secondaires de SRAS-CoV-2 observée à Hong Kong.** N = 91 infectés par le SRAS-CoV-2, N = 153 infectés en phase terminale et N = 46 cas locaux sporadiques. Les barres de l'histogramme indiquent la proportion du nombre de cas secondaire generés. La ligne correspond à une distribution binomiale négative ajustée ([Adam et al., 2020](https://www.nature.com/articles/s41591-020-1092-0)).](fig/see-intro-secondary-cases-fig-b.png){fig-alt="R = 0,58 et k = 0,43."}
 
 <!-- nous voulons -->
 
-Dans ce tutoriel, nous allons quantifier la variation individuelle de la transmission, et donc estimer le potentiel d'événements de superspreading. Nous utiliserons ensuite ces estimations pour explorer les implications de la superspreading pour les interventions de recherche de contacts.
+Dans ce tutoriel, nous allons quantifier la variation individuelle de la transmission, et donc estimer le potentiel d'événements d'hypercontagion. Nous utiliserons ensuite ces estimations pour explorer les implications de l'hypercontagion pour les interventions de recherche de contacts.
 
 Nous allons utiliser les données de l'étude `{outbreaks}` et gérer la liste des lignes et les données sur les contacts à l'aide de l'outil `{epicontacts}` et estimer les paramètres de distribution avec `{fitdistrplus}`. Enfin, nous allons utiliser `{superspreading}` pour explorer les implications de la variation de la transmission sur la prise de décision.
 
@@ -77,9 +77,9 @@ library(tidyverse)
 
 ### Le double point-virgule
 
-Le double point-virgule `::` dans R vous permettent d'appeler une fonction spécifique d'un paquetage sans charger le paquetage entier dans l'environnement actuel.
+Le double point-virgule `::` dans R vous permettent d'appeler une fonction spécifique d'un paquetage sans charger le paquet entier dans l'environnement actuel.
 
-Par exemple, vous pouvez appeler une fonction spécifique d'un package sans charger le package entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir de l'outil `{dplyr}` paquet.
+Par exemple, vous pouvez appeler une fonction spécifique d'un paquet sans charger le paquet entier dans l'environnement actuel, `dplyr::filter(data, condition)` utilise `filter()` à partir de l'outil `{dplyr}` paquet.
 
 Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les conflits d'espace de noms.
 
@@ -87,7 +87,7 @@ Cela nous permet de nous souvenir des fonctions du paquet et d'éviter les confl
 
 ## Le numéro de reproduction individuel
 
-Le nombre de reproduction individuelle est défini comme le nombre de cas secondaires causés par un individu infecté particulier.
+Le nombre de reproduction individuel est défini comme le nombre de cas secondaires causés par un individu infecté.
 
 Au début d'une épidémie, nous pouvons utiliser les données de contact pour reconstruire les chaînes de transmission (c'est-à-dire qui a infecté qui) et calculer le nombre de cas secondaires générés par chaque individu. Cette reconstruction des événements de transmission liés à partir des données de contact peut permettre de comprendre comment différents individus ont contribué à la transmission au cours d'une épidémie ([Cori et al., 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371)).
 
@@ -103,7 +103,7 @@ epi_contacts <-
   )
 ```
 
-Avec l'argument `directed = TRUE` nous configurons un graphe orienté. Ces directions intègrent notre hypothèse de la **infecteur-infecté** du patient source probable au cas secondaire.
+Avec l'argument `directed = TRUE` nous configurons un graphe orienté. Ces directions intègrent notre hypothèse de la paire "**infecteur-infecté**".
 
 ```{r, eval=FALSE}
 # visualise contact network
@@ -132,7 +132,7 @@ withr::with_envvar(c(OPENSSL_CONF = file.path("/dev", "null")), {
 
 Les données de contact d'une chaîne de transmission peuvent fournir des informations sur les personnes infectées qui sont entrées en contact avec d'autres. Nous nous attendons à ce que l'infecteur (`from`) et la personne infectée (`to`), ainsi que des colonnes supplémentaires de variables liées à leur contact, telles que le lieu (`exposure`) et la date du contact.
 
-À la suite de [mettre de l'ordre dans les données](https://tidyr.tidyverse.org/articles/tidy-data.html#tidy-data) l'unité d'observation dans notre cadre de données de contact est le **infecteur-infecté** est la paire infecteur-infecté. Bien qu'un infecteur puisse infecter plusieurs personnes, les enquêtes de recherche de contacts peuvent enregistrer des contacts liés à plus d'un infecteur (par exemple, au sein d'un ménage). Mais nous devrions nous attendre à avoir des paires infecteur-infecté uniques, car chaque personne infectée a généralement contracté l'infection auprès d'une autre personne.
+À la suite de [mettre de l'ordre dans les données](https://tidyr.tidyverse.org/articles/tidy-data.html#tidy-data) l'unité d'observation dans notre cadre de données de contact est la paire infecteur-infecté. Bien qu'un infecteur puisse infecter plusieurs personnes, les enquêtes de recherche de contacts peuvent enregistrer des contacts liés à plus d'un infecteur (par exemple, au sein d'un ménage). Mais nous devrions nous attendre à avoir des paires infecteur-infecté uniques, car chaque personne infectée a généralement contracté l'infection auprès d'une seule autre personne.
 
 Pour garantir l'unicité de ces paires, nous pouvons vérifier les réplicats pour les personnes infectées :
 
@@ -159,7 +159,7 @@ Mais cette sortie ne contient que le nombre de cas secondaires pour les infectie
 
 Au lieu de cela, à partir de `{epicontacts}` nous pouvons utiliser la fonction `epicontacts::get_degree()`. L'argument `type = "out"` permet d'obtenir la valeur de **degré de sortie** de chaque **nœud** dans le réseau de contact à partir du `<epicontacts>` objet de la classe. Dans un réseau dirigé, le degré de sortie est le nombre d'arêtes sortantes (infectés) émanant d'un nœud (infecteur) ([Nykamp DQ, consulté le : 2025](https://mathinsight.org/definition/node_degree)).
 
-De même, l'argument `only_linelist = TRUE` n'inclura que les individus figurant dans le cadre de données de la liste de référence. Lors des enquêtes sur les épidémies, nous nous attendons à ce qu'un registre de **tous les** les personnes infectées observées dans les données de la liste de diffusion. Cependant, toute personne qui n'est pas liée à un infecteur ou un infecté potentiel n'apparaîtra pas dans les données de contact. Par conséquent, l'argument `only_linelist = TRUE` nous permettra de ne pas manquer ce dernier groupe d'individus lorsque nous compterons le nombre de cas secondaires causés par tous les individus infectés observés. Ils apparaîtront dans les `<integer>` sous la forme `0` cas secondaires.
+De même, l'argument `only_linelist = TRUE` n'inclura que les individus figurant dans le cadre de données de la liste de référence. Lors des enquêtes sur les épidémies, nous nous attendons à ce qu'un registre de **toutes les** les personnes infectées observées dans les données de la liste de référence. Cependant, toute personne qui n'est pas liée à un infecteur ou un infecté potentiel n'apparaîtra pas dans les données de contact. Par conséquent, l'argument `only_linelist = TRUE` nous permettra de ne pas manquer ce dernier groupe d'individus lorsque nous compterons le nombre de cas secondaires causés par tous les individus infectés observés. Ils apparaîtront dans les `<integer>` sous la forme `0` cas secondaires.
 
 ```{r, message=FALSE, warning=FALSE}
 # Count secondary cases per subject in contacts and linelist
@@ -183,11 +183,11 @@ ce qui inclut les individus figurant dans les bases de données des contacts et 
 ### Quand utiliser "only\_linelist = FALSE" ?
 
 L'hypothèse selon laquelle
-"la liste de diffusion inclura toutes les personnes figurant dans les contacts et la liste de diffusion".
+"la liste de référence inclura toutes les personnes figurant dans les contacts et la liste de référence".
 peut ne pas fonctionner dans toutes les situations.
 
 Par exemple, si au cours du registre des infections observées,
-les données de contact comprenaient plus de sujets que ceux disponibles dans les données de la liste de diffusion,
+les données de contact comprenaient plus de sujets que ceux disponibles dans les données de la liste de référence,
 vous ne devez prendre en compte que les individus figurant dans les données de contact.
 Dans ce cas, vous devez prendre en compte uniquement les personnes figurant dans les données de contact,
 à `epicontacts::get_degree()` nous utilisons l'argument `only_linelist = FALSE`.
@@ -242,7 +242,7 @@ all_secondary_cases %>%
   )
 ```
 
-Le nombre de cas secondaires peut être utilisé pour *empiriquement* d'estimer de manière empirique le **distribution de la descendance** qui est le nombre de descendants secondaires *secondaires* causées par chaque cas. Une distribution statistique candidate utilisée pour modéliser la distribution de la descendance est la distribution **binomiale négative** avec deux paramètres :
+Le nombre de cas secondaires peut être utilisé pour estimer de manière empirique la **distribution de la descendance** qui est le nombre de cas *secondaires* causées par chaque cas. Une distribution statistique candidate utilisée pour modéliser la distribution de la descendance est la distribution **binomiale négative** avec deux paramètres :
 
 - **Moyenne** qui représente la $R_{0}$ le nombre moyen de cas (secondaires) produits par un seul individu dans une population entièrement sensible, et
 
@@ -302,10 +302,10 @@ L'histogramme et le diagramme de densité montrent que la distribution de la des
 
 ### Récapitulation terminologique
 
-- A partir de la liste des lignes et des données de contact, nous calculons la **le nombre de cas secondaires** causés par les personnes infectées observées.
-- Alors que $R_{0}$ représente la transmission moyenne au sein de la population, nous pouvons définir l'indicateur **nombre de reproduction individuelle** comme une variable aléatoire représentant la *espéré* nombre attendu de cas secondaires causés par un individu infecté.
-- En raison des effets stochastiques de la transmission, le nombre de cas secondaires *infections* causées par chaque cas est décrit par un **distribution de la descendance**.
-- Une *empirique* La distribution des descendants peut être modélisée par l'équation suivante **binomiale négative** avec une moyenne $R_{0}$ et un paramètre de dispersion $k$.
+- A partir de la liste des lignes et des données de contact, nous calculons  **le nombre de cas secondaires** causés par les personnes infectées observées.
+- Alors que $R_{0}$ représente la transmission moyenne au sein de la population, nous pouvons définir l'indicateur **nombre de reproduction individuel** comme une variable aléatoire représentant le nombre **attendu** de cas secondaires causés par un individu infecté.
+- En raison des effets stochastiques de la transmission, le nombre de cas secondaires causés par chaque cas est décrit par la **distribution de la descendance**.
+- La distribution des descendants peut être modélisée par l'équation suivante **binomiale négative** avec une moyenne $R_{0}$ et un paramètre de dispersion $k$.
 
 :::::::::::::::::::::::::::
 
@@ -319,7 +319,7 @@ Pour les occurrences d'événements discrets associés, nous pouvons utiliser **
 
 Dans une distribution de Poisson, la moyenne est égale à la variance. Mais lorsque la variance est supérieure à la moyenne, on parle de **surdispersion**. Dans les applications biologiques, la surdispersion se produit et une binomiale négative peut donc être considérée comme une alternative à la distribution de Poisson.
 
-**Binôme négatif** est particulièrement utile pour les données discrètes sur un intervalle positif non borné dont la variance de l'échantillon dépasse la moyenne de l'échantillon. En d'autres termes, les observations sont surdispersées par rapport à une distribution de Poisson, pour laquelle la moyenne est égale à la variance.
+La distribution **binomiale négative** est particulièrement utile pour les données discrètes sur un intervalle positif non borné dont la variance de l'échantillon dépasse la moyenne de l'échantillon. En d'autres termes, les observations sont surdispersées par rapport à une distribution de Poisson, pour laquelle la moyenne est égale à la variance.
 
 En épidémiologie, [binôme négatif](https://en.wikipedia.org/wiki/Negative_binomial_distribution) ont été utilisées pour modéliser la transmission de maladies infectieuses pour lesquelles le nombre probable d'infections ultérieures peut varier considérablement d'un individu à l'autre et d'un environnement à l'autre, en tenant compte de toutes les variations dans les antécédents infectieux des individus, y compris les propriétés des circonstances biologiques (c'est-à-dire le degré d'excrétion virale) et environnementales (par exemple, le type et le lieu de contact).
 
@@ -712,7 +712,7 @@ cluster_probability_percent <- cluster_probability %>%
 # cluster_probability_percent
 ```
 
-Même si nous disposons d'un $R<1$ une distribution de la progéniture fortement surdispersée ($k=0.02$) signifie que si nous détectons un nouveau cas, il y a un risque d'erreur dans la distribution de la descendance. `r cluster_probability_percent` probabilité qu'il provienne d'un groupe de 25 infections ou plus. Par conséquent, en suivant une stratégie rétrospective, les efforts de recherche des contacts augmenteront la probabilité de réussir à contenir et à mettre en quarantaine ce grand nombre de personnes précédemment infectées, plutôt que de se concentrer simplement sur le nouveau cas, qui est susceptible de n'avoir infecté personne (parce qu'il n'a pas été infecté). $k$ est très faible).
+Même si nous disposons d'un $R<1$ une distribution de la descendance fortement surdispersée ($k=0.02$) signifie que si nous détectons un nouveau cas, il y a un risque d'erreur dans la distribution de la descendance. `r cluster_probability_percent` probabilité qu'il provienne d'un groupe de 25 infections ou plus. Par conséquent, en suivant une stratégie rétrospective, les efforts de recherche des contacts augmenteront la probabilité de réussir à contenir et à mettre en quarantaine ce grand nombre de personnes précédemment infectées, plutôt que de se concentrer simplement sur le nouveau cas, qui est susceptible de n'avoir infecté personne (parce qu'il n'a pas été infecté). $k$ est très faible).
 
 Nous pouvons également utiliser ce nombre pour empêcher les rassemblements de certaines tailles afin de réduire l'épidémie en prévenant les événements potentiels de surpopulation. Les interventions peuvent viser à réduire le nombre de reproductions afin de réduire la probabilité d'avoir des groupes de cas secondaires.
 
@@ -768,7 +768,7 @@ La probabilité d'avoir des grappes de cinq personnes est de 1,8 %. À ce stade,
 
 ::::::::::::::::: hint
 
-Dans une distribution de Poisson, la **lambda** ou **taux** sont égaux à la valeur estimée du paramètre **moyenne** d'une distribution binomiale négative. Vous pouvez étudier cette question dans [Le zoo de la distribution](https://ben18785.shinyapps.io/distribution-zoo/) une application brillante.
+Dans une distribution de Poisson, **lambda** ou **tau** sont égaux à la valeur estimée du paramètre **moyenne** d'une distribution binomiale négative. Vous pouvez étudier cette question dans [Le zoo de la distribution](https://ben18785.shinyapps.io/distribution-zoo/) une application brillante.
 
 :::::::::::::::::
 
@@ -913,9 +913,9 @@ La variation de la transmission au niveau individuel est également appelée hé
 
 ### Lisez ces articles de blog
 
-Les [Tracer la variole du singe](https://plus.maths.org/content/monkeypox) de l'article de la [JUNIPER](https://maths.org/juniper/) montre l'utilité des modèles de réseau pour la recherche de contacts.
+[Tracer la variole du singe](https://plus.maths.org/content/monkeypox) de la [JUNIPER](https://maths.org/juniper/) montre l'utilité des modèles de réseau pour la recherche de contacts.
 
-Les [Devenir viral](https://kucharski.substack.com/p/going-viral) d'Adam Kucharski présente les conditions qui déclenchent la contagion en ligne : viralité sur YouTube, épidémies et campagnes de marketing.
+[Devenir viral](https://kucharski.substack.com/p/going-viral) d'Adam Kucharski présente les conditions qui déclenchent la contagion en ligne : viralité sur YouTube, épidémies et campagnes de marketing.
 
 :::::::::::::::::::::::::::::
 
