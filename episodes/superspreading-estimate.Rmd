@@ -27,15 +27,33 @@ webshot::install_phantomjs(force = TRUE)
 
 ::::::::::::::::::::::::::::::::::::: prereq
 
-## Prerequisites
-
 Learners should familiarise themselves with following concept dependencies before working through this tutorial: 
 
 **Statistics**: common probability distributions, particularly Poisson and negative binomial.
 
 **Epidemic theory**: The reproduction number, R.
 
+**R packages installed**: `{epicontacts}`, `{fitdistrplus}`, `{superspreading}`, `{outbreaks}`, `{tidyverse}`.
+
 :::::::::::::::::::::::::::::::::
+
+:::::::::: spoiler
+
+Install packages if their are not already installed
+
+```{r, eval = FALSE}
+# if {pak} is not installed, run: install.packages("pak")
+pak::pak("epicontacts")
+pak::pak("fitdistrplus")
+pak::pak("superspreading")
+pak::pak("outbreaks")
+pak::pak("tidyverse")
+```
+
+If you have any error message,
+go to the [main setup page](../learners/setup.md#software-setup).
+
+::::::::::
 
 ## Introduction
 
