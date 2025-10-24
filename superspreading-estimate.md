@@ -121,7 +121,7 @@ With the argument `directed = TRUE` we configure a directed graph. These directi
 
 ``` r
 # visualise contact network
-epicontacts::vis_epicontacts(epi_contacts)
+plot(epi_contacts)
 ```
 
 <img src="fig/superspreading-estimate-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
@@ -320,7 +320,7 @@ Calculate the distribution of secondary cases for Ebola using the `ebola_sim_cle
 
 :::::::::::::::::: hint
 
-⚠️ **Optional step:** This dataset has 5829 cases. Running `epicontacts::vis_epicontacts()` may take several minutes and use significant memory for large outbreaks such as the Ebola linelist. If you're on an older or slower computer, you can skip this step.
+⚠️ **Optional step:** This dataset has 5829 cases. Running `plot(<epicontacts>)` may take several minutes and use significant memory for large outbreaks such as the Ebola linelist. If you're on an older or slower computer, you can skip this step.
 
 ::::::::::::::::::
 
