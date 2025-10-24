@@ -270,10 +270,10 @@ From the histogram and density plot, we can identify that the offspring distribu
 
 ### Terminology recap
 
-- From linelist and contact data, we calculate the **number of secondary cases** caused by the observed infected individuals.
-- Whereas $R_{0}$ captures the average transmission in the population, we can define the **individual reproduction number** as a random variable representing the _expected_ number of secondary cases caused by a infected individual.
-- From the stochastic effects in transmission, the number of secondary _infections_ caused by each case is described by an **offspring distribution**.
-- An _empirical_ offspring distribution can be modeled by the **negative-binomial** distribution with mean $R_{0}$ and dispersion parameter $k$.
+- From linelist and contact-tracing data, we calculate the **number of secondary cases** caused by the observed infected individuals.
+- While $R_{0}$ captures the average transmission in the population, the **individual reproduction number** represents the number of secondary _infections_ caused by a specific _infected_ individual, which varies between individuals.
+- Because of stochastic effects in transmission, the number of secondary _infections_ caused by each infection is statistically described by the **offspring distribution**.
+- The _empirical_ offspring distribution can be modeled using a **negative binomial** distribution with mean $R_{0}$ and dispersion parameter $k$, estimated from the observed number of secondary cases.
 
 :::::::::::::::::::::::::::
 
