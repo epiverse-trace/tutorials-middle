@@ -303,9 +303,9 @@ L'histogramme et le diagramme de densité montrent que la distribution de la des
 ### Récapitulation terminologique
 
 - A partir de la liste des lignes et des données de contact, nous calculons  **le nombre de cas secondaires** causés par les personnes infectées observées.
-- Alors que $R_{0}$ représente la transmission moyenne au sein de la population, nous pouvons définir l'indicateur **nombre de reproduction individuel** comme une variable aléatoire représentant le nombre **attendu** de cas secondaires causés par un individu infecté.
-- En raison des effets stochastiques de la transmission, le nombre de cas secondaires causés par chaque cas est décrit par la **distribution de la descendance**.
-- La distribution des descendants peut être modélisée par l'équation suivante **binomiale négative** avec une moyenne $R_{0}$ et un paramètre de dispersion $k$.
+- Alors que $R_{0}$ représente la transmission moyenne au sein de la population, nous pouvons définir l'indicateur **nombre de reproduction individuel** comme le nombre d'infections secondaires causées par un individu infecté spécifique, qui varie d'un individu à l'autre.
+- En raison des effets stochastiques de la transmission, le nombre d'infections secondaires causées par chaque personne infectée est décrit par la **distribution de la descendance**.
+- La distribution des descendants peut être modélisée par l'équation suivante **binomiale négative** avec une moyenne $R_{0}$ et un paramètre de dispersion $k$, estimés à partir du nombre observé de cas secondaires.
 
 :::::::::::::::::::::::::::
 
