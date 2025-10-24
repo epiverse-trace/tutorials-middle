@@ -107,14 +107,14 @@ Avec l'argument `directed = TRUE` nous configurons un graphe orienté. Ces direc
 
 ```{r, eval=FALSE}
 # visualise contact network
-epicontacts::vis_epicontacts(epi_contacts)
+plot(epi_contacts)
 ```
 
 ```{r, echo=FALSE}
 withr::with_envvar(c(OPENSSL_CONF = file.path("/dev", "null")), {
   # visualise contact network
   network <-
-    vis_epicontacts(epi_contacts) %>%
+    plot(epi_contacts) %>%
     visNetwork::visPhysics(solver = "barnesHut")
   fname <- "network.html"
   visNetwork::visSave(network, fname)
@@ -334,7 +334,7 @@ Calculez la distribution des cas secondaires d'Ebola à l'aide de la méthode de
 :::::::::::::::::: hint
 
 ⚠️ 
- **Étape facultative :** Cet ensemble de données a `r nrow(ebola_sim_clean$linelist)` cas. Exécution `epicontacts::vis_epicontacts()` peut prendre plusieurs minutes et utiliser beaucoup de mémoire pour les grandes épidémies telles que la liste des cas d'Ebola. Si vous utilisez un ordinateur plus ancien ou plus lent, vous pouvez sauter cette étape.
+ **Étape facultative :** Cet ensemble de données a `r nrow(ebola_sim_clean$linelist)` cas. Exécution `plot(<epicontacts>)` peut prendre plusieurs minutes et utiliser beaucoup de mémoire pour les grandes épidémies telles que la liste des cas d'Ebola. Si vous utilisez un ordinateur plus ancien ou plus lent, vous pouvez sauter cette étape.
 
 ::::::::::::::::::
 
