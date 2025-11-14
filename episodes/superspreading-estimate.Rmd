@@ -42,12 +42,8 @@ Learners should familiarise themselves with following concept dependencies befor
 Install packages if their are not already installed
 
 ```{r, eval = FALSE}
-# if {pak} is not installed, run: install.packages("pak")
-pak::pak("epicontacts")
-pak::pak("fitdistrplus")
-pak::pak("superspreading")
-pak::pak("outbreaks")
-pak::pak("tidyverse")
+if(!require("pak")) install.packages("pak")
+pak::pak(c("epicontacts", "fitdistrplus", "superspreading", "outbreaks", "tidyverse"))
 ```
 
 If you have any error message,
