@@ -42,12 +42,9 @@ This episode requires you to be familiar with:
 
 Install packages if their are not already installed
 
-```{r, eval = FALSE}
-# if {pak} is not installed, run: install.packages("pak")
-pak::pak("cfr")
-pak::pak("epiparameter")
-pak::pak("tidyverse")
-pak::pak("outbreaks")
+```r
+if (!base::require("pak")) install.packages("pak")
+pak::pak(c("cfr", "epiparameter", "tidyverse", "outbreaks"))
 ```
 
 If you have any error message,
