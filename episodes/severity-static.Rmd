@@ -42,8 +42,8 @@ This episode requires you to be familiar with:
 
 Install packages if their are not already installed
 
-```{r, eval = FALSE}
-if(!require("pak")) install.packages("pak")
+```r
+if (!base::require("pak")) install.packages("pak")
 pak::pak(c("cfr", "epiparameter", "tidyverse", "outbreaks"))
 ```
 
