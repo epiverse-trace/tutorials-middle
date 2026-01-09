@@ -130,7 +130,7 @@ If you look at `?stats::Distributions`, each type of distribution has a unique s
 plot(covid_serialint, xlim = c(0, 20))
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-3-1.png" alt="" style="display: block; margin: auto;" />
 
 
 ``` r
@@ -167,8 +167,8 @@ epiparameter::generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1] 5.611452 5.189468 7.284840 4.451059 9.886059 5.290563 1.762559 1.771989
- [9] 5.081965 7.320946
+ [1]  1.782481  1.655843 10.978102  6.695908  3.283768  4.036827  2.100234
+ [8]  4.563507  5.810270  2.340616
 ```
 
 ::::::::: instructor
@@ -324,7 +324,7 @@ While for a **continuous** distribution, we plot the *Probability Density Functi
 plot(covid_serialint_discrete)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-9-1.png" alt="" style="display: block; margin: auto;" />
 
 To finally get a `max` value, let's access the quantile value of the 99th percentile or `0.99` probability of the distribution with the `prob_dist$q` notation, similarly to how we access the `summary_stats` values.
 
@@ -462,7 +462,7 @@ quantile(covid_serialint_discrete, p = 0.99) %>%
   geom_col()
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-12-1.png" alt="" style="display: block; margin: auto;" />
 
 **Remember:** In infections with pre-symptomatic transmission, serial intervals can have negative values ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext)). When we use the _serial interval_ to approximate the _generation time_ we need to make this distribution with positive values only!
 
@@ -645,7 +645,7 @@ ebola_generationtime
 plot(ebola_serialint)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-17-1.png" alt="" style="display: block; margin: auto;" />
 
 
 ``` r
@@ -653,7 +653,7 @@ plot(ebola_serialint)
 plot(ebola_generationtime)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-18-1.png" alt="" style="display: block; margin: auto;" />
 
 Plotting distributions from the `{EpiNow2}` interface always gives a discretized output.
 From the legend: `PMF` stants for Probability Mass Function and `CMF` stants for Cummulative Mass Function.
@@ -766,7 +766,7 @@ epinow_estimates_cgi <- EpiNow2::epinow(
 base::plot(epinow_estimates_cgi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" />
 
 Try to complement the `delays` argument with a reporting delay like the `reporting_delay_fixed` object of the previous episode.
 
@@ -915,7 +915,7 @@ epinow_estimates_egi <- EpiNow2::epinow(
 plot(epinow_estimates_egi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-22-1.png" alt="" style="display: block; margin: auto;" />
 
 ::::::::::::::::::::::::::
 
@@ -1069,7 +1069,7 @@ epinow_estimates_igi <- EpiNow2::epinow(
 plot(epinow_estimates_igi)
 ```
 
-<img src="fig/delays-functions-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-functions-rendered-unnamed-chunk-23-1.png" alt="" style="display: block; margin: auto;" />
 
 ::::::::::::::::::::::::::
 

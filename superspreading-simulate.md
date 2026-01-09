@@ -175,7 +175,7 @@ serial_interval <- epiparameter::epiparameter_db(
 plot(serial_interval, day_range = 0:25)
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-4-1.png" alt="" style="display: block; margin: auto;" />
 
 
 
@@ -730,7 +730,7 @@ ggplot() +
   )
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-22-1.png" alt="" style="display: block; margin: auto;" />
 
 
 
@@ -783,13 +783,13 @@ Use `plot()` to make an incidence plot:
 plot(mers_cumcases)
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-26-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-26-1.png" alt="" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::::
 
 When plotting the observed number of cumulative cases from the Middle East respiratory syndrome (MERS) outbreak in South Korea in 2015 alongside the previously simulated chains, we see that the observed cases followed a trajectory that is consistent with the simulated explosive outbreak dynamics (which makes sense, given the simulation uses parameters based on this specific outbreak).
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-27-1.png" alt="" style="display: block; margin: auto;" />
 
 When we increase the dispersion parameter from $k = 0.01$ to $k = \infty$ - and hence reduce individual-level variation in transmission - and assume a fixed reproduction number $R = 1.5$, the proportion of simulated outbreaks that reached the 100-case threshold increases. This is because the simulated outbreaks now have more of a consistent, clockwise dynamic, rather than the high level of variability seen previously.
 
@@ -930,7 +930,7 @@ simulated_chains_mpox_day %>%
   labs(x = "Day", y = "Cumulative cases")
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-29-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-29-1.png" alt="" style="display: block; margin: auto;" />
 
 Assuming a Monkey pox outbreak with $R$ = 0.32 and $k$ = 0.58, there is no trajectory among 1000 simulations that reach more than 100 infected cases. Compared to MERS ($R$ = 0.6 and $k$ = 0.02).
 
@@ -994,7 +994,7 @@ c0 %>%
   geom_histogram(binwidth = 1)
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-32-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-32-1.png" alt="" style="display: block; margin: auto;" />
 
 Optional challenge: 
 
@@ -1101,7 +1101,7 @@ sim_chains_aggregate %>%
   labs(x = "Day", y = "Cumulative cases")
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-33-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-simulate-rendered-unnamed-chunk-33-1.png" alt="" style="display: block; margin: auto;" />
 
 
 Remarkably, even with R0 less than 1 (R = 0.95) we can have potentially explosive outbreaks. The observed variation in individual infectiousness in Ebola means that although the probability of extinction is high, new index cases also have the potential for explosive regrowth of the epidemic.

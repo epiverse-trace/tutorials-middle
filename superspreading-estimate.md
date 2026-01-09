@@ -124,7 +124,7 @@ With the argument `directed = TRUE` we configure a directed graph. These directi
 plot(epi_contacts)
 ```
 
-<img src="fig/superspreading-estimate-rendered-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-estimate-rendered-unnamed-chunk-5-1.png" alt="" style="display: block; margin: auto;" />
 
 ::::::::::::::::::::::::::: spoiler
 
@@ -273,7 +273,7 @@ all_secondary_cases %>%
   )
 ```
 
-<img src="fig/superspreading-estimate-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-estimate-rendered-unnamed-chunk-9-1.png" alt="" style="display: block; margin: auto;" />
 
 The number of secondary cases can be used to _empirically_ estimate the **offspring distribution**, which is the number of secondary _infections_ caused by each case. One candidate statistical distribution used to model the offspring distribution is the **negative binomial** distribution with two parameters:
 
@@ -281,7 +281,7 @@ The number of secondary cases can be used to _empirically_ estimate the **offspr
 
 - **Dispersion**, expressed as $k$, which represents the individual-level variation in transmission by single individuals.
 
-<img src="fig/superspreading-estimate-rendered-unnamed-chunk-10-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-estimate-rendered-unnamed-chunk-10-1.png" alt="" style="display: block; margin: auto;" />
 
 From the histogram and density plot, we can identify that the offspring distribution is highly skewed or **overdispersed**. In this framework, the superspreading events (SSEs) are not arbitrary or exceptional, but simply realizations from the right-hand tail of the offspring distribution, which we can quantify and analyse ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).
 
@@ -354,7 +354,7 @@ ebola_secondary %>%
   )
 ```
 
-<img src="fig/superspreading-estimate-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-estimate-rendered-unnamed-chunk-11-1.png" alt="" style="display: block; margin: auto;" />
 
 From a visual inspection, the distribution of secondary cases for the Ebola data set in `ebola_sim_clean` shows an skewed distribution with secondary cases equal or lower than 6. We need to complement this observation with a statistical analysis to evaluate for overdispersion.
 
@@ -407,7 +407,7 @@ From the number secondary cases distribution we estimated a dispersion parameter
 
 We can overlap the estimated density values of the fitted negative binomial distribution and the histogram of the number of secondary cases:
 
-<img src="fig/superspreading-estimate-rendered-unnamed-chunk-14-1.png" style="display: block; margin: auto;" />
+<img src="fig/superspreading-estimate-rendered-unnamed-chunk-14-1.png" alt="" style="display: block; margin: auto;" />
 
 :::::::::::::::::::: callout
 

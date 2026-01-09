@@ -168,7 +168,7 @@ ebola1976 %>%
   plot()
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-3-1.png" alt="" style="display: block; margin: auto;" />
 
 We'll frame this episode under the context of an **ongoing outbreak** with only the **first 30 days** of data observed.
 
@@ -388,7 +388,7 @@ onset_to_death_ebola <-
 plot(onset_to_death_ebola, xlim = c(0, 40))
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-11-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-11-1.png" alt="" style="display: block; margin: auto;" />
 
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
@@ -554,7 +554,7 @@ onset_to_death_ebola %>%
   plot(xlim = c(0, 40))
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-18-1.png" alt="" style="display: block; margin: auto;" />
 
 ::::::::::::::::::
 
@@ -732,7 +732,7 @@ dplyr::bind_rows(
   )
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-27-1.png" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-27-1.png" alt="" style="display: block; margin: auto;" />
 
 The horizontal line represents the delay-adjusted CFR estimated at the outbreak's end. The dotted line means the estimate has a 95% confidence interval (95% CI).
 

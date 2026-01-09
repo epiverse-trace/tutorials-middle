@@ -660,7 +660,7 @@ You can use `plot()` to `<epiparameter>` objects to visualise:
 plot(covid_serialint)
 ```
 
-<img src="fig/delays-access-rendered-unnamed-chunk-15-1.png" style="display: block; margin: auto;" />
+<img src="fig/delays-access-rendered-unnamed-chunk-15-1.png" alt="" style="display: block; margin: auto;" />
 
 With the `xlim` argument, you can change the length or number of days in the `x` axis. Explore what this looks like:
 
