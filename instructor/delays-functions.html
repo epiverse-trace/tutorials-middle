@@ -347,7 +347,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Use delay distributions in analysis</h1>
-        <p>Last updated on 2025-10-17 |
+        <p>Last updated on 2026-01-09 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/delays-functions.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -531,7 +531,7 @@ object you want!</p>
 <span><span class="co"># continuous distribution</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">covid_serialint</span>, xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-3-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb4">
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-3-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -578,8 +578,8 @@ object you want!</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code> [1] 5.611452 5.189468 7.284840 4.451059 9.886059 5.290563 1.762559 1.771989
- [9] 5.081965 7.320946</code></pre>
+<pre class="output" tabindex="0"><code> [1]  1.782481  1.655843 10.978102  6.695908  3.283768  4.036827  2.100234
+ [8]  4.563507  5.810270  2.340616</code></pre>
 </div>
 <div id="accordionInstructor1" class="accordion instructor-note accordion-flush">
 <div class="accordion-item">
@@ -784,7 +784,7 @@ Function (PMF)</em>:</p>
 <code class="sourceCode R"><span><span class="co"># discrete distribution</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">covid_serialint_discrete</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-9-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To finally get a <code>max</code> value, let’s access the quantile
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-9-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To finally get a <code>max</code> value, let’s access the quantile
 value of the 99th percentile or <code>0.99</code> probability of the
 distribution with the <code>prob_dist$q</code> notation, similarly to
 how we access the <code>summary_stats</code> values.</p>
@@ -959,7 +959,7 @@ sequence of quantile values as a numeric vector and calculate
 <span>  <span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_col</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-12-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><strong>Remember:</strong> In infections with pre-symptomatic
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-12-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p><strong>Remember:</strong> In infections with pre-symptomatic
 transmission, serial intervals can have negative values (<a href="https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext" class="external-link">Nishiura
 et al., 2020</a>). When we use the <em>serial interval</em> to
 approximate the <em>generation time</em> we need to make this
@@ -1194,14 +1194,14 @@ Parameters:
 <code class="sourceCode R"><span><span class="co"># plot the `epiparameter` class object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">ebola_serialint</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-17-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb47">
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-17-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb47">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot the `EpiNow2` class object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">ebola_generationtime</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-18-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Plotting distributions from the <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> interface
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-18-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Plotting distributions from the <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> interface
 always gives a discretized output. From the legend: <code>PMF</code>
 stants for Probability Mass Function and <code>CMF</code> stants for
 Cummulative Mass Function.</p>
@@ -1356,7 +1356,7 @@ function.</p>
 <span></span>
 <span><span class="fu">base</span><span class="fu">::</span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_cgi</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-19-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Try to complement the <code>delays</code> argument with a reporting
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Try to complement the <code>delays</code> argument with a reporting
 delay like the <code>reporting_delay_fixed</code> object of the previous
 episode.</p>
 </div>
@@ -1529,7 +1529,7 @@ use functions like:</p>
 <span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_egi</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-22-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-22-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 </div>
 </div>
 </div>
@@ -1715,7 +1715,7 @@ Parameters:
 <span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">epinow_estimates_igi</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-23-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<figure><img src="../fig/delays-functions-rendered-unnamed-chunk-23-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 </div>
 </div>
 </div>
@@ -1848,9 +1848,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/delays-functions.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/delays-functions.html",
-  "dateCreated": "2025-10-24",
-  "dateModified": "2025-10-17",
-  "datePublished": "2025-10-28"
+  "dateCreated": "2026-01-09",
+  "dateModified": "2026-01-09",
+  "datePublished": "2026-01-09"
 }
 
   </script><script>
