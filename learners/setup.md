@@ -392,7 +392,8 @@ Available at: http://prism.edu.au/publications/prism-modeling-guideline/
 
 ### Download the data
 
-We will download the data directly from R during the tutorial. However, if you are expecting problems with the network, it may be better to download the data beforehand and store it on your machine.
+We will download the data directly from R during the tutorial.
+However, if you are expecting problems with the network, it may be better to download the data beforehand and store it on your machine.
 
 The data files for the tutorial can be downloaded manually here:
 
