@@ -32,23 +32,23 @@ mathematical framework that enables this adjustment.
 
 Consider a dataset containing daily incidence cases and deaths. 
 
-<!--html_preserve--><div id="ykippoerxx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ykippoerxx table {
+<!--html_preserve--><div id="sgpazoqyuh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#sgpazoqyuh table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ykippoerxx thead, #ykippoerxx tbody, #ykippoerxx tfoot, #ykippoerxx tr, #ykippoerxx td, #ykippoerxx th {
+#sgpazoqyuh thead, #sgpazoqyuh tbody, #sgpazoqyuh tfoot, #sgpazoqyuh tr, #sgpazoqyuh td, #sgpazoqyuh th {
   border-style: none;
 }
 
-#ykippoerxx p {
+#sgpazoqyuh p {
   margin: 0;
   padding: 0;
 }
 
-#ykippoerxx .gt_table {
+#sgpazoqyuh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -74,12 +74,12 @@ Consider a dataset containing daily incidence cases and deaths.
   border-left-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_caption {
+#sgpazoqyuh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ykippoerxx .gt_title {
+#sgpazoqyuh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -91,7 +91,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-bottom-width: 0;
 }
 
-#ykippoerxx .gt_subtitle {
+#sgpazoqyuh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -103,7 +103,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-top-width: 0;
 }
 
-#ykippoerxx .gt_heading {
+#sgpazoqyuh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -115,13 +115,13 @@ Consider a dataset containing daily incidence cases and deaths.
   border-right-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_bottom_border {
+#sgpazoqyuh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_col_headings {
+#sgpazoqyuh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -136,7 +136,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-right-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_col_heading {
+#sgpazoqyuh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -156,7 +156,7 @@ Consider a dataset containing daily incidence cases and deaths.
   overflow-x: hidden;
 }
 
-#ykippoerxx .gt_column_spanner_outer {
+#sgpazoqyuh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -168,15 +168,15 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 4px;
 }
 
-#ykippoerxx .gt_column_spanner_outer:first-child {
+#sgpazoqyuh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ykippoerxx .gt_column_spanner_outer:last-child {
+#sgpazoqyuh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ykippoerxx .gt_column_spanner {
+#sgpazoqyuh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -188,11 +188,11 @@ Consider a dataset containing daily incidence cases and deaths.
   width: 100%;
 }
 
-#ykippoerxx .gt_spanner_row {
+#sgpazoqyuh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ykippoerxx .gt_group_heading {
+#sgpazoqyuh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -218,7 +218,7 @@ Consider a dataset containing daily incidence cases and deaths.
   text-align: left;
 }
 
-#ykippoerxx .gt_empty_group_heading {
+#sgpazoqyuh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -233,15 +233,15 @@ Consider a dataset containing daily incidence cases and deaths.
   vertical-align: middle;
 }
 
-#ykippoerxx .gt_from_md > :first-child {
+#sgpazoqyuh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ykippoerxx .gt_from_md > :last-child {
+#sgpazoqyuh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ykippoerxx .gt_row {
+#sgpazoqyuh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -260,7 +260,7 @@ Consider a dataset containing daily incidence cases and deaths.
   overflow-x: hidden;
 }
 
-#ykippoerxx .gt_stub {
+#sgpazoqyuh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -273,7 +273,7 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#ykippoerxx .gt_stub_row_group {
+#sgpazoqyuh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -287,15 +287,15 @@ Consider a dataset containing daily incidence cases and deaths.
   vertical-align: top;
 }
 
-#ykippoerxx .gt_row_group_first td {
+#sgpazoqyuh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ykippoerxx .gt_row_group_first th {
+#sgpazoqyuh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ykippoerxx .gt_summary_row {
+#sgpazoqyuh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -305,16 +305,16 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#ykippoerxx .gt_first_summary_row {
+#sgpazoqyuh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_first_summary_row.thick {
+#sgpazoqyuh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ykippoerxx .gt_last_summary_row {
+#sgpazoqyuh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -324,7 +324,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-bottom-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_grand_summary_row {
+#sgpazoqyuh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -334,7 +334,7 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#ykippoerxx .gt_first_grand_summary_row {
+#sgpazoqyuh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -344,7 +344,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-top-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_last_grand_summary_row_top {
+#sgpazoqyuh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -354,11 +354,11 @@ Consider a dataset containing daily incidence cases and deaths.
   border-bottom-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_striped {
+#sgpazoqyuh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ykippoerxx .gt_table_body {
+#sgpazoqyuh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -367,7 +367,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-bottom-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_footnotes {
+#sgpazoqyuh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -381,7 +381,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-right-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_footnote {
+#sgpazoqyuh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -390,7 +390,7 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#ykippoerxx .gt_sourcenotes {
+#sgpazoqyuh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -404,7 +404,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-right-color: #D3D3D3;
 }
 
-#ykippoerxx .gt_sourcenote {
+#sgpazoqyuh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -412,72 +412,72 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#ykippoerxx .gt_left {
+#sgpazoqyuh .gt_left {
   text-align: left;
 }
 
-#ykippoerxx .gt_center {
+#sgpazoqyuh .gt_center {
   text-align: center;
 }
 
-#ykippoerxx .gt_right {
+#sgpazoqyuh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ykippoerxx .gt_font_normal {
+#sgpazoqyuh .gt_font_normal {
   font-weight: normal;
 }
 
-#ykippoerxx .gt_font_bold {
+#sgpazoqyuh .gt_font_bold {
   font-weight: bold;
 }
 
-#ykippoerxx .gt_font_italic {
+#sgpazoqyuh .gt_font_italic {
   font-style: italic;
 }
 
-#ykippoerxx .gt_super {
+#sgpazoqyuh .gt_super {
   font-size: 65%;
 }
 
-#ykippoerxx .gt_footnote_marks {
+#sgpazoqyuh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ykippoerxx .gt_asterisk {
+#sgpazoqyuh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ykippoerxx .gt_indent_1 {
+#sgpazoqyuh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ykippoerxx .gt_indent_2 {
+#sgpazoqyuh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ykippoerxx .gt_indent_3 {
+#sgpazoqyuh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ykippoerxx .gt_indent_4 {
+#sgpazoqyuh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ykippoerxx .gt_indent_5 {
+#sgpazoqyuh .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ykippoerxx .katex-display {
+#sgpazoqyuh .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ykippoerxx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#sgpazoqyuh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
