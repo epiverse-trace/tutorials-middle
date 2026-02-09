@@ -201,13 +201,13 @@ base::summary(estimates)
 ```
 
 ``` output
-                        measure                estimate
-                         <char>                  <char>
-1:       New infections per day  20295 (13412 -- 30799)
-2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.77 -- 1.2)
-4:               Rate of growth -0.011 (-0.09 -- 0.065)
-5: Doubling/halving time (days)        -64 (11 -- -7.7)
+                        measure                 estimate
+                         <char>                   <char>
+1:       New infections per day   20047 (13399 -- 30165)
+2:   Expected change in reports        Likely decreasing
+3:   Effective reproduction no.       0.97 (0.77 -- 1.2)
+4:               Rate of growth -0.011 (-0.092 -- 0.063)
+5: Doubling/halving time (days)         -61 (11 -- -7.6)
 ```
 
 
@@ -526,16 +526,16 @@ summary(ebola_estimates)
 ```
 
 ``` output
-                        measure                 estimate
-                         <char>                   <char>
-1:       New infections per day           91 (47 -- 189)
-2:   Expected change in reports               Increasing
-3:   Effective reproduction no.         1.6 (1.1 -- 2.4)
-4:               Rate of growth 0.039 (0.00097 -- 0.088)
-5: Doubling/halving time (days)          18 (7.9 -- 710)
+                        measure                estimate
+                         <char>                  <char>
+1:       New infections per day          91 (48 -- 192)
+2:   Expected change in reports              Increasing
+3:   Effective reproduction no.        1.6 (1.2 -- 2.4)
+4:               Rate of growth 0.041 (0.0046 -- 0.088)
+5: Doubling/halving time (days)         17 (7.9 -- 150)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.1 -- 2.4). The exponential growth rate of case numbers is 0.039 (0.00097 -- 0.088).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.2 -- 2.4). The exponential growth rate of case numbers is 0.041 (0.0046 -- 0.088).
 
 Visualize the estimates:
 

@@ -426,13 +426,13 @@ outbreaks::ebola_sim_clean$linelist %>%
   meanlog:
     - normal distribution:
       mean:
-        0.26
+        0.16
       sd:
-        0.097
+        0.1
   sdlog:
     - normal distribution:
       mean:
-        0.97
+        0.98
       sd:
         0.1
 ```
@@ -586,22 +586,22 @@ summary(estimates)
 ``` output
                         measure                estimate
                          <char>                  <char>
-1:       New infections per day    7806 (4584 -- 13289)
+1:       New infections per day       7103 (0 -- 12406)
 2:   Expected change in reports       Likely decreasing
-3:   Effective reproduction no.      0.95 (0.72 -- 1.2)
-4:               Rate of growth -0.018 (-0.11 -- 0.078)
-5: Doubling/halving time (days)       -39 (8.9 -- -6.3)
+3:   Effective reproduction no.      0.91 (0.04 -- 1.2)
+4:               Rate of growth -0.033 (-0.42 -- 0.069)
+5: Doubling/halving time (days)        -21 (10 -- -1.6)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7806 (4584 -- 13289).
++ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7103 (0 -- 12406).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.95 (0.72 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.91 (0.04 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.018 (-0.11 -- 0.078).
++ The exponential growth rate of case numbers is -0.033 (-0.42 -- 0.069).
 
-+ The doubling time (the time taken for case numbers to double) is -39 (8.9 -- -6.3).
++ The doubling time (the time taken for case numbers to double) is -21 (10 -- -1.6).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
