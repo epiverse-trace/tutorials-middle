@@ -425,15 +425,15 @@ outbreaks::ebola_sim_clean$linelist %>%
   meanlog:
     - normal distribution:
       mean:
-        0.18
+        0.22
       sd:
-        0.14
+        0.097
   sdlog:
     - normal distribution:
       mean:
-        1
+        0.96
       sd:
-        0.11
+        0.1
 ```
 
 ::::::::::::::::::
@@ -560,7 +560,7 @@ We can extract and visualise estimates of the effective reproduction number thro
 
 
 ``` r
-estimates$plots$R
+plot(estimates, type = "R")
 ```
 
 <img src="fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" />
@@ -570,7 +570,7 @@ The uncertainty in the estimates increases through time. This is because estimat
 We can also visualise the growth rate estimate through time: 
 
 ``` r
-estimates$plots$growth_rate
+plot(estimates, type = "growth_rate")
 ```
 
 <img src="fig/quantify-transmissibility-rendered-unnamed-chunk-20-1.png" alt="" style="display: block; margin: auto;" />
@@ -583,24 +583,24 @@ summary(estimates)
 ```
 
 ``` output
-                        measure               estimate
-                         <char>                 <char>
-1:       New infections per day   7904 (4778 -- 13261)
-2:   Expected change in reports      Likely decreasing
-3:   Effective reproduction no.     0.96 (0.74 -- 1.3)
-4:               Rate of growth -0.013 (-0.1 -- 0.084)
-5: Doubling/halving time (days)      -55 (8.2 -- -6.6)
+                        measure                estimate
+                         <char>                  <char>
+1:       New infections per day    7833 (4648 -- 13062)
+2:   Expected change in reports       Likely decreasing
+3:   Effective reproduction no.      0.96 (0.73 -- 1.2)
+4:               Rate of growth -0.015 (-0.11 -- 0.074)
+5: Doubling/halving time (days)       -47 (9.4 -- -6.5)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7904 (4778 -- 13261).
++ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7833 (4648 -- 13062).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.74 -- 1.3). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.013 (-0.1 -- 0.084).
++ The exponential growth rate of case numbers is -0.015 (-0.11 -- 0.074).
 
-+ The doubling time (the time taken for case numbers to double) is -55 (8.2 -- -6.6).
++ The doubling time (the time taken for case numbers to double) is -47 (9.4 -- -6.5).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
