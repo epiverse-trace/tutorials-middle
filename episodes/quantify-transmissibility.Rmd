@@ -460,14 +460,14 @@ EpiNow2::epinow(
 We can extract and visualise estimates of the effective reproduction number through time:
 
 ```{r}
-estimates$plots$R
+plot(estimates, type = "R")
 ```
 
 The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. This difference in uncertainty is categorised into **Estimate** (green) utilises all data and **Estimate based on partial data** (orange) estimates that are based on less data (because infections that happened at the time are more likely to not have been observed yet) and therefore have increasingly wider intervals towards the date of the last data point. Finally, the **Forecast** (purple) is a projection ahead of time. 
 
 We can also visualise the growth rate estimate through time: 
 ```{r}
-estimates$plots$growth_rate
+plot(estimates, type = "growth_rate")
 ```
 
 To extract a summary of the key transmission metrics at the *latest date* in the data:
