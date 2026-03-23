@@ -657,7 +657,7 @@ simulated_chains_map %>%
 
 To increase the probability of simulating uncontrolled outbreak projections given an overdispersed offspring distribution, let's simulate **1000 transmission chains** with 1 initial case each starting at day 0.
 
-We will create a multiple simulation **without** iteration for this section:
+We will run a simulation with multiple replicates, **without** iteration for this section:
 
 ```{r}
 set.seed(33)
