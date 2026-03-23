@@ -65,7 +65,7 @@ From smallpox to severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2), s
 
 <!-- we dont know -->
 
-The [basic reproduction number](../learners/reference.md#basic), $R_{0}$, measures the average number of cases caused by one infectious individual in a entirely susceptible population. Estimates of $R_{0}$ are useful for understanding the average dynamics of an epidemic at the population-level, but can obscure considerable individual variation in infectiousness. This was highlighted during the global emergence of SARS-CoV-2 by numerous ‘superspreading events’ in which certain infectious individuals generated unusually large numbers of secondary cases ([Leclerc et al, 2020](https://wellcomeopenresearch.org/articles/5-83)).
+The [basic reproduction number](../learners/reference.md#basic), $R_{0}$, measures the average number of cases caused by one infectious individual in a entirely susceptible population. Estimates of $R_{0}$ are useful for understanding the average dynamics of an epidemic at the population-level, but can obscure considerable individual variation in infectiousness. This was highlighted during the global emergence of SARS-CoV-2 by numerous ‘superspreading events’ in which certain infectious individuals generated unusually large numbers of secondary cases ([Leclerc et al., 2020](https://wellcomeopenresearch.org/articles/5-83)).
 
 ![**Observed offspring distribution of SARS-CoV-2 transmission in Hong Kong.** N = 91 SARS-CoV-2 infectors, N = 153 terminal infectees and N = 46 sporadic local cases. Histogram bars indicate the proportion of onward transmission per amount of secondary cases. Line corresponds to a fitted negative binomial distribution ([Adam et al., 2020](https://www.nature.com/articles/s41591-020-1092-0)).](fig/see-intro-secondary-cases-fig-b.png){alt='R = 0.58 and k = 0.43.'}
 
@@ -560,7 +560,7 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 ### The dispersion parameter across diseases
 
-Research into sexually transmitted and vector-borne diseases has previously suggested a '20/80' rule, with 20% of individuals contributing at least 80% of the transmission potential ([Woolhouse et al](https://www.pnas.org/doi/10.1073/pnas.94.1.338)). 
+Research into sexually transmitted and vector-borne diseases has previously suggested a '20/80' rule, with 20% of individuals contributing at least 80% of the transmission potential ([Woolhouse et al., 1997](https://www.pnas.org/doi/10.1073/pnas.94.1.338)). 
 
 On its own, the dispersion parameter $k$ is hard to interpret intuitively, and hence converting into proportional summary can enable easier comparison. When we consider a wider range of pathogens, we can see there is no hard and fast rule for the percentage that generates 80% of transmission, but variation does emerge as a common feature of infectious diseases
 
