@@ -104,7 +104,7 @@ This help us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
-## The individual reprodution number
+## The individual reproduction number
 
 The individual reproduction number is defined as the number of secondary cases caused by a particular infected individual. 
 
