@@ -337,7 +337,7 @@ epichains::simulate_chains(
 
 - **simulation controls** (`n_chains` and `statistic`),
 - **offspring distribution** (`offspring_dist` and required distribution parameters), and
-- generation time (`generation_time`).
+- **generation time** (`generation_time`).
 
 In the lines above, we described how to specify the offspring distribution and generation time. The **simulation controls** include at least two arguments:
 
