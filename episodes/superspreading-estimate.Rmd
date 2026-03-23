@@ -488,7 +488,7 @@ ggplot() +
 
 ### Individual-level variation in transmission
 
-The individual-level variation in transmission is defined by the relationship between the mean ($R_{0}$), dispersion ($k$), which defines the variance of a negative binomial distribution.
+The individual-level variation in transmission is defined by the relationship between the mean ($R_{0}$) and dispersion ($k$), which together define the variance of a negative binomial distribution.
 
 The negative binomial model has $variance = R_{0}(1+\frac{R_{0}}{k})$, so smaller values of $k$ indicate greater variance and, consequently, greater **individual-level variation** in transmission.
 
