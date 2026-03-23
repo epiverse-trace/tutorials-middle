@@ -735,7 +735,7 @@ cluster_probability_percent <- cluster_probability %>%
 
 Even though we have an $R<1$, a highly overdispersed offspring distribution ($k=0.02$) means that if we detect a new case, there is a `r cluster_probability_percent` probability they originated from a cluster of 25 infections or more. Hence, by following a backwards strategy, contact tracing efforts will increase the probability of successfully contain and quarantining this large number of earlier infected individuals, rather than simply focusing on the new case, who is likely to have infected nobody (because $k$ is very small).
 
-We can also use this number to prevent gathering of certain sized to reduce the epidemic by preventing potential superspreading events. Interventions can target to reduce the reproduction number in order to reduce the probability of having clusters of secondary cases.
+We can also use this number to prevent gatherings of a certain size to reduce the epidemic by preventing potential superspreading events. Interventions can target to reduce the reproduction number in order to reduce the probability of having clusters of secondary cases.
 
 
 ::::::::::::::::::::::::::::::::: challenge
