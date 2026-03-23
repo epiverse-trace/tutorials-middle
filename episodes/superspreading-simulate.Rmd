@@ -362,7 +362,7 @@ We can use `simulate_chains()` to create multiple chains and increase the probab
 
 We need to one additional element:
 
-- `set.seed(<integer>)`, which is a random number generator function with a specified seed value, the `<integer>` number, to ensure consistent results across different runs of the code.
+- `set.seed(<integer>)` is a function used to initialise a pseudo-random number generator. By specifying a seed value (the `<integer>`), you ensure that the sequence of numbers produced by subsequent random functions - like `rnorm()` or `simulate_chains()` — is identical every time the code is executed.
 
 With this configuration, each **chain** will represent **one initial case**. These cases per chain are independent, isolated, and without interactions. This means that each chain will have their own pool of susceptibles, which you can configure by using the `pop` or `percent_immune` arguments.
 
