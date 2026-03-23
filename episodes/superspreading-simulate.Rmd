@@ -394,7 +394,7 @@ We can visually count how many chains reach to more than 100 infected cases, wit
 
 Use the last run of `epichains::simulate_chains()` for simulating multiple chains. Change the `statistic` from `"size"` to `"length"`. Run the `summary()` function.
 
-- What chain feature this output count for?
+- What chain feature does this output show?
 
 ::::::::: hint
 
