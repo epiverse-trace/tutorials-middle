@@ -814,7 +814,7 @@ et al., 2020</a>)</div>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>The peak of each curve can inform you about the location of the mean
 of each distribution. A larger mean indicates a longer expected delay
@@ -828,7 +828,7 @@ between symptom onset in the infector and infectee.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p><strong>Which one would be harder to control?</strong></p>
 <p>COVID-19</p>
@@ -937,7 +937,7 @@ called <code>lnorm</code>.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Why do we have an ‘NA’ entry? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Entries with a missing value (<code>&lt;NA&gt;</code>) in the
 <code>prob_distribution</code> column are <em>non-parameterised</em>
@@ -1019,7 +1019,7 @@ other paper?</p></li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>The <code>epiparameter_db()</code> function with <code>disease</code>
 alone counts the number of entries like:</p>
@@ -1051,7 +1051,7 @@ and</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>We choose to explore Ebola’s delay distributions:</p>
 <div class="codewrapper sourceCode" id="cb13">
@@ -1433,7 +1433,7 @@ distribution?</p></li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>Use the <code>$</code> operator plus the <kbd>tab</kbd> or
 <kbd>↹</kbd> keyboard button to explore them as an expandable list:</p>
@@ -1475,7 +1475,7 @@ health care and case isolation?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>An informative delay should measure the time from symptom onset to
 recovery or death.</p>
@@ -1491,7 +1491,7 @@ output is a dataframe.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1892,7 +1892,7 @@ reference manual</a></p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p><strong>Can we replicate {incidence2} with {dplyr}?</strong></p>
 <p>We can get an object similar to <code>cases</code> from the
@@ -2163,7 +2163,7 @@ uncertainty of 0.5 days), we can specify a variable distribution using
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p><strong>Visualize a log Normal distribution using
 {epiparameter}</strong></p>
@@ -2204,7 +2204,7 @@ like:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
 <div class="accordion-body">
 <p><strong>How to get the reporting delay from data?</strong></p>
 <p>If data is available on the time between symptom onset and reporting,
@@ -2616,7 +2616,7 @@ delays in this episode.</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>To wrangle data, you can:</p>
 <div class="codewrapper sourceCode" id="cb31">
@@ -2649,7 +2649,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
@@ -2975,7 +2975,7 @@ before symptom onset improve the detection of potential infectors?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>The serial interval is the time between symptom onset in an infector
 and symptom onset in their infectee.</p>
@@ -2995,7 +2995,7 @@ probability can be computed using <code>epiparameter::cdf()</code>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3063,7 +3063,7 @@ tracing from 2 to 6 days.</p></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> What if </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>If we exchange the question between days and cumulative probability
 to:</p>
@@ -3183,7 +3183,7 @@ response.</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
 <p>What delay distribution measures the time between infection and the
 onset of symptoms? For a refresher, you can read the tutorial <a href="reference.html">Glossary</a>.</p>
@@ -3199,7 +3199,7 @@ the <em>continuous</em> ones!</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3370,7 +3370,7 @@ etc.).</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
 <div class="accordion-body">
 <p>When connecting <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a> and
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>, there is one step that is susceptible to
@@ -3399,7 +3399,7 @@ mistakes.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4"> Show me the solution </h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3562,7 +3562,7 @@ of the <code>example_confirmed</code> data set from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
 <div class="accordion-body">
 <p>Use the last <code>epinow()</code> calculation using the
 <code>delays</code> argument and the <code>delay_opts()</code> helper
@@ -3592,7 +3592,7 @@ function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution5" aria-expanded="false" aria-controls="collapseSolution5">
   <h4 class="accordion-header" id="headingSolution5"> Show me the solution </h4>
 </button>
-<div id="collapseSolution5" class="accordion-collapse collapse" aria-labelledby="headingSolution5" data-bs-parent="#accordionSolution5">
+<div id="collapseSolution5" class="accordion-collapse collapse" data-bs-parent="#accordionSolution5" aria-labelledby="headingSolution5">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb49">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3742,7 +3742,7 @@ dataset</a>:</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint5" aria-expanded="false" aria-controls="collapseHint5">
   <h4 class="accordion-header" id="headingHint5"> Give me a hint </h4>
 </button>
-<div id="collapseHint5" class="accordion-collapse collapse" aria-labelledby="headingHint5" data-bs-parent="#accordionHint5">
+<div id="collapseHint5" class="accordion-collapse collapse" data-bs-parent="#accordionHint5" aria-labelledby="headingHint5">
 <div class="accordion-body">
 <p>To calculate the <span class="math inline">\(R_t\)</span> using
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a>, we need:</p>
@@ -3770,7 +3770,7 @@ use functions like:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution6" aria-expanded="false" aria-controls="collapseSolution6">
   <h4 class="accordion-header" id="headingSolution6"> Show me the solution </h4>
 </button>
-<div id="collapseSolution6" class="accordion-collapse collapse" aria-labelledby="headingSolution6" data-bs-parent="#accordionSolution6">
+<div id="collapseSolution6" class="accordion-collapse collapse" data-bs-parent="#accordionSolution6" aria-labelledby="headingSolution6">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb50">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -3872,7 +3872,7 @@ delays in <a href="https://github.com/epiverse-trace/epiparameter/" class="exter
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint6" aria-expanded="false" aria-controls="collapseHint6">
   <h4 class="accordion-header" id="headingHint6"> Give me a hint </h4>
 </button>
-<div id="collapseHint6" class="accordion-collapse collapse" aria-labelledby="headingHint6" data-bs-parent="#accordionHint6">
+<div id="collapseHint6" class="accordion-collapse collapse" data-bs-parent="#accordionHint6" aria-labelledby="headingHint6">
 <div class="accordion-body">
 <p><code>EpiNow2::NonParametric()</code> accepts Probability Mass
 Functions (PMF) from any distribution family. Read the reference guide
@@ -3887,7 +3887,7 @@ distributions</a>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution7" aria-expanded="false" aria-controls="collapseSolution7">
   <h4 class="accordion-header" id="headingSolution7"> Show me the solution </h4>
 </button>
-<div id="collapseSolution7" class="accordion-collapse collapse" aria-labelledby="headingSolution7" data-bs-parent="#accordionSolution7">
+<div id="collapseSolution7" class="accordion-collapse collapse" data-bs-parent="#accordionSolution7" aria-labelledby="headingSolution7">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb52">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -6582,7 +6582,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-superspreading-estimate"><p>Content from <a href="superspreading-estimate.html">Account for superspreading</a></p>
 <hr>
-<p>Last updated on 2026-03-20 |
+<p>Last updated on 2026-03-24 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-estimate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -6678,8 +6678,8 @@ disease to spread. However, in the earlier or later phases of an
 outbreak, individual differences in infectiousness can be more
 important. In particular, they increase the chance of superspreading
 events (SSEs), which can ignite explosive epidemics and also influence
-the chances of controlling transmission (<a href="https://wellcomeopenresearch.org/articles/5-83" class="external-link">Lloyd-Smith et
-al., 2005</a>).</p>
+the chances of controlling transmission (<a href="https://www.nature.com/articles/nature04153" class="external-link">Lloyd-Smith et al.,
+2005</a>).</p>
 <figure><img src="fig/see-intro-superspreading.png" alt="Chains of SARS-CoV-2 transmission in Hong Kong initiated by local or imported cases. (a), Transmission network of a cluster of cases traced back to a collection of four bars across Hong Kong (n = 106). (b), Transmission network associated with a wedding without clear infector–infectee pairs but linked back to a preceding social gathering and local source (n = 22). (c), Transmission network associated with a temple cluster of undetermined source (n = 19). (d), All other clusters of SARS-CoV-2 infections where the source and transmission chain could be determined (Adam et al., 2020)." class="figure mx-auto d-block"><div class="figcaption">
 <strong>Chains of SARS-CoV-2 transmission in
 Hong Kong initiated by local or imported cases.</strong>
@@ -6702,8 +6702,8 @@ population-level, but can obscure considerable individual variation in
 infectiousness. This was highlighted during the global emergence of
 SARS-CoV-2 by numerous ‘superspreading events’ in which certain
 infectious individuals generated unusually large numbers of secondary
-cases (<a href="https://wellcomeopenresearch.org/articles/5-83" class="external-link">LeClerc
-et al, 2020</a>).</p>
+cases (<a href="https://wellcomeopenresearch.org/articles/5-83" class="external-link">Leclerc
+et al., 2020</a>).</p>
 <figure><img src="fig/see-intro-secondary-cases-fig-b.png" alt="R = 0.58 and k = 0.43." class="figure mx-auto d-block"><div class="figcaption">
 <strong>Observed offspring distribution of
 SARS-CoV-2 transmission in Hong Kong.</strong> N = 91 SARS-CoV-2
@@ -6741,9 +6741,9 @@ functions from these packages, so let’s also call the
 <div id="the-double-colon" class="callout-inner">
 <h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
-<p>The double-colon <code>::</code> in R let you call a specific
+<p>The double-colon <code>::</code> in R lets you call a specific
 function from a package without loading the entire package into the
-current environment.</p>
+current environment. The package must be installed.</p>
 <p>For example, <code>dplyr::filter(data, condition)</code> uses
 <code>filter()</code> from the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> package.</p>
 <p>This help us remember package functions and avoid namespace
@@ -6751,7 +6751,7 @@ conflicts.</p>
 </div>
 </div>
 </div>
-</section><section><h2 class="section-heading" id="the-individual-reprodution-number">The individual reprodution number<a class="anchor" aria-label="anchor" href="#the-individual-reprodution-number"></a>
+</section><section><h2 class="section-heading" id="the-individual-reproduction-number">The individual reproduction number<a class="anchor" aria-label="anchor" href="#the-individual-reproduction-number"></a>
 </h2>
 <hr class="half-width">
 <p>The individual reproduction number is defined as the number of
@@ -7051,14 +7051,14 @@ variance is higher than the mean, this is called
 <strong>overdispersion</strong>. In biological applications,
 overdispersion occurs and so a negative binomial may be worth
 considering as an alternative to Poisson distribution.</p>
-<p><strong>Negative binomial</strong> distribution is specially useful
-for discrete data over an unbounded positive range whose sample variance
-exceeds the sample mean. In such terms, the observations are
+<p>The <strong>negative binomial</strong> distribution is specially
+useful for discrete data over an unbounded positive range whose sample
+variance exceeds the sample mean. In such terms, the observations are
 overdispersed with respect to a Poisson distribution, for which the mean
 is equal to the variance.</p>
-<p>In epidemiology, <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution" class="external-link">negative
-binomial</a> have being used to model disease transmission for
-infectious diseases where the likely number of onward infections may
+<p>In epidemiology, the <a href="https://en.wikipedia.org/wiki/Negative_binomial_distribution" class="external-link">negative
+binomial distribution</a> has been used to model disease transmission
+for infectious diseases where the likely number of onward infections may
 vary considerably from individual to individual and from setting to
 setting, capturing all variation in infectious histories of individuals,
 including properties of the biological (i.e. degree of viral shedding)
@@ -7211,8 +7211,8 @@ cases:</p>
 <h3 class="callout-title">Individual-level variation in transmission</h3>
 <div class="callout-content">
 <p>The individual-level variation in transmission is defined by the
-relationship between the mean (<span class="math inline">\(R_{0}\)</span>), dispersion (<span class="math inline">\(k\)</span>), and the variance of a negative
-binomial distribution.</p>
+relationship between the mean (<span class="math inline">\(R_{0}\)</span>) and dispersion (<span class="math inline">\(k\)</span>), which together define the variance of
+a negative binomial distribution.</p>
 <p>The negative binomial model has <span class="math inline">\(variance
 = R_{0}(1+\frac{R_{0}}{k})\)</span>, so smaller values of <span class="math inline">\(k\)</span> indicate greater variance and,
 consequently, greater <strong>individual-level variation</strong> in
@@ -7344,8 +7344,8 @@ this!</p>
 <div class="callout-content">
 <p>Research into sexually transmitted and vector-borne diseases has
 previously suggested a ‘20/80’ rule, with 20% of individuals
-contributing at least 80% of the transmission potential (<a href="https://www.pnas.org/doi/10.1073/pnas.94.1.338" class="external-link">Woolhouse et
-al</a>).</p>
+contributing at least 80% of the transmission potential (<a href="https://www.pnas.org/doi/10.1073/pnas.94.1.338" class="external-link">Woolhouse et al.,
+1997</a>).</p>
 <p>On its own, the dispersion parameter <span class="math inline">\(k\)</span> is hard to interpret intuitively, and
 hence converting into proportional summary can enable easier comparison.
 When we consider a wider range of pathogens, we can see there is no hard
@@ -7394,15 +7394,15 @@ with an overdispersed offspring distribution, if this primary case is
 identified, a larger fraction of the transmission chain can be detected
 by forward tracing each of the contacts of this primary case (<a href="https://wellcomeopenresearch.org/articles/5-239/v3" class="external-link">Endo et al.,
 2020</a>).</p>
-<figure><img src="fig/contact-tracing-strategies.png" alt="Schematic representation of contact tracing strategies. Black arrows indicate the directions of transmission, blue and Orange arrows, a successful or failed contact tracing, respectivelly. When there is evidence of individual-level variation in transmission, often resulting in superspreading, backward contact tracing from the index case (blue circle) increase the probability to find the primary case (green circle) or clusters with a larger fraction of cases, potentially increasing the number of quarentined cases (yellow circles). Claire Blackmore, 2021" class="figure mx-auto d-block"><div class="figcaption">Schematic representation of contact tracing
+<figure><img src="fig/contact-tracing-strategies.png" alt="Schematic representation of contact tracing strategies. Black arrows indicate the directions of transmission, blue and Orange arrows, a successful or failed contact tracing, respectively. When there is evidence of individual-level variation in transmission, often resulting in superspreading, backward contact tracing from the index case (blue circle) increase the probability to find the primary case (green circle) or clusters with a larger fraction of cases, potentially increasing the number of quarentined cases (yellow circles). Claire Blackmore, 2021" class="figure mx-auto d-block"><div class="figcaption">Schematic representation of contact tracing
 strategies. Black arrows indicate the directions of transmission, blue
-and Orange arrows, a successful or failed contact tracing,
-respectivelly. When there is evidence of individual-level variation in
-transmission, often resulting in superspreading, backward contact
-tracing from the index case (blue circle) increase the probability to
-find the primary case (green circle) or clusters with a larger fraction
-of cases, potentially increasing the number of quarentined cases (yellow
-circles). <a href="https://www.paho.org/sites/default/files/backward_contact_tracing_v3_0.pdf" class="external-link">Claire
+and Orange arrows, a successful or failed contact tracing, respectively.
+When there is evidence of individual-level variation in transmission,
+often resulting in superspreading, backward contact tracing from the
+index case (blue circle) increase the probability to find the primary
+case (green circle) or clusters with a larger fraction of cases,
+potentially increasing the number of quarentined cases (yellow circles).
+<a href="https://www.paho.org/sites/default/files/backward_contact_tracing_v3_0.pdf" class="external-link">Claire
 Blackmore, 2021</a>
 </div>
 </figure><p>When there is evidence of individual-level variation
@@ -7413,10 +7413,10 @@ originating clusters in combination with reducing onwards infection may
 substantially enhance the effectiveness of tracing methods (<a href="https://wellcomeopenresearch.org/articles/5-239/v3" class="external-link">Endo et al.,
 2020</a>).</p>
 <p>Empirical evidence focused on evaluating the efficiency of backward
-tracing lead to 42% more cases identified than forward tracing
-supporting its implementation when rigorous suppression of transmission
-is justified (<a href="https://www.nature.com/articles/s41467-022-32531-6" class="external-link">Raymenants et
-al., 2022</a>)</p>
+tracing led to 42% more cases identified than forward tracing supporting
+its implementation when rigorous suppression of transmission is
+justified (<a href="https://www.nature.com/articles/s41467-022-32531-6" class="external-link">Raymenants et
+al., 2022</a>).</p>
 </section><section><h2 class="section-heading" id="probability-of-cases-in-a-given-cluster">Probability of cases in a given cluster<a class="anchor" aria-label="anchor" href="#probability-of-cases-in-a-given-cluster"></a>
 </h2>
 <hr class="half-width">
@@ -7457,8 +7457,8 @@ and quarantining this large number of earlier infected individuals,
 rather than simply focusing on the new case, who is likely to have
 infected nobody (because <span class="math inline">\(k\)</span> is very
 small).</p>
-<p>We can also use this number to prevent gathering of certain sized to
-reduce the epidemic by preventing potential superspreading events.
+<p>We can also use this number to prevent gatherings of a certain size
+to reduce the epidemic by preventing potential superspreading events.
 Interventions can target to reduce the reproduction number in order to
 reduce the probability of having clusters of secondary cases.</p>
 <div id="backward-contact-tracing-for-ebola" class="callout challenge">
@@ -7822,7 +7822,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-superspreading-simulate"><p>Content from <a href="superspreading-simulate.html">Simulate transmission chains</a></p>
 <hr>
-<p>Last updated on 2026-03-20 |
+<p>Last updated on 2026-03-24 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-simulate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -7922,9 +7922,9 @@ package:</p>
 <div id="the-double-colon" class="callout-inner">
 <h3 class="callout-title">The double-colon</h3>
 <div class="callout-content">
-<p>The double-colon <code>::</code> in R let you call a specific
+<p>The double-colon <code>::</code> in R lets you call a specific
 function from a package without loading the entire package into the
-current environment.</p>
+current environment. The package must be installed.</p>
 <p>For example, <code>dplyr::filter(data, condition)</code> uses
 <code>filter()</code> from the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> package.</p>
 <p>This help us remember package functions and avoid namespace
@@ -8039,7 +8039,7 @@ specific arguments.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson and other distributions </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p><a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> can accept any R function that generates
 random numbers, so the specified arguments will change depending on the
@@ -8085,7 +8085,7 @@ precise time of infection.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> generation time vs serial interval </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <figure><img src="fig/serial-interval-observed.jpeg" alt="A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021)." class="figure mx-auto d-block"><div class="figcaption">A schematic of the relationship of different
 time periods of transmission between an infector and an infectee in a
@@ -8205,7 +8205,9 @@ minimum:</p>
 <li>
 <strong>offspring distribution</strong> (<code>offspring_dist</code>
 and required distribution parameters), and</li>
-<li>generation time (<code>generation_time</code>).</li>
+<li>
+<strong>generation time</strong>
+(<code>generation_time</code>).</li>
 </ul>
 <p>In the lines above, we described how to specify the offspring
 distribution and generation time. The <strong>simulation
@@ -8248,10 +8250,12 @@ projections given an overdispersed offspring distribution.</p>
 <p>We need to one additional element:</p>
 <ul>
 <li>
-<code>set.seed(&lt;integer&gt;)</code>, which is a random number
-generator function with a specified seed value, the
-<code>&lt;integer&gt;</code> number, to ensure consistent results across
-different runs of the code.</li>
+<code>set.seed(&lt;integer&gt;)</code> is a function used to
+initialise a pseudo-random number generator. By specifying a seed value
+(the <code>&lt;integer&gt;</code>), you ensure that the sequence of
+numbers produced by subsequent random functions, like
+<code>rnorm()</code> or <code>simulate_chains()</code>, is identical
+every time the code is executed.</li>
 </ul>
 <p>With this configuration, each <strong>chain</strong> will represent
 <strong>one initial case</strong>. These cases per chain are
@@ -8317,7 +8321,7 @@ simulating multiple chains. Change the <code>statistic</code> from
 <code>"size"</code> to <code>"length"</code>. Run the
 <code>summary()</code> function.</p>
 <ul>
-<li>What chain feature this output count for?</li>
+<li>What chain feature does this output show?</li>
 </ul>
 </div>
 </div>
@@ -8327,7 +8331,7 @@ simulating multiple chains. Change the <code>statistic</code> from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>If you need help, return to the “Chain size and length” callout box
 from the beginning.</p>
@@ -8353,7 +8357,7 @@ simulated <code>chain</code> number 30.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> The epichains object </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>Let’s use <code>dplyr::filter()</code> for this:</p>
 <div class="codewrapper sourceCode" id="cb17">
@@ -8417,7 +8421,7 @@ and three generations. These numbers are more visible when printing the
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> The epichains data frame </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -8472,7 +8476,7 @@ between day 24 and day 31, after the first known infection.”</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> An infectee data frame </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>The output data frame collects <strong>infectees</strong> as the
 observation unit:</p>
@@ -8760,8 +8764,8 @@ output, we can not use the <code>summary(&lt;epichains&gt;)</code>.</p>
 projections given an overdispersed offspring distribution, let’s
 simulate <strong>1000 transmission chains</strong> with 1 initial case
 each starting at day 0.</p>
-<p>We will create a multiple simulation <strong>without</strong>
-iteration for this section:</p>
+<p>We will run a simulation with multiple replicates,
+<strong>without</strong> iteration for this section:</p>
 <div class="codewrapper sourceCode" id="cb32">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -8902,7 +8906,7 @@ results to <code>summary(multiple_epichains)</code>:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Observed cases vs simulated chains </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
 <div class="accordion-body">
 <p>Let’s overlap the cumulative number of observed cases using the
 linelist object from the <code>mers_korea_2015</code> dataset of the
@@ -9014,7 +9018,7 @@ cases?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
 <p>With <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, you can access and use offspring
 and delay distributions from previous Ebola outbreaks.</p>
@@ -9077,7 +9081,7 @@ same day, it may not be necessary to use iteration for this one.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Epidemic Risk assessment accounting for superspreading </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
 <div class="accordion-body">
 <p>With <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a>, you can get numerical solutions
 to processes that <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> solve using branching
@@ -9131,7 +9135,7 @@ object. This should help us count how many chains reach a
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
 <div class="accordion-body">
 <p>Code with the transmission tree data written by <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext" class="external-link">Christian
 Althaus, 2015</a>:</p>
@@ -9227,7 +9231,7 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/aio.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/aio.html",
-  "dateCreated": "2026-03-20",
+  "dateCreated": "2026-03-24",
   "dateModified": "2026-03-24",
   "datePublished": "2026-03-24"
 }
