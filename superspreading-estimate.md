@@ -57,13 +57,13 @@ go to the [main setup page](../learners/setup.md#software-setup).
 
 <!-- we know -->
 
-From smallpox to severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2), some infected individuals spread infection to more people than others. Disease transmission is the result of a combination of biological and social factors, and these factors average out to some extent at the population level during a large epidemic. Hence researchers often use population averages to assess the potential for disease to spread. However, in the earlier or later phases of an outbreak, individual differences in infectiousness can be more important. In particular, they increase the chance of superspreading events (SSEs), which can ignite explosive epidemics and also influence the chances of controlling transmission ([Lloyd-Smith et al., 2005](https://wellcomeopenresearch.org/articles/5-83)).
+From smallpox to severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2), some infected individuals spread infection to more people than others. Disease transmission is the result of a combination of biological and social factors, and these factors average out to some extent at the population level during a large epidemic. Hence researchers often use population averages to assess the potential for disease to spread. However, in the earlier or later phases of an outbreak, individual differences in infectiousness can be more important. In particular, they increase the chance of superspreading events (SSEs), which can ignite explosive epidemics and also influence the chances of controlling transmission ([Lloyd-Smith et al., 2005](https://www.nature.com/articles/nature04153)).
 
 ![**Chains of SARS-CoV-2 transmission in Hong Kong initiated by local or imported cases.** (**a**), Transmission network of a cluster of cases traced back to a collection of four bars across Hong Kong (n = 106). (**b**), Transmission network associated with a wedding without clear infector–infectee pairs but linked back to a preceding social gathering and local source (n = 22). (**c**), Transmission network associated with a temple cluster of undetermined source (n = 19). (**d**), All other clusters of SARS-CoV-2 infections where the source and transmission chain could be determined ([Adam et al., 2020](https://www.nature.com/articles/s41591-020-1092-0)).](fig/see-intro-superspreading.png)
 
 <!-- we dont know -->
 
-The [basic reproduction number](../learners/reference.md#basic), $R_{0}$, measures the average number of cases caused by one infectious individual in a entirely susceptible population. Estimates of $R_{0}$ are useful for understanding the average dynamics of an epidemic at the population-level, but can obscure considerable individual variation in infectiousness. This was highlighted during the global emergence of SARS-CoV-2 by numerous ‘superspreading events’ in which certain infectious individuals generated unusually large numbers of secondary cases ([LeClerc et al, 2020](https://wellcomeopenresearch.org/articles/5-83)).
+The [basic reproduction number](../learners/reference.md#basic), $R_{0}$, measures the average number of cases caused by one infectious individual in a entirely susceptible population. Estimates of $R_{0}$ are useful for understanding the average dynamics of an epidemic at the population-level, but can obscure considerable individual variation in infectiousness. This was highlighted during the global emergence of SARS-CoV-2 by numerous ‘superspreading events’ in which certain infectious individuals generated unusually large numbers of secondary cases ([Leclerc et al., 2020](https://wellcomeopenresearch.org/articles/5-83)).
 
 ![**Observed offspring distribution of SARS-CoV-2 transmission in Hong Kong.** N = 91 SARS-CoV-2 infectors, N = 153 terminal infectees and N = 46 sporadic local cases. Histogram bars indicate the proportion of onward transmission per amount of secondary cases. Line corresponds to a fitted negative binomial distribution ([Adam et al., 2020](https://www.nature.com/articles/s41591-020-1092-0)).](fig/see-intro-secondary-cases-fig-b.png){alt='R = 0.58 and k = 0.43.'}
 
@@ -89,7 +89,7 @@ library(tidyverse)
 
 ### The double-colon
 
-The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
+The double-colon `::` in R lets you call a specific function from a package without loading the entire package into the current environment. The package must be installed.
 
 For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
@@ -97,7 +97,7 @@ This help us remember package functions and avoid namespace conflicts.
 
 :::::::::::::::::::
 
-## The individual reprodution number
+## The individual reproduction number
 
 The individual reproduction number is defined as the number of secondary cases caused by a particular infected individual. 
 
@@ -306,9 +306,9 @@ For occurrences of associated discrete events we can use **Poisson** or negative
 
 In a Poisson distribution, mean is equal to variance. But when variance is higher than the mean, this is called **overdispersion**. In biological applications, overdispersion occurs and so a negative binomial may be worth considering as an alternative to Poisson distribution.
 
-**Negative binomial** distribution is specially useful for discrete data over an unbounded positive range whose sample variance exceeds the sample mean. In such terms, the observations are overdispersed with respect to a Poisson distribution, for which the mean is equal to the variance.
+The **negative binomial** distribution is specially useful for discrete data over an unbounded positive range whose sample variance exceeds the sample mean. In such terms, the observations are overdispersed with respect to a Poisson distribution, for which the mean is equal to the variance.
 
-In epidemiology, [negative binomial](https://en.wikipedia.org/wiki/Negative_binomial_distribution) have being used to model disease transmission for infectious diseases where the likely number of onward infections may vary considerably from individual to individual and from setting to setting, capturing all variation in infectious histories of individuals, including properties of the biological (i.e. degree of viral shedding) and environmental circumstances (e.g. type and location of contact).
+In epidemiology, the [negative binomial distribution](https://en.wikipedia.org/wiki/Negative_binomial_distribution) has been used to model disease transmission for infectious diseases where the likely number of onward infections may vary considerably from individual to individual and from setting to setting, capturing all variation in infectious histories of individuals, including properties of the biological (i.e. degree of viral shedding) and environmental circumstances (e.g. type and location of contact).
 
 :::::::::::::::::::::::::::::
 
@@ -413,7 +413,7 @@ We can overlap the estimated density values of the fitted negative binomial dist
 
 ### Individual-level variation in transmission
 
-The individual-level variation in transmission is defined by the relationship between the mean ($R_{0}$), dispersion ($k$), and the variance of a negative binomial distribution.
+The individual-level variation in transmission is defined by the relationship between the mean ($R_{0}$) and dispersion ($k$), which together define the variance of a negative binomial distribution.
 
 The negative binomial model has $variance = R_{0}(1+\frac{R_{0}}{k})$, so smaller values of $k$ indicate greater variance and, consequently, greater **individual-level variation** in transmission.
 
@@ -495,7 +495,7 @@ We can use the maximum likelihood estimates from `{fitdistrplus}` to compare dif
 
 ### The dispersion parameter across diseases
 
-Research into sexually transmitted and vector-borne diseases has previously suggested a '20/80' rule, with 20% of individuals contributing at least 80% of the transmission potential ([Woolhouse et al](https://www.pnas.org/doi/10.1073/pnas.94.1.338)). 
+Research into sexually transmitted and vector-borne diseases has previously suggested a '20/80' rule, with 20% of individuals contributing at least 80% of the transmission potential ([Woolhouse et al., 1997](https://www.pnas.org/doi/10.1073/pnas.94.1.338)). 
 
 On its own, the dispersion parameter $k$ is hard to interpret intuitively, and hence converting into proportional summary can enable easier comparison. When we consider a wider range of pathogens, we can see there is no hard and fast rule for the percentage that generates 80% of transmission, but variation does emerge as a common feature of infectious diseases
 
@@ -516,11 +516,11 @@ During an outbreak, it is common to try and reduce transmission by identifying p
 
 In the presence of individual-level variation in transmission, i.e., with an overdispersed offspring distribution, if this primary case is identified, a larger fraction of the transmission chain can be detected by forward tracing each of the contacts of this primary case  ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)).
 
-![Schematic representation of contact tracing strategies. Black arrows indicate the directions of transmission, blue and Orange arrows, a successful or failed contact tracing, respectivelly. When there is evidence of individual-level variation in transmission, often resulting in superspreading, backward contact tracing from the index case (blue circle) increase the probability to find the primary case (green circle) or clusters with a larger fraction of cases, potentially increasing the number of quarentined cases (yellow circles). [Claire Blackmore, 2021](https://www.paho.org/sites/default/files/backward_contact_tracing_v3_0.pdf)](fig/contact-tracing-strategies.png)
+![Schematic representation of contact tracing strategies. Black arrows indicate the directions of transmission, blue and Orange arrows, a successful or failed contact tracing, respectively. When there is evidence of individual-level variation in transmission, often resulting in superspreading, backward contact tracing from the index case (blue circle) increase the probability to find the primary case (green circle) or clusters with a larger fraction of cases, potentially increasing the number of quarentined cases (yellow circles). [Claire Blackmore, 2021](https://www.paho.org/sites/default/files/backward_contact_tracing_v3_0.pdf)](fig/contact-tracing-strategies.png)
 
 When there is evidence of individual-level variation (i.e. overdispersion), often resulting in so-called superspreading events, a large proportion of infections may be linked to a small proportion of original clusters. As a result, finding and targeting originating clusters in combination with reducing onwards infection may substantially enhance the effectiveness of tracing methods ([Endo et al., 2020](https://wellcomeopenresearch.org/articles/5-239/v3)). 
 
-Empirical evidence focused on evaluating the efficiency of backward tracing lead to 42% more cases identified than forward tracing supporting its implementation when rigorous suppression of transmission is justified ([Raymenants et al., 2022](https://www.nature.com/articles/s41467-022-32531-6))
+Empirical evidence focused on evaluating the efficiency of backward tracing led to 42% more cases identified than forward tracing supporting its implementation when rigorous suppression of transmission is justified ([Raymenants et al., 2022](https://www.nature.com/articles/s41467-022-32531-6)).
 
 
 ## Probability of cases in a given cluster
@@ -554,7 +554,7 @@ superspreading::proportion_cluster_size(
 
 Even though we have an $R<1$, a highly overdispersed offspring distribution ($k=0.02$) means that if we detect a new case, there is a 46.1% probability they originated from a cluster of 25 infections or more. Hence, by following a backwards strategy, contact tracing efforts will increase the probability of successfully contain and quarantining this large number of earlier infected individuals, rather than simply focusing on the new case, who is likely to have infected nobody (because $k$ is very small).
 
-We can also use this number to prevent gathering of certain sized to reduce the epidemic by preventing potential superspreading events. Interventions can target to reduce the reproduction number in order to reduce the probability of having clusters of secondary cases.
+We can also use this number to prevent gatherings of a certain size to reduce the epidemic by preventing potential superspreading events. Interventions can target to reduce the reproduction number in order to reduce the probability of having clusters of secondary cases.
 
 
 ::::::::::::::::::::::::::::::::: challenge

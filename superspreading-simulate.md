@@ -66,7 +66,7 @@ library(tidyverse)
 
 ### The double-colon
 
-The double-colon `::` in R let you call a specific function from a package without loading the entire package into the current environment. 
+The double-colon `::` in R lets you call a specific function from a package without loading the entire package into the current environment. The package must be installed.
 
 For example, `dplyr::filter(data, condition)` uses `filter()` from the `{dplyr}` package.
 
@@ -252,7 +252,7 @@ epichains::simulate_chains(
 
 - **simulation controls** (`n_chains` and `statistic`),
 - **offspring distribution** (`offspring_dist` and required distribution parameters), and
-- generation time (`generation_time`).
+- **generation time** (`generation_time`).
 
 In the lines above, we described how to specify the offspring distribution and generation time. The **simulation controls** include at least two arguments:
 
@@ -277,7 +277,7 @@ We can use `simulate_chains()` to create multiple chains and increase the probab
 
 We need to one additional element:
 
-- `set.seed(<integer>)`, which is a random number generator function with a specified seed value, the `<integer>` number, to ensure consistent results across different runs of the code.
+- `set.seed(<integer>)` is a function used to initialise a pseudo-random number generator. By specifying a seed value (the `<integer>`), you ensure that the sequence of numbers produced by subsequent random functions, like `rnorm()` or `simulate_chains()`, is identical every time the code is executed.
 
 With this configuration, each **chain** will represent **one initial case**. These cases per chain are independent, isolated, and without interactions. This means that each chain will have their own pool of susceptibles, which you can configure by using the `pop` or `percent_immune` arguments.
 
@@ -327,7 +327,7 @@ We can visually count how many chains reach to more than 100 infected cases, wit
 
 Use the last run of `epichains::simulate_chains()` for simulating multiple chains. Change the `statistic` from `"size"` to `"length"`. Run the `summary()` function.
 
-- What chain feature this output count for?
+- What chain feature does this output show?
 
 ::::::::: hint
 
@@ -631,7 +631,7 @@ simulated_chains_map %>%
 
 To increase the probability of simulating uncontrolled outbreak projections given an overdispersed offspring distribution, let's simulate **1000 transmission chains** with 1 initial case each starting at day 0.
 
-We will create a multiple simulation **without** iteration for this section:
+We will run a simulation with multiple replicates, **without** iteration for this section:
 
 
 ``` r
