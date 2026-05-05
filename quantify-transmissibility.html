@@ -574,7 +574,7 @@ reference manual</a></p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p><strong>Can we replicate {incidence2} with {dplyr}?</strong></p>
 <p>We can get an object similar to <code>cases</code> from the
@@ -672,14 +672,14 @@ period.</p>
 depend on the data. The examples below highlight how the delays can be
 specified for different data sources:</p>
 <center>
-<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr class="header"><th>Data source</th>
+<table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Data source</th>
 <th>Delay(s)</th>
-</tr></thead><tbody><tr class="odd"><td>Time of symptom onset</td>
+</tr></thead><tbody><tr><td>Time of symptom onset</td>
 <td>Incubation period</td>
-</tr><tr class="even"><td>Time of case report</td>
+</tr><tr><td>Time of case report</td>
 <td>Incubation period + time from symptom onset to case
 notification</td>
-</tr><tr class="odd"><td>Time of hospitalisation</td>
+</tr><tr><td>Time of hospitalisation</td>
 <td>Incubation period + time from symptom onset to hospitalisation</td>
 </tr></tbody></table></center>
 </div>
@@ -824,7 +824,7 @@ uncertainty of 0.5 days), we can specify a variable distribution using
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p><strong>Visualize a log Normal distribution using
 {epiparameter}</strong></p>
@@ -864,7 +864,7 @@ like:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
 <div class="accordion-body">
 <p><strong>How to get the reporting delay from data?</strong></p>
 <p>If data is available on the time between symptom onset and reporting,
@@ -1142,17 +1142,17 @@ data) is 0.96 (0.74 – 1.2).</p></li>
 posterior probability that <span class="math inline">\(R_t &lt;
 1\)</span>.</p>
 <center>
-<table class="table"><thead><tr class="header"><th>Probability (<span class="math inline">\(p\)</span>)</th>
+<table class="table"><thead><tr><th>Probability (<span class="math inline">\(p\)</span>)</th>
 <th>Expected change</th>
-</tr></thead><tbody><tr class="odd"><td><span class="math inline">\(p &lt; 0.05\)</span></td>
+</tr></thead><tbody><tr><td><span class="math inline">\(p &lt; 0.05\)</span></td>
 <td>Increasing</td>
-</tr><tr class="even"><td><span class="math inline">\(0.05 \leq p&lt; 0.4\)</span></td>
+</tr><tr><td><span class="math inline">\(0.05 \leq p&lt; 0.4\)</span></td>
 <td>Likely increasing</td>
-</tr><tr class="odd"><td><span class="math inline">\(0.4 \leq p&lt; 0.6\)</span></td>
+</tr><tr><td><span class="math inline">\(0.4 \leq p&lt; 0.6\)</span></td>
 <td>Stable</td>
-</tr><tr class="even"><td><span class="math inline">\(0.6 \leq p &lt; 0.95\)</span></td>
+</tr><tr><td><span class="math inline">\(0.6 \leq p &lt; 0.95\)</span></td>
 <td>Likely decreasing</td>
-</tr><tr class="odd"><td><span class="math inline">\(0.95 \leq p \leq 1\)</span></td>
+</tr><tr><td><span class="math inline">\(0.95 \leq p \leq 1\)</span></td>
 <td>Decreasing</td>
 </tr></tbody></table></center>
 </div>
@@ -1248,7 +1248,7 @@ delays in this episode.</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>To wrangle data, you can:</p>
 <div class="codewrapper sourceCode" id="cb31">
@@ -1281,7 +1281,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
@@ -1393,7 +1393,7 @@ any links that you are not going to use.
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html",
   "dateCreated": "2026-03-24",
   "dateModified": "2026-04-28",
-  "datePublished": "2026-04-28"
+  "datePublished": "2026-05-05"
 }
 
   </script><script>
