@@ -46,7 +46,7 @@ Look at the [glossary](../learners/reference.md) for the definitions of all the 
 
 :::::::::::::::::::::::::
 
-However, early in an epidemic, efforts to understand the epidemic and implications for control can be delayed by the lack of an easy way to access key parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and `{epireview}` are building online catalogues following literature synthesis protocols that can help inform analysis and parametrise models by providing a library of previously estimated epidemiological parameters from past outbreaks.
+However, early in an epidemic, efforts to understand the epidemic and implications for control can be delayed by the lack of an easy way to access key parameters for the disease of interest ([Nash et al., 2023](https://mrc-ide.github.io/epireview/)). Projects like `{epiparameter}` and [epireview](https://mrc-ide.github.io/epireview/) are building online catalogues following literature synthesis protocols that can help inform analysis and parametrise models by providing a library of previously estimated epidemiological parameters from past outbreaks.
 
 :::::::::::::::::: instructor
 
@@ -58,7 +58,7 @@ To illustrate how to use the `{epiparameter}` R package in your analysis pipelin
 
 <!-- In this episode, we'll learn how to access one specific set of epidemiological parameters from the literature and then get their **summary statistics** using `{epiparameter}`.  -->
 
-Let's start loading the `{epiparameter}` package. We'll use the pipe `%>%` to connect some of its functions, some `{tibble}` and `{dplyr}` functions, so let's also call to the `{tidyverse}` package:
+Let's start by loading the `{epiparameter}` package. We'll use the pipe `%>%` to connect some of its functions, some `{tibble}` and `{dplyr}` functions, so let's also load the `{tidyverse}` package:
 
 ```{r,warning=FALSE,message=FALSE}
 library(epiparameter)
@@ -80,7 +80,7 @@ This helps us remember package functions and avoid namespace conflicts.
 
 ## The problem
 
-If we want to estimate the transmissibility of an infection, it's common to use a package such as `{EpiEstim}` or `{EpiNow2}`. The `{EpiEstim}` package allows real-time estimation of the reproduction number using case data over time, reflecting how transmission changes based on when symptoms appear. For estimating transmission based on when people were actually infected (rather than symptom onset), the `{EpiNow2}` package extends this idea by combining it with a model that accounts for delays in observed data. Both packages require some epidemiological information as an input. For example, in `{EpiNow2}` we use `EpiNow2::Gamma()` to specify a [generation time](../learners/reference.md#generationtime) as a probability distribution adding its `mean`, standard deviation (`sd`), and maximum value (`max`). 
+If we want to estimate the transmissibility of an infection, it's common to use a package such as `{EpiEstim}` or `{EpiNow2}`. The `{EpiEstim}` package allows real-time estimation of the reproduction number using case data over time, reflecting how transmission changes based on when symptoms appear. For estimating transmission based on when people were actually infected (rather than symptom onset), the `{EpiNow2}` package extends this idea by combining it with a model that accounts for delays in observed data. Both packages require some epidemiological information as an input. For example, in `{EpiNow2}` we use `EpiNow2::Gamma()` to specify a [generation time](../learners/reference.md#generationtime) as a Gamma probability distribution adding its `mean`, standard deviation (`sd`), and maximum value (`max`). 
 
 To specify a `generation_time` that follows a _Gamma_ distribution with mean $\mu = 4$, standard deviation $\sigma = 2$, and a maximum value of 20, we write:
 
@@ -95,7 +95,7 @@ generation_time <-
 
 It is a common practice for analysts to manually search the available literature and copy and paste the **summary statistics** or the **distribution parameters** from scientific publications. A challenge that is often faced is that the reporting of different statistical distributions is not consistent across the literature (e.g. a paper may only report the mean, rather than the full underlying distribution). `{epiparameter}`'s objective is to facilitate the access to reliable estimates of distribution parameters for a range of infectious diseases, so that they can easily be implemented in outbreak analytic pipelines.
 
-In this episode, we will *access* the summary statistics of generation time for COVID-19 from the library of epidemiological parameters provided by `{epiparameter}`. These metrics can be used to estimate the transmissibility of this disease using `{EpiNow2}` in subsequent episodes.
+In this episode, we will *access* the summary statistics of a generation time for COVID-19 from the library of epidemiological parameters provided by `{epiparameter}`. These metrics can be used to estimate the transmissibility of this disease using `{EpiNow2}` in subsequent episodes.
 
 Let's start by looking at how many entries are currently available in the **epidemiological distributions database** in `{epiparameter}` using `epiparameter_db()` for the epidemiological distribution `epi_name` called generation time with the string `"generation"`:
 
@@ -111,7 +111,7 @@ In the library of epidemiological parameters, we may not have a `"generation"` t
 
 ### Systematic review data for priority pathogens
 
-The [`{epireview}` R package](https://mrc-ide.github.io/epireview/) has parameters on Ebola, Marburg and Lassa from recent systematic reviews, with more priority pathogens planned for future releases. Have a look at [this vignette](https://epiverse-trace.github.io/epiparameter/articles/data_from_epireview.html) for more information on how to use these parameters with `{epiparameter}`.
+The [`{epireview}` R package](https://mrc-ide.github.io/epireview/) has parameters on Ebola, Marburg, Lassa, SARS, Zika and Nipah from recent systematic reviews, with more priority pathogens planned for future releases. Have a look at [this vignette](https://epiverse-trace.github.io/epiparameter/articles/data_from_epireview.html) for more information on how to use these parameters with `{epiparameter}`.
 
 :::::::::::::::::::::::::
 
@@ -212,7 +212,7 @@ The objective of the assessment above is to assess the interpretation of a large
 
 In this section, we will use `{epiparameter}` to obtain the serial interval for COVID-19, as an alternative to the generation time.
 
-First, let's see how many parameters we have in the epidemiological distributions database (`epiparameter_db()`) with the `disease` named `covid`-19. Run this code:
+First, let's see how many parameters we have in the epidemiological distributions database (`epiparameter_db()`) with the `disease` named `covid`. Run this code:
 
 ```{r,eval=FALSE}
 epiparameter::epiparameter_db(
@@ -229,13 +229,13 @@ epiparameter::epiparameter_db(
 )
 ```
 
-With this query combination, we get more than one delay distribution (because the database has multiple entries). This output is an `<epiparameter>` class object.
+With this query combination, we get more than one delay distribution (because the database has multiple entries). When several entries match, the output is a list of `<epiparameter>` objects.
 
 ::::::::::::::::: callout
 
 ### CASE-INSENSITIVE
 
-`epiparameter_db` is [case-insensitive](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). This means that you can use strings with letters in upper or lower case indistinctly. Strings like `"serial"`, `"serial interval"` or `"serial_interval"` are also valid.
+`epiparameter_db` is [case-insensitive](https://dillionmegida.com/p/case-sensitivity-vs-case-insensitivity/#case-insensitivity). This means that you can use strings with letters in upper or lower case interchangeably. Strings like `"serial"`, `"serial interval"` or `"serial_interval"` are also valid.
 
 :::::::::::::::::::::::::
 
@@ -280,7 +280,7 @@ distribution %>%
   is_parameterised()
 ```
 
-### Parameterised entries have an Inference method
+### Parameterised entries have an inference method
 
 As detailed in `?is_parameterised`, a parameterised distribution is the entry that has a probability distribution associated with it provided by an `inference_method` as shown in `metadata`:
 
@@ -303,9 +303,9 @@ Take 2 minutes to explore the `{epiparameter}` library.
 
 Find:
 
-- How many delay distributions are for that disease?
+- How many delay distributions are there for that disease?
 
-- How many types of probability distribution (e.g., gamma, log normal) are for a given delay in that disease?
+- How many types of probability distribution (e.g., gamma, log normal) are there for a given delay in that disease?
 
 Ask:
 
@@ -338,15 +338,15 @@ The combo of `epiparameter_db()` plus `parameter_tbl()` gets a data frame of all
 We choose to explore Ebola's delay distributions:
 
 ```{r}
-# we expect 16 delay distributions for Ebola
+# we expect 17 delay distributions for Ebola
 epiparameter::epiparameter_db(
   disease = "ebola"
 )
 ```
 
-Now, from the output of `epiparameter::epiparameter_db()`, What is an [offspring distribution](../learners/reference.md#offspringdist)?
+Now, from the output of `epiparameter::epiparameter_db()`, what is an [offspring distribution](../learners/reference.md#offspringdist)?
 
-We choose to find Ebola's incubation periods. This output lists all the papers and parameters found. Run this locally if needed:
+We choose to search for incubation period estimates for Ebola. This output lists all the papers and parameters found. Run this locally if needed:
 
 ```{r, eval=FALSE}
 epiparameter::epiparameter_db(
@@ -378,7 +378,7 @@ How does `{epiparameter}` do the collection and review of peer-reviewed literatu
 
 ## Select a single distribution
 
-The `epiparameter::epiparameter_db()` function works as a filtering or subset function. We can use the `author` argument to keep `Hiroshi Nishiura` parameters, or the `subset` argument to keep parameters from studies with a sample size higher than 10:
+The `epiparameter::epiparameter_db()` function works as a filtering or subset function. We can use the `author` argument to keep parameters reported in papers where the first author is `Nishiura`, or the `subset` argument to keep parameters from studies with a sample size higher than 10:
 
 ```{r, eval = FALSE}
 epiparameter::epiparameter_db(
@@ -449,7 +449,7 @@ This only seems to work in code chunks and R console!
 
 -->
 
-You can use `plot()` to `<epiparameter>` objects to visualise:
+You can use `plot()` on `<epiparameter>` objects to visualise:
 
 - the *Probability Density Function (PDF)* and 
 - the *Cumulative Distribution Function (CDF)*.
@@ -469,7 +469,7 @@ plot(covid_serialint, xlim = c(1, 60))
 
 ## Extract the summary statistics
 
-We can get the `mean` and standard deviation (`sd`) from this `<epiparameter>` diving into the `summary_stats` object:
+We can get the `mean` and standard deviation (`sd`) from this `<epiparameter>` object by diving into the `summary_stats` element:
 
 ```{r}
 # get the mean
@@ -487,7 +487,7 @@ generation_time <-
   )
 ```
 
-In the next episode we'll learn how to use `{EpiNow2}` to correctly specify distributions, estimate transmissibility. Then, how to use **distribution functions** to get a maximum value (`max`) for `EpiNow2::LogNormal()` and use `{epiparameter}` in your analysis.
+In the next episode we'll learn how to use `{EpiNow2}` to correctly specify distributions and estimate transmissibility. We'll also learn how to use **distribution functions** to get a maximum value (`max`) for `EpiNow2::LogNormal()` and use `{epiparameter}` in your analysis.
 
 :::::::::::::::::::::::::::::: callout
 
@@ -504,7 +504,7 @@ covid_serialint_parameters
 
 This gets a vector of class `<numeric>` ready to use as input for any other package! 
 
-Consider that {EpiNow2} functions also accept distribution parameters as inputs. Run `?EpiNow2::LogNormal` to read the [Probability distributions](https://epiforecasts.io/EpiNow2/reference/Distributions.html) reference manual.
+Consider that `{EpiNow2}` functions also accept distribution parameters as inputs. Run `?EpiNow2::LogNormal` to read the [Probability distributions](https://epiforecasts.io/EpiNow2/reference/Distributions.html) reference manual.
 
 ::::::::::::::::::::::::::::::
 
@@ -529,10 +529,10 @@ Answer:
 Use the `$` operator plus the <kbd>tab</kbd> or <kbd>↹</kbd>  keyboard button to explore them as an expandable list:
 
 ```r
-covid_serialint$
+ebola_serial$
 ```
 
-Use the `str()` to display the structure of the `<epiparameter>` R object.
+Use `str()` to display the structure of the `<epiparameter>` R object.
 
 ::::::::::::::::::
 
@@ -579,7 +579,7 @@ An interesting element is the `method_assess` nested entry, which refers to the 
 covid_serialint$method_assess
 ```
 
-We will explore these concepts following episodes!
+We will explore these concepts in the following episodes!
 
 ::::::::::::::::::::::::::::::
 
