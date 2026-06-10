@@ -344,7 +344,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Quantifying transmission</h1>
-        <p>Last updated on 2026-04-28 |
+        <p>Last updated on 2026-06-10 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/quantify-transmissibility.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -574,7 +574,7 @@ reference manual</a></p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p><strong>Can we replicate {incidence2} with {dplyr}?</strong></p>
 <p>We can get an object similar to <code>cases</code> from the
@@ -824,7 +824,7 @@ uncertainty of 0.5 days), we can specify a variable distribution using
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p><strong>Visualize a log Normal distribution using
 {epiparameter}</strong></p>
@@ -864,7 +864,7 @@ like:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
 <div class="accordion-body">
 <p><strong>How to get the reporting delay from data?</strong></p>
 <p>If data is available on the time between symptom onset and reporting,
@@ -905,15 +905,15 @@ hospitalization (date when case was reported).</p>
   meanlog:
     - normal distribution:
       mean:
-        0.24
+        0.27
       sd:
-        0.13
+        0.12
   sdlog:
     - normal distribution:
       mean:
-        0.98
+        0.97
       sd:
-        0.085</code></pre>
+        0.091</code></pre>
 </div>
 </div>
 </div>
@@ -1114,23 +1114,23 @@ intervals towards the date of the last data point. Finally, the
 </h3>
 <pre class="output" tabindex="0"><code>                        measure               estimate
                          &lt;char&gt;                 &lt;char&gt;
-1:       New infections per day   7852 (4731 -- 13227)
+1:       New infections per day   7837 (4785 -- 12887)
 2:   Expected change in reports      Likely decreasing
 3:   Effective reproduction no.     0.96 (0.74 -- 1.2)
-4:               Rate of growth -0.014 (-0.1 -- 0.075)
-5: Doubling/halving time (days)      -50 (9.2 -- -6.6)</code></pre>
+4:               Rate of growth -0.014 (-0.1 -- 0.077)
+5: Doubling/halving time (days)        -49 (9 -- -6.9)</code></pre>
 </div>
 <p>As these estimates are based on partial data, they have a wide
 uncertainty interval.</p>
 <ul><li><p>From the summary of our analysis we see that the expected change
-in reports is Likely decreasing with the estimated new infections 7852
-(4731 – 13227).</p></li>
+in reports is Likely decreasing with the estimated new infections 7837
+(4785 – 12887).</p></li>
 <li><p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
 data) is 0.96 (0.74 – 1.2).</p></li>
 <li><p>The exponential growth rate of case numbers is -0.014 (-0.1 –
-0.075).</p></li>
+0.077).</p></li>
 <li><p>The doubling time (the time taken for case numbers to double) is
--50 (9.2 – -6.6).</p></li>
+-49 (9 – -6.9).</p></li>
 </ul><div id="expected-change-in-reports" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -1248,7 +1248,7 @@ delays in this episode.</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>To wrangle data, you can:</p>
 <div class="codewrapper sourceCode" id="cb31">
@@ -1281,7 +1281,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
@@ -1391,9 +1391,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/quantify-transmissibility.html",
-  "dateCreated": "2026-03-24",
-  "dateModified": "2026-04-28",
-  "datePublished": "2026-05-12"
+  "dateCreated": "2026-06-10",
+  "dateModified": "2026-06-10",
+  "datePublished": "2026-06-10"
 }
 
   </script><script>
