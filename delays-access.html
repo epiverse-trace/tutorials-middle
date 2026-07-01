@@ -719,13 +719,16 @@ et al., 2022</a>).</caption>
 <div id="serial-interval" class="callout-inner">
 <h3 class="callout-title">Serial interval</h3>
 <div class="callout-content">
-<p>Assume that COVID-19 and SARS have similar reproduction number values
-and that the serial interval approximates the generation time.</p>
 <p>Given the serial interval of both infections in the figure below:</p>
-<ul><li>Which one would be harder to control?</li>
+<ul><li>Which one would have a larger number of generations in less
+time?</li>
 <li>Why do you conclude that?</li>
-</ul><figure><img src="fig/serial-interval-covid-sars.jpg" alt="Serial interval of novel coronavirus (COVID-19) infections overlaid with a published distribution of SARS. (Nishiura et al., 2020)" class="figure mx-auto d-block"><div class="figcaption">Serial interval of novel coronavirus (COVID-19)
-infections overlaid with a published distribution of SARS. (<a href="https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext" class="external-link">Nishiura
+</ul><p>Assume
+<!-- that COVID-19 and SARS have similar reproduction number values and -->
+that the serial interval approximates the generation time.</p>
+<figure><img src="fig/serial-interval-covid-sars.jpg" alt="Serial interval of COVID-19 (SARS-CoV-2) infections overlaid with a published distribution of SARS (SARS-CoV-1). (Nishiura et al., 2020)" class="figure mx-auto d-block"><div class="figcaption">Serial interval of COVID-19 (SARS-CoV-2)
+infections overlaid with a published distribution of SARS (SARS-CoV-1).
+(<a href="https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext" class="external-link">Nishiura
 et al., 2020</a>)</div>
 </figure></div>
 </div>
@@ -735,7 +738,7 @@ et al., 2020</a>)</div>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
 <div class="accordion-body">
 <p>The peak of each curve can inform you about the location of the mean
 of each distribution. A larger mean indicates a longer expected delay
@@ -749,17 +752,20 @@ between symptom onset in the infector and infectee.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p><strong>Which one would be harder to control?</strong></p>
 <p>COVID-19</p>
 <p><strong>Why do you conclude that?</strong></p>
-<p>COVID-19 has a lower mean serial interval. The approximate mean value
-for the serial interval of COVID-19 is around four days, and SARS is
-about seven days. Thus, if there are many infections in the population,
-COVID-19 will on average have more new generations of infection in less
-time than SARS would, assuming similar reproduction numbers. This means
-far more resources would be required to keep up with the epidemic.</p>
+<p>Because COVID-19 has a shorter mean serial interval. The approximate
+mean serial interval for COVID-19 is around 4 days, compared to
+approximately 7 days for SARS. Therefore, if many infections are present
+in the population, COVID-19 will on average produce more generations of
+infection in less time than SARS.
+<!-- , assuming similar reproduction numbers. --> A short serial
+interval can make contact tracing difficult due to the rapid emergence
+of new generations of cases. This means far more resources would be
+required to keep up with the epidemic.</p>
 </div>
 </div>
 </div>
@@ -857,7 +863,7 @@ called <code>lnorm</code>.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Why do we have an ‘NA’ entry? </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
 <div class="accordion-body">
 <p>Entries with a missing value (<code>&lt;NA&gt;</code>) in the
 <code>prob_distribution</code> column are <em>non-parameterised</em>
@@ -935,7 +941,7 @@ other paper?</p></li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
 <div class="accordion-body">
 <p>The <code>epiparameter_db()</code> function with <code>disease</code>
 alone counts the number of entries like:</p>
@@ -961,7 +967,7 @@ and</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>We choose to explore Ebola’s delay distributions:</p>
 <div class="codewrapper sourceCode" id="cb13">
@@ -1334,7 +1340,7 @@ distribution?</p></li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Give me a hint </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
 <div class="accordion-body">
 <p>Use the <code>$</code> operator plus the <kbd>tab</kbd> or
 <kbd>↹</kbd> keyboard button to explore them as an expandable list:</p>
@@ -1375,7 +1381,7 @@ health care and case isolation?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
 <div class="accordion-body">
 <p>An informative delay should measure the time from symptom onset to
 recovery or death.</p>
@@ -1391,7 +1397,7 @@ output is a dataframe.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
