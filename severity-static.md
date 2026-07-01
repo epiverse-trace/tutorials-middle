@@ -42,13 +42,9 @@ This episode requires you to be familiar with:
 
 Install packages if their are not already installed
 
-
-``` r
-# if {pak} is not installed, run: install.packages("pak")
-pak::pak("cfr")
-pak::pak("epiparameter")
-pak::pak("tidyverse")
-pak::pak("outbreaks")
+```r
+if (!base::require("pak")) install.packages("pak")
+pak::pak(c("cfr", "epiparameter", "tidyverse", "outbreaks"))
 ```
 
 If you have any error message,
@@ -161,7 +157,7 @@ ebola1976 %>%
   plot()
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-3-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-2-1.png" alt="" style="display: block; margin: auto;" />
 
 We'll frame this episode under the context of an **ongoing outbreak** with only the **first 30 days** of data observed.
 
@@ -381,7 +377,7 @@ onset_to_death_ebola <-
 plot(onset_to_death_ebola, xlim = c(0, 40))
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-11-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-10-1.png" alt="" style="display: block; margin: auto;" />
 
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
@@ -547,7 +543,7 @@ onset_to_death_ebola %>%
   plot(xlim = c(0, 40))
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-18-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-17-1.png" alt="" style="display: block; margin: auto;" />
 
 ::::::::::::::::::
 
@@ -725,7 +721,7 @@ dplyr::bind_rows(
   )
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-27-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-26-1.png" alt="" style="display: block; margin: auto;" />
 
 The red and blue lines represent the delay-adjusted and naive CFR, respectively, throughout the outbreak. The bands around them represent the 95% confidence intervals (95% CI).
 

@@ -26,7 +26,23 @@ Learners should familiarise themselves with the following concept dependencies b
 
 **Epidemic theory**: The reproduction number, $R$.
 
+**R packages installed**: `{epichains}`, `{epiparameter}`, `{tidyverse}`.
+
 :::::::::::::::::::::::::::::::::
+
+:::::::::: spoiler
+
+Install packages if their are not already installed
+
+```r
+if (!base::require("pak")) install.packages("pak")
+pak::pak(c("epichains", "epiparameter", "tidyverse"))
+```
+
+If you have any error message,
+go to the [main setup page](../learners/setup.md#software-setup).
+
+::::::::::
 
 ## Introduction
 
@@ -275,7 +291,7 @@ The `simulate_chains()` output creates a `<epichains>` class object, which we ca
 
 We can use `simulate_chains()` to create multiple chains and increase the probability of simulating uncontrolled outbreak projections given an overdispersed offspring distribution.
 
-We need to one additional element:
+We need to specify one additional element:
 
 - `set.seed(<integer>)` is a function used to initialise a pseudo-random number generator. By specifying a seed value (the `<integer>`), you ensure that the sequence of numbers produced by subsequent random functions, like `rnorm()` or `simulate_chains()`, is identical every time the code is executed.
 

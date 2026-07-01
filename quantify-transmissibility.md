@@ -29,7 +29,23 @@ Learners should familiarise themselves with following concepts before working th
 
 **Data science**: Data transformation and visualization. You can review the episode on [Aggregate and visualize](https://epiverse-trace.github.io/tutorials-early/describe-cases.html) incidence data.
 
+**R packages installed**: `{EpiNow2}`, `{incidence2}`, `{tidyverse}`.
+
 :::::::::::::::::::::::::::::::::
+
+:::::::::: spoiler
+
+Install packages if their are not already installed
+
+```r
+if (!base::require("pak")) install.packages("pak")
+pak::pak(c("EpiNow2", "incidence2", "tidyverse"))
+```
+
+If you have any error message,
+go to the [main setup page](../learners/setup.md#software-setup).
+
+::::::::::
 
 
 
@@ -425,15 +441,15 @@ outbreaks::ebola_sim_clean$linelist %>%
   meanlog:
     - normal distribution:
       mean:
-        0.26
+        0.3
       sd:
-        0.1
+        0.12
   sdlog:
     - normal distribution:
       mean:
-        0.98
+        0.93
       sd:
-        0.088
+        0.1
 ```
 
 ::::::::::::::::::
@@ -585,22 +601,22 @@ summary(estimates)
 ``` output
                         measure                estimate
                          <char>                  <char>
-1:       New infections per day    7862 (4613 -- 12932)
+1:       New infections per day    7809 (4585 -- 13525)
 2:   Expected change in reports       Likely decreasing
-3:   Effective reproduction no.      0.96 (0.72 -- 1.2)
-4:               Rate of growth -0.014 (-0.11 -- 0.077)
-5: Doubling/halving time (days)         -48 (9 -- -6.3)
+3:   Effective reproduction no.      0.96 (0.73 -- 1.3)
+4:               Rate of growth -0.014 (-0.11 -- 0.085)
+5: Doubling/halving time (days)       -50 (8.1 -- -6.4)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7862 (4613 -- 12932).
++ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7809 (4585 -- 13525).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.72 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.3). 
 
-+ The exponential growth rate of case numbers is -0.014 (-0.11 -- 0.077).
++ The exponential growth rate of case numbers is -0.014 (-0.11 -- 0.085).
 
-+ The doubling time (the time taken for case numbers to double) is -48 (9 -- -6.3).
++ The doubling time (the time taken for case numbers to double) is -50 (8.1 -- -6.4).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
