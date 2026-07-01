@@ -36,7 +36,7 @@ La variation individuelle de la transmission peut affecter à la fois le potenti
 
 - Une plus grande variation réduit la probabilité globale qu'un nouveau cas unique soit à l'origine d'une épidémie locale de grande ampleur, car la plupart des cas infectent peu d'autres personnes et les individus qui génèrent un grand nombre de cas secondaires sont relativement rares.
 
-- Toutefois, si un "événement de super propagation" se produit et que l'épidémie s'installe, cette variation peut rendre l'épidémie plus difficile à contrôler à l'aide d'un système d'information sur les maladies infectieuses. *des interventions de masse* (c'est-à-dire des interventions générales qui supposent implicitement que tout le monde contribue de manière égale à la transmission), car certains cas contribuent de manière disproportionnée : un seul cas non contrôlé peut générer un grand nombre de cas secondaires.
+- Toutefois, si un "événement de super propagation" se produit et que l'épidémie s'installe, cette variation peut rendre l'épidémie plus difficile à contrôler à l'aide *des interventions de masse* (c'est-à-dire des interventions générales qui supposent implicitement que tout le monde contribue de manière égale à la transmission), car certains cas contribuent de manière disproportionnée : un seul cas non contrôlé peut générer un grand nombre de cas secondaires.
 
 - Inversement, la variation de la transmission peut offrir des possibilités de *des interventions ciblées* si les individus qui contribuent le plus à la transmission (en raison de facteurs biologiques ou comportementaux), ou les environnements dans lesquels se produisent les "événements de super propagation", partagent des caractéristiques sociodémographiques, environnementales ou géographiques qui peuvent être définies.
 
@@ -214,7 +214,7 @@ Pour utiliser `{epichains}` nous devons connaître (ou supposer) deux valeurs é
 
 ## Obtenez la distribution de la descendance
 
-Nous supposons ici que la distribution de la descendance du MERS suit une distribution binomiale négative, avec une moyenne (nombre de reproduction $R$) et une dispersion $k$ estimées à partir de la liste et des données de contact de `mers_korea_2015` dans la `{outbreaks}` R dans l'épisode précédent.
+Nous supposons ici que la distribution de la descendance du MERS suit une distribution binomiale négative, avec une moyenne (nombre de reproduction $R$) et une dispersion $k$ estimées à partir de la liste de cas et des données de contact de `mers_korea_2015` dans la `{outbreaks}` R dans l'épisode précédent.
 
 ```{r}
 mers_offspring <- c(mean = 0.60, dispersion = 0.02)
@@ -255,7 +255,7 @@ Dans cet exemple, nous pouvons spécifier `lambda = mers_offspring["mean"]` car 
 
 ## Obtenir le temps de génération
 
-Les [intervalle de série](../learners/reference.md#serialinterval) est souvent utilisée pour approximer la distribution du temps de génération. Cette approximation est couramment utilisée parce qu'il est plus facile d'observer et de mesurer l'apparition des symptômes dans chaque cas que le moment précis de l'infection.
+L' [intervalle sériel](../learners/reference.md#serialinterval) est souvent utilisée pour approximer la distribution du temps de génération. Cette approximation est couramment utilisée parce qu'il est plus facile d'observer et de mesurer l'apparition des symptômes dans chaque cas que le moment précis de l'infection.
 
 :::::::::::::::::::::::::::::::: spoiler
 
@@ -263,11 +263,11 @@ Les [intervalle de série](../learners/reference.md#serialinterval) est souvent 
 
 ![Schéma de la relation entre les différentes périodes de transmission entre un infecteur et un infecté dans une paire de transmission. La fenêtre d'exposition est définie comme l'intervalle de temps au cours duquel se produit l'exposition virale, et la fenêtre de transmission est définie comme l'intervalle de temps pour la transmission ultérieure par rapport à la durée de l'infection ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)).](fig/serial-interval-observed.jpeg)
 
-Cependant, l'utilisation de l'option *intervalle sériel* comme approximation de l'intervalle *temps de génération* est principalement valable pour les maladies dans lesquelles l'infectiosité commence après l'apparition des symptômes ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). Dans les cas où l'infectiosité commence avant l'apparition des symptômes, les intervalles sériels peuvent avoir des valeurs négatives, ce qui est le cas pour les maladies à transmission pré-symptomatique ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712\(20\)30119-3/fulltext#gr2)).
+Cependant, l'utilisation de l'option *intervalle sériel* comme approximation du *temps de génération* est principalement valable pour les maladies dans lesquelles l'infectiosité commence après l'apparition des symptômes ([Chung Lau et al., 2021](https://academic.oup.com/jid/article/224/10/1664/6356465)). Dans les cas où l'infectiosité commence avant l'apparition des symptômes, les intervalles sériels peuvent avoir des valeurs négatives, ce qui est le cas pour les maladies à transmission pré-symptomatique ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712\(20\)30119-3/fulltext#gr2)).
 
 ::::::::::::::::::::::::::::::::
 
-Utilisons le `{epiparameter}` pour accéder à l'intervalle de série disponible pour la maladie MERS et l'utiliser :
+Utilisons le `{epiparameter}` pour accéder à l'intervalle sériel disponible pour la maladie MERS et l'utiliser :
 
 ```{r, message=FALSE, warning=FALSE}
 serial_interval <- epiparameter_db(
@@ -286,7 +286,7 @@ serial_summary <- serial_interval$summary_stats %>%
   dplyr::distinct(.keep_all = TRUE)
 ```
 
-L'intervalle de série pour le MERS a une moyenne de `r serial_summary$mean` jours et un écart-type de `r serial_summary$sd` jours.
+L'intervalle sériel pour le MERS a une moyenne de `r serial_summary$mean` jours et un écart-type de `r serial_summary$sd` jours.
 
 :::::::::::::::::::::::::::: callout
 
@@ -304,7 +304,7 @@ Cette interface est similaire à celle de `{cfr}` pour établir un lien avec `{e
 
 ## Simuler une chaîne unique
 
-Nous sommes maintenant prêts à utiliser la fonction `simulate_chains()` de `{epichains}` pour créer **un** chaîne de transmission :
+Nous sommes maintenant prêts à utiliser la fonction `simulate_chains()` de `{epichains}` pour créer **une** chaîne de transmission :
 
 ```{r, message=FALSE, warning=FALSE, eval=FALSE}
 epichains::simulate_chains(
@@ -323,7 +323,7 @@ epichains::simulate_chains(
 `simulate_chains()` nécessite au minimum trois séries d'arguments :
 
 - les contrôles de simulation,
-- la distribution de la progéniture, et
+- la distribution de la descendance, et
 - la durée de la génération.
 
 Dans les lignes ci-dessus, nous avons décrit comment spécifier la distribution des descendants et le temps de génération. Les **contrôle la simulation** comprennent au moins deux arguments :
@@ -335,7 +335,7 @@ Dans les lignes ci-dessus, nous avons décrit comment spécifier la distribution
 
 ### Critères d'arrêt
 
-Il s'agit d'une fonction personnalisable de `{epichains}`. Par défaut, les simulations de processus de ramification se terminent lorsqu'elles se sont éteintes. Pour les chaînes de transmission de longue durée, en `simulate_chains()` vous pouvez ajouter le paramètre `stat_threshold` vous pouvez ajouter l'argument
+Il s'agit d'une fonction personnalisable de `{epichains}`. Par défaut, les simulations de processus de ramification se terminent lorsqu'elles se sont éteintes. Pour les chaînes de transmission de longue durée, en `simulate_chains()` vous pouvez ajouter le paramètre `stat_threshold`.
 
 Par exemple, si nous définissons un critère d'arrêt pour `statistic = "size"` de `stat_threshold = 500` il n'y aura plus de descendance après une chaîne de taille 500.
 
@@ -349,7 +349,7 @@ Nous pouvons utiliser `simulate_chains()` pour créer plusieurs chaînes et augm
 
 Nous devons spécifier trois éléments supplémentaires :
 
-- `set.seed(<integer>)`, qui est une fonction de générateur de nombres aléatoires avec une valeur de semence spécifiée, la fonction `<integer>` afin de garantir des résultats cohérents entre les différentes exécutions du code.
+- `set.seed(<integer>)`, qui est une fonction de générateur de nombres aléatoires avec une valeur de semence spécifiée, le paramètre `<integer>` permet de garantir des résultats cohérents entre les différentes exécutions du code.
 - `number_simulations` qui définit le nombre de simulations à effectuer.
 - `initial_cases` définit le nombre de cas initiaux à introduire dans le programme `n_chains` expliqué dans les lignes ci-dessus.
 
@@ -494,7 +494,7 @@ simulated_chains_map %>%
   dplyr::filter(simulation_id == chain_to_observe)
 ```
 
-Les éléments clés de ce résultat se trouvent dans le pied de page, le texte qui apparaît en bas de page :
+Les éléments clés de ce résultat se trouvent dans le texte qui apparaît en bas de page :
 
 ```output
 Number of infectors (known): 3
@@ -561,7 +561,7 @@ simulated_chains_day <- simulated_chains_map %>%
   dplyr::ungroup()
 ```
 
-Avant le tracé, créons un tableau récapitulatif avec la durée totale et la taille de chaque chaîne. Nous pouvons utiliser la fonction `{dplyr}` "combo" de `group_by()`, `summarise()` et `ungroup()`:
+Avant le graphique, créons un tableau récapitulatif avec la durée totale et la taille de chaque chaîne. Nous pouvons utiliser la fonction `{dplyr}` "combo" de `group_by()`, `summarise()` et `ungroup()`:
 
 ```{r}
 # Summarise the chain duration and size
@@ -579,7 +579,7 @@ sim_chains_max <-
 sim_chains_max
 ```
 
-Nous sommes maintenant prêts à utiliser le `{ggplot2}` paquet :
+Nous sommes maintenant prêts à utiliser le paquet`{ggplot2}` :
 
 ```{r}
 # Visualize transmission chains by cumulative cases
@@ -638,7 +638,7 @@ chains_null <- sim_chains_max %>%
   base::nrow()
 ```
 
-Bien que la plupart des introductions de `r initial_cases` ne génèrent pas de cas secondaires (N = `r chains_null`) ou que la plupart des foyers s'éteignent rapidement (durée médiane de `r chains_extinct$extinct_duration_median` et taille médiane de `r chains_extinct$extinct_size_median`), seuls les `r threshhold_summary$chains_theshold` trajectoires épidémiques parmi les `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) peuvent atteindre plus de 100 cas infectés. Ce résultat est d'autant plus remarquable que le nombre de reproduction $R$ est inférieur à 1 (moyenne de la distribution des descendants de `r mers_offspring[["mean"]]`), mais, compte tenu d'un paramètre de dispersion de la distribution des descendants de `r mers_offspring[["dispersion"]]` il montre le potentiel de flambées explosives de la maladie MERS.
+Bien que la plupart des introductions de `r initial_cases` ne génèrent pas de cas secondaires (N = `r chains_null`) ou que la plupart des foyers s'éteignent rapidement (durée médiane de `r chains_extinct$extinct_duration_median` et taille médiane de `r chains_extinct$extinct_size_median`), seules les `r threshhold_summary$chains_theshold` trajectoires épidémiques parmi les `r threshhold_summary$chains_number` simulations (`r threshhold_summary$chains_percentage`%) peuvent atteindre plus de 100 cas infectés. Ce résultat est d'autant plus remarquable que le nombre de reproduction $R$ est inférieur à 1 (moyenne de la distribution des descendants de `r mers_offspring[["mean"]]`), mais, compte tenu d'un paramètre de dispersion de la distribution des descendants de `r mers_offspring[["dispersion"]]` il montre le potentiel de flambées explosives de la maladie MERS.
 
 Nous pouvons compter combien de chaînes ont atteint le seuil de 100 cas en utilisant la fonction `{dplyr}` fonctions :
 
@@ -653,7 +653,7 @@ sim_chains_max %>%
 
 ### Cas observés vs chaînes simulées
 
-Recouvrons le nombre cumulé de cas observés à l'aide de l'objet linelist de l'application `mers_korea_2015` du jeu de données `{outbreaks}` R. Pour préparer l'ensemble de données afin de pouvoir tracer le nombre total de cas quotidiens au fil du temps, nous utilisons l'objet `{incidence2}` pour convertir la liste de lignes en un fichier `<incidence2>` compléter les dates manquantes de la série temporelle à l'aide de l'objet `complete_dates()`
+Recouvrons le nombre cumulé de cas observés à l'aide de l'objet linelist de l'application `mers_korea_2015` du jeu de données `{outbreaks}` R. Pour préparer l'ensemble de données afin de pouvoir tracer le nombre total de cas quotidiens au fil du temps, nous utilisons l'objet `{incidence2}` pour convertir la linelist en un fichier `<incidence2>` afin de compléter les dates manquantes de la série temporelle à l'aide de l'objet `complete_dates()`
 
 ```{r, warning=FALSE, message=FALSE}
 library(outbreaks)
@@ -723,7 +723,7 @@ Lorsque nous augmentons le paramètre de dispersion de $k = 0.01$ à $k = \infty
 
 ### Projections préliminaires de la propagation
 
-Dans la phase initiale de l'épidémie, vous pouvez utiliser `{epichains}` pour appliquer un modèle de processus de ramification afin de prévoir le nombre de cas futurs. Même si le modèle tient compte du caractère aléatoire de la transmission et de la variation du nombre de cas secondaires, il peut exister d'autres caractéristiques locales que nous n'avons pas prises en compte. L'analyse des premières prévisions faites pour le COVID dans différents pays à l'aide de cette structure de modèle a révélé que les prévisions étaient souvent trop confiantes ([Pearson et al., 2020](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.18.2000543#validationofthemodel-1)). Cela est probablement dû au fait que le modèle en temps réel n'incluait pas tous les changements dans la distribution de la progéniture qui se produisaient au niveau local à la suite des changements de comportement et des mesures de contrôle. Pour en savoir plus sur l'importance du contexte local dans les modèles COVID-19, consultez le document suivant [Eggo et al. (2020)](https://www.nature.com/articles/s43588-020-00014-7).
+Dans la phase initiale de l'épidémie, vous pouvez utiliser `{epichains}` pour appliquer un modèle de processus de ramification afin de prévoir le nombre de cas futurs. Même si le modèle tient compte du caractère aléatoire de la transmission et de la variation du nombre de cas secondaires, il peut exister d'autres caractéristiques locales que nous n'avons pas prises en compte. L'analyse des premières prévisions faites pour le COVID dans différents pays à l'aide de cette structure de modèle a révélé que les prévisions étaient souvent trop confiantes ([Pearson et al., 2020](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2020.25.18.2000543#validationofthemodel-1)). Cela est probablement dû au fait que le modèle en temps réel n'incluait pas tous les changements dans la distribution de la descendance qui se produisaient au niveau local à la suite des changements de comportement et des mesures de contrôle. Pour en savoir plus sur l'importance du contexte local dans les modèles COVID-19, consultez le document suivant [Eggo et al. (2020)](https://www.nature.com/articles/s43588-020-00014-7).
 
 Nous vous invitons à lire la vignette sur [Prévision de l'incidence des maladies infectieuses : l'exemple de COVID-19](https://epiverse-trace.github.io/epichains/articles/projecting_incidence.html)! pour en savoir plus sur l'élaboration de prévisions à l'aide de `{epichains}`.
 
@@ -857,7 +857,7 @@ ggplot() +
   )
 ```
 
-Dans l'hypothèse d'une épidémie de variole du singe avec $R$ = 0,32 et $k$ = 0,58, il n'y a pas de trajectoire parmi 1000 simulations qui atteignent plus de 100 cas d'infection. Par rapport au MERS ($R$ = 0,6 et $k$ = 0.02).
+Dans l'hypothèse d'une épidémie de variole du singe avec $R$ = 0,32 et $k$ = 0,58, il n'y a pas de trajectoire parmi 1000 simulations qui atteignent plus de 100 cas d'infection.
 
 ::::::::::::::
 
@@ -865,7 +865,7 @@ Dans l'hypothèse d'une épidémie de variole du singe avec $R$ = 0,32 et $k$ = 
 
 ### Épidémie Évaluation du risque tenant compte de la superspreading
 
-Avec `{superspreading}` vous pouvez obtenir des solutions numériques à des processus qui `{epichains}` résoudre à l'aide de processus de branchement. Nous vous invitons à lire le `{superspreading}` vignette sur [Le risque épidémique](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html) et répondez aux questions suivantes :
+Avec `{superspreading}` vous pouvez obtenir des solutions numériques à des processus qui `{epichains}` résoudre à l'aide de processus de ramification. Nous vous invitons à lire le `{superspreading}` vignette sur [Le risque épidémique](https://epiverse-trace.github.io/superspreading/articles/epidemic_risk.html) et répondez aux questions suivantes :
 
 - Quelle est la probabilité qu'un agent pathogène nouvellement introduit provoque une épidémie de grande ampleur ?
 - Quelle est la probabilité qu'une infection ne s'établisse pas, par hasard, après une ou plusieurs introductions initiales ?
