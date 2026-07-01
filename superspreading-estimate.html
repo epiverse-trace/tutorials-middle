@@ -412,12 +412,8 @@ particularly Poisson and negative binomial.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># if {pak} is not installed, run: install.packages("pak")</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="st">"epicontacts"</span><span class="op">)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="st">"fitdistrplus"</span><span class="op">)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="st">"superspreading"</span><span class="op">)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="st">"outbreaks"</span><span class="op">)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="st">"tidyverse"</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">base</span><span class="fu">::</span><span class="kw">require</span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span><span class="op">)</span> <span class="fu">install.packages</span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="fu">c</span><span class="op">(</span><span class="st">"epicontacts"</span>, <span class="st">"fitdistrplus"</span>, <span class="st">"superspreading"</span>, <span class="st">"outbreaks"</span>, <span class="st">"tidyverse"</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <p>If you have any error message, go to the <a href="index.html#software-setup">main setup page</a>.</p>
 </div>
@@ -548,7 +544,7 @@ patient to the secondary case.</p>
 <code class="sourceCode R"><span><span class="co"># visualise contact network</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">epi_contacts</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-5-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
+<figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-4-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Is contact data tidy? </h3>
@@ -745,7 +741,7 @@ zero secondary cases.</p>
 <span>    y <span class="op">=</span> <span class="st">"Frequency"</span></span>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-9-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The number of secondary cases can be used to <em>empirically</em>
+<figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-8-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The number of secondary cases can be used to <em>empirically</em>
 estimate the <strong>offspring distribution</strong>, which is the
 number of secondary <em>infections</em> caused by each case. One
 candidate statistical distribution used to model the offspring
@@ -756,7 +752,7 @@ cases produced by a single individual in an entirely susceptible
 population, and</p></li>
 <li><p><strong>Dispersion</strong>, expressed as <span class="math inline">\(k\)</span>, which represents the individual-level
 variation in transmission by single individuals.</p></li>
-</ul><figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-10-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>From the histogram and density plot, we can identify that the
+</ul><figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-9-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>From the histogram and density plot, we can identify that the
 offspring distribution is highly skewed or
 <strong>overdispersed</strong>. In this framework, the superspreading
 events (SSEs) are not arbitrary or exceptional, but simply realizations
@@ -887,7 +883,7 @@ step.</p>
 <span>    y <span class="op">=</span> <span class="st">"Frequency"</span></span>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-11-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>From a visual inspection, the distribution of secondary cases for the
+<figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-10-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>From a visual inspection, the distribution of secondary cases for the
 Ebola data set in <code>ebola_sim_clean</code> shows an skewed
 distribution with secondary cases equal or lower than 6. We need to
 complement this observation with a statistical analysis to evaluate for
@@ -952,7 +948,7 @@ events.</p>
 <p>We can overlap the estimated density values of the fitted negative
 binomial distribution and the histogram of the number of secondary
 cases:</p>
-<figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-14-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="individual-level-variation-in-transmission" class="callout">
+<figure><img src="fig/superspreading-estimate-rendered-unnamed-chunk-13-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="individual-level-variation-in-transmission" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
