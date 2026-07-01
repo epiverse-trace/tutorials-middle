@@ -27,7 +27,7 @@ Learners should familiarise themselves with following concepts before working th
 
 **Epidemic theory**: Effective reproduction number.
 
-**Data science**: Data transformation and visualization. You can review the episode on [Aggregate and visualize](https://epiverse-trace.github.io/tutorials-early/describe-cases.html) incidence data.
+**Data science**: Data transformation and visualization. You can review the episode on [Aggregate and visualize](https://epiverse-trace.github.io/tutorials-early/aggreagate-visualize.html) incidence data.
 
 **R packages installed**: `{EpiNow2}`, `{incidence2}`, `{tidyverse}`.
 
