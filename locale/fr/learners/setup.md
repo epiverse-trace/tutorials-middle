@@ -4,7 +4,7 @@ title: Mise en place
 
 ## Motivation
 
-**Éclosions** de maladies infectieuses peuvent apparaître à cause de différents agents pathogènes et dans différents contextes, mais elles conduisent généralement à des questions de santé publique similaires, allant de la compréhension des schémas de transmission et de gravité à l'examen de l'effet des mesures de contrôle ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371#d1e605)). Nous pouvons relier chacune de ces questions de santé publique à une série de tâches d'analyse des données relatives aux épidémies. Plus ces tâches sont efficaces et fiables, plus nous pouvons répondre rapidement et avec précision aux questions sous-jacentes.
+**Éclosions** de maladies infectieuses peuvent apparaître à cause de différents agents pathogènes et dans différents contextes, mais elles conduisent généralement à des questions de santé publique similaires, allant de la compréhension des dynamiques de transmission, de la gravité de la malaie, à l'évaluation de l'effet des mesures de contrôle ([Cori et al. 2017](https://royalsocietypublishing.org/doi/10.1098/rstb.2016.0371#d1e605)). Nous pouvons relier chacune de ces questions de santé publique à une série de tâches d'analyse des données relatives aux épidémies. Plus ces tâches sont efficaces et fiables, plus nous pouvons répondre rapidement et avec précision aux questions sous-jacentes.
 
 Epiverse-TRACE vise à fournir un écosystème logiciel pour [**l'analyse des épidémies**](reference.md#outbreakanalytics) grâce à des logiciels intégrés, généralisables et évolutifs pilotés par la communauté. Nous soutenons le développement de nouveaux progiciels R, nous aidons à relier les outils existants pour les rendre plus conviviaux et nous contribuons à une communauté de pratique composée d'épidémiologistes de terrain, de scientifiques des données, de chercheurs en laboratoire, d'analystes d'agences de santé, d'ingénieurs en logiciel et bien d'autres.
 
@@ -16,18 +16,18 @@ Nos tutoriels sont construits autour d'un pipeline d'analyse d'épidémies divis
 
 Chaque tâche a son site web de tutorat et chaque site web de tutorat consiste en un ensemble d'épisodes couvrant différents sujets.
 
-| [Tutoriels pour les premières tâches ➠](https://epiverse-trace.github.io/tutorials-early/)                                                                                                                                | [Didacticiels pour les tâches intermédiaires ➠](https://epiverse-trace.github.io/tutorials-middle)                                                                                                                                          | [Travaux dirigés tardifs ➠](https://epiverse-trace.github.io/tutorials-late/)                                                                   | 
+| [Tutoriels pour les premières tâches ➠](https://epiverse-trace.github.io/tutorials-early/)                                                                                                                                | [Tutoriels pour les tâches intermédiaires ➠](https://epiverse-trace.github.io/tutorials-middle)                                                                                                                                          | [Tutoriels pour les tâches tardives ➠](https://epiverse-trace.github.io/tutorials-late/)                                                                   | 
 | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | Lire et nettoyer les données de l'affaire, et établir une liste de contrôle                                                     | Analyse et prévision en temps réel                                                                                                        | Modélisation de scénarios                                          | 
 | Lire, nettoyer et valider les données des cas, convertir les données de la liste des lignes en incidence pour la visualisation. | Accéder aux distributions des retards et estimer les paramètres de transmission, prévoir les cas, estimer la gravité et la superposition. | Simulez la propagation de la maladie et étudiez les interventions. | 
 
 Chaque épisode contient :
 
-- **Vue d'ensemble** Cet épisode décrit les questions auxquelles il sera répondu et les objectifs de l'épisode.
+- **Vue d'ensemble** Cet épisode décrit les questions adressées répondu et les objectifs de l'épisode.
 - **Conditions préalables** La description des épisodes/paquets qui doivent idéalement être couverts avant l'épisode en cours.
-- **Exemple de code R** Le site web de la Commission européenne contient des exemples de code R afin que vous puissiez travailler sur les épisodes sur votre propre ordinateur.
+- **Exemple de code R** Le site web contient des exemples de code R afin que vous puissiez travailler sur les épisodes sur votre propre ordinateur.
 - **Défis** Les défis : des défis à relever pour tester votre compréhension.
-- **Explicatifs** Les Explicateurs sont des boîtes qui vous permettent de mieux comprendre les concepts mathématiques et de modélisation.
+- **Explicatifs** Les"Explicatifs" sont des boîtes qui vous permettent de mieux comprendre les concepts mathématiques et de modélisation.
 
 Consultez également le site [glossaire](./reference.md) pour connaître les termes qui ne vous sont pas familiers.
 
