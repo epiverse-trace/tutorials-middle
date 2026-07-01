@@ -6,7 +6,7 @@ exercises: 0
 
 :::::::::::::::::::::::::::::::::::::: questions 
 
-- How can I estimate the time-varying reproduction number ($Rt$) and growth rate from a time series of case data?
+- How can I estimate the time-varying reproduction number ($R_t$) and growth rate from a time series of case data?
 - How can I quantify geographical heterogeneity from these transmission metrics? 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -67,7 +67,7 @@ To estimate these key metrics using case data we must account for delays between
 
 In the next tutorials we will focus on how to use the functions in `{EpiNow2}` to estimate transmission metrics of case data. We will not cover the theoretical background of the models or inference framework, for details on these concepts see the [vignette](https://epiforecasts.io/EpiNow2/dev/articles/estimate_infections.html).
 
-In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We'll get input data from `{incidence2}`. We'll use the `{tidyr}` and `{dplyr}` packages to arrange some of its outputs, `{ggplot2}` to visualize case distribution, and the pipe `%>%` to connect some of their functions, so let's also call to the `{tidyverse}` package:
+In this tutorial we are going to learn how to use the `{EpiNow2}` package to estimate the time-varying reproduction number. We'll get input data from `{incidence2}`. We'll use the `{tidyr}` and `{dplyr}` packages to arrange some of its outputs, `{ggplot2}` to visualise case distribution, and the pipe `%>%` to connect some of their functions, so let's also load the `{tidyverse}` package:
 
 ```r
 library(EpiNow2)
@@ -148,7 +148,7 @@ dplyr::as_tibble(incidence2::covidregionaldataUK)
 
 To use the data, we must format the data to have two columns:
 
-+ `date`: the date (as a date object see `?is.Date()`),
++ `date`: the date (as a date object, see `?is.Date()`),
 + `confirm`: number of disease reports (confirm) on that date.
 
 Let's use `{tidyr}` and `{incidence2}` for this:
@@ -171,8 +171,8 @@ cases_sliced <- incidence2::covidregionaldataUK %>%
   dplyr::slice_head(n = 90)
 ```
 
-With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`
-Explore later the [`incidence2::incidence()` reference manual](https://www.reconverse.org/incidence2/reference/incidence.html)
+With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`.
+Explore later the [`incidence2::incidence()` reference manual](https://www.reconverse.org/incidence2/manual.html#sec:man-incidence).
 
 ::::::::::::::::::::::::: spoiler
 
@@ -235,10 +235,9 @@ cases
 
 We assume there are delays from the time of infection until the time a case is reported. We specify these delays as distributions to account for the uncertainty in individual level differences. The delay may involve multiple types of processes. A typical delay from time of infection to case reporting may consist of:
 
-> **time from infection to symptom onset** (the [incubation period](../learners/reference.md#incubation)) + **time from symptom onset to case notification** (the reporting time)
-.
+> **time from infection to symptom onset** (the [incubation period](../learners/reference.md#incubation)) + **time from symptom onset to case notification** (the reporting time).
 
-The delay distribution for each of these processes can either estimated from data or obtained from the literature. We can express uncertainty about what the correct parameters of the distributions by assuming the distributions have **fixed** parameters or whether they have **variable** parameters. To understand the difference between **fixed** and **variable** distributions, let's consider the incubation period. 
+The delay distribution for each of these processes can either be estimated from data or obtained from the literature. We can express uncertainty about the correct parameters of the distributions by assuming the distributions have either **fixed** parameters or **variable** parameters. To understand the difference between **fixed** and **variable** distributions, let's consider the incubation period. 
 
 ::::::::::::::::::::::::::::::::::::: callout
 
@@ -262,7 +261,7 @@ The number of delays and type of delay are a flexible input that depend on the d
 
 #### Incubation period distribution 
 
-The distribution of incubation period for many diseases can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
+The incubation period distribution for many diseases can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. 
 
 We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma = 2$ (shape = $4$, scale = $1$) using the function `Gamma()` as follows:
 
@@ -312,11 +311,11 @@ For all types of delay, we will need to use distributions for positive values on
 
 ####  Including distribution uncertainty
 
-To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma$ of our gamma distribution. If our incubation period distribution has a mean $\mu$ and standard deviation $\sigma$, then we assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}$:
+To specify a **variable** distribution, we include uncertainty around the mean $\mu$ and standard deviation $\sigma$ of our gamma distribution. If our incubation period distribution has a mean $\mu$ and standard deviation $\sigma$, then we can assume the mean ($\mu$) follows a Normal distribution with standard deviation $\sigma_{\mu}$:
 
 $$\mbox{Normal}(\mu,\sigma_{\mu}^2)$$
 
-and a standard deviation ($\sigma$) follows a Normal distribution with standard deviation $\sigma_{\sigma}$:
+and the standard deviation ($\sigma$) follows a Normal distribution with standard deviation $\sigma_{\sigma}$:
 
 $$\mbox{Normal}(\sigma,\sigma_{\sigma}^2).$$
 
@@ -364,7 +363,7 @@ After the incubation period, there will be an additional delay of time from symp
 
 When specifying a distribution, it is useful to visualise the probability density to see the peak and spread of the distribution, in this case we will use a *log normal* distribution.
 
-If we want to assume that the mean reporting delay is 2 days (with a uncertainty of 0.5 days) and a standard deviation of 1 day (with uncertainty of 0.5 days), we can specify a variable distribution using `LogNormal()` as before:
+If we want to assume that the mean reporting delay is 2 days (with an uncertainty of 0.5 days) and a standard deviation of 1 day (with uncertainty of 0.5 days), we can specify a variable distribution using `LogNormal()` as before:
 
 
 ``` r
@@ -377,7 +376,7 @@ reporting_delay_variable <- EpiNow2::LogNormal(
 
 :::::::::::::::::::::: spoiler
 
-**Visualize a log Normal distribution using {epiparameter}**
+**Visualise a log normal distribution using {epiparameter}**
 
 Using `epiparameter::epiparameter()` we can create a custom distribution. The fixed log normal distribution will look like:
 
@@ -412,7 +411,7 @@ epiparameter::epiparameter(
 
 If data is available on the time between symptom onset and reporting, we can use the function `EpiNow2::estimate_delay()` to estimate a log normal distribution from a vector of delays. 
 
-The code below illustrates how to use `EpiNow2::estimate_delay()` with synthetic Ebola data. We calculate the reporting delay for each case the time difference **from** date of onset **to** date of hospitalization (date when case was reported).
+The code below illustrates how to use `EpiNow2::estimate_delay()` with synthetic Ebola data. We calculate the reporting delay for each case as the time difference **from** date of onset **to** date of hospitalisation (date when case was reported).
 
 
 ``` r
@@ -443,13 +442,13 @@ outbreaks::ebola_sim_clean$linelist %>%
       mean:
         0.21
       sd:
-        0.11
+        0.13
   sdlog:
     - normal distribution:
       mean:
-        0.98
+        0.99
       sd:
-        0.11
+        0.12
 ```
 
 ::::::::::::::::::
@@ -471,10 +470,10 @@ generation_time_variable <- EpiNow2::LogNormal(
 
 ## Finding estimates
 
-The function `epinow()` is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. The generation time distribution and delay distributions must be passed using the functions ` generation_time_opts()` and `delay_opts()` respectively. 
+The function `epinow()` is a wrapper for the function `estimate_infections()` used to estimate cases by date of infection. The generation time distribution and delay distributions must be passed using the functions `generation_time_opts()` and `delay_opts()` respectively.
 
 There are numerous other inputs that can be passed to `epinow()`, see `?EpiNow2::epinow()` for more detail.
-One optional input is to specify a *log normal* prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean of 2 days and standard deviation of 2 days as arguments of `prior` within `rt_opts()`:
+One optional input is to specify a *log normal* prior for the effective reproduction number $R_t$ at the start of the outbreak. We specify a mean of 2 and standard deviation of 2 as arguments of `prior` within `rt_opts()`:
 
 
 ``` r
@@ -501,7 +500,7 @@ To find the maximum number of available cores on your machine, use `parallel::de
 
 ::::::::::::::::::::::::: checklist
 
-**Note:** In the code below `_fixed` distributions are used instead of `_variable` (delay distributions with uncertainty). This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.
+**Note:** In the code below `*_fixed` distributions are used instead of `*_variable` (delay distributions with uncertainty). This is to speed up computation time. It is generally recommended to use variable distributions that account for additional uncertainty.
 
 
 ``` r
@@ -562,7 +561,7 @@ For the purpose of this tutorial, we can optionally use `EpiNow2::stan_opts()` t
 # you can add the `stan` argument
 EpiNow2::epinow(
   ...,
-  stan = EpiNow2::stan_opts(samples = 1000, chains = 3)
+  stan = EpiNow2::stan_opts(samples = 1000, chains = 2)
 )
 ```
 
@@ -581,7 +580,7 @@ plot(estimates, type = "R")
 
 <img src="fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" />
 
-The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. This difference in uncertainty is categorised into **Estimate** (green) utilises all data and **Estimate based on partial data** (orange) estimates that are based on less data (because infections that happened at the time are more likely to not have been observed yet) and therefore have increasingly wider intervals towards the date of the last data point. Finally, the **Forecast** (purple) is a projection ahead of time. 
+The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. The plot distinguishes three categories: **Estimate** (green) uses all available data; **Estimate based on partial data** (orange) is based on less data (because infections around that time are more likely not to have been observed yet) and therefore has increasingly wider intervals towards the date of the last data point; and **Forecast** (purple) is a projection ahead of time.
 
 We can also visualise the growth rate estimate through time: 
 
@@ -599,24 +598,24 @@ summary(estimates)
 ```
 
 ``` output
-                        measure              estimate
-                         <char>                <char>
-1:       New infections per day  7910 (4713 -- 13333)
-2:   Expected change in reports                Stable
-3:   Effective reproduction no.    0.96 (0.74 -- 1.2)
-4:               Rate of growth -0.013 (-0.1 -- 0.08)
-5: Doubling/halving time (days)     -54 (8.7 -- -6.8)
+                        measure                estimate
+                         <char>                  <char>
+1:       New infections per day    7783 (4539 -- 13579)
+2:   Expected change in reports       Likely decreasing
+3:   Effective reproduction no.      0.96 (0.73 -- 1.2)
+4:               Rate of growth -0.017 (-0.11 -- 0.078)
+5: Doubling/halving time (days)       -41 (8.9 -- -6.3)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7910 (4713 -- 13333).
++ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7783 (4539 -- 13579).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.74 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.013 (-0.1 -- 0.08).
++ The exponential growth rate of case numbers is -0.017 (-0.11 -- 0.078).
 
-+ The doubling time (the time taken for case numbers to double) is -54 (8.7 -- -6.8).
++ The doubling time (the time taken for case numbers to double) is -41 (8.9 -- -6.3).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 

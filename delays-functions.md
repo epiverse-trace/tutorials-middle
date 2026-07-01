@@ -14,7 +14,7 @@ editor_options:
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Use distribution functions to continuous and discrete distributions stored as `<epiparameter>` objects.
+- Use distribution functions with continuous and discrete distributions stored as `<epiparameter>` objects.
 - Convert a continuous to a discrete distribution with `{epiparameter}`.
 - Connect `{epiparameter}` outputs with `{EpiNow2}` inputs.
 
@@ -60,7 +60,7 @@ library(EpiNow2)
 library(tidyverse)
 ```
 
-To recap, we learned that `{epiparameter}` help us to *choose* one specific set of epidemiological parameters from the literature, instead of copy/pasting them *by hand*:
+To recap, we learned that `{epiparameter}` helps us to *choose* one specific set of epidemiological parameters from the literature, instead of copy/pasting them *by hand*:
 
 
 ``` r
@@ -167,13 +167,13 @@ epiparameter::generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1] 2.356176 7.147306 3.811940 1.689298 9.509677 2.603007 5.670673 3.269630
- [9] 3.262680 1.052282
+ [1]  4.085318  5.019767  5.817960  5.499465  4.118405  7.736833  5.321582
+ [8]  8.350185 10.494472  4.227899
 ```
 
 ::::::::: instructor
 
-Access to the reference documentation (Help files) for these functions is accessible with the three double-colon notation: `epiparameter:::`
+You can access the reference documentation (help files) for these functions with the triple-colon notation: `epiparameter:::`
 
 - `?epiparameter:::density.epiparameter()`
 - `?epiparameter:::cdf.epiparameter()`
@@ -214,7 +214,7 @@ plot(covid_serialint)
 
 ``` r
 # calculate probability of finding backward cases
-# with contact traicing window of 2 days
+# with contact tracing window of 2 days
 window_2 <- epiparameter::cdf(covid_serialint, q = 2)
 
 window_2
@@ -226,7 +226,7 @@ window_2
 
 ``` r
 # calculate probability of finding backward cases
-# with contact traicing window of 6 days
+# with contact tracing window of 6 days
 window_6 <- epiparameter::cdf(covid_serialint, q = 6)
 
 window_6
@@ -261,7 +261,7 @@ Given the COVID-19 serial interval:
 
 If we exchange the question between days and cumulative probability to: 
 
-- When considering secondary cases, how many days following the symptom onset of primary cases can we expect 55% of symptom onset to occur?
+- When considering secondary cases, within how many days following the symptom onset of primary cases can we expect 55% of secondary symptom onset to occur?
 
 
 ``` r
@@ -270,7 +270,7 @@ quantile(covid_serialint, p = 0.55)
 
 An interpretation could be:
 
-- The 55% percent of the symptom onset of secondary cases will happen after 4.2 days after the symptom onset of primary cases.
+- 55% of secondary cases will have their symptom onset within around 4.3 days of symptom onset in the primary case.
 
 ::::::::::::::::::::::::::
 
@@ -326,7 +326,7 @@ plot(covid_serialint_discrete)
 
 <img src="fig/delays-functions-rendered-unnamed-chunk-9-1.png" alt="" style="display: block; margin: auto;" />
 
-To finally get a `max` value, let's access the quantile value of the 99th percentile or `0.99` probability of the distribution with the `prob_dist$q` notation, similarly to how we access the `summary_stats` values.
+To finally get a `max` value, let's access the quantile value of the 99th percentile or `0.99` cumulative probability of the distribution using the `quantile()` function, as we did above for the continuous distribution.
 
 
 ``` r
@@ -388,7 +388,7 @@ Parameters:
 ```
 
 ``` r
-# to get an integer as a response, discretize the distribution
+# to get an integer as a response, discretise the distribution
 covid_incubation_discrete <- epiparameter::discretise(covid_incubation)
 
 covid_incubation_discrete
@@ -410,7 +410,7 @@ Parameters:
 ```
 
 ``` r
-# calculate the quantile or value at the percertile 99th from the distribution
+# calculate the quantile or value at the 99th percentile from the distribution
 quantile(covid_incubation_discrete, p = 0.99)
 ```
 
@@ -420,7 +420,7 @@ quantile(covid_incubation_discrete, p = 0.99)
 
 99% of those who develop COVID-19 symptoms will do so within 13 days of infection.
 
-Now, Is this result consistent with the duration of quarantine recommended in practice during the COVID-19 pandemic?
+Now, is this result consistent with the duration of quarantine recommended in practice during the COVID-19 pandemic?
 
 ::::::::::::::::::::::::::
 
@@ -524,11 +524,11 @@ The `{epiparameter}` will give you access to the parameter estimated from histor
 Follow these steps:
 
 - Get access to the `serial interval` distribution of `Ebola` using `{epiparameter}`.
-- Access to one entry from the study with the highest sample size.
+- Access one entry from the study with the highest sample size.
 - Print the output and read the description.
-- Identify which probability distribution (e.g., Gamma, Lognormal, etc.) was used by authors to model the delay.
+- Identify which probability distribution (e.g., Gamma, Lognormal, etc.) was used by the authors to model the delay.
 - Extract the distribution parameters for the corresponding probability distribution.
-- Calculate an exact maximum value for the delay distribution (e.g., the  99th percentile). 
+- Calculate an exact maximum value for the delay distribution (e.g., the 99th percentile).
 - Plug-in the distribution parameters from the `<epiparameter>` to the corresponding probability distribution function in `{EpiNow2}`
 (e.g., `EpiNow2::Gamma()`, `EpiNow2::LogNormal()`, etc.).
 
@@ -621,7 +621,7 @@ ebola_serialint_max
 ```
 
 ``` r
-# 4. adapt {epiparameter} to {EpiNow2} distribution inferfase
+# 4. adapt {epiparameter} to the {EpiNow2} distribution interface
 ebola_generationtime <- EpiNow2::Gamma(
   shape = ebola_serialint_params["shape"],
   scale = ebola_serialint_params["scale"],
@@ -649,14 +649,14 @@ plot(ebola_serialint)
 
 
 ``` r
-# plot the `EpiNow2` class object
+# plot the `dist_spec` class object from {EpiNow2}
 plot(ebola_generationtime)
 ```
 
 <img src="fig/delays-functions-rendered-unnamed-chunk-18-1.png" alt="" style="display: block; margin: auto;" />
 
-Plotting distributions from the `{EpiNow2}` interface always gives a discretized output.
-From the legend: `PMF` stants for Probability Mass Function and `CMF` stants for Cummulative Mass Function.
+Plotting distributions from the `{EpiNow2}` interface always gives a discretised output.
+From the legend: `PMF` stands for Probability Mass Function and `CMF` stands for Cumulative Mass Function.
 
 ::::::::::::::::::::
 
@@ -687,7 +687,7 @@ The `delays` argument and the `delay_opts()` helper function are analogous to th
 ```r
 epinow_estimates <- EpiNow2::epinow(
   # cases
-  reported_cases = example_confirmed[1:60],
+  data = example_confirmed[1:60],
   # delays
   generation_time = EpiNow2::generation_time_opts(covid_serial_interval),
   delays = EpiNow2::delay_opts(covid_incubation_time)
@@ -898,7 +898,7 @@ incubation_period_ebola <-
   EpiNow2::Gamma(
     mean = ebola_incubation$summary_stats$mean,
     sd = ebola_incubation$summary_stats$sd,
-    max = quantile(ebola_serial_discrete, p = 0.99)
+    max = quantile(ebola_incubation_discrete, p = 0.99)
   )
 
 # epinow ------------------------------------------------------------------
@@ -1022,7 +1022,7 @@ influenza_incubation <-
     single_epiparameter = TRUE
   )
 
-# Discretize incubation period
+# Discretise incubation period
 influenza_incubation_discrete <-
   epiparameter::discretise(influenza_incubation)
 

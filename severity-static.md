@@ -40,7 +40,7 @@ This episode requires you to be familiar with:
 
 :::::::::: spoiler
 
-Install packages if their are not already installed
+Install packages if they are not already installed
 
 ```r
 if (!base::require("pak")) install.packages("pak")
@@ -82,7 +82,7 @@ which could be intrinsic to the infectious agent (e.g., a new, more severe strai
 
 In this tutorial we are going to learn how to use the `{cfr}` package to calculate and adjust a CFR estimation using [delay distributions](../learners/reference.md#delaydist) from `{epiparameter}` or elsewhere, based on the methods developed by [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852). We will also explore how we can reuse `{cfr}` functions for more severity measurements.
 
-We'll use the pipe `%>%` operator from the `{magrittr}` package to connect  functions from {cfr}, including others from the package `{dplyr}`. Hence, we will load the `{tidyverse}` package which contains both `{magrittr}` and `{dplyr}`.
+We'll use the pipe `%>%` operator from the `{magrittr}` package to connect  functions from `{cfr}`, including others from the package `{dplyr}`. Hence, we will load the `{tidyverse}` package which contains both `{magrittr}` and `{dplyr}`.
 
 
 ``` r
@@ -120,7 +120,7 @@ Have you been a member of an epidemic response team? If yes:
 
 What data sources can we use to estimate the clinical severity of a disease outbreak? [Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext) summarises the spectrum of COVID-19 cases:
 
-![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of deaths among confirmed cases in an epidemic. 
+![Spectrum of COVID-19 cases. The CFR aims to estimate the proportion of deaths among confirmed cases in an epidemic 
 ([Verity et al., 2020](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(20)30243-7/fulltext#gr1))](fig/cfr-spectrum-cases-covid19.jpg)
 
 - At the top of the pyramid, those who met the WHO case criteria for **severe** or **critical** cases would likely have been identified in the hospital setting, presenting with atypical viral pneumonia. These cases would have been identified in mainland China and among those categorised internationally as local transmission. 
@@ -237,14 +237,14 @@ Estimate the naive CFR.
 Inspect the format of the data input.
 
 - Does it contain daily data?
-- Does the column names are as required by `cfr_static()`?
-- How would you rename column names from a data frame?
+- Do the column names match those required by `cfr_static()`?
+- How would you rename the columns in a data frame?
 
 ::::::::::::::::::::
 
 :::::::::::::::::::: solution
 
-We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
+We read the data input using `readr::read_csv()`. This function recognises that the column `date` is a `<date>` class vector.
 
 
 
@@ -283,7 +283,7 @@ We can use `dplyr::rename()` to adapt the external data to fit the data input fo
 
 
 ``` r
-# Rename before Estimate naive CFR
+# Rename columns before estimating the naive CFR
 sarscov2_input %>%
   dplyr::rename(
     cases = cases_jpn,
@@ -339,7 +339,7 @@ In this tutorial episode, we are going to focus on solutions to deal with this s
 
 Improving an _early_ epidemiological assessment of a delay-adjusted CFR is crucial for determining virulence, shaping the level and choices of public health intervention, and providing advice to the general public. 
 
-In 2009, during the swine-flu virus, Influenza A (H1N1), Mexico had an early biased estimation of the CFR. Initial reports from the government of Mexico suggested a virulent infection, whereas, in other countries, the same virus was perceived as mild ([TIME, 2009](https://content.time.com/time/health/article/0,8599,1894534,00.html)).
+In 2009, during the swine-flu outbreak caused by Influenza A (H1N1), Mexico had an early biased estimation of the CFR. Initial reports from the government of Mexico suggested a virulent infection, whereas, in other countries, the same virus was perceived as mild ([TIME, 2009](https://content.time.com/time/health/article/0,8599,1894534,00.html)).
 
 In the USA and Canada, no deaths were attributed to the virus in the first ten days following the World Health Organization's declaration of a public health emergency. Even under similar circumstances at the early stage of the global pandemic, public health officials, policymakers and the general public want to know the virulence of an emerging infectious agent.
 
@@ -359,7 +359,7 @@ We can showcase this last bias using the [concept described in this `{cfr}` vign
 
 [Nishiura et al., 2009](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006852) developed a method that considers the **time delay** from the onset of symptoms to death.
 
-Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or `{epireview}`, which collect them from published scientific literature. For a step-by-step guide, read the tutorial episode on how to [access epidemiological delays](../episodes/delays-access.md).
+Real-time outbreaks may have a number of deaths that are insufficient to determine the time distribution between onset and death. Therefore, we can estimate the _distribution delay_ from historical outbreaks or reuse the ones accessible via R packages like `{epiparameter}` or [epireview](https://github.com/mrc-ide/epireview/), which collect them from published scientific literature. For a step-by-step guide, read the tutorial episode on how to [access epidemiological delays](../episodes/delays-access.md).
 
 Let's use `{epiparameter}`:
 
@@ -398,7 +398,7 @@ cfr::cfr_static(
 
 
 
-The delay-adjusted CFR indicated that the overall disease severity _at the end of the outbreak_ or with the _latest data available at the moment_ is 0.9502 with a 95% confidence interval between 0.881 and 0.9861, slightly higher than the naive one.
+The delay-adjusted CFR estimates the overall disease severity, given the _latest data available at the moment_, as 0.9502 with a 95% confidence interval between 0.881 and 0.9861 — substantially higher than the naive estimate. This larger value reflects the correction for deaths that are still to be reported among the cases observed in the first 30 days.
 
 ::::::::::::::::::::::::::: discussion
 
@@ -417,13 +417,13 @@ in the "More Resources" section of this tutorial's website.
 
 To correct the bias arising from cases whose outcomes are not yet known at the time of estimation, `{cfr}` accounts for the probability that a case’s outcome becomes known after a certain delay.
 
-It does so by relating $D_t$ to the incidence function $c_t$ (i.e., the number of new confirmed cases on day t) and the conditional probability density function $f_s$ of the time from onset to death, given death. 
+It does so by relating $D_t$ to the incidence function $c_t$ (i.e., the number of new confirmed cases on day t) and the conditional probability density function $f_s$ of the time from onset to death, given death.
 
 $$
 D_t = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
 $$
 
-Here, $D_t$ is the cumulative number of deaths up to time t, and $p_t$ is the realized proportion of confirmed cases that die from the infection (i.e., the unbiased case fatality risk, or CFR).
+Here, $D_t$ is the cumulative number of deaths up to time t, and $p_t$ is the realised proportion of confirmed cases that die from the infection (i.e., the unbiased case fatality risk, or CFR).
 
 The term $\sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}$ represents the **total expected number of cases with known outcomes by time `t`**. It sums all incident cases $c_i$, each weighted by the probability density function $f_{j−i}$ that their outcomes become known after a delay of $j−i$ days.
 
@@ -483,7 +483,7 @@ ebola_30days$cases[1] *
 [1] 0.08295091
 ```
 
-Notice that the most recently observe cases start the delay distribution from `0` the others continue with the following day.
+Notice that the most recently observed cases start the delay distribution from `0`, while the others continue with the following day.
 
 Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of x. `{cfr}` will then draw values accordingly, as shown below:
 
@@ -518,7 +518,7 @@ When using an `<epiparameter>` class object we can use this expression as a temp
 
 `function(x) density(<EPIPARAMETER_OBJECT>, x)`
 
-For distribution functions with parameters not available in `{epiparameter}`, we suggest you two alternatives: 
+For distribution functions with parameters not available in `{epiparameter}`, we suggest two alternatives:
 
 - Create an `<epiparameter>` class object, to plug into other R packages of the outbreak analytics pipeline. Read the [reference documentation of `epiparameter::epiparameter()`](https://epiverse-trace.github.io/epiparameter/reference/epiparameter.html)
 
@@ -530,9 +530,9 @@ For distribution functions with parameters not available in `{epiparameter}`, we
 
 ### When to use discrete distributions?
 
-For  `cfr_static()` and all functions in the `cfr_*()` family, the most appropriate choice to use are **discrete** distributions. This is because `{cfr}` operates on count data in discrete time: daily case and death counts.
+For `cfr_static()` and all functions in the `cfr_*()` family, the most appropriate distributions to use are **discrete** ones. This is because `{cfr}` operates on count data in discrete time: daily case and death counts.
 
-We can assume that evaluating the Probability Distribution Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
+We can assume that evaluating the Probability Density Function (PDF) of a *continuous* distribution is equivalent to the Probability Mass Function (PMF) of the equivalent *discrete* distribution.
 
 However, this assumption may not be appropriate for distributions with larger peaks. For instance, diseases with an onset-to-death distribution that is strongly peaked with a low variance. In such cases, the average disparity between the PDF and PMF is expected to be more pronounced compared to distributions with broader spreads. One way to deal with this is to discretise the continuous distribution using `epiparameter::discretise()` to an `<epiparameter>` object.
 
@@ -577,7 +577,7 @@ sarscov2_delay <-
   )
 ```
 
-We read the data input using `readr::read_csv()`. This function recognize that the column `date` is a `<date>` class vector.
+We read the data input using `readr::read_csv()`. This function recognises that the column `date` is a `<date>` class vector.
 
 
 
@@ -616,7 +616,7 @@ We can use the `dplyr::rename()` to adapt the external data to fit the data inpu
 
 
 ``` r
-# Rename before Estimate naive CFR
+# Rename columns before estimating the delay-adjusted CFR
 sarscov2_input %>%
   dplyr::rename(
     cases = cases_jpn,
@@ -834,7 +834,7 @@ Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denomina
 
 :::::::::::::::::::::::::::: solution
 
-### Infection and Hospitalization fatality risk
+### Infection and Hospitalisation fatality risk
 
 If for a _Case_ fatality risk (CFR), we require: 
 
@@ -867,7 +867,7 @@ Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires:
 - mCHR medically attended case-hospitalisation risk, 
 - HFR hospitalisation-fatality risk. 
 
-![Schematic diagram of the baseline analyses. Red, blue, and green arrows denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 84, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–194, D3)daily number of laboratory-confirmed cases on March 9–April 243, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission3, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities3, and D7) 16,781 laboratory-confirmed cases identified through universal screening10,11. Pse: RT-PCR sensitivity12. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections13.'}
+![Schematic diagram of the baseline analyses. Red, blue, and green arrows denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 8, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–19, D3)daily number of laboratory-confirmed cases on March 9–April 24, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities, and D7) 16,781 laboratory-confirmed cases identified through universal screening. Pse: RT-PCR sensitivity. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections.'}
 
 ::::::::::::::::::::::::::::
 
@@ -907,7 +907,7 @@ outbreaks::ebola_sierraleone_2014 %>% as_tibble()
 
 From the `{outbreaks}` package, load the MERS linelist of cases from the `mers_korea_2015` object.
 
-Rearrange your this linelist to fit into the `{cfr}` package input.
+Rearrange this linelist to fit into the `{cfr}` package input.
 
 Estimate the delay-adjusted CFR using the corresponding distribution delay.
 
@@ -969,7 +969,7 @@ mers_korea_2015$linelist %>%
 ``` r
 # Use {incidence2} to count daily incidence
 mers_incidence <- mers_korea_2015$linelist %>%
-  # converto to incidence2 object
+  # convert to incidence2 object
   incidence(date_index = c("dt_onset", "dt_death")) %>%
   # complete dates from first to last
   incidence2::complete_dates()
