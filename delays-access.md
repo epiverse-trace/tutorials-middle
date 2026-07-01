@@ -230,14 +230,16 @@ Table: Serial interval estimates using Gamma, Weibull, and Log Normal distributi
 
 ### Serial interval
 
-Assume that COVID-19 and SARS have similar reproduction number values and that the serial interval approximates the generation time. 
-
 Given the serial interval of both infections in the figure below: 
 
-- Which one would be harder to control? 
+- Which one would have a larger number of generations in less time? 
 - Why do you conclude that?
 
-![Serial interval of novel coronavirus (COVID-19) infections overlaid with a published distribution of SARS. ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext))](fig/serial-interval-covid-sars.jpg)
+Assume
+<!-- that COVID-19 and SARS have similar reproduction number values and --> 
+that the serial interval approximates the generation time.
+
+![Serial interval of COVID-19 (SARS-CoV-2) infections overlaid with a published distribution of SARS (SARS-CoV-1). ([Nishiura et al., 2020](https://www.ijidonline.com/article/S1201-9712(20)30119-3/fulltext))](fig/serial-interval-covid-sars.jpg)
 
 ::::::::::::::::: hint
 
@@ -253,7 +255,9 @@ COVID-19
 
 **Why do you conclude that?**
 
-COVID-19 has a lower mean serial interval. The approximate mean value for the serial interval of COVID-19 is around four days, and SARS is about seven days. Thus, if there are many infections in the population, COVID-19 will on average have more new generations of infection in less time than SARS would, assuming similar reproduction numbers. This means far more resources would be required to keep up with the epidemic.
+Because COVID-19 has a shorter mean serial interval. The approximate mean serial interval for COVID-19 is around 4 days, compared to approximately 7 days for SARS. Therefore, if many infections are present in the population, COVID-19 will on average produce more generations of infection in less time than SARS.
+<!-- , assuming similar reproduction numbers. -->
+A short serial interval can make contact tracing difficult due to the rapid emergence of new generations of cases. This means far more resources would be required to keep up with the epidemic.
 
 ::::::::::::::::::::::::::
 
