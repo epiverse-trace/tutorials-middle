@@ -358,8 +358,8 @@
 <div class="card-body">
 <div class="inner">
 <h3 class="card-title">Questions</h3>
-<ul><li>How can I estimate the time-varying reproduction number (<span class="math inline">\(Rt\)</span>) and growth rate from a time series of
-case data?</li>
+<ul><li>How can I estimate the time-varying reproduction number (<span class="math inline">\(R_t\)</span>) and growth rate from a time series
+of case data?</li>
 <li>How can I quantify geographical heterogeneity from these
 transmission metrics?</li>
 </ul></div>
@@ -403,7 +403,7 @@ and visualize</a> incidence data.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Install packages if their are not already installed</p>
 <div class="codewrapper sourceCode" id="cb1">
@@ -467,10 +467,9 @@ framework, for details on these concepts see the <a href="https://epiforecasts.i
 <a href="https://epiforecasts.io/EpiNow2/" class="external-link">EpiNow2</a> package to estimate the time-varying reproduction
 number. We’ll get input data from <a href="https://www.reconverse.org/incidence2/" class="external-link">incidence2</a>. We’ll use
 the <a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a> and <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> packages to arrange
-some of its outputs, <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> to visualize case
+some of its outputs, <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a> to visualise case
 distribution, and the pipe <code>%&gt;%</code> to connect some of their
-functions, so let’s also call to the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a>
-package:</p>
+functions, so let’s also load the <a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a> package:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -502,7 +501,7 @@ conflicts.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
   <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
 <div class="accordion-body">
 <p>This tutorial illustrates the usage of <code>epinow()</code> to
 estimate the time-varying reproduction number and infection times.
@@ -541,7 +540,7 @@ likelihood \times prior \, probability\)</span></p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
   <h3 class="accordion-header" id="headingInstructor2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor2" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor2" aria-labelledby="headingInstructor2">
+<div id="collapseInstructor2" class="accordion-collapse collapse" aria-labelledby="headingInstructor2" data-bs-parent="#accordionInstructor2">
 <div class="accordion-body">
 <p>Refer to the prior probability distribution and the <a href="https://en.wikipedia.org/wiki/Posterior_probability" class="external-link">posterior
 probability</a> distribution.</p>
@@ -588,7 +587,7 @@ available in the R package <a href="https://www.reconverse.org/incidence2/" clas
 </div>
 <p>To use the data, we must format the data to have two columns:</p>
 <ul><li>
-<code>date</code>: the date (as a date object see
+<code>date</code>: the date (as a date object, see
 <code>?is.Date()</code>),</li>
 <li>
 <code>confirm</code>: number of disease reports (confirm) on that
@@ -618,14 +617,14 @@ this:</p>
 different time <em>intervals</em> (i.e., days, weeks or months) or per
 <em>group</em> categories. Also we can have complete dates for all the
 range of dates per group category using
-<code>complete_dates = TRUE</code> Explore later the <a href="https://www.reconverse.org/incidence2/reference/incidence.html" class="external-link"><code>incidence2::incidence()</code>
-reference manual</a></p>
+<code>complete_dates = TRUE</code>. Explore later the <a href="https://www.reconverse.org/incidence2/manual.html#sec:man-incidence" class="external-link"><code>incidence2::incidence()</code>
+reference manual</a>.</p>
 <div id="accordionSpoiler2" class="accordion spoiler-accordion accordion-flush">
 <div class="accordion-item">
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p><strong>Can we replicate {incidence2} with {dplyr}?</strong></p>
 <p>We can get an object similar to <code>cases</code> from the
@@ -701,17 +700,16 @@ involve multiple types of processes. A typical delay from time of
 infection to case reporting may consist of:</p>
 <blockquote>
 <p><strong>time from infection to symptom onset</strong> (the <a href="reference.html#incubation">incubation period</a>) + <strong>time
-from symptom onset to case notification</strong> (the reporting time)
-.</p>
+from symptom onset to case notification</strong> (the reporting
+time).</p>
 </blockquote>
-<p>The delay distribution for each of these processes can either
+<p>The delay distribution for each of these processes can either be
 estimated from data or obtained from the literature. We can express
-uncertainty about what the correct parameters of the distributions by
-assuming the distributions have <strong>fixed</strong> parameters or
-whether they have <strong>variable</strong> parameters. To understand
-the difference between <strong>fixed</strong> and
-<strong>variable</strong> distributions, let’s consider the incubation
-period.</p>
+uncertainty about the correct parameters of the distributions by
+assuming the distributions have either <strong>fixed</strong> parameters
+or <strong>variable</strong> parameters. To understand the difference
+between <strong>fixed</strong> and <strong>variable</strong>
+distributions, let’s consider the incubation period.</p>
 <div id="delays-and-data" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -739,8 +737,8 @@ notification</td>
 </div>
 <div class="section level4">
 <h4 id="incubation-period-distribution">Incubation period distribution<a class="anchor" aria-label="anchor" href="#incubation-period-distribution"></a></h4>
-<p>The distribution of incubation period for many diseases can usually
-be obtained from the literature. The package <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
+<p>The incubation period distribution for many diseases can usually be
+obtained from the literature. The package <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>
 contains a library of epidemiological parameters for different diseases
 obtained from the literature.</p>
 <p>We specify a (fixed) gamma distribution with mean <span class="math inline">\(\mu = 4\)</span> and standard deviation <span class="math inline">\(\sigma = 2\)</span> (shape = <span class="math inline">\(4\)</span>, scale = <span class="math inline">\(1\)</span>) using the function
@@ -803,10 +801,11 @@ in our analysis!</p>
 uncertainty around the mean <span class="math inline">\(\mu\)</span> and
 standard deviation <span class="math inline">\(\sigma\)</span> of our
 gamma distribution. If our incubation period distribution has a mean
-<span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, then we assume the mean (<span class="math inline">\(\mu\)</span>) follows a Normal distribution with
-standard deviation <span class="math inline">\(\sigma_{\mu}\)</span>:</p>
+<span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, then we can assume the mean
+(<span class="math inline">\(\mu\)</span>) follows a Normal distribution
+with standard deviation <span class="math inline">\(\sigma_{\mu}\)</span>:</p>
 <p><span class="math display">\[\mbox{Normal}(\mu,\sigma_{\mu}^2)\]</span></p>
-<p>and a standard deviation (<span class="math inline">\(\sigma\)</span>) follows a Normal distribution
+<p>and the standard deviation (<span class="math inline">\(\sigma\)</span>) follows a Normal distribution
 with standard deviation <span class="math inline">\(\sigma_{\sigma}\)</span>:</p>
 <p><span class="math display">\[\mbox{Normal}(\sigma,\sigma_{\sigma}^2).\]</span></p>
 <p>We specify this using <code>Normal()</code> for each argument: the
@@ -858,7 +857,7 @@ distribution from data.</p>
 <p>When specifying a distribution, it is useful to visualise the
 probability density to see the peak and spread of the distribution, in
 this case we will use a <em>log normal</em> distribution.</p>
-<p>If we want to assume that the mean reporting delay is 2 days (with a
+<p>If we want to assume that the mean reporting delay is 2 days (with an
 uncertainty of 0.5 days) and a standard deviation of 1 day (with
 uncertainty of 0.5 days), we can specify a variable distribution using
 <code>LogNormal()</code> as before:</p>
@@ -877,9 +876,9 @@ uncertainty of 0.5 days), we can specify a variable distribution using
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
 <div class="accordion-body">
-<p><strong>Visualize a log Normal distribution using
+<p><strong>Visualise a log normal distribution using
 {epiparameter}</strong></p>
 <p>Using <code>epiparameter::epiparameter()</code> we can create a
 custom distribution. The fixed log normal distribution will look
@@ -917,7 +916,7 @@ like:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
   <h3 class="accordion-header" id="headingSpoiler4">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler4" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler4" aria-labelledby="headingSpoiler4">
+<div id="collapseSpoiler4" class="accordion-collapse collapse" aria-labelledby="headingSpoiler4" data-bs-parent="#accordionSpoiler4">
 <div class="accordion-body">
 <p><strong>How to get the reporting delay from data?</strong></p>
 <p>If data is available on the time between symptom onset and reporting,
@@ -925,9 +924,9 @@ we can use the function <code>EpiNow2::estimate_delay()</code> to
 estimate a log normal distribution from a vector of delays.</p>
 <p>The code below illustrates how to use
 <code>EpiNow2::estimate_delay()</code> with synthetic Ebola data. We
-calculate the reporting delay for each case the time difference
+calculate the reporting delay for each case as the time difference
 <strong>from</strong> date of onset <strong>to</strong> date of
-hospitalization (date when case was reported).</p>
+hospitalisation (date when case was reported).</p>
 <div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -960,13 +959,13 @@ hospitalization (date when case was reported).</p>
       mean:
         0.21
       sd:
-        0.11
+        0.13
   sdlog:
     - normal distribution:
       mean:
-        0.98
+        0.99
       sd:
-        0.11</code></pre>
+        0.12</code></pre>
 </div>
 </div>
 </div>
@@ -1001,8 +1000,8 @@ be passed using the functions <code>generation_time_opts()</code> and
 <code>epinow()</code>, see <code>?EpiNow2::epinow()</code> for more
 detail. One optional input is to specify a <em>log normal</em> prior for
 the effective reproduction number <span class="math inline">\(R_t\)</span> at the start of the outbreak. We
-specify a mean of 2 days and standard deviation of 2 days as arguments
-of <code>prior</code> within <code>rt_opts()</code>:</p>
+specify a mean of 2 and standard deviation of 2 as arguments of
+<code>prior</code> within <code>rt_opts()</code>:</p>
 <div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1045,8 +1044,8 @@ equal number of cores to be used in parallel as follows:</p>
 <span class="callout-header">Checklist</span>
 <div class="callout-inner">
 <div class="callout-content">
-<p><strong>Note:</strong> In the code below <code>_fixed</code>
-distributions are used instead of <code>_variable</code> (delay
+<p><strong>Note:</strong> In the code below <code>*_fixed</code>
+distributions are used instead of <code>*_variable</code> (delay
 distributions with uncertainty). This is to speed up computation time.
 It is generally recommended to use variable distributions that account
 for additional uncertainty.</p>
@@ -1120,7 +1119,7 @@ approximately 3 minutes.</p>
 <code class="sourceCode R"><span><span class="co"># you can add the `stan` argument</span></span>
 <span><span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">epinow</span><span class="op">(</span></span>
 <span>  <span class="va">...</span>,</span>
-<span>  stan <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">stan_opts</span><span class="op">(</span>samples <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>  stan <span class="op">=</span> <span class="fu">EpiNow2</span><span class="fu">::</span><span class="fu">stan_opts</span><span class="op">(</span>samples <span class="op">=</span> <span class="fl">1000</span>, chains <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre>
 </div>
 <p><strong>Remember:</strong> Using an appropriate number of
@@ -1142,13 +1141,13 @@ number through time:</p>
 </div>
 <figure><img src="../fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The uncertainty in the estimates increases through time. This is
 because estimates are informed by data in the past - within the delay
-periods. This difference in uncertainty is categorised into
-<strong>Estimate</strong> (green) utilises all data and <strong>Estimate
-based on partial data</strong> (orange) estimates that are based on less
-data (because infections that happened at the time are more likely to
-not have been observed yet) and therefore have increasingly wider
-intervals towards the date of the last data point. Finally, the
-<strong>Forecast</strong> (purple) is a projection ahead of time.</p>
+periods. The plot distinguishes three categories:
+<strong>Estimate</strong> (green) uses all available data;
+<strong>Estimate based on partial data</strong> (orange) is based on
+less data (because infections around that time are more likely not to
+have been observed yet) and therefore has increasingly wider intervals
+towards the date of the last data point; and <strong>Forecast</strong>
+(purple) is a projection ahead of time.</p>
 <p>We can also visualise the growth rate estimate through time:</p>
 <div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1167,25 +1166,25 @@ intervals towards the date of the last data point. Finally, the
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="output" tabindex="0"><code>                        measure              estimate
-                         &lt;char&gt;                &lt;char&gt;
-1:       New infections per day  7910 (4713 -- 13333)
-2:   Expected change in reports                Stable
-3:   Effective reproduction no.    0.96 (0.74 -- 1.2)
-4:               Rate of growth -0.013 (-0.1 -- 0.08)
-5: Doubling/halving time (days)     -54 (8.7 -- -6.8)</code></pre>
+<pre class="output" tabindex="0"><code>                        measure                estimate
+                         &lt;char&gt;                  &lt;char&gt;
+1:       New infections per day    7783 (4539 -- 13579)
+2:   Expected change in reports       Likely decreasing
+3:   Effective reproduction no.      0.96 (0.73 -- 1.2)
+4:               Rate of growth -0.017 (-0.11 -- 0.078)
+5: Doubling/halving time (days)       -41 (8.9 -- -6.3)</code></pre>
 </div>
 <p>As these estimates are based on partial data, they have a wide
 uncertainty interval.</p>
 <ul><li><p>From the summary of our analysis we see that the expected change
-in reports is Stable with the estimated new infections 7910 (4713 –
-13333).</p></li>
+in reports is Likely decreasing with the estimated new infections 7783
+(4539 – 13579).</p></li>
 <li><p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
-data) is 0.96 (0.74 – 1.2).</p></li>
-<li><p>The exponential growth rate of case numbers is -0.013 (-0.1 –
-0.08).</p></li>
+data) is 0.96 (0.73 – 1.2).</p></li>
+<li><p>The exponential growth rate of case numbers is -0.017 (-0.11 –
+0.078).</p></li>
 <li><p>The doubling time (the time taken for case numbers to double) is
--54 (8.7 – -6.8).</p></li>
+-41 (8.9 – -6.3).</p></li>
 </ul><div id="expected-change-in-reports" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -1307,7 +1306,7 @@ delays in this episode.</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>To wrangle data, you can:</p>
 <div class="codewrapper sourceCode" id="cb32">
@@ -1340,7 +1339,7 @@ started vignette section on <code>regional_epinow()</code> at <a href="https://e
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>To find regional estimates, we use the same inputs as
 <code>epinow()</code> to the function
