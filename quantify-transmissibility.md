@@ -35,7 +35,7 @@ Learners should familiarise themselves with following concepts before working th
 
 :::::::::: spoiler
 
-Install packages if their are not already installed
+Install packages if they are not already installed
 
 ```r
 if (!base::require("pak")) install.packages("pak")
@@ -440,15 +440,15 @@ outbreaks::ebola_sim_clean$linelist %>%
   meanlog:
     - normal distribution:
       mean:
-        0.21
+        0.28
       sd:
-        0.13
+        0.11
   sdlog:
     - normal distribution:
       mean:
-        0.99
+        0.96
       sd:
-        0.12
+        0.091
 ```
 
 ::::::::::::::::::
@@ -600,22 +600,22 @@ summary(estimates)
 ``` output
                         measure                estimate
                          <char>                  <char>
-1:       New infections per day    7783 (4539 -- 13579)
-2:   Expected change in reports       Likely decreasing
+1:       New infections per day    7951 (4601 -- 13426)
+2:   Expected change in reports                  Stable
 3:   Effective reproduction no.      0.96 (0.73 -- 1.2)
-4:               Rate of growth -0.017 (-0.11 -- 0.078)
-5: Doubling/halving time (days)       -41 (8.9 -- -6.3)
+4:               Rate of growth -0.013 (-0.11 -- 0.083)
+5: Doubling/halving time (days)       -55 (8.4 -- -6.4)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7783 (4539 -- 13579).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7951 (4601 -- 13426).
 
 + The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.73 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.017 (-0.11 -- 0.078).
++ The exponential growth rate of case numbers is -0.013 (-0.11 -- 0.083).
 
-+ The doubling time (the time taken for case numbers to double) is -41 (8.9 -- -6.3).
++ The doubling time (the time taken for case numbers to double) is -55 (8.4 -- -6.4).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 

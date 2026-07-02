@@ -36,7 +36,7 @@ Learners should familiarise themselves with following concept dependencies befor
 
 :::::::::: spoiler
 
-Install packages if their are not already installed
+Install packages if they are not already installed
 
 ```r
 if (!base::require("pak")) install.packages("pak")
