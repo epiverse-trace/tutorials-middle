@@ -80,7 +80,13 @@ This helps us remember package functions and avoid namespace conflicts.
 
 ## The problem
 
-If we want to estimate the transmissibility of an infection, it's common to use a package such as `{EpiEstim}` or `{EpiNow2}`. The `{EpiEstim}` package allows real-time estimation of the reproduction number using case data over time, reflecting how transmission changes based on when symptoms appear. For estimating transmission based on when people were actually infected (rather than symptom onset), the `{EpiNow2}` package extends this idea by combining it with a model that accounts for delays in observed data. Both packages require some epidemiological information as an input. For example, in `{EpiNow2}` we use `EpiNow2::Gamma()` to specify a [generation time](../learners/reference.md#generationtime) as a Gamma probability distribution adding its `mean`, standard deviation (`sd`), and maximum value (`max`). 
+If we want to estimate the transmissibility of an infection, it's common to use a package such as `{EpiEstim}` or `{EpiNow2}`. 
+
+- The `{EpiEstim}` package allows real-time estimation of the reproduction number using case data over time, reflecting how transmission changes based on when symptoms appear. 
+
+- For estimating transmission based on when people were actually infected (rather than symptom onset), the `{EpiNow2}` package extends this idea by combining it with a model that accounts for delays in observed data. 
+
+Both packages require some epidemiological information as an input. For example, in `{EpiNow2}` we can use `EpiNow2::Gamma()` to specify a [generation time](../learners/reference.md#generationtime) as a Gamma probability distribution adding its `mean`, standard deviation (`sd`), and maximum value (`max`). 
 
 To specify a `generation_time` that follows a _Gamma_ distribution with mean $\mu = 4$, standard deviation $\sigma = 2$, and a maximum value of 20, we write:
 
@@ -207,6 +213,14 @@ A short serial interval can make contact tracing difficult due to the rapid emer
 The objective of the assessment above is to assess the interpretation of a larger or shorter generation time.
 
 ::::::::::::::::::::::
+
+:::::::::::::: checklist
+
+The *generation time* distribution is the delay from one infection to the next, often approximated by the *serial interval* which is easier to observe. It can be used to estimate the transmissibility of a disease by calculating the effective reproduction number ($R_{t}$).
+
+If you want to gain familiarity with how this distribution feeds into that calculation, you can read the complementary resource on [Introduction to the Renewal equation](../learners/intro-renewal-equation.md).
+
+::::::::::::::
 
 ## Choosing epidemiological parameters
 
