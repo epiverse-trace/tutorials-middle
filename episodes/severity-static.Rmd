@@ -442,7 +442,7 @@ cfr::estimate_outcomes(
   data = ebola_30days,
   delay_density = function(x) density(onset_to_death_ebola, at = x)
 ) %>%
-  slice_head(n = 3) %>% 
+  slice_head(n = 3) %>%
   pull(estimated_outcomes)
 ```
 
