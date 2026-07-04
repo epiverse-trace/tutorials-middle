@@ -220,7 +220,7 @@ The number of delays and type of delay are a flexible input that depend on the d
 
 #### Incubation period distribution 
 
-The incubation period distribution for many diseases can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature. More about it in the tutorial to [access epidemiological delay distributions](../episodes/delays-access.md).
+The incubation period distribution for many diseases can usually be obtained from the literature. The package `{epiparameter}` contains a library of epidemiological parameters for different diseases obtained from the literature.
 
 We specify a (fixed) gamma distribution with mean $\mu = 4$ and standard deviation $\sigma = 2$ (shape = $4$, scale = $1$) using the function `Gamma()` as follows:
 
