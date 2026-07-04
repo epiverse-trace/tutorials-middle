@@ -138,7 +138,7 @@ If we measure the *serial interval* in real data, we typically see that not all 
 
 ![Serial intervals of possible case pairs in (a) COVID-19 and (b) MERS-CoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/serial-interval-pairs.jpg)
 
-To summarise these data from individual and pair time periods, it is therefore useful to quantify the **statistical distribution** of delays that best fits the data, rather than just focusing on the mean ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
+To summarise these data on paired individuals (time periods between infector and infectee symptom onset times), it is therefore useful to quantify the **statistical distribution** of delays that best fits the data, rather than just focusing on the mean ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
 
 <!-- add a reference about good practices to estimate distributions -->
 
@@ -161,7 +161,7 @@ Statistical distributions are summarised in terms of their **summary statistics*
 | MERS-CoV | 14.08(13.1–15.2) | 2.58(2.50–2.68) | 0.44(0.39–0.5) |
 | COVID-19 | 5.2(4.2–6.5) | 1.45(1.31–1.61) | 0.63(0.54–0.74) |
 
-Table: Serial interval estimates using Gamma, Weibull, and Log Normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for Log Normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
+Table: Serial interval estimates using Gamma, Weibull, and Log Normal distributions. 95% confidence intervals for the shape and scale (mean-log and sd-log for Log Normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
 
 :::::::::::::::::::::::::
 
@@ -289,6 +289,8 @@ distribution[[1]]$metadata$inference_method
 distribution[[2]]$metadata$inference_method
 distribution[[4]]$metadata$inference_method
 ```
+
+Run the chunks above to get the outputs.
 
 :::::::::::::::::::::::::
 

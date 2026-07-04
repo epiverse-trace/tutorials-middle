@@ -585,7 +585,7 @@ covid_incubation_time <-
 # epinow ------------------------------------------------------------------
 
 # Set 4 cores to be used in parallel computations
-withr::local_options(list(mc.cores = 4))
+withr::local_options(list(mc.cores = parallel::detectCores() - 1))
 
 # run epinow
 epinow_estimates_cgi <- EpiNow2::epinow(
