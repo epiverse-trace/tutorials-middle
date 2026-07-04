@@ -167,8 +167,8 @@ epiparameter::generate(covid_serialint, times = 10)
 ```
 
 ``` output
- [1]  4.085318  5.019767  5.817960  5.499465  4.118405  7.736833  5.321582
- [8]  8.350185 10.494472  4.227899
+ [1]  4.022843  6.177242  2.579687 17.801526  3.680146  4.829783  4.659798
+ [8]  3.263045  2.205161  1.414135
 ```
 
 ::::::::: instructor
@@ -752,7 +752,7 @@ covid_incubation_time <-
 # epinow ------------------------------------------------------------------
 
 # Set 4 cores to be used in parallel computations
-withr::local_options(list(mc.cores = 4))
+withr::local_options(list(mc.cores = parallel::detectCores() - 1))
 
 # run epinow
 epinow_estimates_cgi <- EpiNow2::epinow(

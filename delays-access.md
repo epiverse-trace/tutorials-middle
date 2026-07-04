@@ -81,7 +81,13 @@ This helps us remember package functions and avoid namespace conflicts.
 
 ## The problem
 
-If we want to estimate the transmissibility of an infection, it's common to use a package such as `{EpiEstim}` or `{EpiNow2}`. The `{EpiEstim}` package allows real-time estimation of the reproduction number using case data over time, reflecting how transmission changes based on when symptoms appear. For estimating transmission based on when people were actually infected (rather than symptom onset), the `{EpiNow2}` package extends this idea by combining it with a model that accounts for delays in observed data. Both packages require some epidemiological information as an input. For example, in `{EpiNow2}` we use `EpiNow2::Gamma()` to specify a [generation time](../learners/reference.md#generationtime) as a Gamma probability distribution adding its `mean`, standard deviation (`sd`), and maximum value (`max`). 
+If we want to estimate the transmissibility of an infection, it's common to use a package such as `{EpiEstim}` or `{EpiNow2}`. 
+
+- The `{EpiEstim}` package allows real-time estimation of the reproduction number using case data over time, reflecting how transmission changes based on when symptoms appear. 
+
+- For estimating transmission based on when people were actually infected (rather than symptom onset), the `{EpiNow2}` package extends this idea by combining it with a model that accounts for delays in observed data. 
+
+Both packages require some epidemiological information as an input. For example, in `{EpiNow2}` we can use `EpiNow2::Gamma()` to specify a [generation time](../learners/reference.md#generationtime) as a Gamma probability distribution adding its `mean`, standard deviation (`sd`), and maximum value (`max`). 
 
 To specify a `generation_time` that follows a _Gamma_ distribution with mean $\mu = 4$, standard deviation $\sigma = 2$, and a maximum value of 20, we write:
 
@@ -199,7 +205,7 @@ If we measure the *serial interval* in real data, we typically see that not all 
 
 ![Serial intervals of possible case pairs in (a) COVID-19 and (b) MERS-CoV. Pairs represent a presumed infector and their presumed infectee plotted by date of symptom onset ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#fig6)).](fig/serial-interval-pairs.jpg)
 
-To summarise these data from individual and pair time periods, it is therefore useful to quantify the **statistical distribution** of delays that best fits the data, rather than just focusing on the mean ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
+To summarise these data on paired individuals (time periods between infector and infectee symptom onset times), it is therefore useful to quantify the **statistical distribution** of delays that best fits the data, rather than just focusing on the mean ([McFarland et al., 2023](https://www.eurosurveillance.org/content/10.2807/1560-7917.ES.2023.28.27.2200806)).
 
 <!-- add a reference about good practices to estimate distributions -->
 
@@ -222,7 +228,7 @@ Statistical distributions are summarised in terms of their **summary statistics*
 | MERS-CoV | 14.08(13.1–15.2) | 2.58(2.50–2.68) | 0.44(0.39–0.5) |
 | COVID-19 | 5.2(4.2–6.5) | 1.45(1.31–1.61) | 0.63(0.54–0.74) |
 
-Table: Serial interval estimates using Gamma, Weibull, and Log Normal distributions. 95% confidence intervals for the shape and scale (logmean and sd for Log Normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
+Table: Serial interval estimates using Gamma, Weibull, and Log Normal distributions. 95% confidence intervals for the shape and scale (mean-log and sd-log for Log Normal) parameters are shown in brackets ([Althobaity et al., 2022](https://www.sciencedirect.com/science/article/pii/S2468042722000537#tbl3)).
 
 :::::::::::::::::::::::::
 
@@ -268,6 +274,14 @@ A short serial interval can make contact tracing difficult due to the rapid emer
 The objective of the assessment above is to assess the interpretation of a larger or shorter generation time.
 
 ::::::::::::::::::::::
+
+:::::::::::::: checklist
+
+The *generation time* distribution is the delay from one infection to the next, often approximated by the *serial interval* which is easier to observe. It can be used to estimate the transmissibility of a disease by calculating the effective reproduction number ($R_{t}$).
+
+If you want to gain familiarity with how this distribution feeds into that calculation, you can read the complementary resource on [Introduction to the Renewal equation](../learners/intro-renewal-equation.md).
+
+::::::::::::::
 
 ## Choosing epidemiological parameters
 
@@ -372,6 +386,8 @@ distribution[[1]]$metadata$inference_method
 distribution[[2]]$metadata$inference_method
 distribution[[4]]$metadata$inference_method
 ```
+
+Run the chunks above to get the outputs.
 
 :::::::::::::::::::::::::
 

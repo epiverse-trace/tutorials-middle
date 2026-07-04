@@ -62,9 +62,9 @@ Common questions at the early stage of an epidemic include:
 
 We can assess the pandemic potential of an epidemic with two critical measurements: the transmissibility and the clinical severity
 ([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062), 
-[CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).
+[CDC, 2024](htthttps://www.cdc.gov/pandemic-flu/php/national-strategy/severity-assessment-framework.html)).
 
-![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://www.cdc.gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range”, “moderate pandemic”, “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
+![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://archive.cdc.gov/www_cdc_gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range”, “moderate pandemic”, “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
 
 One epidemiological approach to estimating the clinical severity is quantifying the Case Fatality Risk (CFR). CFR is the conditional probability of death given confirmed diagnosis, calculated as the ratio of the cumulative number of deaths from an infectious disease to the number of confirmed diagnosed cases. However, calculating this directly during the course of an epidemic tends to result in a naive or biased CFR given the time [delay](../learners/reference.md#delaydist) from onset to death, varying substantially as the epidemic progresses and stabilising at the later stages of the outbreak ([Ghani et al., 2005](https://academic.oup.com/aje/article/162/5/479/82647?login=false#620743)).
 
@@ -131,7 +131,7 @@ What data sources can we use to estimate the clinical severity of a disease outb
 
 We measure disease severity in terms of case fatality risk (CFR). The CFR is interpreted as the conditional probability of death given confirmed diagnosis, calculated as the ratio of the cumulative number of deaths $D_{t}$ to the cumulative number of confirmed cases $C_{t}$ at a certain time $t$. We can refer it to the _naive CFR_ (also crude or biased CFR, $b_{t}$):
 
-$$ b_{t} =  \frac{D_{t}}{C_{t}} $$
+$$ naive \, CFR = b_{t} =  \frac{D_{t}}{C_{t}} $$
 
 This calculation is _naive_ because it tends to yield a biased and mostly underestimated CFR due to the time-delay from onset to death, only stabilising at the later stages of the outbreak.
 
@@ -198,7 +198,7 @@ ebola_30days
 
 
 
-This data input should be **aggregated** by day, which means one observation *per day*, containing the *daily* number of reported cases and deaths. Observations with zero or missing values should also be included, similar to time-series data.
+This input data should be **aggregated** by day, which means one observation *per day*, containing the *daily* number of reported cases and deaths. Observations with zero or missing values should also be included, as with all time-series data.
 
 Also, `{cfr}` currently works for *daily* data only, but not for other temporal units of data aggregation, e.g., weeks.
 
@@ -366,12 +366,11 @@ Let's use `{epiparameter}`:
 
 ``` r
 # Get delay distribution
-onset_to_death_ebola <-
-  epiparameter::epiparameter_db(
-    disease = "Ebola",
-    epi_name = "onset_to_death",
-    single_epiparameter = TRUE
-  )
+onset_to_death_ebola <- epiparameter::epiparameter_db(
+  disease = "Ebola",
+  epi_name = "onset_to_death",
+  single_epiparameter = TRUE
+)
 
 # Plot <epiparameter> object
 plot(onset_to_death_ebola, xlim = c(0, 40))
@@ -415,27 +414,30 @@ in the "More Resources" section of this tutorial's website.
 
 ### Why is density() expressed as a function of x?
 
-To correct the bias arising from cases whose outcomes are not yet known at the time of estimation, `{cfr}` accounts for the probability that a case’s outcome becomes known after a certain delay.
+First, read the guide on [How to adjust the CFR for delays](../learners/intro-cfr-adjust-delays.md).
 
-It does so by relating $D_t$ to the incidence function $c_t$ (i.e., the number of new confirmed cases on day t) and the conditional probability density function $f_s$ of the time from onset to death, given death.
+You will find that the core calculation is done by the term:
 
 $$
-D_t = p_t \times \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
+\sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
 $$
 
-Here, $D_t$ is the cumulative number of deaths up to time t, and $p_t$ is the realised proportion of confirmed cases that die from the infection (i.e., the unbiased case fatality risk, or CFR).
+where:
+
+- $c_i$ is the number of new confirmed cases on day i 
+- $f_s$ the conditional probability density function for the delay of $s$ days, from onset to death, given death.
 
 The term $\sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}$ represents the **total expected number of cases with known outcomes by time `t`**. It sums all incident cases $c_i$, each weighted by the probability density function $f_{j−i}$ that their outcomes become known after a delay of $j−i$ days.
 
 On each analysis day, `{cfr}` computes, for each case, the **expected number of outcomes by time `t`**. When using `<epiparameter>` class objects, the function `density()` can be applied to obtain the corresponding probability density function for each case on each day.
 
-For example, by day 1, the expected outcomes are equal to:
+For example, by day 0, the expected outcomes are equal to:
 
-- the number of observed cases on day 1 times the density at day 0.
+- $c_0 \times (f_0)$: the number of observed cases on day 0 times the density at day 0.
 
 
 ``` r
-# By Day 1, the expected outcomes are:
+# By Day 0, the expected outcomes are:
 ebola_30days$cases[1] *
   density(onset_to_death_ebola, at = 0)
 ```
@@ -444,14 +446,14 @@ ebola_30days$cases[1] *
 [1] 0
 ```
 
-By day 2, the expected outcomes are equal to:
+By day 1, the expected outcomes are equal to:
 
-- the number of observed cases on day 1 times the density at day 1, plus
-- the number of observed cases on day 2 times the density at day 0
+- $c_0 \times (f_0 + f_1)$: the number of observed cases on day 0 times the density at day 1, plus
+- $c_1 \times (f_0)$: the number of observed cases on day 1 times the density at day 0.
 
 
 ``` r
-# By Day 2, the expected outcomes are:
+# By Day 1, the expected outcomes are:
 ebola_30days$cases[1] *
   density(onset_to_death_ebola, at = 1) +
   ebola_30days$cases[2] *
@@ -462,11 +464,11 @@ ebola_30days$cases[1] *
 [1] 0.06495664
 ```
 
-By day 3, the expected outcomes are equal to:
+By day 2, the expected outcomes are equal to:
 
-- the number of observed cases on day 1 times the density at day 2, plus
-- the number of observed cases on day 2 times the density at day 1, plus
-- the number of observed cases on day 3 times the density at day 0.
+- $c_0 \times (f_0 + f_1 + f_2)$: the number of observed cases on day 0 times the density at day 2, plus
+- $c_1 \times (f_0 + f_1)$: the number of observed cases on day 1 times the density at day 1, plus
+- $c_2 \times (f_0)$: the number of observed cases on day 2 times the density at day 0.
 
 
 ``` r
@@ -483,16 +485,18 @@ ebola_30days$cases[1] *
 [1] 0.08295091
 ```
 
-Notice that the most recently observed cases start the delay distribution from `0`, while the others continue with the following day.
+Notice that `ebola_30days$cases[1]` represent the number of observed cases on day `0` to fit the notation from the equation above.
 
-Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of x. `{cfr}` will then draw values accordingly, as shown below:
+Notice also that the most recently observed cases start the delay distribution from `0`, while the others continue with the following day.
+
+Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of `x`. `{cfr}` will then draw values accordingly, as shown below:
 
 ```r
 # {cfr} uses the density of the distribution at different values of x
 function(x) density(onset_to_death_ebola, at = x)
 ```
 
-Internally, the function `cfr::estimate_outcomes()` performs this calculation:
+Internally, for the first 3 days (from day 0 to day 2), the function `cfr::estimate_outcomes()` performs this calculation:
 
 
 ``` r
@@ -507,6 +511,8 @@ cfr::estimate_outcomes(
 ``` output
 [1] 0.00000000 0.06495664 0.08295091
 ```
+
+The values printed above are `estimate_outcomes` for the corresponding day.
 
 ::::::::::::::::::
 
@@ -643,7 +649,7 @@ Interpret the comparison between the naive and delay-adjusted CFR estimates.
 
 The **naive** estimate is useful to get an overall severity estimate of the outbreak (so far). Once the outbreak has ended or has progressed such that more deaths are reported, the estimated CFR is then closest to the 'true' unbiased CFR.
 
-On the other hand, the **delay-adjusted** estimate can assess the severity of an emerging infectious disease *earlier* than the biased or naive CFR, during an epidemic.
+On the other hand, the **delay-adjusted** estimate can assess the severity of an emerging infectious disease *earlier* in an outbreak given a more reliable assessment of the severity than the naive CFR.
 
 We can explore the **early** determination of the _delay-adjusted CFR_ using the `cfr_rolling()` function.
 
@@ -745,9 +751,9 @@ Nevertheless, even by only using the observed data for the period March 19 to Ap
 
 ### Interpret the early-stage CFR estimate
 
-Based on the figure above:
+Based on the figure above of the naive and adjusted rolling CFR:
 
-- How much difference in days is between the date in which the 95% CI of the estimated _delay-adjusted CFR_ vs _naive CFR_ cross with the CFR estimated at the end of the outbreak?
+- How many days apart are the dates on which the 95% CI of the **delay-adjusted CFR** and the 95% CI of the **naive CFR** each first cross the CFR estimated at the end of the outbreak?
 
 Discuss:
 
@@ -758,6 +764,18 @@ Discuss:
 :::::::::::::::::::::: hint
 
 We can either use a visual inspection or analyse the output data frames.
+
+The CFR estimated at the end of the outbreak is:
+
+
+``` r
+utils::tail(rolling_cfr_naive, n = 1)
+```
+
+``` output
+         date severity_estimate severity_low severity_high
+73 1976-11-05          0.955102    0.9210866     0.9773771
+```
 
 ::::::::::::::::::::::
 
@@ -821,55 +839,6 @@ This estimation is performed by the internal function `?cfr:::estimate_severity(
 ::::::::::::::::::::::::::
 
 ## Challenges
-
-:::::::::::::::::::::::::::::::: discussion
-
-### More severity measures
-
-Suppose we need to assess the clinical severity of the epidemic in a context different from surveillance data, like the severity among cases that arrive at hospitals or cases you collected from a representative serological survey. 
-
-Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denominator (`deaths`) to estimate more severity measures like the Infection fatality risk (IFR) or the Hospitalisation Fatality Risk (HFR). We can follow this analogy:
-
-:::::::::::::::::::::::::::::::: 
-
-:::::::::::::::::::::::::::: solution
-
-### Infection and Hospitalisation fatality risk
-
-If for a _Case_ fatality risk (CFR), we require: 
-
-- _case_ and death incidence data, with a 
-- case-to-death delay distribution (or close approximation, such as symptom onset-to-death).
-
-Then, the _Infection_ fatality risk (IFR) requires: 
-
-- _infection_ and death incidence data, with an 
-- exposure-to-death delay distribution (or close approximation).
-
-Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires: 
-
-- _hospitalisation_ and death incidence data, and a
-- hospitalisation-to-death delay distribution.
-
-::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::: solution
-
-### Data sources for more severity measures
-
-[Yang et al., 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) summarises different definitions and data sources:
-
-![Severity levels of infections with SARS-CoV-2 and parameters of interest. Each level is assumed to be a subset of the level below.](fig/cfr-s41467-020-19238-2-fig_a.png)
-
-- sCFR symptomatic case-fatality risk, 
-- sCHR symptomatic case-hospitalisation risk, 
-- mCFR medically attended case-fatality risk, 
-- mCHR medically attended case-hospitalisation risk, 
-- HFR hospitalisation-fatality risk. 
-
-![Schematic diagram of the baseline analyses. Red, blue, and green arrows denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 8, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–19, D3)daily number of laboratory-confirmed cases on March 9–April 24, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities, and D7) 16,781 laboratory-confirmed cases identified through universal screening. Pse: RT-PCR sensitivity. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections.'}
-
-::::::::::::::::::::::::::::
 
 ::::::::::::::::: callout
 
@@ -1187,6 +1156,54 @@ We invite you to read this [vignette about the `cfr_time_varying()` function](ht
 
 :::::::::::::::::
 
+:::::::::::::::::::::::::::::::: discussion
+
+### More severity measures
+
+Suppose we need to assess the clinical severity of the epidemic in a context different from surveillance data, like the severity among cases that arrive at hospitals or cases you collected from a representative serological survey. 
+
+Using `{cfr}`, we can change the inputs for the numerator (`cases`) and denominator (`deaths`) to estimate more severity measures like the Infection fatality risk (IFR) or the Hospitalisation Fatality Risk (HFR). We can follow this analogy:
+
+:::::::::::::::::::::::::::::::: 
+
+:::::::::::::::::::::::::::: solution
+
+### Infection and Hospitalisation fatality risk
+
+If for a _Case_ fatality risk (CFR), we require: 
+
+- _case_ and death incidence data, with a 
+- case-to-death delay distribution (or close approximation, such as symptom onset-to-death).
+
+Then, the _Infection_ fatality risk (IFR) requires: 
+
+- _infection_ and death incidence data, with an 
+- exposure-to-death delay distribution (or close approximation).
+
+Similarly, the _Hospitalisation_ Fatality Risk (HFR) requires: 
+
+- _hospitalisation_ and death incidence data, and a
+- hospitalisation-to-death delay distribution.
+
+::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::: solution
+
+### Data sources for more severity measures
+
+[Yang et al., 2020](https://www.nature.com/articles/s41467-020-19238-2/figures/1) summarises different definitions and data sources:
+
+![Severity levels of infections with SARS-CoV-2 and parameters of interest. Each level is assumed to be a subset of the level below.](fig/cfr-s41467-020-19238-2-fig_a.png)
+
+- sCFR symptomatic case-fatality risk, 
+- sCHR symptomatic case-hospitalisation risk, 
+- mCFR medically attended case-fatality risk, 
+- mCHR medically attended case-hospitalisation risk, 
+- HFR hospitalisation-fatality risk. 
+
+![Schematic diagram of the baseline analyses. Red, blue, and green arrows denote the data flow from laboratory-confirmed cases of passive surveillance, clinically-diagnosed cases, and laboratory-confirmed cases of active screenings.](fig/cfr-s41467-020-19238-2-fig_b.png){alt='Data source of COVID-19 cases in Wuhan: D1) 32,583 laboratory-confirmed COVID-19 cases as of March 8, D2) 17,365 clinically-diagnosed COVID-19 cases during February 9–19, D3)daily number of laboratory-confirmed cases on March 9–April 24, D4) total number of COVID-19 deaths as of April 24 obtained from the Hubei Health Commission, D5) 325 laboratory-confirmed cases and D6) 1290 deaths were added as of April 16 through a comprehensive and systematic verification by Wuhan Authorities, and D7) 16,781 laboratory-confirmed cases identified through universal screening. Pse: RT-PCR sensitivity. Pmed.care: proportion of seeking medical assistance among patients suffering from acute respiratory infections.'}
+
+::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints 
 
