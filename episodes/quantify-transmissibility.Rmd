@@ -408,7 +408,7 @@ When possible, we prefer specifying the "natural" distribution parameters (like 
 
 Using the incubation period for measles from `{epiparameter}`, adapt this output to the `{EpiNow2}` distribution interface.
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 measles_incubation <- epiparameter::epiparameter_db(
   disease = "Measles",
   epi_name = "incubation",
