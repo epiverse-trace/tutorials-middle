@@ -341,7 +341,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Estimation of outbreak severity</h1>
-        <p>Last updated on 2026-07-04 |
+        <p>Last updated on 2026-07-05 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/severity-static.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -429,7 +429,7 @@ clinical severity?</li>
 pandemic?</li>
 </ul><p>We can assess the pandemic potential of an epidemic with two critical
 measurements: the transmissibility and the clinical severity (<a href="https://www.science.org/doi/full/10.1126/science.1176062" class="external-link">Fraser
-et al., 2009</a>, <a href="htthttps://www.cdc.gov/pandemic-flu/php/national-strategy/severity-assessment-framework.html" class="external-link">CDC,
+et al., 2009</a>, <a href="https://www.cdc.gov/pandemic-flu/php/national-strategy/severity-assessment-framework.html" class="external-link">CDC,
 2024</a>).</p>
 <figure><img src="../fig/cfr-hhs-scenarios-psaf.png" alt="The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range”, “moderate pandemic”, “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases." class="figure mx-auto d-block"><div class="figcaption">HHS Pandemic Planning Scenarios based on the
 Pandemic Severity Assessment Framework. This uses a combined measure of
@@ -598,7 +598,7 @@ al. (2014).</p>
 </div>
 <figure><img src="../fig/severity-static-rendered-unnamed-chunk-2-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We’ll frame this episode under the context of an <strong>ongoing
 outbreak</strong> with only the <strong>first 30 days</strong> of data
-observed.</p>
+observed (chosen here for illustration, not a required step).</p>
 <div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -628,6 +628,8 @@ observed.</p>
 10 1976-09-03     1      0
 # ℹ 20 more rows</code></pre>
 </div>
+<p>In a real-time analysis, always use the latest data available at the
+moment.</p>
 <div id="we-need-aggregated-incidence-data" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -682,6 +684,9 @@ directly, we are calculating the naive CFR:</p>
 <pre class="output" tabindex="0"><code>  severity_estimate severity_low severity_high
 1         0.4740741    0.3875497     0.5617606</code></pre>
 </div>
+<p>The naive CFR estimates the overall disease severity, given the
+<em>latest data available at the moment</em>, as 0.4740741 with a 95%
+confidence interval between 0.3875497 and 0.5617606.</p>
 <div id="challenge1" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
@@ -776,6 +781,9 @@ fit the data input for <code>cfr::cfr_static()</code>.</p>
 <pre class="output" tabindex="0"><code>  severity_estimate severity_low severity_high
 1        0.01895208   0.01828832    0.01963342</code></pre>
 </div>
+<p>The naive CFR estimates the overall disease severity, given the
+<em>latest data available at the moment</em>, as 0.0189521 with a 95%
+confidence interval between 0.0182883 and 0.0196334.</p>
 </div>
 </div>
 </div>
@@ -910,7 +918,7 @@ guide, read the tutorial episode on how to <a href="delays-access.html">access e
 <span><span class="co"># Plot &lt;epiparameter&gt; object</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/severity-static-rendered-unnamed-chunk-10-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To calculate the delay-adjusted CFR, we can use the
+<figure><img src="../fig/severity-static-rendered-unnamed-chunk-12-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>To calculate the delay-adjusted CFR, we can use the
 <code>cfr_static()</code> function with the <code>data</code> and
 <code>delay_density</code> arguments.</p>
 <div class="codewrapper sourceCode" id="cb14">
@@ -932,7 +940,7 @@ guide, read the tutorial episode on how to <a href="delays-access.html">access e
 </div>
 <p>The delay-adjusted CFR estimates the overall disease severity, given
 the <em>latest data available at the moment</em>, as 0.9502 with a 95%
-confidence interval between 0.881 and 0.9861 — substantially higher than
+confidence interval between 0.881 and 0.9861, substantially higher than
 the naive estimate. This larger value reflects the correction for deaths
 that are still to be reported among the cases observed in the first 30
 days.</p>
@@ -958,8 +966,13 @@ in the “More Resources” section of this tutorial’s website.</p>
 <div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
 <div class="accordion-body">
 <p>First, read the guide on <a href="intro-cfr-adjust-delays.html">How
-to adjust the CFR for delays</a>.</p>
-<p>You will find that the core calculation is done by the term:</p>
+to adjust the CFR for delays</a>. Optionally, review the definition of a
+probability density function (PDF) in the episode on <a href="delays-access.html">Use delay distributions in analysis</a>.</p>
+<p>You will find that the core calculation is to get the <strong>total
+expected number of cases with known outcomes by time
+<code>t</code></strong>. This is to account for the fact that some
+fraction of recent cases haven’t had time to resolve to death/recovery
+yet. It is expressed by the term:</p>
 <p><span class="math display">\[
 \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
 \]</span></p>
@@ -971,21 +984,27 @@ confirmed cases on day i</li>
 <span class="math inline">\(f_s\)</span> the conditional probability
 density function for the delay of <span class="math inline">\(s\)</span>
 days, from onset to death, given death.</li>
-</ul><p>The term <span class="math inline">\(\sum_{i = 0}^t\sum_{j =
-0}^\infty c_i f_{j - i}\)</span> represents the <strong>total expected
-number of cases with known outcomes by time <code>t</code></strong>. It
-sums all incident cases <span class="math inline">\(c_i\)</span>, each
-weighted by the probability density function <span class="math inline">\(f_{j−i}\)</span> that their outcomes become known
-after a delay of <span class="math inline">\(j−i\)</span> days.</p>
-<p>On each analysis day, <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> computes, for each case, the
-<strong>expected number of outcomes by time <code>t</code></strong>.
-When using <code>&lt;epiparameter&gt;</code> class objects, the function
-<code>density()</code> can be applied to obtain the corresponding
-probability density function for each case on each day.</p>
-<p>For example, by day 0, the expected outcomes are equal to:</p>
+</ul><p>It sums the incident cases <span class="math inline">\(c_i\)</span>
+over all onset days <span class="math inline">\(i\)</span> up to <span class="math inline">\(t\)</span>, and for each one, weights it by <span class="math inline">\(f_{j-i}\)</span>, the probability of the outcome
+becoming known on day <span class="math inline">\(j\)</span>, summed
+over all days <span class="math inline">\(j\)</span>.</p>
+<p>For each day <code>i</code>, <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> computes the
+<strong>expected number of outcomes</strong> arising from that day’s
+newly observed incident cases: the outcomes expected “at” day
+<code>i</code>. These per-day expected outcomes are then summed
+cumulatively across the full history up to time <code>t</code> to obtain
+the <strong>total expected number of outcomes “by” time
+<code>t</code></strong>.</p>
+<div class="section level4">
+<h4 id="first-step-the-expected-number-of-outcomes-at-day-i">First step: the expected number of outcomes at day i<a class="anchor" aria-label="anchor" href="#first-step-the-expected-number-of-outcomes-at-day-i"></a></h4>
+<p>When using <code>&lt;epiparameter&gt;</code> class objects, the
+function <code>density()</code> can be applied to obtain the
+corresponding probability density function for incident cases “at” day
+<code>i</code>.</p>
+<p>For example, at day 0, the expected outcomes are equal to:</p>
 <ul><li>
 <span class="math inline">\(c_0 \times (f_0)\)</span>: the number of
-observed cases on day 0 times the density at day 0.</li>
+incident cases on day 0 times the density at day 0.</li>
 </ul><div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -999,13 +1018,16 @@ observed cases on day 0 times the density at day 0.</li>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 0</code></pre>
 </div>
-<p>By day 1, the expected outcomes are equal to:</p>
+<p>Notice that <code>ebola_30days$cases[1]</code> represent the number
+of incident cases on day <code>0</code> to fit the notation from the
+equation above.</p>
+<p>At day 1, the expected outcomes are equal to:</p>
 <ul><li>
-<span class="math inline">\(c_0 \times (f_0 + f_1)\)</span>: the
-number of observed cases on day 0 times the density at day 1, plus</li>
+<span class="math inline">\(c_0 \times (f_1)\)</span>: the number of
+incident cases on day 0 times the density at day 1, plus</li>
 <li>
 <span class="math inline">\(c_1 \times (f_0)\)</span>: the number of
-observed cases on day 1 times the density at day 0.</li>
+incident cases on day 1 times the density at day 0.</li>
 </ul><div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1021,17 +1043,16 @@ observed cases on day 1 times the density at day 0.</li>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 0.06495664</code></pre>
 </div>
-<p>By day 2, the expected outcomes are equal to:</p>
+<p>At day 2, the expected outcomes are equal to:</p>
 <ul><li>
-<span class="math inline">\(c_0 \times (f_0 + f_1 + f_2)\)</span>:
-the number of observed cases on day 0 times the density at day 2,
-plus</li>
+<span class="math inline">\(c_0 \times (f_2)\)</span>: the number of
+incident cases on day 0 times the density at day 2, plus</li>
 <li>
-<span class="math inline">\(c_1 \times (f_0 + f_1)\)</span>: the
-number of observed cases on day 1 times the density at day 1, plus</li>
+<span class="math inline">\(c_1 \times (f_1)\)</span>: the number of
+incident cases on day 1 times the density at day 1, plus</li>
 <li>
 <span class="math inline">\(c_2 \times (f_0)\)</span>: the number of
-observed cases on day 2 times the density at day 0.</li>
+incident cases on day 2 times the density at day 0.</li>
 </ul><div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1049,17 +1070,16 @@ observed cases on day 2 times the density at day 0.</li>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 0.08295091</code></pre>
 </div>
-<p>Notice that <code>ebola_30days$cases[1]</code> represent the number
-of observed cases on day <code>0</code> to fit the notation from the
-equation above.</p>
-<p>Notice also that the most recently observed cases start the delay
-distribution from <code>0</code>, while the others continue with the
-following day.</p>
-<p>Since the input value in <code>at</code> varies by day for each case
-(<code>at = 0</code>, <code>at = 1</code>, <code>at = 2</code>, …), the
-<code>density()</code> needs to be expressed as a function of
-<code>x</code>. <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> will then draw values accordingly, as
-shown below:</p>
+<p>Notice that the delay index shifts by one day at a time: the most
+recent cases (day <span class="math inline">\(t\)</span>) are weighted
+by <span class="math inline">\(f_0\)</span>, the previous day’s cases by
+<span class="math inline">\(f_1\)</span>, and so on, with each earlier
+day moving one step further along the delay distribution.</p>
+<p>Since the input value in <code>at</code> varies by day for incident
+cases of a given day (<code>at = 0</code>, <code>at = 1</code>,
+<code>at = 2</code>, …), the <code>density()</code> needs to be
+expressed as a function of <code>x</code>. <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> will then
+draw values accordingly, as shown below:</p>
 <div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1067,8 +1087,9 @@ shown below:</p>
 <code class="sourceCode R"><span><span class="co"># {cfr} uses the density of the distribution at different values of x</span></span>
 <span><span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">density</span><span class="op">(</span><span class="va">onset_to_death_ebola</span>, at <span class="op">=</span> <span class="va">x</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Internally, for the first 3 days (from day 0 to day 2), the function
-<code>cfr::estimate_outcomes()</code> performs this calculation:</p>
+<p>Internally, for the first 3 days (day 0, day 1, and day 2), the
+function <code>cfr::estimate_outcomes()</code> performs this
+calculation:</p>
 <div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1087,6 +1108,27 @@ shown below:</p>
 </div>
 <p>The values printed above are <code>estimate_outcomes</code> for the
 corresponding day.</p>
+</div>
+<div class="section level3">
+<h3 id="second-step-the-total-expected-number-of-outcomes-by-time-t">Second step: the total expected number of outcomes “by” time t<a class="anchor" aria-label="anchor" href="#second-step-the-total-expected-number-of-outcomes-by-time-t"></a></h3>
+<p>These per-day expected outcomes are then summed cumulatively across
+the full history up to time <code>t</code> to obtain the <strong>total
+expected number of outcomes “by” time <code>t</code></strong>.</p>
+<p>By day 2, the total expected outcomes are equal to:</p>
+<ul><li>
+<span class="math inline">\(c_0 \times (f_0 + f_1 + f_2)\)</span>:
+expected outcomes from day 0’s incident cases, by day 2</li>
+<li>
+<span class="math inline">\(c_1 \times (f_0 + f_1)\)</span>:
+expected outcomes from day 1’s incident cases, by day 2</li>
+<li>
+<span class="math inline">\(c_2 \times (f_0)\)</span>: expected
+outcomes from day 2’s incident cases, by day 2</li>
+</ul><p>Summing these terms gives the total expected outcomes by day 2. This
+match the double summation shown above. This total is used to calculate
+the <strong>underestimation factor</strong> (<code>u_t</code>), the
+fraction of cases whose outcomes are already known.</p>
+</div>
 </div>
 </div>
 </div>
@@ -1144,7 +1186,7 @@ deal with this is to discretise the continuous distribution using
 <span>  <span class="fu">epiparameter</span><span class="fu">::</span><span class="fu">discretise</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">plot</span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>, <span class="fl">40</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/severity-static-rendered-unnamed-chunk-17-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
+<figure><img src="../fig/severity-static-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure></div>
 </div>
 </div>
 </div>
@@ -1256,8 +1298,8 @@ data to fit the data input for <code>cfr_static()</code>.</p>
 <pre class="output" tabindex="0"><code>  severity_estimate severity_low severity_high
 1            0.0734        0.071        0.0759</code></pre>
 </div>
-<p>Interpret the comparison between the naive and delay-adjusted CFR
-estimates.</p>
+<p>Task: Interpret the comparison between the naive and delay-adjusted
+CFR estimates.</p>
 </div>
 </div>
 </div>
@@ -1365,7 +1407,7 @@ naive and delay-adjusted CFR estimates perform in real time?</p>
 <span>    <span class="fu">aes</span><span class="op">(</span><span class="va">date</span>, <span class="va">severity_estimate</span>, colour <span class="op">=</span> <span class="va">method</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="../fig/severity-static-rendered-unnamed-chunk-26-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The red and blue lines represent the delay-adjusted and naive CFR,
+<figure><img src="../fig/severity-static-rendered-unnamed-chunk-28-1.png" alt="" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>The red and blue lines represent the delay-adjusted and naive CFR,
 respectively, throughout the outbreak. The bands around them represent
 the 95% confidence intervals (95% CI).</p>
 <p><strong>Notice</strong> that this delay-adjusted calculation is
@@ -2115,9 +2157,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/severity-static.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/severity-static.html",
-  "dateCreated": "2026-07-04",
-  "dateModified": "2026-07-04",
-  "datePublished": "2026-07-04"
+  "dateCreated": "2026-07-05",
+  "dateModified": "2026-07-05",
+  "datePublished": "2026-07-05"
 }
 
   </script><script>
