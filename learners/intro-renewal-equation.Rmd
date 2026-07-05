@@ -169,13 +169,13 @@ $t−s$ to the infections observed on day $t$, according to the likelihood of ge
 
 Let us compute $R_t$ at $t=2,4$ using the renewal equation.
 
-**Case 1:** $t=2$ 
+**Case:** $t=2$ 
 
 From the incidence data we have  $I_1 = 5$ and $I_2 = 7$. From the generation time distribution we have $\omega(1) = 0.15$. Substituting into the renewal equation gives: 
 $$R_2 = \frac{I_2}{I_1*\omega(1)} = \frac{7}{5*0.15} = 9.33$$
 
 
-**Case 2:** $t=4$ 
+**Case:** $t=4$ 
 
 From the incidence data we have $I_3 = 6$ and $I_4 = 4$. From the generation time distribution we have $\omega(1) = 0.15, \omega(2) = 0.30$, and $\omega(3) = 0.24$. 
 $$R_4 = \frac{I_4}{I_3*\omega(1)+I_2*\omega(2)+I_1*\omega(3)} = \frac{4}{6*0.15 + 7*0.3+5*.24} = 0.95$$
