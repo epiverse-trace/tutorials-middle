@@ -150,11 +150,23 @@ where:
 
 Then the unbiased CFR would be
 
-$$ b_t = p_t \times u_t, \text{where} \;\; u_t = \frac{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}{\sum\limits_{i=0}^{t}c_i}$$
+$$
+b_t = p_t \times u_t
+$$
 
-If fact $u_t$ is called the **underestimation factor**, and the true  proportion of confirmed cases to die from the infection is then given by:
+where:
 
-$$ p_t = b_t\frac{\sum\limits_{i=0}^{t}c_i}{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}.$$
+$$
+u_t = \frac{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}{\sum\limits_{i=0}^{t}c_i} = \frac{\text{cumsum}(\text{expected outcomes})_t}{\text{cumsum}(\text{cases})_t}
+$$
+
+If fact $u_t$ is called the **underestimation factor**. A low $u_t$ means many cases are still unresolved, which drags the naive CFR down.
+
+Then, the true proportion of confirmed cases to die from the infection is then given by:
+
+$$
+p_t = b_t\frac{\sum\limits_{i=0}^{t}c_i}{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}
+$$
 
 In practice, the delay distribution $f_s$ is estimated from samples of onset-to-outcome data. However, when deaths are few or absent during the early stages of an outbreak, assumptions about $f_s$ must be made based on literature from previous outbreaks of the same or similar diseases.
 

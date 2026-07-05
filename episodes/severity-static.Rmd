@@ -413,13 +413,13 @@ It sums the incident cases $c_i$ over all onset days $i$ up to $t$, and for each
 
 For each day `i`, `{cfr}` computes the **expected number of outcomes** arising from that day's newly observed incident cases: the outcomes expected "at" day `i`. These per-day expected outcomes are then summed cumulatively across the full history up to time `t` to obtain the **total expected number of outcomes "by" time `t`**.
 
-#### First, the expected number of outcomes at day i
+#### First step: the expected number of outcomes at day i
 
 When using `<epiparameter>` class objects, the function `density()` can be applied to obtain the corresponding probability density function for incident cases "at" day `i`.
 
 For example, at day 0, the expected outcomes are equal to:
 
-- $c_0 \times (f_0)$: the number of observed cases on day 0 times the density at day 0.
+- $c_0 \times (f_0)$: the number of incident cases on day 0 times the density at day 0.
 
 ```{r}
 # By Day 0, the expected outcomes are:
@@ -427,12 +427,12 @@ ebola_30days$cases[1] *
   density(onset_to_death_ebola, at = 0)
 ```
 
-Notice that `ebola_30days$cases[1]` represent the number of observed cases on day `0` to fit the notation from the equation above.
+Notice that `ebola_30days$cases[1]` represent the number of incident cases on day `0` to fit the notation from the equation above.
 
 At day 1, the expected outcomes are equal to:
 
-- $c_0 \times (f_1)$: the number of observed cases on day 0 times the density at day 1, plus
-- $c_1 \times (f_0)$: the number of observed cases on day 1 times the density at day 0.
+- $c_0 \times (f_1)$: the number of incident cases on day 0 times the density at day 1, plus
+- $c_1 \times (f_0)$: the number of incident cases on day 1 times the density at day 0.
 
 ```{r}
 # By Day 1, the expected outcomes are:
@@ -444,9 +444,9 @@ ebola_30days$cases[1] *
 
 At day 2, the expected outcomes are equal to:
 
-- $c_0 \times (f_2)$: the number of observed cases on day 0 times the density at day 2, plus
-- $c_1 \times (f_1)$: the number of observed cases on day 1 times the density at day 1, plus
-- $c_2 \times (f_0)$: the number of observed cases on day 2 times the density at day 0.
+- $c_0 \times (f_2)$: the number of incident cases on day 0 times the density at day 2, plus
+- $c_1 \times (f_1)$: the number of incident cases on day 1 times the density at day 1, plus
+- $c_2 \times (f_0)$: the number of incident cases on day 2 times the density at day 0.
 
 ```{r}
 # By Day 3, the expected outcomes are:
@@ -460,14 +460,14 @@ ebola_30days$cases[1] *
 
 Notice that the delay index shifts by one day at a time: the most recent cases (day $t$) are weighted by $f_0$, the previous day's cases by $f_1$, and so on, with each earlier day moving one step further along the delay distribution.
 
-Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of `x`. `{cfr}` will then draw values accordingly, as shown below:
+Since the input value in `at` varies by day for incident cases of a given day (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of `x`. `{cfr}` will then draw values accordingly, as shown below:
 
 ```r
 # {cfr} uses the density of the distribution at different values of x
 function(x) density(onset_to_death_ebola, at = x)
 ```
 
-Internally, for the first 3 days (from day 0 to day 2), the function `cfr::estimate_outcomes()` performs this calculation:
+Internally, for the first 3 days (day 0, day 1, and day 2), the function `cfr::estimate_outcomes()` performs this calculation:
 
 ```{r}
 cfr::estimate_outcomes(
@@ -480,38 +480,17 @@ cfr::estimate_outcomes(
 
 The values printed above are `estimate_outcomes` for the corresponding day.
 
-### Second, the total expected number of outcomes "by" time t
+### Second step: the total expected number of outcomes "by" time t
 
 These per-day expected outcomes are then summed cumulatively across the full history up to time `t` to obtain the **total expected number of outcomes "by" time `t`**.
 
 By day 2, the total expected outcomes are equal to:
 
-- $c_0 \times (f_0 + f_1 + f_2)$: expected outcomes from day 0's cases, by day 2
-- $c_1 \times (f_0 + f_1)$: expected outcomes from day 1's cases, by day 2
-- $c_2 \times (f_0)$: expected outcomes from day 2's cases, by day 2
+- $c_0 \times (f_0 + f_1 + f_2)$: expected outcomes from day 0's incident cases, by day 2
+- $c_1 \times (f_0 + f_1)$: expected outcomes from day 1's incident cases, by day 2
+- $c_2 \times (f_0)$: expected outcomes from day 2's incident cases, by day 2
 
-Summing these terms gives the total expected outcomes by day 2. This is exactly the double summation shown above, now worked out term by term. 
-
-This total is used to calculate the **underestimation factor**, the fraction of cases whose outcomes are already known:
-
-$$
-u_t = \frac{\text{cumsum}(\text{expected outcomes})_t}{\text{cumsum}(\text{cases})_t}
-$$
-
-A low `u_t` means many cases are still unresolved, which drags the naive CFR down. We can see this in the last row of `cfr::estimate_outcomes()`:
-
-```{r}
-cfr::estimate_outcomes(
-  data = ebola_30days,
-  delay_density = function(x) density(onset_to_death_ebola, at = x)
-) %>%
-  dplyr::mutate(
-    u_t_manual = cumsum(estimated_outcomes) / cumsum(cases)
-  ) %>% 
-  slice_tail(n = 1)
-```
-
-At day 30, with a $u_t = 0.499$, only about half of the expected outcomes have become known so far. As a result, the naive CFR ($0.474$), based only on currently known deaths, substantially underestimates the delay-adjusted CFR ($0.950$), landing at just 49.9% of its value.
+Summing these terms gives the total expected outcomes by day 2. This match the double summation shown above. This total is used to calculate the **underestimation factor** (`u_t`), the fraction of cases whose outcomes are already known.
 
 ::::::::::::::::::
 
