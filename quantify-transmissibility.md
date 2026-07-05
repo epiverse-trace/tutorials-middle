@@ -54,7 +54,9 @@ go to the [main setup page](../learners/setup.md#software-setup).
 
 The [basic reproduction number](../learners/reference.md#basic), $R_0$, is the average number of cases caused by one infectious individual in an entirely susceptible population. 
 
-But in an ongoing outbreak, the population does not remain entirely susceptible as those that recover from infection are typically immune. Moreover, there can be changes in behaviour or other factors that affect transmission. When we are interested in monitoring changes in transmission we are therefore more interested in the value of the **effective reproduction number**, $R_t$, which represents the average number of cases caused by one infectious individual in the population at time $t$, given the current state of the population (including immunity levels and control measures).
+But in an ongoing outbreak, the population does not remain entirely susceptible as those that recover from infection are typically immune. Moreover, there can be changes in behaviour or other factors that affect transmission. 
+
+When we are interested in monitoring changes in transmission we are therefore more interested in the value of the **effective reproduction number**, $R_t$, which represents the average number of cases caused by one infectious individual in the population at time $t$, given the current state of the population (including immunity levels and control measures).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -155,7 +157,7 @@ Let's use `{tidyr}` and `{incidence2}` for this:
 
 
 ``` r
-cases_sliced <- incidence2::covidregionaldataUK %>%
+cases_incidence <- incidence2::covidregionaldataUK %>%
   tibble::as_tibble() %>%
   # Preprocess missing values
   tidyr::replace_na(base::list(cases_new = 0)) %>%
@@ -166,9 +168,7 @@ cases_sliced <- incidence2::covidregionaldataUK %>%
     count_values_to = "confirm",
     date_names_to = "date",
     complete_dates = TRUE
-  ) %>%
-  # Keep the first 90 dates
-  dplyr::slice_head(n = 90)
+  )
 ```
 
 With `incidence2::incidence()` we aggregate cases in different time *intervals* (i.e., days, weeks or months) or per *group* categories. Also we can have complete dates for all the range of dates per group category using `complete_dates = TRUE`.
@@ -186,18 +186,21 @@ incidence2::covidregionaldataUK %>%
   dplyr::select(date, cases_new) %>%
   dplyr::group_by(date) %>%
   dplyr::summarise(confirm = sum(cases_new, na.rm = TRUE)) %>%
-  dplyr::ungroup() %>%
-  dplyr::slice_head(n = 90)
+  dplyr::ungroup()
 ```
 
 However, the `incidence2::incidence()` function contains convenient arguments like `complete_dates` that facilitate getting an incidence object with the same range of dates for each grouping without the need of extra code lines or a time-series package.
 
 :::::::::::::::::::::::::
 
-In an outbreak situation it is likely we would only have access to the beginning of the input data set. Therefore we assume we only have the first 90 days of this data. 
+We'll frame this episode under the context of an **ongoing outbreak** with only the **first 90 days** of data observed (chosen here for illustration, not a required step).
 
 
 ``` r
+# Assume we only have the first 90 days of this data
+cases_sliced <- cases_incidence %>%
+  dplyr::slice_head(n = 90)
+
 plot(cases_sliced)
 ```
 
@@ -446,15 +449,15 @@ outbreaks::ebola_sim_clean$linelist %>%
   meanlog:
     - normal distribution:
       mean:
-        0.28
+        0.24
       sd:
         0.11
   sdlog:
     - normal distribution:
       mean:
-        0.99
+        1
       sd:
-        0.089
+        0.088
 ```
 
 ::::::::::::::::::
@@ -495,6 +498,114 @@ Notice that we can configure summary statistics (e.g., `mean`, `sd`) as input to
 When possible, we prefer specifying the "natural" distribution parameters (like `shape` and `rate` for Gamma, `meanlog` and `sdlog` for LogNormal) directly, rather than relying on the mean/sd conversion, since this avoids ambiguity and gives more precise control over the resulting distribution.
 
 :::::::::::::::::::
+
+::::::::: challenge
+
+Using the incubation period for measles from `{epiparameter}`, adapt this output to the `{EpiNow2}` distribution interface.
+
+
+``` r
+measles_incubation <- epiparameter::epiparameter_db(
+  disease = "Measles",
+  epi_name = "incubation",
+  single_epiparameter = TRUE
+)
+```
+
+::::::::: hint
+
+Use these questions as a guide:
+
+- Does the incubation time follow a LogNormal or Gamma distribution?
+- What are the *distribution parameters* of the incubation time?
+- Based on that distribution, which function should we use: `EpiNow2::LogNormal()` or `EpiNow2::Gamma()`?
+- What could be a maximum number of days for this distribution? Read this from a plot.
+
+You can copy and paste the corresponding parameter values directly from `{epiparameter}`'s output into `{EpiNow2}`'s input.
+
+:::::::::
+
+:::::::::::: solution
+
+Let's print the output:
+
+
+``` r
+measles_incubation
+```
+
+``` output
+Disease: Measles
+Pathogen: Measles Virus
+Epi Parameter: incubation period
+Study: Lessler J, Reich N, Brookmeyer R, Perl T, Nelson K, Cummings D (2009).
+"Incubation periods of acute respiratory viral infections: a systematic
+review." _The Lancet Infectious Diseases_.
+doi:10.1016/S1473-3099(09)70069-12
+<https://doi.org/10.1016/S1473-3099%2809%2970069-12>.
+Distribution: lnorm (days)
+Parameters:
+  meanlog: 2.526
+  sdlog: 0.207
+```
+
+It follows a LogNormal distribution (`lnorm`), with parameters: `meanlog` and `sdlog`, so the corresponding function is `EpiNow2::LogNormal()`.
+
+
+``` r
+plot(measles_incubation, xlim = c(0, 25))
+```
+
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-17-1.png" alt="" style="display: block; margin: auto;" />
+
+From plot, a plausible maximum value for the incubation period could be 20 days.
+
+We can also ask for the 99% quantile using the distribution functions for `<epiparameter>` objects.
+
+
+``` r
+quantile(measles_incubation, p = 0.99)
+```
+
+``` output
+[1] 20.23301
+```
+
+Then, our EpiNow2 function is:
+
+
+``` r
+measles_incubation_epinow <- EpiNow2::LogNormal(
+  meanlog = 2.526,
+  sdlog = 0.207,
+  max = 20
+)
+
+measles_incubation_epinow
+```
+
+``` output
+- lognormal distribution (max: 20):
+  meanlog:
+    2.5
+  sdlog:
+    0.21
+```
+
+The plot for {EpiNow2} is:
+
+
+``` r
+plot(measles_incubation_epinow)
+```
+
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-20-1.png" alt="" style="display: block; margin: auto;" />
+
+Notice that if we forget to define a maximum value, we will get an error in this step.
+
+::::::::::::
+
+:::::::::
 
 ## Finding estimates
 
@@ -607,9 +718,15 @@ We can extract and visualise estimates of the effective reproduction number thro
 plot(estimates, type = "R")
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-25-1.png" alt="" style="display: block; margin: auto;" />
 
-The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. The plot distinguishes three categories: **Estimate** (green) uses all available data; **Estimate based on partial data** (orange) is based on less data (because infections around that time are more likely not to have been observed yet) and therefore has increasingly wider intervals towards the date of the last data point; and **Forecast** (purple) is a projection ahead of time.
+The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. 
+
+The plot distinguishes three categories: 
+
+- **Estimate** (green) uses all available data; 
+- **Estimate based on partial data** (orange) is based on less data (because infections around that time are more likely not to have been observed yet) and therefore has increasingly wider intervals towards the date of the last data point; and 
+- **Forecast** (purple) is a projection ahead of time.
 
 We can also visualise the growth rate estimate through time: 
 
@@ -617,7 +734,7 @@ We can also visualise the growth rate estimate through time:
 plot(estimates, type = "growth_rate")
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-20-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-26-1.png" alt="" style="display: block; margin: auto;" />
 
 To extract a summary of the key transmission metrics at the *latest date* in the data:
 
@@ -629,22 +746,22 @@ summary(estimates)
 ``` output
                         measure               estimate
                          <char>                 <char>
-1:       New infections per day   7985 (4789 -- 13224)
-2:   Expected change in reports      Likely decreasing
-3:   Effective reproduction no.     0.97 (0.74 -- 1.2)
-4:               Rate of growth -0.012 (-0.1 -- 0.078)
-5: Doubling/halving time (days)      -59 (8.9 -- -6.8)
+1:       New infections per day   7892 (4760 -- 13112)
+2:   Expected change in reports                 Stable
+3:   Effective reproduction no.     0.96 (0.74 -- 1.2)
+4:               Rate of growth -0.013 (-0.1 -- 0.075)
+5: Doubling/halving time (days)      -52 (9.3 -- -6.7)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7985 (4789 -- 13224).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7892 (4760 -- 13112).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.74 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.012 (-0.1 -- 0.078).
++ The exponential growth rate of case numbers is -0.013 (-0.1 -- 0.075).
 
-+ The doubling time (the time taken for case numbers to double) is -59 (8.9 -- -6.8).
++ The doubling time (the time taken for case numbers to double) is -52 (9.3 -- -6.7).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
@@ -670,6 +787,26 @@ A factor describing the expected change in reports based on the posterior probab
 In all `{EpiNow2}` output figures, shaded regions reflect 90%, 50%, and 20% credible intervals in order from lightest to darkest.
 
 ::::::::::::::::::::::::::
+
+:::::::::::::::::: challenge
+
+In the output from `plot(estimates, type = "R")`, what input parameter delimits the length of the trajectory with an `Estimate based on parial data` (orange)?
+
+::::::::: hint
+
+As we explain above, infections around that time are more likely not to have been observed yet. So the input parameter must inform the probability of observing new infections.
+
+:::::::::
+
+::::::::: solution
+
+The finite maximum value of the *generation time* distribution define the range of the `Estimate based on parial data`.
+
+The *generation time* was configured with a maximum value of 20 days.
+
+:::::::::
+
+::::::::::::::::::
 
 ::::::::::: checklist
 

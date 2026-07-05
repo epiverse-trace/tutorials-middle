@@ -62,7 +62,7 @@ Common questions at the early stage of an epidemic include:
 
 We can assess the pandemic potential of an epidemic with two critical measurements: the transmissibility and the clinical severity
 ([Fraser et al., 2009](https://www.science.org/doi/full/10.1126/science.1176062), 
-[CDC, 2024](htthttps://www.cdc.gov/pandemic-flu/php/national-strategy/severity-assessment-framework.html)).
+[CDC, 2024](https://www.cdc.gov/pandemic-flu/php/national-strategy/severity-assessment-framework.html)).
 
 ![HHS Pandemic Planning Scenarios based on the Pandemic Severity Assessment Framework. This uses a combined measure of clinical severity and transmissibility to characterise influenza pandemic scenarios. **HHS**: United States Department of Health and Human Services ([CDC, 2016](https://archive.cdc.gov/www_cdc_gov/flu/pandemic-resources/national-strategy/severity-assessment-framework-508.html)).](fig/cfr-hhs-scenarios-psaf.png){alt='The horizontal axis is the scaled measure of clinical severity, ranging from 1 to 7, where 1 is low, 4 is moderate, and 7 is very severe. The vertical axis is the scaled measure of transmissibility, ranging from 1 to 5, where 1 is low, 3 is moderate, and 5 is highly transmissible. On the graph, HHS pandemic planning scenarios are labeled across four quadrants (A, B, C and D). From left to right, the scenarios are “seasonal range”, “moderate pandemic”, “severe pandemic” and “very severe pandemic.” As clinical severity increases along the horizontal axis, or as transmissibility increases along the vertical axis, the severity of the pandemic planning scenario also increases.'}
 
@@ -159,7 +159,7 @@ ebola1976 %>%
 
 <img src="fig/severity-static-rendered-unnamed-chunk-2-1.png" alt="" style="display: block; margin: auto;" />
 
-We'll frame this episode under the context of an **ongoing outbreak** with only the **first 30 days** of data observed.
+We'll frame this episode under the context of an **ongoing outbreak** with only the **first 30 days** of data observed (chosen here for illustration, not a required step).
 
 
 ``` r
@@ -187,6 +187,8 @@ ebola_30days
 10 1976-09-03     1      0
 # ℹ 20 more rows
 ```
+
+In a real-time analysis, always use the latest data available at the moment.
 
 :::::::::::::::::: callout
 
@@ -225,6 +227,11 @@ cfr::cfr_static(data = ebola_30days)
   severity_estimate severity_low severity_high
 1         0.4740741    0.3875497     0.5617606
 ```
+
+
+
+
+The naive CFR estimates the overall disease severity, given the _latest data available at the moment_, as 0.4740741 with a 95% confidence interval between 0.3875497 and 0.5617606.
 
 :::::::::::::::::::::::::::::::::::::::: challenge
 
@@ -296,6 +303,10 @@ sarscov2_input %>%
   severity_estimate severity_low severity_high
 1        0.01895208   0.01828832    0.01963342
 ```
+
+
+
+The naive CFR estimates the overall disease severity, given the _latest data available at the moment_, as 0.0189521 with a 95% confidence interval between 0.0182883 and 0.0196334.
 
 ::::::::::::::::::::
 
@@ -376,7 +387,7 @@ onset_to_death_ebola <- epiparameter::epiparameter_db(
 plot(onset_to_death_ebola, xlim = c(0, 40))
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-10-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-12-1.png" alt="" style="display: block; margin: auto;" />
 
 To calculate the delay-adjusted CFR, we can use the `cfr_static()` function with the `data` and `delay_density` arguments.
 
@@ -397,7 +408,7 @@ cfr::cfr_static(
 
 
 
-The delay-adjusted CFR estimates the overall disease severity, given the _latest data available at the moment_, as 0.9502 with a 95% confidence interval between 0.881 and 0.9861 — substantially higher than the naive estimate. This larger value reflects the correction for deaths that are still to be reported among the cases observed in the first 30 days.
+The delay-adjusted CFR estimates the overall disease severity, given the _latest data available at the moment_, as 0.9502 with a 95% confidence interval between 0.881 and 0.9861, substantially higher than the naive estimate. This larger value reflects the correction for deaths that are still to be reported among the cases observed in the first 30 days.
 
 ::::::::::::::::::::::::::: discussion
 
@@ -414,9 +425,9 @@ in the "More Resources" section of this tutorial's website.
 
 ### Why is density() expressed as a function of x?
 
-First, read the guide on [How to adjust the CFR for delays](../learners/intro-cfr-adjust-delays.md).
+First, read the guide on [How to adjust the CFR for delays](../learners/intro-cfr-adjust-delays.md). Optionally, review the definition of a probability density function (PDF) in the episode on [Use delay distributions in analysis](../episodes/delays-access.md).
 
-You will find that the core calculation is done by the term:
+You will find that the core calculation is to get the **total expected number of cases with known outcomes by time `t`**. This is to account for the fact that some fraction of recent cases haven't had time to resolve to death/recovery yet. It is expressed by the term:
 
 $$
 \sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
@@ -427,13 +438,17 @@ where:
 - $c_i$ is the number of new confirmed cases on day i 
 - $f_s$ the conditional probability density function for the delay of $s$ days, from onset to death, given death.
 
-The term $\sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}$ represents the **total expected number of cases with known outcomes by time `t`**. It sums all incident cases $c_i$, each weighted by the probability density function $f_{j−i}$ that their outcomes become known after a delay of $j−i$ days.
+It sums the incident cases $c_i$ over all onset days $i$ up to $t$, and for each one, weights it by $f_{j-i}$, the probability of the outcome becoming known on day $j$, summed over all days $j$.
 
-On each analysis day, `{cfr}` computes, for each case, the **expected number of outcomes by time `t`**. When using `<epiparameter>` class objects, the function `density()` can be applied to obtain the corresponding probability density function for each case on each day.
+For each day `i`, `{cfr}` computes the **expected number of outcomes** arising from that day's newly observed incident cases: the outcomes expected "at" day `i`. These per-day expected outcomes are then summed cumulatively across the full history up to time `t` to obtain the **total expected number of outcomes "by" time `t`**.
 
-For example, by day 0, the expected outcomes are equal to:
+#### First step: the expected number of outcomes at day i
 
-- $c_0 \times (f_0)$: the number of observed cases on day 0 times the density at day 0.
+When using `<epiparameter>` class objects, the function `density()` can be applied to obtain the corresponding probability density function for incident cases "at" day `i`.
+
+For example, at day 0, the expected outcomes are equal to:
+
+- $c_0 \times (f_0)$: the number of incident cases on day 0 times the density at day 0.
 
 
 ``` r
@@ -446,10 +461,12 @@ ebola_30days$cases[1] *
 [1] 0
 ```
 
-By day 1, the expected outcomes are equal to:
+Notice that `ebola_30days$cases[1]` represent the number of incident cases on day `0` to fit the notation from the equation above.
 
-- $c_0 \times (f_0 + f_1)$: the number of observed cases on day 0 times the density at day 1, plus
-- $c_1 \times (f_0)$: the number of observed cases on day 1 times the density at day 0.
+At day 1, the expected outcomes are equal to:
+
+- $c_0 \times (f_1)$: the number of incident cases on day 0 times the density at day 1, plus
+- $c_1 \times (f_0)$: the number of incident cases on day 1 times the density at day 0.
 
 
 ``` r
@@ -464,11 +481,11 @@ ebola_30days$cases[1] *
 [1] 0.06495664
 ```
 
-By day 2, the expected outcomes are equal to:
+At day 2, the expected outcomes are equal to:
 
-- $c_0 \times (f_0 + f_1 + f_2)$: the number of observed cases on day 0 times the density at day 2, plus
-- $c_1 \times (f_0 + f_1)$: the number of observed cases on day 1 times the density at day 1, plus
-- $c_2 \times (f_0)$: the number of observed cases on day 2 times the density at day 0.
+- $c_0 \times (f_2)$: the number of incident cases on day 0 times the density at day 2, plus
+- $c_1 \times (f_1)$: the number of incident cases on day 1 times the density at day 1, plus
+- $c_2 \times (f_0)$: the number of incident cases on day 2 times the density at day 0.
 
 
 ``` r
@@ -485,18 +502,16 @@ ebola_30days$cases[1] *
 [1] 0.08295091
 ```
 
-Notice that `ebola_30days$cases[1]` represent the number of observed cases on day `0` to fit the notation from the equation above.
+Notice that the delay index shifts by one day at a time: the most recent cases (day $t$) are weighted by $f_0$, the previous day's cases by $f_1$, and so on, with each earlier day moving one step further along the delay distribution.
 
-Notice also that the most recently observed cases start the delay distribution from `0`, while the others continue with the following day.
-
-Since the input value in `at` varies by day for each case (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of `x`. `{cfr}` will then draw values accordingly, as shown below:
+Since the input value in `at` varies by day for incident cases of a given day (`at = 0`, `at = 1`, `at = 2`, ...), the `density()` needs to be expressed as a function of `x`. `{cfr}` will then draw values accordingly, as shown below:
 
 ```r
 # {cfr} uses the density of the distribution at different values of x
 function(x) density(onset_to_death_ebola, at = x)
 ```
 
-Internally, for the first 3 days (from day 0 to day 2), the function `cfr::estimate_outcomes()` performs this calculation:
+Internally, for the first 3 days (day 0, day 1, and day 2), the function `cfr::estimate_outcomes()` performs this calculation:
 
 
 ``` r
@@ -513,6 +528,18 @@ cfr::estimate_outcomes(
 ```
 
 The values printed above are `estimate_outcomes` for the corresponding day.
+
+### Second step: the total expected number of outcomes "by" time t
+
+These per-day expected outcomes are then summed cumulatively across the full history up to time `t` to obtain the **total expected number of outcomes "by" time `t`**.
+
+By day 2, the total expected outcomes are equal to:
+
+- $c_0 \times (f_0 + f_1 + f_2)$: expected outcomes from day 0's incident cases, by day 2
+- $c_1 \times (f_0 + f_1)$: expected outcomes from day 1's incident cases, by day 2
+- $c_2 \times (f_0)$: expected outcomes from day 2's incident cases, by day 2
+
+Summing these terms gives the total expected outcomes by day 2. This match the double summation shown above. This total is used to calculate the **underestimation factor** (`u_t`), the fraction of cases whose outcomes are already known.
 
 ::::::::::::::::::
 
@@ -549,7 +576,7 @@ onset_to_death_ebola %>%
   plot(xlim = c(0, 40))
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-17-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-19-1.png" alt="" style="display: block; margin: auto;" />
 
 ::::::::::::::::::
 
@@ -638,7 +665,7 @@ sarscov2_input %>%
 1            0.0734        0.071        0.0759
 ```
 
-Interpret the comparison between the naive and delay-adjusted CFR estimates.
+Task: Interpret the comparison between the naive and delay-adjusted CFR estimates.
 
 ::::::::::::::::::::
 
@@ -727,7 +754,7 @@ dplyr::bind_rows(
   )
 ```
 
-<img src="fig/severity-static-rendered-unnamed-chunk-26-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/severity-static-rendered-unnamed-chunk-28-1.png" alt="" style="display: block; margin: auto;" />
 
 The red and blue lines represent the delay-adjusted and naive CFR, respectively, throughout the outbreak. The bands around them represent the 95% confidence intervals (95% CI).
 

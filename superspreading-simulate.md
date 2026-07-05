@@ -110,7 +110,12 @@ The *size* calculation includes the first case, and the *length* calculation con
 
 ::::::::::::::::::::
 
-To use `{epichains}`, we need to know (or assume) two key epidemiological values: the offspring distribution and the generation time.
+To use `{epichains}`, we need to know (or assume) two key epidemiological values: 
+
+- the offspring distribution and 
+- the generation time.
+
+You may recognize these two parameters from the [Access epidemiological delay distributions](../episodes/delays-access.md#generation-time-vs-serial-interval) tutorial, where we first introduced generation time and the reproduction number.
 
 ## Get the offspring distribution
 
