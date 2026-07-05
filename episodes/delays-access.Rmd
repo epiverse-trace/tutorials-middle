@@ -82,7 +82,7 @@ This helps us remember package functions and avoid namespace conflicts.
 
 If we want to estimate the transmissibility of an infection, it's common to use a package such as `{EpiEstim}` or `{EpiNow2}`. 
 
-- The `{EpiEstim}` package allows real-time estimation of the reproduction number using case data over time, reflecting how transmission changes based on when symptoms appear. 
+- The `{EpiEstim}` package allows real-time estimation of the [reproduction number](../learners/reference.md#effectiverepro) using case data over time, reflecting how transmission changes based on when symptoms appear. 
 
 - For estimating transmission based on when people were actually infected (rather than symptom onset), the `{EpiNow2}` package extends this idea by combining it with a model that accounts for delays in observed data. 
 
@@ -123,7 +123,7 @@ The [`{epireview}` R package](https://mrc-ide.github.io/epireview/) has paramete
 
 ## Generation time vs serial interval
 
-The generation time, jointly with the reproduction number ($R$), can provide valuable insights into the likely growth rate of the epidemic, and hence inform the implementation of control measures. The larger the value of $R$ and/or the shorter the generation time, the more new infections that we would expect per day, and hence the faster the incidence of disease cases will grow.
+The generation time, jointly with the [reproduction number](../learners/reference.md#basic) ($R$), can provide valuable insights into the likely growth rate of the epidemic, and hence inform the implementation of control measures. The larger the value of $R$ and/or the shorter the generation time, the more new infections that we would expect per day, and hence the faster the incidence of disease cases will grow.
 
 ![Video from the MRC Centre for Global Infectious Disease Analysis, Ep 76. Science In Context - Epi Parameter Review Group with Dr Anne Cori (27-07-2023) at <https://youtu.be/VvpYHhFDIjI?si=XiUyjmSV1gKNdrrL>](fig/reproduction-generation-time.png)
 
@@ -194,7 +194,7 @@ The peak of each curve can inform you about the location of the mean of each dis
 
 ::::::::::::::::: solution
 
-**Which one would be harder to control?**
+**Which one would have a larger number of generations in less time?**
 
 COVID-19
 
@@ -216,7 +216,9 @@ The objective of the assessment above is to assess the interpretation of a large
 
 :::::::::::::: checklist
 
-The *generation time* distribution is the delay from one infection to the next, often approximated by the *serial interval* which is easier to observe. It can be used to estimate the transmissibility of a disease by calculating the effective reproduction number ($R_{t}$).
+The *generation time* distribution is the delay from one infection to the next, often approximated by the *serial interval* which is easier to observe. 
+
+It can be used to estimate the transmissibility of a disease by calculating the effective reproduction number ($R_{t}$).
 
 If you want to gain familiarity with how this distribution feeds into that calculation, you can read the complementary resource on [Introduction to the Renewal equation](../learners/intro-renewal-equation.md).
 
