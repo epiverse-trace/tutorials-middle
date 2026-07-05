@@ -456,7 +456,7 @@ Then, our EpiNow2 function is:
 ```{r}
 measles_incubation_epinow <- EpiNow2::LogNormal(
   meanlog = 2.526,
-  sdlog = 0.207, 
+  sdlog = 0.207,
   max = 20
 )
 
