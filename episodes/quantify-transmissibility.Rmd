@@ -309,34 +309,6 @@ reporting_delay_variable <- EpiNow2::LogNormal(
 )
 ```
 
-:::::::::::::::::::::: spoiler
-
-**Visualise a log normal distribution using {epiparameter}**
-
-Using `epiparameter::epiparameter()` we can create a custom distribution. The fixed log normal distribution will look like:
-
-```r
-library(epiparameter)
-```
-
-```{r,message=FALSE,warning=FALSE}
-epiparameter::epiparameter(
-  disease = "covid",
-  epi_name = "reporting delay",
-  prob_distribution =
-    epiparameter::create_prob_distribution(
-      prob_distribution = "lnorm",
-      prob_distribution_params = c(
-        meanlog = 2,
-        sdlog = 1
-      )
-    )
-) %>%
-  plot()
-```
-
-::::::::::::::::::::::
-
 :::::::::::::::::: spoiler
 
 **How to get the reporting delay from data?**
@@ -445,12 +417,6 @@ plot(measles_incubation, xlim = c(0, 25))
 
 From plot, a plausible maximum value for the incubation period could be 20 days.
 
-We can also ask for the 99% quantile using the distribution functions for `<epiparameter>` objects.
-
-```{r}
-quantile(measles_incubation, p = 0.99)
-```
-
 Then, our EpiNow2 function is:
 
 ```{r}
@@ -462,6 +428,8 @@ measles_incubation_epinow <- EpiNow2::LogNormal(
 
 measles_incubation_epinow
 ```
+
+Or `epiparameter::get_parameters(measles_incubation)` to reuse parameters directly.
 
 The plot for {EpiNow2} is:
 
