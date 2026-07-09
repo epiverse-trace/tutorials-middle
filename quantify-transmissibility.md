@@ -383,37 +383,6 @@ reporting_delay_variable <- EpiNow2::LogNormal(
 )
 ```
 
-:::::::::::::::::::::: spoiler
-
-**Visualise a log normal distribution using {epiparameter}**
-
-Using `epiparameter::epiparameter()` we can create a custom distribution. The fixed log normal distribution will look like:
-
-```r
-library(epiparameter)
-```
-
-
-``` r
-epiparameter::epiparameter(
-  disease = "covid",
-  epi_name = "reporting delay",
-  prob_distribution =
-    epiparameter::create_prob_distribution(
-      prob_distribution = "lnorm",
-      prob_distribution_params = c(
-        meanlog = 2,
-        sdlog = 1
-      )
-    )
-) %>%
-  plot()
-```
-
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-12-1.png" alt="" style="display: block; margin: auto;" />
-
-::::::::::::::::::::::
-
 :::::::::::::::::: spoiler
 
 **How to get the reporting delay from data?**
@@ -449,15 +418,15 @@ outbreaks::ebola_sim_clean$linelist %>%
   meanlog:
     - normal distribution:
       mean:
-        0.24
+        0.23
       sd:
-        0.11
+        0.1
   sdlog:
     - normal distribution:
       mean:
-        1
+        0.98
       sd:
-        0.088
+        0.079
 ```
 
 ::::::::::::::::::
@@ -556,20 +525,9 @@ It follows a LogNormal distribution (`lnorm`), with parameters: `meanlog` and `s
 plot(measles_incubation, xlim = c(0, 25))
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-17-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-16-1.png" alt="" style="display: block; margin: auto;" />
 
 From plot, a plausible maximum value for the incubation period could be 20 days.
-
-We can also ask for the 99% quantile using the distribution functions for `<epiparameter>` objects.
-
-
-``` r
-quantile(measles_incubation, p = 0.99)
-```
-
-``` output
-[1] 20.23301
-```
 
 Then, our EpiNow2 function is:
 
@@ -592,6 +550,8 @@ measles_incubation_epinow
     0.21
 ```
 
+Or `epiparameter::get_parameters(measles_incubation)` to reuse parameters directly.
+
 The plot for {EpiNow2} is:
 
 
@@ -599,7 +559,7 @@ The plot for {EpiNow2} is:
 plot(measles_incubation_epinow)
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-20-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-18-1.png" alt="" style="display: block; margin: auto;" />
 
 Notice that if we forget to define a maximum value, we will get an error in this step.
 
@@ -718,7 +678,7 @@ We can extract and visualise estimates of the effective reproduction number thro
 plot(estimates, type = "R")
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-25-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-23-1.png" alt="" style="display: block; margin: auto;" />
 
 The uncertainty in the estimates increases through time. This is because estimates are informed by data in the past - within the delay periods. 
 
@@ -734,7 +694,7 @@ We can also visualise the growth rate estimate through time:
 plot(estimates, type = "growth_rate")
 ```
 
-<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-26-1.png" alt="" style="display: block; margin: auto;" />
+<img src="fig/quantify-transmissibility-rendered-unnamed-chunk-24-1.png" alt="" style="display: block; margin: auto;" />
 
 To extract a summary of the key transmission metrics at the *latest date* in the data:
 
@@ -746,22 +706,22 @@ summary(estimates)
 ``` output
                         measure               estimate
                          <char>                 <char>
-1:       New infections per day   7892 (4760 -- 13112)
+1:       New infections per day   7973 (4780 -- 12962)
 2:   Expected change in reports                 Stable
-3:   Effective reproduction no.     0.96 (0.74 -- 1.2)
-4:               Rate of growth -0.013 (-0.1 -- 0.075)
-5: Doubling/halving time (days)      -52 (9.3 -- -6.7)
+3:   Effective reproduction no.     0.97 (0.74 -- 1.2)
+4:               Rate of growth -0.011 (-0.1 -- 0.077)
+5: Doubling/halving time (days)        -63 (9 -- -6.8)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7892 (4760 -- 13112).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7973 (4780 -- 12962).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.74 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.013 (-0.1 -- 0.075).
++ The exponential growth rate of case numbers is -0.011 (-0.1 -- 0.077).
 
-+ The doubling time (the time taken for case numbers to double) is -52 (9.3 -- -6.7).
++ The doubling time (the time taken for case numbers to double) is -63 (9 -- -6.8).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
