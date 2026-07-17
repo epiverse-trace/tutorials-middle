@@ -8599,7 +8599,7 @@ any links that you are not going to use.
  -->
 </section></section><section id="aio-superspreading-simulate"><p>Content from <a href="superspreading-simulate.html">Simulate transmission chains</a></p>
 <hr>
-<p>Last updated on 2026-07-05 |
+<p>Last updated on 2026-07-17 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/superspreading-simulate.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <p>Estimated time: <i aria-hidden="true" data-feather="clock"></i> 32 minutes</p>
@@ -8657,7 +8657,7 @@ including Poisson and negative binomial.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler1" aria-expanded="false" aria-controls="collapseSpoiler1">
   <h3 class="accordion-header" id="headingSpoiler1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Show details </h3>
 </button>
-<div id="collapseSpoiler1" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler1" aria-labelledby="headingSpoiler1">
+<div id="collapseSpoiler1" class="accordion-collapse collapse" aria-labelledby="headingSpoiler1" data-bs-parent="#accordionSpoiler1">
 <div class="accordion-body">
 <p>Install packages if they are not already installed</p>
 <div class="codewrapper sourceCode" id="cb1">
@@ -8849,7 +8849,7 @@ specific arguments.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler2" aria-expanded="false" aria-controls="collapseSpoiler2">
   <h3 class="accordion-header" id="headingSpoiler2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Poisson and other distributions </h3>
 </button>
-<div id="collapseSpoiler2" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler2" aria-labelledby="headingSpoiler2">
+<div id="collapseSpoiler2" class="accordion-collapse collapse" aria-labelledby="headingSpoiler2" data-bs-parent="#accordionSpoiler2">
 <div class="accordion-body">
 <p><a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> can accept any R function that generates
 random numbers, so the specified arguments will change depending on the
@@ -8895,7 +8895,7 @@ precise time of infection.</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler3" aria-expanded="false" aria-controls="collapseSpoiler3">
   <h3 class="accordion-header" id="headingSpoiler3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> generation time vs serial interval </h3>
 </button>
-<div id="collapseSpoiler3" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler3" aria-labelledby="headingSpoiler3">
+<div id="collapseSpoiler3" class="accordion-collapse collapse" aria-labelledby="headingSpoiler3" data-bs-parent="#accordionSpoiler3">
 <div class="accordion-body">
 <figure><img src="../fig/serial-interval-observed.jpeg" alt="A schematic of the relationship of different time periods of transmission between an infector and an infectee in a transmission pair. Exposure window is defined as the time interval having viral exposure, and transmission window is defined as the time interval for onward transmission with respect to the infection time (Chung Lau et al., 2021)." class="figure mx-auto d-block"><div class="figcaption">A schematic of the relationship of different
 time periods of transmission between an infector and an infectee in a
@@ -8992,7 +8992,7 @@ with delay distributions</a> vignette for further context.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor1" aria-expanded="false" aria-controls="collapseInstructor1">
   <h3 class="accordion-header" id="headingInstructor1">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor1" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor1" aria-labelledby="headingInstructor1">
+<div id="collapseInstructor1" class="accordion-collapse collapse" aria-labelledby="headingInstructor1" data-bs-parent="#accordionInstructor1">
 <div class="accordion-body">
 <p>The function to generate random number from an
 <code>&lt;epiparameter&gt;</code> class object can also accept this
@@ -9163,7 +9163,7 @@ simulating multiple chains. Change the <code>statistic</code> from
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>If you need help, return to the “Chain size and length” callout box
 from the beginning.</p>
@@ -9190,7 +9190,7 @@ simulated <code>chain</code> number 30.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> The epichains object </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Let’s use <code>dplyr::filter()</code> for this:</p>
 <div class="codewrapper sourceCode" id="cb18">
@@ -9254,7 +9254,7 @@ and three generations. These numbers are more visible when printing the
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> The epichains data frame </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -9309,7 +9309,7 @@ between day 24 and day 31, after the first known infection.”</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> An infectee data frame </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <p>The output data frame collects <strong>infectees</strong> as the
 observation unit:</p>
@@ -9633,18 +9633,40 @@ surveillance days.</li>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># get the round number (day) of infection times</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>day <span class="op">=</span> <span class="fu">ceiling</span><span class="op">(</span><span class="va">time</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="co"># count the daily number of cases in each chain</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">chain</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"cases"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="co"># count the number of daily incident cases in each chain</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">chain</span>, <span class="va">day</span>, name <span class="op">=</span> <span class="st">"cases_new"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="co"># calculate the cumulative number of cases for each chain</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">group_by</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>cases_cumsum <span class="op">=</span> <span class="fu">cumsum</span><span class="op">(</span><span class="va">cases</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>cases_cumsum <span class="op">=</span> <span class="fu">cumsum</span><span class="op">(</span><span class="va">cases_new</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">ungroup</span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<p>To better understand the output we just produced, let’s print more
+lines of it. The relevant columns are:</p>
+<ul>
+<li>
+<strong><code>days</code></strong>: the discretized time step of the
+simulation (continuous time binned into days)</li>
+<li>
+<strong><code>cases_new</code></strong>: the number of new incident
+cases on that day</li>
+<li>
+<strong><code>cases_cumsum</code></strong>: the cumulative sum of
+cases per day, computed within each transmission chain</li>
+</ul>
+<div class="codewrapper sourceCode" id="cb35">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Print a couple of chains to better understand the output</span></span>
+<span><span class="va">aggregate_chains</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">chain</span><span class="op">)</span> <span class="op">%&gt;%</span> </span>
+<span>  <span class="fu">print</span><span class="op">(</span>n<span class="op">=</span><span class="fl">50</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Before the plot, let’s create a summary table with the total time
 duration and size of each chain. We can use the <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a>
 “combo” of <code>group_by()</code>, <code>summarise()</code> and
 <code>ungroup()</code>:</p>
-<div class="codewrapper sourceCode" id="cb35">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -9682,7 +9704,7 @@ duration and size of each chain. We can use the <a href="https://dplyr.tidyverse
 </div>
 <p>Now, we are prepared for using the <a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a>
 package:</p>
-<div class="codewrapper sourceCode" id="cb37">
+<div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -9719,13 +9741,12 @@ outbreaks of MERS disease.</p>
 <p>We can count how many chains reached the 100-case threshold using
 <a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a> functions. This output should give us equivalent
 results to <code>summary(multiple_epichains)</code>:</p>
-<div class="codewrapper sourceCode" id="cb38">
+<div class="codewrapper sourceCode" id="cb39">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># number of chains that reached the 100-case threshold</span></span>
 <span><span class="va">summary_chains</span> <span class="op">%&gt;%</span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">arrange</span><span class="op">(</span><span class="fu">desc</span><span class="op">(</span><span class="va">cases_total</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span><span class="va">cases_total</span> <span class="op">&gt;</span> <span class="fl">100</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
@@ -9741,7 +9762,7 @@ results to <code>summary(multiple_epichains)</code>:</p>
 <button class="accordion-button spoiler-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSpoiler4" aria-expanded="false" aria-controls="collapseSpoiler4">
   <h3 class="accordion-header" id="headingSpoiler4">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="eye"></i></div> Observed cases vs simulated chains </h3>
 </button>
-<div id="collapseSpoiler4" class="accordion-collapse collapse" data-bs-parent="#accordionSpoiler4" aria-labelledby="headingSpoiler4">
+<div id="collapseSpoiler4" class="accordion-collapse collapse" aria-labelledby="headingSpoiler4" data-bs-parent="#accordionSpoiler4">
 <div class="accordion-body">
 <p>Let’s overlap the cumulative number of observed cases using the
 linelist object from the <code>mers_korea_2015</code> dataset of the
@@ -9750,7 +9771,7 @@ plot daily total cases over time, we use <a href="https://www.reconverse.org/inc
 convert the linelist to an <code>&lt;incidence2&gt;</code> object,
 complete the missing dates of the time series with
 <code>complete_dates()</code></p>
-<div class="codewrapper sourceCode" id="cb40">
+<div class="codewrapper sourceCode" id="cb41">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -9766,7 +9787,7 @@ complete the missing dates of the time series with
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">mutate</span><span class="op">(</span>day <span class="op">=</span> <span class="fu">as.numeric</span><span class="op">(</span><span class="va">day</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Use <code>plot()</code> to make an incidence plot:</p>
-<div class="codewrapper sourceCode" id="cb41">
+<div class="codewrapper sourceCode" id="cb42">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -9855,11 +9876,11 @@ cases?</li>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint2" aria-expanded="false" aria-controls="collapseHint2">
   <h4 class="accordion-header" id="headingHint2"> Give me a hint </h4>
 </button>
-<div id="collapseHint2" class="accordion-collapse collapse" data-bs-parent="#accordionHint2" aria-labelledby="headingHint2">
+<div id="collapseHint2" class="accordion-collapse collapse" aria-labelledby="headingHint2" data-bs-parent="#accordionHint2">
 <div class="accordion-body">
 <p>With <a href="https://github.com/epiverse-trace/epiparameter/" class="external-link">epiparameter</a>, you can access and use offspring
 and delay distributions from previous Ebola outbreaks.</p>
-<div class="codewrapper sourceCode" id="cb42">
+<div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -9884,7 +9905,7 @@ and delay distributions from previous Ebola outbreaks.</p>
 5 SARS                          offspring distribution     2
 6 Smallpox                      offspring distribution     4</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb44">
+<div class="codewrapper sourceCode" id="cb45">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -9917,9 +9938,9 @@ same day, it may not be necessary to use iteration for this one.</p>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor2" aria-expanded="false" aria-controls="collapseInstructor2">
   <h3 class="accordion-header" id="headingInstructor2">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor2" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor2" aria-labelledby="headingInstructor2">
+<div id="collapseInstructor2" class="accordion-collapse collapse" aria-labelledby="headingInstructor2" data-bs-parent="#accordionInstructor2">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb46">
+<div class="codewrapper sourceCode" id="cb47">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -9993,7 +10014,7 @@ MERS (<span class="math inline">\(R\)</span> = 0.6 and <span class="math inline"
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint3" aria-expanded="false" aria-controls="collapseHint3">
   <h4 class="accordion-header" id="headingHint3"> Epidemic Risk assessment accounting for superspreading </h4>
 </button>
-<div id="collapseHint3" class="accordion-collapse collapse" data-bs-parent="#accordionHint3" aria-labelledby="headingHint3">
+<div id="collapseHint3" class="accordion-collapse collapse" aria-labelledby="headingHint3" data-bs-parent="#accordionHint3">
 <div class="accordion-body">
 <p>With <a href="https://github.com/epiverse-trace/superspreading" class="external-link">superspreading</a>, you can get numerical solutions
 to processes that <a href="https://github.com/epiverse-trace/epichains" class="external-link">epichains</a> solve using branching
@@ -10048,11 +10069,11 @@ object. This should help us count how many chains reach a
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint4" aria-expanded="false" aria-controls="collapseHint4">
   <h4 class="accordion-header" id="headingHint4"> Give me a hint </h4>
 </button>
-<div id="collapseHint4" class="accordion-collapse collapse" data-bs-parent="#accordionHint4" aria-labelledby="headingHint4">
+<div id="collapseHint4" class="accordion-collapse collapse" aria-labelledby="headingHint4" data-bs-parent="#accordionHint4">
 <div class="accordion-body">
 <p>Code with the transmission tree data written by <a href="https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext" class="external-link">Christian
 Althaus, 2015</a>:</p>
-<div class="codewrapper sourceCode" id="cb47">
+<div class="codewrapper sourceCode" id="cb48">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -10083,9 +10104,9 @@ Althaus, 2015</a> with the simulation output.</li>
 <button class="accordion-button instructor-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInstructor3" aria-expanded="false" aria-controls="collapseInstructor3">
   <h3 class="accordion-header" id="headingInstructor3">  <div class="note-square"><i aria-hidden="true" class="callout-icon" data-feather="edit-2"></i></div> Instructor Note </h3>
 </button>
-<div id="collapseInstructor3" class="accordion-collapse collapse" data-bs-parent="#accordionInstructor3" aria-labelledby="headingInstructor3">
+<div id="collapseInstructor3" class="accordion-collapse collapse" aria-labelledby="headingInstructor3" data-bs-parent="#accordionInstructor3">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb48">
+<div class="codewrapper sourceCode" id="cb49">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -10095,7 +10116,7 @@ Althaus, 2015</a> with the simulation output.</li>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">fitdistrplus</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">tidyverse</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb49">
+<div class="codewrapper sourceCode" id="cb50">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -10114,7 +10135,7 @@ Parameters:
 size 0.1814260 0.03990278
 mu   0.9537995 0.19812301</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb51">
+<div class="codewrapper sourceCode" id="cb52">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -10161,7 +10182,7 @@ mu   0.9537995 0.19812301</code></pre>
 Max: 2889
 Min: 1</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb53">
+<div class="codewrapper sourceCode" id="cb54">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -10265,9 +10286,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/aio.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/aio.html",
-  "dateCreated": "2026-07-09",
-  "dateModified": "2026-07-14",
-  "datePublished": "2026-07-14"
+  "dateCreated": "2026-07-17",
+  "dateModified": "2026-07-17",
+  "datePublished": "2026-07-17"
 }
 
   </script><script>
