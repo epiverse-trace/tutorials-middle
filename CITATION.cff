@@ -20,6 +20,33 @@ authors:
     family-names: Minter
     email: amandalminter@gmail.com
     orcid: 'https://orcid.org/0000-0003-1171-5688'
+  - given-names: Abdoelnaser
+    family-names: Degoot
+    email: abdoelnaser-mahmood.degoot@lshtm.ac.uk
+    orcid: 'https://orcid.org/0000-0001-8788-2496'
+  - given-names: Hugo
+    family-names: Gruson
+    email: hugo@data.org
+    orcid: 'https://orcid.org/0000-0002-4094-1476'
+  - orcid: 'https://orcid.org/0000-0003-3318-6668'
+    email: Bubacarr.Bah1@lshtm.ac.uk
+    family-names: Bah
+    given-names: Bubacarr
+  - given-names: Rosalind
+    family-names: Eggo
+    email: rosalind.eggo@lshtm.ac.uk
+    orcid: 'https://orcid.org/0000-0002-0362-6717'
+  - given-names: Sebastian
+    family-names: Funk
+    email: sebastian.funk@lshtm.ac.uk
+    orcid: 'https://orcid.org/0000-0002-2842-3406'
+  - orcid: 'https://orcid.org/0000-0002-4094-1476'
+    email: adam.kucharski@lshtm.ac.uk
+    family-names: Kucharski
+    given-names: Adam
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21512003
 repository-code: 'https://github.com/epiverse-trace/tutorials-middle/'
 url: 'https://epiverse-trace.github.io/tutorials-middle/'
 abstract: >-
@@ -54,5 +81,5 @@ keywords:
   - rstats
   - english-language
 license: CC-BY-4.0
-version: v2025-03-11
-date-released: '2025-03-11'
+version: v2026-07-23
+date-released: '2026-07-23'
