@@ -1,6 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- Render with: rmarkdown::render("README.Rmd") -->
+
 # Epiverse-TRACE Tutorials Middle
 
 <!-- badges: start -->
@@ -33,6 +35,7 @@ the pages, see the [Introduction to The Carpentries
 Workbench](https://carpentries.github.io/sandpaper-docs/).
 
 <!-- ## Support -->
+
 <!-- Please see our [Getting help guide](/.github/SUPPORT.md) for support. -->
 
 ## License
@@ -45,10 +48,10 @@ Current maintainers of these tutorials are:
 
 - [Andree Valle-Campos](https://github.com/avallecam/)
 
-<!--
 Former maintainers:
-&#10;- [Andree Valle-Campos](https://github.com/avallecam/) 
-&#10;-->
+
+- [Hugo Gruson](https://github.com/Bisaloo/)
+
 <!--## Acknowledgements-->
 
 ## Related
@@ -82,20 +85,19 @@ use it](https://citation-file-format.github.io/).)
 
 To cite these tutorials in publications use:
 
-    Valle-Campos A, Minter A (2025). "Epiverse-TRACE Tutorials Middle:
-    Real-time analysis and forecasting for outbreak analytics with R."
-    <https://epiverse-trace.github.io/tutorials-middle/>.
+    Valle-Campos A, Minter A, Degoot A, Gruson H, Bah B, Eggo R, Funk S, Kucharski A (2026). "Epiverse-TRACE Tutorials Middle: Real-time analysis and forecasting for outbreak analytics
+    with R." <https://epiverse-trace.github.io/tutorials-middle/>.
 
 A BibTeX entry for LaTeX users is:
 
-    @Misc{vallecampos_etall:2025,
+    @Misc{vallecampos_etall:2026,
       title = {Epiverse-TRACE Tutorials Middle: Real-time analysis and forecasting for outbreak analytics with R},
-      author = {Andree Valle-Campos and Amanda Minter},
-      year = {2025},
+      author = {Andree Valle-Campos and Amanda Minter and Abdoelnaser Degoot and Hugo Gruson and Bubacarr Bah and Rosalind Eggo and Sebastian Funk and Adam Kucharski},
+      year = {2026},
       url = {https://epiverse-trace.github.io/tutorials-middle/},
       abstract = {The Epiverse-TRACE initiative aims to provide a software ecosystem for outbreak analytics with integrated, generalisable and scalable community-driven software. We support the development of R packages, make the existing ones interoperable for the user experience, and stimulate a community of practice. In the outbreak analytics curriculum, we built three tutorials around an outbreak analysis pipeline split into three stages: Early, Middle, and Late tasks. Early tasks include reading, cleaning and validating case data, and converting line list data to incidence for visualizing epidemic curves. Middle tasks host real-time analysis that includes accessing epidemiological delays, estimating transmission metrics, forecasting, and severity from incidence data, superspreading from line list and contact data, and simulating transmission chains. Late tasks include accessing and analyzing social contact matrices, scenario modelling to simulate disease spread and investigate interventions, and modelling disease burden.},
       keywords = {outbreak-analytics,epidemiological-parameters,reproduction-number,forecasting,outbreak-severity,superspreading events,transmission chains,carpentries-workbench,rstats,english-language},
-      version = {v2025-03-11},
+      version = {v2026-07-23},
     }
 
 ## Contact
