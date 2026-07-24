@@ -1009,21 +1009,29 @@ For reproducible results use `set.seed(645)`.
 
 ::::::::::: hint
 
-Code with the transmission tree data written by [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext):
+Use a rewrite of the code with the transmission tree data provided by [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext):
 
 
 ``` r
-# Number of individuals in the trees
-n <- 152
-# Number of secondary cases for all individuals
-c1 <- c(1, 2, 2, 5, 14, 1, 4, 4, 1, 3, 3, 8, 2, 1, 1,
-        4, 9, 9, 1, 1, 17, 2, 1, 1, 1, 4, 3, 3, 4, 2,
-        5, 1, 2, 2, 1, 9, 1, 3, 1, 2, 1, 1, 2)
-c0 <- c(c1, rep(0, n - length(c1)))
+library(tidyverse)
 
-c0 %>%
-  enframe() %>%
-  ggplot(aes(value)) +
+# Total number of individuals in the transmission trees
+n <- 152
+
+# Number of secondary cases per individual, padded with 0 for
+# individuals who caused no further infections
+ebola_secondary_cases <- c(
+  1, 2, 2, 5, 14, 1, 4, 4, 1, 3, 3, 8, 2, 1, 1,
+  4, 9, 9, 1, 1, 17, 2, 1, 1, 1, 4, 3, 3, 4, 2,
+  5, 1, 2, 2, 1, 9, 1, 3, 1, 2, 1, 1, 2
+) %>%
+  # Convert the vector to a tibble: one row per known case count
+  enframe(name = "individual", value = "secondary_cases") %>%
+  # Expand to all n individuals, filling missing ones with 0 cases
+  complete(individual = 1:n, fill = list(secondary_cases = 0))
+
+ebola_secondary_cases %>%
+  ggplot(aes(secondary_cases)) +
   geom_histogram(binwidth = 1)
 ```
 
@@ -1053,15 +1061,20 @@ library(tidyverse)
 
 # Fitting a negative binomial distribution to the number of secondary cases
 fit.cases <- fitdistrplus::fitdist(c0, "nbinom")
+```
+
+``` error
+Error:
+! object 'c0' not found
+```
+
+``` r
 fit.cases
 ```
 
-``` output
-Fitting of the distribution ' nbinom ' by maximum likelihood 
-Parameters:
-      estimate Std. Error
-size 0.1814260 0.03990278
-mu   0.9537995 0.19812301
+``` error
+Error:
+! object 'fit.cases' not found
 ```
 
 ``` r
@@ -1085,27 +1098,22 @@ sim_multiple_chains <- epichains::simulate_chains(
   size = fit.cases$estimate["size"],
   generation_time = function(x) generate(x = ebola_serialinter, times = x)
 )
+```
 
+``` error
+Error:
+! object 'fit.cases' not found
+```
+
+``` r
 # summarise ----------------------------------------
 
 summary(sim_multiple_chains)
 ```
 
-``` output
-`epichains_summary` object 
-
-  [1]    9    1    2    1    1    4    1   20   14    1    1  131    1    2    1
- [16]    1    7    1    2 2889    1    1    1   13    3    1    1    1    1    1
- [31]    5    6    1    1    1    1    1    1    1    1    2    1    1    2    1
- [46]    1    1    1    1    1    1    1    1    1  335    1   11    3   24    6
- [61]    1    1    1    1    1    1    1    1    1    1    1    1    1    1  111
- [76]    1    1    1    1    1    1    2    1  544    1    1    1    3    1    2
- [91]    6    1    1    1    1    1    1    1 2091    1
-
- Simulated sizes: 
-
-Max: 2889
-Min: 1
+``` error
+Error:
+! object 'sim_multiple_chains' not found
 ```
 
 ``` r
@@ -1122,7 +1130,14 @@ sim_chains_aggregate <-
   group_by(chain) %>%
   mutate(cumulative_cases = cumsum(cases)) %>%
   ungroup()
+```
 
+``` error
+Error:
+! object 'sim_multiple_chains' not found
+```
+
+``` r
 sim_chains_aggregate %>%
   # Create grouped chain trajectories
   ggplot(aes(x = day, y = cumulative_cases, group = chain)) +
@@ -1134,7 +1149,10 @@ sim_chains_aggregate %>%
   labs(x = "Day", y = "Cumulative cases")
 ```
 
-<img src="fig/superspreading-simulate-rendered-unnamed-chunk-33-1.png" alt="" style="display: block; margin: auto;" />
+``` error
+Error:
+! object 'sim_chains_aggregate' not found
+```
 
 
 Remarkably, even with R0 less than 1 (R = 0.95) we can have potentially explosive outbreaks. The observed variation in individual infectiousness in Ebola means that although the probability of extinction is high, new index cases also have the potential for explosive regrowth of the epidemic.
