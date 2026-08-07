@@ -210,14 +210,15 @@ $$
 \begin{equation}
 \begin{split}
 D_0 & = p_0 \times \sum_{j=0}^{0} \sum_{i=0}^{j} c_i f_{j-i} \\
-& = p_0 \times \left( c_0 \times f_0 \right) \\ 
-& = p_0 \times 3 \times 0.2 \\ 
-& = p_0 \times 0.6 
+& = p_0 \times \left( c_0 \times f_{0-0} \right) \\
+& = p_0 \times \left( c_0 \times f_0 \right) \\
+& = p_0 \times 3 \times 0.2 \\
+& = p_0 \times 0.6
 \end{split}
 \end{equation}
-$$ 
+$$
 
-where $p_0$ represents the true CFR. The factor $3 \times 0.2 = 0.6$ represents the expected proportion of cases with known outcomes by day 0, given the delay distribution. Hence
+where $p_0$ represents the true CFR. The factor $3 \times 0.2 = 0.6$ represents the expected proportion of cases with known outcomes by day 0, given the delay distribution. Note that since $i$ only ranges from $0$ to $j$, the delay $j - i$ is always between $0$ and $j$ — it is never negative, so $f$ is always evaluated within its defined domain. Hence
 
 $$
 b_0 = \frac{D_0}{C_0} = \frac{p_0 \times 0.6}{3}
@@ -241,7 +242,8 @@ $$
 \begin{equation}
 \begin{split}
 D_1 & = p_1 \times \sum_{j=0}^{1} \sum_{i=0}^{j} c_i f_{j-i} \\
-& = p_1 \times \left[ c_1 \times f_0 + c_0 \times (f_0 + f_1) \right] \\ 
+& = p_1 \times \left[ c_0 f_{0-0} + c_0 f_{1-0} + c_1 f_{1-1} \right] \\
+& = p_1 \times \left[ c_1 \times f_0 + c_0 \times (f_0 + f_1) \right] \\
 & = p_1 \times \left[ 1 \times 0.2 + 3 \times (0.4 + 0.2) \right] \\ 
 & = p_1 \times 2
 \end{split}
