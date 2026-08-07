@@ -181,7 +181,7 @@ $$
 p_t = \frac{D_t}{\sum\limits_{j=0}^{t}\sum\limits_{i=0}^{j}c_{i}f_{j-i}}
 $$
 
-Compare this against the Day 0 and Day 1 calculations below: $p_t$ is obtained by dividing the observed deaths $D_t$ by the expected-outcomes term ($0.6$ on Day 0, $2$ on Day 1).
+Compare this against the Day 0 and Day 1 calculations below: $p_t$ is obtained by dividing the observed deaths $D_t$ by the expected-outcomes term ($0.6$ on Day 0 and $2$ on Day 1).
 
 :::::::::::::::
 
