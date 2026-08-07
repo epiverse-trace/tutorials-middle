@@ -243,8 +243,8 @@ $$
 \begin{split}
 D_1 & = p_1 \times \sum_{j=0}^{1} \sum_{i=0}^{j} c_i f_{j-i} \\
 & = p_1 \times \left[ c_0 f_{0-0} + c_0 f_{1-0} + c_1 f_{1-1} \right] \\
-& = p_1 \times \left[ c_1 \times f_0 + c_0 \times (f_0 + f_1) \right] \\
-& = p_1 \times \left[ 1 \times 0.2 + 3 \times (0.4 + 0.2) \right] \\ 
+& = p_1 \times \left[ c_0 \times (f_0 + f_1) + c_1 \times f_0 \right] \\
+& = p_1 \times \left[ 3 \times (0.4 + 0.2) + 1 \times 0.2 \right] \\
 & = p_1 \times 2
 \end{split}
 \end{equation}
@@ -274,8 +274,9 @@ $$
 \begin{equation}
 \begin{split}
 D_2 & = p_2 \times \sum_{j=0}^{2} \sum_{i=0}^{j} c_i f_{j-i} \\
-& = p_2 \times \Big[ c_2 \times f_0 + c_1 \times (f_0 + f_1) + c_0 \times (f_0 + f_1 + f_2) \Big] \\ 
-& = p_2 \times \Big[ 3 \times 0.2 + 1 \times (0.4 + 0.2) + 3 \times (0.2 + 0.4 + 0.3) \Big] \\ 
+& = p_2 \times \Big[ c_0 f_{0-0} + c_0 f_{1-0} + c_1 f_{1-1} + c_0 f_{2-0} + c_1 f_{2-1} + c_2 f_{2-2} \Big] \\
+& = p_2 \times \Big[ c_0 \times (f_0 + f_1 + f_2) + c_1 \times (f_0 + f_1) + c_2 \times f_0 \Big] \\
+& = p_2 \times \Big[ 3 \times (0.2 + 0.4 + 0.3) + 1 \times (0.4 + 0.2) + 3 \times 0.2 \Big] \\
 & = p_2 \times 3.9
 \end{split}
 \end{equation}
@@ -310,8 +311,9 @@ $$
 \begin{equation}
 \begin{split}
 D_3 & = p_3 \times \sum_{j=0}^{3} \sum_{i=0}^{j} c_i f_{j-i} \\
-& = p_3 \times \Big[ c_3 \times f_0 + c_2 \times (f_0 + f_1) + c_1 \times (f_0 + f_1 + f_2) + c_0 \times (f_0 + f_1 + f_2 + f_3) \Big] \\ 
-& = p_3 \times \Big[ 2 \times 0.2 + 3 \times (0.2 + 0.4) + 1 \times (0.2 + 0.4 + 0.3) + 3 \times (0.2 + 0.4 + 0.3 + 0.1) \Big] \\ 
+& = p_3 \times \Big[ c_0 f_{0-0} + c_0 f_{1-0} + c_1 f_{1-1} + c_0 f_{2-0} + c_1 f_{2-1} + c_2 f_{2-2} + c_0 f_{3-0} + c_1 f_{3-1} + c_2 f_{3-2} + c_3 f_{3-3} \Big] \\
+& = p_3 \times \Big[ c_0 \times (f_0 + f_1 + f_2 + f_3) + c_1 \times (f_0 + f_1 + f_2) + c_2 \times (f_0 + f_1) + c_3 \times f_0 \Big] \\
+& = p_3 \times \Big[ 3 \times (0.2 + 0.4 + 0.3 + 0.1) + 1 \times (0.2 + 0.4 + 0.3) + 3 \times (0.2 + 0.4) + 2 \times 0.2 \Big] \\
 & = p_3 \times 6.1
 \end{split}
 \end{equation}
