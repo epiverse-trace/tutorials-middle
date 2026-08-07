@@ -401,15 +401,18 @@ First, read the guide on [How to adjust the CFR for delays](../learners/intro-cf
 You will find that the core calculation is to get the **total expected number of cases with known outcomes by time `t`**. This is to account for the fact that some fraction of recent cases haven't had time to resolve to death/recovery yet. It is expressed by the term:
 
 $$
-\sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
+\sum_{j = 0}^t\sum_{i = 0}^j c_i f_{j - i}
 $$
 
 where:
 
-- $c_i$ is the number of new confirmed cases on day i 
+- $i$: the day on which cases occurred (the day of incidence).
+- $j$: the day up to which expected outcomes are being accumulated (the cumulative day).
+- $j - i$: the delay between incidence and outcome, i.e. the number of days elapsed since the cases on day $i$ occurred.
+- $c_i$ is the number of new confirmed cases on day i
 - $f_s$ the conditional probability density function for the delay of $s$ days, from onset to death, given death.
 
-It sums the incident cases $c_i$ over all onset days $i$ up to $t$, and for each one, weights it by $f_{j-i}$, the probability of the outcome becoming known on day $j$, summed over all days $j$.
+For each cumulative day $j$ up to $t$, it sums the incident cases $c_i$ over all onset days $i$ up to $j$, weighting each by $f_{j-i}$, the probability of the outcome occurring $j-i$ days after incidence.
 
 For each day `i`, `{cfr}` computes the **expected number of outcomes** arising from that day's newly observed incident cases: the outcomes expected "at" day `i`. These per-day expected outcomes are then summed cumulatively across the full history up to time `t` to obtain the **total expected number of outcomes "by" time `t`**.
 
