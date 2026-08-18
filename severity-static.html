@@ -341,7 +341,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Estimation of outbreak severity</h1>
-        <p>Last updated on 2026-07-05 |
+        <p>Last updated on 2026-08-18 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/severity-static.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -944,20 +944,30 @@ expected number of cases with known outcomes by time
 fraction of recent cases haven’t had time to resolve to death/recovery
 yet. It is expressed by the term:</p>
 <p><span class="math display">\[
-\sum_{i = 0}^t\sum_{j = 0}^\infty c_i f_{j - i}
+\sum_{j = 0}^t\sum_{i = 0}^j c_i f_{j - i}
 \]</span></p>
 <p>where:</p>
 <ul><li>
+<span class="math inline">\(i\)</span>: the day on which cases
+occurred (the day of incidence).</li>
+<li>
+<span class="math inline">\(j\)</span>: the day up to which expected
+outcomes are being accumulated (the cumulative day).</li>
+<li>
+<span class="math inline">\(j - i\)</span>: the delay between
+incidence and outcome, i.e. the number of days elapsed since the cases
+on day <span class="math inline">\(i\)</span> occurred.</li>
+<li>
 <span class="math inline">\(c_i\)</span> is the number of new
 confirmed cases on day i</li>
 <li>
 <span class="math inline">\(f_s\)</span> the conditional probability
 density function for the delay of <span class="math inline">\(s\)</span>
 days, from onset to death, given death.</li>
-</ul><p>It sums the incident cases <span class="math inline">\(c_i\)</span>
-over all onset days <span class="math inline">\(i\)</span> up to <span class="math inline">\(t\)</span>, and for each one, weights it by <span class="math inline">\(f_{j-i}\)</span>, the probability of the outcome
-becoming known on day <span class="math inline">\(j\)</span>, summed
-over all days <span class="math inline">\(j\)</span>.</p>
+</ul><p>For each cumulative day <span class="math inline">\(j\)</span> up to
+<span class="math inline">\(t\)</span>, it sums the incident cases <span class="math inline">\(c_i\)</span> over all onset days <span class="math inline">\(i\)</span> up to <span class="math inline">\(j\)</span>, weighting each by <span class="math inline">\(f_{j-i}\)</span>, the probability of the outcome
+occurring <span class="math inline">\(j-i\)</span> days after
+incidence.</p>
 <p>For each day <code>i</code>, <a href="https://github.com/epiverse-trace/cfr" class="external-link">cfr</a> computes the
 <strong>expected number of outcomes</strong> arising from that day’s
 newly observed incident cases: the outcomes expected “at” day
@@ -2111,8 +2121,8 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/severity-static.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/severity-static.html",
-  "dateCreated": "2026-07-23",
-  "dateModified": "2026-07-05",
+  "dateCreated": "2026-08-18",
+  "dateModified": "2026-08-18",
   "datePublished": "2026-08-18"
 }
 
