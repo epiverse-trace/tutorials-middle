@@ -32,23 +32,23 @@ mathematical framework that enables this adjustment.
 
 Consider a dataset containing daily incidence cases and deaths. 
 
-<!--html_preserve--><div id="zypxkizeal" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zypxkizeal table {
+<!--html_preserve--><div id="uynpesxuir" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uynpesxuir table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zypxkizeal thead, #zypxkizeal tbody, #zypxkizeal tfoot, #zypxkizeal tr, #zypxkizeal td, #zypxkizeal th {
+#uynpesxuir thead, #uynpesxuir tbody, #uynpesxuir tfoot, #uynpesxuir tr, #uynpesxuir td, #uynpesxuir th {
   border-style: none;
 }
 
-#zypxkizeal p {
+#uynpesxuir p {
   margin: 0;
   padding: 0;
 }
 
-#zypxkizeal .gt_table {
+#uynpesxuir .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -74,12 +74,12 @@ Consider a dataset containing daily incidence cases and deaths.
   border-left-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_caption {
+#uynpesxuir .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zypxkizeal .gt_title {
+#uynpesxuir .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -91,7 +91,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-bottom-width: 0;
 }
 
-#zypxkizeal .gt_subtitle {
+#uynpesxuir .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -103,7 +103,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-top-width: 0;
 }
 
-#zypxkizeal .gt_heading {
+#uynpesxuir .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -115,13 +115,13 @@ Consider a dataset containing daily incidence cases and deaths.
   border-right-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_bottom_border {
+#uynpesxuir .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_col_headings {
+#uynpesxuir .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -136,7 +136,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-right-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_col_heading {
+#uynpesxuir .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -156,7 +156,7 @@ Consider a dataset containing daily incidence cases and deaths.
   overflow-x: hidden;
 }
 
-#zypxkizeal .gt_column_spanner_outer {
+#uynpesxuir .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -168,15 +168,15 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 4px;
 }
 
-#zypxkizeal .gt_column_spanner_outer:first-child {
+#uynpesxuir .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zypxkizeal .gt_column_spanner_outer:last-child {
+#uynpesxuir .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zypxkizeal .gt_column_spanner {
+#uynpesxuir .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -188,11 +188,11 @@ Consider a dataset containing daily incidence cases and deaths.
   width: 100%;
 }
 
-#zypxkizeal .gt_spanner_row {
+#uynpesxuir .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zypxkizeal .gt_group_heading {
+#uynpesxuir .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -218,7 +218,7 @@ Consider a dataset containing daily incidence cases and deaths.
   text-align: left;
 }
 
-#zypxkizeal .gt_empty_group_heading {
+#uynpesxuir .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -233,15 +233,15 @@ Consider a dataset containing daily incidence cases and deaths.
   vertical-align: middle;
 }
 
-#zypxkizeal .gt_from_md > :first-child {
+#uynpesxuir .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zypxkizeal .gt_from_md > :last-child {
+#uynpesxuir .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zypxkizeal .gt_row {
+#uynpesxuir .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -260,7 +260,7 @@ Consider a dataset containing daily incidence cases and deaths.
   overflow-x: hidden;
 }
 
-#zypxkizeal .gt_stub {
+#uynpesxuir .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -273,7 +273,7 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#zypxkizeal .gt_stub_row_group {
+#uynpesxuir .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -287,15 +287,15 @@ Consider a dataset containing daily incidence cases and deaths.
   vertical-align: top;
 }
 
-#zypxkizeal .gt_row_group_first td {
+#uynpesxuir .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zypxkizeal .gt_row_group_first th {
+#uynpesxuir .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zypxkizeal .gt_summary_row {
+#uynpesxuir .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -305,16 +305,16 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#zypxkizeal .gt_first_summary_row {
+#uynpesxuir .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_first_summary_row.thick {
+#uynpesxuir .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zypxkizeal .gt_last_summary_row {
+#uynpesxuir .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -324,7 +324,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-bottom-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_grand_summary_row {
+#uynpesxuir .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -334,7 +334,7 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#zypxkizeal .gt_first_grand_summary_row {
+#uynpesxuir .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -344,7 +344,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-top-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_last_grand_summary_row_top {
+#uynpesxuir .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -354,11 +354,11 @@ Consider a dataset containing daily incidence cases and deaths.
   border-bottom-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_striped {
+#uynpesxuir .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zypxkizeal .gt_table_body {
+#uynpesxuir .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -367,7 +367,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-bottom-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_footnotes {
+#uynpesxuir .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -381,7 +381,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-right-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_footnote {
+#uynpesxuir .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -390,7 +390,7 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#zypxkizeal .gt_sourcenotes {
+#uynpesxuir .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -404,7 +404,7 @@ Consider a dataset containing daily incidence cases and deaths.
   border-right-color: #D3D3D3;
 }
 
-#zypxkizeal .gt_sourcenote {
+#uynpesxuir .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -412,72 +412,72 @@ Consider a dataset containing daily incidence cases and deaths.
   padding-right: 5px;
 }
 
-#zypxkizeal .gt_left {
+#uynpesxuir .gt_left {
   text-align: left;
 }
 
-#zypxkizeal .gt_center {
+#uynpesxuir .gt_center {
   text-align: center;
 }
 
-#zypxkizeal .gt_right {
+#uynpesxuir .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zypxkizeal .gt_font_normal {
+#uynpesxuir .gt_font_normal {
   font-weight: normal;
 }
 
-#zypxkizeal .gt_font_bold {
+#uynpesxuir .gt_font_bold {
   font-weight: bold;
 }
 
-#zypxkizeal .gt_font_italic {
+#uynpesxuir .gt_font_italic {
   font-style: italic;
 }
 
-#zypxkizeal .gt_super {
+#uynpesxuir .gt_super {
   font-size: 65%;
 }
 
-#zypxkizeal .gt_footnote_marks {
+#uynpesxuir .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zypxkizeal .gt_asterisk {
+#uynpesxuir .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zypxkizeal .gt_indent_1 {
+#uynpesxuir .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zypxkizeal .gt_indent_2 {
+#uynpesxuir .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zypxkizeal .gt_indent_3 {
+#uynpesxuir .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zypxkizeal .gt_indent_4 {
+#uynpesxuir .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zypxkizeal .gt_indent_5 {
+#uynpesxuir .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zypxkizeal .katex-display {
+#uynpesxuir .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zypxkizeal div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#uynpesxuir div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -531,10 +531,13 @@ $$C_t = \sum\limits_{i=0}^{t}c_i.$$
 
 However, the cumulative number of deaths represents a proportion of confirmed cases with known outcomes up to time $t$. This must account for the delay distribution between case confirmation and death
 
-$$ D_t = p_t\times \sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}$$
+$$ D_t = p_t\times \sum\limits_{j=0}^{t}\sum\limits_{i=0}^{j}c_{i}f_{j-i}$$
 
 where:
 
+- $i$: the day on which cases occurred (the day of incidence).
+- $j$: the day up to which expected outcomes are being accumulated (the cumulative day).
+- $j - i$: the delay between incidence and outcome, i.e. the number of days elapsed since the cases on day $i$ occurred.
 - $c_i=$ number of cases confirmed on day $i$
 - $f_s$ = probability density function for the delay of $s$ days from case confirmation outcome
 - $p_t$ = proportion of cases that result in death (true CFR) at time $t$
@@ -549,7 +552,7 @@ $$
 where:
 
 $$
-u_t = \frac{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}{\sum\limits_{i=0}^{t}c_i} = \frac{\text{cumsum}(\text{expected outcomes})_t}{\text{cumsum}(\text{cases})_t}
+u_t = \frac{\sum\limits_{j=0}^{t}\sum\limits_{i=0}^{j}c_{i}f_{j-i}}{\sum\limits_{i=0}^{t}c_i} = \frac{\text{cumsum}(\text{expected outcomes})_t}{\text{cumsum}(\text{cases})_t}
 $$
 
 If fact $u_t$ is called the **underestimation factor**. A low $u_t$ means many cases are still unresolved, which drags the naive CFR down.
@@ -557,10 +560,22 @@ If fact $u_t$ is called the **underestimation factor**. A low $u_t$ means many c
 Then, the true proportion of confirmed cases to die from the infection is then given by:
 
 $$
-p_t = b_t\frac{\sum\limits_{i=0}^{t}c_i}{\sum\limits_{i=0}^{t}\sum\limits_{j=0}^{\infty}c_{i}f_{i-j}}
+p_t = b_t\frac{\sum\limits_{i=0}^{t}c_i}{\sum\limits_{j=0}^{t}\sum\limits_{i=0}^{j}c_{i}f_{j-i}}
 $$
 
 In practice, the delay distribution $f_s$ is estimated from samples of onset-to-outcome data. However, when deaths are few or absent during the early stages of an outbreak, assumptions about $f_s$ must be made based on literature from previous outbreaks of the same or similar diseases.
+
+::::::::::::::: callout
+
+Note that the $p_t$ expression above simplifies to the same form shown in Figure 4 of [Garske et al. (2009)](https://www.bmj.com/content/339/bmj.b2840): the delay-adjusted CFR as cumulative deaths $D_t$ divided by the cumulative **expected outcomes**, rather than by all confirmed cases as in the naive estimate:
+
+$$
+p_t = \frac{D_t}{\sum\limits_{j=0}^{t}\sum\limits_{i=0}^{j}c_{i}f_{j-i}}
+$$
+
+Compare this against the Day 0 and Day 1 calculations below: $p_t$ is obtained by dividing the observed deaths $D_t$ by the expected-outcomes term ($0.6$ on Day 0 and $2$ on Day 1).
+
+:::::::::::::::
 
 For example, suppose we have obtained the onset-to-outcome distribution for the dataset in our example. This distribution, shown in the figure below, characterizes the probability of death occurring $s$ days after case confirmation.
 
@@ -577,15 +592,16 @@ At $t = 0$ we observe $C_0 = 3, D_0 = 1$, giving a naive estimate $b_0 = \frac{1
 $$
 \begin{equation}
 \begin{split}
-D_0 & = p_0 \times \sum_{i=0}^{0} \sum_{j=0}^{i} c_i f_{j-j} \\ 
-& = p_0 \times \left( c_0 \times f_0 \right) \\ 
-& = p_0 \times 3 \times 0.2 \\ 
-& = p_0 \times 0.6 
+D_0 & = p_0 \times \sum_{j=0}^{0} \sum_{i=0}^{j} c_i f_{j-i} \\
+& = p_0 \times \left( c_0 \times f_{0-0} \right) \\
+& = p_0 \times \left( c_0 \times f_0 \right) \\
+& = p_0 \times 3 \times 0.2 \\
+& = p_0 \times 0.6
 \end{split}
 \end{equation}
-$$ 
+$$
 
-where $p_0$ represents the true CFR. The factor $3 \times 0.2 = 0.6$ represents the expected proportion of cases with known outcomes by day 0, given the delay distribution. Hence
+where $p_0$ represents the true CFR. The factor $3 \times 0.2 = 0.6$ represents the expected proportion of cases with known outcomes by day 0, given the delay distribution. Note that since $i$ only ranges from $0$ to $j$, the delay $j - i$ is always between $0$ and $j$ — it is never negative, so $f$ is always evaluated within its defined domain. Hence
 
 $$
 b_0 = \frac{D_0}{C_0} = \frac{p_0 \times 0.6}{3}
@@ -608,9 +624,10 @@ Accounting for delays, the expected number of deaths by day 1 is
 $$
 \begin{equation}
 \begin{split}
-D_1 & = p_1 \times \sum_{i=1}^{1} \sum_{j=0}^{i} c_i f_{i-j} \\ 
-& = p_1 \times \left[ c_1 \times f_0 + c_0 \times (f_0 + f_1) \right] \\ 
-& = p_1 \times \left[ 1 \times 0.2 + 3 \times (0.4 + 0.2) \right] \\ 
+D_1 & = p_1 \times \sum_{j=0}^{1} \sum_{i=0}^{j} c_i f_{j-i} \\
+& = p_1 \times \left[ c_0 f_{0-0} + c_0 f_{1-0} + c_1 f_{1-1} \right] \\
+& = p_1 \times \left[ c_0 \times (f_0 + f_1) + c_1 \times f_0 \right] \\
+& = p_1 \times \left[ 3 \times (0.4 + 0.2) + 1 \times 0.2 \right] \\
 & = p_1 \times 2
 \end{split}
 \end{equation}
@@ -639,9 +656,10 @@ Accounting for delays, the expected number of deaths by day 2 is
 $$
 \begin{equation}
 \begin{split}
-D_2 & = p_2 \times \sum_{i=1}^{2} \sum_{j=0}^{i} c_i f_{i-j} \\ 
-& = p_2 \times \Big[ c_2 \times f_0 + c_1 \times (f_0 + f_1) + c_0 \times (f_0 + f_1 + f_2) \Big] \\ 
-& = p_2 \times \Big[ 3 \times 0.2 + 1 \times (0.4 + 0.2) + 3 \times (0.2 + 0.4 + 0.3) \Big] \\ 
+D_2 & = p_2 \times \sum_{j=0}^{2} \sum_{i=0}^{j} c_i f_{j-i} \\
+& = p_2 \times \Big[ c_0 f_{0-0} + c_0 f_{1-0} + c_0 f_{2-0} + c_1 f_{1-1} + c_1 f_{2-1} + c_2 f_{2-2} \Big] \\
+& = p_2 \times \Big[ c_0 \times (f_0 + f_1 + f_2) + c_1 \times (f_0 + f_1) + c_2 \times f_0 \Big] \\
+& = p_2 \times \Big[ 3 \times (0.2 + 0.4 + 0.3) + 1 \times (0.4 + 0.2) + 3 \times 0.2 \Big] \\
 & = p_2 \times 3.9
 \end{split}
 \end{equation}
@@ -675,9 +693,9 @@ Accounting for delays, the expected number of deaths by day 3 is
 $$
 \begin{equation}
 \begin{split}
-D_3 & = p_3 \times \sum_{i=1}^{3} \sum_{j=0}^{i} c_i f_{i-j} \\ 
-& = p_3 \times \Big[ c_3 \times f_0 + c_2 \times (f_0 + f_1) + c_1 \times (f_0 + f_1 + f_2) + c_0 \times (f_0 + f_1 + f_2 + f_3) \Big] \\ 
-& = p_3 \times \Big[ 2 \times 0.2 + 3 \times (0.2 + 0.4) + 1 \times (0.2 + 0.4 + 0.3) + 3 \times (0.2 + 0.4 + 0.3 + 0.1) \Big] \\ 
+D_3 & = p_3 \times \sum_{j=0}^{3} \sum_{i=0}^{j} c_i f_{j-i} \\
+& = p_3 \times \Big[ c_0 \times (f_0 + f_1 + f_2 + f_3) + c_1 \times (f_0 + f_1 + f_2) + c_2 \times (f_0 + f_1) + c_3 \times f_0 \Big] \\
+& = p_3 \times \Big[ 3 \times (0.2 + 0.4 + 0.3 + 0.1) + 1 \times (0.2 + 0.4 + 0.3) + 3 \times (0.2 + 0.4) + 2 \times 0.2 \Big] \\
 & = p_3 \times 6.1
 \end{split}
 \end{equation}
