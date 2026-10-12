@@ -1056,20 +1056,28 @@ For reproducible results use `set.seed(645)`.
 
 ::::::::::: hint
 
-Code with the transmission tree data written by [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext):
+Use a rewrite of the code with the transmission tree data provided by [Christian Althaus, 2015](https://www.thelancet.com/journals/laninf/article/PIIS1473-3099(15)70135-0/fulltext):
 
 ```{r,message=FALSE,warning=FALSE}
-# Number of individuals in the trees
-n <- 152
-# Number of secondary cases for all individuals
-c1 <- c(1, 2, 2, 5, 14, 1, 4, 4, 1, 3, 3, 8, 2, 1, 1,
-        4, 9, 9, 1, 1, 17, 2, 1, 1, 1, 4, 3, 3, 4, 2,
-        5, 1, 2, 2, 1, 9, 1, 3, 1, 2, 1, 1, 2)
-c0 <- c(c1, rep(0, n - length(c1)))
+library(tidyverse)
 
-c0 %>%
-  enframe() %>%
-  ggplot(aes(value)) +
+# Total number of individuals in the transmission trees
+n <- 152
+
+# Number of secondary cases per individual, padded with 0 for
+# individuals who caused no further infections
+ebola_secondary_cases <- c(
+  1, 2, 2, 5, 14, 1, 4, 4, 1, 3, 3, 8, 2, 1, 1,
+  4, 9, 9, 1, 1, 17, 2, 1, 1, 1, 4, 3, 3, 4, 2,
+  5, 1, 2, 2, 1, 9, 1, 3, 1, 2, 1, 1, 2
+) %>%
+  # Convert the vector to a tibble: one row per known case count
+  enframe(name = "individual", value = "secondary_cases") %>%
+  # Expand to all n individuals, filling missing ones with 0 cases
+  complete(individual = 1:n, fill = list(secondary_cases = 0))
+
+ebola_secondary_cases %>%
+  ggplot(aes(secondary_cases)) +
   geom_histogram(binwidth = 1)
 ```
 
