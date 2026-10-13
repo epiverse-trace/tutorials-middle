@@ -338,7 +338,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Create a short-term forecast</h1>
-        <p>Last updated on 2026-07-01 |
+        <p>Last updated on 2026-10-13 |
 
         <a href="https://github.com/epiverse-trace/tutorials-middle/edit/main/episodes/create-forecast.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -599,11 +599,11 @@ standard deviation 1%), then we specify the <code>scale</code> input to
 </h3>
 <pre class="output" tabindex="0"><code>                        measure                 estimate
                          &lt;char&gt;                   &lt;char&gt;
-1:       New infections per day   20133 (13352 -- 29484)
+1:       New infections per day   20284 (13397 -- 30341)
 2:   Expected change in reports        Likely decreasing
 3:   Effective reproduction no.       0.97 (0.77 -- 1.2)
-4:               Rate of growth -0.012 (-0.092 -- 0.066)
-5: Doubling/halving time (days)         -58 (10 -- -7.5)</code></pre>
+4:               Rate of growth -0.012 (-0.092 -- 0.068)
+5: Doubling/halving time (days)         -56 (10 -- -7.5)</code></pre>
 </div>
 <p>The estimates of transmission measures such as the effective
 reproduction number and rate of growth are similar (or the same in
@@ -841,7 +841,7 @@ deviation of these distributions.</p>
 <button class="accordion-button hint-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseHint1" aria-expanded="false" aria-controls="collapseHint1">
   <h4 class="accordion-header" id="headingHint1"> Give me a hint </h4>
 </button>
-<div id="collapseHint1" class="accordion-collapse collapse" data-bs-parent="#accordionHint1" aria-labelledby="headingHint1">
+<div id="collapseHint1" class="accordion-collapse collapse" aria-labelledby="headingHint1" data-bs-parent="#accordionHint1">
 <div class="accordion-body">
 <p>We use the effective reproduction number and growth rate to estimate
 whether cases are increasing or decreasing.</p>
@@ -864,7 +864,7 @@ forecast. The default value is of seven days.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> SOLUTION </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>To estimate the effective reproduction number and growth rate, we
 will use the function <code>epinow()</code>.</p>
@@ -1012,15 +1012,15 @@ days.</p>
 </h3>
 <pre class="output" tabindex="0"><code>                        measure                estimate
                          &lt;char&gt;                  &lt;char&gt;
-1:       New infections per day          91 (50 -- 186)
+1:       New infections per day          94 (50 -- 196)
 2:   Expected change in reports              Increasing
-3:   Effective reproduction no.        1.6 (1.2 -- 2.4)
-4:               Rate of growth 0.041 (0.0029 -- 0.087)
-5: Doubling/halving time (days)         17 (7.9 -- 240)</code></pre>
+3:   Effective reproduction no.        1.7 (1.2 -- 2.5)
+4:               Rate of growth 0.042 (0.0026 -- 0.091)
+5: Doubling/halving time (days)         17 (7.7 -- 270)</code></pre>
 </div>
 <p>The effective reproduction number <span class="math inline">\(R_t\)</span> estimate (on the last date of the
-data) is 1.6 (1.2 – 2.4). The exponential growth rate of case numbers is
-0.041 (0.0029 – 0.087).</p>
+data) is 1.7 (1.2 – 2.5). The exponential growth rate of case numbers is
+0.042 (0.0026 – 0.091).</p>
 <p>Visualize the estimates:</p>
 <div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1151,9 +1151,9 @@ any links that you are not going to use.
   "creativeWorkStatus": "active",
   "url": "https://epiverse-trace.github.io/tutorials-middle/instructor/create-forecast.html",
   "identifier": "https://epiverse-trace.github.io/tutorials-middle/instructor/create-forecast.html",
-  "dateCreated": "2026-08-18",
-  "dateModified": "2026-07-01",
-  "datePublished": "2026-08-25"
+  "dateCreated": "2026-10-06",
+  "dateModified": "2026-10-13",
+  "datePublished": "2026-10-13"
 }
 
   </script><script>
