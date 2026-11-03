@@ -418,15 +418,15 @@ outbreaks::ebola_sim_clean$linelist %>%
   meanlog:
     - normal distribution:
       mean:
-        0.24
+        0.3
       sd:
-        0.1
+        0.08
   sdlog:
     - normal distribution:
       mean:
-        0.96
+        0.95
       sd:
-        0.091
+        0.08
 ```
 
 ::::::::::::::::::
@@ -704,24 +704,24 @@ summary(estimates)
 ```
 
 ``` output
-                        measure                estimate
-                         <char>                  <char>
-1:       New infections per day    7914 (4649 -- 13781)
-2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.74 -- 1.3)
-4:               Rate of growth -0.012 (-0.11 -- 0.086)
-5: Doubling/halving time (days)         -59 (8 -- -6.6)
+                        measure              estimate
+                         <char>                <char>
+1:       New infections per day  7951 (4831 -- 13367)
+2:   Expected change in reports                Stable
+3:   Effective reproduction no.    0.97 (0.75 -- 1.2)
+4:               Rate of growth -0.012 (-0.1 -- 0.08)
+5: Doubling/halving time (days)     -57 (8.7 -- -6.9)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7914 (4649 -- 13781).
++ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7951 (4831 -- 13367).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.74 -- 1.3). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.75 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.012 (-0.11 -- 0.086).
++ The exponential growth rate of case numbers is -0.012 (-0.1 -- 0.08).
 
-+ The doubling time (the time taken for case numbers to double) is -59 (8 -- -6.6).
++ The doubling time (the time taken for case numbers to double) is -57 (8.7 -- -6.9).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
