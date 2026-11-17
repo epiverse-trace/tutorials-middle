@@ -201,13 +201,13 @@ base::summary(estimates)
 ```
 
 ``` output
-                        measure                estimate
-                         <char>                  <char>
-1:       New infections per day  19962 (13013 -- 30749)
-2:   Expected change in reports       Likely decreasing
-3:   Effective reproduction no.      0.97 (0.76 -- 1.2)
-4:               Rate of growth -0.013 (-0.097 -- 0.07)
-5: Doubling/halving time (days)       -52 (9.9 -- -7.2)
+                        measure                 estimate
+                         <char>                   <char>
+1:       New infections per day   20033 (13263 -- 30149)
+2:   Expected change in reports        Likely decreasing
+3:   Effective reproduction no.       0.97 (0.77 -- 1.2)
+4:               Rate of growth -0.012 (-0.094 -- 0.068)
+5: Doubling/halving time (days)         -60 (10 -- -7.4)
 ```
 
 
@@ -528,14 +528,14 @@ summary(ebola_estimates)
 ``` output
                         measure                estimate
                          <char>                  <char>
-1:       New infections per day          93 (47 -- 186)
+1:       New infections per day          93 (50 -- 199)
 2:   Expected change in reports              Increasing
-3:   Effective reproduction no.        1.7 (1.1 -- 2.4)
-4:               Rate of growth 0.042 (0.0027 -- 0.086)
-5: Doubling/halving time (days)         17 (8.1 -- 260)
+3:   Effective reproduction no.        1.6 (1.2 -- 2.5)
+4:               Rate of growth 0.041 (0.0034 -- 0.088)
+5: Doubling/halving time (days)         17 (7.9 -- 200)
 ```
 
-The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.7 (1.1 -- 2.4). The exponential growth rate of case numbers is 0.042 (0.0027 -- 0.086).
+The effective reproduction number $R_t$ estimate (on the last date of the data) is 1.6 (1.2 -- 2.5). The exponential growth rate of case numbers is 0.041 (0.0034 -- 0.088).
 
 Visualize the estimates:
 

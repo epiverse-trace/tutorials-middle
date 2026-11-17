@@ -418,15 +418,15 @@ outbreaks::ebola_sim_clean$linelist %>%
   meanlog:
     - normal distribution:
       mean:
-        0.25
+        0.26
       sd:
         0.13
   sdlog:
     - normal distribution:
       mean:
-        0.93
+        0.97
       sd:
-        0.085
+        0.093
 ```
 
 ::::::::::::::::::
@@ -706,22 +706,22 @@ summary(estimates)
 ``` output
                         measure                estimate
                          <char>                  <char>
-1:       New infections per day    7988 (4644 -- 13201)
-2:   Expected change in reports                  Stable
-3:   Effective reproduction no.      0.97 (0.72 -- 1.2)
-4:               Rate of growth -0.012 (-0.11 -- 0.079)
-5: Doubling/halving time (days)       -60 (8.8 -- -6.4)
+1:       New infections per day    7888 (4679 -- 12983)
+2:   Expected change in reports       Likely decreasing
+3:   Effective reproduction no.      0.96 (0.72 -- 1.2)
+4:               Rate of growth -0.014 (-0.11 -- 0.079)
+5: Doubling/halving time (days)       -49 (8.7 -- -6.4)
 ```
 
 As these estimates are based on partial data, they have a wide uncertainty interval.
 
-+ From the summary of our analysis we see that the expected change in reports is Stable with the estimated new infections 7988 (4644 -- 13201).
++ From the summary of our analysis we see that the expected change in reports is Likely decreasing with the estimated new infections 7888 (4679 -- 12983).
 
-+ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.97 (0.72 -- 1.2). 
++ The effective reproduction number $R_t$ estimate (on the last date of the data) is 0.96 (0.72 -- 1.2). 
 
-+ The exponential growth rate of case numbers is -0.012 (-0.11 -- 0.079).
++ The exponential growth rate of case numbers is -0.014 (-0.11 -- 0.079).
 
-+ The doubling time (the time taken for case numbers to double) is -60 (8.8 -- -6.4).
++ The doubling time (the time taken for case numbers to double) is -49 (8.7 -- -6.4).
 
 ::::::::::::::::::::::::::::::::::::: callout
 ### `Expected change in reports` 
